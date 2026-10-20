@@ -1,0 +1,78 @@
+name: planner
+
+on:
+  schedule:
+    # Zeiten in UTC; je zwei Läufe decken Sommer- und Winterzeit ab, das Skript entscheidet nach Berliner Uhrzeit
+    - cron: "10 5,6 * * *"     # Morgen-Push ~7:10
+    - cron: "0 11 * * *"       # Neuplanung mittags
+    - cron: "20 18,19 * * *"   # Nachfrage Training ~20:20
+    - cron: "50 19,20 * * *"   # Nachfrage Schmerz-Log ~21:50
+    - cron: "40 16,17 * * 0"   # Sonntag Check-in ~18:40
+  push:
+    branches: [main]           # App-Änderungen sofort mit aktuellen Feeds veröffentlichen
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: planner
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/checkout@v4
+      - name: Private Daten holen
+        uses: actions/checkout@v4
+        with:
+          repository: xsimmelx1/trainingsdaten
+          ssh-key: ${{ secrets.DATA_DEPLOY_KEY }}
+          path: daten
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .planner/requirements.txt
+      - run: pip install -q -r .planner/requirements.txt
+      - name: Planen und erinnern
+        env:
+          DATA_ROOT: daten
+          # Feed-Dateiname kommt aus einem Secret und landet nie im Repo, in der Git-Geschichte oder in den Logs
+          ICS_OUT: _feeds/cal/${{ secrets.CAL_TOKEN }}.ics
+          MEAL_ICS_OUT: _feeds/cal/${{ secrets.CAL_TOKEN }}-essen.ics
+          GCAL_ICS_URL: ${{ secrets.GCAL_ICS_URL }}
+          UNI_ICS_URL: ${{ secrets.UNI_ICS_URL }}
+          VAPID_PRIVATE_PEM: ${{ secrets.VAPID_PRIVATE_PEM }}
+        run: python .planner/planner.py
+      - name: Daten zurückschreiben
+        working-directory: daten
+        continue-on-error: true
+        run: |
+          git config user.name "planner"
+          git config user.email "planner@users.noreply.github.com"
+          git add data/plan.json data/state.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -q -m "plan"
+          for i in 1 2 3; do
+            if git pull -q --rebase && git push -q; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep 5
+          done
+          exit 1
+      - name: Seite und Feeds zusammenstellen
+        run: |
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude '.planner' --exclude 'daten' --exclude '_site' --exclude '_feeds' --exclude 'cal' ./ _site/
+          if [ -d _feeds/cal ]; then mkdir -p _site/cal && cp _feeds/cal/*.ics _site/cal/; fi
+          touch _site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4

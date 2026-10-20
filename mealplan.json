@@ -1,0 +1,146 @@
+{
+ "note": "Ernährungsplan: 4-Wochen-Rotation passend zum Sonntags-Meal-Prep (Batch A und B reichen Mo–Do). Tage: 0 = Montag … 6 = Sonntag. Wird von App und Planer gelesen.",
+ "target": {
+  "kcal": 2650,
+  "protein": 140,
+  "proteinNote": "Mindestwert"
+ },
+ "slots": [
+  {
+   "k": "fr",
+   "label": "Frühstück",
+   "time": "09:00",
+   "cats": [
+    "fruehstueck"
+   ]
+  },
+  {
+   "k": "mi",
+   "label": "Mittag",
+   "time": "13:00",
+   "cats": [
+    "mittag",
+    "abend"
+   ]
+  },
+  {
+   "k": "sn",
+   "label": "Snack",
+   "time": "16:00",
+   "cats": [
+    "snack",
+    "shake"
+   ]
+  },
+  {
+   "k": "ab",
+   "label": "Abend",
+   "time": "19:00",
+   "cats": [
+    "abend",
+    "mittag"
+   ]
+  },
+  {
+   "k": "ex",
+   "label": "Extra",
+   "time": "",
+   "cats": [
+    "snack",
+    "shake"
+   ]
+  }
+ ],
+ "trainingSnack": "Bananen-Kakao-Skyr-Shake",
+ "restExtra": [
+  "Erdnuss-Hafer-Energy-Balls (2 Stück)",
+  "Knusper-Kichererbsen & Edamame"
+ ],
+ "snacks": [
+  "Chia-Skyr-Pudding mit Beeren",
+  "Hüttenkäse-Gemüse-Box mit Knäckebrot",
+  "Quark-Tiramisu im Glas",
+  "Harzer-Käse-Brot mit Gurke",
+  "Quark-Beeren-Bowl mit Hafer & Erdnussmus",
+  "Skyr-Quark-Eis / Frozen-Bark",
+  "Quark-Beeren-Bowl mit Hafer & Erdnussmus"
+ ],
+ "weeks": [
+  {
+   "batchA": "Linsen-Soja-Bolognese mit Vollkornnudeln",
+   "batchB": "Teriyaki-Tofu-Edamame-Bowl",
+   "fr": [
+    "Mocha-Skyr-Overnight-Oats",
+    "Jalapeño-Hüttenkäse-Toast (XL)",
+    "Mocha-Skyr-Overnight-Oats",
+    "Ei-Hüttenkäse-Muffins (3 Stück)",
+    "Ei-Hüttenkäse-Muffins (3 Stück)",
+    "Quark-Hafer-Protein-Pancakes",
+    "Hüttenkäse-Rührei auf Vollkornbrot"
+   ],
+   "frMittag": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
+   "frAbend": "Blech-Fajitas mit Räuchertofu & Bohnen",
+   "saAbend": "Marry-Me-Linsen mit Räuchertofu (light)",
+   "soAbend": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
+   "prepNote": "Ei-Muffins: die Freitagsportion direkt nach dem Backen einfrieren (im Kühlschrank nur 4 Tage)."
+  },
+  {
+   "batchA": "Chili sin Carne mit Sojagranulat & Reis",
+   "batchB": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
+   "fr": [
+    "Beeren-Zimt-Baked-Protein-Oats",
+    "Beeren-Zimt-Baked-Protein-Oats",
+    "Beeren-Zimt-Baked-Protein-Oats",
+    "Beeren-Zimt-Baked-Protein-Oats",
+    "Jalapeño-Hüttenkäse-Toast (XL)",
+    "Quark-Hafer-Protein-Pancakes",
+    "Räuchertofu-Scramble mit Spinat & Zucchini"
+   ],
+   "frMittag": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
+   "frAbend": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
+   "saAbend": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
+   "soAbend": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße"
+  },
+  {
+   "batchA": "White Chickpea Chili mit Skyr-Topping",
+   "batchB": "Couscous-Kichererbsen-Pfanne mit Feta",
+   "fr": [
+    "Freezer-Breakfast-Burritos (2 Stück)",
+    "Freezer-Breakfast-Burritos (2 Stück)",
+    "Freezer-Breakfast-Burritos (2 Stück)",
+    "Freezer-Breakfast-Burritos (2 Stück)",
+    "Freezer-Breakfast-Burritos (2 Stück)",
+    "Quark-Hafer-Protein-Pancakes",
+    "Hüttenkäse-Rührei auf Vollkornbrot"
+   ],
+   "frMittag": "Quinoa-Kichererbsen-Salat im Glas + Edamame",
+   "frAbend": "Shakshuka mit Kichererbsen & Feta",
+   "saAbend": "Marry-Me-Linsen mit Räuchertofu (light)",
+   "soAbend": "Pasta mit Hüttenkäse-Paprika-Tomatensauce"
+  },
+  {
+   "batchA": "Nudelgulasch mit Soja-Hack",
+   "batchB": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
+   "fr": [
+    "Mocha-Skyr-Overnight-Oats",
+    "Räuchertofu-Scramble mit Spinat & Zucchini",
+    "Mocha-Skyr-Overnight-Oats",
+    "Ei-Hüttenkäse-Muffins (3 Stück)",
+    "Ei-Hüttenkäse-Muffins (3 Stück)",
+    "Quark-Hafer-Protein-Pancakes",
+    "Räuchertofu-Scramble mit Spinat & Zucchini"
+   ],
+   "frMittag": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
+   "frAbend": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
+   "saAbend": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
+   "soAbend": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
+   "prepNote": "Ei-Muffins: die Freitagsportion direkt nach dem Backen einfrieren (im Kühlschrank nur 4 Tage)."
+  }
+ ],
+ "away": {
+  "name": "Mensa / auswärts",
+  "kcal": 700,
+  "protein": 30,
+  "hint": "Gericht mit Hülsenfrüchten, Tofu oder Ei wählen und mit Skyr, Harzer oder Hüttenkäse auf 30 g Protein aufstocken."
+ }
+}

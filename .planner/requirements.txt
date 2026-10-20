@@ -1,0 +1,4 @@
+icalendar==6.1.0
+recurring-ical-events==3.3.3
+pywebpush==2.0.1
+py-vapid==1.9.2

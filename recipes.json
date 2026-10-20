@@ -1,0 +1,1314 @@
+[
+ {
+  "name": "Mocha-Skyr-Overnight-Oats",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 525,
+  "protein": 43,
+  "carbs": 57,
+  "fat": 11,
+  "estimated": true,
+  "timeMin": 5,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "50 g zarte Haferflocken",
+   "250 g Skyr natur",
+   "150 ml Milch 1,5 %",
+   "10 g Chiasamen",
+   "1 TL Backkakao",
+   "1 Espresso (abgekühlt)",
+   "100 g TK-Beeren"
+  ],
+  "steps": [
+   "Hafer, Chia, Kakao in ein Schraubglas geben.",
+   "Skyr, Milch und Espresso einrühren, gut mischen.",
+   "Beeren obendrauf, Deckel zu, mind. 6 h (über Nacht) kühlen.",
+   "Morgens umrühren, ggf. Schuss Milch dazu."
+  ],
+  "source": "https://pdf.susannafuhrmann.de/mocha-overnight-oats-kaffee-skyr.pdf",
+  "note": "adaptiert: Protein über Skyr statt Whey",
+  "img": "img/rezepte/r00.jpg",
+  "imgCredit": {
+   "artist": "Kolforn (Kolforn)\nI'd appreciate if you could mail me (Kolforn@gmail.com) if you",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:-2019-02-07_Overnight_Oats,_Cromer.JPG",
+   "title": "File:-2019-02-07 Overnight Oats, Cromer.JPG"
+  }
+ },
+ {
+  "name": "Bratapfel-Overnight-Oats mit Skyr",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 532,
+  "protein": 39,
+  "carbs": 57,
+  "fat": 14,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Skyr",
+   "40 g Haferflocken",
+   "80 ml Milch",
+   "8 g Chiasamen",
+   "1 Apfel (150 g), gewürfelt",
+   "10 g Walnüsse",
+   "Zimt, Prise Salz"
+  ],
+  "steps": [
+   "Apfelwürfel mit Zimt 3–4 Min. in der Pfanne/Mikrowelle weich garen.",
+   "Skyr, Hafer, Milch, Chia verrühren.",
+   "Apfel unterheben bzw. obenauf, Walnüsse drüber.",
+   "Über Nacht kühlen."
+  ],
+  "source": "https://pdf.susannafuhrmann.de/bratapfel-overnight-oats-mit-skyr.pdf",
+  "note": "Quelle nennt ca. 34 g Protein/435 kcal; hier mit Walnüssen nachgerechnet",
+  "img": "img/rezepte/r01.jpg",
+  "imgCredit": {
+   "artist": "Shisma",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Apple_cinnamon_oatmeal.jpg",
+   "title": "File:Apple cinnamon oatmeal.jpg"
+  }
+ },
+ {
+  "name": "Quark-Hafer-Protein-Pancakes",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 622,
+  "protein": 50,
+  "carbs": 56,
+  "fat": 21,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank, 2 Monate TK",
+  "ingredients": [
+   "60 g Haferflocken (gemahlen)",
+   "200 g Magerquark",
+   "2 Eier (M)",
+   "50 ml Milch",
+   "etwas Öl für die Pfanne",
+   "100 g Beeren als Topping",
+   "1 TL Backpulver, Zimt, Süße nach Wunsch"
+  ],
+  "steps": [
+   "Hafer mahlen (Mixer).",
+   "Alle Teigzutaten glatt mixen, 5 Min. quellen lassen.",
+   "Kleine Pancakes in beschichteter Pfanne bei mittlerer Hitze 2–3 Min. je Seite backen.",
+   "Mit Beeren servieren."
+  ],
+  "source": "https://www.knuspr.de/thema/protein-pancakes-rezept",
+  "note": "ohne Proteinpulver; für +12 g Protein zusätzlich 100 g Magerquark in den Teig (≈ +67 kcal)",
+  "img": "img/rezepte/r02.jpg",
+  "imgCredit": {
+   "artist": "Herson Rodriguez hero",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pancakes_with_Berries_(Unsplash).jpg",
+   "title": "File:Pancakes with Berries (Unsplash).jpg"
+  }
+ },
+ {
+  "name": "Hüttenkäse-Rührei auf Vollkornbrot",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 683,
+  "protein": 57,
+  "carbs": 49,
+  "fat": 28,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": false,
+  "shelfLife": "frisch",
+  "ingredients": [
+   "3 Eier",
+   "100 ml Eiklar (Packung)",
+   "100 g Hüttenkäse",
+   "1 Handvoll Spinat",
+   "1 Tomate",
+   "2 Scheiben Vollkornbrot",
+   "1/2 TL Öl/Butter"
+  ],
+  "steps": [
+   "Eier, Eiklar verquirlen, salzen.",
+   "Spinat in der Pfanne zusammenfallen lassen.",
+   "Ei dazu, bei niedriger Hitze stocken lassen, zum Schluss Hüttenkäse unterheben.",
+   "Mit Tomate auf Brot servieren."
+  ],
+  "source": "https://www.liveeatlearn.com/how-to-make-an-omelette/",
+  "note": "eigene Variante, inspiriert von Omelette-Grundrezept",
+  "img": "img/rezepte/r03.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Scrambled_eggs_on_toast_-_Joe%27s_Cafe_2024-04-14.jpg",
+   "title": "File:Scrambled eggs on toast - Joe's Cafe 2024-04-14.jpg"
+  }
+ },
+ {
+  "name": "Räuchertofu-Scramble mit Spinat & Zucchini",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 704,
+  "protein": 49,
+  "carbs": 53,
+  "fat": 30,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (ohne Brot)",
+  "ingredients": [
+   "200 g Räuchertofu, zerbröselt",
+   "80 g Spinat",
+   "1/2 Zucchini",
+   "1/2 rote Zwiebel",
+   "2 TL Olivenöl",
+   "1 EL Hefeflocken",
+   "2 Scheiben Vollkornbrot",
+   "Kurkuma, Kala Namak/Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebel und Zucchini in Öl 4 Min. anbraten.",
+   "Tofu zerbröseln, mit Kurkuma und Hefeflocken 4–5 Min. mitbraten.",
+   "Spinat unterheben, würzen.",
+   "Mit Brot servieren."
+  ],
+  "source": "https://www.fuersie.de/kochen-backen/veganes-ruehrei-einfaches-rezept-mit-tofu-13964.html",
+  "note": "Mengen an Quelle angelehnt (250 g Räuchertofu für 2), Portion hier größer",
+  "img": "img/rezepte/r04.jpg",
+  "imgCredit": {
+   "artist": "Bart Everson",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tofu_Scrambler.jpg",
+   "title": "File:Tofu Scrambler.jpg"
+  }
+ },
+ {
+  "name": "Freezer-Breakfast-Burritos (2 Stück)",
+  "category": "fruehstueck",
+  "servings": 5,
+  "kcal": 920,
+  "protein": 50,
+  "carbs": 90,
+  "fat": 35,
+  "estimated": true,
+  "timeMin": 60,
+  "mealPrep": true,
+  "shelfLife": "3 Monate TK",
+  "ingredients": [
+   "2 Paprika",
+   "1 Zwiebel",
+   "3 Kartoffeln (mittel)",
+   "225 g Champignons",
+   "2 EL Olivenöl, 1 EL Kräuter-Gewürzmischung, 1/2 TL Salz",
+   "4 Eier",
+   "475 ml Eiklar",
+   "225 g Hüttenkäse",
+   "1 EL Speisestärke",
+   "285 g veganes Hack/Chorizo-Ersatz (z. B. Sojahack)",
+   "120 g geriebener Cheddar/Gouda",
+   "10 große Weizen-Tortillas"
+  ],
+  "steps": [
+   "Gemüse würfeln, mit Öl/Gewürzen 30 Min. bei 200 °C rösten.",
+   "Eier, Eiklar, Hüttenkäse, Stärke glatt mixen.",
+   "Eimasse über das Gemüse gießen, Hack und Käse darauf, 10 Min. backen bis gestockt.",
+   "Abkühlen, in 10 Stücke schneiden, je 1 Stück in Tortilla rollen.",
+   "Einzeln in Folie/Backpapier wickeln, einfrieren; Mikrowelle ca. 2 Min. (in feuchtem Küchentuch)."
+  ],
+  "source": "https://www.liveeatlearn.com/freezer-breakfast-burritos/",
+  "note": "Portion = 2 Burritos. Werte nachgerechnet (Quelle nennt 290 kcal pro Burrito, mit diesen Zutaten sind es mehr).",
+  "img": "img/rezepte/r05.jpg",
+  "imgCredit": {
+   "artist": "Cajsa Lilliehook from Portland",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Breakfast_burrito_(cropped).jpg",
+   "title": "File:Breakfast burrito (cropped).jpg"
+  }
+ },
+ {
+  "name": "Jalapeño-Hüttenkäse-Toast (XL)",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 528,
+  "protein": 38,
+  "carbs": 55,
+  "fat": 17,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": false,
+  "shelfLife": "frisch",
+  "ingredients": [
+   "200 g Hüttenkäse",
+   "20 g geriebener Cheddar",
+   "1/2 Jalapeño, fein gewürfelt",
+   "2 EL rote Zwiebel, fein",
+   "2 Scheiben Sauerteigbrot"
+  ],
+  "steps": [
+   "Brot leicht toasten.",
+   "Hüttenkäse, Käse, Jalapeño, Zwiebel, Salz/Pfeffer mischen.",
+   "Auf das Brot streichen.",
+   "2–3 Min. unter dem Ofengrill gratinieren."
+  ],
+  "source": "https://www.liveeatlearn.com/jalapeno-popper-cottage-cheese-toast/",
+  "note": "Original: 1/2 cup Hüttenkäse = 380 kcal/24 g P; hier doppelte Hüttenkäsemenge",
+  "img": "img/rezepte/r06.jpg",
+  "imgCredit": {
+   "artist": "Sarah Stierch",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Avocado_toast_at_the_girl_%26_the_fig_-_Sarah_Stierch.jpg",
+   "title": "File:Avocado toast at the girl & the fig - Sarah Stierch.jpg"
+  }
+ },
+ {
+  "name": "Beeren-Zimt-Baked-Protein-Oats",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 528,
+  "protein": 43,
+  "carbs": 56,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 45,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 2 Monate TK",
+  "ingredients": [
+   "240 g Haferflocken",
+   "5 Eier",
+   "600 g Skyr",
+   "250 g Magerquark",
+   "300 g TK-Beeren",
+   "200 ml Milch",
+   "2 TL Backpulver, 2 TL Zimt",
+   "optional 1–2 EL Honig"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen.",
+   "Alle Zutaten außer Äpfeln verrühren, Äpfel unterheben.",
+   "In Auflaufform (ca. 20×30 cm) 30–35 Min. backen.",
+   "Abkühlen, in 4 Stücke schneiden, kalt oder kurz erwärmt essen."
+  ],
+  "source": "https://joytothefood.com/apple-pie-protein-baked-oats/",
+  "note": "eigene Mengen, ohne Proteinpulver (Quark statt Whey); Werte geschätzt Äpfel durch TK-Beeren ersetzt (ähnliche kcal).",
+  "img": "img/rezepte/r07.jpg",
+  "imgCredit": {
+   "artist": "Alistair young",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Flapjacks.jpg",
+   "title": "File:Flapjacks.jpg"
+  }
+ },
+ {
+  "name": "Ei-Hüttenkäse-Muffins (3 Stück)",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 572,
+  "protein": 38,
+  "carbs": 46,
+  "fat": 25,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 2 Monate TK",
+  "ingredients": [
+   "10 Eier",
+   "200 g Hüttenkäse",
+   "100 g Feta",
+   "1 Paprika, gewürfelt",
+   "100 g Spinat",
+   "1/2 Bund Frühlingszwiebeln",
+   "8 Scheiben Vollkornbrot (2 pro Portion, zum Servieren)"
+  ],
+  "steps": [
+   "Ofen 180 °C, 12er-Muffinblech fetten/Silikonförmchen.",
+   "Gemüse klein schneiden, in die Mulden verteilen.",
+   "Eier mit Hüttenkäse verquirlen, würzen, eingießen, Feta darüber bröseln.",
+   "20–25 Min. backen bis gestockt."
+  ],
+  "source": "https://www.berrystreet.co/blog/vegetarian-meal-prep-high-protein",
+  "note": "Quelle beschreibt Egg Muffins als Meal-Prep-Snack; Mengen eigene Mit 2 Scheiben Vollkornbrot pro Portion.",
+  "img": "img/rezepte/r08.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Frittata_-_Bam%27s_Kitchen_2024-04-02.jpg",
+   "title": "File:Frittata - Bam's Kitchen 2024-04-02.jpg"
+  }
+ },
+ {
+  "name": "Quinoa-Kichererbsen-Salat im Glas + Edamame",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 707,
+  "protein": 37,
+  "carbs": 70,
+  "fat": 26,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "2–3 Tage Kühlschrank",
+  "ingredients": [
+   "120 g Quinoa",
+   "1 Dose Kichererbsen (240 g abgetropft)",
+   "200 g TK-Edamame (geschält)",
+   "1 große Karotte",
+   "1 Paprika",
+   "1/2 Gurke",
+   "150 g Cherrytomaten",
+   "2 Handvoll Spinat/Rucola",
+   "20 g Hanfsamen/Kürbiskerne",
+   "2 EL Tahin",
+   "2 EL Zitronensaft, 1 TL Ahornsirup, Wasser, Salz"
+  ],
+  "steps": [
+   "Quinoa kochen und komplett abkühlen lassen.",
+   "Edamame kurz blanchieren, abschrecken.",
+   "Dressing anrühren und unten ins Glas.",
+   "Schichten: Kichererbsen/Edamame, Quinoa, festes Gemüse, Tomaten, Blattgrün, Kerne.",
+   "Vor dem Essen schütteln/in Schüssel kippen."
+  ],
+  "source": "https://biancazapatka.com/de/quinoa-salat-mit-kichererbsen/",
+  "note": "Original 576 kcal/25 g P; +Edamame für ≥30 g",
+  "img": "img/rezepte/r09.jpg",
+  "imgCredit": {
+   "artist": "TorbeyCharbel",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Healthy_quinoa_salad_with_dried_fruit.jpg",
+   "title": "File:Healthy quinoa salad with dried fruit.jpg"
+  }
+ },
+ {
+  "name": "Linsen-Soja-Bolognese mit Vollkornnudeln",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 644,
+  "protein": 39,
+  "carbs": 88,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "150 g rote Linsen",
+   "100 g Sojagranulat (trocken)",
+   "320 g Vollkornnudeln",
+   "2 Pck. passierte/gehackte Tomaten (1 kg)",
+   "1 Zwiebel",
+   "2 Möhren",
+   "1 EL Olivenöl",
+   "40 g vegetarischer Hartkäse (mikrobielles Lab)",
+   "Tomatenmark, Oregano, Sojasauce, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojagranulat 10 Min. in heißer Brühe einweichen, ausdrücken.",
+   "Zwiebel/Möhre in Öl anschwitzen, Granulat kräftig anbraten (+ Tomatenmark).",
+   "Tomaten, Linsen und 300 ml Wasser zugeben, 20 Min. köcheln.",
+   "Nudeln al dente kochen, mit Soße in 4 Boxen portionieren, Käse separat."
+  ],
+  "source": "https://www.fuersie.de/kochen-backen/vegetarische-bolognese-15099.html",
+  "note": "Original 25 g P/527 kcal; mit Sojagranulat ergänzt (Zubereitung nach eat-this.org)",
+  "img": "img/rezepte/r10.jpg",
+  "imgCredit": {
+   "artist": "Dira0101",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Ingredients_for_spaghetti_with_tomato_sauce.jpg",
+   "title": "File:Ingredients for spaghetti with tomato sauce.jpg"
+  }
+ },
+ {
+  "name": "Chili sin Carne mit Sojagranulat & Reis",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 610,
+  "protein": 39,
+  "carbs": 88,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 45,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "120 g Sojagranulat",
+   "2 Dosen Kidneybohnen (480 g abgetropft)",
+   "1/2 Dose Mais",
+   "2 Dosen gehackte Tomaten",
+   "2 Paprika",
+   "1 Zwiebel",
+   "1 EL Öl",
+   "240 g Reis (roh)",
+   "200 g Skyr als Topping",
+   "Kreuzkümmel, Chili, Paprika edelsüß, 1 TL Kakao"
+  ],
+  "steps": [
+   "Granulat in Brühe einweichen, ausdrücken, in Öl scharf anbraten.",
+   "Zwiebel, Paprika, Gewürze dazu.",
+   "Tomaten, Bohnen, Mais zugeben, 20–30 Min. köcheln.",
+   "Reis kochen, portionieren; Skyr als Sour-Cream-Ersatz extra."
+  ],
+  "source": "https://www.eat-this.org/sind-sojaschnetzel-gesund/",
+  "note": "eigenes Rezept; Soja-Zubereitung nach Quelle",
+  "img": "img/rezepte/r11.jpg",
+  "imgCredit": {
+   "artist": "Carstor",
+   "license": "CC BY-SA 2.5",
+   "url": "https://commons.wikimedia.org/wiki/File:Bowl_of_chili.jpg",
+   "title": "File:Bowl of chili.jpg"
+  }
+ },
+ {
+  "name": "White Chickpea Chili mit Skyr-Topping",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 560,
+  "protein": 41,
+  "carbs": 66,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (Quelle: bis 1 Woche), 3 Monate TK",
+  "ingredients": [
+   "1 EL Olivenöl",
+   "1 Zwiebel",
+   "4 Knoblauchzehen",
+   "1/3 Tasse Mehl (ca. 40 g)",
+   "2 Dosen weiße Bohnen",
+   "2 Dosen Kichererbsen",
+   "1 Dose Mais",
+   "1 l Gemüsebrühe, grüne Chilis, Kreuzkümmel, Paprika, Oregano",
+   "480 ml Milch",
+   "600 g Skyr (150 g pro Portion als Topping)"
+  ],
+  "steps": [
+   "Zwiebel und Knoblauch in Öl 3 Min. anschwitzen.",
+   "Mehl und Gewürze einrühren.",
+   "Brühe, Bohnen, Kichererbsen, Mais, Chilis zugeben, 15–30 Min. köcheln.",
+   "Teil pürieren, Milch einrühren; portionieren, Skyr obendrauf."
+  ],
+  "source": "https://www.liveeatlearn.com/white-chickpea-chili/",
+  "note": "4 Portionen mit je 150 g Skyr als Topping, damit es ≥ 30 g Protein sind.",
+  "img": "img/rezepte/r12.jpg",
+  "imgCredit": {
+   "artist": "unbekannt",
+   "license": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:White-bean-chili-burritos.jpg",
+   "title": "File:White-bean-chili-burritos.jpg"
+  }
+ },
+ {
+  "name": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 544,
+  "protein": 40,
+  "carbs": 68,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "100 g Linsen-/Erbsennudeln",
+   "100 g Hartweizennudeln",
+   "1/2 Dose gehackte Tomaten",
+   "125 g Hüttenkäse",
+   "60 g geröstete Paprika (Glas)",
+   "1 Mozzarella light (125 g)",
+   "Basilikum, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Nudeln al dente kochen, etwas Nudelwasser aufheben.",
+   "Tomaten, Hüttenkäse, Paprika, Basilikum glatt mixen.",
+   "Soße mit heißen Nudeln mischen (ggf. Nudelwasser).",
+   "Mozzarellawürfel unterheben, portionieren."
+  ],
+  "source": "https://www.liveeatlearn.com/high-protein-pasta-sauce/",
+  "note": "Soßenidee aus Quelle (Soße allein 7,3 g P); Pasta-Mix eigene Rechnung",
+  "img": "img/rezepte/r13.jpg",
+  "imgCredit": {
+   "artist": "Iain Cameron from Ellon, Scotland",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Making_tomato_sauce_for_pasta_dish.jpg",
+   "title": "File:Making tomato sauce for pasta dish.jpg"
+  }
+ },
+ {
+  "name": "Teriyaki-Tofu-Edamame-Bowl",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 760,
+  "protein": 49,
+  "carbs": 70,
+  "fat": 29,
+  "estimated": true,
+  "timeMin": 40,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "800 g Tofu natur (4 Blöcke), gepresst",
+   "2 EL Speisestärke",
+   "2 EL Öl",
+   "300 g TK-Edamame",
+   "260 g Reis (roh)",
+   "500 g Brokkoli",
+   "4 EL Sojasauce",
+   "1 EL Ahornsirup",
+   "1 EL Sesam",
+   "Ingwer, Knoblauch, Reisessig"
+  ],
+  "steps": [
+   "Tofu pressen, würfeln, in Stärke wenden, im Ofen 25 Min. bei 200 °C oder Airfryer knusprig backen.",
+   "Reis kochen, Brokkoli und Edamame dämpfen.",
+   "Sojasauce, Sirup, Ingwer, Knoblauch, Essig aufkochen, Tofu darin schwenken.",
+   "In 4 Boxen portionieren, Sesam drüber."
+  ],
+  "source": "https://www.innerbuddies.com/de/pages/recipe/high-protein-high-fiber-tofu-edamame-meal-prep-bowl",
+  "note": "eigene Mengen; Tofu-Technik nach eat-this.org",
+  "img": "img/rezepte/r14.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Salt_%26_Pepper_Tofu_Rice_Bowl_-_Tiger_Bites_Pig_2025-11-20.jpg",
+   "title": "File:Salt & Pepper Tofu Rice Bowl - Tiger Bites Pig 2025-11-20.jpg"
+  }
+ },
+ {
+  "name": "Couscous-Kichererbsen-Pfanne mit Feta",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 672,
+  "protein": 32,
+  "carbs": 73,
+  "fat": 25,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "240 g Couscous",
+   "3 Dosen Kichererbsen",
+   "250 g Feta",
+   "1 Zucchini",
+   "2 Paprika",
+   "1 rote Zwiebel",
+   "1 EL Olivenöl",
+   "Kreuzkümmel, Paprikapulver, Zitrone, Petersilie"
+  ],
+  "steps": [
+   "Couscous mit gleicher Menge heißer Brühe übergießen, 5 Min. quellen.",
+   "Gemüse und Kichererbsen in Öl mit Gewürzen 8 Min. braten.",
+   "Couscous unterheben, Zitrone/Petersilie.",
+   "Feta zerbröseln, portionieren."
+  ],
+  "source": "https://biancazapatka.com/de/couscous-gemuese-pfanne/",
+  "note": "Original vegan; hier mit Feta + 2. Dose Kichererbsen",
+  "img": "img/rezepte/r15.jpg",
+  "imgCredit": {
+   "artist": "Luca Nebuloni from Milan, Italy",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Couscous_with_vegetables_(6177185023).jpg",
+   "title": "File:Couscous with vegetables (6177185023).jpg"
+  }
+ },
+ {
+  "name": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 591,
+  "protein": 42,
+  "carbs": 48,
+  "fat": 25,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": true,
+  "shelfLife": "Füllung 4 Tage, gerollt 1 Tag",
+  "ingredients": [
+   "300 g Räuchertofu, dünn gehobelt",
+   "2 TL Öl",
+   "2 große Dürüm-Wraps",
+   "200 g Skyr + Knoblauch, Zitrone, Dill",
+   "2 Tomaten",
+   "1/2 rote Zwiebel",
+   "1/2 Gurke",
+   "Salat",
+   "Döner-/Gyrosgewürz, Sumach"
+  ],
+  "steps": [
+   "Tofu in feine Streifen, mit Gewürz und Öl knusprig braten.",
+   "Skyr mit Knoblauch, Zitrone, Dill, Salz verrühren.",
+   "Salat schneiden.",
+   "Wraps füllen, fest rollen (zum Mitnehmen in Alufolie, Soße separat)."
+  ],
+  "source": "https://www.eat-this.org/veganer-raeuchertofu-doener/",
+  "note": "Kombi aus eat-this-Räuchertofu-Döner und Bianca-Zapatka-Dürüm (https://biancazapatka.com/de/veganer-dueruem/)",
+  "img": "img/rezepte/r16.jpg",
+  "imgCredit": {
+   "artist": "Christo",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tofu_wrap.jpg",
+   "title": "File:Tofu wrap.jpg"
+  }
+ },
+ {
+  "name": "Marry-Me-Linsen mit Räuchertofu (light)",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 519,
+  "protein": 32,
+  "carbs": 30,
+  "fat": 28,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (nicht einfrieren)",
+  "ingredients": [
+   "1 EL Rapsöl",
+   "3 Knoblauchzehen, Oregano, Paprikapulver, Chiliflocken",
+   "40 g getrocknete Tomaten (Öl, abgetropft)",
+   "1 Dose Linsen (265 g abgetropft)",
+   "1/2 Dose Linsen",
+   "130 g Räuchertofu, gebröselt",
+   "1 Handvoll Spinat",
+   "130 ml Kochsahne 15 %",
+   "35 g vegetarischer Hartkäse (mikrobielles Lab)",
+   "170 ml Gemüsebrühe, Basilikum"
+  ],
+  "steps": [
+   "Tofubrösel in Öl mit Knoblauch und Gewürzen 4 Min. anbraten.",
+   "Tomaten, Brühe, Linsen zugeben, 6 Min. köcheln.",
+   "Spinat unterheben.",
+   "Vom Herd, Kochsahne und Hartkäse einrühren. Mit Brot oder Reis servieren."
+  ],
+  "source": "https://www.liveeatlearn.com/marry-me-lentils/",
+  "note": "Original 496 kcal/19,8 g P mit Sahne; hier Kochsahne + Räuchertofu",
+  "img": "img/rezepte/r17.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Homemade_Lentil_Soup_-_Lavash_2025-02-10.jpg",
+   "title": "File:Homemade Lentil Soup - Lavash 2025-02-10.jpg"
+  }
+ },
+ {
+  "name": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 585,
+  "protein": 33,
+  "carbs": 68,
+  "fat": 19,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK (ohne Skyr)",
+  "ingredients": [
+   "400 g Tofu, gewürfelt",
+   "1 Dose Kichererbsen",
+   "1 EL Öl",
+   "1 Zwiebel",
+   "4 Knoblauchzehen, 2 EL Ingwer, Garam Masala, Kreuzkümmel, Koriander, Kurkuma, Paprika",
+   "500 g passierte Tomaten",
+   "200 ml Kokosmilch light",
+   "250 g Skyr (zum Schluss)",
+   "240 g Basmati (roh)"
+  ],
+  "steps": [
+   "Tofu im Ofen/Airfryer oder Pfanne anbräunen.",
+   "Zwiebel, Knoblauch, Ingwer in Öl 3 Min., Gewürze 2 Min. mitrösten.",
+   "Tomaten, Kokosmilch, Kichererbsen, Tofu 10 Min. köcheln.",
+   "Vom Herd, Skyr einrühren (nicht mehr kochen). Mit Reis servieren."
+  ],
+  "source": "https://www.liveeatlearn.com/chickpea-tikka-masala/",
+  "note": "Original 526 kcal/15 g P (ohne Reis); Kokosmilch teils durch Skyr/Tofu ersetzt",
+  "img": "img/rezepte/r18.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chana_Masala_-_Mohammed_-_Spice_Of_Life_2024-05-27.jpg",
+   "title": "File:Chana Masala - Mohammed - Spice Of Life 2024-05-27.jpg"
+  }
+ },
+ {
+  "name": "Nudelgulasch mit Soja-Hack",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 588,
+  "protein": 34,
+  "carbs": 89,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "120 g Sojagranulat",
+   "380 g Nudeln (Spirelli)",
+   "2 Paprika",
+   "2 Zwiebeln",
+   "800 g gehackte Tomaten",
+   "1 EL Öl",
+   "200 g Skyr als Topping",
+   "2 EL Tomatenmark",
+   "Paprikapulver edelsüß + geräuchert, Kümmel, Majoran",
+   "700 ml Gemüsebrühe"
+  ],
+  "steps": [
+   "Granulat einweichen, ausdrücken, in Öl scharf anbraten, Tomatenmark mitrösten.",
+   "Zwiebel und Paprika zugeben.",
+   "Tomaten, Brühe, Gewürze, rohe Nudeln zugeben, 12–15 Min. köcheln bis Nudeln gar.",
+   "Mit Skyr-Klecks servieren."
+  ],
+  "source": "https://www.eat-this.org/veganes-nudelgulasch-mit-tofu-hack/",
+  "note": "Original mit Tofu-Hack; hier Sojagranulat (günstiger, mehr Protein)",
+  "img": "img/rezepte/r19.jpg",
+  "imgCredit": {
+   "artist": "Lichinga-niassa",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bohnen_-_Eintopf.JPG",
+   "title": "File:Bohnen - Eintopf.JPG"
+  }
+ },
+ {
+  "name": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 743,
+  "protein": 55,
+  "carbs": 65,
+  "fat": 28,
+  "estimated": true,
+  "timeMin": 45,
+  "mealPrep": true,
+  "shelfLife": "3–4 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Tofu natur",
+   "600 g Kartoffeln",
+   "300 g grüne Bohnen/Spargel",
+   "2 EL Olivenöl",
+   "2 EL Sojasauce",
+   "250 g Magerquark",
+   "Kräuter, Knoblauch, Schuss Milch",
+   "Paprikapulver, Rosmarin, Pfeffer"
+  ],
+  "steps": [
+   "Ofen 220 °C. Kartoffeln vierteln, mit 1 EL Öl/Gewürz aufs Blech, 15 Min. vorbacken.",
+   "Tofu würfeln, mit Sojasauce, 1 EL Öl, Paprika marinieren.",
+   "Tofu und Bohnen dazu, weitere 20 Min. backen.",
+   "Quark mit Kräutern verrühren, dazu servieren."
+  ],
+  "source": "https://www.eat-this.org/tofu-vom-blech-mit-spargel-und-fruehkartoffeln/",
+  "note": "eigene Mengen + Kräuterquark",
+  "img": "img/rezepte/r20.jpg",
+  "imgCredit": {
+   "artist": "Karen and Brad Emerson",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Roasted_sweet_potatoes,_green_beans,_and_shallots_(for_a_salad)_(7753558234).jpg",
+   "title": "File:Roasted sweet potatoes, green beans, and shallots (for a salad) (7753558234).jpg"
+  }
+ },
+ {
+  "name": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 762,
+  "protein": 39,
+  "carbs": 100,
+  "fat": 22,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Pasta",
+   "100 g Spinat",
+   "50 g Bärlauch oder Basilikum",
+   "200 g Tofu natur",
+   "30 g Cashews",
+   "10 g Hefeflocken",
+   "1/2 EL Olivenöl",
+   "125 ml Sojadrink"
+  ],
+  "steps": [
+   "Pasta 12 Min. kochen, 100 ml Nudelwasser aufheben.",
+   "Spinat/Bärlauch mit heißem Wasser übergießen, abschrecken, ausdrücken.",
+   "Mit Tofu, Cashews, Hefeflocken, Öl, Sojadrink, Salz glatt mixen.",
+   "Mit Pasta und etwas Nudelwasser 1–2 Min. erhitzen."
+  ],
+  "source": "https://www.eat-this.org/vegane-high-protein-baerlauch-pasta/",
+  "note": "",
+  "img": "img/rezepte/r21.jpg",
+  "imgCredit": {
+   "artist": "Karen and Brad Emerson",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Spinach_pasta_(3383218355).jpg",
+   "title": "File:Spinach pasta (3383218355).jpg"
+  }
+ },
+ {
+  "name": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 672,
+  "protein": 36,
+  "carbs": 100,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "300 g rote Linsen",
+   "1 Dose gehackte Tomaten",
+   "200 ml Kokosmilch light",
+   "1 Zwiebel",
+   "1 EL Öl",
+   "200 g Spinat (TK ok)",
+   "260 g Reis (roh)",
+   "400 g Skyr (100 g/Portion)",
+   "Knoblauch, Ingwer, Curry, Kreuzkümmel, Kurkuma, Zitrone"
+  ],
+  "steps": [
+   "Zwiebel, Knoblauch, Ingwer in Öl anbraten, Gewürze kurz rösten.",
+   "Linsen, Tomaten, Kokosmilch, 600 ml Wasser 15–20 Min. köcheln.",
+   "Spinat unterrühren, mit Zitrone/Salz abschmecken.",
+   "Mit Reis portionieren, Skyr obendrauf."
+  ],
+  "source": "https://www.berrystreet.co/blog/vegetarian-meal-prep-high-protein",
+  "note": "Quelle: Linsen-Currys ca. 18–20 g P; hier mit Skyr auf ≥30 g",
+  "img": "img/rezepte/r22.jpg",
+  "imgCredit": {
+   "artist": "AugustineKajur",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dal_Tadka-Delhi.jpg",
+   "title": "File:Dal Tadka-Delhi.jpg"
+  }
+ },
+ {
+  "name": "Shakshuka mit Kichererbsen & Feta",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 745,
+  "protein": 45,
+  "carbs": 54,
+  "fat": 36,
+  "estimated": true,
+  "timeMin": 25,
+  "mealPrep": false,
+  "shelfLife": "Soße 4 Tage; Eier frisch",
+  "ingredients": [
+   "6 Eier",
+   "1 Dose gehackte Tomaten",
+   "1 Dose Kichererbsen",
+   "80 g Feta",
+   "1 Paprika",
+   "1 Zwiebel",
+   "2 TL Olivenöl",
+   "2 Scheiben Vollkornbrot",
+   "Kreuzkümmel, Paprika, Chili"
+  ],
+  "steps": [
+   "Zwiebel und Paprika in Öl 5 Min. braten, Gewürze dazu.",
+   "Tomaten und Kichererbsen 10 Min. köcheln.",
+   "6 Mulden formen, Eier hineinschlagen, zugedeckt 6–8 Min. stocken lassen.",
+   "Feta drüberbröseln, mit Brot servieren."
+  ],
+  "source": "https://joytothefood.com/sheet-pan-huevos-rancheros/",
+  "note": "eigene Rezeptur, Idee Eier in Tomaten-Bohnen-Soße",
+  "img": "img/rezepte/r23.jpg",
+  "imgCredit": {
+   "artist": "Calliopejen1",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Shakshuka_by_Calliopejen1.jpg",
+   "title": "File:Shakshuka by Calliopejen1.jpg"
+  }
+ },
+ {
+  "name": "Blech-Fajitas mit Räuchertofu & Bohnen",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 898,
+  "protein": 51,
+  "carbs": 93,
+  "fat": 32,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "Füllung 4 Tage Kühlschrank",
+  "ingredients": [
+   "200 g Räuchertofu, in Streifen",
+   "1 Dose Kidneybohnen",
+   "2 Paprika",
+   "1 Zwiebel",
+   "1 EL Öl",
+   "4 Weizentortillas (à 60 g)",
+   "150 g Skyr + Limette",
+   "40 g geriebener Käse",
+   "Fajita-Gewürz (Kreuzkümmel, Paprika, Chili, Knoblauch)"
+  ],
+  "steps": [
+   "Ofen 220 °C. Paprika, Zwiebel, Tofu mit Öl und Gewürz aufs Blech.",
+   "20 Min. backen, Bohnen in den letzten 5 Min. dazu.",
+   "Tortillas kurz erwärmen.",
+   "Mit Füllung, Skyr-Limetten-Dip und Käse belegen."
+  ],
+  "source": "https://biancazapatka.com/de/fajitas/",
+  "note": "Original vegan; hier Räuchertofu, Skyr und Käse ergänzt",
+  "img": "img/rezepte/r24.jpg",
+  "imgCredit": {
+   "artist": "Jennifer from Vancouver, Canada",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetable_Fajitas_(4188499456).jpg",
+   "title": "File:Vegetable Fajitas (4188499456).jpg"
+  }
+ },
+ {
+  "name": "Harzer-Käse-Brot mit Gurke",
+  "category": "snack",
+  "servings": 1,
+  "kcal": 348,
+  "protein": 39,
+  "carbs": 42,
+  "fat": 3,
+  "estimated": true,
+  "timeMin": 3,
+  "mealPrep": false,
+  "shelfLife": "frisch",
+  "ingredients": [
+   "100 g Harzer Käse",
+   "2 Scheiben Vollkornbrot",
+   "1/4 Gurke",
+   "4 Radieschen",
+   "Senf/Kümmel, Pfeffer"
+  ],
+  "steps": [
+   "Brot ggf. dünn mit Senf bestreichen.",
+   "Harzer in Scheiben schneiden, auflegen.",
+   "Gurke/Radieschen dazu, pfeffern."
+  ],
+  "source": "",
+  "note": "eigene Zusammenstellung (Nährwerte: typische Packungsangaben)",
+  "img": "img/rezepte/r25.jpg",
+  "imgCredit": {
+   "artist": "Elke Wetzig",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Harzer_K%C3%A4se_13_WikiCheese_Lokal_K.jpg",
+   "title": "File:Harzer Käse 13 WikiCheese Lokal K.jpg"
+  }
+ },
+ {
+  "name": "Hüttenkäse-Gemüse-Box mit Knäckebrot",
+  "category": "snack",
+  "servings": 1,
+  "kcal": 351,
+  "protein": 30,
+  "carbs": 31,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 5,
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "200 g Hüttenkäse",
+   "3 Knäckebrot (30 g)",
+   "Cherrytomaten",
+   "Paprikastreifen",
+   "Schnittlauch, Pfeffer"
+  ],
+  "steps": [
+   "Gemüse schneiden.",
+   "Hüttenkäse würzen, in Box füllen.",
+   "Knäckebrot separat einpacken (bleibt knusprig)."
+  ],
+  "source": "",
+  "note": "eigene Zusammenstellung",
+  "img": "img/rezepte/r26.jpg",
+  "imgCredit": {
+   "artist": "megan from new york",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Veggie_pasta_bento_(3948839857).jpg",
+   "title": "File:Veggie pasta bento (3948839857).jpg"
+  }
+ },
+ {
+  "name": "Knusper-Kichererbsen & Edamame",
+  "category": "snack",
+  "servings": 2,
+  "kcal": 314,
+  "protein": 19,
+  "carbs": 22,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": true,
+  "shelfLife": "Kichererbsen 3 Tage luftdicht (werden weicher)",
+  "ingredients": [
+   "1 Dose Kichererbsen, trocken getupft",
+   "200 g TK-Edamame",
+   "2 TL Öl",
+   "Paprika geräuchert, Knoblauchpulver, Salz"
+  ],
+  "steps": [
+   "Kichererbsen gründlich trocknen, mit Öl und Gewürzen mischen.",
+   "In Pfanne 10–12 Min. oder Airfryer 15 Min. bei 200 °C knusprig rösten.",
+   "Edamame auftauen/blanchieren, salzen, dazugeben."
+  ],
+  "source": "https://www.liveeatlearn.com/fried-chickpeas/",
+  "note": "",
+  "img": "img/rezepte/r27.jpg",
+  "imgCredit": {
+   "artist": "Physicistjedi",
+   "license": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Leblebi.jpg",
+   "title": "File:Leblebi.jpg"
+  }
+ },
+ {
+  "name": "Erdnuss-Hafer-Energy-Balls (2 Stück)",
+  "category": "snack",
+  "servings": 4,
+  "kcal": 270,
+  "protein": 13,
+  "carbs": 33,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "7 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "100 g Haferflocken",
+   "60 g Erdnussmus",
+   "60 g Magermilchpulver",
+   "2 EL Honig",
+   "ca. 40 ml Milch"
+  ],
+  "steps": [
+   "Alle Zutaten zu einer formbaren Masse kneten (Milch nach Bedarf).",
+   "8 Kugeln rollen.",
+   "Mind. 30 Min. kühlen."
+  ],
+  "source": "https://www.eat-this.org/energy-balls-leckerer-powersnack-mit-viel-protein/",
+  "note": "ohne Proteinpulver; Magermilchpulver ist ein normales Milchprodukt. Als Snack mit einem Becher Skyr kombinieren für mehr Protein. Werte geschätzt",
+  "img": "img/rezepte/r28.jpg",
+  "imgCredit": {
+   "artist": "Toa Heftiba heftiba",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Energy_Balls_(Unsplash).jpg",
+   "title": "File:Energy Balls (Unsplash).jpg"
+  }
+ },
+ {
+  "name": "Quark-Beeren-Bowl mit Hafer & Erdnussmus",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 430,
+  "protein": 40,
+  "carbs": 45,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 3,
+  "mealPrep": true,
+  "shelfLife": "2 Tage (Hafer separat)",
+  "ingredients": [
+   "250 g Magerquark",
+   "Schuss Milch",
+   "150 g TK-Beeren (aufgetaut)",
+   "30 g Haferflocken",
+   "10 g Erdnussmus",
+   "Zimt, ggf. Süße"
+  ],
+  "steps": [
+   "Quark mit Milch cremig rühren.",
+   "Beeren samt Saft unterziehen.",
+   "Hafer und Erdnussmus darauf."
+  ],
+  "source": "",
+  "note": "eigene Zusammenstellung",
+  "img": "img/rezepte/r29.jpg",
+  "imgCredit": {
+   "artist": "David Stewart",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Muesli_with_Berries.jpg",
+   "title": "File:Muesli with Berries.jpg"
+  }
+ },
+ {
+  "name": "Bananen-Kakao-Skyr-Shake",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 705,
+  "protein": 52,
+  "carbs": 81,
+  "fat": 17,
+  "estimated": true,
+  "timeMin": 3,
+  "mealPrep": false,
+  "shelfLife": "frisch (max. 1 Tag gekühlt)",
+  "ingredients": [
+   "300 ml Milch 1,5 %",
+   "150 g Skyr",
+   "100 g Magerquark",
+   "1 Banane",
+   "40 g Haferflocken",
+   "1 EL Erdnussmus",
+   "1 TL Kakao"
+  ],
+  "steps": [
+   "Alles in den Mixer.",
+   "30 Sek. mixen.",
+   "Sofort trinken oder in Shaker mitnehmen (gekühlt)."
+  ],
+  "source": "",
+  "note": "ohne Proteinpulver, gut als kcal-Puffer; Werte geschätzt",
+  "img": "img/rezepte/r30.jpg",
+  "imgCredit": {
+   "artist": "Shaili Sharma",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tricolor_Smoothie,_Papaya,_Banana_%26_Kiwi_-_Gujarat_-_SHAILI_006.jpg",
+   "title": "File:Tricolor Smoothie, Papaya, Banana & Kiwi - Gujarat - SHAILI 006.jpg"
+  }
+ },
+ {
+  "name": "Skyr-Quark-Eis / Frozen-Bark",
+  "category": "shake",
+  "servings": 2,
+  "kcal": 257,
+  "protein": 34,
+  "carbs": 26,
+  "fat": 1,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": true,
+  "shelfLife": "1 Monat TK",
+  "ingredients": [
+   "500 g Skyr",
+   "100 g Magerquark",
+   "150 g Beeren",
+   "1–2 EL Honig",
+   "etwas Vanille"
+  ],
+  "steps": [
+   "Skyr, Quark, Honig und Vanille verrühren.",
+   "Auf Backpapier 1 cm dick streichen, Beeren drauf.",
+   "2–3 h einfrieren, in Stücke brechen."
+  ],
+  "source": "https://joytothefood.com/greek-yogurt-ice-cream/",
+  "note": "ohne Proteinpulver; Werte geschätzt",
+  "img": "img/rezepte/r31.jpg",
+  "imgCredit": {
+   "artist": "unbekannt",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:French_fry_frozen_yoghurt.jpg",
+   "title": "File:French fry frozen yoghurt.jpg"
+  }
+ },
+ {
+  "name": "Quark-Tiramisu im Glas",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 301,
+  "protein": 42,
+  "carbs": 28,
+  "fat": 2,
+  "estimated": true,
+  "timeMin": 8,
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Magerquark",
+   "100 g Skyr",
+   "3 Löffelbiskuits",
+   "1 Espresso, 1 TL Kakao, Süße/Vanille"
+  ],
+  "steps": [
+   "Quark, Skyr, Süße, Vanille glatt rühren.",
+   "Biskuits in Espresso tunken, ins Glas.",
+   "Quarkcreme drauf, mit Kakao bestäuben, 30 Min. kühlen."
+  ],
+  "source": "https://joytothefood.com/protein-tiramisu-recipe/",
+  "note": "eigene Mengen (Original mit Hüttenkäse)",
+  "img": "img/rezepte/r32.jpg",
+  "imgCredit": {
+   "artist": "Natox",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tiramisu_in_glass.jpg",
+   "title": "File:Tiramisu in glass.jpg"
+  }
+ },
+ {
+  "name": "Chia-Skyr-Pudding mit Beeren",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 348,
+  "protein": 35,
+  "carbs": 25,
+  "fat": 8,
+  "estimated": true,
+  "timeMin": 5,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Skyr",
+   "20 g Chiasamen",
+   "100 ml Milch",
+   "100 g Beeren",
+   "Vanille, Süße"
+  ],
+  "steps": [
+   "Skyr, Milch, Chia, Vanille verrühren.",
+   "Mind. 2 h oder über Nacht quellen lassen.",
+   "Mit Beeren servieren."
+  ],
+  "source": "https://joytothefood.com/greek-yogurt-chia-seed-pudding/",
+  "note": "Original 17 g P; hier mehr Skyr",
+  "img": "img/rezepte/r33.jpg",
+  "imgCredit": {
+   "artist": "T.Tseng",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Coconut_chia_seed_pudding,_fresh_fruit,_honey_%26_hemp_seeds_(30539936772).jpg",
+   "title": "File:Coconut chia seed pudding, fresh fruit, honey & hemp seeds (30539936772).jpg"
+  }
+ },
+ {
+  "name": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 575,
+  "protein": 30,
+  "carbs": 17,
+  "fat": 36,
+  "estimated": true,
+  "timeMin": 50,
+  "mealPrep": false,
+  "shelfLife": "Pilz-Bacon 4 Tage Kühlschrank",
+  "ingredients": [
+   "300 g Champignons",
+   "3 EL Sojasauce",
+   "1 EL Olivenöl",
+   "2 TL Liquid Smoke, Senf, Paprikapulver geräuchert, 3/4 EL Zucker",
+   "125 g Grünkohl",
+   "1 EL Öl",
+   "4 EL (veganer) Frischkäse + Knoblauch + Zitrone",
+   "4 Scheiben Eiweißbrot",
+   "4 Radieschen"
+  ],
+  "steps": [
+   "Pilze in 4-mm-Scheiben schneiden, 15 Min. marinieren.",
+   "Bei 180 °C 40 Min. backen, halb wenden.",
+   "Grünkohl 8 Min. in Öl braten.",
+   "Aioli-Frischkäse rühren, Brote belegen."
+  ],
+  "source": "https://www.eat-this.org/protein-stullen-mit-pilz-bacon-und-gruenkohl/",
+  "note": "Protein laut Quelle ca. 30 g/Sandwich; kcal/KH/Fett geschätzt",
+  "img": "img/rezepte/r34.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mushrooms_On_Toast_-_North_Laine_Caf%C3%A9_2025-09-08.jpg",
+   "title": "File:Mushrooms On Toast - North Laine Café 2025-09-08.jpg"
+  }
+ }
+]

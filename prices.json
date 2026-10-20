@@ -1,0 +1,1341 @@
+{
+"date": "2026-10-20",
+"note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
+"products": [
+{
+"id": "magermilchpulver",
+"name": "Magermilchpulver",
+"pack": 250,
+"unit": "g",
+"match": "milchpulver",
+"prices": {
+"rewe": 2.49,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kokosmilch",
+"name": "Kokosmilch light",
+"pack": 400,
+"unit": "ml",
+"dose": true,
+"match": "kokosmilch",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.29,
+"aldi": 1.19,
+"kaufland": 1.19
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "sojadrink",
+"name": "Sojadrink natur",
+"pack": 1000,
+"unit": "ml",
+"match": "sojadrink",
+"prices": {
+"rewe": 0.95,
+"lidl": 1.09,
+"aldi": 0.99,
+"kaufland": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "raeuchertofu",
+"name": "Räuchertofu",
+"pack": 200,
+"unit": "g",
+"match": "räuchertofu",
+"prices": {
+"rewe": 1.5,
+"lidl": 1.49,
+"aldi": 1.31,
+"kaufland": 1.49
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "veghack",
+"name": "Veganes Hack (Kühlregal)",
+"pack": 250,
+"unit": "g",
+"match": "veganes hack|chorizo",
+"prices": {
+"rewe": 2.21,
+"lidl": 2.29,
+"aldi": 2.0,
+"kaufland": 2.11
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "sojagranulat",
+"name": "Sojagranulat / Soja-Schnetzel",
+"pack": 250,
+"unit": "g",
+"match": "sojagranulat|soja-hack",
+"prices": {
+"rewe": 3.08,
+"lidl": 1.99,
+"aldi": 1.79,
+"kaufland": 1.79
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "eiklar",
+"name": "Eiklar flüssig (pasteurisiert)",
+"pack": 500,
+"unit": "ml",
+"match": "eiklar",
+"prices": {
+"rewe": 3.49,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "huettenkaese",
+"name": "Hüttenkäse / Körniger Frischkäse",
+"pack": 200,
+"unit": "g",
+"match": "hüttenkäse",
+"prices": {
+"rewe": 1.19,
+"lidl": 0.89,
+"aldi": 1.19,
+"kaufland": 1.19
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "frischkaese",
+"name": "Frischkäse (Eigenmarke)",
+"pack": 200,
+"unit": "g",
+"match": "frischkäse",
+"prices": {
+"rewe": 1.06,
+"lidl": 0.97,
+"aldi": 1.06,
+"kaufland": 1.09
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "hartkaese",
+"name": "Vegetarischer Hartkäse (Grana-Art)",
+"pack": 150,
+"unit": "g",
+"match": "hartkäse",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 2.99,
+"kaufland": 2.29
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "reibekaese",
+"name": "Geriebener Käse (Gouda/Cheddar)",
+"pack": 200,
+"unit": "g",
+"match": "gerieben|cheddar|gouda",
+"prices": {
+"rewe": 1.59,
+"lidl": 1.19,
+"aldi": 1.43,
+"kaufland": 1.43
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "magerquark",
+"name": "Magerquark (Eigenmarke)",
+"pack": 500,
+"unit": "g",
+"match": "quark",
+"prices": {
+"rewe": 0.99,
+"lidl": 1.19,
+"aldi": 1.19,
+"kaufland": 1.19
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "vollkornnudeln",
+"name": "Vollkornnudeln",
+"pack": 500,
+"unit": "g",
+"match": "vollkornnudeln",
+"prices": {
+"rewe": 1.49,
+"lidl": 0.99,
+"aldi": 0.85,
+"kaufland": 0.89
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "linsennudeln",
+"name": "Linsen- oder Erbsennudeln",
+"pack": 250,
+"unit": "g",
+"match": "linsen-|erbsennudeln",
+"prices": {
+"rewe": 1.55,
+"lidl": 1.49,
+"aldi": 1.55,
+"kaufland": 1.55
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "roteLinsen",
+"name": "Rote Linsen getrocknet",
+"pack": 500,
+"unit": "g",
+"match": "rote linsen",
+"prices": {
+"rewe": 1.65,
+"lidl": 1.49,
+"aldi": 1.65,
+"kaufland": 1.45
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "weissebohnen",
+"name": "Weiße Bohnen Dose (400 g, 240 g abgetropft)",
+"pack": 240,
+"unit": "g",
+"dose": true,
+"match": "weiße bohnen",
+"prices": {
+"rewe": 0.79,
+"lidl": 0.79,
+"aldi": 0.69,
+"kaufland": 0.69
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "bohnenGruen",
+"name": "Grüne Bohnen TK",
+"pack": 750,
+"unit": "g",
+"match": "grüne bohnen",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kidney",
+"name": "Kidneybohnen Dose (400 g, 250 g abgetropft)",
+"pack": 250,
+"unit": "g",
+"dose": true,
+"match": "kidney",
+"prices": {
+"rewe": 0.79,
+"lidl": 0.69,
+"aldi": 0.69,
+"kaufland": 0.69
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "tomatenGehackt",
+"name": "Gehackte Tomaten Dose",
+"pack": 400,
+"unit": "g",
+"dose": true,
+"match": "gehackte tomaten|dosen? tomaten",
+"prices": {
+"rewe": 0.59,
+"lidl": 0.55,
+"aldi": 0.59,
+"kaufland": 0.59
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "tomatenPassiert",
+"name": "Passierte Tomaten",
+"pack": 500,
+"unit": "g",
+"match": "passierte",
+"prices": {
+"rewe": 0.65,
+"lidl": 0.55,
+"aldi": 0.65,
+"kaufland": 0.65
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "tomatenmark",
+"name": "Tomatenmark",
+"pack": 200,
+"unit": "g",
+"match": "tomatenmark",
+"prices": {
+"rewe": 0.89,
+"lidl": 0.69,
+"aldi": 0.89,
+"kaufland": 0.89
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "cherrytomaten",
+"name": "Cherrytomaten",
+"pack": 250,
+"unit": "g",
+"match": "cherrytomate",
+"prices": {
+"rewe": 1.29,
+"lidl": 1.19,
+"aldi": 1.19,
+"kaufland": 1.4
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "fruehlingszwiebeln",
+"name": "Frühlingszwiebeln, Bund (ca. 100 g)",
+"pack": 1,
+"unit": "Stück",
+"match": "frühlingszwiebel",
+"prices": {
+"rewe": 0.79,
+"lidl": 0.69,
+"aldi": 0.69,
+"kaufland": 0.69
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "eiweissbrot",
+"name": "Eiweißbrot",
+"pack": 250,
+"unit": "g",
+"piece": 50,
+"match": "eiweißbrot",
+"prices": {
+"rewe": 2.69,
+"lidl": 1.79,
+"aldi": 1.99,
+"kaufland": 1.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "knaeckebrot",
+"name": "Vollkorn-Knäckebrot",
+"pack": 250,
+"unit": "g",
+"piece": 12,
+"match": "knäcke",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "erdnussmus",
+"name": "Erdnussmus / Erdnussbutter",
+"pack": 350,
+"unit": "g",
+"match": "erdnuss",
+"prices": {
+"rewe": 1.75,
+"lidl": 1.99,
+"aldi": 1.75,
+"kaufland": 1.75
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "skyr",
+"name": "Skyr natur (Eigenmarke)",
+"pack": 500,
+"unit": "g",
+"match": "skyr",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.39,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "milch",
+"name": "Fettarme H-Milch 1,5 %",
+"pack": 1000,
+"unit": "ml",
+"match": "milch(?!pulver)",
+"prices": {
+"rewe": 0.85,
+"lidl": 0.85,
+"aldi": 0.85,
+"kaufland": 0.79
+}
+},
+{
+"id": "eier",
+"name": "Eier Freiland, Größe M, 10 Stück",
+"pack": 10,
+"unit": "Stück",
+"match": "\\beier?\\b",
+"prices": {
+"rewe": 3.29,
+"lidl": 2.99,
+"aldi": 2.99,
+"kaufland": 2.99
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "feta",
+"name": "Feta / Hirtenkäse",
+"pack": 200,
+"unit": "g",
+"match": "feta",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.43,
+"aldi": 1.19,
+"kaufland": 1.19
+}
+},
+{
+"id": "harzer",
+"name": "Harzer Käse",
+"pack": 200,
+"unit": "g",
+"match": "harzer",
+"prices": {
+"rewe": 1.89,
+"lidl": 1.72,
+"aldi": 1.99,
+"kaufland": 1.29
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "mozzarella",
+"name": "Mozzarella light",
+"pack": 125,
+"unit": "g",
+"match": "mozzarella",
+"piece": 125,
+"prices": {
+"rewe": 1.29,
+"lidl": 0.79,
+"aldi": 0.85,
+"kaufland": 0.85
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "kochsahne",
+"name": "Kochsahne 15 %",
+"pack": 200,
+"unit": "ml",
+"match": "kochsahne|sahne",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.79,
+"aldi": 0.71,
+"kaufland": 0.71
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "butter",
+"name": "Butter",
+"pack": 250,
+"unit": "g",
+"match": "butter",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.05,
+"aldi": 1.19,
+"kaufland": 1.19
+},
+"est": [
+"rewe",
+"kaufland"
+]
+},
+{
+"id": "tofu",
+"name": "Tofu natur",
+"pack": 400,
+"unit": "g",
+"match": "tofu(?! ?-?räucher)",
+"prices": {
+"rewe": 2.29,
+"lidl": 2.19,
+"aldi": 2.29,
+"kaufland": 1.99
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "edamame",
+"name": "TK-Edamame geschält",
+"pack": 500,
+"unit": "g",
+"match": "edamame",
+"prices": {
+"rewe": 2.99,
+"lidl": 2.99,
+"aldi": 1.99,
+"kaufland": 2.49
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kichererbsen",
+"name": "Kichererbsen Dose (400 g, 240 g abgetropft)",
+"pack": 240,
+"unit": "g",
+"dose": true,
+"match": "kichererbsen",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "linsendose",
+"name": "Linsen Dose (400 g, 265 g abgetropft)",
+"pack": 265,
+"unit": "g",
+"dose": true,
+"match": "^linsen|dosen? linsen",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.89,
+"kaufland": 0.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "mais",
+"name": "Mais Dose (285 g abgetropft)",
+"pack": 285,
+"unit": "g",
+"dose": true,
+"match": "\\bmais\\b",
+"prices": {
+"rewe": 0.89,
+"lidl": 0.99,
+"aldi": 0.89,
+"kaufland": 0.89
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "haferflocken",
+"name": "Haferflocken zart",
+"pack": 500,
+"unit": "g",
+"match": "haferflocken",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.59,
+"aldi": 0.69,
+"kaufland": 0.69
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "reis",
+"name": "Langkorn- oder Basmatireis",
+"pack": 1000,
+"unit": "g",
+"match": "\\breis\\b|basmati",
+"prices": {
+"rewe": 1.59,
+"lidl": 1.59,
+"aldi": 1.39,
+"kaufland": 1.39
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "nudeln",
+"name": "Hartweizennudeln",
+"pack": 500,
+"unit": "g",
+"match": "nudeln|pasta|spaghetti",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.79,
+"aldi": 0.69,
+"kaufland": 0.69
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "couscous",
+"name": "Couscous",
+"pack": 500,
+"unit": "g",
+"match": "couscous",
+"prices": {
+"rewe": 1.29,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "quinoa",
+"name": "Quinoa",
+"pack": 500,
+"unit": "g",
+"match": "quinoa",
+"prices": {
+"rewe": 2.29,
+"lidl": 2.99,
+"aldi": 2.99,
+"kaufland": 2.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "vollkornbrot",
+"name": "Vollkornbrot geschnitten",
+"pack": 500,
+"unit": "g",
+"piece": 50,
+"match": "vollkornbrot|sauerteigbrot|\\bbrot\\b",
+"prices": {
+"rewe": 0.79,
+"lidl": 1.19,
+"aldi": 0.89,
+"kaufland": 1.19
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "tortillas",
+"name": "Weizen-Tortillas / Wraps, 6 Stück",
+"pack": 6,
+"unit": "Stück",
+"match": "tortilla|wrap",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.29,
+"aldi": 1.19,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "loeffelbiskuits",
+"name": "Löffelbiskuits",
+"pack": 200,
+"unit": "g",
+"match": "löffelbiskuit",
+"piece": 6,
+"prices": {
+"rewe": 0.75,
+"lidl": 1.29,
+"aldi": 0.75,
+"kaufland": 1.19
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "mehl",
+"name": "Weizenmehl Type 405",
+"pack": 1000,
+"unit": "g",
+"match": "mehl",
+"prices": {
+"rewe": 0.59,
+"lidl": 0.59,
+"aldi": 0.59,
+"kaufland": 0.59
+},
+"est": [
+"kaufland"
+]
+},
+{
+"id": "tkbeeren",
+"name": "TK-Beerenmischung",
+"pack": 750,
+"unit": "g",
+"match": "beere",
+"prices": {
+"rewe": 2.69,
+"lidl": 2.99,
+"aldi": 3.29,
+"kaufland": 3.49
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "banane",
+"name": "Bananen lose",
+"pack": 1000,
+"unit": "g",
+"piece": 120,
+"match": "banane",
+"loose": true,
+"prices": {
+"rewe": 1.79,
+"lidl": 1.39,
+"aldi": 1.19,
+"kaufland": 1.39
+},
+"est": [
+"rewe",
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "apfel",
+"name": "Äpfel",
+"pack": 1000,
+"unit": "g",
+"piece": 150,
+"match": "apfel|äpfel",
+"loose": true,
+"prices": {
+"rewe": 1.99,
+"lidl": 2.29,
+"aldi": 1.11,
+"kaufland": 2.99
+},
+"est": [
+"rewe",
+"lidl"
+]
+},
+{
+"id": "zitrone",
+"name": "Zitronen",
+"pack": 500,
+"unit": "g",
+"piece": 100,
+"match": "zitrone|limette",
+"loose": true,
+"prices": {
+"rewe": 1.29,
+"lidl": 1.29,
+"aldi": 1.39,
+"kaufland": 1.69
+},
+"est": [
+"rewe",
+"lidl",
+"aldi"
+]
+},
+{
+"id": "paprika",
+"name": "Paprika rot (Stück)",
+"pack": 500,
+"unit": "g",
+"piece": 160,
+"match": "paprika(?!pulver| ?geräuchert| edelsüß)",
+"loose": true,
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi"
+]
+},
+{
+"id": "gurke",
+"name": "Salatgurke",
+"pack": 1,
+"unit": "Stück",
+"piece": 400,
+"match": "gurke",
+"prices": {
+"rewe": 0.89,
+"lidl": 0.69,
+"aldi": 0.79,
+"kaufland": 0.79
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "zucchini",
+"name": "Zucchini",
+"pack": 500,
+"unit": "g",
+"piece": 250,
+"match": "zucchini",
+"loose": true,
+"prices": {
+"rewe": 1.25,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "tomaten",
+"name": "Rispentomaten",
+"pack": 500,
+"unit": "g",
+"piece": 100,
+"match": "^tomaten?$|tomate\\b",
+"loose": true,
+"prices": {
+"rewe": 1.5,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.5
+},
+"est": [
+"rewe",
+"lidl",
+"aldi"
+]
+},
+{
+"id": "zwiebeln",
+"name": "Speisezwiebeln",
+"pack": 1000,
+"unit": "g",
+"piece": 100,
+"match": "zwiebel(?!n? ?-?frühling)|rote zwiebel",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.79,
+"kaufland": 1.0
+},
+"est": [
+"rewe",
+"lidl",
+"aldi"
+]
+},
+{
+"id": "knoblauch",
+"name": "Knoblauch (Netz, ca. 150 g)",
+"pack": 150,
+"unit": "g",
+"piece": 5,
+"match": "knoblauch",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "moehren",
+"name": "Möhren",
+"pack": 1000,
+"unit": "g",
+"piece": 100,
+"match": "möhre|karotte",
+"prices": {
+"rewe": 1.19,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kartoffeln",
+"name": "Kartoffeln festkochend",
+"pack": 2000,
+"unit": "g",
+"piece": 150,
+"match": "kartoffel",
+"prices": {
+"rewe": 2.49,
+"lidl": 2.29,
+"aldi": 1.49,
+"kaufland": 3.19
+},
+"est": [
+"rewe",
+"lidl"
+]
+},
+{
+"id": "brokkoli",
+"name": "Brokkoli",
+"pack": 500,
+"unit": "g",
+"match": "brokkoli",
+"prices": {
+"rewe": 1.5,
+"lidl": 1.49,
+"aldi": 1.11,
+"kaufland": 1.49
+},
+"est": [
+"rewe",
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "champignons",
+"name": "Champignons weiß",
+"pack": 400,
+"unit": "g",
+"match": "champignon|pilz",
+"prices": {
+"rewe": 1.99,
+"lidl": 1.59,
+"aldi": 1.89,
+"kaufland": 2.54
+},
+"est": [
+"rewe",
+"lidl"
+]
+},
+{
+"id": "spinat",
+"name": "Babyspinat frisch",
+"pack": 200,
+"unit": "g",
+"match": "spinat|rucola",
+"prices": {
+"rewe": 2.29,
+"lidl": 1.49,
+"aldi": 2.06,
+"kaufland": 1.49
+},
+"est": [
+"rewe",
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "gruenkohl",
+"name": "Grünkohl frisch oder TK",
+"pack": 450,
+"unit": "g",
+"match": "grünkohl",
+"prices": {
+"rewe": 0.99,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "ingwer",
+"name": "Ingwer",
+"pack": 100,
+"unit": "g",
+"match": "ingwer",
+"prices": {
+"rewe": 0.6,
+"lidl": 0.4,
+"aldi": 0.49,
+"kaufland": 0.49
+},
+"est": [
+"rewe",
+"lidl"
+]
+},
+{
+"id": "tahin",
+"name": "Tahin (Sesammus)",
+"pack": 300,
+"unit": "g",
+"match": "tahin",
+"prices": {
+"rewe": 3.89,
+"lidl": 2.29,
+"aldi": 2.29,
+"kaufland": 2.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "chia",
+"name": "Chiasamen",
+"pack": 200,
+"unit": "g",
+"match": "chia",
+"prices": {
+"rewe": 1.23,
+"lidl": 1.99,
+"aldi": 1.13,
+"kaufland": 1.24
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "walnuesse",
+"name": "Walnusskerne",
+"pack": 200,
+"unit": "g",
+"match": "waln[uü]",
+"prices": {
+"rewe": 2.8,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "cashews",
+"name": "Cashewkerne",
+"pack": 200,
+"unit": "g",
+"match": "cashew",
+"prices": {
+"rewe": 2.89,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.89
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "kerne",
+"name": "Kürbis- oder Hanfsamen",
+"pack": 200,
+"unit": "g",
+"match": "kürbiskern|hanfsamen|sesam",
+"prices": {
+"rewe": 1.99,
+"lidl": 1.93,
+"aldi": 1.82,
+"kaufland": 1.89
+}
+},
+{
+"id": "oel",
+"name": "Rapsöl (für Olivenöl ggf. mehr)",
+"pack": 1000,
+"unit": "ml",
+"match": "(^|[^a-zäöü])öl\\b|olivenöl",
+"prices": {
+"rewe": 1.69,
+"lidl": 1.69,
+"aldi": 1.69,
+"kaufland": 1.89
+}
+},
+{
+"id": "sojasauce",
+"name": "Sojasauce",
+"pack": 250,
+"unit": "ml",
+"match": "sojasauce|sojasoße",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.19,
+"aldi": 1.39,
+"kaufland": 1.49
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "bruehe",
+"name": "Gemüsebrühe Pulver (200 g ergibt 10 l)",
+"pack": 10000,
+"unit": "ml",
+"match": "brühe",
+"prices": {
+"rewe": 1.41,
+"lidl": 1.49,
+"aldi": 1.57,
+"kaufland": 1.29
+},
+"est": [
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "honig",
+"name": "Honig",
+"pack": 500,
+"unit": "g",
+"match": "honig|ahornsirup|sirup",
+"prices": {
+"rewe": 3.19,
+"lidl": 3.29,
+"aldi": 3.29,
+"kaufland": 2.69
+},
+"est": [
+"lidl"
+]
+},
+{
+"id": "kakao",
+"name": "Backkakao",
+"pack": 250,
+"unit": "g",
+"match": "kakao",
+"prices": {
+"rewe": 4.49,
+"lidl": 2.49,
+"aldi": 3.29,
+"kaufland": 3.29
+},
+"est": [
+"rewe",
+"lidl",
+"kaufland"
+]
+},
+{
+"id": "staerke",
+"name": "Speisestärke",
+"pack": 400,
+"unit": "g",
+"match": "stärke",
+"prices": {
+"rewe": 0.79,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79
+},
+"est": [
+"lidl",
+"kaufland"
+]
+}
+]
+}
