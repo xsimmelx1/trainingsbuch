@@ -298,7 +298,7 @@ def build_ics(now, settings, plan, extras, past):
         L.append(fold("SUMMARY:" + ics_escape(summary)))
         L.append(fold("DESCRIPTION:" + ics_escape("In der App öffnen: " + url + "\n\n" + desc)))
         L.append(fold("URL:" + url))
-        if alarm:
+        if alarm is not None:
             L.extend(["BEGIN:VALARM", "ACTION:DISPLAY", f"TRIGGER:-PT{alarm}M", "DESCRIPTION:" + ics_escape(summary), "END:VALARM"])
         L.append("END:VEVENT")
 
@@ -314,8 +314,8 @@ def build_ics(now, settings, plan, extras, past):
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
         ev(f"morning-{d}", "Morgenroutine 12 min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
-           f"{SITE}#m={d}", utc(d, "07:30"), utc(d, "07:45"), alarm=0)
-        ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, "21:45"), utc(d, "21:50"), alarm=0)
+           f"{SITE}#m={d}", utc(d, "07:30"), utc(d, "07:45"), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
+        ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, "21:45"), utc(d, "21:50"), alarm=0 if (settings.get("pushPrefs") or {}).get("pain") is not False else None)
     for x in extras:
         d = dt.date.fromisoformat(x["date"])
         ev(f"checkin-{x['date']}", "Check-in & Meal Prep", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser).",
@@ -752,7 +752,11 @@ def main():
     p_today = next((p for p in plan if p["date"] == tday), None)
     msgs = []
 
+    prefs = settings.get("pushPrefs") or {}
+
     def once(key, payload):
+        if prefs.get(key.split("-")[0]) is False:  # vom Nutzer abgeschaltet
+            return
         if not state["sent"].get(key):
             msgs.append((key, payload))
 

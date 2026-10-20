@@ -179,6 +179,24 @@ body.wo main{padding-bottom:110px}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}
+.ptitle{margin:4px 0 0}
+.subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.subhead h2{margin:0}
+.lrow.menu{width:100%;text-align:left;font:inherit;color:var(--ink);min-height:64px}
+.chips.scope{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.chips.scope button{min-height:40px}
+.meal.mc{grid-template-columns:40px minmax(0,1fr) auto;touch-action:pan-y}
+.meal.mc .mdot{width:40px;height:40px}
+.meal.mc .mthumb{width:40px;height:40px}
+.meal.mc .mtx b{-webkit-line-clamp:2}
+.meal.mc .go{color:var(--muted);padding:0 4px}
+.mbars{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mbars .track{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden;margin-top:4px}
+.mbars .fill{height:100%;background:var(--good)}
+.mbars .fill.p{background:var(--accent)}
+.shopi{touch-action:pan-y}
+.card.empty{align-items:center;text-align:center}
+.card.empty .trophy{font-size:40px}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
@@ -1065,7 +1083,7 @@ const ALTS = {
 };
 
 // ---------- Zustand ----------
-let tab = "heute", sub = {fortschritt:"uebersicht", mehr:"kalender", reise:"weg"}, selDate = todayIso(), cur = null, dirty = false, saveTimer = null;
+let tab = "heute", sub = {fortschritt:"uebersicht", mehr:"menu", reise:"weg"}, selDate = todayIso(), cur = null, dirty = false, saveTimer = null;
 let openEx = null, sheetKind = null, sheetArg = null;
 const REST = {c:150, i:90, k:45};
 let restEnd = 0, restTimer = null, clockTimer = null, wakeLock = null;
@@ -1089,7 +1107,8 @@ function readHash(){
     else if (["reise","weg","lektionen"].includes(k)) { tab = "fortschritt"; sub.fortschritt = "reise"; if (k !== "reise") sub.reise = k; }
     else if (["einkauf","rezepte"].includes(k)) { tab = "essen"; essenView = k; }
     else if (["messen","checkin","verlauf"].includes(k)) { tab = "fortschritt"; sub.fortschritt = k === "verlauf" ? "uebersicht" : k; }
-    else if (["kalender","plan","setup"].includes(k)) { tab = "mehr"; sub.mehr = k; } }
+    else if (["kalender","plan","setup","essenset","menu"].includes(k)) { tab = "mehr"; sub.mehr = k; }
+    else if (k === "routine") { selDate = todayIso(); tab = "heute"; cur = null; deep = ["mob"]; } }
 }
 function blankDay(d){ return {date:d, session:defaultSession(d), sets:{}, boulder:{done:false,min:null}, mobility:{}, pain:{sc:null,knee:null,finger:null,kneeTest:null}, weight:null, sleep:null, note:""}; }
 function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false}; dirty = false; }
@@ -1234,7 +1253,7 @@ function renderToday(){
     items.push({k:"ci", order: 5.5, done: ok, html: `<button type="button" class="task ${ok ? "done" : ""}" data-act="checkin" data-v="${mo}"><span class="dot">${ok ? "✓" : ""}</span><span><span class="t">Wochen-Check-in</span><br><span class="s">10 min · Bilanz und Modus für nächste Woche</span></span><span class="go">›</span></button>`});
   }
   items.sort((a, b) => (a.done - b.done) || (a.order - b.order));
-  let h = `<div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div>
+  let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div>
     <h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? `<span></span>` : `<button class="btn ghost" type="button" data-day="0">Heute</button>`}</div>`;
   h += `<div class="seg" role="group" aria-label="Ansicht">${[["training","Training"],["essen","Essen"],["alles","Alles"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
@@ -1248,15 +1267,15 @@ function renderToday(){
       `<div class="lrow ${cur.boulder.done ? "done" : ""}"><span class="mdot static">${cur.boulder.done ? "✓" : "🧗"}</span><span class="lmain"><b>Bouldern heute?</b><span class="small muted">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`].join("")}</div>`;
     if (done.length) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
     if (todayFocus === "training" || todayFocus === "alles") h += weekStrip();
-    view.innerHTML = h; return;
+    view.innerHTML = h + `</div>`; return;
   }
   if (todayFocus !== "essen") h += heroCard();
   if (todayFocus !== "training") h += mealCard(selDate, todayFocus === "essen");
-  if (todayFocus === "essen") { view.innerHTML = h; return; }
+  if (todayFocus === "essen") { view.innerHTML = h + `</div>`; return; }
   h += `<div class="lab sec">Aufgaben ${isToday ? "heute" : "an diesem Tag"}</div><div class="tasks">${items.map(i => i.html).join("")}</div>`;
   const mo = monday(selDate);
   h += weekStrip(mo);
-  view.innerHTML = h;
+  view.innerHTML = h + `</div>`;
 }
 // Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
 function weekStrip(mo){
@@ -1564,8 +1583,9 @@ function renderProgress(){
 }
 function progressOverview(){
   const t = todayIso(), mo = monday(t), w = weekNo(t), ph = phaseOf(w), tgt = planTargets(w), vol = weekVolume(t);
-  const recs = records();
-  let h = `<div class="kpis"><div class="kpi"><div class="v">${streak()}</div><div class="l">Wochen in Folge ≥ 2 Einheiten</div></div><div class="kpi"><div class="v">${weekCount(mo)}<span class="l">/4</span></div><div class="l">diese Woche</div></div><div class="kpi"><div class="v">${recs.length}</div><div class="l">Bestwerte (30 Tage)</div></div></div>`;
+  const recs = records(), any = Object.values(store.days).some(isStrength);
+  let h = any ? "" : `<div class="card empty"><div class="trophy">📈</div><b>Hier wächst dein Fortschritt</b><div class="small muted">Ab der ersten Einheit siehst du Serien, Bestwerte und Volumen pro Muskel. Gewicht und Bauchumfang erscheinen, sobald du sie einträgst.</div><div class="actions"><button class="btn primary" type="button" data-sub="messen">Jetzt messen</button><button class="btn" type="button" data-go="fotos">Fotos</button></div></div>`;
+  h += `<div class="kpis"><div class="kpi"><div class="v">${streak()}</div><div class="l">Wochen in Folge ≥ 2 Einheiten</div></div><div class="kpi"><div class="v">${weekCount(mo)}<span class="l">/4</span></div><div class="l">diese Woche</div></div><div class="kpi"><div class="v">${recs.length}</div><div class="l">Bestwerte (30 Tage)</div></div></div>`;
   // Kalender-Heatmap (aktueller Monat)
   const d0 = parse(t), first = new Date(d0.getFullYear(), d0.getMonth(), 1), days = new Date(d0.getFullYear(), d0.getMonth()+1, 0).getDate(), off = (first.getDay()+6)%7;
   h += `<div class="card"><h2>${first.toLocaleDateString("de-DE",{month:"long",year:"numeric"})}</h2><div class="cal">${["Mo","Di","Mi","Do","Fr","Sa","So"].map(x => `<div class="h">${x}</div>`).join("")}`;
@@ -1582,7 +1602,7 @@ function progressOverview(){
   const wPts = dates.map(d => ({v: num(store.days[d]?.weight)}));
   const avg = dates.map((d,i) => { const win = wPts.slice(Math.max(0,i-13), i+1).map(p => p.v).filter(v => v != null); return {v: win.length >= 1 ? win.reduce((a,b)=>a+b,0)/win.length : null}; });
   const la = [...avg].reverse().find(p => p.v != null)?.v;
-  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten."})}<div class="small muted">Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.</div></div>`;
+  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Schlaf & Gewicht ein."})}<div class="small muted">Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.</div></div>`;
   const d28 = dates.slice(-28);
   h += `<div class="card"><h2>Schmerz-Trend</h2>${lineChart([{pts:d28.map(d => ({v:store.days[d]?.pain?.sc ?? null})),color:"var(--bad)",line:1,dots:1},{pts:d28.map(d => ({v:store.days[d]?.pain?.knee ?? null})),color:"var(--warn)",line:1,dots:1}], {dates:d28, min:0, max:10, ticks:[0,2,5,10], label:"Schmerz SC und Knie", empty:"Noch keine Schmerzwerte."})}
     <div class="small"><span style="color:var(--bad)">●</span> SC-Gelenk &nbsp; <span style="color:var(--warn)">●</span> Knie</div></div>`;
@@ -1604,7 +1624,8 @@ function measureHtml(){
 }
 function checkinHistory(){
   const mo = monday(todayIso()), ks = Object.keys(store.checkins).sort().reverse();
-  let h = `<button class="btn primary big" type="button" data-act="checkin" data-v="${mo}">Check-in für diese Woche</button>`;
+  let h = ks.length ? "" : `<div class="card empty"><div class="trophy">🗓</div><b>Dein Wochen-Check-in</b><div class="small muted">Jeden Sonntag 10 Minuten: Wie lief die Woche, wie ist der Stress, welcher Modus kommt nächste Woche? Daraus passt der Planer Umfang und Termine an.</div></div>`;
+  h += `<button class="btn primary big" type="button" data-act="checkin" data-v="${mo}">Check-in für diese Woche</button>`;
   h += ks.length ? `<div class="card"><h2>Bisherige Check-ins</h2>${ks.map(k => { const c = store.checkins[k]; return `<button type="button" class="task" data-act="checkin" data-v="${k}"><span class="dot">✓</span><span><span class="t">Woche ab ${fmt(k).slice(3)}</span><br><span class="s">Stress ${c.stress ?? "–"} · Modus ${esc(c.nextMode || "normal")}${c.ifthen ? " · " + esc(c.ifthen).slice(0,40) : ""}</span></span><span class="go">›</span></button>`; }).join("")}</div>` : `<p class="muted small">Noch keine Check-ins.</p>`;
   return h;
 }
@@ -1654,10 +1675,7 @@ function coachHtml(){
   const c = coach(); if (!c) return "";
   return `<div class="coach"><div class="lab">Dein Coach</div><div class="ct">${esc(c.title)}</div><div class="small">${esc(c.body)}</div>${c.btns.length ? `<div class="actions">${c.btns.map(([k, l]) => `<button class="btn small" type="button" data-coach="${k}">${esc(l)} ›</button>`).join("")}</div>` : ""}</div>`;
 }
-function journeyHtml(){
-  const s = sub.reise || "weg";
-  return `<div class="seg">${[["weg","Dein Weg"],["lektionen","Lektionen"]].map(([k,l]) => `<button type="button" data-rsub="${k}" aria-pressed="${s===k}">${l}</button>`).join("")}</div>` + (s === "weg" ? journeyWay() : lessonList());
-}
+function journeyHtml(){ return journeyWay() + `<div class="lab sec">Lektionen</div>` + lessonList(); }
 function renderJourney(){ tab = "fortschritt"; sub.fortschritt = "reise"; renderProgress(); }
 let openStage = null;
 function msHtml(state, text, btn){
@@ -1785,14 +1803,19 @@ function renderRecipes(b){
 
 // ---------- MEHR ----------
 function renderEssen(){ view.innerHTML = `<div id="moreBody"></div>`; essenHtml(document.getElementById("moreBody")); }
+const MORE = [["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"],
+  ["essenset", "🍽", "Essen-Einstellungen", "Nährwerte, Budget, Allergien, Ersatz, Zeiten"], ["setup", "⚙", "Einrichtung", "Verbindung, Push, Kalender-Abo, Plan"]];
 function renderMore(){
   if (tab === "essen") return renderEssen();
-  if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "kalender";
-  const s = sub.mehr;
-  let h = `<div class="seg" id="subSeg">${[["kalender","Kalender"],["plan","Regeln"],["setup","Einrichtung"]].map(([k,l]) => `<button type="button" data-sub="${k}" aria-pressed="${s===k}">${l}</button>`).join("")}</div>`;
-  view.innerHTML = h + `<div id="moreBody"></div>`;
+  if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
+  const s = sub.mehr || "menu";
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" data-sub="${k}"><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div>`; return; }
+  const title = (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
+  view.innerHTML = `<div class="subhead"><button type="button" class="btn ghost small" data-sub="menu">‹ Mehr</button><h2>${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
-  if (s === "kalender") b.innerHTML = calHtml(); else if (s === "plan") b.innerHTML = planHtml(); else { b.innerHTML = setupHtml(); afterSetup(); }
+  if (s === "kalender") b.innerHTML = calHtml(); else if (s === "plan") b.innerHTML = planHtml();
+  else if (s === "essenset") { if (!mealPlan || !recipes) { b.innerHTML = `<p class="muted">Lade …</p>`; ensureMeals().then(() => { if (tab === "mehr") renderMore(); }).catch(() => {}); } else b.innerHTML = foodSettingsHtml(); }
+  else { b.innerHTML = setupHtml(); afterSetup(); }
 }
 // ---------- Kalender: nur Trainingsdinge (Plan, Erledigtes, Routinen, Marker) ----------
 let calView = lsGet("calView") || "woche", calDate = null;
@@ -2001,12 +2024,22 @@ function mealThumb(n){
   return r?.img ? `<img class="mthumb" src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : ({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r?.category] || "🍴"}</span>`;
 }
 function mealRow(d, m){
+  const r = m.info;
+  return `<div class="meal mc ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
+    <button type="button" class="mname" ${m.own ? "disabled" : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“</span>` : ""}</span></button>
+    ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<span class="go">›</span>`}</div>`;
+}
+function mealRowOld(d, m){
   const r = m.info, rec = recipeByName(m.name);
   return `<div class="meal ${m.ate ? "done" : ""}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
     <button type="button" class="mname" ${rec ? `data-recipe="${esc(m.name)}"` : "disabled"}>${mealThumb(m.name)}<span class="mtx"><span class="ml">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · günstiger (Budget)" : ""}</span><b>${esc(r.name)}</b>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“, bitte tauschen</span>` : ""}<span class="mk"><span class="nutri">${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span></span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<button type="button" class="btn small mswap" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Alternativen zu ${esc(m.label)}">⇄</button>`}</div>`;
 }
 function mealBars(t){
+  const T = foodTarget(), rk = Math.max(0, T.kcal - t.eKcal), rp = Math.max(0, T.protein - t.eProtein);
+  return `<div class="mbars nutri"><div><div class="small"><b>noch ${rk}</b> kcal</div><div class="track"><div class="fill" style="width:${Math.min(t.eKcal / T.kcal * 100, 100)}%"></div></div></div><div><div class="small"><b>noch ${rp}</b> g Protein</div><div class="track"><div class="fill p" style="width:${Math.min(t.eProtein / T.protein * 100, 100)}%"></div></div></div></div>`;
+}
+function mealBarsOld(t){
   const T = foodTarget(), bar = (lab, e, pl, tg, unit) => `<div class="mbar"><div class="small"><b>${lab}</b> ${e} / ${tg} ${unit}${unit === "g" ? " (mind.)" : ""} <span class="muted">· Plan ${pl}</span></div><div class="track"><div class="plan" style="width:${Math.min(pl / tg * 100, 100)}%"></div><div class="fill" style="width:${Math.min(e / tg * 100, 100)}%"></div></div></div>`;
   return bar("Energie", t.eKcal, t.kcal, T.kcal, "kcal") + bar("Protein", t.eProtein, t.protein, T.protein, "g");
 }
@@ -2031,11 +2064,11 @@ function altMeals(k, curName){
 }
 function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m) return "";
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info;
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
   const opt = (n, why) => { const r = mealInfo(n), dk = r.kcal - ref.kcal, dp = r.protein - ref.protein;
     return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
-  return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2>${close}</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
+  return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2>${close}</div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
     ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${altMeals(k, m.name).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}
@@ -2166,7 +2199,7 @@ const fmtQ = q => q == null ? "" : (Math.round(q * 10) / 10).toLocaleString("de-
 function shopHtml(){
   const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), hide = !!lsGet("shopHide"), {recs, groups} = shopList(cx.entries);
   const total = groups.reduce((n, [, a]) => n + a.length, 0), got = groups.reduce((n, [, a]) => n + a.filter(i => done.has(i.key)).length, 0);
-  let h = `<div class="seg" role="group" aria-label="Umfang">${[["tag","Tag"],["gericht","Gericht"],["woche","Woche"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
+  let h = `<div class="chips scope" role="group" aria-label="Umfang"><span class="small muted">Einkauf für</span>${[["tag","einen Tag"],["gericht","ein Gericht"],["woche","die Woche"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const wr = Object.keys(weekRecipes(shopWeek())), rest = recipes.map(r => r.name).filter(n => !wr.includes(n));
     h += `<div class="card"><div class="field"><label for="shopRec">Gericht</label><select id="shopRec"><optgroup label="Diese Woche im Plan">${wr.map(n => `<option ${n === cx.n ? "selected" : ""}>${esc(n)}</option>`).join("")}</optgroup><optgroup label="Alle Rezepte">${rest.map(n => `<option ${n === cx.n ? "selected" : ""}>${esc(n)}</option>`).join("")}</optgroup></select></div>
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
@@ -2180,7 +2213,7 @@ function shopHtml(){
     ${shopScope === "gericht" ? `<div class="small muted">${esc(cx.note)}</div>` : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
-    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${(i.pr.est || []).includes(FOOD().store || "aldi") ? `<span class="muted">*</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
+    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${(i.pr.est || []).includes(FOOD().store || "aldi") ? `<span class="muted">*</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
   return h + `<div class="small muted">Was schon im Vorrat ist (Gewürze, Öl, Haferflocken), einfach abhaken.</div>`;
 }
 function shopText(){
@@ -2222,15 +2255,15 @@ function budgetCard(mo){
   return `<div class="card budget ${cost > budget ? "over" : ""}"><div class="mhead"><span><span class="lab">Wochenbudget</span><br><b>${eur(cost)}</b> <span class="muted">von ${eur(budget)}</span></span>
     <button class="btn small ${f.budgetIgnore ? "" : "ghost"}" type="button" data-budgettoggle>${f.budgetIgnore ? "Budget anwenden" : "Grenze ignorieren"}</button></div>
     <div class="track"><div class="fill" style="width:${Math.min(cost / budget * 100, 100)}%"></div></div>
-    <div class="small muted">${f.budgetIgnore ? "Grenze ignoriert: Plan ohne Budget-Anpassung." : n ? `${n} Gericht${n > 1 ? "e" : ""} gegen günstigere getauscht (vorher ${eur(b.before)}): ${Object.entries(b.subs).map(([a, c]) => `${esc(a)} → ${esc(c)}`).join("; ")}.` : cost <= budget ? "Passt ins Budget, nichts getauscht." : "Keine passenden günstigeren Gerichte gefunden."}${b && !b.ok ? " Günstigere Alternativen mit ähnlichen Nährwerten reichen nicht ganz." : ""} ${cost > budget && b?.ok ? " Über dem Budget liegt der Plan wegen eigener Tausche." : ""} Anteilige Kosten pro Portion, ${f.store === "min" ? "jeweils günstigster Markt" : esc(STORES[f.store || "aldi"])}.</div></div>`;
+    <div class="small muted">${f.budgetIgnore ? "Grenze ignoriert: Plan ohne Budget-Anpassung." : n ? `<details><summary>${n} Gericht${n > 1 ? "e" : ""} gegen günstigere getauscht (vorher ${eur(b.before)})</summary><ul>${Object.entries(b.subs).map(([a, c]) => `<li>${esc(a)} → <b>${esc(c)}</b></li>`).join("")}</ul></details>` : cost <= budget ? "Passt ins Budget, nichts getauscht." : "Keine passenden günstigeren Gerichte gefunden."}${b && !b.ok ? " Günstigere Alternativen mit ähnlichen Nährwerten reichen nicht ganz." : ""} ${cost > budget && b?.ok ? " Über dem Budget liegt der Plan wegen eigener Tausche." : ""} Anteilige Kosten pro Portion, ${f.store === "min" ? "jeweils günstigster Markt" : esc(STORES[f.store || "aldi"])}.</div></div>`;
 }
 let openDays = null;
 function essenHtml(b){
-  let h = `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"],["einst","⚙ Einst."]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
+  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
   if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (!mealPlan || !recipes) { b.innerHTML = h + `<p class="muted">Lade Ernährungsplan …</p>`; ensureMeals().then(() => { if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = h + `<p>Plan konnte nicht geladen werden.</p>`; }); return; }
   if (essenView === "einkauf") { b.innerHTML = h + shopHtml(); return; }
-  if (essenView === "einst") { b.innerHTML = h + foodSettingsHtml(); return; }
+  if (essenView === "einst") { sub.mehr = "essenset"; go("mehr"); return; }
   const t = todayIso(), mo = essenMon || monday(t), w = weekNo(mo), W = mealWeek(w ?? 0);
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
@@ -2276,12 +2309,14 @@ async function pushState(){ if (!("serviceWorker" in navigator) || !("PushManage
 function setupHtml(){
   const s = S(), standalone = matchMedia("(display-mode: standalone)").matches;
   return `<div class="card"><h2>Verbindung</h2>
-    ${token ? `<div class="banner good">Verbunden mit <b>${CFG.owner}/${CFG.repo}</b> (privat).</div>` : `<div class="banner info">Deine Logs liegen im privaten Repo <b>${CFG.owner}/${CFG.repo}</b>. Einmal pro Gerät ein Token eintragen.</div>
+    ${token ? (document.getElementById("syncBtn")?.dataset.state === "bad" ? `<div class="banner bad">Token gespeichert, aber das Synchronisieren schlägt fehl. Token prüfen oder neu eintragen.</div>` : `<div class="banner good">Verbunden mit <b>${CFG.owner}/${CFG.repo}</b> (privat).</div>`) : `<div class="banner info">Deine Logs liegen im privaten Repo <b>${CFG.owner}/${CFG.repo}</b>. Einmal pro Gerät ein Token eintragen.</div>
     <ol class="small"><li><a href="https://github.com/settings/personal-access-tokens/new?name=Trainingsbuch-App&description=Logs+speichern+und+Planer+anstossen&target_name=xsimmelx1&expires_in=366&contents=write&actions=write" target="_blank" rel="noopener">Token anlegen (vorausgefüllt) ↗</a></li><li>Repository access: <b>trainingsdaten</b> und <b>trainingsbuch</b></li><li>Generate token, kopieren, hier einfügen.</li></ol>`}
     <div class="field"><label for="tokIn">${token ? "Neues Token" : "Token"}</label><input type="password" id="tokIn" autocomplete="off" placeholder="github_pat_…"></div>
     <div class="actions"><button class="btn primary" id="tokSave" type="button">Verbinden</button>${token ? `<button class="btn" id="tokDel" type="button">Vom Gerät entfernen</button>` : ""}<span class="small muted" id="tokMsg"></span></div></div>
   <div class="card"><h2>App & Push</h2>${standalone ? `<div class="small">Läuft als installierte App ✓</div>` : `<div class="small">Chrome-Menü ⋮ → <b>App installieren</b>, dann vom Startbildschirm öffnen.</div>`}
     <div class="actions"><button class="btn primary" id="pushOn" type="button" ${token ? "" : "disabled"}>Push aktivieren</button><button class="btn" id="pushTest" type="button">Test</button><span class="small muted" id="pushMsg"></span></div></div>
+  <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten und Kalender-Wecker du bekommst.</div>
+    ${[["morning","Morgen: Routine und Tagesplan"],["evening","Abend: Training noch nicht eingetragen"],["pain","Abendcheck (Schmerz-Log)"],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
   ${calExportHtml()}
   <div class="card"><h2>Plan</h2>
     <div class="grid2"><div class="field"><label for="stDate">Start Woche 1</label><input type="date" id="stDate" value="${esc(s.startDate || "")}"></div><div class="field"><label for="htIn">Größe (cm)</label><input type="text" inputmode="numeric" id="htIn" value="${esc(s.height ?? 175)}"></div></div>
@@ -2374,8 +2409,9 @@ async function onClick(e){
   const ok = t.closest("[data-ok]"); if (ok) { checkSet(ok.dataset.ok, ok.dataset.base, Number(ok.dataset.i)); return; }
   const rr = t.closest("[data-rir]"); if (rr) { const id = rr.dataset.rir, base = rr.dataset.base, sk = woSession || cur.session, w = weekNo(selDate); const arr = setsObj()[id] || [], dc = arr.filter(doneSet).length; const last = arr[Math.max(dc, 1) - 1]; if (last) { last.rir = rr.dataset.v.replace("+", ""); touch(); } const nx = exList(sk), ix = nx.indexOf(base); openEx = nx.slice(ix + 1).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)) || null; renderTraining(); return; }
   const pb = t.closest("[data-pain]"); if (pb) { const k = pb.dataset.pain, v = Number(pb.dataset.v); cur.pain[k] = cur.pain[k] === v ? null : v; pb.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur.pain[k]))); touch(); return; }
+  const s2 = t.closest("[data-sub2]"); if (s2) { sub.mehr = s2.dataset.sub2; go("mehr"); return; }
   const rs = t.closest("[data-rsub]"); if (rs) { sub.reise = rs.dataset.rsub; renderProgress(); return; }
-  const sb = t.closest("[data-sub]"); if (sb) { sub[tab] = sb.dataset.sub; history.replaceState(null, "", `#t=${sb.dataset.sub}`); render(); return; }
+  const sb = t.closest("[data-sub]"); if (sb) { sub[tab] = sb.dataset.sub; history.replaceState(null, "", `#t=${sb.dataset.sub}`); render(); scrollTo(0, 0); return; }
   const ac = t.closest("[data-act]");
   if (ac) { const a = ac.dataset.act, v = ac.dataset.v;
     if (a === "closeSheet") { closeSheet(); return; }
@@ -2440,6 +2476,7 @@ function onChange(e){
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]); renderMore(); return; }
   if (t.id === "shopRec") { shopRec = t.value; shopMul = 1; renderMore(); return; }
   if (t.dataset.warm) { cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
+  if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
   if (t.id === "foodAvoid") { saveFood({avoid: t.value}); renderEssen(); return; }
@@ -2464,12 +2501,27 @@ function onChange(e){
   if (t.id === "kn1") { saveSettings({knee1:t.checked}); return; }
 }
 for (const el of [document.querySelector("header.top"), document.getElementById("syncLine")]) el.addEventListener("click", onClick);
+// Wischgesten: Mahlzeit rechts = gegessen, links = tauschen; Einkauf = abhaken; Heute = Tag wechseln
+function onSwipe(s0, dx){
+  const z = s0.z;
+  if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
+    if (dx > 0) { editDay(d, day => { day.ate = Object.assign({}, day.ate, {[k]: !(day.ate || {})[k]}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render(); }
+    else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
+  if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
+  if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); }
+}
 // Wischgesten: horizontal über [data-swipe]
-let swp = null;
+let swp = null, swipedAt = 0;
+// Nach einer Wischgeste den folgenden Klick verwerfen (sonst würde z. B. das Häkchen gleich wieder umschalten)
+view.addEventListener("click", e => { if (Date.now() - swipedAt < 500) { e.preventDefault(); e.stopPropagation(); } }, true);
 view.addEventListener("pointerdown", e => { const z = e.target.closest("[data-swipe]"); swp = z && !e.target.closest("input,textarea,select") ? {x: e.clientX, y: e.clientY, z, kind: z.dataset.swipe} : null; });
 view.addEventListener("pointerup", e => { if (!swp) return; const dx = e.clientX - swp.x, dy = e.clientY - swp.y, s0 = swp; swp = null;
   if (Math.abs(dx) < 70 || Math.abs(dy) > 50) return;
+  swipedAt = Date.now();
   if (s0.kind === "ex") exNav(dx < 0 ? 1 : -1); else if (typeof onSwipe === "function") onSwipe(s0, dx); });
+let shd = null;
+sheet.addEventListener("pointerdown", e => { shd = sheet.scrollTop <= 0 && e.clientY - sheet.getBoundingClientRect().top < 90 ? e.clientY : null; });
+sheet.addEventListener("pointerup", e => { if (shd != null && e.clientY - shd > 90) { clearInterval(guideTimer); sheetKind = null; sheet.close(); } shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 addEventListener("hashchange", () => { if (dirty) saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
