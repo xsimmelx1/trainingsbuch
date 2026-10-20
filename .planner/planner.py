@@ -385,7 +385,8 @@ def substitute(mp, rec, o, rx):
 
 
 # ---------- Preise und Budget (wie parseIng, recipeCost, altMeals, budgetSubs in der App) ----------
-SUBST_OK = {"milch": ("sojadrink", "haferdrink"), "kochsahne": ("cuisine",), "butter": ("margarine",)}
+SUBST_OK = {"milch": {"sojadrink": ["sojadrink"], "haferdrink": ["haferdrink"], "mix": ["sojadrink", "haferdrink"]},
+            "kochsahne": {"cuisine": ["cuisine"]}, "butter": {"margarine": ["margarine"]}}
 ING_RE = None
 
 
@@ -416,7 +417,7 @@ def parse_ing(line, P, subst):
     name = re.sub(r"\(.*?\)", "", m.group(3) if m else line).split(", ")[0].strip()
     pr = next((x for x in P["products"] if x["re"].search(name)), None)
     if not pr:
-        return None, 0
+        return []
     if q is None:
         amt = 0
     elif unit in ("g", "ml"):
@@ -441,12 +442,12 @@ def parse_ing(line, P, subst):
         amt = q * (pr.get("piece") or 100)
     if pr["unit"] == "Stück" and unit in ("g", "ml"):
         amt = q / (pr.get("piece") or 60)
-    sub = (subst or {}).get(pr["id"])
-    if sub and sub in SUBST_OK.get(pr["id"], ()):
-        sp = next((x for x in P["products"] if x["id"] == sub), None)
-        if sp:
-            pr = sp
-    return pr, amt
+    ids = SUBST_OK.get(pr["id"], {}).get((subst or {}).get(pr["id"]))
+    if ids:
+        ps = [x for x in P["products"] if x["id"] in ids]
+        if ps:
+            return [(x, amt / len(ps)) for x in ps]
+    return [(pr, amt)]
 
 
 def price_of(pr, store, P):
@@ -464,8 +465,7 @@ def portion_cost(r, P, store, subst, memo):
         return memo[r["name"]]
     c = 0.0
     for line in r.get("ingredients") or []:
-        pr, amt = parse_ing(line, P, subst)
-        if pr:
+        for pr, amt in parse_ing(line, P, subst):
             v = price_of(pr, store, P)
             if v is not None:
                 c += amt / pr["pack"] * v

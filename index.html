@@ -1560,7 +1560,7 @@ function journeySheet(kind, arg){
       ${avoidHit(r) ? `<div class="pill warn">Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)</div>` : ""}
       ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div><div class="small muted">Pro Portion, anteilig gerechnet. ${priceNote()}</div>` : ""}
       <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port. · ${r.timeMin} min</span></div>
-      <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.pr.id][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
+      <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.subKey][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
       <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
       ${r.shelfLife ? `<div class="small muted">Haltbarkeit: ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}
       ${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}
@@ -1706,7 +1706,7 @@ const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
 // Ersatzprodukte: kcal- und Protein-Unterschied je 100 g bzw. ml gegenüber dem Original
 const SUBST = {
-  milch: {label: "Milch", opts: {sojadrink: ["Sojadrink", -8, -0.1], haferdrink: ["Haferdrink", -1, -2.7]}},
+  milch: {label: "Milch", opts: {sojadrink: ["Sojadrink", -8, -0.1], haferdrink: ["Haferdrink", -1, -2.7], mix: ["Soja- und Haferdrink (je zur Hälfte)", -4.5, -1.4, ["sojadrink", "haferdrink"]]}},
   kochsahne: {label: "Kochsahne", opts: {cuisine: ["Hafer-Cuisine", -20, -2.2]}},
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
@@ -1717,7 +1717,7 @@ function recipeNutri(r){
   if (!r) return null;
   if (!prices || !Object.keys(FOOD().subst || {}).length) return r;
   if (!nutriMemo.has(r.name)) { let k = 0, pr = 0;
-    for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.orig) continue; const d = SUBST[x.orig.id].opts[x.pr.id]; k += x.amt / 100 * d[1]; pr += x.amt / 100 * d[2]; }
+    for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.orig) continue; const d = SUBST[x.orig.id].opts[x.subKey]; k += x.amt / 100 * d[1]; pr += x.amt / 100 * d[2]; }
     const sv = r.servings || 1; nutriMemo.set(r.name, Object.assign({}, r, {kcal: Math.round(r.kcal + k / sv), protein: Math.round(r.protein + pr / sv)})); }
   return nutriMemo.get(r.name);
 }
@@ -1886,13 +1886,14 @@ function parseIng(line){
   else if (pr.unit === "Stück") amt = q;
   else amt = q * (pr.piece || 100);
   if (pr.unit === "Stück" && (unit === "g" || unit === "ml")) amt = q / (pr.piece || 60);
-  const sub = FOOD().subst?.[pr.id], sp = sub && SUBST[pr.id]?.opts[sub] && prices.products.find(x => x.id === sub);
-  if (sp) return {name, q, unit, pr: sp, orig: pr, amt};
+  const sub = FOOD().subst?.[pr.id], opt = sub && SUBST[pr.id]?.opts[sub];
+  if (opt) { const ids = opt[3] || [sub], ps = ids.map(id => prices.products.find(x => x.id === id)).filter(Boolean);
+    if (ps.length) return {name, q, unit, pr: ps[0], orig: pr, subKey: sub, amt, parts: ps.map(x => ({pr: x, amt: amt / ps.length}))}; }
   return {name, q, unit, pr, amt};
 }
 const costMemo = new Map();
 function recipeCost(r, store){ const k = r.name + "|" + (store || FOOD().store || "aldi"); if (!costMemo.has(k)) costMemo.set(k, recipeCost0(r, store)); return costMemo.get(k); }
-function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { miss++; continue; } const v = priceOf(x.pr, store); if (v == null) { miss++; continue; } c += x.amt / x.pr.pack * v; } return {total: c, portion: c / (r.servings || 1), miss}; }
+function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
 function mealCost(name, store){ const r = recipeByName(name); if (r) return recipeCost(r, store).portion; if (name === "away") return 4.5; return null; }
 const fmtAmt = (a, u) => u === "Stück" ? `${Math.round(a * 10) / 10} Stück` : a >= 1000 ? `${(Math.round(a / 100) / 10).toLocaleString("de-DE")} ${u === "ml" ? "l" : "kg"}` : `${Math.round(a)} ${u}`;
 function priceNote(){ return prices ? `Richtpreise ${esc(prices.stores.map(st => STORES[st]).join(", "))}, recherchiert am ${fmt(prices.date)}${prices.date ? " " + prices.date.slice(0, 4) : ""}. Keine Live-Daten: Angebote und regionale Preise weichen ab.` : ""; }
@@ -1912,8 +1913,9 @@ function shopList(entries){
     const r = recipeByName(n); if (!r) continue; recs.push({n, cnt, f, serv: r.servings || 1});
     for (const line of r.ingredients || []) {
       const x = prices ? parseIng(line) : null;
-      if (x && x.pr) { const k = "p|" + x.pr.id, it = items[k] || (items[k] = {name: x.pr.name.replace(/\s*\(.*?\)\s*/g, " ").replace(/,\s+\d.*$/, "").replace(/\s+\d+\s*(g|Stück)$/, "").trim(), pr: x.pr, amt: 0, recipes: new Set(), key: k});
-        it.amt += (x.amt || (x.pr.unit === "Stück" ? 0.5 : x.pr.piece ? x.pr.piece / 2 : 20)) * f; it.recipes.add(n); continue; }
+      if (x && x.pr) for (const pt of x.parts || [x]) { const k = "p|" + pt.pr.id, it = items[k] || (items[k] = {name: pt.pr.name.replace(/\s*\(.*?\)\s*/g, " ").replace(/,\s+\d.*$/, "").replace(/\s+\d+\s*(g|Stück)$/, "").trim(), pr: pt.pr, amt: 0, recipes: new Set(), key: k});
+        it.amt += (pt.amt || (pt.pr.unit === "Stück" ? 0.5 : pt.pr.piece ? pt.pr.piece / 2 : 20)) * f; it.recipes.add(n); }
+      if (x && x.pr) continue;
       const mm = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$/);
       let q = null, unit = "", name = line;
       if (mm) { q = mm[1] === "½" ? .5 : mm[1].includes("/") ? mm[1].split("/").reduce((a, b) => a / b) : Number(mm[1].replace(",", ".")); unit = mm[2] || ""; name = mm[3]; }
