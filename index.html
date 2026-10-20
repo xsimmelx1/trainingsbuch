@@ -75,7 +75,7 @@ textarea{min-height:64px;resize:vertical}
 .btn:disabled{opacity:.5;cursor:default}
 .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .seg{display:flex;gap:4px;background:var(--sunk);border-radius:12px;padding:4px}
-.seg button{flex:1;border:0;background:none;border-radius:9px;padding:7px 8px;font-weight:600;color:var(--muted);font-size:14px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:7px 8px;min-height:40px;font-weight:600;color:var(--muted);font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chips button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600}
@@ -95,8 +95,8 @@ textarea{min-height:64px;resize:vertical}
 .phbox img{width:100%;height:100%;object-fit:cover;display:block}
 .phcap{font-size:12px;font-weight:600;color:var(--muted)}
 .phbig{width:100%;border-radius:12px;display:block}
-.calnav{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;gap:8px;align-items:center}
-.calnav button{border:1px solid var(--line);background:var(--surface);border-radius:10px;height:38px;font-size:18px}
+.calnav{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center}
+.calnav button{border:1px solid var(--line);background:var(--surface);border-radius:10px;height:44px;font-size:18px}
 .calnav .ttl{text-align:center;font-weight:600}
 .agday{display:flex;flex-direction:column;gap:6px}
 .agday h3{margin:6px 0 0;font-size:14px;display:flex;gap:8px;align-items:center}
@@ -165,13 +165,13 @@ textarea{min-height:64px;resize:vertical}
 .shopg{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .shopi{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:start;padding:9px 12px;border-top:1px solid var(--line)}
 .shopi:first-child{border-top:0}
-.shopi input{width:20px;height:20px;margin-top:2px}
+.shopi input{width:24px;height:24px;margin-top:0}
 .shopi.done b{text-decoration:line-through;color:var(--muted)}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .mhead h2{margin:0}
 .meals{display:flex;flex-direction:column;gap:6px}
-.meal{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--meal);border-radius:10px;padding:6px 8px;background:var(--surface)}
-.meal .mdot{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--good);font-weight:700;padding:0}
+.meal{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--meal);border-radius:10px;padding:6px 8px;background:var(--surface)}
+.meal .mdot{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--good);font-weight:700;padding:0}
 .meal.done .mdot{border-color:var(--good);background:var(--good-soft)}
 .meal .mname{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;min-width:0;color:var(--ink);font:inherit}
 .meal .mname b{overflow-wrap:anywhere}
@@ -332,6 +332,8 @@ code.copy{display:block;background:var(--sunk);padding:8px 10px;border-radius:8p
 .rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .rcard{display:flex;flex-direction:column;gap:4px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;padding:0 0 10px}
 .rcard img,.rcard .noimg{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--sunk);display:block}
+.rcard .noimg{display:grid;place-items:center;font-size:40px}
+.mthumb.ph{font-size:22px}
 .rcard .rt{font-weight:600;font-size:14px;padding:0 10px;line-height:1.25}
 .rcard .rm{font-size:12px;color:var(--muted);padding:0 10px}
 .rcard .rm b{color:var(--ink);font-family:var(--f-num);font-weight:500}
@@ -460,6 +462,9 @@ const TARGETS = {
   block2:{ruecken:[14,18],brust:[10,14],seitlS:[12,16],hintS:[8,12],obTrap:[8,12],bizeps:[8,12],trizeps:[8,12],quad:[12,16],gh:[12,16],waden:[8,12],rumpf:[6,10]},
 };
 const RIR = {0:["3","3"],1:["3","3"],2:["3","3"],3:["2","1"],4:["1–2","0–1"],5:["1","0"],6:["3–4","3–4"],7:["2","1"],8:["2","1"],9:["1–2","0–1"],10:["1","0"],11:["1","0"],12:["3–4","3–4"]};
+const MOB_OLD = ["knietest", "hipflexor", "deadbug", "shrug30", "tilt"], MOB_SINCE = "2026-10-21";
+const mobTotal = d => d < MOB_SINCE ? MOB_OLD.length : MOBILITY.length;
+const mobCount = (day, d) => day?.mobility ? (d < MOB_SINCE ? MOB_OLD : MOBILITY.map(m => m[0])).filter(k => day.mobility[k]).length : 0;
 // Morgenroutine inkl. Anti-Beckenkipp-Routine (nach Built With Science, angepasst an SC-Gelenk und Knie)
 const MOBILITY = [["knietest","Knie-Test: 5 einbeinige Kniebeugen auf 45° oder 2 Stufen hinab",null],
   ["tiltlie","Beckenkippen im Liegen 1 × 10: unteren Rücken an den Boden drücken, Bauch und Po anspannen",null],
@@ -571,7 +576,7 @@ async function loadAll(){
     ]);
     store.days = {}; for (const m of Object.values(months)) Object.assign(store.days, m);
     for (const d of Object.keys(pending)) store.days[d] = mergeDay(store.days[d], pending[d]);
-    lsSet("shas", shas); cacheAll(); setSync(pendingN() ? `${pendingN()} Tag(e) warten auf Sync …` : "Synchronisiert ✓");
+    lsSet("shas", shas); cacheAll(); if (typeof clearFoodMemos === "function") clearFoodMemos(); setSync(pendingN() ? `${pendingN()} Tag(e) warten auf Sync …` : "Synchronisiert ✓");
     Object.keys(pending).forEach(flushDay);
   } catch (e) { setSync(e.message.startsWith("401") ? "Token ungültig: Einrichtung prüfen" : "Offline: zeige letzten Stand", true); }
 }
@@ -1060,7 +1065,7 @@ function go(t){ if (dirty) saveCur(); if (t !== "training") woSession = null; ta
 // ---------- HEUTE ----------
 function trainState(){
   if (cur.session === "frei") return "frei";
-  if (cur.finishedAt) return "fertig";
+  if (cur.finishedAt) return loggedSets(cur) ? "fertig" : "leer";
   if (cur.startedAt) return "läuft";
   return "bereit";
 }
@@ -1081,8 +1086,8 @@ function heroCard(){
       <button class="btn ghost small" type="button" data-act="setSession" data-v="${nxt}" data-then="start" style="align-self:flex-start">Trotzdem trainieren: ${esc(SESS[nxt].title)} ›</button>`;
   } else {
     const p = progress(sk), mins = Math.round(sess.ex.reduce((a, id) => a + setsFor(id, w, sess) * (REST[EX[id].type] + 40), 0) / 60 + 8);
-    const pill = st === "bereit" ? `<span class="pillst plan">Geplant${plan && plan.start ? ` · ${plan.start} Uhr` : ""}</span>` : st === "läuft" ? `<span class="pillst run">Läuft</span>` : `<span class="pillst done">Erledigt</span>`;
-    const stateTxt = st === "fertig" ? `${p.d} von ${p.t} Sätzen` : st === "läuft" ? `${p.d} von ${p.t} Sätzen geschafft` : `${sess.ex.length} Übungen · ca. ${mins} min`;
+    const pill = st === "bereit" ? `<span class="pillst plan">Geplant${plan && plan.start ? ` · ${plan.start} Uhr` : ""}</span>` : st === "läuft" ? `<span class="pillst run">Läuft</span>` : st === "leer" ? `<span class="pillst plan">Ohne Sätze beendet</span>` : `<span class="pillst done">Erledigt</span>`;
+    const stateTxt = st === "leer" ? "Nichts eingetragen. Über ⋯ zurücksetzen oder löschen." : st === "fertig" ? `${p.d} von ${p.t} Sätzen` : st === "läuft" ? `${p.d} von ${p.t} Sätzen geschafft` : `${sess.ex.length} Übungen · ca. ${mins} min`;
     h += `<div class="tb ${st === "fertig" ? "done" : ""}"><div class="tbm">${pill}<b>${esc(sess.title)}</b><div class="small muted">${stateTxt}</div></div><button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button></div>`;
     if (scHigh()) h += `<div class="banner bad small">SC-Schmerz heute oder gestern ≥ 3: Übungen mit SC-Ampel tauschen.</div>`;
     if (st === "bereit") h += `<button class="btn primary big" type="button" data-act="start">▶ Training starten</button>`;
@@ -1095,10 +1100,10 @@ function heroCard(){
 function renderToday(){
   ensureCur();
   const t = todayIso(), isToday = selDate === t, hour = new Date().getHours(), wd = parse(selDate).getDay();
-  const mobDone = MOBILITY.filter(([k]) => cur.mobility[k]).length;
+  const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate);
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   const items = [];
-  items.push({k:"mob", order: hour < 12 ? 1 : 6, done: mobDone === MOBILITY.length, html: `<button type="button" class="task ${mobDone === MOBILITY.length ? "done" : ""}" data-sheet="mob"><span class="dot">${mobDone === MOBILITY.length ? "✓" : mobDone || ""}</span><span><span class="t">Morgenroutine</span><br><span class="s">12 min · ${mobDone}/${MOBILITY.length} · Knie-Test${cur.pain.kneeTest != null ? `: ${cur.pain.kneeTest}/10` : ""}</span></span><span class="go">›</span></button>`});
+  items.push({k:"mob", order: hour < 12 ? 1 : 6, done: mobDone === mobN, html: `<button type="button" class="task ${mobDone === mobN ? "done" : ""}" data-sheet="mob"><span class="dot">${mobDone === mobN ? "✓" : mobDone || ""}</span><span><span class="t">Morgenroutine</span><br><span class="s">12 min · ${mobDone}/${mobN} · Knie-Test${cur.pain.kneeTest != null ? `: ${cur.pain.kneeTest}/10` : ""}</span></span><span class="go">›</span></button>`});
   items.push({k:"w", order: hour < 12 ? 2 : 7, done: num(cur.sleep) != null, html: `<div class="task ${num(cur.sleep) != null ? "done" : ""}"><span class="dot">${num(cur.sleep) != null ? "✓" : ""}</span><span><span class="t">Schlaf</span><br><span class="s">Gewicht nur, wenn gewogen (z. B. im Gym)</span></span><span class="mini"><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></span></div>`});
   items.push({k:"boulder", order: 4, done: !!cur.boulder.done, html: `<div class="task ${cur.boulder.done ? "done" : ""}"><span class="dot">${cur.boulder.done ? "✓" : ""}</span><span><span class="t">Bouldern heute?</span><br><span class="s">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`});
   items.push({k:"pain", order: hour >= 18 ? 0 : 5, done: painDone, html: `<button type="button" class="task ${painDone ? "done" : ""}" data-sheet="pain"><span class="dot">${painDone ? "✓" : ""}</span><span><span class="t">Schmerz-Log</span><br><span class="s">abends · SC ${cur.pain.sc ?? "–"} · Knie ${cur.pain.knee ?? "–"} · Finger ${cur.pain.finger ?? "–"}</span></span><span class="go">›</span></button>`});
@@ -1586,7 +1591,7 @@ function renderRecipes(b){
   b.innerHTML = `<div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
     <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · ${list.length} Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
-    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg"></span>`}<span class="rt">${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.timeMin} min</span></button>`).join("")}</div>
+    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.timeMin} min</span></button>`).join("")}</div>
     <div class="small muted">Fotos sind Symbolbilder von Wikimedia Commons (freie Lizenzen), Quelle im Rezept.</div>`;
 }
 
@@ -1624,8 +1629,8 @@ function calEntries(d, noMeals){
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
   if (day?.boulder?.done) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
-  const mob = day?.mobility ? MOBILITY.filter(([k]) => day.mobility[k]).length : 0, pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
-  if (d >= t || mob) out.push({tm:"07:30", en:"07:45", title:"Morgenroutine", kind:"routine", done: mob === MOBILITY.length, part: mob && mob < MOBILITY.length ? `${mob}/${MOBILITY.length}` : "", go:`#m=${d}`});
+  const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
+  if (d >= t || mob) out.push({tm:"07:30", en:"07:45", title:"Morgenroutine", kind:"routine", done: mob >= mobN, part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
   if (d >= t || pain) out.push({tm:"21:45", en:"21:50", title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
 }
@@ -1710,7 +1715,8 @@ let avoidMemo = {k: null, re: null};
 function avoidRe(){ const key = JSON.stringify([FOOD().allergens, FOOD().avoid]); if (avoidMemo.k === key) return avoidMemo.re; avoidMemo = {k: key, re: avoidRe0()}; return avoidMemo.re; }
 function avoidRe0(){ const f = FOOD(), parts = (f.allergens || []).map(k => ALLERGENS[k]?.[1]).filter(Boolean).concat((f.avoid || "").split(/[,;\n]/).map(avoidTerm).filter(Boolean));
   return parts.length ? new RegExp(parts.join("|"), "i") : null; }
-const recipeText = r => (r.name + " " + (r.ingredients || []).join(" ")).toLowerCase();
+const recipeText = r => (r.name + " " + (r.ingredients || []).join(" ") + substNames(r)).toLowerCase();
+function substNames(r){ if (!prices || !Object.keys(FOOD().subst || {}).length) return ""; let t = ""; for (const l of r.ingredients || []) { const x = parseIng(l); if (x.orig) t += " " + (x.parts || [x]).map(p => p.pr.name).join(" "); } return t; }
 const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
 // Ersatzprodukte: kcal- und Protein-Unterschied je 100 g bzw. ml gegenüber dem Original
@@ -1747,13 +1753,15 @@ function budgetSubs(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
   const key = JSON.stringify([raw, budget, FOOD().store]); if (budgetMemo.has(key)) return budgetMemo.get(key);
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
+  const W = mealWeek(weekNo(mo) ?? 0), batch = new Set([W.batchA, W.batchB]);
   const subs = {}, total = () => Object.values(occ).reduce((a, x) => a + x.cnt * portionCost(subs[x.n] || x.n), 0), before = total();
   let cost = before;
   for (let g = 0; cost > budget && g < 20; g++) {
     let best = null;
     for (const x of Object.values(occ)) { if (subs[x.n]) continue; const c0 = portionCost(x.n), ref = mealInfo(x.n);
       for (const c of altMeals(x.slot, x.n)) { const c1 = portionCost(c.name), ci = mealInfo(c.name);
-        if (c1 >= c0 || ci.protein < ref.protein * 0.8 || Math.abs(ci.kcal - ref.kcal) > 300) continue;
+        if ((batch.has(x.n) && !(c.mealPrep && (c.servings || 1) >= 4)) || recipeCost(c).miss > 1) continue;
+        if (c1 >= c0 || ci.protein < ref.protein * 0.8 || Math.abs(ci.kcal - ref.kcal) > 300 || occ[c.name] || Object.values(subs).includes(c.name)) continue;
         const save = (c0 - c1) * x.cnt; if (!best || save > best.save) best = {n: x.n, c: c.name, save}; } }
     if (!best) break; subs[best.n] = best.c; cost = total();
   }
@@ -1765,8 +1773,11 @@ function mealDefaults(d, raw){
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
   else if (i === 5) [o.mi, o.ab] = [W.frAbend, W.saAbend];
   else [o.mi, o.ab] = [W.saAbend, W.soAbend];
-  o.sn = tr ? (W.trainingSnack || mealPlan.trainingSnack) : (W.snacks || mealPlan.snacks)[i];
-  if (!tr) o.ex = mealPlan.restExtra[i % 2];
+  // Snacks rotieren über die Ruhetage der Woche, damit jeder einmal drankommt
+  let ri = 0; for (let x = monday(d); x < d; x = addDays(x, 1)) if (!isTrainDay(x)) ri++;
+  const sn = W.snacks || mealPlan.snacks;
+  o.sn = tr ? (W.trainingSnack || mealPlan.trainingSnack) : sn[ri % sn.length];
+  if (!tr) o.ex = mealPlan.restExtra[ri % 2];
   const re = avoidRe();
   if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alt = altMeals(k, o[k])[0]; if (alt) o[k] = alt.name; } }
   if (!raw && budgetOn()) { const b = budgetSubs(monday(d)).subs, mark = new Set(); for (const k of Object.keys(o)) if (b[o[k]]) { o[k] = b[o[k]]; mark.add(k); }
@@ -1799,7 +1810,7 @@ function editDay(d, fn){
 }
 function mealThumb(n){
   const r = recipeByName(n);
-  return r?.img ? `<img class="mthumb" src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : "?"}</span>`;
+  return r?.img ? `<img class="mthumb" src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : ({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r?.category] || "🍴"}</span>`;
 }
 function mealRow(d, m){
   const r = m.info, rec = recipeByName(m.name);
@@ -1827,8 +1838,8 @@ function mealCard(d, forceOpen){
 function altMeals(k, curName){
   const sl = mealPlan.slots.find(x => x.k === k), ref = mealInfo(curName), minP = k === "sn" || k === "ex" ? 13 : 25;
   const re = avoidRe();
-  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && r.protein >= minP && recipeOk(r, re))
-    .sort((a, b) => (Math.abs(a.kcal - ref.kcal) / 8 + Math.abs(a.protein - ref.protein)) - (Math.abs(b.kcal - ref.kcal) / 8 + Math.abs(b.protein - ref.protein))).slice(0, 8);
+  const nu = r => recipeNutri(r), score = r => Math.abs(nu(r).kcal - ref.kcal) / 8 + Math.abs(nu(r).protein - ref.protein);
+  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && nu(r).protein >= minP && recipeOk(r, re)).sort((a, b) => score(a) - score(b)).slice(0, 8);
 }
 function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m) return "";
@@ -1902,7 +1913,7 @@ function parseIng(line){
 }
 const costMemo = new Map();
 function recipeCost(r, store){ const k = r.name + "|" + (store || FOOD().store || "aldi"); if (!costMemo.has(k)) costMemo.set(k, recipeCost0(r, store)); return costMemo.get(k); }
-function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
+function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { if (x.q != null) miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
 function mealCost(name, store){ const r = recipeByName(name); if (r) return recipeCost(r, store).portion; if (name === "away") return 4.5; return null; }
 const fmtAmt = (a, u) => u === "Stück" ? `${Math.round(a * 10) / 10} Stück` : a >= 1000 ? `${(Math.round(a / 100) / 10).toLocaleString("de-DE")} ${u === "ml" ? "l" : "kg"}` : `${Math.round(a)} ${u}`;
 function priceNote(){ return prices ? `Richtpreise ${esc(prices.stores.map(st => STORES[st]).join(", "))}, recherchiert am ${fmt(prices.date)}${prices.date ? " " + prices.date.slice(0, 4) : ""}. Keine Live-Daten: Angebote und regionale Preise weichen ab.` : ""; }
@@ -1961,7 +1972,7 @@ function shopCtx(){
   if (shopScope === "gericht") { const wr = Object.keys(weekRecipes(mo)), n = shopRec && recipeByName(shopRec) ? shopRec : wr[0] || recipes[0].name, r = recipeByName(n);
     return {key: `shop:r:${n}:${shopMul}`, title: n, entries: [{n, cnt: shopMul * (r.servings || 1), f: shopMul}], note: `${shopMul}× Rezept ergibt ${shopMul * (r.servings || 1)} Portion${shopMul * (r.servings || 1) > 1 ? "en" : ""}.`, n}; }
   const c = weekRecipes(mo);
-  return {key: "shop:w:" + mo, title: `${weekNo(mo) > 0 ? `Woche ${weekNo(mo)} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}`, entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: Math.ceil(cnt / (recipeByName(n).servings || 1))})), note: "Mengen auf ganze Rezepte hochgerechnet."};
+  return {key: "shop:w:" + mo, title: `${weekNo(mo) > 0 ? `Woche ${weekNo(mo)} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}`, entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: Math.ceil(cnt / (recipeByName(n).servings || 1) * 2) / 2})), note: "Mengen auf ganze bzw. halbe Rezepte gerundet."};
 }
 const fmtQ = q => q == null ? "" : (Math.round(q * 10) / 10).toLocaleString("de-DE");
 function shopHtml(){
@@ -1976,7 +1987,7 @@ function shopHtml(){
     h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt</span></div>`).join("")}</div><div class="small muted">Ganze Packungen bzw. ganze Stück, ohne Gewürze und Kleinkram. * = geschätzter Preis. ${shopScope === "woche" && num(FOOD().budget) ? `Wochenbudget ${eur(num(FOOD().budget))}; Packungen und Vorrat (Öl, Haferflocken …) machen den Einkauf teurer als den Planwert, sie reichen aber über die Woche hinaus. ` : ""}${priceNote()}</div></div>`; }
   h += `<div class="card"><div class="mhead"><b>${got}/${total} im Korb</b><div class="actions"><button class="btn small" type="button" id="shopShare">Teilen</button><button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button></div></div>
     <label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label>
-    ${shopScope === "gericht" ? `<div class="small muted">${esc(cx.note)}</div>` : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f}× Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
+    ${shopScope === "gericht" ? `<div class="small muted">${esc(cx.note)}</div>` : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)); if (!vis.length) continue;
     h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${(i.pr.est || []).includes(FOOD().store || "aldi") ? `<span class="muted">*</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
@@ -1998,7 +2009,7 @@ function foodSettingsHtml(){
     <div class="card"><h2>Wochenbudget</h2>
       <div class="field"><label for="foodBudget">Grenze pro Woche (€)</label><input type="text" inputmode="decimal" id="foodBudget" value="${esc(f.budget ?? "")}" placeholder="z. B. 60"></div>
       <label class="check"><input type="checkbox" id="foodBudgetIgnore" ${f.budgetIgnore ? "checked" : ""}><span>Grenze ignorieren</span></label>
-      <div class="small muted">Liegt der Plan darüber, tauscht die App die teuersten Gerichte gegen günstigere mit ähnlichen kcal und mindestens 80 % des Proteins. Braucht eingeschaltete Preise.</div></div>
+      <div class="small muted">Liegt der Plan darüber, tauscht die App die teuersten Gerichte gegen günstigere mit ähnlichen kcal und mindestens 80 % des Proteins. Nutzt die Richtpreise, auch wenn die Preisanzeige aus ist.</div></div>
     <div class="card"><h2>Ersatzprodukte</h2>
       ${Object.entries(SUBST).map(([id, sb]) => `<div class="field"><label for="sub_${id}">${esc(sb.label)}</label><select id="sub_${id}" data-subst="${id}"><option value="">${esc(sb.label)} (Original)</option>${Object.entries(sb.opts).map(([k, [l]]) => `<option value="${k}" ${(f.subst || {})[id] === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></div>`).join("")}
       <div class="small muted">Gilt für Rezepte, Einkaufsliste, Preise und Nährwerte. Haferdrink hat deutlich weniger Protein als Milch.</div></div>
@@ -2021,7 +2032,7 @@ function budgetCard(mo){
   return `<div class="card budget ${cost > budget ? "over" : ""}"><div class="mhead"><span><span class="lab">Wochenbudget</span><br><b>${eur(cost)}</b> <span class="muted">von ${eur(budget)}</span></span>
     <button class="btn small ${f.budgetIgnore ? "" : "ghost"}" type="button" data-budgettoggle>${f.budgetIgnore ? "Budget anwenden" : "Grenze ignorieren"}</button></div>
     <div class="track"><div class="fill" style="width:${Math.min(cost / budget * 100, 100)}%"></div></div>
-    <div class="small muted">${f.budgetIgnore ? "Grenze ignoriert: Plan ohne Budget-Anpassung." : n ? `${n} Gericht${n > 1 ? "e" : ""} gegen günstigere getauscht (vorher ${eur(b.before)}): ${Object.entries(b.subs).map(([a, c]) => `${esc(a)} → ${esc(c)}`).join("; ")}.` : "Passt ins Budget, nichts getauscht."}${b && !b.ok ? " Günstigere Alternativen mit ähnlichen Nährwerten reichen nicht ganz." : ""} Anteilige Kosten pro Portion, ${esc(STORES[f.store] || "günstigster Markt")}.</div></div>`;
+    <div class="small muted">${f.budgetIgnore ? "Grenze ignoriert: Plan ohne Budget-Anpassung." : n ? `${n} Gericht${n > 1 ? "e" : ""} gegen günstigere getauscht (vorher ${eur(b.before)}): ${Object.entries(b.subs).map(([a, c]) => `${esc(a)} → ${esc(c)}`).join("; ")}.` : cost <= budget ? "Passt ins Budget, nichts getauscht." : "Keine passenden günstigeren Gerichte gefunden."}${b && !b.ok ? " Günstigere Alternativen mit ähnlichen Nährwerten reichen nicht ganz." : ""} ${cost > budget && b?.ok ? " Über dem Budget liegt der Plan wegen eigener Tausche." : ""} Anteilige Kosten pro Portion, ${f.store === "min" ? "jeweils günstigster Markt" : esc(STORES[f.store || "aldi"])}.</div></div>`;
 }
 let openDays = null;
 function essenHtml(b){
@@ -2035,7 +2046,7 @@ function essenHtml(b){
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
   if (mo !== monday(t)) h += `<button class="btn ghost small" type="button" data-ew="0">Diese Woche</button>`;
   h += budgetCard(mo);
-  h += `<div class="prep"><span class="lab">Meal Prep am Sonntag davor</span>${W.prepNote ? `<div class="small muted">${esc(W.prepNote)}</div>` : ""}<div class="prepr">${[W.batchA, W.batchB].map((n, i) => `<button type="button" class="shoprec" data-recipe="${esc(n)}">${mealThumb(n)}<span><span class="muted small">Batch ${i ? "B" : "A"} · 4 Portionen</span><br><b>${esc(n)}</b></span></button>`).join("")}</div></div>`;
+  h += `<div class="prep"><span class="lab">Meal Prep am Sonntag davor</span>${W.prepNote ? `<div class="small muted">${esc(W.prepNote)}</div>` : ""}<div class="prepr">${[W.batchA, W.batchB].map(n => (budgetOn() && budgetSubs(mo).subs[n]) || n).map((n, i) => `<button type="button" class="shoprec" data-recipe="${esc(n)}">${mealThumb(n)}<span><span class="muted small">Batch ${i ? "B" : "A"} · 4 Portionen</span><br><b>${esc(n)}</b></span></button>`).join("")}</div></div>`;
   for (let i = 0; i < 7; i++) { const d = addDays(mo, i), ms = mealsFor(d), tt = mealTotals(ms), open = openDays.set.has(d), day = dayObj(d), p = planFor(d), done = isStrength(day);
     const sk = done ? day.session : p ? variantOf(p.session, d) : null, eaten = ms.filter(m => m.ate).length;
     h += `<div class="card dayplan ${d === t ? "today" : ""}"><button type="button" class="foldhead" data-dayfold="${d}" aria-expanded="${open}"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}<br><span class="small muted">${sk && SESS[sk] ? `${done ? "✓ " : "🏋 "}${esc(SESS[sk].title)}` : day?.boulder?.done ? "Bouldern" : "Ruhetag"}<span class="nutri"> · ${tt.kcal} kcal · ${tt.protein} g P</span>${showPrices() ? ` · ${eur(ms.reduce((a, m) => a + (mealCost(m.name) || 0), 0))}` : ""}${eaten ? ` · ${eaten}/${ms.length} gegessen` : ""}</span></span><span class="thumbs">${ms.slice(0, 4).map(m => mealThumb(m.name)).join("")}</span><span class="muted">${open ? "▴" : "▾"}</span></button>`;

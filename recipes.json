@@ -208,7 +208,7 @@
    "225 g Hüttenkäse",
    "1 EL Speisestärke",
    "285 g veganes Hack/Chorizo-Ersatz (z. B. Sojahack)",
-   "120 g geriebener Cheddar/Gouda",
+   "120 g geriebener Cheddar/Gouda (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "10 große Weizen-Tortillas"
   ],
   "steps": [
@@ -242,7 +242,7 @@
   "shelfLife": "frisch",
   "ingredients": [
    "200 g Hüttenkäse",
-   "20 g geriebener Cheddar",
+   "20 g geriebener Cheddar (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1/2 Jalapeño, fein gewürfelt",
    "2 EL rote Zwiebel, fein",
    "2 Scheiben Sauerteigbrot"
@@ -316,7 +316,7 @@
   "ingredients": [
    "10 Eier",
    "200 g Hüttenkäse",
-   "100 g Feta",
+   "100 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 Paprika, gewürfelt",
    "100 g Spinat",
    "1/2 Bund Frühlingszwiebeln",
@@ -517,7 +517,7 @@
    "1/2 Dose gehackte Tomaten",
    "125 g Hüttenkäse",
    "60 g geröstete Paprika (Glas)",
-   "1 Mozzarella light (125 g)",
+   "1 Mozzarella light (125 g) (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "Basilikum, Salz, Pfeffer"
   ],
   "steps": [
@@ -591,7 +591,7 @@
   "ingredients": [
    "240 g Couscous",
    "3 Dosen Kichererbsen",
-   "250 g Feta",
+   "250 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 Zucchini",
    "2 Paprika",
    "1 rote Zwiebel",
@@ -903,7 +903,7 @@
    "6 Eier",
    "1 Dose gehackte Tomaten",
    "1 Dose Kichererbsen",
-   "80 g Feta",
+   "80 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 Paprika",
    "1 Zwiebel",
    "2 TL Olivenöl",
@@ -946,7 +946,7 @@
    "1 EL Öl",
    "4 Weizentortillas (à 60 g)",
    "150 g Skyr + Limette",
-   "40 g geriebener Käse",
+   "40 g geriebener Käse (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "Fajita-Gewürz (Kreuzkümmel, Paprika, Chili, Knoblauch)"
   ],
   "steps": [
@@ -1354,10 +1354,10 @@
   "name": "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
   "category": "fruehstueck",
   "servings": 1,
-  "kcal": 430,
-  "protein": 47,
-  "carbs": 15,
-  "fat": 20,
+  "kcal": 650,
+  "protein": 55,
+  "carbs": 55,
+  "fat": 22,
   "estimated": true,
   "timeMin": 40,
   "mealPrep": true,
@@ -1369,7 +1369,8 @@
    "1 Tomate",
    "1/2 rote Paprika",
    "50 g Skyr",
-   "Knoblauchpulver, italienische Kräuter, Pfeffer, Prise Salz"
+   "Knoblauchpulver, italienische Kräuter, Pfeffer, Prise Salz",
+   "2 Scheiben Vollkornbrot (dazu)"
   ],
   "steps": [
    "Ofen auf 180 °C Ober-/Unterhitze vorheizen, Blech mit Backpapier auslegen und leicht einfetten.",
@@ -1474,8 +1475,8 @@
    "400 g TK-Blattspinat (aufgetaut, ausgedrückt)",
    "250 g Champignons",
    "1 Zwiebel",
-   "75 g Feta",
-   "50 g Mozzarella, gerieben",
+   "75 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
+   "50 g Mozzarella, gerieben (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 TL Rapsöl",
    "1 Knoblauchzehe, Muskat, Pfeffer, Salz"
   ],
@@ -1516,7 +1517,7 @@
    "1/2 Zwiebel",
    "1 TL Rapsöl",
    "50 g Skyr",
-   "30 g Feta",
+   "30 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 Knoblauchzehe, Kreuzkümmel, Chiliflocken, Salz, frischer Koriander oder Petersilie"
   ],
   "steps": [
@@ -1620,7 +1621,7 @@
   "name": "Gefüllte Skyr-Senf-Eier",
   "category": "snack",
   "servings": 2,
-  "kcal": 261,
+  "kcal": 295,
   "protein": 26,
   "carbs": 3,
   "fat": 16,
@@ -1732,10 +1733,10 @@
   "name": "Erdnuss-Bananen-Quark-Shake",
   "category": "shake",
   "servings": 1,
-  "kcal": 507,
-  "protein": 44,
-  "carbs": 49,
-  "fat": 14,
+  "kcal": 717,
+  "protein": 51,
+  "carbs": 75,
+  "fat": 21,
   "estimated": true,
   "timeMin": 5,
   "mealPrep": false,
@@ -1744,9 +1745,11 @@
    "1 Banane (gefroren, in Stücken)",
    "250 g Magerquark",
    "200 ml Milch 1,5 %",
-   "1 gehäufter EL Erdnussmus",
+   "20 g Erdnussmus",
    "1 TL Honig (optional)",
-   "Vanille, Zimt"
+   "Vanille, Zimt",
+   "40 g Haferflocken",
+   "10 g Erdnussmus"
   ],
   "steps": [
    "Banane am Vorabend in Scheiben schneiden und einfrieren.",
@@ -1754,7 +1757,7 @@
    "30–60 Sek. auf höchster Stufe cremig mixen, bei Bedarf einen Schuss Milch nachgießen."
   ],
   "source": "https://www.budgetbytes.com/peanut-butter-banana-smoothie/",
-  "note": "adaptiert: Magerquark ergänzt (statt Proteinpulver), Honig statt braunem Zucker, weniger Erdnussmus (20 g statt ca. 60 g). Zutaten nach Suchzusammenfassung der Quelle nachgebaut.",
+  "note": "adaptiert: Magerquark ergänzt (statt Proteinpulver), Honig statt braunem Zucker, weniger Erdnussmus (20 g statt ca. 60 g). Zutaten nach Suchzusammenfassung der Quelle nachgebaut. Mit Haferflocken aufgestockt, damit der Shake an Trainingstagen genug Energie liefert.",
   "img": "img/rezepte/n1-12.jpg",
   "imgCredit": {
    "artist": "Ourlibrary",
@@ -1845,10 +1848,10 @@
   "name": "Blaubeer-Seidentofu-Skyr-Smoothie",
   "category": "shake",
   "servings": 1,
-  "kcal": 451,
-  "protein": 38,
-  "carbs": 37,
-  "fat": 15,
+  "kcal": 651,
+  "protein": 44,
+  "carbs": 76,
+  "fat": 18,
   "estimated": true,
   "timeMin": 5,
   "mealPrep": false,
@@ -1859,7 +1862,9 @@
    "200 ml Sojadrink (ungesüßt)",
    "150 g TK-Heidelbeeren",
    "1/2 Banane",
-   "1 EL Leinsamen, geschrotet"
+   "1 EL Leinsamen, geschrotet",
+   "40 g Haferflocken",
+   "1/2 Banane"
   ],
   "steps": [
    "Seidentofu abtropfen lassen.",
@@ -1867,7 +1872,7 @@
    "Ca. 1 Min. cremig mixen; ist er zu dick, etwas Sojadrink oder Wasser nachgießen."
   ],
   "source": "https://naturallieplantbased.com/silken-tofu-smoothie/",
-  "note": "adaptiert: Skyr ergänzt, damit >30 g Protein; Leinsamen bleibt, Ahornsirup weggelassen (Banane süßt). Seidentofu-Ersatz: 100 g Tofu natur + 100 ml mehr Sojadrink.",
+  "note": "adaptiert: Skyr ergänzt, damit >30 g Protein; Leinsamen bleibt, Ahornsirup weggelassen (Banane süßt). Seidentofu-Ersatz: 100 g Tofu natur + 100 ml mehr Sojadrink. Mit Haferflocken aufgestockt, damit der Shake an Trainingstagen genug Energie liefert.",
   "img": "img/rezepte/n1-15.jpg",
   "imgCredit": {
    "artist": "User:Ɱ",
@@ -2014,7 +2019,7 @@
   "ingredients": [
    "300 g Nudeln (Fusilli oder Penne)",
    "2 Dosen Kichererbsen (480 g abgetropft)",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 Salatgurke",
    "250 g Kirschtomaten",
    "1 rote Paprika",
@@ -2181,7 +2186,7 @@
    "250 g Magerquark",
    "1 Ei",
    "300 g TK-Spinat",
-   "60 g Gouda (gerieben)",
+   "60 g Gouda (gerieben) (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "Oregano, Muskat, Knoblauch, Salz, Pfeffer"
   ],
   "steps": [
@@ -2225,7 +2230,7 @@
    "1 EL Rapsöl",
    "200 ml Milch (1,5 %)",
    "250 g Magerquark",
-   "50 g Gouda (gerieben)",
+   "50 g Gouda (gerieben) (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "600 ml Gemüsebrühe",
    "Thymian, Muskat, Salz, Pfeffer"
   ],
@@ -2303,7 +2308,7 @@
    "1 Zwiebel",
    "1 rote Paprika",
    "200 g Hüttenkäse",
-   "120 g Gouda (gerieben)",
+   "120 g Gouda (gerieben) (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "1 EL Rapsöl",
    "300 g Skyr natur",
    "Kreuzkümmel, Paprikapulver, Chili, Limette, Salsa, Salz"
@@ -2344,7 +2349,7 @@
    "1 Dose gehackte Tomaten (400 g)",
    "1 Zwiebel",
    "1 EL Olivenöl",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "250 g Skyr natur",
    "Kreuzkümmel, Paprikapulver, Oregano, Knoblauch, Salz, Pfeffer"
   ],
@@ -2419,7 +2424,7 @@
   "shelfLife": "3–4 Tage Kühlschrank",
   "ingredients": [
    "320 g Nudeln (Penne oder Fusilli)",
-   "300 g Feta",
+   "300 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "500 g Kirschtomaten",
    "2 Dosen weiße Bohnen (500 g abgetropft)",
    "200 g Babyspinat",

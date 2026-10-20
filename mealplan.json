@@ -97,9 +97,9 @@
     "Huevos Rancheros mit schwarzen Bohnen & Feta"
    ],
    "frMittag": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
-   "frAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
-   "saAbend": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
-   "soAbend": "Kartoffel-Tortilla mit Hüttenkäse",
+   "frAbend": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
+   "saAbend": "Kartoffel-Tortilla mit Hüttenkäse",
+   "soAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
    "snacks": [
     "Skyr-Tzatziki mit Vollkorn-Knäcke",
     "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
@@ -110,7 +110,7 @@
     "Protein-Käsekuchen ohne Boden mit Beeren"
    ],
    "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
-   "prepNote": "Brötchen und Quiche am Sonntag backen; die Quiche hält bis Freitag nur eingefroren sicher."
+   "prepNote": "Brötchen und Quiche am Sonntag backen, die Quiche für Do/Fr einfrieren. Eier-Curry: die Eier erst am Mittwoch frisch kochen."
   },
   {
    "batchA": "Chili sin Carne mit Sojagranulat & Reis",
@@ -137,7 +137,7 @@
     "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
     "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
     "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
-    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Hüttenkäse-Rührei auf Vollkornbrot",
     "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
     "Quark-Kaiserschmarrn mit Zwetschgen"
    ],
@@ -188,10 +188,10 @@
    ],
    "frMittag": "Kartoffel-Tortilla mit Hüttenkäse",
    "frAbend": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
-   "saAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
-   "soAbend": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
+   "saAbend": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
+   "soAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
    "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
-   "prepNote": "Gebratenen Reis nach dem Kochen schnell abkühlen (flache Box), dann in den Kühlschrank.",
+   "prepNote": "Brötchen für Do–Sa direkt nach dem Backen einfrieren. Gebratener Reis: schnell abkühlen, die Portionen für Mi/Do einfrieren.",
    "snacks": [
     "Skyr-Tzatziki mit Vollkorn-Knäcke",
     "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",

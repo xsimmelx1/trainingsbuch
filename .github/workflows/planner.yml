@@ -16,6 +16,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write   # zum Löschen des Pages-Artefakts nach dem Deploy (es enthält die Feeds)
 
 concurrency:
   group: planner
@@ -41,6 +42,10 @@ jobs:
           cache: pip
           cache-dependency-path: .planner/requirements.txt
       - run: pip install -q -r .planner/requirements.txt
+      - name: Secret prüfen
+        env:
+          CAL_TOKEN: ${{ secrets.CAL_TOKEN }}
+        run: test ${#CAL_TOKEN} -ge 20 || { echo "CAL_TOKEN fehlt"; exit 1; }
       - name: Planen und erinnern
         env:
           DATA_ROOT: daten
@@ -75,4 +80,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+          retention-days: 1
       - uses: actions/deploy-pages@v4
+      - name: Pages-Artefakt löschen (öffentliches Repo, enthält die Feed-Dateien)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for id in $(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" --jq '.artifacts[].id'); do
+            gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" || true
+          done

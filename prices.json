@@ -3,6 +3,121 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "seidentofu",
+"name": "Seidentofu",
+"pack": 400,
+"unit": "g",
+"match": "seidentofu",
+"prices": {
+"rewe": 2.29,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "tkSpinat",
+"name": "TK-Blattspinat",
+"pack": 750,
+"unit": "g",
+"match": "tk-?(blatt)?spinat|spinat \\(tk|blattspinat",
+"prices": {
+"rewe": 1.49,
+"lidl": 1.19,
+"aldi": 1.19,
+"kaufland": 1.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "schwarzeBohnen",
+"name": "Schwarze Bohnen Dose (240 g abgetropft)",
+"pack": 240,
+"unit": "g",
+"dose": true,
+"match": "schwarze bohnen",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.89,
+"aldi": 0.89,
+"kaufland": 0.89
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "linsenBraun",
+"name": "Teller- oder Berglinsen getrocknet",
+"pack": 500,
+"unit": "g",
+"match": "tellerlinsen|berglinsen|braune linsen",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.59
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "leinsamen",
+"name": "Leinsamen geschrotet",
+"pack": 250,
+"unit": "g",
+"match": "leinsamen",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kichererbsen",
+"name": "Kichererbsen Dose (400 g, 240 g abgetropft)",
+"pack": 240,
+"unit": "g",
+"dose": true,
+"match": "kichererbsen",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
 "id": "magermilchpulver",
 "name": "Magermilchpulver",
 "pack": 250,
@@ -252,7 +367,7 @@
 "name": "Rote Linsen getrocknet",
 "pack": 500,
 "unit": "g",
-"match": "rote linsen|tellerlinsen|berglinsen",
+"match": "rote linsen",
 "prices": {
 "rewe": 1.65,
 "lidl": 1.49,
@@ -308,7 +423,7 @@
 "pack": 250,
 "unit": "g",
 "dose": true,
-"match": "kidney|schwarze bohnen",
+"match": "kidney",
 "prices": {
 "rewe": 0.79,
 "lidl": 0.69,
@@ -469,7 +584,7 @@
 "name": "TK-Erbsen",
 "pack": 750,
 "unit": "g",
-"match": "erbsen(?!nudel)",
+"match": "(?<!icher)erbsen(?!nudel|mehl)",
 "prices": {
 "rewe": 1.49,
 "lidl": 1.29,
@@ -518,7 +633,7 @@
 "name": "Eier Freiland, Größe M, 10 Stück",
 "pack": 10,
 "unit": "Stück",
-"match": "\bei(er)?\b",
+"match": "\\bei(er)?\\b",
 "prices": {
 "rewe": 3.29,
 "lidl": 2.99,
@@ -598,7 +713,7 @@
 "name": "Butter",
 "pack": 250,
 "unit": "g",
-"match": "butter",
+"match": "butter(?!milch)",
 "prices": {
 "rewe": 1.19,
 "lidl": 1.05,
@@ -615,7 +730,7 @@
 "name": "Tofu natur",
 "pack": 400,
 "unit": "g",
-"match": "tofu(?! ?-?räucher)",
+"match": "(?<!seiden)tofu(?! ?-?räucher)",
 "prices": {
 "rewe": 2.29,
 "lidl": 2.19,
@@ -640,25 +755,6 @@
 },
 "est": [
 "rewe",
-"lidl",
-"aldi",
-"kaufland"
-]
-},
-{
-"id": "kichererbsen",
-"name": "Kichererbsen Dose (400 g, 240 g abgetropft)",
-"pack": 240,
-"unit": "g",
-"dose": true,
-"match": "kichererbsen",
-"prices": {
-"rewe": 0.69,
-"lidl": 0.79,
-"aldi": 0.79,
-"kaufland": 0.79
-},
-"est": [
 "lidl",
 "aldi",
 "kaufland"
@@ -1128,7 +1224,7 @@
 "name": "Babyspinat frisch",
 "pack": 200,
 "unit": "g",
-"match": "spinat|rucola",
+"match": "(?<!tk-)(?<!tk-blatt)spinat|rucola",
 "prices": {
 "rewe": 2.29,
 "lidl": 1.49,
@@ -1250,7 +1346,7 @@
 "name": "Kürbis- oder Hanfsamen",
 "pack": 200,
 "unit": "g",
-"match": "kürbiskern|hanfsamen|sesam|sonnenblumenkern|leinsamen",
+"match": "kürbiskern|hanfsamen|sesam(?!öl)|sonnenblumenkern",
 "prices": {
 "rewe": 1.99,
 "lidl": 1.93,
@@ -1263,7 +1359,7 @@
 "name": "Rapsöl (für Olivenöl ggf. mehr)",
 "pack": 1000,
 "unit": "ml",
-"match": "öl\b",
+"match": "öl\\b",
 "prices": {
 "rewe": 1.69,
 "lidl": 1.69,
@@ -1428,6 +1524,82 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "zucker",
+"name": "Zucker",
+"pack": 1000,
+"unit": "g",
+"match": "\\bzucker\\b|rohrzucker",
+"prices": {
+"rewe": 1.19,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "lauch",
+"name": "Lauch (Stange)",
+"pack": 1,
+"unit": "Stück",
+"match": "lauch(?!zwiebel)",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.89
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "burgerbroetchen",
+"name": "Vollkorn-Burgerbrötchen, 4 Stück",
+"pack": 4,
+"unit": "Stück",
+"match": "burgerbrötchen|burger-brötchen",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.59
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "schokolade",
+"name": "Zartbitterschokolade",
+"pack": 100,
+"unit": "g",
+"match": "zartbitter|schokolade",
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 1.09
 },
 "est": [
 "rewe",
