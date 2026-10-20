@@ -1100,7 +1100,7 @@ function renderToday(){
   items.sort((a, b) => (a.done - b.done) || (a.order - b.order));
   let h = `<div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div>
     <h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? `<span></span>` : `<button class="btn ghost" type="button" data-day="0">Heute</button>`}</div>`;
-  h += `<div class="seg" role="group" aria-label="Ansicht">${[["alles","Alles"],["training","Training"],["essen","Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
+  h += `<div class="seg" role="group" aria-label="Ansicht">${[["training","Training"],["essen","Essen"],["alles","Alles"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
   if (todayFocus !== "essen") h += heroCard();
   if (todayFocus !== "training") h += mealCard(selDate, todayFocus === "essen");
@@ -1802,7 +1802,7 @@ function mealBars(t){
   const T = foodTarget(), bar = (lab, e, pl, tg, unit) => `<div class="mbar"><div class="small"><b>${lab}</b> ${e} / ${tg} ${unit}${unit === "g" ? " (mind.)" : ""} <span class="muted">· Plan ${pl}</span></div><div class="track"><div class="plan" style="width:${Math.min(pl / tg * 100, 100)}%"></div><div class="fill" style="width:${Math.min(e / tg * 100, 100)}%"></div></div></div>`;
   return bar("Energie", t.eKcal, t.kcal, T.kcal, "kcal") + bar("Protein", t.eProtein, t.protein, T.protein, "g");
 }
-let mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus") || "alles";
+let mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus2") || "training";
 function mealCard(d, forceOpen){
   if (!mealPlan || !recipes) { ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {}); return `<div class="card"><h2>Essen</h2><div class="small muted">Lade Ernährungsplan …</div></div>`; }
   const ms = mealsFor(d), t = mealTotals(ms), T = foodTarget(), gap = T.kcal - t.kcal, eaten = ms.filter(m => m.ate).length;
@@ -2135,7 +2135,7 @@ async function onClick(e){
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
   if (t.closest("[data-budgettoggle]")) { saveFood({budgetIgnore: !FOOD().budgetIgnore}); render(); return; }
-  const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus", todayFocus); renderToday(); return; }
+  const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus2", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }
   if (t.id === "shopReset") { lsSet(shopCtx().key, []); renderMore(); return; }
