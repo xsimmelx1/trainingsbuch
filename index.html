@@ -460,7 +460,16 @@ const TARGETS = {
   block2:{ruecken:[14,18],brust:[10,14],seitlS:[12,16],hintS:[8,12],obTrap:[8,12],bizeps:[8,12],trizeps:[8,12],quad:[12,16],gh:[12,16],waden:[8,12],rumpf:[6,10]},
 };
 const RIR = {0:["3","3"],1:["3","3"],2:["3","3"],3:["2","1"],4:["1–2","0–1"],5:["1","0"],6:["3–4","3–4"],7:["2","1"],8:["2","1"],9:["1–2","0–1"],10:["1","0"],11:["1","0"],12:["3–4","3–4"]};
-const MOBILITY = [["knietest","Knie-Test: 5 einbeinige Kniebeugen auf 45° oder 2 Stufen hinab",null],["hipflexor","Hüftbeuger halbkniend, Becken eingerollt, 2 × 30–45 s/Seite","hipflexor"],["deadbug","Dead Bug 1–2 × 8/Seite","deadbug"],["shrug30","30°-Shrug 1 × 15, 2 s halten","dbshrug"],["tilt","Beckenkippen im Stand 10×","tilt"]];
+// Morgenroutine inkl. Anti-Beckenkipp-Routine (nach Built With Science, angepasst an SC-Gelenk und Knie)
+const MOBILITY = [["knietest","Knie-Test: 5 einbeinige Kniebeugen auf 45° oder 2 Stufen hinab",null],
+  ["tiltlie","Beckenkippen im Liegen 1 × 10: unteren Rücken an den Boden drücken, Bauch und Po anspannen",null],
+  ["tilt","Beckenkippen im Stand 1 × 10: Po anspannen, Becken einrollen","tilt"],
+  ["glutebr","Glute Bridge / Hip Thrust (Sofa) 3 × 10+: oben Becken einrollen, kein Hohlkreuz","glutebridge"],
+  ["rkc","RKC-Plank 2 × so lange sauber möglich: Po fest, Becken eingerollt. Bei Schlüsselbein ≥ 3/10 weglassen","alt_plank"],
+  ["deadbug","Dead Bug 1–2 × 8/Seite","deadbug"],
+  ["hipflexor","Ausfallschritt-Dehnung (Hüftbeuger), Becken eingerollt, 2 × 30 s/Seite","hipflexor"],
+  ["rectfem","Vorderer Oberschenkel: Fuß aufs Sofa oder im Stand ranziehen, Becken eingerollt, 2 × 30 s/Seite. Nur schmerzfrei fürs Knie",null],
+  ["shrug30","30°-Shrug 1 × 15, 2 s halten","dbshrug"]];
 const WD = ["So","Mo","Di","Mi","Do","Fr","Sa"];
 
 // ---------- Datum ----------
@@ -1089,7 +1098,7 @@ function renderToday(){
   const mobDone = MOBILITY.filter(([k]) => cur.mobility[k]).length;
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   const items = [];
-  items.push({k:"mob", order: hour < 12 ? 1 : 6, done: mobDone === MOBILITY.length, html: `<button type="button" class="task ${mobDone === MOBILITY.length ? "done" : ""}" data-sheet="mob"><span class="dot">${mobDone === MOBILITY.length ? "✓" : mobDone || ""}</span><span><span class="t">Morgenroutine</span><br><span class="s">7 min · ${mobDone}/${MOBILITY.length} · Knie-Test${cur.pain.kneeTest != null ? `: ${cur.pain.kneeTest}/10` : ""}</span></span><span class="go">›</span></button>`});
+  items.push({k:"mob", order: hour < 12 ? 1 : 6, done: mobDone === MOBILITY.length, html: `<button type="button" class="task ${mobDone === MOBILITY.length ? "done" : ""}" data-sheet="mob"><span class="dot">${mobDone === MOBILITY.length ? "✓" : mobDone || ""}</span><span><span class="t">Morgenroutine</span><br><span class="s">12 min · ${mobDone}/${MOBILITY.length} · Knie-Test${cur.pain.kneeTest != null ? `: ${cur.pain.kneeTest}/10` : ""}</span></span><span class="go">›</span></button>`});
   items.push({k:"w", order: hour < 12 ? 2 : 7, done: num(cur.sleep) != null, html: `<div class="task ${num(cur.sleep) != null ? "done" : ""}"><span class="dot">${num(cur.sleep) != null ? "✓" : ""}</span><span><span class="t">Schlaf</span><br><span class="s">Gewicht nur, wenn gewogen (z. B. im Gym)</span></span><span class="mini"><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></span></div>`});
   items.push({k:"boulder", order: 4, done: !!cur.boulder.done, html: `<div class="task ${cur.boulder.done ? "done" : ""}"><span class="dot">${cur.boulder.done ? "✓" : ""}</span><span><span class="t">Bouldern heute?</span><br><span class="s">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`});
   items.push({k:"pain", order: hour >= 18 ? 0 : 5, done: painDone, html: `<button type="button" class="task ${painDone ? "done" : ""}" data-sheet="pain"><span class="dot">${painDone ? "✓" : ""}</span><span><span class="t">Schmerz-Log</span><br><span class="s">abends · SC ${cur.pain.sc ?? "–"} · Knie ${cur.pain.knee ?? "–"} · Finger ${cur.pain.finger ?? "–"}</span></span><span class="go">›</span></button>`});
@@ -1278,7 +1287,7 @@ function renderSheet(){
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="grab"></div>`;
   if (sheetKind === "mob") {
-    h += `<div class="sh"><h2>Morgenroutine · 7 min</h2>${close}</div>`;
+    h += `<div class="sh"><h2>Morgenroutine · 12 min</h2>${close}</div>`;
     for (const [k, t, img] of MOBILITY) h += `<label class="check">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : ""}<input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""}><span>${esc(t)}</span></label>`;
     h += `<div class="lab">Knie-Test: Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}<div class="small muted">Über 2/10 mehrere Tage: Knie-Phase 1 unter Mehr → Einrichtung aktivieren.</div>`;
   } else if (sheetKind === "pain") {
@@ -1442,7 +1451,7 @@ function coach(){
     if (painHi && !S().scCleared) { c.title = "Die Schulter meldet sich"; c.body = "Heute Übungen mit SC-Ampel durch den Ersatz tauschen. Hält das länger als 1–2 Wochen an, den Arzttermin vorziehen."; }
     else if (isStrength(cur)) { c.title = "Einheit erledigt"; c.body = "Stark. Jetzt machen Essen, Schlaf und Erholung den Fortschritt. Heute Abend noch das Schmerz-Log."; }
     else if (p) { c.title = `Heute: ${SESS[variantOf(p.session, t)].title}${p.start ? ` um ${p.start}` : ""}`; c.body = ph.focus; }
-    else { c.title = "Ruhetag"; c.body = "Erholung gehört zum Plan: 7 min Routine, Rad, genug Protein. Lust auf Bouldern? Dann locker."; }
+    else { c.title = "Ruhetag"; c.body = "Erholung gehört zum Plan: 12 min Routine, Rad, genug Protein. Lust auf Bouldern? Dann locker."; }
     if (parse(t).getDay() === 1) { const n = weekCount(addDays(monday(t), -7)); c.body += ` Letzte Woche: ${n}/4 Einheiten${n >= 4 ? ", voll durchgezogen." : n >= 2 ? ", bestanden." : ". Diese Woche zählt: nie zweimal auslassen."}`; }
   }
   if (ls && !lessonRead(ls.id)) c.btns.push(["lesson:" + ls.id, `Lektion: ${ls.title} · ${ls.min} min`]);
@@ -1616,7 +1625,7 @@ function calEntries(d, noMeals){
   if (day?.boulder?.done) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = day?.mobility ? MOBILITY.filter(([k]) => day.mobility[k]).length : 0, pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
-  if (d >= t || mob) out.push({tm:"07:30", en:"07:40", title:"Morgenroutine", kind:"routine", done: mob === MOBILITY.length, part: mob && mob < MOBILITY.length ? `${mob}/${MOBILITY.length}` : "", go:`#m=${d}`});
+  if (d >= t || mob) out.push({tm:"07:30", en:"07:45", title:"Morgenroutine", kind:"routine", done: mob === MOBILITY.length, part: mob && mob < MOBILITY.length ? `${mob}/${MOBILITY.length}` : "", go:`#m=${d}`});
   if (d >= t || pain) out.push({tm:"21:45", en:"21:50", title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
 }
@@ -1706,7 +1715,7 @@ const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
 // Ersatzprodukte: kcal- und Protein-Unterschied je 100 g bzw. ml gegenüber dem Original
 const SUBST = {
-  milch: {label: "Milch", opts: {sojadrink: ["Sojadrink", -8, -0.1], haferdrink: ["Haferdrink", -1, -2.7], mix: ["Soja- und Haferdrink (je zur Hälfte)", -4.5, -1.4, ["sojadrink", "haferdrink"]]}},
+  milch: {label: "Milch", opts: {sojadrink: ["Sojadrink", -8, -0.1], haferdrink: ["Haferdrink", -1, -2.7], mix: ["Soja- und/oder Haferdrink", -4.5, -1.4, ["pflanzendrink"]]}},
   kochsahne: {label: "Kochsahne", opts: {cuisine: ["Hafer-Cuisine", -20, -2.2]}},
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
@@ -1756,7 +1765,7 @@ function mealDefaults(d, raw){
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
   else if (i === 5) [o.mi, o.ab] = [W.frAbend, W.saAbend];
   else [o.mi, o.ab] = [W.saAbend, W.soAbend];
-  o.sn = tr ? mealPlan.trainingSnack : mealPlan.snacks[i];
+  o.sn = tr ? (W.trainingSnack || mealPlan.trainingSnack) : (W.snacks || mealPlan.snacks)[i];
   if (!tr) o.ex = mealPlan.restExtra[i % 2];
   const re = avoidRe();
   if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alt = altMeals(k, o[k])[0]; if (alt) o[k] = alt.name; } }

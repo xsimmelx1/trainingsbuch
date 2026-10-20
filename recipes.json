@@ -1310,5 +1310,1177 @@
    "url": "https://commons.wikimedia.org/wiki/File:Mushrooms_On_Toast_-_North_Laine_Caf%C3%A9_2025-09-08.jpg",
    "title": "File:Mushrooms On Toast - North Laine Café 2025-09-08.jpg"
   }
+ },
+ {
+  "name": "Quark-Kaiserschmarrn mit Zwetschgen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 640,
+  "protein": 51,
+  "carbs": 67,
+  "fat": 17,
+  "estimated": true,
+  "timeMin": 25,
+  "mealPrep": false,
+  "shelfLife": "frisch essen (Teig nicht lagerfähig)",
+  "ingredients": [
+   "2 Eier",
+   "250 g Magerquark",
+   "40 g Weizenmehl (Type 405)",
+   "50 ml Milch 1,5 %",
+   "2 TL Zucker",
+   "1 TL Rapsöl",
+   "150 g Zwetschgen (frisch oder TK)",
+   "Abrieb von 1/2 Bio-Zitrone, Zimt, Prise Salz"
+  ],
+  "steps": [
+   "Eier trennen, Eiweiß mit der Prise Salz steif schlagen.",
+   "Eigelb mit Quark, Mehl, Milch, 1 TL Zucker und Zitronenabrieb glatt rühren, Eischnee locker unterheben.",
+   "Öl in einer beschichteten Pfanne erhitzen, Teig hineingeben und bei mittlerer Hitze mit Deckel ca. 5 Min. stocken lassen.",
+   "Wenden (geht in Vierteln leichter), mit zwei Pfannenwendern in Stücke reißen und rundum goldbraun braten.",
+   "Zwetschgen entsteinen, mit 1 TL Zucker, Zimt und 2 EL Wasser 5 Min. weich köcheln und dazu servieren."
+  ],
+  "source": "https://www.tyrol.com/activities/food/recipes/quark-kaiserschmarrn",
+  "note": "adaptiert: Vorbild (4 Eier, 150 g Mehl, 80 g Zucker, Butter, Rotwein-Zwetschgenröster) auf eine Portion verkleinert; mehr Magerquark, weniger Mehl und Zucker, Öl statt Butter, Röster ohne Rotwein.",
+  "img": "img/rezepte/n1-01.jpg",
+  "imgCredit": {
+   "artist": "Geolina163",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Hofzuckerb%C3%A4cker_Demel_Kaiserschmarrn_3.jpg",
+   "title": "File:Hofzuckerbäcker Demel Kaiserschmarrn 3.jpg"
+  }
+ },
+ {
+  "name": "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 430,
+  "protein": 47,
+  "carbs": 15,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 40,
+  "mealPrep": true,
+  "shelfLife": "Fladen 4 Tage Kühlschrank (zwischen Backpapier), gefüllt am selben Tag essen",
+  "ingredients": [
+   "200 g Hüttenkäse",
+   "2 Eier",
+   "40 g Babyspinat",
+   "1 Tomate",
+   "1/2 rote Paprika",
+   "50 g Skyr",
+   "Knoblauchpulver, italienische Kräuter, Pfeffer, Prise Salz"
+  ],
+  "steps": [
+   "Ofen auf 180 °C Ober-/Unterhitze vorheizen, Blech mit Backpapier auslegen und leicht einfetten.",
+   "Hüttenkäse, Eier und Gewürze mit dem Pürierstab glatt mixen.",
+   "Masse dünn (ca. 25 x 30 cm) auf das Backpapier streichen und 30–35 Min. backen, bis sie gestockt und leicht gebräunt ist.",
+   "5 Min. abkühlen lassen, vom Papier lösen und halbieren.",
+   "Mit Skyr bestreichen, mit Spinat, Tomate und Paprikastreifen belegen und einrollen."
+  ],
+  "source": "https://cleananddelicious.com/cottage-cheese-egg-flatbread-20g-protein/",
+  "note": "adaptiert: Vorbild ergibt 2 Portionen à ca. 20 g Protein; hier die ganze Menge (240 g Cottage Cheese ≈ 200 g Hüttenkäse) als eine Portion plus Skyr-Aufstrich, damit >30 g Protein. Am Sonntag mehrere Fladen backen."
+ },
+ {
+  "name": "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 556,
+  "protein": 40,
+  "carbs": 33,
+  "fat": 26,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": false,
+  "shelfLife": "frisch essen; Teig hält 1 Tag im Kühlschrank",
+  "ingredients": [
+   "60 g Kichererbsenmehl",
+   "120 ml Sojadrink (ungesüßt)",
+   "1 EL Hefeflocken",
+   "1/2 TL Backpulver",
+   "100 g Räuchertofu",
+   "100 g Champignons",
+   "30 g Babyspinat",
+   "2 TL Rapsöl",
+   "Kurkuma, Knoblauchpulver, Pfeffer, Salz (oder Kala Namak)"
+  ],
+  "steps": [
+   "Kichererbsenmehl, Sojadrink, Hefeflocken, Backpulver und Gewürze klümpchenfrei verquirlen, 10 Min. ruhen lassen.",
+   "Räuchertofu würfeln, Pilze in Scheiben schneiden; in 1 TL Öl ca. 5 Min. kräftig anbraten, Spinat kurz zusammenfallen lassen, herausnehmen.",
+   "Restliches Öl in die Pfanne, Teig hineingießen und durch Schwenken verteilen.",
+   "Bei mittlerer Hitze 3–4 Min. backen, bis der Rand fest ist, dann wenden und 2 Min. weiterbraten.",
+   "Füllung auf eine Hälfte geben und zuklappen."
+  ],
+  "source": "https://www.vegkit.com/recipes/vegan-breakfast-brunch/chickpea-flour-omelette-with-avocado-asian-vegetables/",
+  "note": "adaptiert: halbe Teigmenge des Vorbilds; Füllung aus Räuchertofu, Pilzen und Spinat statt Pak Choi, Sprossen und Avocado, damit >30 g Protein. Kichererbsenmehl gibt es in Bio-Märkten, bei dm oder REWE.",
+  "img": "img/rezepte/n1-03.jpg",
+  "imgCredit": {
+   "artist": "Back ache",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chickpea_Omelette_Complete.jpg",
+   "title": "File:Chickpea Omelette Complete.jpg"
+  }
+ },
+ {
+  "name": "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 622,
+  "protein": 45,
+  "carbs": 40,
+  "fat": 30,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": false,
+  "shelfLife": "frisch essen",
+  "ingredients": [
+   "50 g zarte Haferflocken",
+   "150 ml Milch 1,5 %",
+   "100 ml Gemüsebrühe",
+   "15 g vegetarischer Hartkäse, gerieben",
+   "80 g Hüttenkäse",
+   "100 g Champignons",
+   "40 g Babyspinat",
+   "2 Eier",
+   "1 TL Olivenöl",
+   "Pfeffer, Chiliflocken, Prise Salz"
+  ],
+  "steps": [
+   "Haferflocken mit Milch und Brühe aufkochen und unter Rühren 4–5 Min. sämig köcheln.",
+   "Vom Herd nehmen, Hartkäse und Hüttenkäse unterrühren, mit Pfeffer abschmecken.",
+   "Pilze in Öl anbraten, Spinat zugeben und zusammenfallen lassen, an den Pfannenrand schieben.",
+   "Eier in die Pfanne schlagen und als Spiegeleier braten.",
+   "Oats in eine Schüssel geben, Gemüse und Eier darauf, mit Chiliflocken bestreuen."
+  ],
+  "source": "https://feelgoodfoodie.net/recipe/savory-oatmeal/",
+  "note": "adaptiert: zweites Ei und Hüttenkäse ergänzt, Milch statt nur Wasser, damit >30 g Protein. Die Quellseite blockiert automatische Abrufe; Zutaten nach Rezeptbeschreibung (Hartkäse-Oats, Pilze, Spinat, Spiegelei)."
+ },
+ {
+  "name": "Spinat-Pilz-Feta-Quiche ohne Boden",
+  "category": "fruehstueck",
+  "servings": 3,
+  "kcal": 435,
+  "protein": 39,
+  "carbs": 8,
+  "fat": 26,
+  "estimated": true,
+  "timeMin": 60,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 2 Monate TK (in Stücken)",
+  "ingredients": [
+   "6 Eier",
+   "250 g Hüttenkäse",
+   "100 ml Milch 1,5 %",
+   "400 g TK-Blattspinat (aufgetaut, ausgedrückt)",
+   "250 g Champignons",
+   "1 Zwiebel",
+   "75 g Feta",
+   "50 g Mozzarella, gerieben",
+   "1 TL Rapsöl",
+   "1 Knoblauchzehe, Muskat, Pfeffer, Salz"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen, Auflauf- oder Tarteform (ca. 24 cm) fetten.",
+   "Zwiebel, Knoblauch und Pilze in Öl braten, bis die Flüssigkeit verkocht ist.",
+   "Spinat kräftig ausdrücken und mit den Pilzen in der Form verteilen, Feta darüberbröseln.",
+   "Eier, Hüttenkäse, Milch, Muskat, Pfeffer und wenig Salz verquirlen und darübergießen, Mozzarella aufstreuen.",
+   "40–45 Min. backen, bis die Mitte fest ist. Abkühlen lassen, in 3 Portionen schneiden und in Dosen packen."
+  ],
+  "source": "https://www.budgetbytes.com/spinach-mushroom-feta-crustless-quiche/",
+  "note": "adaptiert: Vorbild (4 Eier, 1 Tasse Milch, 6 Portionen) auf 6 Eier plus Hüttenkäse und 3 Portionen umgestellt, damit ca. 40 g Protein. Wenig Kohlenhydrate: bei Bedarf 1–2 Scheiben Vollkornbrot dazu (nicht eingerechnet).",
+  "img": "img/rezepte/n1-05.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Quiche_of_the_Day_(mushroom_and_spinach)_-_The_Hummingbird_2026-05-05.jpg",
+   "title": "File:Quiche of the Day (mushroom and spinach) - The Hummingbird 2026-05-05.jpg"
+  }
+ },
+ {
+  "name": "Huevos Rancheros mit schwarzen Bohnen & Feta",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 658,
+  "protein": 42,
+  "carbs": 54,
+  "fat": 27,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": false,
+  "shelfLife": "Bohnensoße 4 Tage Kühlschrank; Eier frisch braten",
+  "ingredients": [
+   "1 Vollkorn-Tortilla (ca. 60 g)",
+   "2 Eier",
+   "125 g schwarze Bohnen (1/2 Dose, abgetropft)",
+   "150 g stückige Tomaten (Dose)",
+   "1/2 Zwiebel",
+   "1 TL Rapsöl",
+   "50 g Skyr",
+   "30 g Feta",
+   "1 Knoblauchzehe, Kreuzkümmel, Chiliflocken, Salz, frischer Koriander oder Petersilie"
+  ],
+  "steps": [
+   "Zwiebel und Knoblauch in der Hälfte des Öls glasig dünsten, Kreuzkümmel kurz mitrösten.",
+   "Tomaten und Bohnen zugeben, 5–8 Min. dicklich einköcheln, mit Salz und Chili abschmecken.",
+   "Tortilla in einer trockenen Pfanne kurz anrösten.",
+   "Eier im restlichen Öl als Spiegeleier braten.",
+   "Tortilla mit Bohnensoße, Eiern, Skyr-Klecks, Feta und Kräutern belegen."
+  ],
+  "source": "https://cookieandkate.com/huevos-rancheros-recipe/",
+  "note": "adaptiert: Skyr statt Sauerrahm/Avocado, Feta statt Cotija, Weizen-Vollkorn-Tortilla statt Maistortillas (im deutschen Supermarkt leichter zu finden). Schwarze Bohnen notfalls durch Kidneybohnen ersetzen. Die Quellseite blockiert automatische Abrufe; Zutaten nicht 1:1 geprüft.",
+  "img": "img/rezepte/n1-06.jpg",
+  "imgCredit": {
+   "artist": "Daderot",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Huevos_rancheros_-_Pescadero.jpg",
+   "title": "File:Huevos rancheros - Pescadero.jpg"
+  }
+ },
+ {
+  "name": "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+  "category": "fruehstueck",
+  "servings": 3,
+  "kcal": 581,
+  "protein": 41,
+  "carbs": 58,
+  "fat": 18,
+  "estimated": true,
+  "timeMin": 40,
+  "mealPrep": true,
+  "shelfLife": "Brötchen 3 Tage in der Dose, 2 Monate TK; Hüttenkäse frisch auftragen",
+  "ingredients": [
+   "250 g zarte Haferflocken",
+   "250 g Magerquark",
+   "2 Eier",
+   "1 Päckchen Backpulver",
+   "1 EL Chiasamen",
+   "1 EL Leinsamen",
+   "1 EL Sonnenblumenkerne",
+   "1 TL Salz",
+   "300 g Hüttenkäse (zum Belegen)",
+   "1 Salatgurke",
+   "Schnittlauch, Pfeffer"
+  ],
+  "steps": [
+   "Ofen auf 180 °C Ober-/Unterhitze vorheizen, Blech mit Backpapier belegen.",
+   "Haferflocken im Mixer grob mahlen (optional, macht die Krume feiner).",
+   "Hafer, Quark, Eier, Backpulver, Salz und Saaten zu einem klebrigen Teig verkneten.",
+   "Mit feuchten Händen 6 Brötchen formen, mit ein paar Haferflocken bestreuen und 25 Min. goldbraun backen.",
+   "Pro Portion 2 Brötchen aufschneiden, mit je 100 g Hüttenkäse, Gurkenscheiben, Schnittlauch und Pfeffer belegen."
+  ],
+  "source": "https://www.fuersie.de/kochen-backen/abnehmen-mit-haferflocken-rezept-fuer-schnelle-broetchen-ohne-mehl-7356.html",
+  "note": "Teig wie im Vorbild; ergänzt: Belag mit 100 g Hüttenkäse pro Portion, damit >30 g Protein (Brötchen allein ca. 21 g pro 2 Stück).",
+  "img": "img/rezepte/n1-07.jpg",
+  "imgCredit": {
+   "artist": "Shisma",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Quark_rolls.jpg",
+   "title": "File:Quark rolls.jpg"
+  }
+ },
+ {
+  "name": "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
+  "category": "snack",
+  "servings": 3,
+  "kcal": 246,
+  "protein": 24,
+  "carbs": 7,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 40,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (im Ofen oder in der Pfanne aufknuspern)",
+  "ingredients": [
+   "400 g Tofu natur (2 Packungen)",
+   "2 EL Sojasauce",
+   "1 EL Rapsöl",
+   "1 EL Speisestärke",
+   "150 g Skyr",
+   "1 TL Sriracha",
+   "Knoblauchpulver, geräuchertes Paprikapulver, Pfeffer"
+  ],
+  "steps": [
+   "Tofu 15 Min. zwischen Küchentüchern mit einem Gewicht pressen, dann in 2 cm große Würfel schneiden.",
+   "Ofen auf 200 °C Umluft vorheizen.",
+   "Würfel mit Sojasauce, Öl und Gewürzen mischen, dann die Stärke darüberstäuben und durchschwenken.",
+   "Mit Abstand auf einem Blech mit Backpapier verteilen, 25–30 Min. backen, nach der Hälfte wenden.",
+   "Skyr mit Sriracha und einer Prise Salz verrühren und als Dip dazu servieren."
+  ],
+  "source": "https://www.budgetbytes.com/baked-tofu/",
+  "note": "adaptiert: Gewürze leicht abgewandelt, Skyr-Dip ergänzt; 3 Snackportionen à ca. 133 g Tofu.",
+  "img": "img/rezepte/n1-08.jpg",
+  "imgCredit": {
+   "artist": "RXerself (talk · contribs)",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tahu_goreng_crispy.jpg",
+   "title": "File:Tahu goreng crispy.jpg"
+  }
+ },
+ {
+  "name": "Gefüllte Skyr-Senf-Eier",
+  "category": "snack",
+  "servings": 2,
+  "kcal": 261,
+  "protein": 26,
+  "carbs": 3,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank (gekochte, ungeschälte Eier 1 Woche)",
+  "ingredients": [
+   "6 Eier",
+   "80 g Skyr",
+   "2 TL mittelscharfer Senf",
+   "1 TL Zitronensaft",
+   "Paprikapulver edelsüß, Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Eier 10 Min. hart kochen, kalt abschrecken und pellen.",
+   "Längs halbieren und die Eigelbe in eine Schüssel geben.",
+   "Eigelb mit Skyr, Senf, Zitronensaft, Salz und Pfeffer glatt zerdrücken.",
+   "Masse in die Eiweißhälften füllen (mit Löffel oder Gefrierbeutel mit abgeschnittener Ecke).",
+   "Mit Paprikapulver und Schnittlauch bestreuen."
+  ],
+  "source": "https://www.budgetbytes.com/deviled-eggs/",
+  "note": "adaptiert: Skyr statt Mayonnaise (weniger Fett, mehr Protein). 3 Eier = 1 Portion. Die Quellseite blockiert automatische Abrufe; Grundrezept klassisch (Eier, Mayo, Senf, Essig, Paprika).",
+  "img": "img/rezepte/n1-09.jpg",
+  "imgCredit": {
+   "artist": "Robert Loescher",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Deviled_Eggs_topped_with_Scallions.JPG",
+   "title": "File:Deviled Eggs topped with Scallions.JPG"
+  }
+ },
+ {
+  "name": "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
+  "category": "snack",
+  "servings": 2,
+  "kcal": 381,
+  "protein": 28,
+  "carbs": 39,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": true,
+  "shelfLife": "Dip 4 Tage Kühlschrank; Gemüse frisch schneiden",
+  "ingredients": [
+   "250 g weiße Bohnen (1 Dose, abgetropft)",
+   "250 g Hüttenkäse",
+   "1 TL Olivenöl",
+   "1/2 Bio-Zitrone (Saft und Abrieb)",
+   "1 Knoblauchzehe",
+   "1 TL frischer Rosmarin (oder 1/2 TL getrocknet), Chiliflocken, Salz, Pfeffer",
+   "200 g Karotten",
+   "200 g Gurke",
+   "4 Scheiben Vollkorn-Knäckebrot"
+  ],
+  "steps": [
+   "Bohnen abspülen und gut abtropfen lassen.",
+   "Bohnen, Hüttenkäse, Knoblauch, Rosmarin, Zitronensaft und -abrieb mit dem Pürierstab cremig mixen.",
+   "Mit Salz, Pfeffer und Chili abschmecken, in zwei Dosen füllen und mit Olivenöl beträufeln.",
+   "Karotten und Gurke in Sticks schneiden und mit dem Knäckebrot zum Dippen dazu essen."
+  ],
+  "source": "https://www.forkinthekitchen.com/white-bean-dip/",
+  "note": "adaptiert: mehr Hüttenkäse (250 g statt ca. 170 g) und weniger Öl (1 TL statt 2 EL); als 2 große Snackportionen statt 10 Dip-Portionen gerechnet.",
+  "img": "img/rezepte/n1-10.jpg",
+  "imgCredit": {
+   "artist": "Keith McDuffee from Northborough, MA, USA",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:White_bean_dip_with_garlic_and_fresh_herbs.jpg",
+   "title": "File:White bean dip with garlic and fresh herbs.jpg"
+  }
+ },
+ {
+  "name": "Skyr-Tzatziki mit Vollkorn-Knäcke",
+  "category": "snack",
+  "servings": 2,
+  "kcal": 324,
+  "protein": 31,
+  "carbs": 30,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 10,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "500 g Skyr",
+   "1 Salatgurke",
+   "2 TL Olivenöl",
+   "2 Knoblauchzehen",
+   "1/2 Zitrone (Saft)",
+   "1 EL Dill (frisch oder TK), Salz, Pfeffer",
+   "6 Scheiben Vollkorn-Knäckebrot"
+  ],
+  "steps": [
+   "Gurke grob raspeln, mit einer Prise Salz mischen und 10 Min. ziehen lassen.",
+   "Gurke in einem Küchentuch kräftig ausdrücken.",
+   "Skyr mit Gurke, gepresstem Knoblauch, Zitronensaft und Dill verrühren, mit Salz und Pfeffer abschmecken.",
+   "In zwei Dosen füllen, Olivenöl darüberträufeln; mit je 3 Scheiben Knäckebrot essen."
+  ],
+  "source": "https://flavorthemoments.com/greek-tzatziki-dip/",
+  "note": "adaptiert: Skyr statt griechischem Joghurt (mehr Protein, weniger Fett); doppelte Menge als 2 große Snackportionen mit Knäckebrot gerechnet.",
+  "img": "img/rezepte/n1-11.jpg",
+  "imgCredit": {
+   "artist": "Nikodem Nijaki",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tzatziki_IMGP1444.jpg",
+   "title": "File:Tzatziki IMGP1444.jpg"
+  }
+ },
+ {
+  "name": "Erdnuss-Bananen-Quark-Shake",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 507,
+  "protein": 44,
+  "carbs": 49,
+  "fat": 14,
+  "estimated": true,
+  "timeMin": 5,
+  "mealPrep": false,
+  "shelfLife": "frisch trinken",
+  "ingredients": [
+   "1 Banane (gefroren, in Stücken)",
+   "250 g Magerquark",
+   "200 ml Milch 1,5 %",
+   "1 gehäufter EL Erdnussmus",
+   "1 TL Honig (optional)",
+   "Vanille, Zimt"
+  ],
+  "steps": [
+   "Banane am Vorabend in Scheiben schneiden und einfrieren.",
+   "Alle Zutaten in den Mixer geben.",
+   "30–60 Sek. auf höchster Stufe cremig mixen, bei Bedarf einen Schuss Milch nachgießen."
+  ],
+  "source": "https://www.budgetbytes.com/peanut-butter-banana-smoothie/",
+  "note": "adaptiert: Magerquark ergänzt (statt Proteinpulver), Honig statt braunem Zucker, weniger Erdnussmus (20 g statt ca. 60 g). Zutaten nach Suchzusammenfassung der Quelle nachgebaut.",
+  "img": "img/rezepte/n1-12.jpg",
+  "imgCredit": {
+   "artist": "Ourlibrary",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Banana_Smoothie.jpg",
+   "title": "File:Banana Smoothie.jpg"
+  }
+ },
+ {
+  "name": "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
+  "category": "shake",
+  "servings": 2,
+  "kcal": 456,
+  "protein": 33,
+  "carbs": 31,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 15,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Seidentofu",
+   "300 g Magerquark",
+   "60 g Zartbitterschokolade (70 %)",
+   "1 EL Backkakao",
+   "2 EL Ahornsirup oder Honig",
+   "100 g TK-Himbeeren",
+   "Vanille, Prise Salz"
+  ],
+  "steps": [
+   "Schokolade über dem Wasserbad oder in der Mikrowelle schmelzen und kurz abkühlen lassen.",
+   "Seidentofu abtropfen lassen und mit Quark, Kakao, Sirup, Vanille und Salz glatt pürieren.",
+   "Geschmolzene Schokolade zugeben und nochmals mixen, bis die Masse gleichmäßig ist.",
+   "In zwei Gläser füllen und mindestens 1 Std. kalt stellen.",
+   "Vor dem Essen mit den (angetauten) Himbeeren toppen."
+  ],
+  "source": "https://itdoesnttastelikechicken.com/silken-tofu-chocolate-mousse/",
+  "note": "adaptiert: Magerquark ergänzt, damit >30 g Protein; weniger Schokolade als im Vorbild. Seidentofu gibt es im Asia-Laden, teils bei REWE/Edeka/Bio-Märkten; Ersatz: 400 g Tofu natur sehr lange pürieren (fester). Quellseite blockiert automatische Abrufe.",
+  "img": "img/rezepte/n1-13.jpg",
+  "imgCredit": {
+   "artist": "jules / stonesoup",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_mousse_-_stonesoup.jpg",
+   "title": "File:Chocolate mousse - stonesoup.jpg"
+  }
+ },
+ {
+  "name": "Protein-Käsekuchen ohne Boden mit Beeren",
+  "category": "shake",
+  "servings": 6,
+  "kcal": 299,
+  "protein": 31,
+  "carbs": 33,
+  "fat": 4,
+  "estimated": true,
+  "timeMin": 75,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 2 Monate TK (Stücke)",
+  "ingredients": [
+   "1 kg Magerquark",
+   "250 g Skyr",
+   "4 Eier",
+   "80 g Zucker",
+   "40 g Weichweizengrieß",
+   "20 g Speisestärke",
+   "Abrieb von 1 Bio-Zitrone, 1 TL Vanilleextrakt, Prise Salz",
+   "300 g TK-Beeren (zum Servieren)"
+  ],
+  "steps": [
+   "Quark möglichst 1 Std. (oder über Nacht) in einem Sieb mit Küchentuch abtropfen lassen.",
+   "Ofen auf 160 °C Ober-/Unterhitze vorheizen, Springform (24–26 cm) fetten und mit Grieß ausstreuen.",
+   "Eier trennen, Eiweiß mit Salz steif schlagen.",
+   "Quark, Skyr, Eigelb, Zucker, Grieß, Stärke, Zitronenabrieb und Vanille glatt rühren, Eischnee unterheben.",
+   "In die Form füllen und ca. 55–60 Min. backen. Im ausgeschalteten Ofen bei leicht geöffneter Tür abkühlen lassen (verhindert Risse).",
+   "In 6 Stücke schneiden; jeweils mit 50 g aufgetauten Beeren essen."
+  ],
+  "source": "https://baketotheroots.de/kaesekuchen-ohne-boden/",
+  "note": "stark adaptiert: Vorbild nutzt 20-%-Quark, Mascarpone, 120 g Butter und 250 g Zucker; hier Magerquark und Skyr, ohne Butter/Mascarpone, Zucker auf 80 g reduziert. Konsistenz wird fester und weniger cremig.",
+  "img": "img/rezepte/n1-14.jpg",
+  "imgCredit": {
+   "artist": "Ocdp",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Souffl%C3%A9-style_cheesecake_001.jpg",
+   "title": "File:Soufflé-style cheesecake 001.jpg"
+  }
+ },
+ {
+  "name": "Blaubeer-Seidentofu-Skyr-Smoothie",
+  "category": "shake",
+  "servings": 1,
+  "kcal": 451,
+  "protein": 38,
+  "carbs": 37,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 5,
+  "mealPrep": false,
+  "shelfLife": "frisch trinken",
+  "ingredients": [
+   "200 g Seidentofu",
+   "150 g Skyr",
+   "200 ml Sojadrink (ungesüßt)",
+   "150 g TK-Heidelbeeren",
+   "1/2 Banane",
+   "1 EL Leinsamen, geschrotet"
+  ],
+  "steps": [
+   "Seidentofu abtropfen lassen.",
+   "Alle Zutaten in den Mixer geben, gefrorene Beeren zuletzt.",
+   "Ca. 1 Min. cremig mixen; ist er zu dick, etwas Sojadrink oder Wasser nachgießen."
+  ],
+  "source": "https://naturallieplantbased.com/silken-tofu-smoothie/",
+  "note": "adaptiert: Skyr ergänzt, damit >30 g Protein; Leinsamen bleibt, Ahornsirup weggelassen (Banane süßt). Seidentofu-Ersatz: 100 g Tofu natur + 100 ml mehr Sojadrink.",
+  "img": "img/rezepte/n1-15.jpg",
+  "imgCredit": {
+   "artist": "User:Ɱ",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Blueberry_smoothie.jpg",
+   "title": "File:Blueberry smoothie.jpg"
+  }
+ },
+ {
+  "name": "Linseneintopf mit Räuchertofu & Kartoffeln",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 673,
+  "protein": 42,
+  "carbs": 85,
+  "fat": 14,
+  "estimated": true,
+  "timeMin": 50,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "300 g Tellerlinsen (braun, trocken)",
+   "400 g Räuchertofu",
+   "600 g Kartoffeln (festkochend)",
+   "2 Möhren",
+   "1 Stange Lauch",
+   "1 Zwiebel",
+   "1 EL Rapsöl",
+   "2 EL Tomatenmark",
+   "1,5 l Gemüsebrühe",
+   "4 Scheiben Vollkornbrot (200 g)",
+   "Majoran, Lorbeer, Senf, Essig, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Räuchertofu würfeln und im Öl knusprig braten, herausnehmen.",
+   "Zwiebel, Lauch, Möhren und Kartoffeln klein schneiden, im Topf kurz anrösten, Tomatenmark mitrösten.",
+   "Linsen abspülen, mit Brühe, Lorbeer und Majoran zugeben und 30–35 Min. köcheln, bis die Linsen weich sind.",
+   "Tofu unterrühren, mit Senf, Essig, Salz und Pfeffer abschmecken. In 4 Boxen füllen, Brot separat einpacken."
+  ],
+  "source": "https://www.kitchenstories.com/de/rezepte/linseneintopf",
+  "note": "Klassischer Linseneintopf ohne Würstchen; Räuchertofu als Würstchen-Ersatz und Proteinquelle, Brot als Beilage ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-01.jpg",
+  "imgCredit": {
+   "artist": "Whoisjohngalt",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
+   "title": "File:Bowl of lentil soup with green and red lentils.jpg"
+  }
+ },
+ {
+  "name": "Erdnuss-Nudeln mit Tofu & Edamame",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 692,
+  "protein": 39,
+  "carbs": 67,
+  "fat": 26,
+  "estimated": true,
+  "timeMin": 25,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (kalt oder warm essbar)",
+  "ingredients": [
+   "320 g Vollkornspaghetti",
+   "400 g Tofu natur",
+   "300 g TK-Edamame (geschält)",
+   "1 rote Paprika",
+   "1 Möhre",
+   "1/2 Salatgurke",
+   "80 g Erdnussmus",
+   "4 EL Sojasauce",
+   "1 EL Rapsöl",
+   "1 EL Honig oder Zucker",
+   "Knoblauch, Ingwer, Limettensaft, Chiliflocken"
+  ],
+  "steps": [
+   "Tofu trocken tupfen, würfeln und im Öl rundum knusprig braten.",
+   "Nudeln kochen, Edamame in den letzten 3 Min. mitgaren, abgießen und kalt abschrecken.",
+   "Erdnussmus mit Sojasauce, Honig, Limettensaft, geriebenem Knoblauch und Ingwer und etwas heißem Wasser glatt rühren.",
+   "Paprika, Möhre und Gurke in feine Streifen schneiden, alles mit der Soße mischen und in 4 Boxen füllen."
+  ],
+  "source": "https://www.rainbowplantlife.com/peanut-noodles/",
+  "note": "Original vegan ohne Tofu; Tofu und Edamame ergänzt, Vollkornnudeln statt Reisnudeln, Erdnussmus reduziert. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-02.jpg",
+  "imgCredit": {
+   "artist": "tomatoes and friends",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegan_Peanut_Cold_Noodles_with_Cucumbers_(6002018387).jpg",
+   "title": "File:Vegan Peanut Cold Noodles with Cucumbers (6002018387).jpg"
+  }
+ },
+ {
+  "name": "Gebratener Reis mit Tofu, Ei & Erbsen",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 662,
+  "protein": 35,
+  "carbs": 75,
+  "fat": 24,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (Reis schnell abkühlen)",
+  "ingredients": [
+   "300 g Basmati- oder Langkornreis",
+   "400 g Tofu natur",
+   "6 Eier",
+   "300 g TK-Erbsen",
+   "2 Möhren",
+   "1 rote Paprika",
+   "4 Frühlingszwiebeln",
+   "2 EL Rapsöl",
+   "1 EL Sesamöl",
+   "4 EL Sojasauce",
+   "Knoblauch, Ingwer, Pfeffer"
+  ],
+  "steps": [
+   "Reis am Vortag kochen und offen im Kühlschrank vollständig abkühlen lassen.",
+   "Tofu zerbröseln und in 1 EL Öl goldbraun braten; Eier verquirlen, als Rührei stocken lassen und beiseitestellen.",
+   "Möhren und Paprika würfeln, mit Knoblauch und Ingwer im restlichen Öl anbraten, Erbsen zugeben.",
+   "Reis zugeben und bei hoher Hitze braten, Tofu, Ei, Sojasauce und Sesamöl unterheben, mit Frühlingszwiebeln portionieren."
+  ],
+  "source": "https://www.budgetbytes.com/vegetable-fried-rice/",
+  "note": "Original mit nur 2 Eiern; auf 6 Eier erhöht und Tofu ergänzt, Erbsen verdreifacht. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-03.jpg",
+  "imgCredit": {
+   "artist": "Gary Dee",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fried_Rice_1_(Eggs_%26_Vegetables).jpg",
+   "title": "File:Fried Rice 1 (Eggs & Vegetables).jpg"
+  }
+ },
+ {
+  "name": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 674,
+  "protein": 36,
+  "carbs": 81,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 20,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (Dressing separat)",
+  "ingredients": [
+   "300 g Nudeln (Fusilli oder Penne)",
+   "2 Dosen Kichererbsen (480 g abgetropft)",
+   "200 g Feta",
+   "1 Salatgurke",
+   "250 g Kirschtomaten",
+   "1 rote Paprika",
+   "1 rote Zwiebel",
+   "300 g Skyr natur",
+   "2 EL Olivenöl",
+   "Zitronensaft, Dill, Knoblauch, Oregano, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Nudeln bissfest kochen, kalt abschrecken.",
+   "Kichererbsen abspülen, Gurke, Tomaten, Paprika und Zwiebel klein schneiden, Feta würfeln.",
+   "Skyr mit Olivenöl, Zitronensaft, Dill, Knoblauch, Oregano, Salz und Pfeffer zu einem Dressing rühren.",
+   "Alles mischen oder das Dressing in kleinen Gläsern getrennt einpacken, damit der Salat knackig bleibt."
+  ],
+  "source": "https://www.budgetbytes.com/creamy-lemon-dill-greek-pasta-salad/",
+  "note": "Original mit Mayonnaise/Joghurt-Dressing und ohne Kichererbsen; Dressing auf Skyr umgestellt, Kichererbsen ergänzt, Artischocken weggelassen. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-04.jpg",
+  "imgCredit": {
+   "artist": "Schwäbin",
+   "license": "CC BY-SA 3.0 de",
+   "url": "https://commons.wikimedia.org/wiki/File:Nudelsalat_Feta-Kidneybohnen-Gurke-Zwiebel.jpg",
+   "title": "File:Nudelsalat Feta-Kidneybohnen-Gurke-Zwiebel.jpg"
+  }
+ },
+ {
+  "name": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 613,
+  "protein": 39,
+  "carbs": 70,
+  "fat": 18,
+  "estimated": true,
+  "timeMin": 30,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 2 Monate TK (ohne Reis)",
+  "ingredients": [
+   "600 g Tofu natur",
+   "80 g Sojagranulat (trocken)",
+   "300 g Reis",
+   "300 g TK-Brokkoli",
+   "4 Frühlingszwiebeln",
+   "2 EL Rapsöl",
+   "2 EL Chili-Bohnenpaste (Doubanjiang) oder Sambal Oelek",
+   "3 EL Sojasauce",
+   "2 TL Speisestärke",
+   "Knoblauch, Ingwer, Sichuanpfeffer oder Pfeffer"
+  ],
+  "steps": [
+   "Reis kochen. Sojagranulat 10 Min. in heißer Brühe einweichen und gut ausdrücken.",
+   "Granulat im Öl krümelig anbraten, Knoblauch, Ingwer und Chilipaste kurz mitrösten.",
+   "Mit 300 ml Wasser und Sojasauce ablöschen, Tofuwürfel und Brokkoli zugeben, 5 Min. sanft köcheln.",
+   "Mit angerührter Stärke binden, Frühlingszwiebeln darüber, mit Reis in 4 Boxen füllen."
+  ],
+  "source": "https://thewoksoflife.com/vegan-mapo-tofu/",
+  "note": "Original mit Shiitake statt Hack und Seidentofu; Sojagranulat als Hack-Ersatz, fester Tofu (transportfest) und Brokkoli ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-05.jpg",
+  "imgCredit": {
+   "artist": "NeoBatfreak",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mapo_Tofu_with_rice.jpg",
+   "title": "File:Mapo Tofu with rice.jpg"
+  }
+ },
+ {
+  "name": "Kartoffel-Tortilla mit Hüttenkäse",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 626,
+  "protein": 38,
+  "carbs": 63,
+  "fat": 23,
+  "estimated": true,
+  "timeMin": 45,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (kalt essbar)",
+  "ingredients": [
+   "1 kg Kartoffeln (festkochend)",
+   "2 Zwiebeln",
+   "10 Eier",
+   "400 g Hüttenkäse",
+   "2 EL Olivenöl",
+   "4 Scheiben Vollkornbrot (200 g)",
+   "Paprikapulver, Petersilie, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Kartoffeln in dünne Scheiben schneiden und 10 Min. vorkochen oder dämpfen; Zwiebeln in Streifen schneiden.",
+   "Zwiebeln und Kartoffeln im Öl in einer ofenfesten Pfanne 10 Min. braten.",
+   "Eier mit Hüttenkäse, Gewürzen und Petersilie verquirlen, über die Kartoffeln gießen.",
+   "Bei niedriger Hitze stocken lassen und 15 Min. bei 180 °C im Ofen fertig garen. Abgekühlt in 4 Stücke schneiden, Brot dazu."
+  ],
+  "source": "https://www.kitchenstories.com/en/recipes/tortilla-de-patatas-spanish-omelette-en",
+  "note": "Original mit viel Frittieröl; Kartoffeln vorgegart statt in Öl konfiert (2 EL statt ~500 ml), Hüttenkäse und Brot für Protein und Sättigung ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-06.jpg",
+  "imgCredit": {
+   "artist": "Juan Emilio Prades Bel",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tortilla_espa%C3%B1ola_con_patatas_y_cebolla.jpg",
+   "title": "File:Tortilla española con patatas y cebolla.jpg"
+  }
+ },
+ {
+  "name": "Soja-Gyros-Bowl mit Reis & Quark-Tzatziki",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 599,
+  "protein": 42,
+  "carbs": 78,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (Tzatziki separat)",
+  "ingredients": [
+   "150 g Sojaschnetzel (trocken)",
+   "300 g Reis",
+   "2 Paprika",
+   "1 Zwiebel",
+   "3 EL Rapsöl",
+   "2 EL Sojasauce",
+   "500 g Magerquark",
+   "1 Salatgurke",
+   "250 g Kirschtomaten",
+   "Gyrosgewürz, Knoblauch, Zitronensaft, Salz"
+  ],
+  "steps": [
+   "Sojaschnetzel 10 Min. in heißer Brühe einweichen, kräftig ausdrücken, mit Sojasauce, 2 EL Öl und Gyrosgewürz mischen.",
+   "Reis kochen. Schnetzel in einer heißen Pfanne knusprig braten, Paprika und Zwiebelstreifen im restlichen Öl mitbraten.",
+   "Halbe Gurke raspeln und ausdrücken, mit Quark, Knoblauch, Zitronensaft und Salz zu Tzatziki rühren.",
+   "Reis, Gyros und restliche Gurke und Tomaten auf 4 Boxen verteilen, Tzatziki in kleinen Behältern dazu."
+  ],
+  "source": "https://biancazapatka.com/de/veganes-gyros/",
+  "note": "Vegane Vorlage; Sojaschnetzel-Gyros übernommen, Tzatziki mit Magerquark statt Sojajoghurt, als Reis-Bowl portioniert. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-07.jpg",
+  "imgCredit": {
+   "artist": "Vegan Feast Catering",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tzatiki_(3656301454).jpg",
+   "title": "File:Tzatiki (3656301454).jpg"
+  }
+ },
+ {
+  "name": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 728,
+  "protein": 58,
+  "carbs": 80,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 75,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "250 g Lasagneplatten",
+   "100 g Sojagranulat (trocken)",
+   "100 g rote Linsen",
+   "500 g passierte Tomaten",
+   "1 Dose gehackte Tomaten (400 g)",
+   "1 Zwiebel",
+   "2 Möhren",
+   "1 EL Olivenöl",
+   "400 g Hüttenkäse",
+   "250 g Magerquark",
+   "1 Ei",
+   "300 g TK-Spinat",
+   "60 g Gouda (gerieben)",
+   "Oregano, Muskat, Knoblauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojagranulat 10 Min. in heißer Brühe einweichen und ausdrücken. Zwiebel und Möhren fein würfeln, im Öl anschwitzen, Granulat anbraten.",
+   "Passierte und gehackte Tomaten, Linsen und 200 ml Wasser zugeben, 15 Min. köcheln, würzen.",
+   "Hüttenkäse, Quark, Ei und aufgetauten, ausgedrückten Spinat mit Muskat, Salz und Pfeffer verrühren.",
+   "In einer Auflaufform Ragù, Platten und Quarkmasse schichten, mit Ragù und Käse abschließen, 40 Min. bei 180 °C backen."
+  ],
+  "source": "https://www.eat-this.org/vegane-lasagne/",
+  "note": "Vegane Vorlage mit Béchamel; Hackschicht aus Soja und Linsen übernommen, Béchamel durch Hüttenkäse-Quark-Spinat-Schicht ersetzt, wenig Gouda. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-08.jpg",
+  "imgCredit": {
+   "artist": "Donna Alvita",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lasagne_piece.jpg",
+   "title": "File:Lasagne piece.jpg"
+  }
+ },
+ {
+  "name": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 607,
+  "protein": 39,
+  "carbs": 84,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 60,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "250 g Tellerlinsen (braun, trocken)",
+   "1 kg Kartoffeln (mehligkochend)",
+   "250 g Champignons",
+   "1 Zwiebel",
+   "2 Möhren",
+   "200 g TK-Erbsen",
+   "2 EL Tomatenmark",
+   "1 EL Mehl",
+   "2 EL Sojasauce",
+   "1 EL Rapsöl",
+   "200 ml Milch (1,5 %)",
+   "250 g Magerquark",
+   "50 g Gouda (gerieben)",
+   "600 ml Gemüsebrühe",
+   "Thymian, Muskat, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsen in der Brühe ca. 25 Min. weich kochen. Kartoffeln schälen, kochen und mit warmer Milch, Quark, Muskat und Salz stampfen.",
+   "Zwiebel, Möhren und Pilze würfeln, im Öl anbraten, Tomatenmark und Mehl kurz mitrösten.",
+   "Linsen samt Restbrühe, Erbsen, Sojasauce und Thymian zugeben, 5 Min. einkochen lassen.",
+   "Füllung in eine Auflaufform geben, Püree darauf verstreichen, Käse darüber, 20 Min. bei 200 °C goldbraun backen."
+  ],
+  "source": "https://www.budgetbytes.com/vegetarian-shepherds-pie/",
+  "note": "Original laut Blog ca. 395 kcal/9 g Protein pro Portion (6 Portionen); Linsenmenge stark erhöht, Butter im Püree durch Magerquark ersetzt, auf 4 Portionen. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-09.jpg",
+  "imgCredit": {
+   "artist": "Abhinaba Basu from Redmond, United States",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Shepherd%27s_pie_(22470901009)_(cropped).jpg",
+   "title": "File:Shepherd's pie (22470901009) (cropped).jpg"
+  }
+ },
+ {
+  "name": "Eier-Curry mit Kichererbsen, Spinat & Reis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 610,
+  "protein": 37,
+  "carbs": 68,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 40,
+  "mealPrep": true,
+  "shelfLife": "3–4 Tage Kühlschrank (nicht einfrieren)",
+  "ingredients": [
+   "10 Eier",
+   "1 Dose Kichererbsen (240 g abgetropft)",
+   "250 g Basmatireis",
+   "1 Dose gehackte Tomaten (400 g)",
+   "2 Zwiebeln",
+   "200 g TK-Spinat",
+   "2 EL Rapsöl",
+   "300 g Skyr natur",
+   "Garam Masala, Kurkuma, Kreuzkümmel, Chili, Knoblauch, Ingwer, Salz"
+  ],
+  "steps": [
+   "Eier 9 Min. hart kochen, abschrecken, pellen und rundum leicht einritzen. Reis kochen.",
+   "Zwiebeln fein würfeln und im Öl goldbraun braten, Knoblauch, Ingwer und Gewürze 1 Min. mitrösten.",
+   "Tomaten, Kichererbsen, Spinat und 150 ml Wasser zugeben, 10 Min. köcheln, Eier darin 5 Min. ziehen lassen.",
+   "Vom Herd nehmen, Skyr unterrühren (nicht mehr kochen), mit Reis servieren."
+  ],
+  "source": "https://www.indianhealthyrecipes.com/punjabi-egg-curry-anda-curry-dhaba-style/",
+  "note": "Original ohne Hülsenfrüchte; Kichererbsen, Spinat und Skyr für Cremigkeit und Protein ergänzt, Öl reduziert. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-10.jpg",
+  "imgCredit": {
+   "artist": "Mdsmds0",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Egg_Curry_(Anda_Curry).JPG",
+   "title": "File:Egg Curry (Anda Curry).JPG"
+  }
+ },
+ {
+  "name": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 637,
+  "protein": 40,
+  "carbs": 67,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 25,
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "8 Weizentortillas (à ca. 40 g)",
+   "2 Dosen schwarze Bohnen (500 g abgetropft)",
+   "1 kleine Dose Mais (140 g abgetropft)",
+   "1 Zwiebel",
+   "1 rote Paprika",
+   "200 g Hüttenkäse",
+   "120 g Gouda (gerieben)",
+   "1 EL Rapsöl",
+   "300 g Skyr natur",
+   "Kreuzkümmel, Paprikapulver, Chili, Limette, Salsa, Salz"
+  ],
+  "steps": [
+   "Zwiebel und Paprika würfeln, im Öl anbraten, Bohnen und Mais zugeben, mit Gewürzen würzen und grob zerdrücken.",
+   "Hüttenkäse unterrühren. Masse auf 4 Tortillas streichen, Gouda darüber, je eine zweite Tortilla auflegen.",
+   "In einer trockenen Pfanne pro Seite 2–3 Min. knusprig braten, in Viertel schneiden.",
+   "Skyr mit Salsa, Limettensaft und Salz als Dip verrühren. Zum Einfrieren einzeln in Folie wickeln."
+  ],
+  "source": "https://www.budgetbytes.com/hearty-black-bean-quesadillas/",
+  "note": "Original mit Cheddar und mehr Käse; Käse teilweise durch Hüttenkäse ersetzt, Skyr-Dip ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-11.jpg",
+  "imgCredit": {
+   "artist": "pelican from Tokyo, Japan",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Quesadilla_plate,_New_Orleans_November_2016.jpg",
+   "title": "File:Quesadilla plate, New Orleans November 2016.jpg"
+  }
+ },
+ {
+  "name": "Gefüllte Paprika mit Sojahack, Reis & Feta",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 602,
+  "protein": 39,
+  "carbs": 68,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 55,
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "4 große Paprika",
+   "100 g Sojagranulat (trocken)",
+   "200 g Reis",
+   "1 Dose Kidneybohnen (250 g abgetropft)",
+   "1 Dose gehackte Tomaten (400 g)",
+   "1 Zwiebel",
+   "1 EL Olivenöl",
+   "200 g Feta",
+   "250 g Skyr natur",
+   "Kreuzkümmel, Paprikapulver, Oregano, Knoblauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Paprika längs halbieren, entkernen und 10 Min. vorbacken. Reis kochen.",
+   "Sojagranulat in heißer Brühe einweichen, ausdrücken und mit der Zwiebel im Öl anbraten.",
+   "Tomaten, Bohnen, Reis und Gewürze zugeben, kurz köcheln, die Hälfte des Fetas unterheben.",
+   "Paprika füllen, restlichen Feta darüberbröseln, 20 Min. backen. Mit Skyr-Knoblauch-Dip servieren."
+  ],
+  "source": "https://cookieandkate.com/vegetarian-stuffed-peppers-recipe/",
+  "note": "Original mit Pintobohnen und Käse; Sojagranulat ergänzt, Feta statt Cheddar, Skyr-Dip ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-12.jpg",
+  "imgCredit": {
+   "artist": "Alice Wiegand",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Gef%C3%BCllte_Paprika_Nahansicht_2026.jpg",
+   "title": "File:Gefüllte Paprika Nahansicht 2026.jpg"
+  }
+ },
+ {
+  "name": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 656,
+  "protein": 39,
+  "carbs": 87,
+  "fat": 12,
+  "estimated": true,
+  "timeMin": 50,
+  "mealPrep": true,
+  "shelfLife": "Patties 4 Tage Kühlschrank, 3 Monate TK",
+  "ingredients": [
+   "2 Dosen schwarze Bohnen (480 g abgetropft)",
+   "60 g Sojagranulat (trocken)",
+   "2 Eier",
+   "60 g Paniermehl",
+   "1 rote Zwiebel",
+   "4 Vollkorn-Burgerbrötchen",
+   "600 g Kartoffeln",
+   "2 EL Rapsöl",
+   "250 g Magerquark",
+   "1 Tomate und ein paar Salatblätter",
+   "Kreuzkümmel, Paprikapulver, Sojasauce, Sriracha, Kräuter, Salz"
+  ],
+  "steps": [
+   "Ofen auf 220 °C vorheizen. Kartoffeln in Spalten schneiden, mit 1 EL Öl und Paprikapulver 30 Min. backen.",
+   "Sojagranulat einweichen und ausdrücken. Bohnen abspülen, gut trocken tupfen und grob zerdrücken.",
+   "Bohnen, Granulat, Eier, Paniermehl, fein gehackte Zwiebel und Gewürze verkneten, 4 Patties formen, im restlichen Öl je Seite 4–5 Min. braten.",
+   "Quark mit Kräutern und Salz verrühren. Burger mit Tomate und Salat belegen, mit Kartoffeln und Quark servieren."
+  ],
+  "source": "https://www.budgetbytes.com/black-bean-burgers/",
+  "note": "Original ca. 261 kcal/12 g Protein pro Patty laut Blog; Sojagranulat in die Masse, Ofenkartoffeln und Kräuterquark ergänzt, 4 große statt 6 Patties. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-13.jpg",
+  "imgCredit": {
+   "artist": "Bing from Boston, United States",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_black_bean_burger_with_homefries.jpg",
+   "title": "File:Vegetarian black bean burger with homefries.jpg"
+  }
+ },
+ {
+  "name": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 657,
+  "protein": 33,
+  "carbs": 76,
+  "fat": 21,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": true,
+  "shelfLife": "3–4 Tage Kühlschrank",
+  "ingredients": [
+   "320 g Nudeln (Penne oder Fusilli)",
+   "300 g Feta",
+   "500 g Kirschtomaten",
+   "2 Dosen weiße Bohnen (500 g abgetropft)",
+   "200 g Babyspinat",
+   "1 EL Olivenöl",
+   "Knoblauch, Chiliflocken, Oregano, Pfeffer"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Tomaten und Knoblauch in eine Auflaufform geben, Feta als Block in die Mitte legen.",
+   "Mit Öl, Oregano und Chili würzen und 25 Min. backen, bis die Tomaten platzen.",
+   "Nudeln kochen; in der letzten Minute Bohnen dazugeben, abgießen und etwas Nudelwasser aufheben.",
+   "Feta und Tomaten zerdrücken, Nudeln, Bohnen und Spinat unterheben, mit Nudelwasser cremig rühren."
+  ],
+  "source": "https://www.budgetbytes.com/feta-pasta/",
+  "note": "Weiße Bohnen ergänzt (im Blog als Variante empfohlen), Öl deutlich reduziert, Spinat ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-14.jpg",
+  "imgCredit": {
+   "artist": "Delicious Adventures",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Baked_feta_pasta.jpg",
+   "title": "File:Baked feta pasta.jpg"
+  }
+ },
+ {
+  "name": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 737,
+  "protein": 40,
+  "carbs": 72,
+  "fat": 30,
+  "estimated": true,
+  "timeMin": 35,
+  "mealPrep": false,
+  "shelfLife": "frisch essen; Gemüse und Tofu 3 Tage Kühlschrank",
+  "ingredients": [
+   "150 g Reis",
+   "200 g Tofu natur",
+   "2 Eier",
+   "150 g TK-Edamame (geschält)",
+   "200 g Spinat (frisch oder TK)",
+   "1 Möhre",
+   "1/2 Salatgurke",
+   "2 EL Rapsöl",
+   "2 EL Sojasauce",
+   "1 EL Sesam",
+   "Gochujang oder Sriracha, Knoblauch, Reisessig"
+  ],
+  "steps": [
+   "Reis kochen. Tofu würfeln, mit 1 EL Sojasauce marinieren und in 1 EL Öl knusprig braten.",
+   "Spinat mit Knoblauch kurz dünsten, Edamame garen, Möhre und Gurke in Streifen schneiden und mit etwas Essig marinieren.",
+   "Eier im restlichen Öl als Spiegeleier braten.",
+   "Reis in Schalen geben, Gemüse, Tofu und Ei darauf anrichten, mit Sesam, Sojasauce und Gochujang servieren."
+  ],
+  "source": "https://www.eat-this.org/veganes-bibimbap/",
+  "note": "Vegane Vorlage mit Seitan; Tofu statt Seitan, Spiegelei und Edamame ergänzt. Nährwerte selbst berechnet.",
+  "img": "img/rezepte/n2-15.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Brighton_Bibimbap_(tofu)_-_Time_For_Kimchi.jpg",
+   "title": "File:Brighton Bibimbap (tofu) - Time For Kimchi.jpg"
+  }
  }
 ]

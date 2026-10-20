@@ -1,5 +1,5 @@
 {
- "note": "Ernährungsplan: 4-Wochen-Rotation passend zum Sonntags-Meal-Prep (Batch A und B reichen Mo–Do). Tage: 0 = Montag … 6 = Sonntag. Wird von App und Planer gelesen.",
+ "note": "Ernährungsplan: 8-Wochen-Rotation passend zum Sonntags-Meal-Prep (Batch A und B reichen Mo–Do). Tage: 0 = Montag … 6 = Sonntag. Wochen können eigene snacks und trainingSnack haben. Wird von App und Planer gelesen.",
  "target": {
   "kcal": 2650,
   "protein": 140,
@@ -85,6 +85,34 @@
    "prepNote": "Ei-Muffins: die Freitagsportion direkt nach dem Backen einfrieren (im Kühlschrank nur 4 Tage)."
   },
   {
+   "batchA": "Linseneintopf mit Räuchertofu & Kartoffeln",
+   "batchB": "Eier-Curry mit Kichererbsen, Spinat & Reis",
+   "fr": [
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Spinat-Pilz-Feta-Quiche ohne Boden",
+    "Spinat-Pilz-Feta-Quiche ohne Boden",
+    "Quark-Kaiserschmarrn mit Zwetschgen",
+    "Huevos Rancheros mit schwarzen Bohnen & Feta"
+   ],
+   "frMittag": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
+   "frAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
+   "saAbend": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
+   "soAbend": "Kartoffel-Tortilla mit Hüttenkäse",
+   "snacks": [
+    "Skyr-Tzatziki mit Vollkorn-Knäcke",
+    "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
+    "Protein-Käsekuchen ohne Boden mit Beeren",
+    "Gefüllte Skyr-Senf-Eier",
+    "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
+    "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
+    "Protein-Käsekuchen ohne Boden mit Beeren"
+   ],
+   "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
+   "prepNote": "Brötchen und Quiche am Sonntag backen; die Quiche hält bis Freitag nur eingefroren sicher."
+  },
+  {
    "batchA": "Chili sin Carne mit Sojagranulat & Reis",
    "batchB": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
    "fr": [
@@ -100,6 +128,34 @@
    "frAbend": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
    "saAbend": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
    "soAbend": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße"
+  },
+  {
+   "batchA": "Erdnuss-Nudeln mit Tofu & Edamame",
+   "batchB": "Gefüllte Paprika mit Sojahack, Reis & Feta",
+   "fr": [
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
+    "Quark-Kaiserschmarrn mit Zwetschgen"
+   ],
+   "frMittag": "Soja-Gyros-Bowl mit Reis & Quark-Tzatziki",
+   "frAbend": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
+   "saAbend": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
+   "soAbend": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
+   "snacks": [
+    "Skyr-Tzatziki mit Vollkorn-Knäcke",
+    "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
+    "Protein-Käsekuchen ohne Boden mit Beeren",
+    "Gefüllte Skyr-Senf-Eier",
+    "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
+    "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
+    "Protein-Käsekuchen ohne Boden mit Beeren"
+   ],
+   "trainingSnack": "Blaubeer-Seidentofu-Skyr-Smoothie",
+   "prepNote": "Erdnuss-Nudeln: Soße separat lagern, damit die Nudeln nicht aufweichen."
   },
   {
    "batchA": "White Chickpea Chili mit Skyr-Topping",
@@ -119,6 +175,34 @@
    "soAbend": "Pasta mit Hüttenkäse-Paprika-Tomatensauce"
   },
   {
+   "batchA": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
+   "batchB": "Gebratener Reis mit Tofu, Ei & Erbsen",
+   "fr": [
+    "Spinat-Pilz-Feta-Quiche ohne Boden",
+    "Spinat-Pilz-Feta-Quiche ohne Boden",
+    "Spinat-Pilz-Feta-Quiche ohne Boden",
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
+    "Huevos Rancheros mit schwarzen Bohnen & Feta"
+   ],
+   "frMittag": "Kartoffel-Tortilla mit Hüttenkäse",
+   "frAbend": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
+   "saAbend": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
+   "soAbend": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
+   "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
+   "prepNote": "Gebratenen Reis nach dem Kochen schnell abkühlen (flache Box), dann in den Kühlschrank.",
+   "snacks": [
+    "Skyr-Tzatziki mit Vollkorn-Knäcke",
+    "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
+    "Protein-Käsekuchen ohne Boden mit Beeren",
+    "Gefüllte Skyr-Senf-Eier",
+    "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
+    "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
+    "Protein-Käsekuchen ohne Boden mit Beeren"
+   ]
+  },
+  {
    "batchA": "Nudelgulasch mit Soja-Hack",
    "batchB": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
    "fr": [
@@ -135,6 +219,33 @@
    "saAbend": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
    "soAbend": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
    "prepNote": "Ei-Muffins: die Freitagsportion direkt nach dem Backen einfrieren (im Kühlschrank nur 4 Tage)."
+  },
+  {
+   "batchA": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
+   "batchB": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
+   "fr": [
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
+    "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
+    "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
+    "Quark-Kaiserschmarrn mit Zwetschgen",
+    "Huevos Rancheros mit schwarzen Bohnen & Feta"
+   ],
+   "frMittag": "Soja-Gyros-Bowl mit Reis & Quark-Tzatziki",
+   "frAbend": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
+   "saAbend": "Gefüllte Paprika mit Sojahack, Reis & Feta",
+   "soAbend": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
+   "snacks": [
+    "Skyr-Tzatziki mit Vollkorn-Knäcke",
+    "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
+    "Protein-Käsekuchen ohne Boden mit Beeren",
+    "Gefüllte Skyr-Senf-Eier",
+    "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
+    "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
+    "Protein-Käsekuchen ohne Boden mit Beeren"
+   ],
+   "trainingSnack": "Blaubeer-Seidentofu-Skyr-Smoothie"
   }
  ],
  "away": {

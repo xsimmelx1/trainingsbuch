@@ -313,8 +313,8 @@ def build_ics(now, settings, plan, extras, past):
     today = now.date()
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
-        ev(f"morning-{d}", "Morgenroutine 7 min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
-           f"{SITE}#m={d}", utc(d, "07:30"), utc(d, "07:40"), alarm=0)
+        ev(f"morning-{d}", "Morgenroutine 12 min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
+           f"{SITE}#m={d}", utc(d, "07:30"), utc(d, "07:45"), alarm=0)
         ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, "21:45"), utc(d, "21:50"), alarm=0)
     for x in extras:
         d = dt.date.fromisoformat(x["date"])
@@ -385,7 +385,7 @@ def substitute(mp, rec, o, rx):
 
 
 # ---------- Preise und Budget (wie parseIng, recipeCost, altMeals, budgetSubs in der App) ----------
-SUBST_OK = {"milch": {"sojadrink": ["sojadrink"], "haferdrink": ["haferdrink"], "mix": ["sojadrink", "haferdrink"]},
+SUBST_OK = {"milch": {"sojadrink": ["sojadrink"], "haferdrink": ["haferdrink"], "mix": ["pflanzendrink"]},
             "kochsahne": {"cuisine": ["cuisine"]}, "butter": {"margarine": ["margarine"]}}
 ING_RE = None
 
@@ -532,7 +532,7 @@ def meal_defaults(mp, settings, d, train):
         o["mi"], o["ab"] = W["frAbend"], W["saAbend"]
     else:
         o["mi"], o["ab"] = W["saAbend"], W["soAbend"]
-    o["sn"] = mp["trainingSnack"] if train else mp["snacks"][i]
+    o["sn"] = W.get("trainingSnack", mp["trainingSnack"]) if train else W.get("snacks", mp["snacks"])[i]
     if not train:
         o["ex"] = mp["restExtra"][i % 2]
     return o
@@ -718,7 +718,7 @@ def main():
             body = "Heute keine Krafteinheit geplant."
             if missed_yday:
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
-        once(f"morning-{tday}", {"title": "Guten Morgen: 7 min Routine", "body": body + " " + coaching(settings, today),
+        once(f"morning-{tday}", {"title": "Guten Morgen: 12 min Routine", "body": body + " " + coaching(settings, today),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
     if "20:15" <= hm < "23:30" and p_today and hm >= p_today.get("end", "00:00") and not is_strength(day):
         once(f"evening-{tday}", {"title": "Noch keine Einheit eingetragen",

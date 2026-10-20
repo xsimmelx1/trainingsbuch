@@ -98,7 +98,7 @@
 "name": "Sojagranulat / Soja-Schnetzel",
 "pack": 250,
 "unit": "g",
-"match": "sojagranulat|soja-hack",
+"match": "sojagranulat|soja-?hack|sojaschnetzel",
 "prices": {
 "rewe": 3.08,
 "lidl": 1.99,
@@ -252,7 +252,7 @@
 "name": "Rote Linsen getrocknet",
 "pack": 500,
 "unit": "g",
-"match": "rote linsen",
+"match": "rote linsen|tellerlinsen|berglinsen",
 "prices": {
 "rewe": 1.65,
 "lidl": 1.49,
@@ -308,7 +308,7 @@
 "pack": 250,
 "unit": "g",
 "dose": true,
-"match": "kidney",
+"match": "kidney|schwarze bohnen",
 "prices": {
 "rewe": 0.79,
 "lidl": 0.69,
@@ -326,7 +326,7 @@
 "pack": 400,
 "unit": "g",
 "dose": true,
-"match": "gehackte tomaten|dosen? tomaten",
+"match": "gehackte tomaten|stückige tomaten|dosen? tomaten",
 "prices": {
 "rewe": 0.59,
 "lidl": 0.55,
@@ -377,7 +377,7 @@
 "name": "Cherrytomaten",
 "pack": 250,
 "unit": "g",
-"match": "cherrytomate",
+"match": "cherrytomate|kirschtomate",
 "prices": {
 "rewe": 1.29,
 "lidl": 1.19,
@@ -465,6 +465,25 @@
 ]
 },
 {
+"id": "erbsen",
+"name": "TK-Erbsen",
+"pack": 750,
+"unit": "g",
+"match": "erbsen(?!nudel)",
+"prices": {
+"rewe": 1.49,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
 "id": "skyr",
 "name": "Skyr natur (Eigenmarke)",
 "pack": 500,
@@ -499,7 +518,7 @@
 "name": "Eier Freiland, Größe M, 10 Stück",
 "pack": 10,
 "unit": "Stück",
-"match": "\\beier?\\b",
+"match": "\bei(er)?\b",
 "prices": {
 "rewe": 3.29,
 "lidl": 2.99,
@@ -718,7 +737,7 @@
 "name": "Hartweizennudeln",
 "pack": 500,
 "unit": "g",
-"match": "nudeln|pasta|spaghetti",
+"match": "nudeln|pasta|spaghetti|lasagne",
 "prices": {
 "rewe": 0.69,
 "lidl": 0.79,
@@ -1231,7 +1250,7 @@
 "name": "Kürbis- oder Hanfsamen",
 "pack": 200,
 "unit": "g",
-"match": "kürbiskern|hanfsamen|sesam",
+"match": "kürbiskern|hanfsamen|sesam|sonnenblumenkern|leinsamen",
 "prices": {
 "rewe": 1.99,
 "lidl": 1.93,
@@ -1244,7 +1263,7 @@
 "name": "Rapsöl (für Olivenöl ggf. mehr)",
 "pack": 1000,
 "unit": "ml",
-"match": "(^|[^a-zäöü])öl\\b|olivenöl",
+"match": "öl\b",
 "prices": {
 "rewe": 1.69,
 "lidl": 1.69,
@@ -1389,6 +1408,26 @@
 "lidl": 1.79,
 "aldi": 1.79,
 "kaufland": 1.79
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "pflanzendrink",
+"name": "Soja- oder Haferdrink",
+"pack": 1000,
+"unit": "ml",
+"match": "pflanzendrink",
+"subst": true,
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99
 },
 "est": [
 "rewe",
