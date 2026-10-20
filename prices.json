@@ -1336,6 +1336,66 @@
 "lidl",
 "kaufland"
 ]
+},
+{
+"id": "haferdrink",
+"name": "Haferdrink (Eigenmarke)",
+"pack": 1000,
+"unit": "ml",
+"match": "haferdrink",
+"subst": true,
+"prices": {
+"rewe": 1.29,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "cuisine",
+"name": "Hafer-Cuisine / Pflanzliche Kochcreme",
+"pack": 200,
+"unit": "ml",
+"match": "cuisine|kochcreme",
+"subst": true,
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.85
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "margarine",
+"name": "Pflanzenmargarine",
+"pack": 500,
+"unit": "g",
+"match": "margarine",
+"subst": true,
+"prices": {
+"rewe": 1.99,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
 }
 ]
 }

@@ -384,6 +384,141 @@ def substitute(mp, rec, o, rx):
     return o
 
 
+# ---------- Preise und Budget (wie parseIng, recipeCost, altMeals, budgetSubs in der App) ----------
+SUBST_OK = {"milch": ("sojadrink", "haferdrink"), "kochsahne": ("cuisine",), "butter": ("margarine",)}
+ING_RE = None
+
+
+def load_prices():
+    import re
+    try:
+        with open(os.path.join(SITE_ROOT, "prices.json"), encoding="utf-8") as f:
+            P = json.load(f)
+    except OSError:
+        return None
+    for pr in P["products"]:
+        pr["re"] = re.compile(pr["match"], re.I)
+    P["stores"] = [st for st in ("rewe", "lidl", "aldi", "kaufland") if any(st in (pr.get("prices") or {}) for pr in P["products"])]
+    return P
+
+
+def parse_ing(line, P, subst):
+    import re
+    global ING_RE
+    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$")
+    line = re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)
+    m = ING_RE.match(line)
+    q = None
+    if m:
+        a = m.group(1)
+        q = 0.5 if a == "½" else (float(a.split("/")[0]) / float(a.split("/")[1]) if "/" in a else float(a.replace(",", ".")))
+    unit = (m.group(2) or "") if m else ""
+    name = re.sub(r"\(.*?\)", "", m.group(3) if m else line).split(", ")[0].strip()
+    pr = next((x for x in P["products"] if x["re"].search(name)), None)
+    if not pr:
+        return None, 0
+    if q is None:
+        amt = 0
+    elif unit in ("g", "ml"):
+        amt = q
+    elif unit in ("kg", "l"):
+        amt = q * 1000
+    elif unit == "EL":
+        amt = q * 15
+    elif unit == "TL":
+        amt = q * 5
+    elif unit == "Handvoll":
+        amt = q * 30
+    elif unit.startswith("Dose"):
+        amt = q * (pr["pack"] if pr.get("dose") else 400)
+    elif unit == "Becher":
+        amt = q * 250
+    elif unit.startswith("Pck"):
+        amt = q * pr["pack"]
+    elif pr["unit"] == "Stück":
+        amt = q
+    else:
+        amt = q * (pr.get("piece") or 100)
+    if pr["unit"] == "Stück" and unit in ("g", "ml"):
+        amt = q / (pr.get("piece") or 60)
+    sub = (subst or {}).get(pr["id"])
+    if sub and sub in SUBST_OK.get(pr["id"], ()):
+        sp = next((x for x in P["products"] if x["id"] == sub), None)
+        if sp:
+            pr = sp
+    return pr, amt
+
+
+def price_of(pr, store, P):
+    ps = pr.get("prices") or {}
+    if store != "min" and store not in P["stores"]:
+        store = "min"
+    if store == "min":
+        v = [x for x in ps.values() if x is not None]
+        return min(v) if v else None
+    return ps.get(store)
+
+
+def portion_cost(r, P, store, subst, memo):
+    if r["name"] in memo:
+        return memo[r["name"]]
+    c = 0.0
+    for line in r.get("ingredients") or []:
+        pr, amt = parse_ing(line, P, subst)
+        if pr:
+            v = price_of(pr, store, P)
+            if v is not None:
+                c += amt / pr["pack"] * v
+    memo[r["name"]] = c / (r.get("servings") or 1)
+    return memo[r["name"]]
+
+
+def alt_meals(mp, rec, k, cur, rx):
+    slot = next(x for x in mp["slots"] if x["k"] == k)
+    ref = rec.get(cur) or {"kcal": 0, "protein": 0}
+    minp = 13 if k in ("sn", "ex") else 25
+    text = lambda r: (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
+    c = [r for r in rec.values() if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp and not (rx and rx.search(text(r)))]
+    c.sort(key=lambda r: abs(r["kcal"] - ref["kcal"]) / 8 + abs(r["protein"] - ref["protein"]))
+    return c[:8]
+
+
+def budget_subs(mp, rec, settings, raws, rx, P):
+    f = settings.get("food") or {}
+    budget = f.get("budget")
+    if not P or not budget or f.get("budgetIgnore"):
+        return {}
+    store, subst, memo = f.get("store") or "aldi", f.get("subst") or {}, {}
+    cost = lambda n: portion_cost(rec[n], P, store, subst, memo) if n in rec else 0
+    occ = {}
+    for o in raws:
+        for k, n in o.items():
+            occ.setdefault(n, {"n": n, "slot": k, "cnt": 0})["cnt"] += 1
+    subs = {}
+    total = lambda: sum(x["cnt"] * cost(subs.get(x["n"], x["n"])) for x in occ.values())
+    cur_cost = total()
+    for _ in range(20):
+        if cur_cost <= budget:
+            break
+        best = None
+        for x in occ.values():
+            if x["n"] in subs or x["n"] not in rec:
+                continue
+            c0, ref = cost(x["n"]), rec[x["n"]]
+            for c in alt_meals(mp, rec, x["slot"], x["n"], rx):
+                c1 = cost(c["name"])
+                if c1 >= c0 or c["protein"] < ref["protein"] * 0.8 or abs(c["kcal"] - ref["kcal"]) > 300:
+                    continue
+                save = (c0 - c1) * x["cnt"]
+                if not best or save > best[2]:
+                    best = (x["n"], c["name"], save)
+        if not best:
+            break
+        subs[best[0]] = best[1]
+        cur_cost = total()
+    return subs
+
+
 def meal_defaults(mp, settings, d, train):
     w = week_no(settings, d)
     W = mp["weeks"][(w - 1) % len(mp["weeks"]) if w > 0 else len(mp["weeks"]) - 1]
@@ -403,13 +538,28 @@ def meal_defaults(mp, settings, d, train):
     return o
 
 
-def build_meal_ics(now, settings, plan, days):
+def build_meal_ics(now, settings, plan, days, past=None):
     with open(os.path.join(SITE_ROOT, "mealplan.json"), encoding="utf-8") as f:
         mp = json.load(f)
     with open(os.path.join(SITE_ROOT, "recipes.json"), encoding="utf-8") as f:
         rec = {r["name"]: r for r in json.load(f)}
     by_date = {p["date"]: p for p in plan}
+    past_dates = {p["date"] for p in (past or [])}
     rx = avoid_re(settings)
+    P = load_prices()
+
+    def is_train(dd):
+        day = days.get(dd.isoformat()) or {}
+        return is_strength(day) or bool(by_date.get(dd.isoformat())) or dd.isoformat() in past_dates or bool((day.get("boulder") or {}).get("done"))
+
+    week_subs = {}
+
+    def subs_for(dd):
+        mo = dd - dt.timedelta(days=dd.weekday())
+        if mo not in week_subs:
+            raws = [substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i))), rx) for i in range(7)]
+            week_subs[mo] = budget_subs(mp, rec, settings, raws, rx, P)
+        return week_subs[mo]
     stamp = now.strftime("%Y%m%dT000000Z")
     L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//trainingsbuch//essen//DE", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
          "X-WR-CALNAME:Trainingsbuch Essen", "X-WR-TIMEZONE:Europe/Berlin", "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
@@ -418,8 +568,9 @@ def build_meal_ics(now, settings, plan, days):
         iso = d.isoformat()
         day = days.get(iso) or {}
         pl = by_date.get(iso)
-        train = is_strength(day) or bool(pl) or bool((day.get("boulder") or {}).get("done"))
-        names = substitute(mp, rec, meal_defaults(mp, settings, d, train), rx)
+        names = substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d)), rx)
+        bs = subs_for(d)
+        names = {k: bs.get(v, v) for k, v in names.items()}
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
         times = (settings.get("food") or {}).get("times") or {}
         for slot in mp["slots"]:
@@ -542,7 +693,7 @@ def main():
     except Exception as ex:
         print("Kalender-Feed Fehler:", type(ex).__name__)
     try:
-        write_meal_feed(build_meal_ics(now, settings, plan, days))
+        write_meal_feed(build_meal_ics(now, settings, plan, days, past))
     except Exception as ex:
         print("Essens-Feed Fehler:", type(ex).__name__)
 

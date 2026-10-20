@@ -138,6 +138,9 @@ textarea{min-height:64px;resize:vertical}
 .storecmp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .storecmp div{border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;font-size:12px;background:var(--surface)}
 .storecmp div b{font-family:var(--f-num);font-size:14px}
+.budget .track{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.budget .fill{height:100%;background:var(--good)}
+.budget.over .fill{background:var(--warn)}
 .mwarn{font-size:12px;color:var(--bad);font-weight:600}
 .storecmp div .muted{font-size:10px}
 .storecmp .best{border-color:var(--good);background:var(--good-soft)}
@@ -1556,8 +1559,8 @@ function journeySheet(kind, arg){
     return `<div class="sh"><h2>${esc(r.name)}</h2>${close}</div>${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
       ${avoidHit(r) ? `<div class="pill warn">Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)</div>` : ""}
       ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div><div class="small muted">Pro Portion, anteilig gerechnet. ${priceNote()}</div>` : ""}
-      <div class="macro"><span><b>${r.kcal}</b> kcal</span><span><b>${r.protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port. · ${r.timeMin} min</span></div>
-      <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>
+      <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port. · ${r.timeMin} min</span></div>
+      <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.pr.id][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
       <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
       ${r.shelfLife ? `<div class="small muted">Haltbarkeit: ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}
       ${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}
@@ -1701,17 +1704,53 @@ function avoidRe0(){ const f = FOOD(), parts = (f.allergens || []).map(k => ALLE
 const recipeText = r => (r.name + " " + (r.ingredients || []).join(" ")).toLowerCase();
 const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
-const saveFood = patch => { saveSettings({food: Object.assign(FOOD(), patch)}); applyNutri(); };
+// Ersatzprodukte: kcal- und Protein-Unterschied je 100 g bzw. ml gegenüber dem Original
+const SUBST = {
+  milch: {label: "Milch", opts: {sojadrink: ["Sojadrink", -8, -0.1], haferdrink: ["Haferdrink", -1, -2.7]}},
+  kochsahne: {label: "Kochsahne", opts: {cuisine: ["Hafer-Cuisine", -20, -2.2]}},
+  butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
+};
+const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo]) m.clear(); };
+const saveFood = patch => { saveSettings({food: Object.assign(FOOD(), patch)}); applyNutri(); clearFoodMemos(); };
+const nutriMemo = new Map();
+function recipeNutri(r){
+  if (!r) return null;
+  if (!prices || !Object.keys(FOOD().subst || {}).length) return r;
+  if (!nutriMemo.has(r.name)) { let k = 0, pr = 0;
+    for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.orig) continue; const d = SUBST[x.orig.id].opts[x.pr.id]; k += x.amt / 100 * d[1]; pr += x.amt / 100 * d[2]; }
+    const sv = r.servings || 1; nutriMemo.set(r.name, Object.assign({}, r, {kcal: Math.round(r.kcal + k / sv), protein: Math.round(r.protein + pr / sv)})); }
+  return nutriMemo.get(r.name);
+}
 function mealInfo(n){
   if (n && typeof n === "object") return {name: n.name || "Eigenes Essen", kcal: num(n.kcal) || 0, protein: num(n.protein) || 0, own: true};
   if (n === "away") return {name: mealPlan.away.name, kcal: mealPlan.away.kcal, protein: mealPlan.away.protein};
   if (n === "skip") return {name: "ausgelassen", kcal: 0, protein: 0};
-  const r = recipeByName(n); return r ? {name: r.name, kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
+  const r = recipeNutri(recipeByName(n)); return r ? {name: r.name, kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
 }
 const dayObj = d => cur && cur.date === d ? cur : store.days[d];
 const isTrainDay = d => isStrength(dayObj(d)) || !!dayObj(d)?.boulder?.done || !!planFor(d) || (store.plan.past || []).some(p => p.date === d);
 const mealWeek = w => mealPlan.weeks[w > 0 ? (w - 1) % mealPlan.weeks.length : mealPlan.weeks.length - 1];
-function mealDefaults(d){
+const budgetOn = () => { const f = FOOD(); return !!prices && num(f.budget) > 0 && !f.budgetIgnore; };
+const portionCost = n => { const r = recipeByName(n); return r ? recipeCost(r).portion : 0; };
+const budgetMemo = new Map();
+// Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
+function budgetSubs(mo){
+  const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
+  const key = JSON.stringify([raw, budget, FOOD().store]); if (budgetMemo.has(key)) return budgetMemo.get(key);
+  const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
+  const subs = {}, total = () => Object.values(occ).reduce((a, x) => a + x.cnt * portionCost(subs[x.n] || x.n), 0), before = total();
+  let cost = before;
+  for (let g = 0; cost > budget && g < 20; g++) {
+    let best = null;
+    for (const x of Object.values(occ)) { if (subs[x.n]) continue; const c0 = portionCost(x.n), ref = mealInfo(x.n);
+      for (const c of altMeals(x.slot, x.n)) { const c1 = portionCost(c.name), ci = mealInfo(c.name);
+        if (c1 >= c0 || ci.protein < ref.protein * 0.8 || Math.abs(ci.kcal - ref.kcal) > 300) continue;
+        const save = (c0 - c1) * x.cnt; if (!best || save > best.save) best = {n: x.n, c: c.name, save}; } }
+    if (!best) break; subs[best.n] = best.c; cost = total();
+  }
+  const res = {subs, before, cost, budget, ok: cost <= budget}; budgetMemo.set(key, res); return res;
+}
+function mealDefaults(d, raw){
   const w = weekNo(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
   if (i <= 3) [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
@@ -1721,6 +1760,8 @@ function mealDefaults(d){
   if (!tr) o.ex = mealPlan.restExtra[i % 2];
   const re = avoidRe();
   if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alt = altMeals(k, o[k])[0]; if (alt) o[k] = alt.name; } }
+  if (!raw && budgetOn()) { const b = budgetSubs(monday(d)).subs, mark = new Set(); for (const k of Object.keys(o)) if (b[o[k]]) { o[k] = b[o[k]]; mark.add(k); }
+    Object.defineProperty(o, "_budget", {value: mark, enumerable: false}); }
   return o;
 }
 function mealTime(d, slot){
@@ -1734,7 +1775,7 @@ function mealsFor(d){
   const day = dayObj(d), def = mealDefaults(d), ov = day?.meals || {}, ate = day?.ate || {};
   const out = mealPlan.slots.map(sl => { const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
-    return {k: sl.k, label: sl.label, time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && ov[sl.k] !== def[sl.k], ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
+    return {k: sl.k, label: sl.label, time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, info: mealInfo(o)});
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
@@ -1754,7 +1795,7 @@ function mealThumb(n){
 function mealRow(d, m){
   const r = m.info, rec = recipeByName(m.name);
   return `<div class="meal ${m.ate ? "done" : ""}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
-    <button type="button" class="mname" ${rec ? `data-recipe="${esc(m.name)}"` : "disabled"}>${mealThumb(m.name)}<span class="mtx"><span class="ml">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${esc(r.name)}</b>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“, bitte tauschen</span>` : ""}<span class="mk"><span class="nutri">${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span></span></button>
+    <button type="button" class="mname" ${rec ? `data-recipe="${esc(m.name)}"` : "disabled"}>${mealThumb(m.name)}<span class="mtx"><span class="ml">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · günstiger (Budget)" : ""}</span><b>${esc(r.name)}</b>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“, bitte tauschen</span>` : ""}<span class="mk"><span class="nutri">${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span></span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<button type="button" class="btn small mswap" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Alternativen zu ${esc(m.label)}">⇄</button>`}</div>`;
 }
 function mealBars(t){
@@ -1845,6 +1886,8 @@ function parseIng(line){
   else if (pr.unit === "Stück") amt = q;
   else amt = q * (pr.piece || 100);
   if (pr.unit === "Stück" && (unit === "g" || unit === "ml")) amt = q / (pr.piece || 60);
+  const sub = FOOD().subst?.[pr.id], sp = sub && SUBST[pr.id]?.opts[sub] && prices.products.find(x => x.id === sub);
+  if (sp) return {name, q, unit, pr: sp, orig: pr, amt};
   return {name, q, unit, pr, amt};
 }
 const costMemo = new Map();
@@ -1919,7 +1962,7 @@ function shopHtml(){
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
   else h += `<div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>`;
   if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => a[1].sum - b[1].sum)[0][0];
-    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt</span></div>`).join("")}</div><div class="small muted">Ganze Packungen bzw. ganze Stück, ohne Gewürze und Kleinkram. * = geschätzter Preis. ${priceNote()}</div></div>`; }
+    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt</span></div>`).join("")}</div><div class="small muted">Ganze Packungen bzw. ganze Stück, ohne Gewürze und Kleinkram. * = geschätzter Preis. ${shopScope === "woche" && num(FOOD().budget) ? `Wochenbudget ${eur(num(FOOD().budget))}; Packungen und Vorrat (Öl, Haferflocken …) machen den Einkauf teurer als den Planwert, sie reichen aber über die Woche hinaus. ` : ""}${priceNote()}</div></div>`; }
   h += `<div class="card"><div class="mhead"><b>${got}/${total} im Korb</b><div class="actions"><button class="btn small" type="button" id="shopShare">Teilen</button><button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button></div></div>
     <label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label>
     ${shopScope === "gericht" ? `<div class="small muted">${esc(cx.note)}</div>` : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f}× Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
@@ -1941,6 +1984,13 @@ function foodSettingsHtml(){
       <label class="check"><input type="checkbox" id="foodPrices" ${f.prices ? "checked" : ""}><span>Preise pro Gericht und Einkauf anzeigen</span></label>
       <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
       <div class="small muted">${prices ? priceNote() : "Richtpreise werden geladen …"}</div></div>
+    <div class="card"><h2>Wochenbudget</h2>
+      <div class="field"><label for="foodBudget">Grenze pro Woche (€)</label><input type="text" inputmode="decimal" id="foodBudget" value="${esc(f.budget ?? "")}" placeholder="z. B. 60"></div>
+      <label class="check"><input type="checkbox" id="foodBudgetIgnore" ${f.budgetIgnore ? "checked" : ""}><span>Grenze ignorieren</span></label>
+      <div class="small muted">Liegt der Plan darüber, tauscht die App die teuersten Gerichte gegen günstigere mit ähnlichen kcal und mindestens 80 % des Proteins. Braucht eingeschaltete Preise.</div></div>
+    <div class="card"><h2>Ersatzprodukte</h2>
+      ${Object.entries(SUBST).map(([id, sb]) => `<div class="field"><label for="sub_${id}">${esc(sb.label)}</label><select id="sub_${id}" data-subst="${id}"><option value="">${esc(sb.label)} (Original)</option>${Object.entries(sb.opts).map(([k, [l]]) => `<option value="${k}" ${(f.subst || {})[id] === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></div>`).join("")}
+      <div class="small muted">Gilt für Rezepte, Einkaufsliste, Preise und Nährwerte. Haferdrink hat deutlich weniger Protein als Milch.</div></div>
     <div class="card"><h2>Allergien & Unverträglichkeiten</h2>
       <div class="chips">${Object.entries(ALLERGENS).map(([k, [l]]) => `<button type="button" data-allergen="${k}" aria-pressed="${(f.allergens || []).includes(k)}">${esc(l)}</button>`).join("")}</div>
       <div class="field"><label for="foodAvoid">Weitere Zutaten meiden (mit Komma trennen)</label><input type="text" id="foodAvoid" value="${esc(f.avoid || "")}" placeholder="z. B. Äpfel, Pilze, Koriander"></div>
@@ -1953,6 +2003,15 @@ function foodSettingsHtml(){
     ${url ? `<div class="card"><h2>Essens-Kalender abonnieren</h2><div class="small muted">Eigener Kalender, getrennt vom Training, in Google ein- und ausblendbar.</div><code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
       <div class="actions"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">In Google Kalender ↗</a></div></div>` : ""}`;
 }
+function weekPlanCost(mo){ let c = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) c += mealCost(m.name) || 0; return c; }
+function budgetCard(mo){
+  const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return "";
+  const cost = weekPlanCost(mo), b = budgetOn() ? budgetSubs(mo) : null, n = b ? Object.keys(b.subs).length : 0;
+  return `<div class="card budget ${cost > budget ? "over" : ""}"><div class="mhead"><span><span class="lab">Wochenbudget</span><br><b>${eur(cost)}</b> <span class="muted">von ${eur(budget)}</span></span>
+    <button class="btn small ${f.budgetIgnore ? "" : "ghost"}" type="button" data-budgettoggle>${f.budgetIgnore ? "Budget anwenden" : "Grenze ignorieren"}</button></div>
+    <div class="track"><div class="fill" style="width:${Math.min(cost / budget * 100, 100)}%"></div></div>
+    <div class="small muted">${f.budgetIgnore ? "Grenze ignoriert: Plan ohne Budget-Anpassung." : n ? `${n} Gericht${n > 1 ? "e" : ""} gegen günstigere getauscht (vorher ${eur(b.before)}): ${Object.entries(b.subs).map(([a, c]) => `${esc(a)} → ${esc(c)}`).join("; ")}.` : "Passt ins Budget, nichts getauscht."}${b && !b.ok ? " Günstigere Alternativen mit ähnlichen Nährwerten reichen nicht ganz." : ""} Anteilige Kosten pro Portion, ${esc(STORES[f.store] || "günstigster Markt")}.</div></div>`;
+}
 let openDays = null;
 function essenHtml(b){
   let h = `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"],["einst","⚙ Einst."]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
@@ -1964,6 +2023,7 @@ function essenHtml(b){
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
   if (mo !== monday(t)) h += `<button class="btn ghost small" type="button" data-ew="0">Diese Woche</button>`;
+  h += budgetCard(mo);
   h += `<div class="prep"><span class="lab">Meal Prep am Sonntag davor</span>${W.prepNote ? `<div class="small muted">${esc(W.prepNote)}</div>` : ""}<div class="prepr">${[W.batchA, W.batchB].map((n, i) => `<button type="button" class="shoprec" data-recipe="${esc(n)}">${mealThumb(n)}<span><span class="muted small">Batch ${i ? "B" : "A"} · 4 Portionen</span><br><b>${esc(n)}</b></span></button>`).join("")}</div></div>`;
   for (let i = 0; i < 7; i++) { const d = addDays(mo, i), ms = mealsFor(d), tt = mealTotals(ms), open = openDays.set.has(d), day = dayObj(d), p = planFor(d), done = isStrength(day);
     const sk = done ? day.session : p ? variantOf(p.session, d) : null, eaten = ms.filter(m => m.ate).length;
@@ -2074,6 +2134,7 @@ async function onClick(e){
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
+  if (t.closest("[data-budgettoggle]")) { saveFood({budgetIgnore: !FOOD().budgetIgnore}); render(); return; }
   const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }
@@ -2157,7 +2218,10 @@ function onChange(e){
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
   if (t.id === "foodAvoid") { saveFood({avoid: t.value}); renderEssen(); return; }
-  if (t.id === "foodStore") { saveFood({store: t.value}); costMemo.clear(); return; }
+  if (t.id === "foodBudget") { const v = num(t.value); saveFood({budget: v && v > 0 ? v : null}); return; }
+  if (t.id === "foodBudgetIgnore") { saveFood({budgetIgnore: t.checked}); return; }
+  if (t.dataset.subst) { const sb = Object.assign({}, FOOD().subst); if (t.value) sb[t.dataset.subst] = t.value; else delete sb[t.dataset.subst]; saveFood({subst: sb}); return; }
+  if (t.id === "foodStore") { saveFood({store: t.value}); return; }
   if (t.dataset.ftime) { if (t.value) saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
   if (t.id === "shopHide") { lsSet("shopHide", t.checked); renderMore(); return; }
