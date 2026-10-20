@@ -49,7 +49,14 @@ a{color:var(--accent)}
 header.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0 2px;max-width:640px;margin:0 auto;width:100%}
 .pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600;background:var(--accent-soft);white-space:nowrap}
 .pill.warn{background:var(--warn-soft)}
-#syncLine{font-size:11px;color:var(--muted);text-align:right;max-width:640px;margin:0 auto;width:100%;min-height:16px}
+#syncLine{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;max-width:640px;margin:6px auto 0;width:100%;background:var(--warn-soft);border-radius:10px;padding:6px 10px}
+#syncLine[hidden]{display:none}
+.hright{display:flex;align-items:center;gap:8px}
+.syncb{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:15px;color:var(--good);padding:0}
+.syncb[data-state="busy"]{color:var(--muted)}
+.syncb[data-state="bad"]{color:var(--bad);border-color:var(--bad)}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(var(--nav-h) + 16px);z-index:60;max-width:600px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast[hidden]{display:none}
 
 nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding:4px max(8px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(8px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:repeat(5,1fr);height:calc(var(--nav-h) + env(safe-area-inset-bottom,0px))}
@@ -148,6 +155,36 @@ textarea{min-height:64px;resize:vertical}
 .price{color:var(--ink);font-weight:600}
 .nonutri .nutri,.nonutri .mbar,.nonutri .macro{display:none !important}
 .ownf{background:var(--sunk)}
+.coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
+.nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
+.nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.nowh .mthumb{width:64px;height:64px}
+.nowi{font-size:30px;width:48px;text-align:center}
+.nowc .actions .btn{flex:1}
+.lrows{display:flex;flex-direction:column;gap:6px}
+.lrow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--surface);min-height:52px}
+.lrow .lmain{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;min-width:0;color:var(--ink);font:inherit}
+.lrow .lmain b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow.done .lmain b{color:var(--muted);text-decoration:line-through}
+.lrow .mdot{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--good);font-weight:700;padding:0;display:grid;place-items:center}
+.lrow.done .mdot{border-color:var(--good);background:var(--good-soft)}
+.lrow .mdot.static{font-size:16px}
+.lrow .mini{display:flex;gap:6px}
+.lrow .mini input{width:58px;padding:8px 6px;text-align:center}
+.wsh{display:flex;justify-content:space-between;align-items:center}
+.wsh a{color:var(--accent);text-decoration:none;font-weight:600;text-transform:none;letter-spacing:0}
+.weekstrip button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;color:var(--ink);font:inherit}
+.weekstrip .ring{width:30px;height:30px;border-radius:50%;border:3px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700}
+.weekstrip .done .ring{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.weekstrip .bould .ring{border-color:var(--good);color:var(--good)}
+.weekstrip .plan .ring{border-style:dashed;border-color:var(--accent)}
+.weekstrip .today b{color:var(--accent)}
+.weekstrip .sel .ring{box-shadow:0 0 0 2px var(--accent-soft)}
+.weekstrip .tm{font-size:10px;color:var(--muted);font-family:var(--f-num);min-height:12px}
+.shopsticky{position:sticky;top:0;z-index:5}
+.shopbar{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.shopbar .fill{height:100%;background:var(--good)}
+.row2{display:flex;flex-wrap:wrap;gap:4px 16px}
 .mthumb{width:46px;height:46px;border-radius:8px;object-fit:cover;flex:none;background:var(--sunk);display:grid;place-items:center;font-size:18px;color:var(--muted)}
 .meal .mname{flex-direction:row !important;align-items:center;gap:10px}
 .meal .mtx{display:flex;flex-direction:column;min-width:0}
@@ -202,11 +239,7 @@ textarea{min-height:64px;resize:vertical}
 .toggle[aria-pressed="true"]{background:var(--good)}
 .toggle[aria-pressed="true"]::after{left:23px}
 .weekstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;font-size:12px}
-.weekstrip div{border-radius:10px;padding:6px 0;background:var(--surface);border:1px solid var(--line);line-height:1.2}
 .weekstrip b{display:block;font-family:var(--f-display);font-size:14px}
-.weekstrip .done{background:var(--good-soft);border-color:var(--good)}
-.weekstrip .plan{border-style:dashed;border-color:var(--accent)}
-.weekstrip .today{outline:2px solid var(--accent)}
 
 /* Training */
 .wohead{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line)}
@@ -248,12 +281,15 @@ textarea{min-height:64px;resize:vertical}
 .tag.gate{background:var(--warn-soft);color:var(--ink)} .tag.up{background:var(--good-soft);color:var(--ink)}
 .sug{border:0;background:var(--good-soft);border-radius:8px;padding:4px 10px;font-size:13px;text-align:left}
 .sug.hold{background:var(--sunk)}
-.setrow{display:grid;grid-template-columns:22px minmax(0,1fr) 14px minmax(0,1fr) 52px;gap:8px;align-items:center}
-.setrow.nokg{grid-template-columns:22px minmax(0,1fr) 52px}
+.setrow,.sethead{display:grid;grid-template-columns:22px 56px minmax(0,1fr) 12px minmax(0,1fr) 56px;gap:6px;align-items:center}
+.setrow.nokg,.sethead.nokg{grid-template-columns:22px 56px minmax(0,1fr) 56px}
+.sethead{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.sethead span:last-child{text-align:center}
+.setrow .prev{font-family:var(--f-num);font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .setrow .i{font-family:var(--f-num);font-size:13px;color:var(--muted);text-align:center}
 .setrow input{text-align:center;font-family:var(--f-num);font-size:16px;padding:10px 4px}
 .setrow .x{color:var(--muted);text-align:center}
-.setrow .ok{height:44px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:18px;font-weight:700;color:var(--muted)}
+.setrow .ok{height:48px;border-radius:10px;border:2px solid var(--line);background:var(--surface);font-size:18px;font-weight:700;color:var(--muted)}
 .setrow.isdone .ok{background:var(--good);border-color:var(--good);color:var(--accent-ink)}
 .setrow.isdone input{background:var(--good-soft);border-color:transparent}
 .restbar{position:fixed;left:0;right:0;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px));z-index:19;background:var(--ink);color:var(--bg);
@@ -369,8 +405,9 @@ ol.prev li:last-child{border-bottom:0}
 </style>
 </head>
 <body>
-<header class="top"><h1>Trainingsbuch</h1><span id="weekPill" class="pill">Woche –</span></header>
-<div id="syncLine"></div>
+<header class="top"><h1>Trainingsbuch</h1><span class="hright"><span id="weekPill" class="pill">Woche –</span><button type="button" id="syncBtn" class="syncb" aria-label="Speicherstatus" data-state="ok">✓</button></span></header>
+<div id="syncLine" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <div class="wrap"><main id="view"></main></div>
 <div class="restbar" id="restBar" hidden><span>Pause <span class="t" id="restT">0:00</span></span><span class="actions"><button type="button" data-rest="-15">−15</button><button type="button" data-rest="15">+15</button><button type="button" data-rest="stop">Weiter</button></span></div>
 <nav class="bottom" aria-label="Hauptnavigation">
@@ -556,7 +593,24 @@ function flushDay(date){
   });
 }
 addEventListener("online", () => Object.keys(pending).forEach(flushDay));
-function setSync(t, bad){ const el = document.getElementById("syncLine"); el.textContent = t; el.style.color = bad ? "var(--bad)" : ""; }
+
+// Speicherstatus: ruhiges Symbol im Kopf; Probleme verständlich, Details auf Antippen; Hinweise als Toast
+let syncDetail = "", toastTimer = null;
+function toast(t){ const el = document.getElementById("toast"); if (!el) return; el.textContent = t; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 3200); }
+function setSync(t, bad){
+  const btn = document.getElementById("syncBtn"), line = document.getElementById("syncLine"); if (!btn) return;
+  const busy = /Ungespeichert|Synchronisiere|warten auf Sync/.test(t), ok = /Gespeichert|Synchronisiert/.test(t);
+  if (!bad && !busy && !ok) { toast(t); return; }
+  syncDetail = t;
+  const state = bad ? "bad" : busy ? "busy" : "ok";
+  btn.dataset.state = state; btn.textContent = state === "bad" ? "⚠" : state === "busy" ? "⟳" : "✓";
+  btn.setAttribute("aria-label", bad ? "Nicht synchronisiert, Details" : busy ? "Wird gespeichert" : "Alles gespeichert");
+  if (!bad) { line.hidden = true; line.innerHTML = ""; return; }
+  const auth = /401|Token/.test(t), off = /Offline|Failed to fetch|NetworkError/.test(t);
+  line.hidden = false;
+  line.innerHTML = `<span>${auth ? "Nicht synchronisiert: Anmeldung prüfen." : off ? "Offline: Änderungen bleiben gespeichert und werden später gesendet." : "Nicht synchronisiert: wird automatisch erneut versucht."}</span>${auth ? `<button type="button" class="btn small" data-go="setup">Einrichtung</button>` : `<button type="button" class="btn small ghost" data-act="retrySync">Erneut</button>`}`;
+}
+
 function cacheAll(){ lsSet("cache", store); }
 
 async function loadAll(){
@@ -1076,7 +1130,7 @@ function restInfo(){
   const next = np ? `Nächstes Training: <b>${fmt(np.date)}${np.start ? `, ${np.start} Uhr` : ""}</b> · ${esc(SESS[variantOf(np.session, np.date)].title)}` : "";
   return {why, next};
 }
-function heroCard(){
+function heroCard(noCoach){
   const c = coach(), sk = cur.session, sess = SESS[sk] || SESS.frei, plan = planFor(selDate), w = weekNo(selDate), st = trainState();
   const isToday = selDate === todayIso(), btns = (c && c.btns) || [];
   let h = `<div class="hero"><div class="lab">Training ${isToday ? "heute" : "am " + fmt(selDate)}</div>`;
@@ -1094,11 +1148,44 @@ function heroCard(){
     else if (st === "läuft") h += `<button class="btn primary big" type="button" data-act="start">Weiter trainieren</button>`;
     else h += `<div class="actions"><button class="btn" type="button" data-act="start">Ansehen</button><button class="btn" type="button" data-act="resume">Weiter trainieren</button></div>`;
   }
-  if (c) h += `<div class="coachsec"><div class="lab">Dein Coach</div><div class="ct">${esc(c.title)}</div><div class="small">${esc(c.body)}</div>${btns.length ? `<div class="actions">${btns.map(([k, l], i) => `<button class="btn small ${i === 0 && st === "frei" ? "primary" : ""}" type="button" data-coach="${k}">${esc(l)}</button>`).join("")}</div>` : ""}</div>`;
+  if (c && !noCoach) h += `<div class="coachsec"><div class="lab">Dein Coach</div><div class="ct">${esc(c.title)}</div><div class="small">${esc(c.body)}</div>${btns.length ? `<div class="actions">${btns.map(([k, l], i) => `<button class="btn small ${i === 0 && st === "frei" ? "primary" : ""}" type="button" data-coach="${k}">${esc(l)}</button>`).join("")}</div>` : ""}</div>`;
   return h + `</div>`;
 }
+// Aufgaben des Tages mit Priorität nach Uhrzeit; die erste offene wird groß als „Jetzt“ gezeigt
+function todayItems(focus){
+  const t = todayIso(), now = new Date(), hm0 = now.getHours() * 60 + now.getMinutes(), out = [];
+  const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate), st = trainState(), plan = planFor(selDate);
+  out.push({k: "mob", prio: hm0 < 11 * 60 ? 1 : 7, done: mobDone >= mobN, icon: "🧘", title: "Morgenroutine", sub: `12 min · ${mobDone}/${mobN}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
+  if (focus !== "essen" && st !== "frei") {
+    const startM = plan?.start ? hm(plan.start) : 18 * 60;
+    out.push({k: "train", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : "heute", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
+  }
+  if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
+    const tm = m.time ? hm(m.time) : 20 * 60;
+    out.push({k: "meal:" + m.k, prio: hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, meal: m});
+  }
+  const painDone = cur.pain.sc != null && cur.pain.knee != null;
+  out.push({k: "pain", prio: hm0 >= 19 * 60 ? 1 : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
+  const wd = parse(selDate).getDay();
+  if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate, -7))])) { const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate, -7));
+    out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
+  return out.sort((a, b) => a.prio - b.prio);
+}
+function nowCard(it){
+  if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
+  if (it.meal) { const m = it.meal, r = m.info;
+    return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh">${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${r.kcal} kcal · ${r.protein} g Protein</div></div></div>
+      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button></div></div>`; }
+  return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh"><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
+}
+function laterRow(it){
+  if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" data-sheet="meal" data-v="${selDate}|${m.k}"><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
+  return `<div class="lrow ${it.done ? "done" : ""}"><span class="mdot static">${it.done ? "✓" : it.icon}</span><button type="button" class="lmain" ${it.act}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button><span class="go">›</span></div>`;
+}
+let showDone = false;
 function renderToday(){
   ensureCur();
+  if (selDate === todayIso() && (todayFocus !== "essen" || true)) { if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {}); }
   const t = todayIso(), isToday = selDate === t, hour = new Date().getHours(), wd = parse(selDate).getDay();
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate);
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
@@ -1116,17 +1203,33 @@ function renderToday(){
     <h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? `<span></span>` : `<button class="btn ghost" type="button" data-day="0">Heute</button>`}</div>`;
   h += `<div class="seg" role="group" aria-label="Ansicht">${[["training","Training"],["essen","Essen"],["alles","Alles"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
+  if (isToday && todayFocus !== "essen") {
+    const c = coach(), its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
+    if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
+    h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
+    if (open.length > 1) h += `<div class="lab sec">Später heute</div><div class="lrows">${open.slice(1).map(laterRow).join("")}</div>`;
+    h += `<div class="lrows">${[
+      `<div class="lrow ${num(cur.sleep) != null ? "done" : ""}"><span class="mdot static">${num(cur.sleep) != null ? "✓" : "😴"}</span><span class="lmain"><b>Schlaf & Gewicht</b><span class="small muted">kg nur, wenn gewogen</span></span><span class="mini"><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></span></div>`,
+      `<div class="lrow ${cur.boulder.done ? "done" : ""}"><span class="mdot static">${cur.boulder.done ? "✓" : "🧗"}</span><span class="lmain"><b>Bouldern heute?</b><span class="small muted">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`].join("")}</div>`;
+    if (done.length) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
+    if (todayFocus === "training" || todayFocus === "alles") h += weekStrip();
+    view.innerHTML = h; return;
+  }
   if (todayFocus !== "essen") h += heroCard();
   if (todayFocus !== "training") h += mealCard(selDate, todayFocus === "essen");
   if (todayFocus === "essen") { view.innerHTML = h; return; }
   h += `<div class="lab sec">Aufgaben ${isToday ? "heute" : "an diesem Tag"}</div><div class="tasks">${items.map(i => i.html).join("")}</div>`;
   const mo = monday(selDate);
-  if (todayFocus === "alles") { view.innerHTML = h; return; }
-  h += `<div class="lab sec">Diese Woche</div><div class="weekstrip" aria-label="Diese Woche">`;
-  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p = planFor(d), s = isStrength(day), b = day?.boulder?.done;
-    h += `<div class="${s || b ? "done" : p ? "plan" : ""} ${d === t ? "today" : ""}"><b>${WD[parse(d).getDay()]}</b>${s ? "✓" : b ? "B" : p ? (p.start || "○") : "·"}</div>`; }
-  h += `</div>`;
+  h += weekStrip(mo);
   view.innerHTML = h;
+}
+// Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
+function weekStrip(mo){
+  mo = mo || monday(selDate); const t = todayIso(); let n = 0;
+  let h = `<div class="lab sec wsh"><span>Diese Woche</span><a href="#t=kalender">Kalender ›</a></div><div class="weekstrip" aria-label="Diese Woche">`;
+  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p = planFor(d), s = isStrength(day), b = day?.boulder?.done; if (s) n++;
+    h += `<button type="button" class="${s ? "done" : b ? "bould" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : p ? "" : ""}</span><span class="tm">${!s && p?.start ? p.start : ""}</span></button>`; }
+  return h + `</div><div class="small muted">${n}/4 Einheiten diese Woche · Serie: ${streak()} Woche${streak() === 1 ? "" : "n"} mit ≥ 2</div>`;
 }
 function gapBanner(){
   const st = S().startDate; if (!st || todayIso() < st || selDate !== todayIso()) return "";
@@ -1225,10 +1328,11 @@ function exBody(base, n, w){
   else h += `<button type="button" class="btn" data-sheet="tech" data-v="${id}">Technik & Video</button>`;
   h += `<div class="target"><span>Ziel <b>${n} × ${esc(e.reps)}</b>${rir ? ` · RIR <b>${rir}</b>` : ""}</span>${e.gate && !cleared ? `<span class="tag gate">SC-Ampel${e.alt ? ` · Ersatz: ${esc(e.alt)}` : ""}</span>` : ""}</div>`;
   if (e.type !== "k") h += `<button type="button" class="sug ${sg.up ? "" : "hold"}" data-sheet="why" data-v="${id}">${esc(sg.short)} <span class="muted">· warum?</span></button>`;
-  const showKg = !!e.load;
+  const showKg = !!e.load, prev = lastPerf(id, selDate)?.sets || [];
+  h += `<div class="sethead ${showKg ? "" : "nokg"}"><span>Satz</span><span>Zuletzt</span>${showKg ? "<span>kg</span><span></span>" : ""}<span>Wdh</span><span>✓</span></div>`;
   for (let i = 0; i < rows; i++) {
-    const v = mine[i] || {}, d = !!v.done, phKg = sg.kg ?? "", phR = sg.reps ?? "";
-    h += `<div class="setrow ${showKg ? "" : "nokg"} ${d ? "isdone" : ""}"><span class="i">${i+1}</span>
+    const v = mine[i] || {}, d = !!v.done, phKg = sg.kg ?? "", phR = sg.reps ?? "", pv = prev[i];
+    h += `<div class="setrow ${showKg ? "" : "nokg"} ${d ? "isdone" : ""}"><span class="i">${i+1}</span><span class="prev">${pv ? (num(pv.kg) != null ? dec(num(pv.kg)) + "×" : "") + esc(pv.reps ?? "") : "–"}</span>
       ${showKg ? `<input type="text" inputmode="decimal" aria-label="Satz ${i+1} kg" data-ex="${id}" data-i="${i}" data-f="kg" value="${esc(v.kg ?? "")}" placeholder="${phKg !== "" ? esc(dec(phKg)) + " kg" : "kg"}"><span class="x">×</span>` : ""}
       <input type="text" inputmode="numeric" aria-label="Satz ${i+1} Wiederholungen" data-ex="${id}" data-i="${i}" data-f="reps" value="${esc(v.reps ?? "")}" placeholder="${phR !== "" ? esc(phR) + " Wdh" : "Wdh"}">
       <button type="button" class="ok" data-ok="${id}" data-base="${base}" data-i="${i}" aria-label="Satz ${i+1} erledigt" aria-pressed="${d}">✓</button></div>`;
@@ -1247,6 +1351,7 @@ function checkSet(id, base, i){
   const s = setsObj()[id][i];
   if (s.done) { s.done = false; touch(); renderTraining(); return; }
   if (!s.kg && EX[id].load && sg.kg != null) { if (sg.up) { const inp = view.querySelector(`input[data-ex="${id}"][data-i="${i}"][data-f="kg"]`); if (inp) inp.focus(); setSync("Neues Gewicht eintragen, dann ✓"); return; } s.kg = dec(sg.kg); }
+  if (!s.kg && EX[id].load && sg.kg == null) { const inp = view.querySelector(`input[data-ex="${id}"][data-i="${i}"][data-f="kg"]`); if (inp) inp.focus(); toast("Gewicht eintragen (0 = Körpergewicht), dann ✓"); return; }
   if (!s.reps && sg.reps != null) s.reps = String(sg.reps);
   if (!s.reps) { const inp = view.querySelector(`input[data-ex="${id}"][data-i="${i}"][data-f="reps"]`); inp && inp.focus(); return; }
   s.done = true;
@@ -1985,12 +2090,14 @@ function shopHtml(){
   else h += `<div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>`;
   if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => a[1].sum - b[1].sum)[0][0];
     h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt</span></div>`).join("")}</div><div class="small muted">Ganze Packungen bzw. ganze Stück, ohne Gewürze und Kleinkram. * = geschätzter Preis. ${shopScope === "woche" && num(FOOD().budget) ? `Wochenbudget ${eur(num(FOOD().budget))}; Packungen und Vorrat (Öl, Haferflocken …) machen den Einkauf teurer als den Planwert, sie reichen aber über die Woche hinaus. ` : ""}${priceNote()}</div></div>`; }
-  h += `<div class="card"><div class="mhead"><b>${got}/${total} im Korb</b><div class="actions"><button class="btn small" type="button" id="shopShare">Teilen</button><button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button></div></div>
-    <label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label>
+  const src = !!lsGet("shopSrc");
+  h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b><div class="actions"><button class="btn small" type="button" id="shopShare">Teilen</button><button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button></div></div>
+    <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
+    <div class="row2"><label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label><label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Für welches Gericht</span></label></div>
     ${shopScope === "gericht" ? `<div class="small muted">${esc(cx.note)}</div>` : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
-  for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)); if (!vis.length) continue;
-    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${(i.pr.est || []).includes(FOOD().store || "aldi") ? `<span class="muted">*</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
+  for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
+    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${(i.pr.est || []).includes(FOOD().store || "aldi") ? `<span class="muted">*</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
   return h + `<div class="small muted">Was schon im Vorrat ist (Gewürze, Öl, Haferflocken), einfach abhaken.</div>`;
 }
 function shopText(){
@@ -2157,6 +2264,7 @@ async function onClick(e){
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
   if (t.closest("[data-budgettoggle]")) { saveFood({budgetIgnore: !FOOD().budgetIgnore}); render(); return; }
+  if (t.closest("#syncBtn")) { toast(syncDetail || "Alles gespeichert."); return; }
   const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus2", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }
@@ -2184,6 +2292,8 @@ async function onClick(e){
     if (a === "setSession") { cur.session = v; touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
+    if (a === "toggleDone") { showDone = !showDone; renderToday(); return; }
+    if (a === "retrySync") { Object.keys(pending).forEach(flushDay); loadAll().then(() => render()); return; }
     if (a === "booked") { saveSettings({onboard:Object.assign({}, S().onboard, {arzt:true})}); render(); if (sheet.open) renderSheet(); return; }
     if (a === "clear") { saveSettings({scCleared:true}); render(); return; }
     if (a === "delset") { const arr = setsObj()[v]; if (arr) { arr.length = lastMeaningful(arr); arr.pop(); } touch(); renderTraining(); return; }
@@ -2246,6 +2356,7 @@ function onChange(e){
   if (t.id === "foodStore") { saveFood({store: t.value}); return; }
   if (t.dataset.ftime) { if (t.value) saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
+  if (t.id === "shopSrc") { lsSet("shopSrc", t.checked); renderMore(); return; }
   if (t.id === "shopHide") { lsSet("shopHide", t.checked); renderMore(); return; }
   if (t.id === "calMeals") { calMeals = t.checked; lsSet("calMeals", calMeals); renderMore(); return; }
   if (t.id === "phDate") { if (t.value) { photoDate = t.value; photoMsg = ""; renderProgress(); } return; }
@@ -2259,6 +2370,7 @@ function onChange(e){
   if (t.id === "scClr") { saveSettings({scCleared:t.checked}); return; }
   if (t.id === "kn1") { saveSettings({knee1:t.checked}); return; }
 }
+for (const el of [document.querySelector("header.top"), document.getElementById("syncLine")]) el.addEventListener("click", onClick);
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 addEventListener("hashchange", () => { if (dirty) saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
