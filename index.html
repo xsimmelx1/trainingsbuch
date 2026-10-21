@@ -325,6 +325,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .biob{border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:1px 8px;font:inherit;font-size:12px;min-height:26px}
 .biob.on{border-color:var(--good);color:var(--ink);background:color-mix(in srgb,var(--good) 18%,transparent)}
 .biopick summary{cursor:pointer;padding:6px 0}
+.favb{border:0;background:none;font-size:24px;line-height:1;min-width:44px;min-height:44px;color:var(--muted);cursor:pointer}
+.favb.on{color:#f5b301}
+.shr{display:flex;align-items:center;gap:4px}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
@@ -1163,7 +1166,7 @@ function photoSlot(name, label, act){
 function photosHtml(){
   if (!token) return "";
   const list = photoList || [], dates = photoDates(), cf = pendingConfirm;
-  let h = `<div class="card" id="photos"><h2>Fotos</h2><div class="small muted">Woche 0, 6 und 12: vorn, seitlich, hinten. Gleicher Ort, gleiches Licht, 2,5–3 m Abstand. Die Fotos werden verkleinert, ohne Standortdaten und nur in deinem privaten Daten-Repo gespeichert.</div>
+  let h = `<div class="card" id="photos"><h2>Fotos</h2>${info("Woche 0, 6 und 12: vorn, seitlich, hinten. Gleicher Ort, gleiches Licht, 2,5–3 m Abstand. Die Fotos werden verkleinert, ohne Standortdaten und nur in deinem privaten Daten-Repo gespeichert.")}
     <div class="field"><label for="phDate">Datum</label><input type="date" id="phDate" value="${photoDate}"></div><div class="phgrid">`;
   for (const [k, l] of PHOTO_POS) { const name = `${photoDate}-${k}.jpg`, has = list.some(f => f.name === name);
     h += photoSlot(name, l, `<label class="btn small">${has ? "Ersetzen" : "＋ Foto"}<input type="file" accept="image/*" data-phup="${k}" hidden></label>${has ? `<button class="btn ghost small ${cf === "ph:" + name ? "danger" : ""}" type="button" data-phdel="${name}">${cf === "ph:" + name ? "Sicher?" : "Löschen"}</button>` : ""}`); }
@@ -1705,7 +1708,7 @@ function renderTraining(){
     view.innerHTML = `<div class="card"><div class="lab">Bereit · ${fmt(selDate)}</div><h2>${esc(sess.title)}</h2>
       <div class="lab">Wo trainierst du?</div>
       <div class="seg"><button type="button" data-where="gym" aria-pressed="${where === "gym"}">Gym</button><button type="button" data-where="home" aria-pressed="${where === "home"}">Zuhause ohne Geräte</button></div>
-      <div class="small muted">Übungen und Alternativen passen sich an. Nach dem Start bleibt der Ort für diese Einheit so.</div>
+      ${info("Übungen und Alternativen passen sich an. Nach dem Start bleibt der Ort für diese Einheit so.")}
       ${where === "home" ? gearPicker(["kh", "gewicht", "stange", "band", "matte", "handtuch", "tisch", "tuer", "sofa", "stuhl", "stufe"]) : ""}
       <div class="lab">Deine Übungen</div>
       <div class="pvlist">${ids0.map((id, i) => previewRow(id, w, sk, i)).join("")}</div>
@@ -1900,7 +1903,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
       <div class="lab">Knie</div>${scaleHtml("knee","knee",cur.pain.knee)}
       <div class="lab">Finger / Ellbogen</div>${scaleHtml("knee","finger",cur.pain.finger)}
-      <div class="small muted">SC: 0–2 grün · 3 Übung tauschen · über 3 rot. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.</div>
+      ${info("SC: 0–2 grün · 3 Übung tauschen · über 3 rot. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.")}
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div><div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
@@ -1921,7 +1924,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
         <ol class="steps">${(e.cue || []).map(c => `<li>${esc(c)}</li>`).join("")}</ol>
         ${e.note || e.gate ? `<div class="warnb"><div class="lab">Für dich wichtig</div>${e.note ? esc(e.note) : ""}${e.gate && !S().scCleared ? `${e.note ? "<br>" : ""}Schlüsselbein: Ampel beachten, ab 3/10 Schmerz die Ersatzübung nehmen.` : ""}</div>` : ""}`
       : techTab === "mus" ? muscleMap(e.m, sheetArg)
-      : techTab === "alt" ? `<div class="small muted">Gleiche Muskeln, andere Ausführung, z. B. wenn ein Gerät besetzt ist oder etwas zwickt. Tauschen im Training über ⇄.</div><div class="altlist">${alts.map(([i, why]) => { const x = EX[i], pm = Object.keys(x.m || {}).filter(k => x.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
+      : techTab === "alt" ? `${info("Gleiche Muskeln, andere Ausführung, z. B. wenn ein Gerät besetzt ist oder etwas zwickt. Tauschen im Training über ⇄.")}<div class="altlist">${alts.map(([i, why]) => { const x = EX[i], pm = Object.keys(x.m || {}).filter(k => x.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
           return `<button type="button" class="altrow" data-sheet="tech" data-v="${i}">${exThumb(i, x.img) ? `<img src="${exThumb(i, x.img)}" alt="" loading="lazy">` : `<span class="noimg">🏋</span>`}<span class="at"><b>${esc(x.name)}</b><span class="small">${esc(why)}</span><span class="small muted">${esc(pm.join(", "))}${HOME_OK.has(i) || i.startsWith("hw_") ? " · 🏠 Zuhause" : ""}${x.gate && !S().scCleared ? " · SC-Ampel" : ""}</span></span><span class="go">›</span></button>`; }).join("")}</div>`
       : `${videoHtml(sheetArg, e.q || e.name, true)}${VIDS?.[sheetArg]?.note ? `<div class="warnb soft"><div class="lab">Zum Video</div>${esc(VIDS[sheetArg].note)}</div>` : ""}`}
       ${e.img ? `<div class="small muted">${e.credit === RDB_CREDIT ? `Illustration: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>` : e.credit ? esc(e.credit) : "Foto: free-exercise-db (gemeinfrei)"}${sheetArg === "stepdown" ? ". Zeigt Step-Up, gemeint ist der Weg nach unten." : ""}</div>` : ""}`;
@@ -1942,7 +1945,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
     if (false) h += `<div class="sh"><h2>Stark. ${esc(a.title)} erledigt</h2><button class="btn ghost" type="button" data-act="summaryDone">Fertig</button></div>
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
-      <div class="small muted">Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.</div>`;
+      ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
   } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","ownfood","receipt","ownprices","scan","cardio"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
@@ -2011,7 +2014,7 @@ function progressOverview(){
   for (let i = 0; i < off; i++) h += `<div class="c e"></div>`;
   for (let i = 1; i <= days; i++) { const d = iso(new Date(d0.getFullYear(), d0.getMonth(), i)), day = store.days[d];
     h += `<button type="button" class="c ${isStrength(day) ? "s" : ""} ${day?.boulder?.done ? "b" : ""} ${d === t ? "t" : ""}" data-goday="${d}" aria-label="${fmt(d)} öffnen">${i}</button>`; }
-  h += `</div><div class="small muted">Blau = Krafteinheit, grün = Bouldern. Tag antippen, um ihn anzusehen oder ein Training zu löschen.</div></div>`;
+  h += `</div>${info("Blau = Krafteinheit, grün = Bouldern. Tag antippen, um ihn anzusehen oder ein Training zu löschen.")}</div>`;
   if (recs.length) h += `<div class="card"><h2>Bestwerte der letzten 30 Tage</h2><div class="bars">${recs.map(([n,p]) => `<div class="small">${esc(n)} <b class="num">+${p} %</b></div>`).join("")}</div></div>`;
   h += `<div class="card"><h2>Volumen diese Woche</h2><div class="small muted">Harte Sätze pro Muskel (indirekte zählen halb). Blau = was der Plan in dieser Woche vorsieht (${esc(ph.label)}).</div><div class="bars">`;
   for (const [k, lab] of MUSCLES) { const [a, b] = tgt[k], max = Math.max(b*1.4, vol[k], 4), v = vol[k];
@@ -2021,7 +2024,7 @@ function progressOverview(){
   const wPts = dates.map(d => ({v: num(store.days[d]?.weight)}));
   const avg = dates.map((d,i) => { const win = wPts.slice(Math.max(0,i-13), i+1).map(p => p.v).filter(v => v != null); return {v: win.length >= 1 ? win.reduce((a,b)=>a+b,0)/win.length : null}; });
   const la = [...avg].reverse().find(p => p.v != null)?.v;
-  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Schlaf & Gewicht ein."})}<div class="small muted">Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.</div></div>`;
+  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Schlaf & Gewicht ein."})}${info("Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.")}</div>`;
   const d28 = dates.slice(-28);
   h += `<div class="card"><h2>Schmerz-Trend</h2>${lineChart([{pts:d28.map(d => ({v:store.days[d]?.pain?.sc ?? null})),color:"var(--bad)",line:1,dots:1},{pts:d28.map(d => ({v:store.days[d]?.pain?.knee ?? null})),color:"var(--warn)",line:1,dots:1}], {dates:d28, min:0, max:10, ticks:[0,2,5,10], label:"Schmerz SC und Knie", empty:"Noch keine Schmerzwerte."})}
     <div class="small"><span style="color:var(--bad)">●</span> SC-Gelenk &nbsp; <span style="color:var(--warn)">●</span> Knie</div></div>`;
@@ -2043,7 +2046,7 @@ function measureHtml(){
 }
 function checkinHistory(){
   const mo = monday(todayIso()), ks = Object.keys(store.checkins).sort().reverse();
-  let h = ks.length ? "" : `<div class="card empty"><div class="trophy">🗓</div><b>Dein Wochen-Check-in</b><div class="small muted">Jeden Sonntag 10 Minuten: Wie lief die Woche, wie ist der Stress, welcher Modus kommt nächste Woche? Daraus passt der Planer Umfang und Termine an.</div></div>`;
+  let h = ks.length ? "" : `<div class="card empty"><div class="trophy">🗓</div><b>Dein Wochen-Check-in</b>${info("Jeden Sonntag 10 Minuten: Wie lief die Woche, wie ist der Stress, welcher Modus kommt nächste Woche? Daraus passt der Planer Umfang und Termine an.")}</div>`;
   h += `<button class="btn primary big" type="button" data-act="checkin" data-v="${mo}">Check-in für diese Woche</button>`;
   h += ks.length ? `<div class="card"><h2>Bisherige Check-ins</h2>${ks.map(k => { const c = store.checkins[k]; return `<button type="button" class="task" data-act="checkin" data-v="${k}"><span class="dot">✓</span><span><span class="t">Woche ab ${fmt(k).slice(3)}</span><br><span class="s">Stress ${c.stress ?? "–"} · Modus ${esc(c.nextMode || "normal")}${c.ifthen ? " · " + esc(c.ifthen).slice(0,40) : ""}</span></span><span class="go">›</span></button>`; }).join("")}</div>` : `<p class="muted small">Noch keine Check-ins.</p>`;
   return h;
@@ -2162,7 +2165,7 @@ function journeySheet(kind, arg){
   }
   if (kind === "cardio") return cardioSheet(arg || selDate);
   if (kind === "scan") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } setTimeout(() => { if (!scanSlot()?.innerHTML) startScan("price"); }, 50);
-    return `<div class="sh"><h2>Preis scannen</h2>${close}</div><div class="small muted">Im Laden den Barcode scannen und den Preis vom Regal eintragen. Er gilt dann vor dem Richtpreis, wie beim Kassenbon.</div><div id="scanSlot"></div>${ownCount() ? `<button class="btn ghost" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`; }
+    return `<div class="sh"><h2>Preis scannen</h2>${close}</div>${info("Im Laden den Barcode scannen und den Preis vom Regal eintragen. Er gilt dann vor dem Richtpreis, wie beim Kassenbon.")}<div id="scanSlot"></div>${ownCount() ? `<button class="btn ghost" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`; }
   if (kind === "ownprices") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } return ownPricesHtml(); }
   if (kind === "receipt") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } return receiptHtml(); }
   if (kind === "meal") return mealPlan && recipes ? mealSheet(arg) : close;
@@ -2200,7 +2203,7 @@ function journeySheet(kind, arg){
   }
   if (kind === "recipe") {
     const r = recipes.find(x => x.name === arg); if (!r) return close;
-    return `<div class="sh"><h2>${esc(r.name)}</h2>${close}</div>${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
+    return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
       ${avoidHit(r) ? `<div class="pill warn">Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)</div>` : ""}
       ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div><div class="small muted">Pro Portion, anteilig gerechnet. ${priceNote()}</div>` : ""}
       <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port.</span></div>
@@ -2218,14 +2221,14 @@ function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
-  const list = recipes.filter(r => recipeOk(r, are) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein);
+  const list = recipes.filter(r => recipeOk(r, are) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein);
   b.innerHTML = `<div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
-    <div class="chips">${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
+    <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
     <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · ${list.length} Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
-    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
-    <div class="small muted">Fotos sind Symbolbilder mit freien Lizenzen (Wikimedia Commons, Flickr), Quelle im Rezept.</div>`;
+    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
+    ${info("Fotos sind Symbolbilder mit freien Lizenzen (Wikimedia Commons, Flickr), Quelle im Rezept.")}`;
 }
 
 // ---------- MEHR ----------
@@ -2347,14 +2350,14 @@ function calMonth(d){
 }
 function calExportHtml(){
   const url = S().icsUrl;
-  return `<div class="card"><h2>Kalender exportieren & abonnieren</h2>${url ? `<div class="small muted">Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.</div>
+  return `<div class="card"><h2>Kalender exportieren & abonnieren</h2>${url ? `${info("Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.")}
     <code class="copy" id="icsUrl">${esc(url)}</code>
     <div class="actions"><button class="btn" id="icsCopy" type="button">iCal-Link kopieren</button>
     <a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:"))}" target="_blank" rel="noopener">In Google Kalender ↗</a>
     <a class="btn ghost" href="${esc(url.replace(/^https:/, "webcal:"))}">Andere Kalender-App</a>
     <a class="btn ghost" href="${esc(url)}" download="trainingsbuch.ics">.ics herunterladen</a></div>
-    <div class="small muted">Die heruntergeladene Datei ist eine Momentaufnahme. Für automatische Updates das Abo nutzen. Google Kalender übernimmt bei Abos keine Wecker; dafür erinnern dich die Push-Nachrichten der App (Apple Kalender und ICSx5 übernehmen sie).</div>
-    <div class="lab">Essensplan als eigener Kalender</div><div class="small muted">Separat abonnieren, dann lässt er sich in Google Kalender unabhängig vom Training ein- und ausblenden.</div>
+    ${info("Die heruntergeladene Datei ist eine Momentaufnahme. Für automatische Updates das Abo nutzen. Google Kalender übernimmt bei Abos keine Wecker; dafür erinnern dich die Push-Nachrichten der App (Apple Kalender und ICSx5 übernehmen sie).")}
+    <div class="lab">Essensplan als eigener Kalender</div>${info("Separat abonnieren, dann lässt er sich in Google Kalender unabhängig vom Training ein- und ausblenden.")}
     <code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
     <div class="actions"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">In Google Kalender ↗</a></div>` : `<div class="small muted">Nach dem Verbinden unter Einrichtung erscheint hier der iCal-Link.</div>`}</div>`;
 }
@@ -2578,6 +2581,11 @@ function mealCard(d, forceOpen){
     <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn ghost small" type="button" data-go="essen">Wochenplan ›</button><button class="btn ghost small" type="button" data-go="einkauf">Einkaufsliste ›</button></div></div>`;
 }
 let mealTempF = "";
+// Favoriten im Tauschblatt nach oben (nur Anzeige, Plan und Budget bleiben unberührt); dazu passende Favoriten, die sonst nicht in der Liste wären
+function favFirst(list){
+  const favs = list.filter(r => isFav(r.name)), rest = list.filter(r => !isFav(r.name));
+  return [...favs, ...rest];
+}
 // Anzeige im Essensblatt: ähnliche Gerichte, optional nur warm oder kalt (mehr Auswahl als die 8 nächsten)
 function mainAlts(k, curName){
   if (!mealTempF) return altMeals(k, curName);
@@ -2595,11 +2603,11 @@ function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
   const opt = (n, why) => { const r = mealInfo(n), dk = r.kcal - ref.kcal, dp = r.protein - ref.protein;
-    return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
+    return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${isFav(n) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
-  return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2>${close}</div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
+  return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
     ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
-    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
+    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}
     ${ownForm("slot")}
@@ -2705,7 +2713,7 @@ function cardioSheet(d){
       <div class="lab">Wie war's?</div><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
       <div class="field"><label for="caNote">Notiz (optional)</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div>
       <button class="btn primary big" type="button" data-act="cardioSave" data-v="${d}">Eintragen</button>
-      <div class="small muted">Knie: Nach dem Laufen kurz auf die Knie-Ampel achten. Liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.</div></div>`;
+      ${info("Knie: Nach dem Laufen kurz auf die Knie-Ampel achten. Liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.")}</div>`;
 }
 let cardioType = "lauf", cardioFeel = "";
 // ---------- Barcode-Scanner: Kamera → EAN → Open Food Facts (freie Datenbank) ----------
@@ -2825,7 +2833,7 @@ const ownCount = () => Object.values(FOOD().ownPrices || {}).reduce((n, o) => n 
 function ownPricesHtml(){
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, own = FOOD().ownPrices || {}, by = {};
   for (const [pid, o] of Object.entries(own)) for (const [st, x] of Object.entries(o)) (by[st] = by[st] || []).push([pid, x]);
-  let h = `<div class="sh"><h2>Meine Preise</h2>${close}</div><div class="small muted">Aus deinen Kassenbons. Sie gelten vor den Richtpreisen, im Budget und im Planer, und werden mit deinem privaten Repo synchronisiert.</div>`;
+  let h = `<div class="sh"><h2>Meine Preise</h2>${close}</div>${info("Aus deinen Kassenbons. Sie gelten vor den Richtpreisen, im Budget und im Planer, und werden mit deinem privaten Repo synchronisiert.")}`;
   if (!Object.keys(by).length) return h + `<div class="empty small">Noch keine eigenen Preise. Im Einkauf über „🧾 Bon“ einen Kassenbon einlesen.</div>`;
   for (const [st, rows] of Object.entries(by)) {
     rows.sort((a, b) => (prodById(a[0])?.name || a[0]).localeCompare(prodById(b[0])?.name || b[0], "de"));
@@ -2838,7 +2846,7 @@ function ownPricesHtml(){
 function receiptHtml(){
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="sh"><h2>Kassenbon</h2>${close}</div>`;
-  if (!rcpt || !rcpt.items) return h + `<div class="small muted">REWE-eBon als PDF (REWE-App → Kassenbons → Teilen) oder ein Foto vom Papierbon. Der Bon wird nur im Browser gelesen und nicht gespeichert.</div>
+  if (!rcpt || !rcpt.items) return h + `${info("REWE-eBon als PDF (REWE-App → Kassenbons → Teilen) oder ein Foto vom Papierbon. Der Bon wird nur im Browser gelesen und nicht gespeichert.")}
     <label class="btn primary big">🧾 Bon auswählen<input type="file" accept="image/*,application/pdf" id="rcFile" hidden></label><div class="small" id="rcStatus">${esc(rcpt?.status || "")}</div>
     ${ownCount() ? `<button class="btn big" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`;
   const opts = sel => `<option value="">– nicht übernehmen –</option>` + prices.products.map(p => `<option value="${p.id}" ${p.id === sel ? "selected" : ""}>${esc(p.name)}</option>`).join("");
@@ -2964,19 +2972,19 @@ function foodSettingsHtml(){
     <div class="card"><h2>Wochenbudget</h2>
       <div class="field"><label for="foodBudget">Grenze pro Woche (€)</label><input type="text" inputmode="decimal" id="foodBudget" value="${esc(f.budget ?? "")}" placeholder="z. B. 60"></div>
       <label class="check"><input type="checkbox" id="foodBudgetIgnore" ${f.budgetIgnore ? "checked" : ""}><span>Grenze ignorieren</span></label>
-      <div class="small muted">Liegt der Plan darüber, tauscht die App die teuersten Gerichte gegen günstigere mit ähnlichen kcal und mindestens 80 % des Proteins. Nutzt die Richtpreise, auch wenn die Preisanzeige aus ist.</div></div>
+      ${info("Liegt der Plan darüber, tauscht die App die teuersten Gerichte gegen günstigere mit ähnlichen kcal und mindestens 80 % des Proteins. Nutzt die Richtpreise, auch wenn die Preisanzeige aus ist.")}</div>
     <div class="card"><h2>Ersatzprodukte</h2>
       ${Object.entries(SUBST).map(([id, sb]) => `<div class="field"><label for="sub_${id}">${esc(sb.label)}</label><select id="sub_${id}" data-subst="${id}"><option value="">${esc(sb.label)} (Original)</option>${Object.entries(sb.opts).map(([k, [l]]) => `<option value="${k}" ${(f.subst || {})[id] === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></div>`).join("")}
-      <div class="small muted">Gilt für Rezepte, Einkaufsliste, Preise und Nährwerte. Haferdrink hat deutlich weniger Protein als Milch.</div></div>
+      ${info("Gilt für Rezepte, Einkaufsliste, Preise und Nährwerte. Haferdrink hat deutlich weniger Protein als Milch.")}</div>
     <div class="card"><h2>Allergien & Unverträglichkeiten</h2>
       <div class="chips">${Object.entries(ALLERGENS).map(([k, [l]]) => `<button type="button" data-allergen="${k}" aria-pressed="${(f.allergens || []).includes(k)}">${esc(l)}</button>`).join("")}</div>
       <div class="field"><label for="foodAvoid">Weitere Zutaten meiden (mit Komma trennen)</label><input type="text" id="foodAvoid" value="${esc(f.avoid || "")}" placeholder="z. B. Äpfel, Pilze, Koriander"></div>
       <div class="small muted">${avoidRe() ? `${recipes.filter(r => !recipeOk(r)).length} Rezepte werden gemieden. Im Plan rückt automatisch das ähnlichste erlaubte Gericht nach, in Einkauf und Kalender ebenso.` : "Gerichte mit diesen Zutaten ersetzt der Plan automatisch durch ähnliche."} Bei echten Allergien zusätzlich die Zutatenliste der Produkte prüfen.</div></div>
     <div class="card"><h2>Essenszeiten</h2><div class="grid2">${mealPlan.slots.filter(sl => sl.time).map(sl => `<div class="field"><label for="ft_${sl.k}">${esc(sl.label)}</label><input type="time" id="ft_${sl.k}" data-ftime="${sl.k}" value="${esc(f.times[sl.k] || sl.time)}"></div>`).join("")}</div>
-      <div class="small muted">An Trainingstagen kommt der Snack (Shake) direkt nach dem Training, und das Abendessen rückt nach hinten, wenn das Training spät endet. Die Zeiten gelten auch für den Essens-Kalender.</div>
+      ${info("An Trainingstagen kommt der Snack (Shake) direkt nach dem Training, und das Abendessen rückt nach hinten, wenn das Training spät endet. Die Zeiten gelten auch für den Essens-Kalender.")}
       <button class="btn ghost small" type="button" id="ftReset">Standardzeiten</button></div>
     <div class="card nutri"><h2>Tagesziel</h2><div class="grid2"><div class="field"><label for="fkcal">kcal</label><input type="text" inputmode="numeric" id="fkcal" value="${T.kcal}"></div><div class="field"><label for="fprot">Protein (g)</label><input type="text" inputmode="numeric" id="fprot" value="${T.protein}"></div></div>
-      <div class="small muted">Start laut Plan: 2.650 kcal, 140 g Protein. Angepasst wird erst nach 4 Gym-Wiegungen und Bauchumfang (siehe Regeln).</div></div>
+      ${info("Start laut Plan: 2.650 kcal, 140 g Protein. Angepasst wird erst nach 4 Gym-Wiegungen und Bauchumfang (siehe Regeln).")}</div>
     ${url ? `<div class="card"><h2>Essens-Kalender abonnieren</h2><div class="small muted">Eigener Kalender, getrennt vom Training, in Google ein- und ausblendbar.</div><code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
       <div class="actions"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">In Google Kalender ↗</a></div></div>` : ""}`;
 }
@@ -3010,11 +3018,14 @@ function essenHtml(b){
   b.innerHTML = h;
 }
 
-let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:""};
+let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false};
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
 // Mittag und Abend sind austauschbar; unterschieden wird warm/kalt
 // Hauptmahlzeiten heißen nach dem Gericht: warm oder kalt
 const mainLabel = (sl, rec) => sl.k === "mi" || sl.k === "ab" ? (rec?.temp === "kalt" ? "❄️ Kalt" : rec?.temp === "beides" ? "🔥/❄️ Warm oder kalt" : rec ? "🔥 Warm" : "Hauptgericht") : sl.label;
+// Favoriten (Rezeptnamen), synchronisiert über die Essen-Einstellungen
+const isFav = n => (FOOD().favs || []).includes(n);
+const favBtn = n => `<button type="button" class="favb ${isFav(n) ? "on" : ""}" data-fav="${esc(n)}" aria-pressed="${isFav(n)}" aria-label="${isFav(n) ? "Aus Favoriten entfernen" : "Als Favorit merken"}">${isFav(n) ? "★" : "☆"}</button>`;
 const catOf = r => r.category === "mittag" || r.category === "abend" ? "haupt" : r.category;
 const TEMP = {warm: "🔥 warm", kalt: "❄️ kalt", beides: "🔥/❄️ warm oder kalt"};
 const tempTag = r => r?.temp ? `<span class="ttag ${r.temp}">${TEMP[r.temp]}</span>` : "";
@@ -3153,6 +3164,8 @@ async function onClick(e){
   const bp = t.closest("[data-biopreset]"); if (bp) { const lim = Number(bp.dataset.biopreset), st = FOOD().store !== "min" && FOOD().store || "aldi";
     saveFood({bioItems: lim ? prices.products.filter(x => x.bio?.[st] != null && x.prices?.[st] && (x.bio[st] - x.prices[st]) / x.prices[st] <= lim / 100).map(x => x.id) : []}); render(); return; }
   const mtf = t.closest("[data-mealtemp]"); if (mtf) { mealTempF = mtf.dataset.mealtemp; renderSheet(); return; }
+  const fv = t.closest("[data-fav]"); if (fv) { const n = fv.dataset.fav, set = new Set(FOOD().favs || []); set.has(n) ? set.delete(n) : set.add(n); saveFood({favs: [...set]}); toast(set.has(n) ? "★ Als Favorit gemerkt" : "Aus Favoriten entfernt"); if (sheet.open) renderSheet(); if (document.getElementById("recBody") || tab === "essen") renderRecipes(); return; }
+  if (t.closest("[data-recfav]")) { recFilter.fav = !recFilter.fav; renderRecipes(); return; }
   const rte = t.closest("[data-rectemp]"); if (rte) { recFilter.temp = rte.dataset.rectemp; renderRecipes(); return; }
   const rd = t.closest("[data-recdiff]"); if (rd) { recFilter.diff = rd.dataset.recdiff; renderRecipes(); return; }
   if (t.closest("[data-recfast]")) { recFilter.fast = !recFilter.fast; renderRecipes(); return; }
