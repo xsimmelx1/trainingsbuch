@@ -365,14 +365,27 @@ def avoid_re(settings):
         for x, y in (("[aä]", "[aä]"), ("[oö]", "[oö]"), ("[uü]", "[uü]")):
             w = re.sub(x, y, w)
         parts.append(w)
+    have = set(f.get("devices") or ["herd", "ofen", "mixer", "mikrowelle"])  # Küchengeräte wie devParts in der App
+    if "herd" not in have:
+        parts.append("§herd§")
+    if "ofen" not in have:
+        parts.append("§ofen§")
+        if "airfryer" not in have:
+            parts.append("§ofenk§")
+    if "mixer" not in have:
+        parts.append("§mixer§")
     return re.compile("|".join(parts), re.I) if parts else None
+
+
+def dev_tok(r):
+    return "".join(" §%s§" % d for d in r.get("dev") or [])
 
 
 def substitute(mp, rec, o, rx):
     """Gemiedene Gerichte durch das ähnlichste erlaubte derselben Mahlzeit ersetzen (wie altMeals in der App)."""
     if not rx:
         return o
-    text = lambda r: r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
+    text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
     slots = {s["k"]: s for s in mp["slots"]}
     for k, n in list(o.items()):
         r = rec.get(n)
@@ -566,7 +579,7 @@ def alt_meals(mp, rec, k, cur, rx):
     slot = next(x for x in mp["slots"] if x["k"] == k)
     ref = rec.get(cur) or {"kcal": 0, "protein": 0}
     minp = 13 if k in ("sn", "ex") else 25
-    text = lambda r: r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
+    text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
     c = [r for r in rec.values() if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp and not (rx and rx.search(text(r)))]
     c.sort(key=lambda r: abs(r["kcal"] - ref["kcal"]) / 8 + abs(r["protein"] - ref["protein"]))
     return c[:8]
@@ -641,7 +654,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
         return min(sum(rec[sb.get(n, n)]["kcal"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
     k_floor = min((num(fd.get("kcal")) or (mp.get("target") or {}).get("kcal") or 2650) - 250, day_k({}))
     minp = lambda k: 13 if k in ("sn", "ex") else 25
-    text = lambda r: r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
+    text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
 
     cand_memo = {}
 
