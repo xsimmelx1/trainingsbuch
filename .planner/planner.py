@@ -25,7 +25,8 @@ TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB"
          "notfall": "Notfall-Ganzkörper", "reduziert": "Ganzkörper (reduziert)", "beineAk": "Beine A (Knie-Phase 1)", "beineBk": "Beine B (Knie-Phase 1)"}
 # Öffentlicher Kalender-Feed: neutrale Namen ohne Reha- oder Stress-Status
 PUBLIC_TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB": "Oberkörper B", "beineAk": "Beine A", "beineBk": "Beine B",
-                "notfall": "Kurz-Einheit", "reduziert": "Ganzkörper", "okBhome": "Oberkörper B"}
+                "notfall": "Kurz-Einheit", "reduziert": "Ganzkörper", "okBhome": "Oberkörper B",
+                "notfallK": "Kurz-Einheit", "reduziertK": "Ganzkörper"}
 EXERCISES = {
     "beineA": ["Beinpresse/Hack Squat", "Rumänisches Kreuzheben", "Beinstrecker", "Sitzender Beinbeuger", "Wadenheben stehend", "Dead Bug"],
     "okA": ["Brustgestütztes Rudern", "KH-Schrägbank Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben", "Face Pull", "Kabel-Shrug 30°", "Bayesian Curl", "Trizeps-Pushdown"],
@@ -179,11 +180,12 @@ def week_no(settings, d):
 
 
 def variant(base, settings, d):
-    if settings.get("mode") == "notfall":
-        return "notfall"
+    k = "K" if settings.get("knee1") else ""  # Knie-Phase 1 hat Vorrang vor jedem Modus (wie variantOf)
+    if base == "notfall" or settings.get("mode") == "notfall":
+        return "notfall" + k
     if settings.get("mode") == "reduziert":
-        return "reduziert"
-    if settings.get("knee1"):
+        return "reduziert" + k
+    if k:
         return {"beineA": "beineAk", "beineB": "beineBk"}.get(base, base)
     return base
 
@@ -223,15 +225,23 @@ def build_plan(now, settings, days, busy, keep=None):
         if wk == start.isocalendar()[:2]:
             count[wk] = count.get(wk, 0) + 1
     plan = []
+    last = None  # letzte Krafteinheit (für den Abstand bei Ganzkörper-Modi)
+    for k in sorted(days, reverse=True):
+        if k < start.isoformat() and is_strength(days[k]):
+            last = dt.date.fromisoformat(k)
+            break
     for i in range(HORIZON):
         d = start + dt.timedelta(days=i)
         wk = d.isocalendar()[:2]
         if d.weekday() == 6 or consec >= 2 or count.get(wk, 0) >= max_week:
             consec = 0
             continue
-        prev = days.get((d - dt.timedelta(days=1)).isoformat()) or {}
-        if (prev.get("boulder") or {}).get("done") and SEQ[nxt] in ("okA", "okB"):
-            continue  # Tag nach dem Bouldern: kein schweres Zugtraining
+        bo = lambda x: bool(((days.get(x.isoformat()) or {}).get("boulder") or {}).get("done"))
+        if (bo(d) or bo(d - dt.timedelta(days=1))) and SEQ[nxt] in ("okA", "okB"):
+            consec = 0
+            continue  # am Bouldertag und am Tag danach kein Oberkörper (Zugmuskulatur)
+        if settings.get("mode") in ("reduziert", "notfall") and last and (d - last).days < 3:
+            continue  # Ganzkörper: mindestens 72 h Abstand
         not_before = now + dt.timedelta(minutes=30) if d == today else dt.datetime.combine(d, dt.time(0), TZ)
         slot = find_slot(d, busy, TRAIN_MIN, not_before)
         short = False
@@ -246,6 +256,7 @@ def build_plan(now, settings, days, busy, keep=None):
                      "start": slot[0].strftime("%H:%M"), "end": slot[1].strftime("%H:%M"), "short": short})
         nxt = (nxt + 1) % 4
         consec += 1
+        last = d
         count[wk] = count.get(wk, 0) + 1
     # Sonntag: Check-in & Meal Prep (2 h), wenn möglich
     extras = []
@@ -306,7 +317,7 @@ def build_ics(now, settings, plan, extras, past):
 
     for p in past + plan:
         d = dt.date.fromisoformat(p["date"])
-        s = variant(p["session"], settings, d) if p["session"] != "notfall" else "notfall"
+        s = variant(p["session"], settings, d)
         title = PUBLIC_TITLE.get(s, s)
         desc = ("Nur ein kurzer Slot frei: 30-Minuten-Einheit.\n" if p.get("short") else "") + "Übungen und Sätze stehen in der App."
         past_day = d < now.date()
