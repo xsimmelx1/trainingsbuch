@@ -199,6 +199,17 @@ body.wo main{padding-bottom:110px}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
 .chips.focus{justify-content:center;margin:2px 0 8px}.esum{margin:8px 2px}
+.tline{display:flex;gap:4px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.tline span{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:44px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:13px}
+.tline span b{font-size:11px;color:var(--muted);font-weight:600}
+.tline span.done{opacity:.55}.tline span.miss{border-style:dashed}
+.tline span.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
+.nextc .nowh .mthumb{width:56px;height:56px;border-radius:12px}
+.preps{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.prep{display:grid;grid-template-columns:46px 1fr;gap:8px;font-size:14px;align-items:baseline}
+.prep > span:first-child{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.prep.due > span:first-child{color:var(--warn)}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .quick label{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font-size:13px;color:var(--muted)}
 .quick input{width:100%;min-width:0;padding:6px 8px}
@@ -1794,6 +1805,48 @@ function todayItems(focus){
     out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
   return out.sort((a, b) => a.prio - b.prio);
 }
+
+// ---------- Heute: Tagesablauf mit Uhrzeiten, nächster Termin und Vorbereitungen ----------
+const hmDiff = m => m < 1 ? "jetzt" : m < 60 ? `in ${m} min` : `in ${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}`;
+function dayEvents(d){
+  const ev = [], st = trainState(), pl = planFor(d);
+  ev.push({k: "mob", t: "07:30", icon: "🧘", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
+  if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
+    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
+  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", title: m.info.name, sub: `${m.label} · <span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, done: m.ate, meal: m});
+  ev.push({k: "pain", t: "21:45", icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
+  return ev.sort((a, b) => a.t.localeCompare(b.t));
+}
+// Vorbereitungen: wann man womit anfangen sollte
+function dayPreps(d, ev){
+  const out = [], wd = parse(d).getDay();
+  for (const e of ev) { if (e.done) continue; const T = hm(e.t);
+    if (e.train) { const home = /Zuhause/.test(e.sub);
+      out.push({t: T - (home ? 15 : 60), for: e.k, icon: "🎒", txt: home ? `Platz und Sachen bereitlegen (Matte, Kurzhanteln, Wasser) – Training ${e.t}` : `Tasche packen: Schuhe, Handtuch, Wasser, Schloss – Training ${e.t}`});
+      out.push({t: T - 90, for: e.k, icon: "🍌", txt: "Kleine Mahlzeit 1–2 h vorher (z. B. Banane, Skyr), dann nichts Schweres mehr"}); }
+    if (e.meal) { const r = recipeByName(e.meal.name); if (!r) continue; const act = r.activeMin ?? r.timeMin ?? 15, tot = r.timeMin ?? act;
+      if (r.mealPrep && e.meal.k !== "fr" && wd >= 1 && wd <= 4) out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"});
+      else if (tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
+  // für morgen: Gerichte, die über Nacht ziehen
+  if (mealPlan && recipes) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
+  if (wd === 0) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
+  return out.sort((a, b) => a.t - b.t);
+}
+function nextBlock(d){
+  const ev = dayEvents(d), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
+  // nächster offener Termin: noch nicht vorbei bzw. höchstens 90 min überfällig
+  const nx = ev.find(e => !e.done && hm(e.t) + (e.meal ? 90 : e.train ? 120 : 60) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
+  const line = `<div class="tline">${ev.map(e => { const past = hm(e.t) < nm; return `<span class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${!e.done && past && e !== nx ? "miss" : ""}" title="${esc(e.title)}"><b>${e.t}</b>${e.done ? "✓" : e.icon}</span>`; }).join("")}</div>`;
+  let h = `<div class="lab sec">Als Nächstes</div>` + line;
+  if (!nx) return {h: h + `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`, key: null};
+  const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k), m = nx.meal;
+  h += `<div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
+    ${mine.length ? `<div class="preps">${mine.map(p => `<div class="prep ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
+  const other = preps.filter(p => p.for !== nx.k && p.t <= nm + 8 * 60).slice(0, 3);
+  if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="preps card">${other.map(p => `<div class="prep"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
+  return {h, key: nx.k};
+}
 function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
@@ -1819,8 +1872,10 @@ function renderToday(){
   {
     const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
     if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
-    if (isToday) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
-    const later = isToday ? open.slice(1) : open, LIM = 3;
+    let nxKey = null;
+    let nbOk = false; if (isToday && todayFocus === "alles") try { const nb = nextBlock(selDate); h += nb.h; nxKey = nb.key; nbOk = true; } catch (e) { console.error(e); }
+    if (isToday && !nbOk) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
+    const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
     if (later.length) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
     if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
     if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><label><span>🧗 Bouldern</span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></label></div>
