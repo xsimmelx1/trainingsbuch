@@ -94,10 +94,12 @@ textarea{min-height:64px;resize:vertical}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
 .acl{margin-top:6px}
-.ingt{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.ingt{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;margin-top:6px}
+.ingt th:first-child,.ingt td.amt{width:72px}.ingt th.num,.ingt td.num{width:68px}
+.ingt td{overflow-wrap:anywhere}
 .ingt th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line)}
 .ingt td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
-.ingt td.amt{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums;width:1%}
+.ingt td.amt{color:var(--muted);font-variant-numeric:tabular-nums}
 .ingt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .ingt tr.grp td{background:var(--surface);font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-top:10px}
 .ingt tr.home td{opacity:.65}
@@ -1863,7 +1865,7 @@ function ingTable(r){
   const rows = r.ingredients.map((l, i) => { const x = prices ? parseIng(l) : null, m = l.match(/^((?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Stiele?|Zweige?)?)\s+(.+)$/);
     const pr = x?.pr, cost = pr ? (x.parts || [x]).reduce((a, pt) => { const v = priceOf(pt.pr); return v == null ? a : a + pt.amt / pt.pr.pack * v; }, 0) : null, name = m ? m[2] : l;
     const grp = pr?.group || (SPICE_RE.test(l) || !pr ? "Vorrat & Gewürze" : (SHOP_GROUPS.find(([, re]) => re.test(name))?.[0] || "Vorrat & Gewürze"));
-    return {i, amt: m ? m[1] : "", name, sub: x?.orig ? SUBST[x.orig.id].opts[x.subKey][0] : null, cost, grp, home: !!(pr && st.has(pr.id))}; });
+    return {i, amt: m ? m[1] : "", name: name.replace(/\s*\([^)]*\)/g, "").trim() || name, sub: x?.orig ? SUBST[x.orig.id].opts[x.subKey][0] : null, cost, grp, home: !!(pr && st.has(pr.id))}; });
   const GO = SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze");
   if (sort === "laden") rows.sort((a, b) => GO.indexOf(a.grp) - GO.indexOf(b.grp) || a.name.localeCompare(b.name, "de"));
   else if (sort === "preis") rows.sort((a, b) => (b.cost ?? -1) - (a.cost ?? -1));
