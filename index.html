@@ -210,10 +210,10 @@ body.wo main{padding-bottom:110px}
 .subhead h2{margin:0}
 .chips.focus{justify-content:center;margin:2px 0 8px}.esum{margin:8px 2px}
 .tline{display:flex;gap:4px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
-.tline span{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:44px;padding:4px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:13px}
-.tline span b{font-size:11px;color:var(--muted);font-weight:600}
-.tline span.done{opacity:.55}.tline span.miss{border-style:dashed}
-.tline span.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
+.tline button{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:46px;padding:5px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:14px;color:var(--ink)}
+.tline button b{font-size:11px;color:var(--muted);font-weight:600}
+.tline button.done{opacity:.55}.tline button.miss{border-style:dashed}
+.tline button.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
 .nextc .nowh .mthumb{width:56px;height:56px;border-radius:12px}
 .pps{display:flex;flex-direction:column;gap:6px;margin:0}
 .pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
@@ -221,7 +221,9 @@ body.wo main{padding-bottom:110px}
 .pps .pp.due > span:first-child{color:var(--warn)}
 .nextc .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}.nextc .actions .btn{white-space:nowrap}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
-.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.quick .qcard{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font:inherit;font-size:13px;color:var(--muted);text-align:left}
+.quick .qcard b{color:var(--ink);font-size:18px;line-height:28px}
 .quick label{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font-size:13px;color:var(--muted)}
 .quick input{width:100%;min-width:0;padding:6px 8px}
 .mrows{display:flex;flex-direction:column;margin-top:6px}
@@ -1825,6 +1827,8 @@ function dayEvents(d){
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
   if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", title: m.info.name, sub: `${m.label} · <span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, done: m.ate, meal: m});
+  const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
+    ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
   ev.push({k: "pain", t: "21:45", icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
   return ev.sort((a, b) => a.t.localeCompare(b.t));
 }
@@ -1848,14 +1852,15 @@ function nextBlock(d){
   const ev = dayEvents(d), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
   // nächster offener Termin: noch nicht vorbei bzw. höchstens 90 min überfällig
   const nx = ev.find(e => !e.done && hm(e.t) + (e.meal ? 90 : e.train ? 120 : 60) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
-  const line = `<div class="tline">${ev.map(e => { const past = hm(e.t) < nm; return `<span class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${!e.done && past && e !== nx ? "miss" : ""}" title="${esc(e.title)}"><b>${e.t}</b>${e.done ? "✓" : e.icon}</span>`; }).join("")}</div>`;
+  const line = `<div class="tline">${ev.map(e => { const past = hm(e.t) < nm; const act = e.meal ? (recipeByName(e.meal.name) ? `data-recipe="${esc(e.meal.name)}" data-rctx="${d}|${e.meal.k}"` : `data-sheet="meal" data-v="${d}|${e.meal.k}"`) : e.act;
+    return `<button type="button" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${!e.done && past && e !== nx ? "miss" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}"><b>${e.t}</b>${e.done ? "✓" : e.icon}</button>`; }).join("")}</div>`;
   let h = `<div class="lab sec">Als Nächstes</div>` + line;
   if (!nx) return {h: h + `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`, key: null};
-  const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k), m = nx.meal;
+  const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
     <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
-  const other = preps.filter(p => p.for !== nx.k && p.t <= nm + 8 * 60).slice(0, 3);
+  const other = [];
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
   return {h, key: nx.k};
 }
@@ -1906,11 +1911,11 @@ function renderToday(){
     let nbOk = false; if (isToday && todayFocus === "alles") try { const nb = nextBlock(selDate); h += nb.h; nxKey = nb.key; nbOk = true; } catch (e) { console.error(e); }
     if (isToday && !nbOk) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
     const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
-    if (later.length) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
+    if (later.length && !nbOk) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
     if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
-    if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><label><span>🧗 Bouldern</span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></label></div>
+    if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><label><span>🧗 Bouldern</span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></label><button type="button" class="qcard" data-sheet="cardio" data-v="${selDate}"><span>🏃 Laufen</span><b>${(cur.cardio || []).length ? (cur.cardio || []).reduce((a, c) => a + (num(c.min) || 0), 0) + " min" : "＋"}</b></button></div>
       ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
-    if (done.length) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
+    if (done.length && !nbOk) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
     if (todayFocus !== "essen") h += weekStrip();
     view.innerHTML = h + `</div>`; return;
   }
