@@ -230,7 +230,9 @@ body.wo main{padding-bottom:110px}
 .vmarks{display:flex;flex-wrap:wrap;gap:6px}
 .vm{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:36px;font:inherit;font-size:13px}
 .vclip{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;position:relative}
-.vclip iframe{width:100%;height:100%;border:0;pointer-events:none}
+.vclip iframe{width:100%;height:100%;border:0}
+.vclip .vhint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:rgba(0,0,0,.7);color:#fff;border-radius:999px;padding:8px 14px;font-size:13px;pointer-events:none;display:none}
+.vclip.stalled .vhint{display:block}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;align-self:flex-start}
 .seg button{border:0;background:none;color:var(--ink);padding:6px 14px;min-height:38px;font:inherit;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .seg button[aria-pressed=true]{background:var(--accent-soft);font-weight:600}
@@ -287,6 +289,15 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .tabs3{display:grid;grid-template-columns:repeat(3,1fr);background:var(--sunk);border-radius:12px;padding:3px;gap:3px}
 .tabs3 button{border:0;background:none;color:var(--muted);border-radius:9px;min-height:40px;font:inherit;font-weight:600;font-size:14px}
 .tabs3 button[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.chiplab{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;align-self:center;margin-right:2px}
+.backlink{border:0;background:none;color:var(--accent);font:inherit;font-weight:600;font-size:14px;padding:4px 0;min-height:36px;text-align:left;align-self:flex-start}
+.tabs3.n4{grid-template-columns:repeat(4,auto)}
+.tabs3.n4 button{padding:0 8px;font-size:13px}
+.altlist{display:flex;flex-direction:column;gap:8px}
+.altrow{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:6px 10px 6px 6px;text-align:left;color:var(--ink);font:inherit}
+.altrow img,.altrow .noimg{width:72px;height:54px;object-fit:contain;border-radius:8px;background:#dcf0fa;display:grid;place-items:center}
+.altrow .at{display:flex;flex-direction:column;gap:2px}
+.altrow .at b{font-size:15px}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
@@ -1351,7 +1362,7 @@ function clipOf(key){
 }
 function clipHtml(key){
   const c = clipOf(key); if (!c) return "";
-  return `<div class="vclip"><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${c.s}${c.e ? "&end=" + c.e : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
+  return `<div class="vclip" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(c.id)}/hqdefault.jpg) center/cover"><span class="vhint">Zum Abspielen antippen</span><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${c.s}${c.e ? "&end=" + c.e : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
 }
 let techTab = "anl", techFor = null;
 let realOpen = null; // Schlüssel der Übung, deren echter Clip gerade gezeigt wird
@@ -1365,10 +1376,14 @@ window.addEventListener("message", ev => {
   if (!/youtube/.test(ev.origin)) return; let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; }
   const st = d?.event === "onStateChange" ? d.info : d?.event === "infoDelivery" ? d.info?.playerState : null, ct = d?.event === "infoDelivery" ? d.info?.currentTime : null;
   for (const f of document.querySelectorAll("iframe[data-clip]")) if (f.contentWindow === ev.source) { const c = clipOf(f.dataset.clip); if (!c) return;
+    if (st === 1) { f._playing = true; f.parentElement.classList.remove("stalled"); }
     if (!(st === 0 || (c.e && ct != null && ct >= c.e - 0.4))) return;
     const cmd = (func, args) => f.contentWindow.postMessage(JSON.stringify({event: "command", func, args}), "*"); cmd("seekTo", [c.s, true]); cmd("playVideo", []); }
 });
-function hookClips(){ for (const f of document.querySelectorAll("iframe[data-clip]")) if (!f._hooked) { f._hooked = true; f.addEventListener("load", () => f.contentWindow.postMessage(JSON.stringify({event: "listening", id: f.dataset.clip, channel: "widget"}), "*")); } }
+function hookClips(){ for (const f of document.querySelectorAll("iframe[data-clip]")) if (!f._hooked) { f._hooked = true;
+  f.addEventListener("load", () => { f.contentWindow.postMessage(JSON.stringify({event: "listening", id: f.dataset.clip, channel: "widget"}), "*");
+    // Startet der Clip nicht von selbst (Autoplay blockiert), Hinweis zum Antippen zeigen
+    setTimeout(() => { if (!f._playing && f.isConnected) f.parentElement.classList.add("stalled"); }, 4000); }); } }
 const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 function playVideo(key, t){
   const v = VIDS?.[key], box = document.getElementById("vid-" + key.replace(":", "_")); if (!v || !box) return;
@@ -1710,8 +1725,20 @@ function releaseWake(){ try { wakeLock && wakeLock.release(); } catch {} wakeLoc
 
 // ---------- SHEETS ----------
 let pendingConfirm = null;
-function openSheet(kind, arg){ pendingConfirm = null; mobZoom = null; sheetKind = kind; sheetArg = arg; renderSheet(); if (!sheet.open) sheet.showModal(); }
-function closeSheet(){ if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); }
+let techStack = [];
+// Alternativen einer Übung; hat sie keine eigenen, dann die Ursprungsübung(en) und deren übrige Alternativen
+function altsFor(id){
+  const own = (ALTS[id] || []).filter(([i]) => EX[i]); if (own.length) return own;
+  const out = [], seen = new Set([id]);
+  for (const [base, list] of Object.entries(ALTS)) if (list.some(([i]) => i === id) && EX[base]) {
+    if (!seen.has(base)) { seen.add(base); out.push([base, "Ursprüngliche Übung im Plan"]); }
+    for (const [i, why] of list) if (!seen.has(i) && EX[i]) { seen.add(i); out.push([i, why]); } }
+  return out;
+}
+function openSheet(kind, arg){ pendingConfirm = null; mobZoom = null;
+  if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
+  sheetKind = kind; sheetArg = arg; renderSheet(); if (!sheet.open) sheet.showModal(); else sheet.scrollTop = 0; }
+function closeSheet(){ techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); }
 function renderSheet(){ setTimeout(hookClips, 0);
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="grab"></div>`;
@@ -1750,19 +1777,21 @@ function renderSheet(){ setTimeout(hookClips, 0);
   } else if (sheetKind === "tech") {
     const e = EX[sheetArg];
     if (techFor !== sheetArg) { techFor = sheetArg; techTab = "anl"; realOpen = null; }
-    const alts = (ALTS[sheetArg] || []).filter(([i]) => EX[i]);
+    const alts = altsFor(sheetArg);
     const still = e.img && RDB_STILL.has(e.img), home = HOME_OK.has(sheetArg) || sheetArg.startsWith("hw_");
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
-    h += `<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
+    const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
+    h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? e.sets + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}</div>
       ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}
-      <div class="tabs3" role="tablist">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"]].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
+      <div class="tabs3 ${alts.length ? "n4" : ""}" role="tablist">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(alts.length ? [["alt", `Alternativen (${alts.length})`]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
       ${techTab === "anl" ? `${prim.length ? `<div class="whyb"><div class="lab">Wofür</div>Trainiert vor allem ${esc(prim.join(" und "))}.${MOB_INFO[sheetArg] ? " " + esc(MOB_INFO[sheetArg].why) : ""}</div>` : ""}
         <ol class="steps">${(e.cue || []).map(c => `<li>${esc(c)}</li>`).join("")}</ol>
         ${e.note || e.gate ? `<div class="warnb"><div class="lab">Für dich wichtig</div>${e.note ? esc(e.note) : ""}${e.gate && !S().scCleared ? `${e.note ? "<br>" : ""}Schlüsselbein: Ampel beachten, ab 3/10 Schmerz die Ersatzübung nehmen.` : ""}</div>` : ""}`
       : techTab === "mus" ? muscleMap(e.m)
+      : techTab === "alt" ? `<div class="small muted">Gleiche Muskeln, andere Ausführung, z. B. wenn ein Gerät besetzt ist oder etwas zwickt. Tauschen im Training über ⇄.</div><div class="altlist">${alts.map(([i, why]) => { const x = EX[i], pm = Object.keys(x.m || {}).filter(k => x.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
+          return `<button type="button" class="altrow" data-sheet="tech" data-v="${i}">${x.img ? `<img src="${isrc(x.img, x.img.startsWith("r/") ? 1 : 0)}" alt="" loading="lazy">` : `<span class="noimg">🏋</span>`}<span class="at"><b>${esc(x.name)}</b><span class="small">${esc(why)}</span><span class="small muted">${esc(pm.join(", "))}${HOME_OK.has(i) || i.startsWith("hw_") ? " · 🏠 Zuhause" : ""}${x.gate && !S().scCleared ? " · SC-Ampel" : ""}</span></span><span class="go">›</span></button>`; }).join("")}</div>`
       : `${videoHtml(sheetArg, e.q || e.name, true)}${VIDS?.[sheetArg]?.note ? `<div class="warnb soft"><div class="lab">Zum Video</div>${esc(VIDS[sheetArg].note)}</div>` : ""}`}
-      ${alts.length && tab === "mehr" ? `<div class="lab">Alternativen</div><div class="chips">${alts.map(([i, why]) => `<button type="button" data-sheet="tech" data-v="${i}" title="${esc(why)}">${esc(EX[i].name)}</button>`).join("")}</div>` : ""}
       ${e.img ? `<div class="small muted">${e.credit === RDB_CREDIT ? `Illustration: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>` : e.credit ? esc(e.credit) : "Foto: free-exercise-db (gemeinfrei)"}${sheetArg === "stepdown" ? ". Zeigt Step-Up, gemeint ist der Weg nach unten." : ""}</div>` : ""}`;
   } else if (sheetKind === "why") {
     const e = EX[sheetArg], sg = suggestion(sheetArg);
@@ -2064,15 +2093,17 @@ function renderRecipes(b){
 function renderEssen(){ view.innerHTML = `<div id="moreBody"></div>`; essenHtml(document.getElementById("moreBody")); }
 // ---------- Übungskatalog ----------
 const catF = {q: "", m: "", where: "", plan: false};
+// Körperregionen statt einzelner Muskeln, damit die Filterleiste ohne Wischen auskommt
+const REGIONS = [["brust", "Brust", ["brust"]], ["ruecken", "Rücken", ["ruecken"]], ["schulter", "Schultern", ["seitlS", "hintS", "vordS", "obTrap"]], ["arme", "Arme", ["bizeps", "trizeps"]], ["beine", "Beine", ["quad", "waden"]], ["po", "Po & Beinrückseite", ["gh"]], ["rumpf", "Rumpf", ["rumpf", "hipflex"]]];
 function catalogHtml(){
   const inPlan = new Set(Object.values(SESS).flatMap(x => x.ex || [])), home = id => HOME_OK.has(id) || id.startsWith("hw_");
   const list = Object.entries(EX).filter(([id, e]) => (!catF.q || (e.name + " " + (e.q || "")).toLowerCase().includes(catF.q.toLowerCase()))
-    && (!catF.m || (e.m || {})[catF.m]) && (!catF.where || (catF.where === "home" ? home(id) : !id.startsWith("hw_"))) && (!catF.plan || inPlan.has(id)))
+    && (!catF.m || (REGIONS.find(r => r[0] === catF.m)?.[2] || []).some(k => (e.m || {})[k])) && (!catF.where || (catF.where === "home" ? home(id) : !id.startsWith("hw_"))) && (!catF.plan || inPlan.has(id)))
     .sort((a, b) => a[1].name.localeCompare(b[1].name, "de"));
   const chip = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${l}</button>`;
   return `<div class="card"><input type="text" id="catQ" value="${esc(catF.q)}" placeholder="Suche: Name oder englischer Begriff" aria-label="Übungen suchen">
-      <div class="chips">${chip("data-catw", "", "Alle", !catF.where)}${chip("data-catw", "gym", "Gym", catF.where === "gym")}${chip("data-catw", "home", "Zuhause", catF.where === "home")}${chip("data-catp", "1", "In meinem Plan", catF.plan)}</div>
-      <div class="chips scrollx">${chip("data-catm", "", "Alle Muskeln", !catF.m)}${MUSCLES.map(([k, l]) => chip("data-catm", k, esc(l), catF.m === k)).join("")}</div>
+      <div class="chips"><span class="chiplab">Ort</span>${chip("data-catw", "", "Alle", !catF.where)}${chip("data-catw", "gym", "Gym", catF.where === "gym")}${chip("data-catw", "home", "Zuhause", catF.where === "home")}${chip("data-catp", "1", "In meinem Plan", catF.plan)}</div>
+      <div class="chips"><span class="chiplab">Muskeln</span>${chip("data-catm", "", "Alle", !catF.m)}${REGIONS.map(([k, l]) => chip("data-catm", k, esc(l), catF.m === k)).join("")}</div>
       <div class="small muted">${list.length} Übungen · antippen für Technik, Hinweise und Video</div></div>
     <div class="catgrid">${list.map(([id, e]) => `<button type="button" class="catc" data-sheet="tech" data-v="${id}">${e.img ? `<img src="${isrc(e.img, e.img.startsWith("r/") ? 1 : 0)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.name)}</b><span class="small muted">${esc(Object.keys(e.m || {}).filter(k => (e.m[k] || 0) >= 1).map(k => (MUSCLES.find(m => m[0] === k) || [, k])[1]).join(", ") || "Mobilität")}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${inPlan.has(id) ? " · im Plan" : ""}</span></span></button>`).join("")}</div>`;
 }
@@ -2749,7 +2780,7 @@ async function enablePush(){
 document.querySelector("nav.bottom").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { techStack = []; if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const cb = t.closest("[data-coach]"); if (cb) { const k = cb.dataset.coach; ensureCur(); if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
@@ -2835,6 +2866,7 @@ async function onClick(e){
   const ac = t.closest("[data-act]");
   if (ac) { const a = ac.dataset.act, v = ac.dataset.v;
     if (a === "closeSheet") { closeSheet(); return; }
+    if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "alt"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
     if (a === "setSession") { cur.session = v; touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
