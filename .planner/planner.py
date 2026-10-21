@@ -694,7 +694,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
     return subs
 
 
-def meal_defaults(mp, settings, d, train, is_train=None):
+def meal_defaults(mp, settings, d, train, is_train=None, boulder=False):
     w = week_no(settings, d)
     W = mp["weeks"][(w - 1) % len(mp["weeks"]) if w > 0 else len(mp["weeks"]) - 1]
     i = d.weekday()
@@ -712,7 +712,7 @@ def meal_defaults(mp, settings, d, train, is_train=None):
     sn = W.get("snacks", mp["snacks"])
     o["sn"] = W.get("trainingSnack", mp["trainingSnack"]) if train else sn[ri % len(sn)]
     if not train:
-        o["ex"] = mp["restExtra"][ri % 2]
+        o["ex"] = W.get("trainingSnack", mp["trainingSnack"]) if boulder else mp["restExtra"][ri % 2]  # Shake nach dem Bouldern
     return o
 
 
@@ -748,7 +748,10 @@ def build_meal_ics(now, settings, plan, days, past=None):
 
     def is_train(dd):
         day = days.get(dd.isoformat()) or {}
-        return is_strength(day) or bool(by_date.get(dd.isoformat())) or dd.isoformat() in past_dates or bool((day.get("boulder") or {}).get("done"))
+        return is_strength(day) or bool(by_date.get(dd.isoformat())) or dd.isoformat() in past_dates  # Bouldern zählt fürs Essen nicht (wie isTrainDay)
+
+    def bo(dd):
+        return bool(((days.get(dd.isoformat()) or {}).get("boulder") or {}).get("done"))
 
     week_subs = {}
 
@@ -769,7 +772,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
         day = days.get(iso) or {}
         pl = by_date.get(iso)
         wd = week_no(settings, d)
-        names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
+        names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d)), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
