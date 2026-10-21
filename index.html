@@ -101,6 +101,12 @@ textarea{min-height:64px;resize:vertical}
 .ingg.zg .ih,.ingg.zg .ir{grid-template-columns:var(--zc, minmax(0,1fr) 64px 52px)}
 .ingg .num.cheap{color:var(--good);font-weight:700}
 .zst{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.zst button{flex:none}
+.zw{display:flex;flex-direction:column;margin-top:6px}
+.zw .zwh,.zw .zwp{display:grid;grid-template-columns:repeat(var(--zn),minmax(0,1fr));gap:2px;text-align:right;font-variant-numeric:tabular-nums}
+.zw .zwh{position:sticky;top:0;z-index:2;background:var(--bg);font-size:11px;font-weight:600;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}
+.zw .zwr{display:flex;flex-direction:column;gap:2px;padding:6px 0;border:0;border-bottom:1px solid var(--line);background:none;font:inherit;color:var(--ink);text-align:left;width:100%}
+.zw .zwn{font-size:14px}.zw .zwp{font-size:12.5px}.zw .zwp .cheap{color:var(--good);font-weight:700}
+.zw .zwr.sum{font-weight:700}.zw .ig{padding:10px 0 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .ingg .ih{font-size:12px;color:var(--muted);font-weight:600}
 .ingg .ir > span{min-width:0;overflow-wrap:anywhere}
 .ingg button.ir{border:0;border-bottom:1px solid var(--line);background:none;font:inherit;color:var(--ink);text-align:left;width:100%}
@@ -1937,7 +1943,7 @@ let zStores = lsGet("zStores") || null;
 function zutatenHtml(){
   if (!prices) { ensurePrices().then(() => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); else renderSheet(); }).catch(() => {}); return `<p class="muted">Lade Preise …</p>`; }
   const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi";
-  const SS = (zStores || [def]).filter(x => prices.stores.includes(x)).slice(0, 3), cmp = SS.length > 1, use = prodUseCount(), home = STOCK(), qq = zQ.trim().toLowerCase();
+  const SS = prices.stores.filter(x => (zStores || [def]).includes(x)), cmp = SS.length > 1, wide = SS.length > 3, use = prodUseCount(), home = STOCK(), qq = zQ.trim().toLowerCase();
   let rows = prices.products.map(pr => { const pp = SS.map(st => priceOf(pr, st)), all = Object.entries(pr.prices || {}).filter(([k, v]) => v != null && prices.stores.includes(k)).sort((x, y) => x[1] - y[1]);
     const vals = pp.filter(v => v != null), lo = vals.length ? Math.min(...vals) : null, hi = vals.length ? Math.max(...vals) : null;
     return {pr, name: prodLabel(pr), grp: pr.group || "Vorrat & Gewürze", pp, lo, diff: lo != null ? hi - lo : 0, best: all[0], n: use[pr.id] || 0, home: home.has(pr.id)}; })
@@ -1953,7 +1959,16 @@ function zutatenHtml(){
   const cols = cmp ? `minmax(0,1fr) repeat(${SS.length},58px)` : `minmax(0,1fr) 64px 52px`;
   const full = rows.filter(x => x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
   const cell = (x, i) => { const v = x.pp[i]; return `<span class="num ${cmp && v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? eur(v) + (isEst(x.pr, SS[i]) ? "*" : "") : "–"}</span>`; };
-  return `<div class="lab">Märkte <span class="muted">(bis zu 3 zum Vergleichen)</span></div><div class="chips sm zst">${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+  const AB = {kaufland: "Kaufl.", edeka: "Edeka", penny: "Penny", netto: "Netto"}, ab = st => AB[st] || STORES[st];
+  if (wide) return `<div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
+    <div class="zw" style="--zn:${SS.length}"><div class="zwh">${SS.map(st => `<span>${ab(st)}</span>`).join("")}</div>
+    ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
+      + `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${fmtAmt(x.pr.pack, x.pr.unit)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`).join("")}
+    ${rows.length ? `<div class="zwr sum"><span class="zwn">Summe · ${full.length} Zutaten mit Preis überall</span><span class="zwp">${sums.map(v => `<span class="${v === Math.min(...sums) ? "cheap" : ""}">${Math.round(v)}</span>`).join("")}</span></div>
+      <div class="zwr"><span class="zwn small muted">wie oft am günstigsten</span><span class="zwp">${wins.map(w => `<span class="small">${w}×</span>`).join("")}</span></div>` : ""}</div>
+    <div class="small muted">Preise in € je Packung · * geschätzt · grün = am günstigsten · Antippen für Details.</div>`;
+  return `<div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="false">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
     <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
     <div class="ingg zg" style="--zc:${cols}"><div class="ih"><span>Zutat</span>${cmp ? SS.map(st => `<span class="num">${STORES[st]}</span>`).join("") : `<span class="num">${STORES[SS[0]]}</span><span class="num">Rez.</span>`}</div>
     ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
@@ -3803,7 +3818,7 @@ async function onClick(e){
   const zUpd = () => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); };
   const zs = t.closest("[data-zsort]"); if (zs) { zSort = zs.dataset.zsort; lsSet("zSort", zSort); zUpd(); return; }
   const zsb = t.closest("[data-zst]"); if (zsb) { const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi"; let L = (zStores || [def]).slice(); const k = zsb.dataset.zst;
-    L = L.includes(k) ? L.filter(x => x !== k) : [...L, k].slice(-3); if (!L.length) L = [k]; zStores = L; lsSet("zStores", L); if (zSort === "spar" && L.length < 2) zSort = "preis"; zUpd(); return; }
+    if (k === "*") L = L.length === prices.stores.length ? [def] : prices.stores.slice(); else { L = L.includes(k) ? L.filter(x => x !== k) : [...L, k]; if (!L.length) L = [k]; } zStores = L; lsSet("zStores", L); if (zSort === "spar" && L.length < 2) zSort = "preis"; zUpd(); return; }
   const zg = t.closest("[data-zgrp]"); if (zg) { zGrp = zg.dataset.zgrp; document.querySelectorAll("[data-zgrp]").forEach(b => b.setAttribute("aria-pressed", b === zg)); zUpd(); return; }
   const zi = t.closest("[data-zinfo]"); if (zi) { openSheet("zinfo", zi.dataset.zinfo); return; }
   const zf = t.closest("[data-zfind]"); if (zf) { closeSheet(); essenView = "rezepte"; recShelves = false; recFilter.q = zf.dataset.zfind; go("essen"); return; }
