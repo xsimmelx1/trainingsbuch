@@ -153,7 +153,7 @@ textarea{min-height:64px;resize:vertical}
 .ev.done .ti b{text-decoration:line-through;text-decoration-thickness:1px}
 .ev .st{font-size:12px;color:var(--muted)}
 .ev.done .st{color:var(--good)}
-.storecmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.storecmp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .storecmp div{border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;font-size:12px;background:var(--surface)}
 .storecmp div b{font-family:var(--f-num);font-size:14px}
 .budget .track{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
@@ -193,6 +193,26 @@ body.wo main{padding-bottom:110px}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
+.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.quick label{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font-size:13px;color:var(--muted)}
+.quick input{width:100%;min-width:0;padding:6px 8px}
+.mrows{display:flex;flex-direction:column;margin-top:6px}
+.mrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
+.mrow .mrmain{flex:1;display:flex;align-items:center;gap:10px;border:0;background:none;padding:0;text-align:left;color:var(--ink);font:inherit;min-width:0}
+.mrow .mthumb{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:none}
+.mrow .mtx{display:flex;flex-direction:column;min-width:0}
+.mrow .mtx b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.25}
+.mrow.done .mtx b{color:var(--muted);text-decoration:line-through}
+.mcheck{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);background:none;color:var(--good);font-weight:700;flex:none}
+.mcheck[aria-pressed="true"]{border-color:var(--good);background:var(--good-soft)}
+.pbars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.pbar{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}.pbar b{color:var(--ink);font-size:16px}
+details.slim{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:6px 0}
+details.slim > summary{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;cursor:pointer;list-style:none;font-weight:600}
+details.slim > summary span:first-child{white-space:nowrap;flex:none}
+details.slim > summary::-webkit-details-marker{display:none}
+details.slim > summary span:last-child{font-weight:400;font-size:13px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+details.slim > .card{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
 .subhead{margin:4px 0 10px}
 .subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
 h2.ptitle{margin:6px 0 10px}
@@ -1703,7 +1723,7 @@ function laterRow(it){
 let showDone = false;
 function renderToday(){
   ensureCur();
-  if (selDate === todayIso()) { if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {}); }
+  if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {});
   const t = todayIso(), isToday = selDate === t, hour = new Date().getHours(), wd = parse(selDate).getDay();
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate);
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
@@ -1722,18 +1742,17 @@ function renderToday(){
   items.sort((a, b) => (a.done - b.done) || (a.order - b.order));
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
-  h += `<div class="seg" role="group" aria-label="Ansicht">${[["training","Training"],["essen","Essen"],["alles","Alles"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
-  if (isToday && todayFocus !== "essen") {
-    const c = coach(), its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
+  {
+    const c = isToday ? coach() : null, its = todayItems("alles"), open = its.filter(i => !i.done), done = its.filter(i => i.done);
     if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
-    h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
-    if (open.length > 1) h += `<div class="lab sec">Später heute</div><div class="lrows">${open.slice(1).map(laterRow).join("")}</div>`;
-    h += `<div class="lrows">${[
-      `<div class="lrow ${num(cur.sleep) != null ? "done" : ""}"><span class="mdot static">${num(cur.sleep) != null ? "✓" : "😴"}</span><span class="lmain"><b>Schlaf & Gewicht</b><span class="small muted">kg nur, wenn gewogen</span></span><span class="mini"><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></span></div>`,
-      `<div class="lrow ${cur.boulder.done ? "done" : ""}"><span class="mdot static">${cur.boulder.done ? "✓" : "🧗"}</span><span class="lmain"><b>Bouldern heute?</b><span class="small muted">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`].join("")}</div>`;
+    if (isToday) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
+    const later = isToday ? open.slice(1) : open, LIM = 3;
+    if (later.length) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
+    h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><label><span>🧗 Bouldern</span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></label></div>
+      ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
     if (done.length) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
-    if (todayFocus === "training" || todayFocus === "alles") h += weekStrip();
+    h += weekStrip();
     view.innerHTML = h + `</div>`; return;
   }
   if (todayFocus !== "essen") h += heroCard();
@@ -1747,10 +1766,11 @@ function renderToday(){
 // Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
 function weekStrip(mo){
   mo = mo || monday(selDate); const t = todayIso(); let n = 0;
-  let h = `<div class="lab sec wsh"><span>Diese Woche</span><a href="#t=kalender">Kalender ›</a></div><div class="weekstrip" aria-label="Diese Woche">`;
+  for (let i = 0; i < 7; i++) if (isStrength(store.days[addDays(mo, i)])) n++;
+  let h = `<div class="lab sec wsh"><span>Diese Woche · ${n}/4 Einheiten</span><a href="#t=kalender">Kalender ›</a></div><div class="weekstrip" aria-label="Diese Woche">`; n = 0;
   for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p = planFor(d), s = isStrength(day), b = day?.boulder?.done; if (s) n++;
     h += `<button type="button" class="${s ? "done" : b ? "bould" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : p ? "" : ""}</span><span class="tm">${!s && p?.start ? p.start : ""}</span></button>`; }
-  return h + `</div><div class="small muted">${n}/4 Einheiten diese Woche · Serie: ${streak()} Woche${streak() === 1 ? "" : "n"} mit ≥ 2</div>`;
+  return h + `</div>`;
 }
 function gapBanner(){
   const st = S().startDate; if (!st || todayIso() < st || selDate !== todayIso()) return "";
@@ -2754,7 +2774,7 @@ function mealBarsOld(t){
   const T = foodTarget(), bar = (lab, e, pl, tg, unit) => `<div class="mbar"><div class="small"><b>${lab}</b> ${e} / ${tg} ${unit}${unit === "g" ? " (mind.)" : ""} <span class="muted">· Plan ${pl}</span></div><div class="track"><div class="plan" style="width:${Math.min(pl / tg * 100, 100)}%"></div><div class="fill" style="width:${Math.min(e / tg * 100, 100)}%"></div></div></div>`;
   return bar("Energie", t.eKcal, t.kcal, T.kcal, "kcal") + bar("Protein", t.eProtein, t.protein, T.protein, "g");
 }
-let mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus2") || "training";
+let showMore = false, mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus2") || "training";
 function mealCard(d, forceOpen){
   if (!mealPlan || !recipes) { ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {}); return `<div class="card"><h2>Essen</h2><div class="small muted">Lade Ernährungsplan …</div></div>`; }
   const ms = mealsFor(d), t = mealTotals(ms), T = foodTarget(), gap = T.kcal - t.kcal, eaten = ms.filter(m => m.ate).length;
@@ -2819,7 +2839,7 @@ function trainLine(d){
 }
 // ---------- Preise: recherchierte Richtpreise je Markt (prices.json), keine Live-Daten ----------
 let prices = null, pricesReady = null;
-const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny"};
+const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny", edeka: "Edeka"};
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
   if (prices) return Promise.resolve();
@@ -2998,7 +3018,7 @@ async function receiptText(file){
 // Zeilen eines deutschen Kassenbons → Positionen mit Preis; Gewichts- und Mengenzeilen werden verrechnet
 function parseReceipt(text){
   const lines = text.split(/\n/).map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean), up = text.toUpperCase();
-  const store = /REWE/.test(up) ? "rewe" : /LIDL/.test(up) ? "lidl" : /ALDI/.test(up) ? "aldi" : /KAUFLAND/.test(up) ? "kaufland" : /NETTO/.test(up) ? "netto" : /PENNY/.test(up) ? "penny" : (FOOD().store !== "min" && FOOD().store) || "aldi";
+  const store = /REWE/.test(up) ? "rewe" : /LIDL/.test(up) ? "lidl" : /ALDI/.test(up) ? "aldi" : /KAUFLAND/.test(up) ? "kaufland" : /NETTO/.test(up) ? "netto" : /PENNY/.test(up) ? "penny" : /EDEKA|MARKTKAUF|E CENTER/.test(up) ? "edeka" : (FOOD().store !== "min" && FOOD().store) || "aldi";
   const skip = /^(SUMME|ZU ZAHLEN|GESAMT|ZWISCHENSUMME|GEGEBEN|R[ÜU]CKGELD|BAR\b|EC[- ]|VISA|MASTERCARD|KARTE|KARTENZAHLUNG|PFAND|LEERGUT|RABATT|COUPON|BONUS|PAYBACK|PUNKTE|STEUER|MWST|NETTO\s*(EUR|€|\d)|BRUTTO\s*(EUR|€|\d)|DATUM|UHRZEIT|KASSE|BELEG|TSE|FILIALE|ST\.?NR|TEL\.|WWW\.)|\b(MWST|SUMME|PFAND|RABATT|R[ÜU]CKGELD|GEGEBEN)\b/i;
   const items = [];
   for (const l of lines) {
@@ -3274,7 +3294,7 @@ function foodSettingsHtml(){
       ${info("Der Plan tauscht frisch gekochte Gerichte, die darüber liegen, gegen ähnliche mit passendem Protein. Meal Prep bleibt, weil es nur einmal pro Woche gekocht wird. Jedes Rezept zeigt aktive Zeit, Gesamtzeit und Schwierigkeit.")}</div>
     <div class="card"><h2>Preise</h2>
       <label class="check"><input type="checkbox" id="foodPrices" ${f.prices ? "checked" : ""}><span>Preise pro Gericht und Einkauf anzeigen</span></label>
-      <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["netto","Netto"],["penny","Penny"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+      <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["netto","Netto"],["penny","Penny"],["edeka","Edeka"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
       <label class="check"><input type="checkbox" id="foodBio" ${f.bio ? "checked" : ""}><span>Bio für alle Produkte <span class="small muted">(Bio-Preis, wo bekannt; Budget und Einkauf rechnen damit)</span></span></label>
       ${prices && !f.bio ? bioPicker(f) : ""}
       <div class="small muted">${prices ? priceNote() : "Richtpreise werden geladen …"}</div></div>
@@ -3298,6 +3318,8 @@ function foodSettingsHtml(){
       <div class="btnrow two"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">Google Kalender ↗</a></div></div>` : ""}`;
 }
 function weekPlanCost(mo){ let c = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) c += mealCost(m.name) || 0; return c; }
+function budgetSlim(mo){ const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return ""; const cost = weekShopCost(mo);
+  return `<details class="slim ${cost > budget ? "over" : ""}"><summary><span>💶 Budget</span><span class="${cost > budget ? "warnt" : "muted"}">${eur(cost)} von ${eur(budget)}${cost > budget ? " ⚠" : " ✓"}</span></summary>${budgetCard(mo)}</details>`; }
 function budgetCard(mo){
   const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return "";
   const cost = weekShopCost(mo), b = budgetOn() ? budgetSubs(mo) : null, n = b ? Object.keys(b.subs).length : 0;
@@ -3310,6 +3332,13 @@ let openDays = null, essenDay = null;
 function ringHtml(v, target, label){
   const pct = target ? Math.min(v / target, 1) : 0, r = 30, c = 2 * Math.PI * r;
   return `<div class="ring"><svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="${r}" class="rbg"/><circle cx="36" cy="36" r="${r}" class="rfg ${v >= target ? "full" : ""}" stroke-dasharray="${(pct * c).toFixed(1)} ${c.toFixed(1)}"/></svg><div><b>${Math.round(v)}</b><span class="small muted">/ ${Math.round(target)} ${label}</span></div></div>`;
+}
+// Kompakte Zeile: Bild, Zeit · Art, Name, Werte; ✓ rechts; Tippen öffnet das Rezept (dort Tauschen)
+function diaryRow(d, m){
+  const r = m.info, rec = recipeByName(m.name);
+  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}">
+    <button type="button" class="mrmain" ${m.own ? "disabled" : rec ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
+    ${m.own ? `<button type="button" class="btn small ghost ic" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Entfernen">✕</button>` : ""}<button type="button" class="mcheck" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button></div>`;
 }
 function diaryCard(d, m){
   const r = m.info, rec = recipeByName(m.name);
@@ -3330,21 +3359,22 @@ function essenHtml(b){
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
   if (mo !== monday(t)) h += `<button class="btn ghost small" type="button" data-ew="0">Diese Woche</button>`;
-  h += budgetCard(mo);
   if (!essenDay || monday(essenDay) !== mo) essenDay = mo === monday(t) ? t : mo;
   // B: Wochenleiste (Tag wählen) und Meal-Prep-Karte
   h += `<div class="daychips" role="tablist">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(mo, i), ms = mealsFor(d), n = ms.filter(m => m.ate).length;
     return `<button type="button" role="tab" data-eday="${d}" aria-selected="${d === essenDay}" class="${d === t ? "today" : ""}"><span>${WD[parse(d).getDay()]}</span><b>${parse(d).getDate()}</b><i>${n ? "●".repeat(Math.min(n, 3)) : "&nbsp;"}</i></button>`; }).join("")}</div>`;
   const batch = [W.batchA, W.batchB].map(n => (budgetOn() && budgetSubs(mo).subs[n]) || n);
-  h += `<div class="card prepcard"><div class="mhead"><span><span class="lab">🍳 Meal Prep · Sonntag davor</span><br><b>2 Gerichte, je 4 Portionen für Mo–Do</b></span>${W.prepNote ? info(esc(W.prepNote)) : ""}</div>
+  const prep = `<details class="slim"><summary><span>🍳 Meal Prep</span><span class="muted">${batch.map(n => esc(mealInfo(n).name.split(/ mit | & |,/)[0])).join(" · ")}</span></summary><div class="card prepcard"><div class="small muted">Sonntag davor: 2 Gerichte, je 4 Portionen für Mo–Do ${W.prepNote ? info(esc(W.prepNote)) : ""}</div>
     <div class="preprow">${batch.map(n => `<button type="button" class="prepi" data-recipe="${esc(n)}">${mealThumb(n)}<span><b>${esc(mealInfo(n).name)}</b><span class="small muted">${mealInfo(n).kcal} kcal · ${mealInfo(n).protein} g P</span></span></button>`).join("")}</div>
-    <button class="btn small" type="button" data-prepshop>🛒 Einkauf für die Woche ›</button></div>`;
+    <button class="btn small" type="button" data-prepshop>🛒 Einkauf für die Woche ›</button></div></details>`;
   // A: Tagebuch des gewählten Tags
   const d = essenDay, ms = mealsFor(d), tt = mealTotals(ms), tg = foodTarget();
-  h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted nutri">Plan ${tt.kcal} kcal · ${tt.protein} g P</span></div>
-    <div class="rings nutri">${ringHtml(tt.eKcal, tg.kcal, "kcal")}${ringHtml(tt.eProtein, tg.protein, "g Protein")}</div><div class="small">${trainLine(d)}</div></div>
-    <div class="mcards">${ms.map(m => diaryCard(d, m)).join("")}</div>
-    <div class="btnrow two"><button class="btn" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn" type="button" data-ownscan="${d}">📷 Barcode scannen</button></div>`;
+  const bar = (v, g, l) => `<div class="pbar"><span><b>${Math.round(v)}</b> / ${g} ${l}</span><div class="track"><div class="fill" style="width:${Math.min(v / g * 100, 100)}%"></div></div></div>`;
+  h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted">${esc(trainLine(d).replace(/<[^>]+>/g, ""))}</span></div>
+    <div class="pbars nutri">${bar(tt.eKcal, tg.kcal, "kcal")}${bar(tt.eProtein, tg.protein, "g Protein")}</div>
+    <div class="mrows">${ms.map(m => diaryRow(d, m)).join("")}</div>
+    <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn ghost small" type="button" data-ownscan="${d}">📷 Scannen</button></div></div>`;
+  h += `<div class="lab sec">Die Woche</div>` + prep + budgetSlim(mo);
   b.innerHTML = h;
 }
 
@@ -3531,6 +3561,7 @@ async function onClick(e){
   const cw2 = t.closest("[data-catw]"); if (cw2) { catF.where = cw2.dataset.catw; renderMore(); return; }
   const cm2 = t.closest("[data-catm]"); if (cm2) { catF.m = cm2.dataset.catm; renderMore(); return; }
   if (t.closest("[data-catp]")) { catF.plan = !catF.plan; renderMore(); return; }
+  if (t.closest('[data-act="toggleMore"]')) { showMore = !showMore; renderToday(); return; }
   const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus2", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }

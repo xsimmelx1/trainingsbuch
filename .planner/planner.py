@@ -441,7 +441,7 @@ def load_prices():
         return None
     for pr in P["products"]:
         pr["re"] = re.compile(pr["match"], re.I)
-    P["stores"] = [st for st in ("rewe", "lidl", "aldi", "kaufland", "netto", "penny") if any(st in (pr.get("prices") or {}) for pr in P["products"])]
+    P["stores"] = [st for st in ("rewe", "lidl", "aldi", "kaufland", "netto", "penny", "edeka") if any(st in (pr.get("prices") or {}) for pr in P["products"])]
     return P
 
 
