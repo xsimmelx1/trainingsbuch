@@ -229,6 +229,11 @@ body.wo main{padding-bottom:110px}
 .vplay{position:absolute;inset:0;margin:auto;width:60px;height:60px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;font-size:26px;display:grid;place-items:center}
 .vmarks{display:flex;flex-wrap:wrap;gap:6px}
 .vm{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;min-height:36px;font:inherit;font-size:13px}
+.vclip{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000;position:relative}
+.vclip iframe{width:100%;height:100%;border:0;pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;align-self:flex-start}
+.seg button{border:0;background:none;color:var(--ink);padding:6px 14px;min-height:38px;font:inherit;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed=true]{background:var(--accent-soft);font-weight:600}
 .vframe{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .vframe iframe{width:100%;height:100%;border:0}
 details.info{display:inline-block}
@@ -1328,6 +1333,33 @@ function videoHtml(key, fallbackQ, noNote){
     ${(v.markers || []).length || v.start ? `<div class="vmarks">${v.start ? `<button type="button" class="vm" data-play="${esc(key)}" data-t="${Number(v.start)}">▶ Übung ab ${mmss(v.start)}</button>` : ""}${(v.markers || []).filter(x => x.t !== v.start).map(x => `<button type="button" class="vm" data-play="${esc(key)}" data-t="${Number(x.t)}">${esc(x.label)} · ${mmss(x.t)}</button>`).join("")}</div>` : ""}
     <div class="small muted">🎬 ${esc(v.title || "Video")}${v.channel ? " · " + esc(v.channel) : ""}${v.lang === "de" ? " · Deutsch" : ""}${v.note && !noNote ? `<br>${esc(v.note)}` : ""}</div></div>`;
 }
+// Bewegungs-Clip: Ausführungsteil des Erklärvideos stumm in Schleife; Shorts ganz
+function clipOf(key){
+  const v = VIDS?.[key]; if (!v?.video) return null;
+  const mk = (v.markers || []).find(x => /Ausführung|Demo/i.test(x.label)), short = v.dur && v.dur <= 75;
+  const st = short ? 0 : mk ? mk.t : (v.start || 0);
+  return {id: v.video, s: st, e: short ? 0 : st + 10};
+}
+let animMode = lsGet("animMode") || "video";
+function clipHtml(key){
+  const c = clipOf(key); if (!c) return "";
+  return `<div class="vclip"><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${c.s}${c.e ? "&end=" + c.e : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
+}
+function motionHtml(key, img, alt, still){
+  const c = clipOf(key), useClip = c && animMode === "video";
+  const sw = c && img ? `<div class="seg small"><button type="button" data-anim="video" aria-pressed="${useClip}">🎬 Bewegung</button><button type="button" data-anim="img" aria-pressed="${!useClip}">🖼 Bilder</button></div>` : "";
+  if (useClip) return sw + clipHtml(key) + `<div class="small muted">Stummer Ausschnitt aus dem Erklärvideo${c.s ? ` ab ${mmss(c.s)}` : ""}, läuft in Schleife.</div>`;
+  return sw + (img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : "");
+}
+// Schleife: am Ende des Ausschnitts zurück zum Anfang (YouTube-Iframe-API per postMessage)
+window.addEventListener("message", ev => {
+  if (!/youtube/.test(ev.origin)) return; let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; }
+  const st = d?.event === "onStateChange" ? d.info : d?.event === "infoDelivery" ? d.info?.playerState : null, ct = d?.event === "infoDelivery" ? d.info?.currentTime : null;
+  for (const f of document.querySelectorAll("iframe[data-clip]")) if (f.contentWindow === ev.source) { const c = clipOf(f.dataset.clip); if (!c) return;
+    if (!(st === 0 || (c.e && ct != null && ct >= c.e - 0.4))) return;
+    const cmd = (func, args) => f.contentWindow.postMessage(JSON.stringify({event: "command", func, args}), "*"); cmd("seekTo", [c.s, true]); cmd("playVideo", []); }
+});
+function hookClips(){ for (const f of document.querySelectorAll("iframe[data-clip]")) if (!f._hooked) { f._hooked = true; f.addEventListener("load", () => f.contentWindow.postMessage(JSON.stringify({event: "listening", id: f.dataset.clip, channel: "widget"}), "*")); } }
 const mmss = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
 function playVideo(key, t){
   const v = VIDS?.[key], box = document.getElementById("vid-" + key.replace(":", "_")); if (!v || !box) return;
@@ -1671,7 +1703,7 @@ function releaseWake(){ try { wakeLock && wakeLock.release(); } catch {} wakeLoc
 let pendingConfirm = null;
 function openSheet(kind, arg){ pendingConfirm = null; mobZoom = null; sheetKind = kind; sheetArg = arg; renderSheet(); if (!sheet.open) sheet.showModal(); }
 function closeSheet(){ if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); }
-function renderSheet(){
+function renderSheet(){ setTimeout(hookClips, 0);
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="grab"></div>`;
   if (sheetKind === "mob") {
@@ -1679,7 +1711,7 @@ function renderSheet(){
     MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : ""}<span>${esc(t)}</span><span class="go">›</span></button></div>`; });
     if (mobZoom != null) { const [k, t, img] = MOBILITY[mobZoom], g = GUIDE[k];
       h += `<div class="zoomov" data-mobzoom="close"><div class="zoomcard" role="dialog" aria-label="${esc(t)}"><div class="zh"><span class="lab">Übung ${mobZoom + 1} von ${MOBILITY.length}</span><button type="button" class="btn ghost small" data-mobzoom="close" aria-label="Schließen">✕</button></div>
-        ${img ? animHtml(img, t) : ""}<div class="zt">${esc(t)}</div>
+        ${motionHtml("mob:" + k, img, t, false)}<div class="zt">${esc(t)}</div>
         ${videoHtml("mob:" + k, "")}
         ${MOB_INFO[k] ? `<div class="whyb"><div class="lab">Wofür gut</div><div>${esc(MOB_INFO[k].why)}</div></div>${muscleMap(MOB_INFO[k].m)}` : ""}
         ${k === "knietest" ? `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}` : ""}
@@ -1713,8 +1745,7 @@ function renderSheet(){
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
     h += `<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? e.sets + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}</div>
-      ${e.img && !still ? `<div class="small muted">Wechselt alle 1,5 s zwischen Start und Ende · antippen zum Anhalten</div>` : ""}
-      ${e.img ? `<div class="exvis">${animHtml(e.img, e.name).replace('class="anim"', `class="anim${still ? " still" : ""}"`)}${still ? "" : `<div class="frames"><figure><img src="${isrc(e.img, 0)}" alt="" loading="lazy"><figcaption><b>1</b> Start</figcaption></figure><span class="farrow">→</span><figure><img src="${isrc(e.img, 1)}" alt="" loading="lazy"><figcaption><b>2</b> Ende</figcaption></figure></div>`}</div>` : ""}
+      ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}${still || !e.img ? "" : `<div class="frames"><figure><img src="${isrc(e.img, 0)}" alt="" loading="lazy"><figcaption><b>1</b> Start</figcaption></figure><span class="farrow">→</span><figure><img src="${isrc(e.img, 1)}" alt="" loading="lazy"><figcaption><b>2</b> Ende</figcaption></figure></div>`}</div>` : ""}
       ${prim.length ? `<div class="whyb"><div class="lab">Wofür</div>Trainiert vor allem ${esc(prim.join(" und "))}.${MOB_INFO[sheetArg] ? " " + esc(MOB_INFO[sheetArg].why) : ""}</div>` : ""}
       <div class="lab">So geht's</div><ol class="steps">${(e.cue || []).map(c => `<li>${esc(c)}</li>`).join("")}</ol>
       ${e.note || e.gate ? `<div class="warnb"><div class="lab">Für dich wichtig</div>${e.note ? esc(e.note) : ""}${e.gate && !S().scCleared ? `${e.note ? "<br>" : ""}Schlüsselbein: Ampel beachten, ab 3/10 Schmerz die Ersatzübung nehmen.` : ""}</div>` : ""}
@@ -2748,6 +2779,7 @@ async function onClick(e){
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
   if (t.closest("[data-budgettoggle]")) { saveFood({budgetIgnore: !FOOD().budgetIgnore}); render(); return; }
   if (t.closest("#syncBtn")) { toast(syncDetail || "Alles gespeichert."); return; }
+  const am = t.closest("[data-anim]"); if (am) { animMode = am.dataset.anim; lsSet("animMode", animMode); renderSheet(); return; }
   const an = t.closest(".exvis .anim"); if (an) { an.classList.toggle("paused"); return; }
   const pv = t.closest("[data-play]"); if (pv) { playVideo(pv.dataset.play, pv.dataset.t != null ? Number(pv.dataset.t) : undefined); return; }
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") ? t : null;
