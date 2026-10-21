@@ -1,5 +1,5 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v51";
+const CACHE = "tb-v52";
 const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "videos.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
@@ -17,7 +17,7 @@ self.addEventListener("fetch", e => {
     return;
   }
   // App-Hülle: erst Netz (damit Updates ankommen), offline aus dem Cache
-  e.respondWith(fetch(e.request).then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return res; }).catch(() => caches.match(e.request).then(r => r || caches.match("index.html"))));
+  e.respondWith(fetch(e.request).then(res => { if (res.ok) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); } return res; }).catch(() => caches.match(e.request).then(r => r || caches.match("index.html"))));
 });
 
 self.addEventListener("push", e => {

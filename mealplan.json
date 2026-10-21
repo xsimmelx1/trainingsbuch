@@ -86,7 +86,7 @@
   },
   {
    "batchA": "Mango-Linsensalat mit mariniertem Tofu",
-   "batchB": "Burrito mit Soja-Hack, Bohnen & Käsesoße",
+   "batchB": "Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa",
    "fr": [
     "Mocha-Skyr-Overnight-Oats",
     "Herzhafte Spinat-Pancakes mit Kräuter-Skyr",
@@ -100,7 +100,7 @@
    "frAbend": "Smashed Potatoes mit Zitronen-Kräuterquark",
    "saAbend": "Gefüllte Spitzpaprika mit Feta-Hüttenkäse-Creme",
    "soAbend": "Halloumi-Carbonara mit Hartkäse",
-   "prepNote": "Meal Prep am Sonntag: Mango-Linsensalat mit mariniertem Tofu und Burrito mit Soja-Hack, Bohnen & Käsesoße je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Mango-Linsensalat mit mariniertem Tofu und Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa je 4 Portionen für Mo–Do. Mango-Linsensalat mit mariniertem Tofu: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "Linseneintopf mit Räuchertofu & Kartoffeln",
@@ -156,7 +156,7 @@
     "Protein-Käsekuchen ohne Boden mit Beeren"
    ],
    "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
-   "prepNote": "Meal Prep am Sonntag: Linsen-Tofu-Curry mit Pak Choi und Ofengemüse-Salat mit Halloumi & Kichererbsen je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Linsen-Tofu-Curry mit Pak Choi und Ofengemüse-Salat mit Halloumi & Kichererbsen je 4 Portionen für Mo–Do. Ofengemüse-Salat mit Halloumi & Kichererbsen: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "Chili sin Carne mit Sojagranulat & Reis",
@@ -177,7 +177,7 @@
   },
   {
    "batchA": "Penne-Spinat-Auflauf mit Feta & Ei",
-   "batchB": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
+   "batchB": "Gelbes Tofu-Linsen-Curry mit Möhren & Paprika",
    "fr": [
     "Beeren-Zimt-Baked-Protein-Oats",
     "Dinkel-Crêpes mit Blaubeerquark",
@@ -191,7 +191,7 @@
    "frAbend": "Knusprige Tofu-Ecken in Erdnusssoße mit Brokkoli",
    "saAbend": "Spinat-Crêpes mit Kräuterquark & Radieschen-Feldsalat",
    "soAbend": "Rührtofu mit Kartoffelpüree & Rahmspinat",
-   "prepNote": "Meal Prep am Sonntag: Penne-Spinat-Auflauf mit Feta & Ei und Tofu-Souvlaki mit griechischem Bauernsalat & Feta je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Penne-Spinat-Auflauf mit Feta & Ei und Gelbes Tofu-Linsen-Curry mit Möhren & Paprika je 4 Portionen für Mo–Do. Penne-Spinat-Auflauf mit Feta & Ei: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "Erdnuss-Nudeln mit Tofu & Edamame",
@@ -247,7 +247,7 @@
     "Protein-Käsekuchen ohne Boden mit Beeren"
    ],
    "trainingSnack": "Blaubeer-Seidentofu-Skyr-Smoothie",
-   "prepNote": "Meal Prep am Sonntag: Spaghetti-Auflauf mit Hüttenkäse & Tomaten und Falafel in orientalischer Linsensuppe mit Skyr je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Spaghetti-Auflauf mit Hüttenkäse & Tomaten und Falafel in orientalischer Linsensuppe mit Skyr je 4 Portionen für Mo–Do. Spaghetti-Auflauf mit Hüttenkäse & Tomaten und Falafel in orientalischer Linsensuppe mit Skyr: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "White Chickpea Chili mit Skyr-Topping",
@@ -282,7 +282,7 @@
    "frAbend": "Tofu-Stroganoff mit Champignons & Bandnudeln",
    "saAbend": "Schnelle Miso-Ramen mit Tofu & Ei",
    "soAbend": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
-   "prepNote": "Meal Prep am Sonntag: Rote-Linsen-Salat mit Feta, Mango & Cashews und Thai-Curry mit Tofu, Kürbis & grünen Bohnen je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Rote-Linsen-Salat mit Feta, Mango & Cashews und Thai-Curry mit Tofu, Kürbis & grünen Bohnen je 4 Portionen für Mo–Do. Rote-Linsen-Salat mit Feta, Mango & Cashews und Thai-Curry mit Tofu, Kürbis & grünen Bohnen: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
@@ -329,7 +329,7 @@
    "saAbend": "Backofengemüse mit Kidneybohnen & Schafskäse",
    "soAbend": "Wraps mit gerösteten weißen Bohnen, Avocado & Rotkohl",
    "trainingSnack": "Erdnuss-Bananen-Quark-Shake",
-   "prepNote": "Meal Prep am Sonntag: Kichererbsen-Pasta mit Linsennudeln & Hartkäse und Kohlrabi-Lasagne mit Senfcreme je 4 Portionen für Mo–Do.",
+   "prepNote": "Meal Prep am Sonntag: Kichererbsen-Pasta mit Linsennudeln & Hartkäse und Kohlrabi-Lasagne mit Senfcreme je 4 Portionen für Mo–Do. Kichererbsen-Pasta mit Linsennudeln & Hartkäse: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage).",
    "snacks": [
     "Skyr-Tzatziki mit Vollkorn-Knäcke",
     "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
@@ -360,7 +360,7 @@
   },
   {
    "batchA": "Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing",
-   "batchB": "Hüttenkäse-Taler mit Rucolasalat & Kräuterquark",
+   "batchB": "Indischer Rote-Linsen-Eintopf mit Reis & Skyr",
    "fr": [
     "Mocha-Skyr-Overnight-Oats",
     "Möhren-Rührei mit Räuchertofu & Feta",
@@ -374,7 +374,7 @@
    "frAbend": "Griechischer Spinatreis mit gebackenem Feta",
    "saAbend": "Rosenkohl-Kartoffel-Auflauf mit Hartkäse",
    "soAbend": "Seitan-Gulasch mit Paprika & Kartoffeln",
-   "prepNote": "Meal Prep am Sonntag: Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing und Hüttenkäse-Taler mit Rucolasalat & Kräuterquark je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing und Indischer Rote-Linsen-Eintopf mit Reis & Skyr je 4 Portionen für Mo–Do. Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   },
   {
    "batchA": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
@@ -429,7 +429,7 @@
     "Protein-Käsekuchen ohne Boden mit Beeren"
    ],
    "trainingSnack": "Blaubeer-Seidentofu-Skyr-Smoothie",
-   "prepNote": "Meal Prep am Sonntag: Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße und Halloumi-Tikka-Masala mit Reis je 4 Portionen für Mo–Do."
+   "prepNote": "Meal Prep am Sonntag: Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße und Halloumi-Tikka-Masala mit Reis je 4 Portionen für Mo–Do. Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße und Halloumi-Tikka-Masala mit Reis: die Portionen für Mi/Do direkt einfrieren (hält im Kühlschrank nur 3 Tage)."
   }
  ],
  "away": {

@@ -30,7 +30,7 @@
   "note": "adaptiert: Protein über Skyr statt Whey",
   "img": "img/rezepte/r00.jpg",
   "imgCredit": {
-   "artist": "Kolforn (Kolforn)\nI'd appreciate if you could mail me (Kolforn@gmail.com) if you",
+   "artist": "Kolforn (Kolforn",
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:-2019-02-07_Overnight_Oats,_Cromer.JPG",
    "title": "File:-2019-02-07 Overnight Oats, Cromer.JPG"
@@ -431,7 +431,8 @@
    "2 Möhren",
    "1 EL Olivenöl",
    "40 g vegetarischer Hartkäse (mikrobielles Lab)",
-   "Tomatenmark, Oregano, Sojasauce, Salz, Pfeffer"
+   "Tomatenmark, Oregano, Sojasauce, Salz, Pfeffer",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Sojagranulat 10 Min. in heißer Brühe einweichen, ausdrücken.",
@@ -474,7 +475,8 @@
    "1 EL Öl",
    "240 g Reis (roh)",
    "200 g Skyr als Topping",
-   "Kreuzkümmel, Chili, Paprika edelsüß, 1 TL Kakao"
+   "Kreuzkümmel, Chili, Paprika edelsüß, 1 TL Kakao",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Granulat in Brühe einweichen, ausdrücken, in Öl scharf anbraten.",
@@ -641,7 +643,8 @@
    "2 Paprika",
    "1 rote Zwiebel",
    "1 EL Olivenöl",
-   "Kreuzkümmel, Paprikapulver, Zitrone, Petersilie"
+   "Kreuzkümmel, Paprikapulver, Zitrone, Petersilie",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Couscous mit gleicher Menge heißer Brühe übergießen, 5 Min. quellen.",
@@ -2242,7 +2245,8 @@
    "2 EL Chili-Bohnenpaste (Doubanjiang) oder Sambal Oelek",
    "3 EL Sojasauce",
    "2 TL Speisestärke",
-   "Knoblauch, Ingwer, Sichuanpfeffer oder Pfeffer"
+   "Knoblauch, Ingwer, Sichuanpfeffer oder Pfeffer",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Reis kochen. Sojagranulat 10 Min. in heißer Brühe einweichen und gut ausdrücken.",
@@ -2325,7 +2329,8 @@
    "500 g Magerquark",
    "1 Salatgurke",
    "250 g Kirschtomaten",
-   "Gyrosgewürz, Knoblauch, Zitronensaft, Salz"
+   "Gyrosgewürz, Knoblauch, Zitronensaft, Salz",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Sojaschnetzel 10 Min. in heißer Brühe einweichen, kräftig ausdrücken, mit Sojasauce, 2 EL Öl und Gyrosgewürz mischen.",
@@ -2372,7 +2377,8 @@
    "1 Ei",
    "300 g TK-Spinat",
    "60 g Gouda (gerieben) (vegetarisch, auf mikrobielles Lab/V-Label achten)",
-   "Oregano, Muskat, Knoblauch, Salz, Pfeffer"
+   "Oregano, Muskat, Knoblauch, Salz, Pfeffer",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Sojagranulat 10 Min. in heißer Brühe einweichen und ausdrücken. Zwiebel und Möhren fein würfeln, im Öl anschwitzen, Granulat anbraten.",
@@ -2548,7 +2554,8 @@
    "1 EL Olivenöl",
    "200 g Feta (vegetarisch, auf mikrobielles Lab/V-Label achten)",
    "250 g Skyr natur",
-   "Kreuzkümmel, Paprikapulver, Oregano, Knoblauch, Salz, Pfeffer"
+   "Kreuzkümmel, Paprikapulver, Oregano, Knoblauch, Salz, Pfeffer",
+   "200 ml Gemüsebrühe (zum Einweichen)"
   ],
   "steps": [
    "Ofen auf 200 °C vorheizen. Paprika längs halbieren, entkernen und 10 Min. vorbacken. Reis kochen.",
@@ -2736,7 +2743,7 @@
    "url": "https://www.flickr.com/photos/58301516@N00/23209305283",
    "title": "Breakfast: mango (), oat porridge and coffee with almond and coconut milk."
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Hüttenkäse-Pancakes mit Blaubeeren & Mandeln",
@@ -2896,7 +2903,7 @@
    "2 Knoblauchzehen",
    "1 Zitrone",
    "125 g Rucola",
-   "250 g Mozzarella",
+   "250 g Mozzarella (vegetarisch, mikrobielles Lab)",
    "3 EL Olivenöl",
    "Salz, Pfeffer"
   ],
@@ -2915,7 +2922,7 @@
    "url": "https://commons.wikimedia.org/wiki/File:Pasta,_Rocket,_Red_Lentils_%26_Goat_Cheese_(4370431939).jpg",
    "title": "File:Pasta, Rocket, Red Lentils & Goat Cheese (4370431939).jpg"
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Linsennudel-Auflauf mit Brokkoli & Mozzarella",
@@ -2939,7 +2946,7 @@
    "1 EL Rapsöl",
    "850 ml stückige Tomaten (Dose)",
    "Salz, Pfeffer, Cayennepfeffer",
-   "125 g Mozzarella"
+   "125 g Mozzarella (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Ofen auf 180 °C vorheizen. Linsennudeln knapp bissfest kochen.",
@@ -3166,7 +3173,7 @@
   "ingredients": [
    "250 g Basmatireis",
    "Salz",
-   "400 g Halloumi",
+   "400 g Halloumi (vegetarisch, mikrobielles Lab)",
    "1 Zwiebel",
    "15 g Ingwer",
    "2 Knoblauchzehen",
@@ -3278,7 +3285,7 @@
    "50 g Cashewkerne",
    "370 g Räuchertofu",
    "3 Eier (M)",
-   "75 g Feta",
+   "75 g Feta (vegetarisch, mikrobielles Lab)",
    "Pfeffer",
    "1 kg Tomaten",
    "1 Zwiebel",
@@ -3376,7 +3383,7 @@
    "Salz, Pfeffer, Muskat",
    "1/2 Zitrone",
    "12 Lasagneplatten",
-   "200 g Feta"
+   "200 g Feta (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Spinat auftauen und ausdrücken; Knoblauch hacken und im Öl kurz anschwitzen, mit Spinat und Skyr mischen.",
@@ -3417,7 +3424,7 @@
    "100 g Kidneybohnen (Dose, abgetropft)",
    "50 ml Kochsahne 15 %",
    "100 ml Sojadrink natur",
-   "100 g geriebener Käse (Cheddar/Gouda)",
+   "100 g geriebener Käse (Cheddar/Gouda) (vegetarisch, mikrobielles Lab)",
    "20 g Weizenmehl",
    "75 g Feldsalat",
    "1/2 Glas Jalapeños",
@@ -3459,7 +3466,7 @@
    "1 Bund Frühlingszwiebeln",
    "400 g Hüttenkäse",
    "2 Eier (M)",
-   "100 g geriebener Emmentaler",
+   "100 g geriebener Emmentaler (vegetarisch, mikrobielles Lab)",
    "50 g Weizenmehl",
    "Salz, Pfeffer",
    "1 TL Basilikum getrocknet",
@@ -3509,7 +3516,7 @@
    "2 rote Zwiebeln",
    "100 g schwarze Oliven",
    "16 Scheiben Vollkorn-Knäckebrot",
-   "100 g geriebener Gouda"
+   "100 g geriebener Gouda (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Ofen auf 200 °C vorheizen. Die Hälfte der Tomaten fein hacken, mit Hüttenkäse und der Hälfte des Schnittlauchs mischen und würzen.",
@@ -3521,7 +3528,7 @@
   "note": "nach REWE; Marken-Protein-Knäcke durch normales Vollkorn-Knäcke ersetzt",
   "img": "img/rezepte/x-082.jpg",
   "imgCredit": {
-   "artist": "Kolforn (Kolforn) I'd appreciate if you could mail me (Kolforn@gmail.com) if you want to use this picture out of the Wik",
+   "artist": "Kolforn (Kolforn",
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:-2019-05-17_Cheese,_tomato_and_egg_on_rye_crispbread_(1).JPG",
    "title": "File:-2019-05-17 Cheese, tomato and egg on rye crispbread (1).JPG"
@@ -3644,7 +3651,7 @@
    "3 Strauchtomaten",
    "1/2 TL Muskat",
    "12 Eier (M)",
-   "250 g Mozzarella light",
+   "250 g Mozzarella light (vegetarisch, mikrobielles Lab)",
    "4 EL Olivenöl",
    "Abrieb von 1/2 Zitrone",
    "1 Knoblauchzehe",
@@ -3789,7 +3796,7 @@
    "1 Paprika gelb",
    "800 g Tofu natur",
    "1 Fladenbrot",
-   "150 g Feta",
+   "150 g Feta (vegetarisch, mikrobielles Lab)",
    "2 TL italienische Kräuter",
    "8 eingelegte Peperoni",
    "2 TL Oregano, 2 TL Paprikapulver, 1 TL Knoblauchgranulat"
@@ -3879,7 +3886,7 @@
    "1 Salatgurke",
    "4 EL Olivenöl",
    "125 g Rucola",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, mikrobielles Lab)",
    "1 Limette",
    "4 EL Cashewkerne",
    "300 g rote Linsen (trocken)"
@@ -3905,11 +3912,11 @@
   "name": "Gebratene Quarkklöße mit Salat & Radieschen",
   "category": "abend",
   "servings": 4,
-  "kcal": 393,
+  "kcal": 510,
   "protein": 30,
   "carbs": 32,
   "fat": 16,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -3935,7 +3942,7 @@
    "Klöße im Öl rundum goldbraun braten. Salat und Radieschen mit Essig, Öl, Zucker, Salz und Crème fraîche anmachen und mit Schnittlauch servieren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/gebratene-quarkkloesse-mit-salat-und-radieschen",
-  "note": "nach Lidl Kochen",
+  "note": "nach Lidl Kochen Nährwerte nachgerechnet.",
   "img": "img/rezepte/x-091.jpg",
   "imgCredit": {
    "artist": "SZF48",
@@ -4057,7 +4064,7 @@
    "5 g Rosmarin",
    "5 g Thymian",
    "250 g Cherrytomaten",
-   "450 g Halloumi",
+   "450 g Halloumi (vegetarisch, mikrobielles Lab)",
    "50 g Kalamata-Oliven"
   ],
   "steps": [
@@ -4096,7 +4103,7 @@
    "1 TL Kreuzkümmel",
    "1/2 Bund Minze",
    "30 ml Olivenöl",
-   "300 g Feta",
+   "300 g Feta (vegetarisch, mikrobielles Lab)",
    "1 TL Salz",
    "700 ml Gemüsebrühe",
    "1/2 Bund Koriander",
@@ -4351,11 +4358,11 @@
   "name": "Beeren-Skyr mit Mandeln & Rosinen",
   "category": "snack",
   "servings": 4,
-  "kcal": 266,
-  "protein": 24,
-  "carbs": 38,
-  "fat": 4,
-  "estimated": false,
+  "kcal": 185,
+  "protein": 16,
+  "carbs": 26,
+  "fat": 3,
+  "estimated": true,
   "timeMin": 5,
   "activeMin": 5,
   "difficulty": "leicht",
@@ -4375,7 +4382,7 @@
    "In Schälchen oder Gläser füllen und mit gehackten Mandeln und Rosinen bestreuen."
   ],
   "source": "https://rezepte.lidl.de/rezepte/beeren-skyr-mit-mandeln-und-rosinen",
-  "note": "nach Lidl Kochen; auf 4 Snack-Portionen statt 2 Portionen aufgeteilt",
+  "note": "nach Lidl Kochen; auf 4 Snack-Portionen statt 2 Portionen aufgeteilt Nährwerte nachgerechnet.",
   "img": "img/rezepte/x-101.jpg",
   "imgCredit": {
    "artist": "Ruth and Dave",
@@ -4408,7 +4415,7 @@
    "4 Zweige Petersilie",
    "2 Knoblauchzehen",
    "2 EL Rapsöl",
-   "100 g Feta"
+   "100 g Feta (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Zwiebeln in Halbringe schneiden, Möhren mit dem Sparschäler in dünne Streifen hobeln, Tofu würfeln.",
@@ -4773,7 +4780,7 @@
    "100 g Feldsalat",
    "200 g Beluga- oder Berglinsen (trocken)",
    "1 Prise Nelke, Zimt und Currypulver",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, mikrobielles Lab)",
    "5 EL Olivenöl",
    "1 TL Honig",
    "1 TL Senf",
@@ -4883,12 +4890,12 @@
   "note": "nach Kaufland; Quark im Dip von 250 g auf 500 g Magerquark erhöht",
   "img": "img/rezepte/x-112.jpg",
   "imgCredit": {
-   "artist": "https://www.flickr.com/photos/rusvaplauke/",
+   "artist": "unbekannt",
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegan_patties_with_potatoes_and_salad.jpg",
    "title": "File:Vegan patties with potatoes and salad.jpg"
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
@@ -4998,7 +5005,7 @@
    "2 TL Tomatenmark",
    "3 EL gehackte Kräuter (z. B. Petersilie, Schnittlauch)",
    "Salz, Pfeffer",
-   "2 EL geriebener Käse (Gouda)"
+   "2 EL geriebener Käse (Gouda) (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Ofen auf 200 °C Ober-/Unterhitze vorheizen. Paprika waschen, Deckel abschneiden und entkernen.",
@@ -5064,11 +5071,11 @@
   "name": "Tofu-Gemüse-Pfanne mit Kokosmilch & Reis",
   "category": "mittag",
   "servings": 3,
-  "kcal": 494,
+  "kcal": 690,
   "protein": 32,
   "carbs": 68,
-  "fat": 11,
-  "estimated": false,
+  "fat": 28,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 30,
   "difficulty": "leicht",
@@ -5095,7 +5102,7 @@
    "Marinade, restliche Kokosmilch, Brühe und Chili zugeben und ca. 10 Min. sämig köcheln; mit Reis servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/1893301308285830/Tofu-Gemuese-Pfanne-mit-Kokosmilch.html",
-  "note": "nach Chefkoch (4,6 Sterne, 301 Bewertungen); Kokosmilch light, Reismenge festgelegt",
+  "note": "nach Chefkoch (4,6 Sterne, 301 Bewertungen); Kokosmilch light, Reismenge festgelegt Nährwerte nachgerechnet.",
   "img": "img/rezepte/x-117.jpg",
   "imgCredit": {
    "artist": "Andy Li",
@@ -5126,7 +5133,7 @@
    "1 TL Salz",
    "150 g passierte Tomaten",
    "1 TL Oregano",
-   "125 g Mozzarella light",
+   "125 g Mozzarella light (vegetarisch, mikrobielles Lab)",
    "1 Paprika rot",
    "100 g Champignons",
    "1 TL Olivenöl"
@@ -5188,7 +5195,7 @@
    "url": "https://commons.wikimedia.org/wiki/File:Veggie_patties_nicely_grilled.jpg",
    "title": "File:Veggie patties nicely grilled.jpg"
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Penne-Spinat-Auflauf mit Feta & Ei",
@@ -5210,7 +5217,7 @@
    "Salz, Pfeffer",
    "1 EL Rapsöl",
    "2 rote Spitzpaprika",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, mikrobielles Lab)",
    "4 Eier (M)",
    "2 Knoblauchzehen"
   ],
@@ -5423,10 +5430,10 @@
   "category": "abend",
   "servings": 4,
   "kcal": 529,
-  "protein": 26,
+  "protein": 20,
   "carbs": 93,
   "fat": 10,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -5457,7 +5464,7 @@
    "Mit Brühe und Cuisine ablöschen, Paprika zugeben, kurz einköcheln und mit Cayenne, Zitronensaft, Zucker und Salz abschmecken; mit Petersilie und Reis servieren."
   ],
   "source": "https://www.rewe.de/rezepte/veganes-pilzragout-raeuchertofu-wildreis/",
-  "note": "nach REWE",
+  "note": "nach REWE Nährwerte nachgerechnet.",
   "img": "img/rezepte/x-125.jpg",
   "imgCredit": {
    "artist": "MartinThoma",
@@ -5527,7 +5534,7 @@
   "shelfLife": "2 Tage Kühlschrank",
   "ingredients": [
    "500 g rote Spitzpaprika",
-   "100 g Feta",
+   "100 g Feta (vegetarisch, mikrobielles Lab)",
    "300 g Hüttenkäse",
    "100 g getrocknete Tomaten",
    "1 Knoblauchzehe",
@@ -5623,7 +5630,7 @@
    "600 ml Gemüsebrühe",
    "Salz, 1 TL Zucker",
    "15 g Koriander oder Basilikum",
-   "300 g Feta / Hirtenkäse",
+   "300 g Feta / Hirtenkäse (vegetarisch, mikrobielles Lab)",
    "1/2 Fladenbrot",
    "2 Knoblauchzehen",
    "Chiliflocken"
@@ -5662,7 +5669,7 @@
   "ingredients": [
    "400 g Spaghetti",
    "Salz",
-   "200 g Halloumi",
+   "200 g Halloumi (vegetarisch, mikrobielles Lab)",
    "2 EL Rapsöl",
    "1/2 TL geräuchertes Paprikapulver",
    "60 g Hartkäse (vegetarisch, mikrobielles Lab)",
@@ -5710,7 +5717,7 @@
    "1 TL Thymian",
    "1 TL Paprikapulver edelsüß",
    "Salz, Pfeffer",
-   "400 g Halloumi",
+   "400 g Halloumi (vegetarisch, mikrobielles Lab)",
    "400 g Cherrytomaten",
    "1 Paprika rot",
    "1/2 Zitrone",
@@ -5810,7 +5817,7 @@
    "800 g gehackte Tomaten (Dose)",
    "150 g Frischkäse",
    "1 Knoblauchzehe",
-   "200 g geriebener Gouda"
+   "200 g geriebener Gouda (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Ofen auf 200 °C (Umluft) vorheizen. Kohlrabi in dünne Scheiben hobeln und 3 Min. in Salzwasser blanchieren.",
@@ -5850,7 +5857,7 @@
    "Pfeffer",
    "425 g weiße Bohnen (Dose)",
    "1 EL Butter",
-   "250 g Mozzarella",
+   "250 g Mozzarella (vegetarisch, mikrobielles Lab)",
    "5 EL Olivenöl",
    "10 g Rosmarin",
    "1 TL Salz",
@@ -6056,7 +6063,7 @@
    "url": "https://commons.wikimedia.org/wiki/File:MC_%E6%BE%B3%E9%96%80_Macau_JW_Marriott_%E8%90%AC%E8%B1%AA%E9%85%92%E5%BA%97_hotel_restaurant_%E8%87%AA%E5%8A%A9%E9%A4%90%E5%BB%B3_buffet_food_Lunch_January_2019_SSG_28.jpg",
    "title": "File:MC 澳門 Macau JW Marriott 萬豪酒店 hotel restaurant 自助餐廳 buffet food Lunch January 2019 SSG 28.jpg"
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Hokkaido-Linsen-Cashew-Curry-Eintopf mit Joghurt",
@@ -6287,10 +6294,10 @@
   "category": "mittag",
   "servings": 2,
   "kcal": 684,
-  "protein": 26,
+  "protein": 20,
   "carbs": 130,
   "fat": 6,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -6319,7 +6326,7 @@
    "Mit Mangochutney, Curry, Salz, Pfeffer, Chili und Kurkuma abschmecken und mit Reis servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/2746431426709816/Zucchini-Kichererbsen-Curry.html",
-  "note": "nach Chefkoch (4,8 Sterne, 20 Bewertungen); Kokosmilch light",
+  "note": "nach Chefkoch (4,8 Sterne, 20 Bewertungen); Kokosmilch light Nährwerte nachgerechnet.",
   "img": "img/rezepte/x-144.jpg",
   "imgCredit": {
    "artist": "Deodora333",
@@ -6494,7 +6501,7 @@
    "200 g Kidneybohnen (Dose, abgetropft)",
    "300 g passierte Tomaten",
    "1 TL Kräuter der Provence",
-   "80 g Feta / Schafskäse"
+   "80 g Feta / Schafskäse (vegetarisch, mikrobielles Lab)"
   ],
   "steps": [
    "Ofen auf 200 °C vorheizen. Paprika und Zucchini grob würfeln, Zwiebel und Knoblauch hacken.",
@@ -6587,7 +6594,7 @@
    "1 Bund Dill",
    "200 ml Kochsahne 15 %",
    "250 g Cherrytomaten",
-   "200 g Feta",
+   "200 g Feta (vegetarisch, mikrobielles Lab)",
    "80 ml Weißwein (oder Wasser)",
    "200 g Baguette oder Vollkornbrot"
   ],
@@ -6733,7 +6740,7 @@
    "1 Ei (M)",
    "Salz, Pfeffer",
    "4 EL Paniermehl",
-   "400 g Feta",
+   "400 g Feta (vegetarisch, mikrobielles Lab)",
    "1 Zitrone",
    "1/2 Bund Petersilie"
   ],
@@ -7241,7 +7248,7 @@
    "4 Eier",
    "1 Bund Frühlingszwiebeln",
    "1 Gurke",
-   "75 g Feta",
+   "75 g Feta (vegetarisch, mikrobielles Lab)",
    "3 EL Essig",
    "2 EL Öl",
    "1 TL Senf",
@@ -7686,7 +7693,7 @@
    "700 g Kartoffeln",
    "300 g TK-Erbsen",
    "1 Zwiebel",
-   "30 g geriebener Gouda",
+   "30 g geriebener Gouda (vegetarisch, mikrobielles Lab)",
    "1 TL Öl",
    "Salz, Pfeffer, Basilikum"
   ],
@@ -7826,7 +7833,7 @@
    "500 g Magerquark",
    "2 Eier",
    "200 ml Milch",
-   "100 g geriebener Gouda",
+   "100 g geriebener Gouda (vegetarisch, mikrobielles Lab)",
    "Oregano, Muskat, Salz, Pfeffer"
   ],
   "steps": [
@@ -8322,7 +8329,7 @@
    "url": "https://commons.wikimedia.org/wiki/File:Blueberry_clafoutis,_April_2006.jpg",
    "title": "File:Blueberry clafoutis, April 2006.jpg"
   },
-  "temp": "warm"
+  "temp": "beides"
  },
  {
   "name": "Quark-Hafer-Schüssel mit Banane & Erdnussmus",

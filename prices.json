@@ -113,7 +113,7 @@
 "unit": "g",
 "match": "oliven(?!öl)",
 "prices": {
-"rewe": 1.79,
+"rewe": 1.28,
 "aldi": 1.21,
 "lidl": 1.52,
 "kaufland": 1.65
@@ -151,7 +151,7 @@
 "name": "TK-Blattspinat",
 "pack": 750,
 "unit": "g",
-"match": "tk-?(blatt)?spinat|spinat \\(tk|blattspinat",
+"match": "tk-?(blatt)?spinat|spinat \\(tk|blattspinat|rahmspinat|tk-?rahm",
 "prices": {
 "rewe": 3.11,
 "aldi": 2.69,
@@ -196,7 +196,7 @@
 "unit": "g",
 "match": "tellerlinsen|berglinsen|braune linsen",
 "prices": {
-"rewe": 1.99,
+"rewe": 1.45,
 "aldi": 1.45,
 "lidl": 1.49,
 "kaufland": 1.59
@@ -455,7 +455,7 @@
 "name": "Geriebener Käse (Gouda/Cheddar)",
 "pack": 200,
 "unit": "g",
-"match": "gerieben|cheddar|gouda",
+"match": "gerieben(?!e[rn]? ingwer)|reibekäse|cheddar|gouda",
 "prices": {
 "rewe": 1.43,
 "lidl": 1.43,
@@ -497,7 +497,7 @@
 "unit": "g",
 "match": "vollkornnudeln",
 "prices": {
-"rewe": 1.49,
+"rewe": 0.95,
 "lidl": 0.99,
 "aldi": 0.85,
 "kaufland": 0.89
@@ -515,7 +515,7 @@
 "name": "Linsen- oder Erbsennudeln",
 "pack": 250,
 "unit": "g",
-"match": "linsen-|erbsennudeln",
+"match": "linsen-?nudeln|erbsen-?nudeln|kichererbsen-?nudeln|(linsen|erbsen)[- ]?(pasta|spaghetti|penne|fusilli)|linsen-",
 "prices": {
 "rewe": 1.55,
 "lidl": 1.49,
@@ -698,9 +698,10 @@
 {
 "id": "fruehlingszwiebeln",
 "name": "Frühlingszwiebeln, Bund (ca. 100 g)",
-"pack": 1,
-"unit": "Stück",
+"pack": 100,
+"unit": "g",
 "match": "frühlingszwiebel",
+"piece": 15,
 "prices": {
 "rewe": 0.75,
 "lidl": 0.69,
@@ -1071,6 +1072,7 @@
 "pack": 500,
 "unit": "g",
 "match": "nudeln|pasta|spaghetti|lasagne|penne|fusilli|spätzle|rigatoni|farfalle|tagliatelle|maccheroni",
+"piece": 20,
 "prices": {
 "rewe": 0.69,
 "lidl": 0.69,
@@ -1249,29 +1251,6 @@
 }
 },
 {
-"id": "apfel",
-"name": "Äpfel",
-"pack": 1000,
-"unit": "g",
-"piece": 150,
-"match": "apfel|äpfel",
-"loose": true,
-"prices": {
-"rewe": 1.99,
-"lidl": 2.29,
-"aldi": 1.11,
-"kaufland": 2.99
-},
-"est": [
-"rewe",
-"lidl"
-],
-"bio": {
-"rewe": 2.99,
-"kaufland": 3.49
-}
-},
-{
 "id": "zitrone",
 "name": "Zitronen",
 "pack": 500,
@@ -1300,7 +1279,7 @@
 "pack": 500,
 "unit": "g",
 "piece": 160,
-"match": "paprika(?!pulver| ?geräuchert| edelsüß)",
+"match": "(?<!rosen)paprika(?!pulver| ?geräuchert| edelsüß)",
 "loose": true,
 "prices": {
 "rewe": 1.79,
@@ -1453,7 +1432,7 @@
 "pack": 2000,
 "unit": "g",
 "piece": 150,
-"match": "kartoffel",
+"match": "(?<!süß)kartoffel|drilling",
 "prices": {
 "rewe": 1.6,
 "lidl": 2.29,
@@ -1544,6 +1523,7 @@
 "pack": 100,
 "unit": "g",
 "match": "ingwer",
+"piece": 5,
 "prices": {
 "rewe": 0.79,
 "lidl": 0.4,
@@ -1627,7 +1607,7 @@
 "prices": {
 "rewe": 3.19,
 "lidl": 2.49,
-"aldi": 2.89,
+"aldi": 2.19,
 "kaufland": 2.89
 },
 "est": [
@@ -1819,7 +1799,7 @@
 "match": "pflanzendrink",
 "subst": true,
 "prices": {
-"rewe": 1.39,
+"rewe": 0.9,
 "lidl": 0.85,
 "aldi": 0.9,
 "kaufland": 0.99
@@ -1855,7 +1835,7 @@
 "name": "Lauch (Stange)",
 "pack": 1,
 "unit": "Stück",
-"match": "(?<!schnitt)lauch(?!zwiebel)|porree",
+"match": "(?<!schnitt)(?<!bär)lauch(?!zwiebel)|porree",
 "prices": {
 "rewe": 0.66,
 "aldi": 0.59,
@@ -2237,6 +2217,82 @@
 "kaufland": 1.65
 },
 "est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "seitan",
+"name": "Seitan",
+"pack": 250,
+"unit": "g",
+"match": "seitan",
+"prices": {
+"rewe": 3.49,
+"lidl": 2.97,
+"aldi": 2.97,
+"kaufland": 3.21
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "tempeh",
+"name": "Tempeh",
+"pack": 200,
+"unit": "g",
+"match": "tempeh",
+"prices": {
+"rewe": 2.99,
+"lidl": 2.54,
+"aldi": 2.54,
+"kaufland": 2.75
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "bulgur",
+"name": "Bulgur",
+"pack": 500,
+"unit": "g",
+"match": "bulgur",
+"prices": {
+"rewe": 1.29,
+"lidl": 1.1,
+"aldi": 1.1,
+"kaufland": 1.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "suesskartoffel",
+"name": "Süßkartoffeln",
+"pack": 1000,
+"unit": "g",
+"match": "süßkartoffel",
+"prices": {
+"rewe": 2.99,
+"lidl": 2.54,
+"aldi": 2.54,
+"kaufland": 2.75
+},
+"est": [
+"rewe",
 "lidl",
 "aldi",
 "kaufland"
