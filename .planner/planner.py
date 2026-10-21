@@ -243,7 +243,7 @@ def build_plan(now, settings, days, busy, keep=None):
         if settings.get("mode") in ("reduziert", "notfall") and last and (d - last).days < 3:
             continue  # Ganzkörper: mindestens 72 h Abstand
         not_before = now + dt.timedelta(minutes=30) if d == today else dt.datetime.combine(d, dt.time(0), TZ)
-        slot = find_slot(d, busy, TRAIN_MIN, not_before)
+        slot = find_slot(d, busy, TRAIN_MIN + (15 if SEQ[nxt] == "okB" else 0), not_before)  # okB ist die längste Einheit
         short = False
         if not slot:
             slot = find_slot(d, busy, SHORT_MIN, not_before)
@@ -484,7 +484,7 @@ def parse_ing(line, P, subst):
     elif unit == "Handvoll":
         amt = q * 30
     elif unit.startswith(("Dose", "Glas", "Gläser")):
-        amt = q * (pr["pack"] if pr.get("dose") else 400)
+        amt = q * (pr["pack"] if pr.get("dose") or pr.get("jar") else 400)
     elif unit.startswith("Prise"):
         amt = q
     elif unit == "Bund":
@@ -518,7 +518,7 @@ def price_of(pr, store, P):
 
 
 # Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“ (wie SPICE_RE in der App)
-SPICE_RE = __import__("re").compile(r"pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", __import__("re").I)
+SPICE_RE = __import__("re").compile(r"rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", __import__("re").I)
 
 
 def portion_cost(r, P, store, subst, memo):

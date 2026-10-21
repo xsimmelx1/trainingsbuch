@@ -94,6 +94,9 @@ textarea{min-height:64px;resize:vertical}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
 .acl{margin-top:6px}
+.restmini{position:sticky;top:0;z-index:5;margin:-4px 0 8px;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--ink);font-size:14px;text-align:center}
+.restmini.over{background:var(--good-soft)}
+.gaphint{margin-top:6px;padding:8px 10px;border-radius:10px;background:var(--warn-soft)}
 .rsrow{padding:8px}.rsrow .lrow{border:0;padding:0;background:none}.rsrow .btn{margin-top:6px}
 .fsbox ol{margin:6px 0 0;padding-left:20px}.fsbox li{margin:3px 0}
 .stockrow{margin:8px 0 2px}.acl:empty{display:none}.acl button{padding:4px 12px;font-weight:500}
@@ -1103,7 +1106,20 @@ function saveDay(day){
 }
 // Vorgemerkte Änderungen an Einstellungen/Messwerten bleiben bis zum erfolgreichen Senden erhalten (auch über Neustarts)
 let pendSet = lsGet("pendSet") || {}, pendMap = lsGet("pendMap") || {};
-const applySet = (d, ps) => { const o = Object.assign({}, d || {}); for (const [k, v] of Object.entries(ps)) o[k] = k === "food" ? Object.assign({}, o.food, v) : v; return o; };
+const applyFood = (old, v) => { const o = Object.assign({}, old);
+  for (const [k, x] of Object.entries(v || {})) {
+    if (x && x._ops) { const st = new Set(o[k] || []); for (const a of x.add || []) st.add(a); for (const d of x.del || []) st.delete(d); o[k] = [...st]; }
+    else if (k === "ownPrices" && x && typeof x === "object" && x._delta) { const op = Object.assign({}, o.ownPrices); for (const [id, m] of Object.entries(x)) { if (id === "_delta") continue; if (m == null) delete op[id]; else op[id] = m; } o.ownPrices = op; }
+    else o[k] = x; }
+  return o; };
+const applySet = (d, ps) => { const o = Object.assign({}, d || {}); for (const [k, v] of Object.entries(ps)) o[k] = k === "food" ? applyFood(o.food, v) : v; return o; };
+// Vorgemerkte Änderungen zusammenfassen: Listen-Operationen und Preis-Deltas addieren sich
+function mergePend(ps, patch){ const o = Object.assign({}, ps); for (const [k, v] of Object.entries(patch)) { if (k !== "food") { o[k] = v; continue; }
+    const f = Object.assign({}, o.food); for (const [fk, x] of Object.entries(v)) { const pv = f[fk];
+      if (x && x._ops && pv && pv._ops) { const add = new Set([...(pv.add || [])].filter(a => !(x.del || []).includes(a)).concat(x.add || [])), del = new Set([...(pv.del || [])].filter(d => !(x.add || []).includes(d)).concat(x.del || [])); f[fk] = {_ops: true, add: [...add], del: [...del]}; }
+      else if (x && x._delta && pv && pv._delta) f[fk] = Object.assign({}, pv, x);
+      else f[fk] = x; }
+    o.food = f; } return o; }
 function flushSettings(){
   if (!Object.keys(pendSet).length) return;
   queue(async () => { const mine = JSON.stringify(pendSet); if (mine === "{}") return;
@@ -1116,7 +1132,7 @@ function flushMaps(){
     if (JSON.stringify(pendMap[file] || {}) === mine) { delete pendMap[file]; lsSet("pendMap", pendMap); } });
 }
 function saveSettings(patch){
-  store.settings = applySet(store.settings, patch); pendSet = applySet(pendSet, patch); lsSet("pendSet", pendSet);
+  store.settings = applySet(store.settings, patch); pendSet = mergePend(pendSet, patch); lsSet("pendSet", pendSet);
   cacheAll(); renderHeader(); flushSettings();
 }
 function saveMap(file, key, id, val){ store[key][id] = val; pendMap[file] = Object.assign({}, pendMap[file], {[id]: val}); lsSet("pendMap", pendMap); cacheAll(); flushMaps(); }
@@ -1799,10 +1815,12 @@ function gapBanner(){
 let woSession = null;
 const setsObj = () => woSession === "antag" ? (cur.antag = cur.antag || {}) : cur.sets; // "antag" für Antagonisten nach dem Bouldern
 // Zuhause = nur Eigengewicht, Möbel, Treppe, Rucksack
-const HOME_OK = new Set(["hw_towelshrug","hw_latraise","hw_squat","hw_bss","hw_slrdl","hw_slidecurl","hw_calf","hw_tablerow","hw_doorrow","hw_latiso","hw_shrug","hw_curl","hw_hipthrust","hw_abd","hw_extrot","deadbug","sideplank","ytw","pushupplus","wallsit","glutebridge","stepdown","alt_plank","alt_birddog","alt_inclpush","alt_nordic","pushup","closepushup"]);
+const HOME_OK = new Set(["chinneutral","dblathome","dbshrug","onearmrow","spidercurl","alt_floorpress","hw_towelshrug","hw_latraise","hw_squat","hw_bss","hw_slrdl","hw_slidecurl","hw_calf","hw_tablerow","hw_doorrow","hw_latiso","hw_shrug","hw_curl","hw_hipthrust","hw_abd","hw_extrot","deadbug","sideplank","ytw","pushupplus","wallsit","glutebridge","stepdown","alt_plank","alt_birddog","alt_inclpush","alt_nordic","pushup","closepushup"]);
 const HOME_ALTS = {hw_latraise:["hw_latiso","ytw"], hw_squat:["hw_bss","wallsit","stepdown"], hw_bss:["hw_squat","stepdown"], hw_slrdl:["hw_hipthrust","alt_nordic","hw_slidecurl"], wallsit:["hw_squat","hw_bss"], hw_slidecurl:["alt_nordic","hw_slrdl"], hw_calf:["stepdown"], hw_tablerow:["hw_doorrow","hw_curl"], hw_doorrow:["hw_tablerow"], pushup:["alt_inclpush","closepushup"], hw_latiso:["ytw"], ytw:["hw_latiso","hw_doorrow"], hw_shrug:["hw_latiso"], hw_curl:["hw_doorrow","hw_tablerow"], closepushup:["alt_inclpush","pushup"], hw_hipthrust:["glutebridge","hw_slrdl"], glutebridge:["hw_hipthrust"], hw_abd:["sideplank"], sideplank:["alt_plank","alt_birddog","deadbug"], deadbug:["alt_birddog","alt_plank","sideplank"], pushupplus:["alt_inclpush"], hw_extrot:["ytw"], stepdown:["hw_squat","wallsit"], alt_inclpush:["pushup"]};
 const atHome = () => (cur.where || "gym") === "home";
-const homeDefault = id => id in HOME ? HOME[id] : (HOME_OK.has(id) ? id : null);
+// Mit Geräten zuhause zuerst die bessere Übung (Kurzhanteln, Klimmzugstange), sonst ohne Geräte
+const HOME_PLUS = {chinneutral:"chinneutral",latneutral:"chinneutral",cablelat:"dblathome",dblateral:"dblathome",cableshrug:"dbshrug",rowchest:"onearmrow",cablerow:"onearmrow",bayesian:"spidercurl",inclinecurl:"spidercurl",chestpress:"alt_floorpress",inclinedb:"alt_floorpress"};
+const homeDefault = id => HOME_PLUS[id] && gearOk(HOME_PLUS[id]) ? HOME_PLUS[id] : id in HOME ? HOME[id] : (HOME_OK.has(id) ? id : null);
 const prefMap = () => (atHome() ? S().altPrefHome : S().altPref) || {};
 const swapKey = () => atHome() ? "swapHome" : "swap";
 const SC_RED = {inclinedb:"alt_floorpress",chestpress:"alt_floorpress",chinneutral:"cablerow",latneutral:"cablerow",abroller:"deadbug",pushup:"pushupplus"};
@@ -1986,6 +2004,7 @@ function updateRestBar(){
   document.getElementById("restT").textContent = left >= 0 ? fmtDur(left) : "+" + fmtDur(-left);
   if (left < 0 && !bar.classList.contains("over")) { bar.classList.add("over"); try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch {} }
   if (left >= 0) bar.classList.remove("over");
+  const mini = document.getElementById("restMiniT"); if (mini) { mini.textContent = left >= 0 ? fmtDur(left) : "+" + fmtDur(-left); mini.parentElement.classList.toggle("over", left < 0); }
   if (left < -90) stopRest();
 }
 function startClock(){ clearInterval(clockTimer); clockTimer = setInterval(() => { const c = document.getElementById("woClock"); if (!c || !cur?.startedAt || cur.finishedAt || woSession) return clearInterval(clockTimer); c.textContent = fmtDur((Date.now() - Date.parse(cur.startedAt))/1000); }, 1000); }
@@ -2019,7 +2038,7 @@ function renderSheetPart(sel){
 }
 function renderSheet(){ setTimeout(hookClips, 0);
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
-  let h = `<div class="grab"></div>`;
+  let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
     h += `<div class="sh"><h2>Morgenroutine · 12 min</h2>${close}</div><button class="btn primary big" type="button" data-guide="start">▶ Geführt durch die Routine</button>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}`;
     MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb("mob:" + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb("mob:" + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${mobAlt(k) ? `<br><span class="small muted">${esc(mobAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
@@ -2455,7 +2474,7 @@ const EQUIP = {legpress:["beinpresse"],rdl:["langhantel"],legext:["maschine"],se
 const GEAR_FALLBACK = {onearmrow:["hw_tablerow"], spidercurl:["hw_curl"], inclinecurl:["hw_curl"], revwrist:["hw_curl"], alt_dbrow:["hw_tablerow"], alt_kickback:["closepushup"], alt_lylat:["hw_latiso"], bss:["hw_bss"], hw_shrug:["hw_towelshrug"], dbshrug:["hw_shrug","hw_towelshrug"], hw_latraise:["hw_latiso"], dblathome:["hw_latraise","hw_latiso"], hw_tablerow:["hw_doorrow"], hw_doorrow:["hw_tablerow"], hw_curl:["hw_doorrow"], hw_bss:["hw_squat"], hw_hipthrust:["glutebridge"], hw_squat:["wallsit"], hw_calf:["hw_slrdl"], hw_slidecurl:["glutebridge"], alt_nordic:["glutebridge"], alt_inclpush:["pushupplus"], pushup:["pushupplus"], closepushup:["pushupplus"], abroller:["alt_plank"]};
 const gearHome = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {});
 // Wand und Erhöhung (Wand/Sofa) gibt es immer; Gym-Geräte zuhause nie
-const hasGear = k => k === "wand" || k === "erhoehung" ? true : GEAR_HOME.includes(k) ? !!gearHome()[k] : false;
+const hasGear = k => k === "wand" || k === "erhoehung" ? true : k === "bank" ? !!(gearHome().sofa || gearHome().stuhl) : GEAR_HOME.includes(k) ? !!gearHome()[k] : false;
 const gearOk = id => (EQUIP[id] || []).every(hasGear);
 const missingGear = id => (EQUIP[id] || []).filter(k => !hasGear(k));
 function gearSwap(id){ // zuhause: erste passende Alternative, die nicht schon in der Einheit vorkommt; sonst die Übung selbst
@@ -2632,7 +2651,10 @@ const SUBST = {
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
-const saveFood = patch => { saveSettings({food: patch}); applyNutri(); clearFoodMemos(); };
+const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
+  for (const k of ["favs", "stock", "bioItems"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
+  if (pt.ownPrices && !pt.ownPrices._delta) { const a = f0.ownPrices || {}, b = pt.ownPrices, dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt.ownPrices = dl; }
+  saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
   if (!r) return null;
@@ -2916,7 +2938,7 @@ function parseIng(line){
   else if (unit === "EL") amt = q * 15;
   else if (unit === "TL") amt = q * 5;
   else if (unit === "Handvoll") amt = q * 30;
-  else if (/^(Dose|Glas|Gläser)/.test(unit)) amt = q * (pr.dose ? pr.pack : 400);
+  else if (/^(Dose|Glas|Gläser)/.test(unit)) amt = q * (pr.dose || pr.jar ? pr.pack : 400);
   else if (/^Prise/.test(unit)) amt = q;
   else if (unit === "Bund") amt = pr.unit === "Stück" ? q : q * pr.pack;
   else if (unit === "Becher") amt = q * 250;
@@ -2932,7 +2954,7 @@ function parseIng(line){
 const costMemo = new Map();
 function recipeCost(r, store){ const k = r.name + "|" + (store || FOOD().store || "aldi"); if (!costMemo.has(k)) costMemo.set(k, recipeCost0(r, store)); return costMemo.get(k); }
 // Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“
-const SPICE_RE = new RegExp("pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", "i");
+const SPICE_RE = new RegExp("rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", "i");
 function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { if (x.q != null && !SPICE_RE.test(l)) miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
 function mealCost(name, store){ const r = recipeByName(name); if (r) return recipeCost(r, store).portion; if (name === "away") return 4.5; return null; }
 
@@ -3158,7 +3180,7 @@ function shopList(entries){
     return {recs: recs.sort((a, b) => b.cnt - a.cnt), groups: G.filter(([, a]) => a.length)};
   }
   const groups = SHOP_GROUPS.map(([g]) => [g, []]); groups.push(["Vorrat & Gewürze", []]);
-  for (const it of Object.values(items)) { const gi = /(^|[^a-zäöü])öl\b|salz|pfeffer|zimt|gewürz|backpulver|sirup|essig|sojasoße|sojasauce|brühe|kakao|honig|stärke/i.test(it.name) ? -1 : SHOP_GROUPS.findIndex(([, re]) => re.test(it.name)); groups[gi < 0 ? groups.length - 1 : gi][1].push(it); }
+  for (const it of Object.values(items)) { if (it.pr?.group) { const gx = SHOP_GROUPS.findIndex(([g]) => g === it.pr.group); groups[gx < 0 ? groups.length - 1 : gx][1].push(it); continue; } const gi = SPICE_RE.test(it.name) || /(^|[^a-zäöü])öl\b|salz|pfeffer|zimt|gewürz|backpulver|sirup|essig|sojasoße|sojasauce|brühe|kakao|honig|stärke/i.test(it.name) ? -1 : SHOP_GROUPS.findIndex(([, re]) => re.test(it.name)); groups[gi < 0 ? groups.length - 1 : gi][1].push(it); }
   for (const [, a] of groups) a.sort((x, y) => x.name.localeCompare(y.name, "de"));
   return {recs: recs.sort((a, b) => b.cnt - a.cnt), groups: groups.filter(([, a]) => a.length)};
 }
@@ -3405,6 +3427,7 @@ function essenHtml(b){
   const bar = (v, g, l) => `<div class="pbar"><span><b>${Math.round(v)}</b> / ${g} ${l}</span><div class="track"><div class="fill" style="width:${Math.min(v / g * 100, 100)}%"></div></div></div>`;
   h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted">${esc(trainLine(d).replace(/<[^>]+>/g, ""))}</span></div>
     <div class="pbars nutri">${bar(tt.eKcal, tg.kcal, "kcal")}${bar(tt.eProtein, tg.protein, "g Protein")}</div>
+    ${tg.kcal - tt.kcal >= 150 ? `<div class="small gaphint nutri">Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder" : ""} 30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).</div>` : ""}
     <div class="mrows">${ms.map(m => diaryRow(d, m)).join("")}</div>
     <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn ghost small" type="button" data-ownscan="${d}">📷 Scannen</button></div></div>`;
   h += `<div class="lab sec">Die Woche</div>` + prep + budgetSlim(mo);
