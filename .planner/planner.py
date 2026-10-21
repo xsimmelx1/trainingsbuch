@@ -344,9 +344,9 @@ def build_ics(now, settings, plan, extras, past):
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-ALLERGENS = {"nuesse": "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern", "erdnuss": "erdnuss", "soja": "soja|tofu|edamame|tempeh",
-             "ei": r"\beier?\b|eiklar|rührei|ei-", "milch": "milch|skyr|quark|käse|joghurt|sahne|butter|feta|harzer|mozzarella",
-             "gluten": "weizen|mehl|nudel|pasta|spaghetti|brot|couscous|tortilla|wrap|hafer|knäcke|bulgur|biskuit|dürüm", "sesam": "sesam|tahin", "senf": "senf"}
+ALLERGENS = {"nuesse": "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern|studentenfutter|nussmus", "erdnuss": "erdnuss", "soja": "soja|tofu|edamame|tempeh",
+             "ei": r"\beier?\b|eiklar|eigelb|rührei|spiegelei|omelett|ei-", "milch": "(?<!kokos)milch|skyr|quark|käse|joghurt|sahne|butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|schmand|crème fraîche|creme fraiche",
+             "gluten": "weizen|mehl|nudel|pasta|spaghetti|brot|brötchen|couscous|tortilla|wrap|hafer|knäcke|bulgur|biskuit|dürüm|seitan|dinkel|grünkern|gerste|panko|semmel", "sesam": "sesam|tahin", "senf": "senf"}
 
 
 def avoid_re(settings):
@@ -435,7 +435,7 @@ def load_prices():
 def parse_ing(line, P, subst):
     import re
     global ING_RE
-    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$")
+    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$")
     line = re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)
     m = ING_RE.match(line)
     q = None
@@ -459,8 +459,10 @@ def parse_ing(line, P, subst):
         amt = q * 5
     elif unit == "Handvoll":
         amt = q * 30
-    elif unit.startswith("Dose"):
+    elif unit.startswith(("Dose", "Glas", "Gläser")):
         amt = q * (pr["pack"] if pr.get("dose") else 400)
+    elif unit == "Bund":
+        amt = q if pr["unit"] == "Stück" else q * pr["pack"]
     elif unit == "Becher":
         amt = q * 250
     elif unit.startswith("Pck"):
@@ -632,7 +634,12 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
 
     def day_p(sb):  # wie dayP in der App
         return min(sum(rec[sb.get(n, n)]["protein"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
-    p_floor = min((mp.get("target") or {}).get("protein") or 140, day_p({}))
+    fd = settings.get("food") or {}
+    p_floor = min(num(fd.get("protein")) or (mp.get("target") or {}).get("protein") or 140, day_p({}))
+
+    def day_k(sb):  # wie dayK in der App
+        return min(sum(rec[sb.get(n, n)]["kcal"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
+    k_floor = min((num(fd.get("kcal")) or (mp.get("target") or {}).get("kcal") or 2650) - 250, day_k({}))
     minp = lambda k: 13 if k in ("sn", "ex") else 25
     text = lambda r: r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
 
@@ -659,13 +666,13 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
             c0, ref = cost(x["n"]), rec[x["n"]]
             for c in cands(x["slot"], x["n"]):
                 c1 = cost(c["name"])
-                if (x["n"] in batch and not (c.get("mealPrep") and (c.get("servings") or 1) >= 4)) or memo.get(c["name"] + "#miss", 0) > 1 or (x["n"] not in batch and effort_on(settings) and not effort_ok(settings, c)):
+                if (x["n"] in batch and not (c.get("mealPrep") and (c.get("servings") or 1) >= 4)) or memo.get(c["name"] + "#miss", 0) > 0 or (x["n"] not in batch and effort_on(settings) and not effort_ok(settings, c)):
                     continue
                 if c1 >= c0 or c["protein"] < min(ref["protein"] * 0.8, 18 if x["slot"] in ("sn", "ex") else 30) or abs(c["kcal"] - ref["kcal"]) > 300 or c["name"] in occ or c["name"] in subs.values():
                     continue
                 sb = dict(subs, **{x["n"]: c["name"]})
                 save = cur_cost - total(sb)
-                if save > 0.01 and (not best or save > best[2]) and day_p(sb) >= p_floor:
+                if save > 0.01 and (not best or save > best[2]) and day_p(sb) >= p_floor and day_k(sb) >= k_floor:
                     best = (x["n"], c["name"], save)
         if not best:
             break

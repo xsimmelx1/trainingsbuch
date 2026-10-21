@@ -2517,9 +2517,9 @@ const FOOD = () => { const f = S().food; if (!foodMemo || foodMemo.ref !== f || 
 const foodTarget = () => ({kcal: num(FOOD().kcal) || mealPlan.target.kcal, protein: num(FOOD().protein) || mealPlan.target.protein});
 const applyNutri = () => document.body.classList.toggle("nonutri", FOOD().showNutri === false);
 // Allergene und eigene Begriffe → ein Suchmuster über Name und Zutaten
-const ALLERGENS = {nuesse: ["Nüsse", "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern"], erdnuss: ["Erdnüsse", "erdnuss"], soja: ["Soja", "soja|tofu|edamame|tempeh"],
-  ei: ["Ei", "\\beier?\\b|eiklar|rührei|ei-"], milch: ["Milch/Laktose", "milch|skyr|quark|käse|joghurt|sahne|butter|feta|harzer|mozzarella"],
-  gluten: ["Gluten", "weizen|mehl|nudel|pasta|spaghetti|brot|couscous|tortilla|wrap|hafer|knäcke|bulgur|biskuit|dürüm"], sesam: ["Sesam", "sesam|tahin"], senf: ["Senf", "senf"]};
+const ALLERGENS = {nuesse: ["Nüsse", "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern|studentenfutter|nussmus"], erdnuss: ["Erdnüsse", "erdnuss"], soja: ["Soja", "soja|tofu|edamame|tempeh"],
+  ei: ["Ei", "\\beier?\\b|eiklar|eigelb|rührei|spiegelei|omelett|ei-"], milch: ["Milch/Laktose", "(?<!kokos)milch|skyr|quark|käse|joghurt|sahne|butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|schmand|crème fraîche|creme fraiche"],
+  gluten: ["Gluten", "weizen|mehl|nudel|pasta|spaghetti|brot|brötchen|couscous|tortilla|wrap|hafer|knäcke|bulgur|biskuit|dürüm|seitan|dinkel|grünkern|gerste|panko|semmel"], sesam: ["Sesam", "sesam|tahin"], senf: ["Senf", "senf"]};
 function avoidTerm(w){ w = w.trim().toLowerCase(); if (w.length < 3) return null;
   for (const suf of ["en", "n", "e", "s"]) if (w.endsWith(suf) && w.length - suf.length >= 4) { w = w.slice(0, -suf.length); break; }
   return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/[aä]/g, "[aä]").replace(/[oö]/g, "[oö]").replace(/[uü]/g, "[uü]"); }
@@ -2613,7 +2613,10 @@ function budgetSubs0(mo){
   const total = sb => { const c = {}; for (const x of Object.values(occ)) { const n = sb[x.n] || x.n; c[n] = (c[n] || 0) + x.cnt; } return shopCostCounts(c); };
   // Kein Tausch darf einen Tag unter das Protein-Ziel drücken (bzw. unter den Ausgangswert, falls der schon darunter liegt)
   const dayP = sb => Math.min(...raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).protein || 0), 0)));
-  const pFloor = Math.min(mealPlan.target?.protein || 140, dayP({}));
+  const pFloor = Math.min(foodTarget().protein, dayP({}));
+  // auch Kalorien: kein Tausch darf einen Tag mehr als 250 kcal unter das Ziel drücken (bzw. unter den Ausgangswert)
+  const dayK = sb => Math.min(...raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).kcal || 0), 0)));
+  const kFloor = Math.min(foodTarget().kcal - 250, dayK({}));
   const subs = {}, before = total(subs), candMemo = new Map();
   let cost = before;
   for (let g = 0; cost > budget && g < 40; g++) {
@@ -2621,9 +2624,9 @@ function budgetSubs0(mo){
     for (const x of Object.values(occ)) { if (subs[x.n]) continue; const c0 = portionCost(x.n), ref = mealInfo(x.n);
       const ck = x.slot + "|" + x.n; if (!candMemo.has(ck)) { const al = altMeals(x.slot, x.n); candMemo.set(ck, al.concat(budgetCands(x.slot, x.n).filter(c => !al.includes(c)))); } const cands = candMemo.get(ck);
       for (const c of cands) { const c1 = portionCost(c.name), ci = mealInfo(c.name);
-        if ((batch.has(x.n) && !(c.mealPrep && (c.servings || 1) >= 4)) || recipeCost(c).miss > 1 || (!batch.has(x.n) && effortOn() && !effortOk(c))) continue;
+        if ((batch.has(x.n) && !(c.mealPrep && (c.servings || 1) >= 4)) || recipeCost(c).miss > 0 || (!batch.has(x.n) && effortOn() && !effortOk(c))) continue;
         if (c1 >= c0 || ci.protein < Math.min(ref.protein * 0.8, x.slot === "sn" || x.slot === "ex" ? 18 : 30) || Math.abs(ci.kcal - ref.kcal) > 300 || occ[c.name] || Object.values(subs).includes(c.name)) continue;
-        const sb = Object.assign({}, subs, {[x.n]: c.name}), save = cost - total(sb); if (save > 0.01 && (!best || save > best.save) && dayP(sb) >= pFloor) best = {n: x.n, c: c.name, save}; } }
+        const sb = Object.assign({}, subs, {[x.n]: c.name}), save = cost - total(sb); if (save > 0.01 && (!best || save > best.save) && dayP(sb) >= pFloor && dayK(sb) >= kFloor) best = {n: x.n, c: c.name, save}; } }
     if (!best) break; subs[best.n] = best.c; cost = total(subs);
   }
   const res = {subs, before, cost, budget, ok: cost <= budget}; budgetMemo.set(key, res); return res;
@@ -2787,7 +2790,9 @@ function bioAlt(pr, share){
   const st = FOOD().store || "aldi"; if (st === "min" || ownOf(pr)[st] || pr.bio?.[st] == null || pr.prices?.[st] == null) return "";
   return bioUse(pr) ? ` <button type="button" class="biob on" data-biotoggle="${pr.id}">Bio ✓ · konv. ${eur(share * pr.prices[st])}</button>` : ` <button type="button" class="biob" data-biotoggle="${pr.id}">Bio ${eur(share * pr.bio[st])}</button>`;
 }
-const isEst = (pr, st) => !ownOf(pr)[st] && !(bioUse(pr) && pr.bio?.[st] != null) && (pr.est || []).includes(st);
+const isEst = (pr, st) => { if (st === "min") { const ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}), own = ownOf(pr); for (const [k, o] of Object.entries(own)) if (o?.price != null) ps[k] = o.price;
+    const best = Object.entries(ps).filter(([, v]) => v != null).sort((a, b) => a[1] - b[1])[0]; return !!best && !own[best[0]] && !(bioUse(pr) && pr.bio?.[best[0]] != null) && (pr.est || []).includes(best[0]); }
+  return !ownOf(pr)[st] && !(bioUse(pr) && pr.bio?.[st] != null) && (pr.est || []).includes(st); };
 // Reihenfolge: eigener Preis (Kassenbon/Scan) > Bio-Preis (wenn „Bio bevorzugen“) > Richtpreis
 function priceOf(pr, store){
   const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
@@ -2799,7 +2804,7 @@ function priceOf(pr, store){
 // Zutatenzeile → {pr: Produkt, amt: Menge in der Basiseinheit des Produkts} oder null
 function parseIng(line){
   line = line.replace(/^(ca\.|etwas|etwa|optional:?)\s+/i, "");
-  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$/);
+  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$/);
   const q = m ? (m[1] === "½" ? .5 : m[1].includes("/") ? m[1].split("/").reduce((a, b) => a / b) : Number(m[1].replace(",", "."))) : null;
   const unit = m ? (m[2] || "") : "", name = (m ? m[3] : line).replace(/\(.*?\)/g, "").split(", ")[0].trim();
   const pr = prices?.products.find(x => x.re.test(name)); if (!pr) return {name, q, unit, pr: null, amt: 0};
@@ -2810,7 +2815,8 @@ function parseIng(line){
   else if (unit === "EL") amt = q * 15;
   else if (unit === "TL") amt = q * 5;
   else if (unit === "Handvoll") amt = q * 30;
-  else if (/^Dose/.test(unit)) amt = q * (pr.dose ? pr.pack : 400);
+  else if (/^(Dose|Glas|Gläser)/.test(unit)) amt = q * (pr.dose ? pr.pack : 400);
+  else if (unit === "Bund") amt = pr.unit === "Stück" ? q : q * pr.pack;
   else if (unit === "Becher") amt = q * 250;
   else if (/^Pck/.test(unit)) amt = q * pr.pack;
   else if (pr.unit === "Stück") amt = q;

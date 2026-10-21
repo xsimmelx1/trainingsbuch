@@ -238,7 +238,7 @@
 "pack": 240,
 "unit": "g",
 "dose": true,
-"match": "kichererbsen",
+"match": "kichererbse(?!n-?mehl)",
 "prices": {
 "rewe": 0.59,
 "lidl": 0.79,
@@ -1051,7 +1051,7 @@
 "name": "Langkorn- oder Basmatireis",
 "pack": 1000,
 "unit": "g",
-"match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis\\b|basmati",
+"match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis(?!-?essig)\\b|basmati",
 "prices": {
 "rewe": 1.39,
 "lidl": 1.59,
@@ -2081,6 +2081,7 @@
 "pack": 500,
 "unit": "g",
 "match": "fladenbrot|pita",
+"piece": 250,
 "prices": {
 "rewe": 1.69,
 "lidl": 1.44,
@@ -2171,6 +2172,7 @@
 "pack": 1,
 "unit": "Stück",
 "match": "sellerie",
+"piece": 600,
 "prices": {
 "rewe": 1.79,
 "lidl": 1.52,
@@ -2285,6 +2287,7 @@
 "pack": 1000,
 "unit": "g",
 "match": "süßkartoffel",
+"piece": 300,
 "prices": {
 "rewe": 2.99,
 "lidl": 2.54,
