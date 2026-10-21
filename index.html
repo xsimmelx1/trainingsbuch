@@ -322,6 +322,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .ttag{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--sunk)}
 .ttag.warm{background:color-mix(in srgb,#f97316 22%,transparent)}
 .ttag.kalt{background:color-mix(in srgb,#38bdf8 22%,transparent)}
+.biob{border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:1px 8px;font:inherit;font-size:12px;min-height:26px}
+.biob.on{border-color:var(--good);color:var(--ink);background:color-mix(in srgb,var(--good) 18%,transparent)}
+.biopick summary{cursor:pointer;padding:6px 0}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
@@ -2470,7 +2473,7 @@ function budgetCands(k, curName){
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
 function budgetSubs(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
-  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), bioOn()]); if (budgetMemo.has(key)) return budgetMemo.get(key);
+  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), !!FOOD().bio, FOOD().bioItems || []]); if (budgetMemo.has(key)) return budgetMemo.get(key);
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
   const W = mealWeek(weekNo(mo) ?? 0), batch = new Set([W.batchA, W.batchB]);
   // Bewertet wird der echte Wocheneinkauf (Packungen), nicht die Portionskosten
@@ -2523,7 +2526,7 @@ function mealsFor(d){
   const day = dayObj(d), def = mealDefaults(d), ov = day?.meals || {}, ate = day?.ate || {};
   const out = mealPlan.slots.map(sl => { const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
-    return {k: sl.k, label: sl.label, time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
+    return {k: sl.k, label: mainLabel(sl, rec), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, info: mealInfo(o)});
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
@@ -2544,7 +2547,7 @@ function mealThumb(n){
 function mealRow(d, m){
   const r = m.info;
   return `<div class="meal mc ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
-    <button type="button" class="mname" ${m.own ? "disabled" : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${recipeByName(m.name)?.temp && (m.k === "mi" || m.k === "ab") ? " · " + (recipeByName(m.name).temp === "kalt" ? "❄️ kalt" : recipeByName(m.name).temp === "warm" ? "🔥 warm" : "🔥/❄️") : ""}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“</span>` : ""}</span></button>
+    <button type="button" class="mname" ${m.own ? "disabled" : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<span class="go">›</span>`}</div>`;
 }
 function mealRowOld(d, m){
@@ -2574,6 +2577,14 @@ function mealCard(d, forceOpen){
     ${gap > 150 ? `<div class="small muted nutri">Plan liegt ${gap} kcal unter dem Ziel: mit Obst, Brot, Nüssen oder Milch auffüllen.</div>` : ""}
     <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn ghost small" type="button" data-go="essen">Wochenplan ›</button><button class="btn ghost small" type="button" data-go="einkauf">Einkaufsliste ›</button></div></div>`;
 }
+let mealTempF = "";
+// Anzeige im Essensblatt: ähnliche Gerichte, optional nur warm oder kalt (mehr Auswahl als die 8 nächsten)
+function mainAlts(k, curName){
+  if (!mealTempF) return altMeals(k, curName);
+  const ref = mealInfo(curName), re = avoidRe(), nu = r => recipeNutri(r);
+  return recipes.filter(r => (r.category === "mittag" || r.category === "abend") && r.name !== curName && nu(r).protein >= 25 && recipeOk(r, re) && (r.temp === mealTempF || r.temp === "beides"))
+    .sort((a, b) => (Math.abs(nu(a).kcal - ref.kcal) / 8 + Math.abs(nu(a).protein - ref.protein)) - (Math.abs(nu(b).kcal - ref.kcal) / 8 + Math.abs(nu(b).protein - ref.protein))).slice(0, 12);
+}
 function altMeals(k, curName){
   const sl = mealPlan.slots.find(x => x.k === k), ref = mealInfo(curName), minP = k === "sn" || k === "ex" ? 13 : 25;
   const re = avoidRe();
@@ -2587,7 +2598,8 @@ function mealSheet(arg){
     return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
   return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2>${close}</div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
-    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${altMeals(k, m.name).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
+    ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
+    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}
     ${ownForm("slot")}
@@ -2621,16 +2633,26 @@ function ensurePrices(){
 const eur = v => v == null ? "–" : v.toLocaleString("de-DE", {style: "currency", currency: "EUR"});
 // Markt: gewählt oder je Produkt der günstigste
 const ownOf = pr => (FOOD().ownPrices || {})[pr.id] || {};
-const bioOn = () => !!FOOD().bio;
+const bioOn = () => !!FOOD().bio || !!(FOOD().bioItems || []).length;
+// Bio für dieses Produkt: alle (Schalter) oder einzeln ausgewählt
+const bioUse = pr => !!pr.bio && (!!FOOD().bio || (FOOD().bioItems || []).includes(pr.id));
 // Zweite Variante (Bio bzw. konventionell) klein daneben, wenn bekannt und kein eigener Preis gilt
+function bioPicker(f){
+  const st = f.store !== "min" && f.store || "aldi", sel = new Set(f.bioItems || []);
+  const rows = prices.products.filter(pr => pr.bio?.[st] != null && pr.prices?.[st] != null).map(pr => [pr, Math.round((pr.bio[st] - pr.prices[st]) / pr.prices[st] * 100)]).sort((a, b) => a[1] - b[1]);
+  if (!rows.length) return `<div class="small muted">Für ${STORES[st]} sind keine Bio-Preise bekannt.</div>`;
+  return `<details class="biopick" ${sel.size ? "open" : ""}><summary><b>Bio einzeln wählen</b> <span class="small muted">${sel.size ? sel.size + " gewählt" : `${rows.length} Produkte mit Bio-Preis bei ${STORES[st]}`}</span></summary>
+    <div class="actions"><button class="btn small" type="button" data-biopreset="25">Nur kleine Aufschläge (≤ 25 %)</button><button class="btn ghost small" type="button" data-biopreset="0">Keine</button></div>
+    ${rows.map(([pr, d]) => `<label class="check small"><input type="checkbox" data-bioitem="${pr.id}" ${sel.has(pr.id) ? "checked" : ""}><span>${esc(pr.name)} <span class="muted">· ${eur(pr.prices[st])} → Bio ${eur(pr.bio[st])} (${d >= 0 ? "+" : ""}${d} %)</span></span></label>`).join("")}</details>`;
+}
 function bioAlt(pr, share){
   const st = FOOD().store || "aldi"; if (st === "min" || ownOf(pr)[st] || pr.bio?.[st] == null || pr.prices?.[st] == null) return "";
-  return bioOn() ? ` <span class="small muted">· konv. ${eur(share * pr.prices[st])}</span>` : ` <span class="small muted">· Bio ${eur(share * pr.bio[st])}</span>`;
+  return bioUse(pr) ? ` <button type="button" class="biob on" data-biotoggle="${pr.id}">Bio ✓ · konv. ${eur(share * pr.prices[st])}</button>` : ` <button type="button" class="biob" data-biotoggle="${pr.id}">Bio ${eur(share * pr.bio[st])}</button>`;
 }
-const isEst = (pr, st) => !ownOf(pr)[st] && !(bioOn() && pr.bio?.[st] != null) && (pr.est || []).includes(st);
+const isEst = (pr, st) => !ownOf(pr)[st] && !(bioUse(pr) && pr.bio?.[st] != null) && (pr.est || []).includes(st);
 // Reihenfolge: eigener Preis (Kassenbon/Scan) > Bio-Preis (wenn „Bio bevorzugen“) > Richtpreis
 function priceOf(pr, store){
-  const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}, bioOn() ? pr.bio || {} : {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
+  const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
   store = store || FOOD().store || "aldi";
   if (store !== "min" && prices && !prices.stores.includes(store)) store = "min";
   if (store === "min") { const v = Object.values(ps).filter(x => x != null); return v.length ? Math.min(...v) : null; }
@@ -2936,7 +2958,8 @@ function foodSettingsHtml(){
     <div class="card"><h2>Preise</h2>
       <label class="check"><input type="checkbox" id="foodPrices" ${f.prices ? "checked" : ""}><span>Preise pro Gericht und Einkauf anzeigen</span></label>
       <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
-      <label class="check"><input type="checkbox" id="foodBio" ${f.bio ? "checked" : ""}><span>Bio bevorzugen <span class="small muted">(Bio-Preis, wo bekannt; Budget und Einkauf rechnen damit)</span></span></label>
+      <label class="check"><input type="checkbox" id="foodBio" ${f.bio ? "checked" : ""}><span>Bio für alle Produkte <span class="small muted">(Bio-Preis, wo bekannt; Budget und Einkauf rechnen damit)</span></span></label>
+      ${prices && !f.bio ? bioPicker(f) : ""}
       <div class="small muted">${prices ? priceNote() : "Richtpreise werden geladen …"}</div></div>
     <div class="card"><h2>Wochenbudget</h2>
       <div class="field"><label for="foodBudget">Grenze pro Woche (€)</label><input type="text" inputmode="decimal" id="foodBudget" value="${esc(f.budget ?? "")}" placeholder="z. B. 60"></div>
@@ -2990,6 +3013,8 @@ function essenHtml(b){
 let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:""};
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
 // Mittag und Abend sind austauschbar; unterschieden wird warm/kalt
+// Hauptmahlzeiten heißen nach dem Gericht: warm oder kalt
+const mainLabel = (sl, rec) => sl.k === "mi" || sl.k === "ab" ? (rec?.temp === "kalt" ? "❄️ Kalt" : rec?.temp === "beides" ? "🔥/❄️ Warm oder kalt" : rec ? "🔥 Warm" : "Hauptgericht") : sl.label;
 const catOf = r => r.category === "mittag" || r.category === "abend" ? "haupt" : r.category;
 const TEMP = {warm: "🔥 warm", kalt: "❄️ kalt", beides: "🔥/❄️ warm oder kalt"};
 const tempTag = r => r?.temp ? `<span class="ttag ${r.temp}">${TEMP[r.temp]}</span>` : "";
@@ -3123,6 +3148,11 @@ async function onClick(e){
     else { guide.start = Date.now(); guide.end = g.stop ? 1 : Date.now() + g.sec * 1000; clearInterval(guideTimer); guideTimer = setInterval(guideTick, 250); }
     renderSheet(); guideTick(); return; }
   const el2 = t.closest("[data-efflvl]"); if (el2) { saveFood({effort: Object.assign({}, FOOD().effort, {lvl: Number(el2.dataset.efflvl)})}); render(); return; }
+  const bt = t.closest("[data-biotoggle]"); if (bt) { e.preventDefault(); const id = bt.dataset.biotoggle, f = FOOD(), set = new Set(f.bioItems || []);
+    if (f.bio) { saveFood({bio: false, bioItems: prices.products.filter(x => x.bio && x.id !== id).map(x => x.id)}); } else { set.has(id) ? set.delete(id) : set.add(id); saveFood({bioItems: [...set]}); } render(); return; }
+  const bp = t.closest("[data-biopreset]"); if (bp) { const lim = Number(bp.dataset.biopreset), st = FOOD().store !== "min" && FOOD().store || "aldi";
+    saveFood({bioItems: lim ? prices.products.filter(x => x.bio?.[st] != null && x.prices?.[st] && (x.bio[st] - x.prices[st]) / x.prices[st] <= lim / 100).map(x => x.id) : []}); render(); return; }
+  const mtf = t.closest("[data-mealtemp]"); if (mtf) { mealTempF = mtf.dataset.mealtemp; renderSheet(); return; }
   const rte = t.closest("[data-rectemp]"); if (rte) { recFilter.temp = rte.dataset.rectemp; renderRecipes(); return; }
   const rd = t.closest("[data-recdiff]"); if (rd) { recFilter.diff = rd.dataset.recdiff; renderRecipes(); return; }
   if (t.closest("[data-recfast]")) { recFilter.fast = !recFilter.fast; renderRecipes(); return; }
@@ -3239,6 +3269,7 @@ function onChange(e){
   if (t.dataset.subst) { const sb = Object.assign({}, FOOD().subst); if (t.value) sb[t.dataset.subst] = t.value; else delete sb[t.dataset.subst]; saveFood({subst: sb}); return; }
   if (t.id === "foodStore") { saveFood({store: t.value}); return; }
   if (t.id === "foodBio") { saveFood({bio: t.checked}); render(); return; }
+  if (t.dataset.bioitem) { const set = new Set(FOOD().bioItems || []); t.checked ? set.add(t.dataset.bioitem) : set.delete(t.dataset.bioitem); saveFood({bioItems: [...set]}); render(); return; }
   if (t.dataset.ftime) { if (t.value) saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
   if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet();

@@ -695,6 +695,14 @@ def meal_defaults(mp, settings, d, train, is_train=None):
     return o
 
 
+def main_label(slot, r):
+    """Hauptmahlzeiten heißen nach dem Gericht (wie mainLabel in der App)."""
+    if slot["k"] not in ("mi", "ab"):
+        return slot["label"]
+    t = (r or {}).get("temp")
+    return "Kalt" if t == "kalt" else "Warm oder kalt" if t == "beides" else "Warm" if r else "Hauptgericht"
+
+
 def build_meal_ics(now, settings, plan, days, past=None):
     with open(os.path.join(SITE_ROOT, "mealplan.json"), encoding="utf-8") as f:
         mp = json.load(f)
@@ -704,9 +712,11 @@ def build_meal_ics(now, settings, plan, days, past=None):
     past_dates = {p["date"] for p in (past or [])}
     rx = avoid_re(settings)
     P = load_prices()
-    if P and (settings.get("food") or {}).get("bio"):  # Bio bevorzugen (wie priceOf in der App)
+    fd = settings.get("food") or {}
+    if P and (fd.get("bio") or fd.get("bioItems")):  # Bio für alle oder einzeln gewählte Produkte (wie bioUse in der App)
         for pr in P["products"]:
-            pr.setdefault("prices", {}).update(pr.get("bio") or {})
+            if pr.get("bio") and (fd.get("bio") or pr["id"] in (fd.get("bioItems") or [])):
+                pr.setdefault("prices", {}).update(pr["bio"])
     if P:  # eigene Preise aus Kassenbons vor den Richtpreisen (wie priceOf in der App)
         own = (settings.get("food") or {}).get("ownPrices") or {}
         for pr in P["products"]:
@@ -765,7 +775,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
             desc = f"In der App öffnen: {url}" + (f"\n\n{r['kcal']} kcal · {r['protein']} g Protein" if r else f"\n\n{mp['away']['hint']}" if name == "away" else "")
             L += ["BEGIN:VEVENT", f"UID:meal-{iso}-{k}@tb2.trainingsbuch", f"DTSTAMP:{stamp}",
                   f"DTSTART:{utc(d, t)}", f"DTEND:{utc(d, f'{end // 60:02d}:{end % 60:02d}')}",
-                  fold("SUMMARY:" + ics_escape(f"{slot['label']}: {title}")), fold("DESCRIPTION:" + ics_escape(desc)),
+                  fold("SUMMARY:" + ics_escape(f"{main_label(slot, rec.get(name) if isinstance(name, str) else None)}: {title}")), fold("DESCRIPTION:" + ics_escape(desc)),
                   fold("URL:" + url), "TRANSP:TRANSPARENT", "END:VEVENT"]
     L.append("END:VCALENDAR")
     return "\r\n".join(L) + "\r\n"

@@ -16,7 +16,7 @@
   },
   {
    "k": "mi",
-   "label": "Mittag",
+   "label": "1. Hauptgericht",
    "time": "13:00",
    "cats": [
     "mittag",
@@ -34,7 +34,7 @@
   },
   {
    "k": "ab",
-   "label": "Abend",
+   "label": "2. Hauptgericht",
    "time": "19:00",
    "cats": [
     "abend",
