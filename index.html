@@ -2537,7 +2537,7 @@ const SUBST = {
   kochsahne: {label: "Kochsahne", opts: {cuisine: ["Hafer-Cuisine", -20, -2.2]}},
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
-const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); dataVer++; };
+const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
 const saveFood = patch => { saveSettings({food: patch}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
@@ -3039,6 +3039,12 @@ function shopList(entries){
     else { it.packs = Math.max(1, Math.ceil(it.amt / pr.pack - 0.05)); it.share = it.packs;
       it.buy = pr.dose ? `${it.packs} ${it.packs > 1 ? "Dosen" : "Dose"}` : pr.unit === "Stück" && pr.pack === 1 ? `${it.packs} Stück` : pr.unit === "Stück" ? `${it.packs}× ${pr.pack}er-Packung` : `${it.packs}× ${fmtAmt(pr.pack, pr.unit)}`; }
     it.need = pr.unit === "Stück" ? `${Math.round(it.amt * 10) / 10} Stück` : fmtAmt(it.amt, pr.unit); }
+  if (shopKind === "lager") {
+    const G = [["🥬 Frisch – zeitnah kaufen", []], ["⭐ Spezial – nur für bestimmte Gerichte", []], ["🗄 Basis – Vorrat prüfen", []]], ix = {frisch: 0, spezial: 1, basis: 2};
+    for (const it of Object.values(items)) G[ix[shelfOf(it)]][1].push(it);
+    for (const [, a] of G) a.sort((x, y) => x.name.localeCompare(y.name, "de"));
+    return {recs: recs.sort((a, b) => b.cnt - a.cnt), groups: G.filter(([, a]) => a.length)};
+  }
   const groups = SHOP_GROUPS.map(([g]) => [g, []]); groups.push(["Vorrat & Gewürze", []]);
   for (const it of Object.values(items)) { const gi = /(^|[^a-zäöü])öl\b|salz|pfeffer|zimt|gewürz|backpulver|sirup|essig|sojasoße|sojasauce|brühe|kakao|honig|stärke/i.test(it.name) ? -1 : SHOP_GROUPS.findIndex(([, re]) => re.test(it.name)); groups[gi < 0 ? groups.length - 1 : gi][1].push(it); }
   for (const [, a] of groups) a.sort((x, y) => x.name.localeCompare(y.name, "de"));
@@ -3049,7 +3055,12 @@ function shopCosts(groups, done){
   for (const [, a] of groups) for (const it of a) { if (!it.pr || done.has(it.key)) continue; for (const st of Object.keys(STORES)) { const v = priceOf(it.pr, st); if (v == null) out[st].miss++; else { out[st].sum += it.share * v; out[st].n = (out[st].n || 0) + 1; if ((it.pr.est || []).includes(st)) out[st].est = (out[st].est || 0) + 1; } } }
   return out;
 }
-let shopScope = lsGet("shopScope") || "woche", shopDay = null, shopRec = null, shopMul = 1;
+let shopScope = lsGet("shopScope") || "woche", shopDay = null, shopRec = null, shopMul = 1, shopDays = lsGet("shopDays") || 3, shopKind = lsGet("shopKind") || "gang";
+// Lagerart je Produkt: Basis = lange haltbar (Trocken, Dose, TK, H-Milch, Zwiebeln/Kartoffeln), sonst frisch; Spezial = kommt nur in wenigen Rezepten vor
+const BASIS = new Set(["haferflocken","reis","nudeln","vollkornnudeln","linsennudeln","couscous","quinoa","bulgur","roteLinsen","linsenBraun","kichererbsen","kidney","weissebohnen","schwarzeBohnen","linsendose","mais","tomatenGehackt","tomatenPassiert","tomatenmark","kokosmilch","sojagranulat","tkSpinat","erbsen","bohnenGruen","edamame","tkbeeren","mehl","zucker","staerke","oel","sojasauce","bruehe","honig","kakao","chia","leinsamen","kerne","walnuesse","cashews","mandeln","pinienkerne","erdnussmus","tahin","knaeckebrot","magermilchpulver","milch","sojadrink","haferdrink","pflanzendrink","currypaste","currypulver","senf","essig","agave","oliven","jalapenos","loeffelbiskuits","schokolade","kartoffeln","zwiebeln","knoblauch","margarine","eiweissbrot","tortillas"]);
+let prodUse = null;
+function prodUseCount(){ if (prodUse) return prodUse; prodUse = {}; for (const r of recipes || []) { const seen = new Set(); for (const l of r.ingredients || []) { const x = prices ? parseIng(l) : null; for (const pt of x?.parts || (x?.pr ? [x] : [])) seen.add(pt.pr.id); } for (const id of seen) prodUse[id] = (prodUse[id] || 0) + 1; } return prodUse; }
+const shelfOf = it => !it.pr ? "basis" : it.pr.pantry || BASIS.has(it.pr.id) ? ((prodUseCount()[it.pr.id] || 0) <= 3 && !it.pr.pantry ? "spezial" : "basis") : (prodUseCount()[it.pr.id] || 0) <= 4 ? "spezial" : "frisch";
 function weekRecipes(mo){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
 function shopCtx(){
@@ -3057,6 +3068,9 @@ function shopCtx(){
   if (shopScope === "tag") { const d = shopDay || todayIso(), c = {};
     for (const m of mealsFor(d)) if (recipeByName(m.name)) c[m.name] = (c[m.name] || 0) + 1;
     return {key: "shop:d:" + d, title: fmt(d), entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: cnt / (recipeByName(n).servings || 1)})), note: "Mengen für genau diese Portionen. Meal-Prep-Gerichte kaufst du meist für die ganze Woche."}; }
+  if (shopScope === "tage") { const d0 = shopDay || todayIso(), c = {};
+    for (let i = 0; i < shopDays; i++) for (const m of mealsFor(addDays(d0, i))) if (recipeByName(m.name)) c[m.name] = (c[m.name] || 0) + 1;
+    return {key: `shop:t:${d0}:${shopDays}`, title: `${fmt(d0)} – ${fmt(addDays(d0, shopDays - 1))}`, entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: cnt / (recipeByName(n).servings || 1)})), note: `Genau die Portionen der nächsten ${shopDays} Tage. Meal-Prep-Gerichte kochst du meist für die ganze Woche – dann lieber „die Woche“ wählen.`}; }
   if (shopScope === "gericht") { const wr = Object.keys(weekRecipes(mo)), n = shopRec && recipeByName(shopRec) ? shopRec : wr[0] || recipes[0].name, r = recipeByName(n);
     return {key: `shop:r:${n}:${shopMul}`, title: n, entries: [{n, cnt: shopMul * (r.servings || 1), f: shopMul}], note: `${shopMul}× Rezept ergibt ${shopMul * (r.servings || 1)} Portion${shopMul * (r.servings || 1) > 1 ? "en" : ""}.`, n}; }
   const c = weekRecipes(mo);
@@ -3066,11 +3080,12 @@ const fmtQ = q => q == null ? "" : (Math.round(q * 10) / 10).toLocaleString("de-
 function shopHtml(){
   const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), hide = !!lsGet("shopHide"), {recs, groups} = shopList(cx.entries);
   const total = groups.reduce((n, [, a]) => n + a.length, 0), got = groups.reduce((n, [, a]) => n + a.filter(i => done.has(i.key)).length, 0);
-  let h = `<div class="chips scope" role="group" aria-label="Umfang"><span class="small muted">Einkauf für</span>${[["tag","einen Tag"],["gericht","ein Gericht"],["woche","die Woche"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
+  let h = `<div class="chips scope" role="group" aria-label="Umfang"><span class="small muted">Einkauf für</span>${[["tage","die nächsten Tage"],["woche","die Woche"],["tag","einen Tag"],["gericht","ein Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const wr = Object.keys(weekRecipes(shopWeek())), rest = recipes.map(r => r.name).filter(n => !wr.includes(n));
     h += `<div class="card"><div class="field"><label for="shopRec">Gericht</label><select id="shopRec"><optgroup label="Diese Woche im Plan">${wr.map(n => `<option ${n === cx.n ? "selected" : ""}>${esc(n)}</option>`).join("")}</optgroup><optgroup label="Alle Rezepte">${rest.map(n => `<option ${n === cx.n ? "selected" : ""}>${esc(n)}</option>`).join("")}</optgroup></select></div>
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
-  else h += `<div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>`;
+  else { if (shopScope === "tage") h += `<div class="chips"><span class="small muted">Für</span>${[2, 3, 4].map(n => `<button type="button" data-shopdays="${n}" aria-pressed="${shopDays === n}">${n} Tage</button>`).join("")}</div>`;
+    h += `<div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>`; }
   if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => a[1].sum - b[1].sum)[0][0];
     const bud = num(FOOD().budget);
     h += `<div class="card budgetbar"><div class="mhead"><b>Wochenbudget <span id="budVal">${bud ? eur(bud) : "aus"}</span></b><label class="check small"><input type="checkbox" id="budOn" ${bud && !FOOD().budgetIgnore ? "checked" : ""}><span>aktiv</span></label></div>
@@ -3081,11 +3096,14 @@ function shopHtml(){
   const src = !!lsGet("shopSrc");
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b><div class="actions"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" id="shopShare">Teilen</button><button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button></div></div>
     <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
+    <div class="chips"><span class="small muted">Sortieren</span><button type="button" data-shopkind="gang" aria-pressed="${shopKind === "gang"}">nach Gang im Laden</button><button type="button" data-shopkind="lager" aria-pressed="${shopKind === "lager"}">Frisch · Spezial · Basis</button></div>
     <div class="row2"><label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label><label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Für welches Gericht</span></label></div>
     ${shopScope === "gericht" ? info(esc(cx.note)) : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
+  const shopItemHtml = i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${isEst(i.pr, FOOD().store || "aldi") ? `<span class="muted">*</span>` : ownOf(i.pr)[FOOD().store || "aldi"] ? ` <span class="tag">dein Preis</span>` : ""}${bioAlt(i.pr, i.share)}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
-    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${isEst(i.pr, FOOD().store || "aldi") ? `<span class="muted">*</span>` : ownOf(i.pr)[FOOD().store || "aldi"] ? ` <span class="tag">dein Preis</span>` : ""}${bioAlt(i.pr, i.share)}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
+    if (shopKind === "lager" && g.startsWith("🗄") && shopScope !== "woche") { h += `<details class="shopbasis"><summary class="lab sec">${esc(g)} (${vis.length})</summary><div class="small muted">Lange haltbar – nur nachkaufen, was fehlt.</div><div class="shopg">${vis.map(shopItemHtml).join("")}</div></details>`; continue; }
+    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(shopItemHtml).join("")}</div>`; }
   return h + info("Was schon im Vorrat ist (Gewürze, Öl, Haferflocken), einfach abhaken. Wischen hakt ebenfalls ab.");
 }
 function shopText(){
@@ -3286,7 +3304,9 @@ async function onClick(e){
     sheetKind = null; sheet.close(); render(); return; }
   const od = t.closest("[data-owndel]"); if (od) { const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
-  const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
+  const sd = t.closest("[data-shopdays]"); if (sd) { shopDays = Number(sd.dataset.shopdays); lsSet("shopDays", shopDays); renderMore(); return; }
+  const sk2 = t.closest("[data-shopkind]"); if (sk2) { shopKind = sk2.dataset.shopkind; lsSet("shopKind", shopKind); renderMore(); return; }
+  const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else if (shopScope === "tage") shopDay = addDays(shopDay || todayIso(), v * shopDays); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
