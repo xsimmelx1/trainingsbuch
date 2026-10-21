@@ -94,6 +94,14 @@ textarea{min-height:64px;resize:vertical}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
 .acl{margin-top:6px}
+.ingt{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.ingt th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line)}
+.ingt td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+.ingt td.amt{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums;width:1%}
+.ingt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ingt tr.grp td{background:var(--surface);font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding-top:10px}
+.ingt tr.home td{opacity:.65}
+.ingt tfoot td{font-weight:700;border-bottom:0}
 .nwest{margin:8px 0;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
 .nwrow{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0}.nwrow.miss span:first-child{color:var(--warn)}.nwrow.sum{border-top:1px solid var(--line);margin-top:4px;padding-top:6px}
 .restmini{position:sticky;top:0;z-index:5;margin:-4px 0 8px;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--ink);font-size:14px;text-align:center}
@@ -205,10 +213,11 @@ body.wo main{padding-bottom:110px}
 .tline span.done{opacity:.55}.tline span.miss{border-style:dashed}
 .tline span.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
 .nextc .nowh .mthumb{width:56px;height:56px;border-radius:12px}
-.preps{display:flex;flex-direction:column;gap:6px;margin:8px 0}
-.prep{display:grid;grid-template-columns:46px 1fr;gap:8px;font-size:14px;align-items:baseline}
-.prep > span:first-child{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
-.prep.due > span:first-child{color:var(--warn)}
+.pps{display:flex;flex-direction:column;gap:6px;margin:0}
+.pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
+.pps .pp > span:first-child{flex:none;width:42px;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.pps .pp.due > span:first-child{color:var(--warn)}
+.nextc .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}.nextc .actions .btn{white-space:nowrap}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .quick label{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font-size:13px;color:var(--muted)}
@@ -1842,11 +1851,29 @@ function nextBlock(d){
   if (!nx) return {h: h + `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`, key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k), m = nx.meal;
   h += `<div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
-    ${mine.length ? `<div class="preps">${mine.map(p => `<div class="prep ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
+    ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
     <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
   const other = preps.filter(p => p.for !== nx.k && p.t <= nm + 8 * 60).slice(0, 3);
-  if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="preps card">${other.map(p => `<div class="prep"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
+  if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
   return {h, key: nx.k};
+}
+// Zutaten als Tabelle, sortierbar nach Rezept, Gang im Laden, Preis oder A–Z
+function ingTable(r){
+  const sort = lsGet("ingSort") || "rezept", st = stockOn() ? STOCK() : new Set(), pz = showPrices() && prices;
+  const rows = r.ingredients.map((l, i) => { const x = prices ? parseIng(l) : null, m = l.match(/^((?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Stiele?|Zweige?)?)\s+(.+)$/);
+    const pr = x?.pr, cost = pr ? (x.parts || [x]).reduce((a, pt) => { const v = priceOf(pt.pr); return v == null ? a : a + pt.amt / pt.pr.pack * v; }, 0) : null, name = m ? m[2] : l;
+    const grp = pr?.group || (SPICE_RE.test(l) || !pr ? "Vorrat & Gewürze" : (SHOP_GROUPS.find(([, re]) => re.test(name))?.[0] || "Vorrat & Gewürze"));
+    return {i, amt: m ? m[1] : "", name, sub: x?.orig ? SUBST[x.orig.id].opts[x.subKey][0] : null, cost, grp, home: !!(pr && st.has(pr.id))}; });
+  const GO = SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze");
+  if (sort === "laden") rows.sort((a, b) => GO.indexOf(a.grp) - GO.indexOf(b.grp) || a.name.localeCompare(b.name, "de"));
+  else if (sort === "preis") rows.sort((a, b) => (b.cost ?? -1) - (a.cost ?? -1));
+  else if (sort === "az") rows.sort((a, b) => a.name.localeCompare(b.name, "de"));
+  const cols = pz ? 3 : 2;
+  return `<div class="lab">Zutaten · ${r.servings} Portion${r.servings > 1 ? "en" : ""}</div>
+    <div class="chips sm">${[["rezept", "Rezept"], ["laden", "Laden"], ["preis", "Preis"], ["az", "A–Z"]].map(([k, lb]) => `<button type="button" data-ingsort="${k}" aria-pressed="${sort === k}">${lb}</button>`).join("")}</div>
+    <table class="ingt"><thead><tr><th>Menge</th><th>Zutat</th>${pz ? `<th class="num">Preis</th>` : ""}</tr></thead><tbody>${rows.map((x, j) => (sort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<tr class="grp"><td colspan="${cols}">${esc(x.grp)}</td></tr>` : "")
+      + `<tr class="${x.home ? "home" : ""}"><td class="amt">${esc(x.amt)}</td><td>${esc(x.name)}${x.sub ? ` <b>→ ${esc(x.sub)}</b>` : ""}${x.home ? ` <span class="tag">🏠 da</span>` : ""}</td>${pz ? `<td class="num">${x.cost != null ? eur(x.cost) : "–"}</td>` : ""}</tr>`).join("")}</tbody>
+    ${pz ? `<tfoot><tr><td></td><td>Gesamt · pro Portion ${eur(recipeCost(r).portion)}</td><td class="num">${eur(recipeCost(r).total)}</td></tr></tfoot>` : ""}</table>`;
 }
 function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
@@ -2478,7 +2505,7 @@ function journeySheet(kind, arg){
       ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div>${info(`Pro Portion, anteilig gerechnet. ${priceNote()}`)}` : ""}
       <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span><b>${r.servings}</b> Portion${r.servings > 1 ? "en" : ""}</span></div>
       <div class="effort">${tempTag(r)}<span>⏱ ${r.activeMin != null ? `<b>${r.activeMin} min</b> aktiv · ` : ""}${r.timeMin} min gesamt</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${effortOn() && !effortOk(r) ? `<span class="small muted">über deinem Aufwand-Limit</span>` : ""}</div>
-      <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.subKey][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
+      <div id="ingTab">${ingTable(r)}</div>
       <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
       ${r.shelfLife ? `<div class="small muted">Haltbarkeit: ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}
       ${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}
@@ -3646,6 +3673,7 @@ async function onClick(e){
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
+  const isr = t.closest("[data-ingsort]"); if (isr) { lsSet("ingSort", isr.dataset.ingsort); const box = document.getElementById("ingTab"), r = recipeByName(sheetArg); if (box && r) box.innerHTML = ingTable(r); return; }
   const stk = t.closest("[data-stock]"); if (stk) { const a = STOCK(), k = stk.dataset.stock; a.has(k) ? a.delete(k) : a.add(k); saveFood({stock: [...a]}); stk.setAttribute("aria-pressed", a.has(k)); const m = sheetBody.querySelector(".mhead .small.muted"); if (m) m.textContent = `${a.size} Produkte markiert`; return; }
   if (t.closest("[data-stockon]")) { saveFood({stockOn: FOOD().stockOn === false}); renderSheet(); return; }
   if (t.closest("[data-stockclear]")) { saveFood({stock: []}); renderSheet(); return; }
