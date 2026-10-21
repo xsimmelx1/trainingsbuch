@@ -36,7 +36,8 @@
    "title": "File:-2019-02-07 Overnight Oats, Cromer.JPG"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Zimt-Birnen-Overnight-Oats mit Skyr",
@@ -75,7 +76,8 @@
    "title": "File:Apple cinnamon oatmeal.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Quark-Hafer-Protein-Pancakes",
@@ -114,7 +116,8 @@
    "title": "File:Pancakes with Berries (Unsplash).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Rührei auf Vollkornbrot",
@@ -153,7 +156,8 @@
    "title": "File:Scrambled eggs on toast - Joe's Cafe 2024-04-14.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Räuchertofu-Scramble mit Spinat & Zucchini",
@@ -193,7 +197,8 @@
    "title": "File:Tofu Scrambler.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Freezer-Breakfast-Burritos (2 Stück)",
@@ -238,7 +243,8 @@
    "title": "File:Breakfast burrito (cropped).jpg"
   },
   "activeMin": 30,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "beides"
  },
  {
   "name": "Jalapeño-Hüttenkäse-Toast (XL)",
@@ -275,7 +281,8 @@
    "title": "File:Avocado toast at the girl & the fig - Sarah Stierch.jpg"
   },
   "activeMin": 7,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Beeren-Zimt-Baked-Protein-Oats",
@@ -315,7 +322,8 @@
    "title": "File:Flapjacks.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "beides"
  },
  {
   "name": "Ei-Hüttenkäse-Muffins (3 Stück)",
@@ -354,7 +362,8 @@
    "title": "File:Frittata - Bam's Kitchen 2024-04-02.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "beides"
  },
  {
   "name": "Quinoa-Kichererbsen-Salat im Glas + Edamame",
@@ -398,7 +407,8 @@
    "title": "File:Healthy quinoa salad with dried fruit.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Linsen-Soja-Bolognese mit Vollkornnudeln",
@@ -439,7 +449,8 @@
    "title": "File:Ingredients for spaghetti with tomato sauce.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Chili sin Carne mit Sojagranulat & Reis",
@@ -481,7 +492,8 @@
    "title": "File:Bowl of chili.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "White Chickpea Chili mit Skyr-Topping",
@@ -523,7 +535,8 @@
    "title": "File:White-bean-chili-burritos.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
@@ -562,7 +575,8 @@
    "title": "File:Making tomato sauce for pasta dish.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Teriyaki-Tofu-Edamame-Bowl",
@@ -604,7 +618,8 @@
    "title": "File:Salt & Pepper Tofu Rice Bowl - Tiger Bites Pig 2025-11-20.jpg"
   },
   "activeMin": 20,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "beides"
  },
  {
   "name": "Couscous-Kichererbsen-Pfanne mit Feta",
@@ -644,7 +659,8 @@
    "title": "File:Couscous with vegetables (6177185023).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
@@ -685,7 +701,8 @@
    "title": "File:Tofu wrap.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Marry-Me-Linsen mit Räuchertofu (light)",
@@ -727,7 +744,8 @@
    "title": "File:Homemade Lentil Soup - Lavash 2025-02-10.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
@@ -768,7 +786,8 @@
    "title": "File:Chana Masala - Mohammed - Spice Of Life 2024-05-27.jpg"
   },
   "activeMin": 20,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Nudelgulasch mit Soja-Hack",
@@ -810,7 +829,8 @@
    "title": "File:Bohnen - Eintopf.JPG"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
@@ -850,7 +870,8 @@
    "title": "File:Roasted sweet potatoes, green beans, and shallots (for a salad) (7753558234).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
@@ -890,7 +911,8 @@
    "title": "File:Spinach pasta (3383218355).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
@@ -931,7 +953,8 @@
    "title": "File:Dal Tadka-Delhi.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Shakshuka mit Kichererbsen & Feta",
@@ -972,7 +995,8 @@
    "title": "File:Shakshuka by Calliopejen1.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Blech-Fajitas mit Räuchertofu & Bohnen",
@@ -1013,7 +1037,8 @@
    "title": "File:Vegetable Fajitas (4188499456).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Harzer-Käse-Brot mit Gurke",
@@ -1049,7 +1074,8 @@
    "title": "File:Harzer Käse 13 WikiCheese Lokal K.jpg"
   },
   "activeMin": 3,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Hüttenkäse-Gemüse-Box mit Knäckebrot",
@@ -1085,7 +1111,8 @@
    "title": "File:Veggie pasta bento (3948839857).jpg"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Knusper-Kichererbsen & Edamame",
@@ -1120,7 +1147,8 @@
    "title": "File:Leblebi.jpg"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Erdnuss-Hafer-Energy-Balls (2 Stück)",
@@ -1156,7 +1184,8 @@
    "title": "File:Energy Balls (Unsplash).jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Quark-Beeren-Bowl mit Hafer & Erdnussmus",
@@ -1193,7 +1222,8 @@
    "title": "File:Muesli with Berries.jpg"
   },
   "activeMin": 3,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Bananen-Kakao-Skyr-Shake",
@@ -1231,7 +1261,8 @@
    "title": "File:Tricolor Smoothie, Papaya, Banana & Kiwi - Gujarat - SHAILI 006.jpg"
   },
   "activeMin": 3,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Skyr-Quark-Eis / Frozen-Bark",
@@ -1267,7 +1298,8 @@
    "title": "File:French fry frozen yoghurt.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Quark-Tiramisu im Glas",
@@ -1302,7 +1334,8 @@
    "title": "File:Tiramisu in glass.jpg"
   },
   "activeMin": 8,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Chia-Skyr-Pudding mit Beeren",
@@ -1338,7 +1371,8 @@
    "title": "File:Coconut chia seed pudding, fresh fruit, honey & hemp seeds (30539936772).jpg"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
@@ -1379,7 +1413,8 @@
    "title": "File:Mushrooms On Toast - North Laine Café 2025-09-08.jpg"
   },
   "activeMin": 20,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "kalt"
  },
  {
   "name": "Quark-Kaiserschmarrn mit Zwetschgen",
@@ -1420,7 +1455,8 @@
    "title": "File:Hofzuckerbäcker Demel Kaiserschmarrn 3.jpg"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
@@ -1461,7 +1497,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%BE%D1%80%D1%82%D0%B8%D1%99%D0%B8_%D1%81%D0%BE_%D1%98%D0%B0%D1%98%D1%86%D0%B5_%D0%B8_%D1%81%D0%BF%D0%B0%D0%BD%D0%B0%D1%9C.jpg",
    "title": "File:Тортиљи со јајце и спанаќ.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
@@ -1503,7 +1540,8 @@
    "title": "File:Chickpea Omelette Complete.jpg"
   },
   "activeMin": 15,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
@@ -1546,7 +1584,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Risotto_of_leek,_mushroom,_pea,_spinach_-_Relish_Food_Store_AUD14_(4139673555).jpg",
    "title": "File:Risotto of leek, mushroom, pea, spinach - Relish Food Store AUD14 (4139673555).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Spinat-Pilz-Feta-Quiche ohne Boden",
@@ -1589,7 +1628,8 @@
    "title": "File:Quiche of the Day (mushroom and spinach) - The Hummingbird 2026-05-05.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "beides"
  },
  {
   "name": "Huevos Rancheros mit schwarzen Bohnen & Feta",
@@ -1631,7 +1671,8 @@
    "title": "File:Huevos rancheros - Pescadero.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
@@ -1675,7 +1716,8 @@
    "title": "File:Quark rolls.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
@@ -1715,7 +1757,8 @@
    "title": "File:Tahu goreng crispy.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Gefüllte Skyr-Senf-Eier",
@@ -1753,7 +1796,8 @@
    "title": "File:Deviled Eggs topped with Scallions.JPG"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
@@ -1794,7 +1838,8 @@
    "title": "File:White bean dip with garlic and fresh herbs.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Skyr-Tzatziki mit Vollkorn-Knäcke",
@@ -1833,7 +1878,8 @@
    "title": "File:Tzatziki IMGP1444.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Erdnuss-Bananen-Quark-Shake",
@@ -1872,7 +1918,8 @@
    "title": "File:Banana Smoothie.jpg"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
@@ -1912,7 +1959,8 @@
    "title": "File:Chocolate mousse - stonesoup.jpg"
   },
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Protein-Käsekuchen ohne Boden mit Beeren",
@@ -1954,7 +2002,8 @@
    "title": "File:Soufflé-style cheesecake 001.jpg"
   },
   "activeMin": 30,
-  "difficulty": "aufwendig"
+  "difficulty": "aufwendig",
+  "temp": "warm"
  },
  {
   "name": "Blaubeer-Seidentofu-Skyr-Smoothie",
@@ -1993,7 +2042,8 @@
    "title": "File:Blueberry smoothie.jpg"
   },
   "activeMin": 5,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Linseneintopf mit Räuchertofu & Kartoffeln",
@@ -2036,7 +2086,8 @@
    "title": "File:Bowl of lentil soup with green and red lentils.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Erdnuss-Nudeln mit Tofu & Edamame",
@@ -2079,7 +2130,8 @@
    "title": "File:Vegan Peanut Cold Noodles with Cucumbers (6002018387).jpg"
   },
   "activeMin": 25,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Gebratener Reis mit Tofu, Ei & Erbsen",
@@ -2122,7 +2174,8 @@
    "title": "File:Fried Rice 1 (Eggs & Vegetables).jpg"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
@@ -2164,7 +2217,8 @@
    "title": "File:Nudelsalat Feta-Kidneybohnen-Gurke-Zwiebel.jpg"
   },
   "activeMin": 20,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "kalt"
  },
  {
   "name": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
@@ -2206,7 +2260,8 @@
    "title": "File:Mapo Tofu with rice.jpg"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Kartoffel-Tortilla mit Hüttenkäse",
@@ -2245,7 +2300,8 @@
    "title": "File:Tortilla española con patatas y cebolla.jpg"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Soja-Gyros-Bowl mit Reis & Quark-Tzatziki",
@@ -2287,7 +2343,8 @@
    "title": "File:Tzatiki (3656301454).jpg"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "beides"
  },
  {
   "name": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
@@ -2333,7 +2390,8 @@
    "title": "File:Lasagne piece.jpg"
   },
   "activeMin": 35,
-  "difficulty": "aufwendig"
+  "difficulty": "aufwendig",
+  "temp": "warm"
  },
  {
   "name": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
@@ -2380,7 +2438,8 @@
    "title": "File:Shepherd's pie (22470901009) (cropped).jpg"
   },
   "activeMin": 35,
-  "difficulty": "aufwendig"
+  "difficulty": "aufwendig",
+  "temp": "warm"
  },
  {
   "name": "Eier-Curry mit Kichererbsen, Spinat & Reis",
@@ -2421,7 +2480,8 @@
    "title": "File:Egg Curry (Anda Curry).JPG"
   },
   "activeMin": 25,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
@@ -2463,7 +2523,8 @@
    "title": "File:Quesadilla plate, New Orleans November 2016.jpg"
   },
   "activeMin": 25,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Gefüllte Paprika mit Sojahack, Reis & Feta",
@@ -2505,7 +2566,8 @@
    "title": "File:Gefüllte Paprika Nahansicht 2026.jpg"
   },
   "activeMin": 30,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
@@ -2548,7 +2610,8 @@
    "title": "File:Vegetarian black bean burger with homefries.jpg"
   },
   "activeMin": 35,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
@@ -2587,7 +2650,8 @@
    "title": "File:Baked feta pasta.jpg"
   },
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "temp": "warm"
  },
  {
   "name": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
@@ -2630,7 +2694,8 @@
    "title": "File:Brighton Bibimbap (tofu) - Time For Kimchi.jpg"
   },
   "activeMin": 30,
-  "difficulty": "mittel"
+  "difficulty": "mittel",
+  "temp": "warm"
  },
  {
   "name": "Protein-Porridge mit Skyr, Walnüssen & Mango",
@@ -2670,7 +2735,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/58301516@N00/23209305283",
    "title": "Breakfast: mango (), oat porridge and coffee with almond and coconut milk."
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Pancakes mit Blaubeeren & Mandeln",
@@ -2713,7 +2779,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Blueberry_pancakes_(1).jpg",
    "title": "File:Blueberry pancakes (1).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Herzhafte Spinat-Pancakes mit Kräuter-Skyr",
@@ -2761,7 +2828,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Spinach_pancake_with_curd.jpg",
    "title": "File:Spinach pancake with curd.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Mediterranes Omelett-Sandwich",
@@ -2804,7 +2872,8 @@
    "license": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bocadillo_de_Tortilla_de_patatas_-_34.jpg",
    "title": "File:Bocadillo de Tortilla de patatas - 34.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Rote-Linsen-Pasta mit Rucola, Mozzarella & Pinienkernen",
@@ -2845,7 +2914,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Pasta,_Rocket,_Red_Lentils_%26_Goat_Cheese_(4370431939).jpg",
    "title": "File:Pasta, Rocket, Red Lentils & Goat Cheese (4370431939).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsennudel-Auflauf mit Brokkoli & Mozzarella",
@@ -2885,7 +2955,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://www.flickr.com/photos/34917178@N08/5383745643",
    "title": "Baked Penne"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Sushi-Bowl mit Tofu & Edamame",
@@ -2933,7 +3004,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Fried_Tofu_Poke_Bowl_(M)_with_Wasabi_Soy_sauce_-_Kitokito_2023-06-09.jpg",
    "title": "File:Fried Tofu Poke Bowl (M) with Wasabi Soy sauce - Kitokito 2023-06-09.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Linsen-Kürbis-Eintopf mit Tofu",
@@ -2978,7 +3050,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/69302634@N02/9528060666",
    "title": "Soup with rosemary garnish"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Schwäbische Linsen mit Spätzle & Räuchertofu",
@@ -3027,7 +3100,8 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Rago%C3%BBt_aux_lentilles.jpg",
    "title": "File:Ragoût aux lentilles.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kürbis-Tofu-Curry mit Reis",
@@ -3072,7 +3146,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dudi_(10524395875).jpg",
    "title": "File:Dudi (10524395875).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Halloumi-Tikka-Masala mit Reis",
@@ -3125,7 +3200,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Paneer_Butter_Masala_(2026).jpg",
    "title": "File:Paneer Butter Masala (2026).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Knusprige Tofu-Ecken in Erdnusssoße mit Brokkoli",
@@ -3179,7 +3255,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Baked_Tofu_with_Broccoli_and_Rice.jpg",
    "title": "File:Baked Tofu with Broccoli and Rice.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Wirsingrouladen mit Räuchertofu-Füllung & Tomatensugo",
@@ -3224,7 +3301,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Wirsingroulade.jpg",
    "title": "File:Wirsingroulade.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rührtofu mit Kartoffelpüree & Rahmspinat",
@@ -3271,7 +3349,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Aloo_Palak_potato.jpg",
    "title": "File:Aloo Palak potato.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "High-Protein-Spinat-Lasagne mit Hüttenkäse",
@@ -3313,7 +3392,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Food_%E8%8F%A0%E8%8F%9C%26%E7%91%9E%E5%8F%AF%E9%81%94%E8%B5%B7%E5%8F%B8%E5%8D%83%E5%B1%A4%E9%BA%B5,_Spinach_%26_Ricotta_Lasagna,_LONGTABLE,_%E5%8F%B0%E5%8C%97_(15708119113).jpg",
    "title": "File:Food 菠菜&瑞可達起司千層麵, Spinach & Ricotta Lasagna, LONGTABLE, 台北 (15708119113).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Burrito mit Soja-Hack, Bohnen & Käsesoße",
@@ -3357,7 +3437,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_Burrito_at_Mucho_Burrito_in_Vancouver,_BC_(5665706890).jpg",
    "title": "File:Vegetarian Burrito at Mucho Burrito in Vancouver, BC (5665706890).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Taler mit Rucolasalat & Kräuterquark",
@@ -3403,7 +3484,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Fritter_-_The_Veg_Box_Cafe_2024-12-29.jpg",
    "title": "File:Fritter - The Veg Box Cafe 2024-12-29.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Knäcke-Pizza mit Hüttenkäse, Oliven & Gouda",
@@ -3443,7 +3525,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:-2019-05-17_Cheese,_tomato_and_egg_on_rye_crispbread_(1).JPG",
    "title": "File:-2019-05-17 Cheese, tomato and egg on rye crispbread (1).JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa",
@@ -3496,7 +3579,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dal_soup_(Indian_lentil_dish).jpg",
    "title": "File:Dal soup (Indian lentil dish).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Panierte Tofu-Sticks mit Kichererbsen-Spinat & Kartoffeln",
@@ -3537,7 +3621,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Spinach-Chickpea_Curry_(3117324894).jpg",
    "title": "File:Spinach-Chickpea Curry (3117324894).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tomaten-Mozzarella-Omelett aus dem Ofen",
@@ -3579,7 +3664,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Baked_Moroccan_Omelette_with_Haloumi,_Tomatoes_and_Capsicums.jpg",
    "title": "File:Baked Moroccan Omelette with Haloumi, Tomatoes and Capsicums.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Chinesischer Zitronen-Tofu mit Gemüsereis",
@@ -3625,7 +3711,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Tofu_Kee_Mao_Fried_Rice_-_Nok_Nok_Kitchen_at_The_Cow_2025-03-15.jpg",
    "title": "File:Tofu Kee Mao Fried Rice - Nok Nok Kitchen at The Cow 2025-03-15.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing",
@@ -3674,7 +3761,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/35022955@N06/44602725310",
    "title": "Teriyaki buddha bowl: Tofu, buckwheat, mushrooms and cabbage #dailydozen #dailydozenchallenge"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
@@ -3720,7 +3808,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetable_skewers.jpg",
    "title": "File:Vegetable skewers.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsen-Tofu-Curry mit Pak Choi",
@@ -3765,7 +3854,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tofu_and_bok_choy.jpg",
    "title": "File:Tofu and bok choy.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote-Linsen-Salat mit Feta, Mango & Cashews",
@@ -3808,7 +3898,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Salade_de_lentilles,_potimarron_r%C3%B4ti_et_Feta.jpg",
    "title": "File:Salade de lentilles, potimarron rôti et Feta.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Gebratene Quarkklöße mit Salat & Radieschen",
@@ -3851,7 +3942,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kaspresskn%C3%B6del.jpg",
    "title": "File:Kaspressknödel.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Nudel-Frittata mit grünem Spargel",
@@ -3890,7 +3982,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/96763131@N00/477554807",
    "title": "Constructed Asparagus Frittata"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Falafel in orientalischer Linsensuppe mit Skyr",
@@ -3935,7 +4028,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Red_lentil_soup_bowl.jpg",
    "title": "File:Red lentil soup bowl.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gebackener Halloumi mit Ofengemüse",
@@ -3980,7 +4074,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:The_Crown_and_Two_Chairmen,_Soho,_London_(2331354643).jpg",
    "title": "File:The Crown and Two Chairmen, Soho, London (2331354643).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Orientalischer Linsen-Feta-Eintopf",
@@ -4024,7 +4119,8 @@
    "license": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:French_Lentil_Soup_(140491423).jpeg",
    "title": "File:French Lentil Soup (140491423).jpeg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu-Bowl mit Bohnen, Ofengemüse & Hummus",
@@ -4072,7 +4168,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Skordalia,_hummus_and_vegetables.jpg",
    "title": "File:Skordalia, hummus and vegetables.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Schnelle Miso-Ramen mit Tofu & Ei",
@@ -4121,7 +4218,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Miso_ramen_with_fried_tofu,_corn,_wakame_seaweed,_chili_strings,_and_scallions_-_Massachusetts.jpg",
    "title": "File:Miso ramen with fried tofu, corn, wakame seaweed, chili strings, and scallions - Massachusetts.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Pellkartoffeln mit extra Kräuterquark",
@@ -4162,7 +4260,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kartoffeln-quark.jpg",
    "title": "File:Kartoffeln-quark.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Frühstücks-Quarkspeise mit Beeren & Studentenfutter",
@@ -4203,7 +4302,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/61676142@N00/9920331173",
    "title": "Post-workout meal"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Dinkel-Crêpes mit Blaubeerquark",
@@ -4244,7 +4344,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:01_Lemon_Blueberry_Crepes.jpg",
    "title": "File:01 Lemon Blueberry Crepes.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Beeren-Skyr mit Mandeln & Rosinen",
@@ -4281,7 +4382,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/95142644@N00/8003777591",
    "title": "Berries for breakfast"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Möhren-Rührei mit Räuchertofu & Feta",
@@ -4322,7 +4424,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Breakfast_in_Israel_scrambled_eggs_with_herbs_and_vegetables.jpg",
    "title": "File:Liat Portal for Foodie Disorder - Breakfast in Israel scrambled eggs with herbs and vegetables.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Veggie-Bowl mit Crispy-Tofu, Ofengemüse & Kichererbsen",
@@ -4369,7 +4472,8 @@
    "license": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Smokey_Millet_Super_Grain_Bowl_With_Crispy_Tofu.jpg",
    "title": "File:Smokey Millet Super Grain Bowl With Crispy Tofu.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Kichererbsen-Pasta mit Linsennudeln & Hartkäse",
@@ -4410,7 +4514,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Pasta_e_ceci_(49671162847).jpg",
    "title": "File:Pasta e ceci (49671162847).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Dinkel-Wraps mit Hüttenkäse-Avocado-Creme",
@@ -4454,7 +4559,8 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%BE%D1%80%D1%82%D0%B8%D1%99%D0%B0_%D1%81%D0%BE_%D0%B0%D0%B2%D0%BE%D0%BA%D0%B0%D0%B4%D0%BE,_%D1%98%D0%B0%D1%98%D1%86%D0%B0_%D0%B8_%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%BA%D0%B0.jpg",
    "title": "File:Тортиља со авокадо, јајца и салатка.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Tofu-Shawarma mit Ofen-Blumenkohl & Skyr-Soße",
@@ -4503,7 +4609,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%D7%A9%D7%95%D7%95%D7%90%D7%A8%D7%9E%D7%94_%D7%A6%D7%9E%D7%97%D7%95%D7%A0%D7%99%D7%AA_%D7%91%D7%98%D7%95%D7%A8%D7%98%D7%99%D7%94.JPG",
    "title": "File:שווארמה צמחונית בטורטיה.JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Süßkartoffel-Curry-Omelett mit Kichererbsen",
@@ -4546,7 +4653,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Tortilla_espa%C3%B1ola_kuku_sabzi_hybrid.jpg",
    "title": "File:Tortilla española kuku sabzi hybrid.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gemüse-Reisrösti mit Kräuterquark & Radieschensalat",
@@ -4593,7 +4701,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%EA%A0%98%EA%A0%A5%EA%A0%98_%EA%A0%89%EA%A0%A0%EA%A0%A3.jpg",
    "title": "File:ꠘꠥꠘ ꠉꠠꠣ.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Wraps mit gerösteten weißen Bohnen, Avocado & Rotkohl",
@@ -4640,7 +4749,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/25128194@N02/3310697872",
    "title": "Veggie Wrap with Eggplant Dip"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Linsen-Brokkoli-Salat mit Feta & Aprikosen",
@@ -4684,7 +4794,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lentil_Salad_(49195230383).jpg",
    "title": "File:Lentil Salad (49195230383).jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Soba-Bowl mit Räuchertofu, Spargel & Paprika",
@@ -4728,7 +4839,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/33993074@N00/9345210661",
    "title": "Cold soba noodle salad with baked tofu"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Linsen-Haferflocken-Bratlinge mit Quark-Joghurt-Dip",
@@ -4775,7 +4887,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegan_patties_with_potatoes_and_salad.jpg",
    "title": "File:Vegan patties with potatoes and salad.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
@@ -4821,7 +4934,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bento_box_lunch.jpg",
    "title": "File:Bento box lunch.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Avocado-Hüttenkäse-Salat mit Ei & Rucola",
@@ -4861,7 +4975,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Avocado_and_hard-boiled_egg_on_mixed_greens,_with_vinegar,_garlic_olive_oil,_and_black_pepper_-_Massachusetts.jpg",
    "title": "File:Avocado and hard-boiled egg on mixed greens, with vinegar, garlic olive oil, and black pepper - Massachusetts.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Gefüllte Paprika mit Kräuter-Hüttenkäse",
@@ -4898,7 +5013,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Stuffed_bell_peppers_Karnataka_DSC0001.jpg",
    "title": "File:Stuffed bell peppers Karnataka DSC0001.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gemüse-Frittata mit Hüttenkäse & Tomaten",
@@ -4941,7 +5057,8 @@
    "license": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Frittata_slice.jpg",
    "title": "File:Frittata slice.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Tofu-Gemüse-Pfanne mit Kokosmilch & Reis",
@@ -4985,7 +5102,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Red_curry_with_tofu,_egg_fried_rice_-_Little_Thai_2024-07-21.jpg",
    "title": "File:Red curry with tofu, egg fried rice - Little Thai 2024-07-21.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Quark-Pizza ohne Hefe mit Mozzarella & Gemüse",
@@ -5027,7 +5145,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_pizza.jpg",
    "title": "File:Vegetarian pizza.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Laibchen mit Kernen & Kräutern",
@@ -5068,7 +5187,8 @@
    "license": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Veggie_patties_nicely_grilled.jpg",
    "title": "File:Veggie patties nicely grilled.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Penne-Spinat-Auflauf mit Feta & Ei",
@@ -5108,7 +5228,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://www.flickr.com/photos/10559879@N00/4571025610",
    "title": "Filled - Julia's Jamie Oliver Spinach and Ricotta Cannelloni"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rosenkohl-Kartoffel-Auflauf mit Hartkäse",
@@ -5148,7 +5269,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/91873384@N04/49800371042",
    "title": "purple cauliflower & brussel sprout gratin"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Pikante Berglinsen-Gemüse-Pfanne mit Kräuterquark",
@@ -5193,7 +5315,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%B5%D1%9C%D0%B0_2025.jpg",
    "title": "File:Леќа 2025.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsen-Pilz-Bowl mit Naturreis, Avocado & Skyr",
@@ -5240,7 +5363,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Delica_Squash_with_Lentils_and_Wild_Mushrooms_at_Kettner%27s_-_Clarence_Tavern.jpg",
    "title": "File:Delica Squash with Lentils and Wild Mushrooms at Kettner's - Clarence Tavern.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Thai-Curry mit Tofu, Kürbis & grünen Bohnen",
@@ -5291,7 +5415,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Curried_Tofu_at_Green_Papaya_(3375805731).jpg",
    "title": "File:Curried Tofu at Green Papaya (3375805731).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Pilzragout mit Räuchertofu, Paprika & Wildreis",
@@ -5339,7 +5464,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Pilzragout-mit-Reis.jpg",
    "title": "File:Pilzragout-mit-Reis.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Smashed Potatoes mit Zitronen-Kräuterquark",
@@ -5382,7 +5508,8 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Wild_Goat_Bistro_-_April_2019_-_Stierch_03.jpg",
    "title": "File:Wild Goat Bistro - April 2019 - Stierch 03.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gefüllte Spitzpaprika mit Feta-Hüttenkäse-Creme",
@@ -5420,7 +5547,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Stuffed_Peppers_Ready_for_the_Oven_(4067530220).jpg",
    "title": "File:Stuffed Peppers Ready for the Oven (4067530220).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Vegetarischer falscher Hase mit Erbsen-Möhren-Gemüse",
@@ -5469,7 +5597,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lentil_loaf_and_sides.jpg",
    "title": "File:Lentil loaf and sides.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Curry-Tomatensuppe mit roten Linsen & Hirtenkäse",
@@ -5513,7 +5642,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tomato_soup,_Turkish_style.jpg",
    "title": "File:Tomato soup, Turkish style.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Halloumi-Carbonara mit Hartkäse",
@@ -5554,7 +5684,8 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cacio_e_pepe.jpg",
    "title": "File:Cacio e pepe.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Ofengemüse-Salat mit Halloumi & Kichererbsen",
@@ -5600,7 +5731,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Halloumi_%26_Crispy_Chickpeas_Salad_-_No.16_2025-08-24.jpg",
    "title": "File:Halloumi & Crispy Chickpeas Salad - No.16 2025-08-24.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Seitan-Gulasch mit Paprika & Kartoffeln",
@@ -5646,7 +5778,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/35022955@N06/31427214752",
    "title": "Goulash vegan"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kohlrabi-Lasagne mit Senfcreme",
@@ -5693,7 +5826,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Eggplant_Lasagna_(Vegitarian)_(2_of_6).jpg",
    "title": "File:Eggplant Lasagna (Vegitarian) (2 of 6).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rosmarinkartoffeln mit Weiße-Bohnen-Creme & Caprese",
@@ -5741,7 +5875,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Potatoes_ready_for_roasting_with_rosemary_and_garlic,_2026.jpg",
    "title": "File:Potatoes ready for roasting with rosemary and garlic, 2026.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu-Burger mit Senf-Skyr-Soße",
@@ -5785,7 +5920,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Veggie_burger_on_plate_(Unsplash).jpg",
    "title": "File:Veggie burger on plate (Unsplash).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Lauch-Soja-Hack-Suppe",
@@ -5828,7 +5964,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mon_Plaisir,_Covent_Garden,_London_(3717184145).jpg",
    "title": "File:Mon Plaisir, Covent Garden, London (3717184145).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Spinat-Crêpes mit Kräuterquark & Radieschen-Feldsalat",
@@ -5874,7 +6011,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Spinach_crepes_(3236762733).jpg",
    "title": "File:Spinach crepes (3236762733).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote-Bete-Quinoa mit Tofu & Basilikum",
@@ -5917,7 +6055,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:MC_%E6%BE%B3%E9%96%80_Macau_JW_Marriott_%E8%90%AC%E8%B1%AA%E9%85%92%E5%BA%97_hotel_restaurant_%E8%87%AA%E5%8A%A9%E9%A4%90%E5%BB%B3_buffet_food_Lunch_January_2019_SSG_28.jpg",
    "title": "File:MC 澳門 Macau JW Marriott 萬豪酒店 hotel restaurant 自助餐廳 buffet food Lunch January 2019 SSG 28.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Hokkaido-Linsen-Cashew-Curry-Eintopf mit Joghurt",
@@ -5962,7 +6101,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Pumpkin_Curry_(Kaddu_Ki_Sabzi).JPG",
    "title": "File:Pumpkin Curry (Kaddu Ki Sabzi).JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu süß-sauer mit Quinoa",
@@ -6006,7 +6146,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:JerkTofu.jpg",
    "title": "File:JerkTofu.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße",
@@ -6054,7 +6195,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Spaghetti_al_Pomodoro_with_broccoli_%E3%82%B9%E3%83%91%E3%82%B2%E3%83%83%E3%83%86%E3%82%A3%E3%83%9D%E3%83%A2%E3%83%89%E3%83%BC%E3%83%AD%E3%80%81%E3%83%96%E3%83%AD%E3%83%83%E3%82%B3%E3%83%AA%E3%83%BC%E6%B7%BB%E3%81%88.jpg",
    "title": "File:Spaghetti al Pomodoro with broccoli スパゲッティポモドーロ、ブロッコリー添え.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote-Linsen-Salat mit Camembert, Trauben & Walnüssen",
@@ -6096,7 +6238,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lentil_salad_(29308018298).jpg",
    "title": "File:Lentil salad (29308018298).jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Spaghetti-Auflauf mit Hüttenkäse & Tomaten",
@@ -6136,7 +6279,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Baked_Spaghetti_with_mushrooms.JPG",
    "title": "File:Baked Spaghetti with mushrooms.JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Zucchini-Kichererbsen-Curry mit Reis",
@@ -6182,7 +6326,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B0%D1%80%D0%B8_%D1%81%D0%BE_%D0%BD%D0%B0%D1%83%D1%82_%D0%B8_%D1%82%D0%B8%D0%BA%D0%B2%D0%B8%D1%87%D0%BA%D0%B8.jpg",
    "title": "File:Кари со наут и тиквички.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Mango-Linsensalat mit mariniertem Tofu",
@@ -6227,7 +6372,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Kabocha_Lentil_Salad_(45603480082).jpg",
    "title": "File:Kabocha Lentil Salad (45603480082).jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Indischer Spinat-Tofu mit Reis (Palak-Style)",
@@ -6271,7 +6417,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cottage_cheese_in_spinach_gravy(palak_paneer).jpg",
    "title": "File:Cottage cheese in spinach gravy(palak paneer).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu-Stroganoff mit Champignons & Bandnudeln",
@@ -6316,7 +6463,8 @@
    "license": "CC BY 2.0",
    "url": "https://www.flickr.com/photos/33990010@N02/4784227049",
    "title": "mushroom stroganoff at noodles & co in crystal city"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Backofengemüse mit Kidneybohnen & Schafskäse",
@@ -6362,7 +6510,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Couscous_with_Roasted_Vegetables_%26_Feta.jpg",
    "title": "File:Couscous with Roasted Vegetables & Feta.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Crispy-Tempeh-Bowl mit Reis, Gemüse & Kresse",
@@ -6410,7 +6559,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Warung_Bu_Tika.jpg",
    "title": "File:Warung Bu Tika.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Schmorgurken mit Kichererbsen, Feta & Dill",
@@ -6455,7 +6605,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Moroccan_Chickpea_and_Vegetable_Stew_(6750034613).jpg",
    "title": "File:Moroccan Chickpea and Vegetable Stew (6750034613).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
@@ -6508,7 +6659,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Kunstmuseum_Bonn,_museum_bowl.jpg",
    "title": "File:Kunstmuseum Bonn, museum bowl.jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Gelbes Tofu-Linsen-Curry mit Möhren & Paprika",
@@ -6554,7 +6706,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Thai_yellow_curry_with_jasmine_rice.jpg",
    "title": "File:Thai yellow curry with jasmine rice.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Griechischer Spinatreis mit gebackenem Feta",
@@ -6598,7 +6751,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%CE%A3%CF%80%CE%B1%CE%BD%CE%B1%CE%BA%CF%8C%CF%81%CF%85%CE%B6%CE%BF_Spanakorizo_(Las_Siete_Orillas_project)_(2).jpg",
    "title": "File:Σπανακόρυζο Spanakorizo (Las Siete Orillas project) (2).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Tofu-Köttbullar mit Rahmsoße & Kartoffeln",
@@ -6646,7 +6800,8 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_German_Cuisine.jpg",
    "title": "File:Vegetarian German Cuisine.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Vegetarische Moussaka mit Linsen & Hartkäse",
@@ -6695,7 +6850,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Eggplant_Potato_Moussaka_(43128259612).jpg",
    "title": "File:Eggplant Potato Moussaka (43128259612).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Indischer Rote-Linsen-Eintopf mit Reis & Skyr",
@@ -6741,7 +6897,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:The_Dal_Chawal.jpg",
    "title": "File:The Dal Chawal.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote-Linsen-Kartoffel-Eintopf mit Quark-Klecks",
@@ -6786,7 +6943,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%BE%D0%BC%D0%BF%D0%B8%D1%80_%D0%BC%D0%B0%D0%BD%D1%9F%D0%B0_%D1%81%D0%BE_%D0%BB%D0%B5%D1%9C%D0%B0.jpg",
    "title": "File:Компир манџа со леќа.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kenianischer Tellerlinsen-Eintopf mit Kartoffeln",
@@ -6831,7 +6989,8 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Catalan_lentil_soup.JPG",
    "title": "File:Catalan lentil soup.JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Chana Masala mit Sojagranulat & Reis",
@@ -6877,7 +7036,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chana_masala_(5727362126).jpg",
    "title": "File:Chana masala (5727362126).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Chili sin Carne mit Sojagranulat, Kidney & Mais",
@@ -6924,7 +7084,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Two-Bean_Vegetarian_Chili.jpg",
    "title": "File:Two-Bean Vegetarian Chili.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Hüttenkäse-Tomaten-Pasta mit Linsen",
@@ -6965,7 +7126,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Pasta,_Tomato_Sauce,_Red_Lentils_%26_Sprouts_(4368525956).jpg",
    "title": "File:Pasta, Tomato Sauce, Red Lentils & Sprouts (4368525956).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Paprika-Rahm-Nudeln mit Hüttenkäse & Erbsen",
@@ -7009,7 +7171,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Spaghetti_with_Whipping_Cream_and_Green_Peas.jpg",
    "title": "File:Liat Portal for Foodie Disorder - Spaghetti with Whipping Cream and Green Peas.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gemüsecurry mit Sojaschnetzeln & Reis",
@@ -7055,7 +7218,8 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:CURRY-SHOP-C-and-C---Steamed-Vegetable-Curry---2025.jpg",
    "title": "File:CURRY-SHOP-C-and-C---Steamed-Vegetable-Curry---2025.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Lauwarmer Tellerlinsen-Salat mit Feta & Ei",
@@ -7098,7 +7262,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Majadra_haystack_(on_the_plate)_(4291546125).jpg",
    "title": "File:Majadra haystack (on the plate) (4291546125).jpg"
-  }
+  },
+  "temp": "beides"
  },
  {
   "name": "Linsen-Quark-Puffer mit Kräuterquark & Kartoffeln",
@@ -7141,7 +7306,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bengali_Dal_Pakora_RedLentilFritter.JPG",
    "title": "File:Bengali Dal Pakora RedLentilFritter.JPG"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Erbsen-Linsen-Eintopf mit Sojaschnetzeln",
@@ -7186,7 +7352,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Amy%27s_split_pea_soup.jpg",
    "title": "File:Amy's split pea soup.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Brokkoli-Kichererbsen-Reis mit Erdnusssoße",
@@ -7227,7 +7394,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mantharai_Ilai_1.jpg",
    "title": "File:Mantharai Ilai 1.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Spanische Kichererbsen-Spinat-Pfanne mit Ei & Brot",
@@ -7273,7 +7441,8 @@
    "license": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:GarbanzosConEspinacas.jpg",
    "title": "File:GarbanzosConEspinacas.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Bratkartoffeln mit Bohnen-Gemüse & Kräuterquark",
@@ -7316,7 +7485,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Eggs_with_Frankfurt_green_sauce,_Bad_Soden.jpg",
    "title": "File:Eggs with Frankfurt green sauce, Bad Soden.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote Linsen mit Kokos-Spinat & Reis",
@@ -7359,7 +7529,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dal_Palak_Spinach_and_lentil_curry_(15914333462).jpg",
    "title": "File:Dal Palak Spinach and lentil curry (15914333462).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Bohnen-Möhren-Chili mit Knoblauchbrot",
@@ -7406,7 +7577,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Instant_Pot_Pressure_Cooker_Vegetables_and_Quinoa_(44383321600).jpg",
    "title": "File:Instant Pot Pressure Cooker Vegetables and Quinoa (44383321600).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kartoffel-Bohnen-Stampf mit Tomatensoße & Kräuterquark",
@@ -7447,7 +7619,8 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mashed_potatoes,_eggs,_beans.jpg",
    "title": "File:Mashed potatoes, eggs, beans.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Eier in Tomaten-Linsen-Soße mit Röstkartoffeln",
@@ -7489,7 +7662,8 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Shakshuka_Dish.jpg",
    "title": "File:Shakshuka Dish.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Ofen-Frittata mit Erbsen, Kartoffeln & Quark",
@@ -7530,7 +7704,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:My_randomly_inspired_frittata,_potato,_leek,_pea_and_boccocini,_made_up_off_the_top_of_my_head_and_delighted_that_it_worked_out_so_well!_-mycookingadventures_-vegcookingadventures_(49836716203).jpg",
    "title": "File:My randomly inspired frittata, potato, leek, pea and boccocini, made up off the top of my head and delighted that it worked out so well! -mycookingadventures -vegcookingadventures (49836716203).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Gemüse-Eintopf mit grünen & weißen Bohnen und Sojaschnetzeln",
@@ -7576,7 +7751,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:FASOLADA.jpg",
    "title": "File:FASOLADA.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping",
@@ -7620,7 +7796,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mushroom_and_tomato_sauce_pasta_(4261192837).jpg",
    "title": "File:Mushroom and tomato sauce pasta (4261192837).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsen-Lasagne mit Quark-Schicht",
@@ -7667,7 +7844,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Cask,_Pimlico,_London_(3859632633).jpg",
    "title": "File:Cask, Pimlico, London (3859632633).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Bohnen-Reis-Burritos mit Sojagranulat & Quark",
@@ -7711,7 +7889,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:VEGAN_HOME_MADE_BURRITO_,_TOFU_TEMPEH,_SOY_BEANS,.jpg",
    "title": "File:VEGAN HOME MADE BURRITO , TOFU TEMPEH, SOY BEANS,.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Curry-Reispfanne mit Sojaschnetzeln, Erbsen & Ei",
@@ -7754,7 +7933,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Rice,_carrots,_peas,_and_chive,_stir-fried_-_Massachusetts.jpg",
    "title": "File:Rice, carrots, peas, and chive, stir-fried - Massachusetts.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Curry-Reis-Eintopf mit Kichererbsen & Lauch",
@@ -7796,7 +7976,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Harira_soup_prepared_at_home.jpg",
    "title": "File:Liat Portal for Foodie Disorder - Harira soup prepared at home.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kichererbsen-Soja-Bolognese mit Nudeln & Joghurt-Dip",
@@ -7839,7 +8020,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Penne_Arrabbiata.jpg",
    "title": "File:Penne Arrabbiata.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Linsen-Kartoffel-Chili mit Skyr",
@@ -7882,7 +8064,8 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Red_onions,_potatoes,_black_beans,_peas,_and_chickpeas_in_tomato_sauce,_atop_textured_vegetable_protein,_with_Ning_Chi_garlic_chili_paste_and_black_pepper_-_Massachusetts.jpg",
    "title": "File:Red onions, potatoes, black beans, peas, and chickpeas in tomato sauce, atop textured vegetable protein, with Ning Chi garlic chili paste and black pepper - Massachusetts.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kidney-Hafer-Burger mit Quark-Senf-Soße",
@@ -7926,7 +8109,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Veggie_burger_flickr_user_divinemisscopa_creative_commons.jpg",
    "title": "File:Veggie burger flickr user divinemisscopa creative commons.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Ofenkartoffeln mit Ei-Kresse-Quark & Gurkensalat",
@@ -7967,7 +8151,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Baked_potato_with_quark,_Oberauroff.jpg",
    "title": "File:Baked potato with quark, Oberauroff.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kohlrabi-Kartoffel-Frittata mit Quark",
@@ -8008,7 +8193,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Potato_and_chard_fritatta_(4432998866).jpg",
    "title": "File:Potato and chard fritatta (4432998866).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Grünkohl-Kartoffel-Linsen-Pfanne mit Senfquark",
@@ -8050,7 +8236,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Three_Bowls_vegan_sweet_potato_kale_(3141703785).jpg",
    "title": "File:Three Bowls vegan sweet potato kale (3141703785).jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Schwäbischer Spätzle-Linsen-Salat mit Ei",
@@ -8092,7 +8279,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mediterranean_Lentil_Salad_1_(28905407141).jpg",
    "title": "File:Mediterranean Lentil Salad 1 (28905407141).jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Quark-Hafer-Auflauf mit Banane",
@@ -8133,7 +8321,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Blueberry_clafoutis,_April_2006.jpg",
    "title": "File:Blueberry clafoutis, April 2006.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Quark-Hafer-Schüssel mit Banane & Erdnussmus",
@@ -8170,7 +8359,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Porrrrrrage.jpg",
    "title": "File:Porrrrrrage.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Bananen-Overnight-Oats mit Skyr & Leinsamen",
@@ -8207,7 +8397,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Protein_overnight_oats.jpg",
    "title": "File:Protein overnight oats.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Bananen-Hafer-Quark-Pfannkuchen",
@@ -8245,7 +8436,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Banana_Pancakes_Pk021.jpg",
    "title": "File:Banana Pancakes Pk021.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Kakao-Porridge mit Quark",
@@ -8282,7 +8474,8 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chocolate_porridge_from_wheat_middlings.jpg",
    "title": "File:Chocolate porridge from wheat middlings.jpg"
-  }
+  },
+  "temp": "warm"
  },
  {
   "name": "Schnittlauch-Quark-Brote mit Gurke",
@@ -8317,7 +8510,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Schnittlauchbrot-01.jpg",
    "title": "File:Schnittlauchbrot-01.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Weiße-Bohnen-Quark-Hummus mit Möhrensticks",
@@ -8355,7 +8549,8 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Basil_White_Bean_Hummus_and_Chipotle_Hummus_(3618854542).jpg",
    "title": "File:Basil White Bean Hummus and Chipotle Hummus (3618854542).jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Gefüllte Senf-Quark-Eier",
@@ -8390,7 +8585,8 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Deviled_eggs_closeup.jpg",
    "title": "File:Deviled eggs closeup.jpg"
-  }
+  },
+  "temp": "kalt"
  },
  {
   "name": "Vanille-Zimt-Quark mit Banane",
@@ -8425,6 +8621,7 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Yogurt_fruit_bowl.jpg",
    "title": "File:Yogurt fruit bowl.jpg"
-  }
+  },
+  "temp": "kalt"
  }
 ]

@@ -704,6 +704,9 @@ def build_meal_ics(now, settings, plan, days, past=None):
     past_dates = {p["date"] for p in (past or [])}
     rx = avoid_re(settings)
     P = load_prices()
+    if P and (settings.get("food") or {}).get("bio"):  # Bio bevorzugen (wie priceOf in der App)
+        for pr in P["products"]:
+            pr.setdefault("prices", {}).update(pr.get("bio") or {})
     if P:  # eigene Preise aus Kassenbons vor den Richtpreisen (wie priceOf in der App)
         own = (settings.get("food") or {}).get("ownPrices") or {}
         for pr in P["products"]:

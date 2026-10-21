@@ -319,6 +319,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .cbars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:150px;margin:8px 0}
 .cb{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:2px;text-align:center}
 .cb .bar{width:70%;min-height:3px;background:var(--accent);border-radius:6px 6px 2px 2px}
+.ttag{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--sunk)}
+.ttag.warm{background:color-mix(in srgb,#f97316 22%,transparent)}
+.ttag.kalt{background:color-mix(in srgb,#38bdf8 22%,transparent)}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
@@ -2198,7 +2201,7 @@ function journeySheet(kind, arg){
       ${avoidHit(r) ? `<div class="pill warn">Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)</div>` : ""}
       ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div><div class="small muted">Pro Portion, anteilig gerechnet. ${priceNote()}</div>` : ""}
       <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port.</span></div>
-      <div class="effort"><span>⏱ ${r.activeMin != null ? `<b>${r.activeMin} min</b> aktiv · ` : ""}${r.timeMin} min gesamt</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${effortOn() && !effortOk(r) ? `<span class="small muted">über deinem Aufwand-Limit</span>` : ""}</div>
+      <div class="effort">${tempTag(r)}<span>⏱ ${r.activeMin != null ? `<b>${r.activeMin} min</b> aktiv · ` : ""}${r.timeMin} min gesamt</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${effortOn() && !effortOk(r) ? `<span class="small muted">über deinem Aufwand-Limit</span>` : ""}</div>
       <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.subKey][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
       <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
       ${r.shelfLife ? `<div class="small muted">Haltbarkeit: ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}
@@ -2212,12 +2215,13 @@ function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
-  const list = recipes.filter(r => recipeOk(r, are) && (recFilter.cat === "alle" || r.category === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein);
+  const list = recipes.filter(r => recipeOk(r, are) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein);
   b.innerHTML = `<div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
+    <div class="chips">${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
     <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · ${list.length} Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
-    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}</span></button>`).join("")}</div>
+    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
     <div class="small muted">Fotos sind Symbolbilder mit freien Lizenzen (Wikimedia Commons, Flickr), Quelle im Rezept.</div>`;
 }
 
@@ -2466,7 +2470,7 @@ function budgetCands(k, curName){
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
 function budgetSubs(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
-  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg()]); if (budgetMemo.has(key)) return budgetMemo.get(key);
+  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), bioOn()]); if (budgetMemo.has(key)) return budgetMemo.get(key);
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
   const W = mealWeek(weekNo(mo) ?? 0), batch = new Set([W.batchA, W.batchB]);
   // Bewertet wird der echte Wocheneinkauf (Packungen), nicht die Portionskosten
@@ -2540,7 +2544,7 @@ function mealThumb(n){
 function mealRow(d, m){
   const r = m.info;
   return `<div class="meal mc ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
-    <button type="button" class="mname" ${m.own ? "disabled" : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“</span>` : ""}</span></button>
+    <button type="button" class="mname" ${m.own ? "disabled" : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${recipeByName(m.name)?.temp && (m.k === "mi" || m.k === "ab") ? " · " + (recipeByName(m.name).temp === "kalt" ? "❄️ kalt" : recipeByName(m.name).temp === "warm" ? "🔥 warm" : "🔥/❄️") : ""}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ enthält „${esc(m.warn)}“</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<span class="go">›</span>`}</div>`;
 }
 function mealRowOld(d, m){
@@ -2580,7 +2584,7 @@ function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
   const opt = (n, why) => { const r = mealInfo(n), dk = r.kcal - ref.kcal, dp = r.protein - ref.protein;
-    return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}</span></span></button>`; };
+    return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
   return `<div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2>${close}</div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
     ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${altMeals(k, m.name).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
@@ -2617,9 +2621,16 @@ function ensurePrices(){
 const eur = v => v == null ? "–" : v.toLocaleString("de-DE", {style: "currency", currency: "EUR"});
 // Markt: gewählt oder je Produkt der günstigste
 const ownOf = pr => (FOOD().ownPrices || {})[pr.id] || {};
-const isEst = (pr, st) => !ownOf(pr)[st] && (pr.est || []).includes(st);
+const bioOn = () => !!FOOD().bio;
+// Zweite Variante (Bio bzw. konventionell) klein daneben, wenn bekannt und kein eigener Preis gilt
+function bioAlt(pr, share){
+  const st = FOOD().store || "aldi"; if (st === "min" || ownOf(pr)[st] || pr.bio?.[st] == null || pr.prices?.[st] == null) return "";
+  return bioOn() ? ` <span class="small muted">· konv. ${eur(share * pr.prices[st])}</span>` : ` <span class="small muted">· Bio ${eur(share * pr.bio[st])}</span>`;
+}
+const isEst = (pr, st) => !ownOf(pr)[st] && !(bioOn() && pr.bio?.[st] != null) && (pr.est || []).includes(st);
+// Reihenfolge: eigener Preis (Kassenbon/Scan) > Bio-Preis (wenn „Bio bevorzugen“) > Richtpreis
 function priceOf(pr, store){
-  const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
+  const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}, bioOn() ? pr.bio || {} : {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
   store = store || FOOD().store || "aldi";
   if (store !== "min" && prices && !prices.stores.includes(store)) store = "min";
   if (store === "min") { const v = Object.values(ps).filter(x => x != null); return v.length ? Math.min(...v) : null; }
@@ -2905,7 +2916,7 @@ function shopHtml(){
     ${shopScope === "gericht" ? info(esc(cx.note)) : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
-    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${isEst(i.pr, FOOD().store || "aldi") ? `<span class="muted">*</span>` : ownOf(i.pr)[FOOD().store || "aldi"] ? ` <span class="tag">dein Preis</span>` : ""}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
+    h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${isEst(i.pr, FOOD().store || "aldi") ? `<span class="muted">*</span>` : ownOf(i.pr)[FOOD().store || "aldi"] ? ` <span class="tag">dein Preis</span>` : ""}${bioAlt(i.pr, i.share)}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`).join("")}</div>`; }
   return h + info("Was schon im Vorrat ist (Gewürze, Öl, Haferflocken), einfach abhaken. Wischen hakt ebenfalls ab.");
 }
 function shopText(){
@@ -2925,6 +2936,7 @@ function foodSettingsHtml(){
     <div class="card"><h2>Preise</h2>
       <label class="check"><input type="checkbox" id="foodPrices" ${f.prices ? "checked" : ""}><span>Preise pro Gericht und Einkauf anzeigen</span></label>
       <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+      <label class="check"><input type="checkbox" id="foodBio" ${f.bio ? "checked" : ""}><span>Bio bevorzugen <span class="small muted">(Bio-Preis, wo bekannt; Budget und Einkauf rechnen damit)</span></span></label>
       <div class="small muted">${prices ? priceNote() : "Richtpreise werden geladen …"}</div></div>
     <div class="card"><h2>Wochenbudget</h2>
       <div class="field"><label for="foodBudget">Grenze pro Woche (€)</label><input type="text" inputmode="decimal" id="foodBudget" value="${esc(f.budget ?? "")}" placeholder="z. B. 60"></div>
@@ -2975,8 +2987,12 @@ function essenHtml(b){
   b.innerHTML = h;
 }
 
-let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false};
-const CAT = {fruehstueck:"Frühstück",mittag:"Mittag",abend:"Abend",snack:"Snack",shake:"Shake/Dessert"};
+let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:""};
+const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
+// Mittag und Abend sind austauschbar; unterschieden wird warm/kalt
+const catOf = r => r.category === "mittag" || r.category === "abend" ? "haupt" : r.category;
+const TEMP = {warm: "🔥 warm", kalt: "❄️ kalt", beides: "🔥/❄️ warm oder kalt"};
+const tempTag = r => r?.temp ? `<span class="ttag ${r.temp}">${TEMP[r.temp]}</span>` : "";
 function planHtml(){
   return `<div class="card"><h2>So plant der Planer</h2><ul class="small">
     <li>Reihenfolge Beine A → Oberkörper A → Beine B → Oberkörper B, in freie Slots von Google- und Uni-Kalender.</li>
@@ -3107,6 +3123,7 @@ async function onClick(e){
     else { guide.start = Date.now(); guide.end = g.stop ? 1 : Date.now() + g.sec * 1000; clearInterval(guideTimer); guideTimer = setInterval(guideTick, 250); }
     renderSheet(); guideTick(); return; }
   const el2 = t.closest("[data-efflvl]"); if (el2) { saveFood({effort: Object.assign({}, FOOD().effort, {lvl: Number(el2.dataset.efflvl)})}); render(); return; }
+  const rte = t.closest("[data-rectemp]"); if (rte) { recFilter.temp = rte.dataset.rectemp; renderRecipes(); return; }
   const rd = t.closest("[data-recdiff]"); if (rd) { recFilter.diff = rd.dataset.recdiff; renderRecipes(); return; }
   if (t.closest("[data-recfast]")) { recFilter.fast = !recFilter.fast; renderRecipes(); return; }
   const cw2 = t.closest("[data-catw]"); if (cw2) { catF.where = cw2.dataset.catw; renderMore(); return; }
@@ -3221,6 +3238,7 @@ function onChange(e){
   if (t.id === "foodBudgetIgnore") { saveFood({budgetIgnore: t.checked}); return; }
   if (t.dataset.subst) { const sb = Object.assign({}, FOOD().subst); if (t.value) sb[t.dataset.subst] = t.value; else delete sb[t.dataset.subst]; saveFood({subst: sb}); return; }
   if (t.id === "foodStore") { saveFood({store: t.value}); return; }
+  if (t.id === "foodBio") { saveFood({bio: t.checked}); render(); return; }
   if (t.dataset.ftime) { if (t.value) saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
   if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet();
