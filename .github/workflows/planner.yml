@@ -59,7 +59,7 @@ jobs:
           VAPID_PRIVATE_PEM: ${{ secrets.VAPID_PRIVATE_PEM }}
         run: python .planner/planner.py
       - name: Daten zurückschreiben
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.plan.outcome != 'skipped' }}
         working-directory: daten
         run: |
           git config user.name "planner"
@@ -73,9 +73,15 @@ jobs:
             sleep 5
           done
           exit 1
-      - name: Planer-Fehler melden (dann kein Deploy, die letzte Seite bleibt online)
+      - name: Bei Planer-Fehler letzte gute Feeds übernehmen
         if: ${{ steps.plan.outcome == 'failure' }}
-        run: exit 1
+        env:
+          CAL_TOKEN: ${{ secrets.CAL_TOKEN }}
+        run: |
+          mkdir -p _feeds/cal
+          for f in "$CAL_TOKEN.ics" "$CAL_TOKEN-essen.ics"; do
+            [ -s "_feeds/cal/$f" ] || curl -fsS "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/cal/$f" -o "_feeds/cal/$f" || echo "::warning::Ein Feed konnte nicht übernommen werden"
+          done
       - name: Seite und Feeds zusammenstellen
         run: |
           mkdir -p _site
@@ -93,5 +99,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           for id in $(gh api "repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts" --jq '.artifacts[].id'); do
-            gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" || true
+            gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" || echo "::warning::Artefakt $id konnte nicht gelöscht werden"
           done
+      - name: Planer-Fehler melden (Seite wurde trotzdem mit den letzten guten Feeds aktualisiert)
+        if: ${{ steps.plan.outcome == 'failure' }}
+        run: exit 1

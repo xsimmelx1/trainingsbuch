@@ -9,6 +9,7 @@ import datetime as dt
 import json
 import math
 import os
+import re
 import sys
 import urllib.request
 import zoneinfo
@@ -756,6 +757,8 @@ def build_meal_ics(now, settings, plan, days, past=None):
         for slot in mp["slots"]:
             k, name = slot["k"], names.get(slot["k"])
             t = times.get(k) or slot["time"]
+            if t and not re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", t):  # ungültige eigene Zeit → Standard
+                t = slot["time"]
             if pl and pl.get("end") and k == "sn":
                 t = pl["end"]
             elif pl and pl.get("end") and k == "ab" and pl["end"] > "18:15":
@@ -770,7 +773,11 @@ def build_meal_ics(now, settings, plan, days, past=None):
             # öffentlicher Feed: eigene Einträge ohne Freitext
             title = "Eigenes Essen" if own else mp["away"]["name"] if name == "away" else name
             h, m = map(int, t.split(":"))
-            end = min(h * 60 + m + (15 if k == "sn" else 30), 23 * 60 + 59)
+            dur_m = 15 if k == "sn" else 30
+            if h * 60 + m > 23 * 60 + 59 - dur_m:  # Ende muss nach dem Start liegen (RFC 5545)
+                h, m = divmod(23 * 60 + 59 - dur_m, 60)
+                t = f"{h:02d}:{m:02d}"
+            end = h * 60 + m + dur_m
             url = f"{SITE}#e={iso}"
             desc = f"In der App öffnen: {url}" + (f"\n\n{r['kcal']} kcal · {r['protein']} g Protein" if r else f"\n\n{mp['away']['hint']}" if name == "away" else "")
             L += ["BEGIN:VEVENT", f"UID:meal-{iso}-{k}@tb2.trainingsbuch", f"DTSTAMP:{stamp}",
@@ -818,7 +825,11 @@ def send_push(subs, payload, dead):
     if not pem or not subs:
         print("Push übersprungen (kein Schlüssel oder kein Gerät)")
         return []
-    vapid = Vapid.from_pem(pem.encode())
+    try:
+        vapid = Vapid.from_pem(pem.encode())
+    except Exception as ex:  # ungültiger Schlüssel: nichts senden, nicht abstürzen
+        print("Push-Schlüssel ungültig:", type(ex).__name__)
+        return []
     keep = []
     for s in subs:
         if s["endpoint"] in dead:
@@ -832,8 +843,9 @@ def send_push(subs, payload, dead):
             print("Push fehlgeschlagen:", code)
             if code in (404, 410):
                 dead[s["endpoint"]] = dt.date.today().isoformat()
-            else:
-                keep.append(s)
+            # sonst (z. B. 5xx): nicht als zugestellt zählen, im nächsten Lauf erneut
+        except Exception as ex:  # Netzwerk, Timeout …: nur dieses Abo überspringen
+            print("Push fehlgeschlagen:", type(ex).__name__)
     print(f"Push gesendet an {len(keep)} Gerät(e)")
     return keep
 
@@ -923,6 +935,7 @@ def main():
     for key, m in msgs:
         if send_push(push.get("subs", []), m, dead):
             state["sent"][key] = now.isoformat(timespec="minutes")
+            save("state.json", state)  # sofort sichern, damit nach einem Absturz nichts doppelt kommt
     # alte Einträge aufräumen
     cutoff = (today - dt.timedelta(days=14)).isoformat()
     state["sent"] = {k: v for k, v in state["sent"].items() if v[:10] >= cutoff}

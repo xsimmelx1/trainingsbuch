@@ -969,7 +969,9 @@ function setSync(t, bad){
   line.innerHTML = `<span>${auth ? "Nicht synchronisiert: Anmeldung prüfen." : off ? "Offline: Änderungen bleiben gespeichert und werden später gesendet." : "Nicht synchronisiert: wird automatisch erneut versucht."}</span>${auth ? `<button type="button" class="btn small" data-go="setup">Einrichtung</button>` : `<button type="button" class="btn small ghost" data-act="retrySync">Erneut</button>`}`;
 }
 
-function cacheAll(){ lsSet("cache", store); }
+// Jede Datenänderung erhöht die Version; teure Ableitungen (Essensplan, Budget) merken sich ihr Ergebnis pro Version
+let dataVer = 0;
+function cacheAll(){ dataVer++; lsSet("cache", store); }
 
 async function loadAll(){
   const c = lsGet("cache"); if (c) Object.assign(store, c);
@@ -2430,7 +2432,8 @@ function ensureMeals(){
     .then(([m, r]) => { mealPlan = m; recipes = r; return ensurePrices().catch(() => {}); }).catch(e => { mealsReady = null; throw e; });
 }
 const recipeByName = n => typeof n === "string" ? (recipes || []).find(x => x.name === n) : undefined;
-const FOOD = () => Object.assign({showNutri: true, times: {}, kcal: null, protein: null}, S().food || {});
+let foodMemo = null;
+const FOOD = () => { const f = S().food; if (!foodMemo || foodMemo.ref !== f || foodMemo.ver !== dataVer) foodMemo = {ref: f, ver: dataVer, val: Object.assign({showNutri: true, times: {}, kcal: null, protein: null}, f || {})}; return foodMemo.val; };
 const foodTarget = () => ({kcal: num(FOOD().kcal) || mealPlan.target.kcal, protein: num(FOOD().protein) || mealPlan.target.protein});
 const applyNutri = () => document.body.classList.toggle("nonutri", FOOD().showNutri === false);
 // Allergene und eigene Begriffe → ein Suchmuster über Name und Zutaten
@@ -2454,7 +2457,7 @@ const SUBST = {
   kochsahne: {label: "Kochsahne", opts: {cuisine: ["Hafer-Cuisine", -20, -2.2]}},
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
-const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); };
+const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); dataVer++; };
 const saveFood = patch => { saveSettings({food: patch}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
@@ -2516,7 +2519,12 @@ function budgetCands(k, curName){
     .map(r => [r, Math.round(recipeCost(r).portion * 1e4) / 1e4]).sort((a, b) => a[1] - b[1]).slice(0, 15).map(x => x[0]);
 }
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
+const budgetQuick = new Map();
 function budgetSubs(mo){
+  const qk = mo + "|" + dataVer; if (budgetQuick.has(qk)) return budgetQuick.get(qk);
+  const res0 = budgetSubs0(mo); if (budgetQuick.size > 50) budgetQuick.clear(); budgetQuick.set(qk, res0); return res0;
+}
+function budgetSubs0(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
   const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), !!FOOD().bio, FOOD().bioItems || []]); if (budgetMemo.has(key)) return budgetMemo.get(key);
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
