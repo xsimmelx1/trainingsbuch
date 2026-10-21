@@ -2650,7 +2650,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/protein-porridge-skyr/",
   "note": "nach REWE; Proteinriegel und Vanille-Skyr durch Skyr natur + Walnüsse ersetzt (ohne Supplements), Nährwerte neu geschätzt",
-  "img": null
+  "img": "img/rezepte/x-065.jpg",
+  "imgCredit": {
+   "artist": "David Jackmanson",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/58301516@N00/23209305283",
+   "title": "Breakfast: mango (), oat porridge and coffee with almond and coconut milk."
+  }
  },
  {
   "name": "Hüttenkäse-Pancakes mit Blaubeeren & Mandeln",
@@ -2687,7 +2693,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/huettenkaese-pancakes-blaubeeren-mandeln/",
   "note": "nach REWE; Proteinpulver durch 200 g Magerquark + mehr Hafer ersetzt",
-  "img": null
+  "img": "img/rezepte/x-066.jpg",
+  "imgCredit": {
+   "artist": "jeffreyw",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Blueberry_pancakes_(1).jpg",
+   "title": "File:Blueberry pancakes (1).jpg"
+  }
  },
  {
   "name": "Herzhafte Spinat-Pancakes mit Kräuter-Skyr",
@@ -2729,7 +2741,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/herzhafte-pancakes/",
   "note": "nach REWE; Mandeldrink durch Sojadrink ersetzt (mehr Protein)",
-  "img": null
+  "img": "img/rezepte/x-067.jpg",
+  "imgCredit": {
+   "artist": "Herne14",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Spinach_pancake_with_curd.jpg",
+   "title": "File:Spinach pancake with curd.jpg"
+  }
  },
  {
   "name": "Mediterranes Omelett-Sandwich",
@@ -2766,7 +2784,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/mediterranes-omelett-sandwich/",
   "note": "nach REWE; Parmesan durch vegetarischen Hartkäse ersetzt",
-  "img": null
+  "img": "img/rezepte/x-068.jpg",
+  "imgCredit": {
+   "artist": "Tamorlan",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bocadillo_de_Tortilla_de_patatas_-_34.jpg",
+   "title": "File:Bocadillo de Tortilla de patatas - 34.jpg"
+  }
  },
  {
   "name": "Rote-Linsen-Pasta mit Rucola, Mozzarella & Pinienkernen",
@@ -2801,7 +2825,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/rote-linsen-pasta-rucola-mozzarella-pinienkernen/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-069.jpg",
+  "imgCredit": {
+   "artist": "Katrin Gilger",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pasta,_Rocket,_Red_Lentils_%26_Goat_Cheese_(4370431939).jpg",
+   "title": "File:Pasta, Rocket, Red Lentils & Goat Cheese (4370431939).jpg"
+  }
  },
  {
   "name": "Linsennudel-Auflauf mit Brokkoli & Mozzarella",
@@ -2835,7 +2865,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/linsennudel-auflauf/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-070.jpg",
+  "imgCredit": {
+   "artist": "wlayton",
+   "license": "CC BY-SA 2.0",
+   "url": "https://www.flickr.com/photos/34917178@N08/5383745643",
+   "title": "Baked Penne"
+  }
  },
  {
   "name": "Sushi-Bowl mit Tofu & Edamame",
@@ -2877,7 +2913,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/sushi-bowl-edamame/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-071.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fried_Tofu_Poke_Bowl_(M)_with_Wasabi_Soy_sauce_-_Kitokito_2023-06-09.jpg",
+   "title": "File:Fried Tofu Poke Bowl (M) with Wasabi Soy sauce - Kitokito 2023-06-09.jpg"
+  }
  },
  {
   "name": "Linsen-Kürbis-Eintopf mit Tofu",
@@ -2916,7 +2958,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/veganer-linsen-kuerbis-eintopf-tofu/",
   "note": "nach REWE; Kokosmilch light statt normal (Nährwerte der Quelle beibehalten, real etwas weniger Fett)",
-  "img": null
+  "img": "img/rezepte/x-072.jpg",
+  "imgCredit": {
+   "artist": "Helena Jacoba",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/69302634@N02/9528060666",
+   "title": "Soup with rosemary garnish"
+  }
  },
  {
   "name": "Schwäbische Linsen mit Spätzle & Räuchertofu",
@@ -2959,7 +3007,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/spaetzle-linsengemuese/",
   "note": "nach REWE; Protein erhöht mit 200 g Räuchertofu",
-  "img": null
+  "img": "img/rezepte/x-073.jpg",
+  "imgCredit": {
+   "artist": "Zantastik",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Rago%C3%BBt_aux_lentilles.jpg",
+   "title": "File:Ragoût aux lentilles.jpg"
+  }
  },
  {
   "name": "Kürbis-Tofu-Curry mit Reis",
@@ -2998,7 +3052,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/kuerbis-curry-tofu/",
   "note": "nach REWE; Kokosmilch light statt normal, Reis als Beilage ergänzt",
-  "img": null
+  "img": "img/rezepte/x-074.jpg",
+  "imgCredit": {
+   "artist": "goanfishcurryrice3",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dudi_(10524395875).jpg",
+   "title": "File:Dudi (10524395875).jpg"
+  }
  },
  {
   "name": "Halloumi-Tikka-Masala mit Reis",
@@ -3045,7 +3105,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/halloumi-tikka-masala-reis/",
   "note": "nach REWE; Kokosmilch light statt normal",
-  "img": null
+  "img": "img/rezepte/x-075.jpg",
+  "imgCredit": {
+   "artist": "Gpkp",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Paneer_Butter_Masala_(2026).jpg",
+   "title": "File:Paneer Butter Masala (2026).jpg"
+  }
  },
  {
   "name": "Knusprige Tofu-Ecken in Erdnusssoße mit Brokkoli",
@@ -3093,7 +3159,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/tofu-ecken-erdnusssosse/",
   "note": "nach REWE; Kokosöl durch Rapsöl, Hafer-Soja-Drink durch Sojadrink ersetzt",
-  "img": null
+  "img": "img/rezepte/x-076.jpg",
+  "imgCredit": {
+   "artist": "Miscellaneous contributor",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Baked_Tofu_with_Broccoli_and_Rice.jpg",
+   "title": "File:Baked Tofu with Broccoli and Rice.jpg"
+  }
  },
  {
   "name": "Wirsingrouladen mit Räuchertofu-Füllung & Tomatensugo",
@@ -3132,7 +3204,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/kohlrouladen-raeuchertofu-tomatensugo/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-077.jpg",
+  "imgCredit": {
+   "artist": "abnehmen.net",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Wirsingroulade.jpg",
+   "title": "File:Wirsingroulade.jpg"
+  }
  },
  {
   "name": "Rührtofu mit Kartoffelpüree & Rahmspinat",
@@ -3173,7 +3251,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/ruehrtofu-kartoffelpueree-rahmspinat/",
   "note": "nach REWE; Haferdrink durch Milch ersetzt (mehr Protein)",
-  "img": null
+  "img": "img/rezepte/x-078.jpg",
+  "imgCredit": {
+   "artist": "CNEcija12345",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Aloo_Palak_potato.jpg",
+   "title": "File:Aloo Palak potato.jpg"
+  }
  },
  {
   "name": "High-Protein-Spinat-Lasagne mit Hüttenkäse",
@@ -3209,7 +3293,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/high-protein-spinat-lasagne/",
   "note": "nach REWE; Fertig-Rahmspinat (Marke) durch TK-Spinat + Skyr ersetzt, Parmesan durch veg. Hartkäse",
-  "img": null
+  "img": "img/rezepte/x-079.jpg",
+  "imgCredit": {
+   "artist": "bryan... from Taipei, Taiwan",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Food_%E8%8F%A0%E8%8F%9C%26%E7%91%9E%E5%8F%AF%E9%81%94%E8%B5%B7%E5%8F%B8%E5%8D%83%E5%B1%A4%E9%BA%B5,_Spinach_%26_Ricotta_Lasagna,_LONGTABLE,_%E5%8F%B0%E5%8C%97_(15708119113).jpg",
+   "title": "File:Food 菠菜&瑞可達起司千層麵, Spinach & Ricotta Lasagna, LONGTABLE, 台北 (15708119113).jpg"
+  }
  },
  {
   "name": "Burrito mit Soja-Hack, Bohnen & Käsesoße",
@@ -3247,7 +3337,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/vegetarischer-burrito/",
   "note": "nach REWE; veganer Cheddar durch normalen Käse ersetzt (vegetarisch, mehr Protein), Pintobohnen -> Kidneybohnen",
-  "img": null
+  "img": "img/rezepte/x-080.jpg",
+  "imgCredit": {
+   "artist": "Jennifer from Vancouver, Canada",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_Burrito_at_Mucho_Burrito_in_Vancouver,_BC_(5665706890).jpg",
+   "title": "File:Vegetarian Burrito at Mucho Burrito in Vancouver, BC (5665706890).jpg"
+  }
  },
  {
   "name": "Hüttenkäse-Taler mit Rucolasalat & Kräuterquark",
@@ -3287,7 +3383,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/huettenkaese-taler-fruehlingszwiebeln/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-081.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Fritter_-_The_Veg_Box_Cafe_2024-12-29.jpg",
+   "title": "File:Fritter - The Veg Box Cafe 2024-12-29.jpg"
+  }
  },
  {
   "name": "Knäcke-Pizza mit Hüttenkäse, Oliven & Gouda",
@@ -3321,7 +3423,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/proteinreiche-knaecke-pizza/",
   "note": "nach REWE; Marken-Protein-Knäcke durch normales Vollkorn-Knäcke ersetzt",
-  "img": null
+  "img": "img/rezepte/x-082.jpg",
+  "imgCredit": {
+   "artist": "Kolforn (Kolforn) I'd appreciate if you could mail me (Kolforn@gmail.com) if you want to use this picture out of the Wik",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:-2019-05-17_Cheese,_tomato_and_egg_on_rye_crispbread_(1).JPG",
+   "title": "File:-2019-05-17 Cheese, tomato and egg on rye crispbread (1).JPG"
+  }
  },
  {
   "name": "Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa",
@@ -3368,7 +3476,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/linsendal-mit-brokkoli-tofu-bites-und-quinoa",
   "note": "nach Lidl Kochen; Einfrieren des Tofus am Vortag optional weggelassen",
-  "img": null
+  "img": "img/rezepte/x-083.jpg",
+  "imgCredit": {
+   "artist": "Pelican",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dal_soup_(Indian_lentil_dish).jpg",
+   "title": "File:Dal soup (Indian lentil dish).jpg"
+  }
  },
  {
   "name": "Panierte Tofu-Sticks mit Kichererbsen-Spinat & Kartoffeln",
@@ -3403,7 +3517,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/panierte-tofusticks-mit-spinat-und-kartoffeln",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-084.jpg",
+  "imgCredit": {
+   "artist": "Kari Sullivan from Austin, TX",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Spinach-Chickpea_Curry_(3117324894).jpg",
+   "title": "File:Spinach-Chickpea Curry (3117324894).jpg"
+  }
  },
  {
   "name": "Tomaten-Mozzarella-Omelett aus dem Ofen",
@@ -3439,7 +3559,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/tomaten-mozzarella-omelett-aus-dem-ofen",
   "note": "nach Lidl Kochen; Mozzarella light statt normal",
-  "img": null
+  "img": "img/rezepte/x-085.jpg",
+  "imgCredit": {
+   "artist": "Alpha",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Baked_Moroccan_Omelette_with_Haloumi,_Tomatoes_and_Capsicums.jpg",
+   "title": "File:Baked Moroccan Omelette with Haloumi, Tomatoes and Capsicums.jpg"
+  }
  },
  {
   "name": "Chinesischer Zitronen-Tofu mit Gemüsereis",
@@ -3479,7 +3605,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/chinesischer-zitronen-tofu-an-gemuesereis",
   "note": "nach Lidl Kochen; in der Pfanne gebraten statt frittiert, Zucker halbiert – Nährwerte daher angepasst geschätzt",
-  "img": null
+  "img": "img/rezepte/x-086.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tofu_Kee_Mao_Fried_Rice_-_Nok_Nok_Kitchen_at_The_Cow_2025-03-15.jpg",
+   "title": "File:Tofu Kee Mao Fried Rice - Nok Nok Kitchen at The Cow 2025-03-15.jpg"
+  }
  },
  {
   "name": "Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing",
@@ -3522,7 +3654,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/power-bowl-mit-bulgur-und-tofu",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-087.jpg",
+  "imgCredit": {
+   "artist": "Lablascovegmenu",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/35022955@N06/44602725310",
+   "title": "Teriyaki buddha bowl: Tofu, buckwheat, mushrooms and cabbage #dailydozen #dailydozenchallenge"
+  }
  },
  {
   "name": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
@@ -3562,7 +3700,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/tofu-souvlaki-auf-griechischem-bauernsalat",
   "note": "nach Lidl Kochen; veganer Hirtenkäse durch Feta, Fertig-Gewürzmischung durch Einzelgewürze ersetzt, weniger Öl",
-  "img": null
+  "img": "img/rezepte/x-088.jpg",
+  "imgCredit": {
+   "artist": "Tiia Monto",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetable_skewers.jpg",
+   "title": "File:Vegetable skewers.jpg"
+  }
  },
  {
   "name": "Linsen-Tofu-Curry mit Pak Choi",
@@ -3601,7 +3745,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/linsen-tofu-curry-mit-pak-choi",
   "note": "nach Lidl Kochen; Kokosmilch light statt normal",
-  "img": null
+  "img": "img/rezepte/x-089.jpg",
+  "imgCredit": {
+   "artist": "Sharon",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tofu_and_bok_choy.jpg",
+   "title": "File:Tofu and bok choy.jpg"
+  }
  },
  {
   "name": "Rote-Linsen-Salat mit Feta, Mango & Cashews",
@@ -3638,7 +3788,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/roter-linsensalat",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-090.jpg",
+  "imgCredit": {
+   "artist": "Benoît Prieur",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Salade_de_lentilles,_potimarron_r%C3%B4ti_et_Feta.jpg",
+   "title": "File:Salade de lentilles, potimarron rôti et Feta.jpg"
+  }
  },
  {
   "name": "Gebratene Quarkklöße mit Salat & Radieschen",
@@ -3675,7 +3831,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/gebratene-quarkkloesse-mit-salat-und-radieschen",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-091.jpg",
+  "imgCredit": {
+   "artist": "SZF48",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kaspresskn%C3%B6del.jpg",
+   "title": "File:Kaspressknödel.jpg"
+  }
  },
  {
   "name": "Nudel-Frittata mit grünem Spargel",
@@ -3708,7 +3870,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/nudel-spargel-frittata",
   "note": "nach Lidl Kochen; Schlagsahne -> Kochsahne",
-  "img": null
+  "img": "img/rezepte/x-092.jpg",
+  "imgCredit": {
+   "artist": "wharman",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/96763131@N00/477554807",
+   "title": "Constructed Asparagus Frittata"
+  }
  },
  {
   "name": "Falafel in orientalischer Linsensuppe mit Skyr",
@@ -3747,7 +3915,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/falafel-in-orientalischer-linsensuppe",
   "note": "nach Lidl Kochen; veganen Frischaufstrich/Sojaghurt durch Skyr ersetzt",
-  "img": null
+  "img": "img/rezepte/x-093.jpg",
+  "imgCredit": {
+   "artist": "jules",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Red_lentil_soup_bowl.jpg",
+   "title": "File:Red lentil soup bowl.jpg"
+  }
  },
  {
   "name": "Gebackener Halloumi mit Ofengemüse",
@@ -3786,7 +3960,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/gebackener-halloumi-mit-gemuese",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-094.jpg",
+  "imgCredit": {
+   "artist": "Ewan Munro from London, UK",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:The_Crown_and_Two_Chairmen,_Soho,_London_(2331354643).jpg",
+   "title": "File:The Crown and Two Chairmen, Soho, London (2331354643).jpg"
+  }
  },
  {
   "name": "Orientalischer Linsen-Feta-Eintopf",
@@ -3824,7 +4004,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/orientalischer-linseneintopf",
   "note": "nach Lidl Kochen; Zubereitung für den Herd statt Küchenmaschine beschrieben",
-  "img": null
+  "img": "img/rezepte/x-095.jpg",
+  "imgCredit": {
+   "artist": "J Doll",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:French_Lentil_Soup_(140491423).jpeg",
+   "title": "File:French Lentil Soup (140491423).jpeg"
+  }
  },
  {
   "name": "Tofu-Bowl mit Bohnen, Ofengemüse & Hummus",
@@ -3866,7 +4052,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/tofu-bowl-mit-bohnen-toskana-gemuese-und-hummus",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-096.jpg",
+  "imgCredit": {
+   "artist": "stu_spivack",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Skordalia,_hummus_and_vegetables.jpg",
+   "title": "File:Skordalia, hummus and vegetables.jpg"
+  }
  },
  {
   "name": "Schnelle Miso-Ramen mit Tofu & Ei",
@@ -3909,7 +4101,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/schnelle-vegane-miso-ramen-mit-tofu",
   "note": "nach Lidl Kochen; Protein erhöht mit 4 Eiern, Sesamöl halbiert",
-  "img": null
+  "img": "img/rezepte/x-097.jpg",
+  "imgCredit": {
+   "artist": "Daderot",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Miso_ramen_with_fried_tofu,_corn,_wakame_seaweed,_chili_strings,_and_scallions_-_Massachusetts.jpg",
+   "title": "File:Miso ramen with fried tofu, corn, wakame seaweed, chili strings, and scallions - Massachusetts.jpg"
+  }
  },
  {
   "name": "Pellkartoffeln mit extra Kräuterquark",
@@ -3944,7 +4142,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/pellkartoffeln-mit-kraeuterquark",
   "note": "nach Lidl Kochen; Quarkmenge um 250 g erhöht",
-  "img": null
+  "img": "img/rezepte/x-098.jpg",
+  "imgCredit": {
+   "artist": "abnehmen.net",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kartoffeln-quark.jpg",
+   "title": "File:Kartoffeln-quark.jpg"
+  }
  },
  {
   "name": "Frühstücks-Quarkspeise mit Beeren & Studentenfutter",
@@ -3979,7 +4183,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/fruehstuecksquarkspeise",
   "note": "nach Lidl Kochen; Quark 20 % durch Magerquark + Skyr ersetzt (mehr Protein, weniger Fett)",
-  "img": null
+  "img": "img/rezepte/x-099.jpg",
+  "imgCredit": {
+   "artist": "Jose C Silva",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/61676142@N00/9920331173",
+   "title": "Post-workout meal"
+  }
  },
  {
   "name": "Dinkel-Crêpes mit Blaubeerquark",
@@ -4014,7 +4224,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/dinkel-crepes-mit-blaubeerquark",
   "note": "nach Lidl Kochen; 250 g Quark 40 % durch 500 g Magerquark ersetzt",
-  "img": null
+  "img": "img/rezepte/x-100.jpg",
+  "imgCredit": {
+   "artist": "Mark Mitchell",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:01_Lemon_Blueberry_Crepes.jpg",
+   "title": "File:01 Lemon Blueberry Crepes.jpg"
+  }
  },
  {
   "name": "Beeren-Skyr mit Mandeln & Rosinen",
@@ -4045,7 +4261,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/beeren-skyr-mit-mandeln-und-rosinen",
   "note": "nach Lidl Kochen; auf 4 Snack-Portionen statt 2 Portionen aufgeteilt",
-  "img": null
+  "img": "img/rezepte/x-101.jpg",
+  "imgCredit": {
+   "artist": "Ruth and Dave",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/95142644@N00/8003777591",
+   "title": "Berries for breakfast"
+  }
  },
  {
   "name": "Möhren-Rührei mit Räuchertofu & Feta",
@@ -4080,7 +4302,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/low-carb/rdp-low-carb-moehren-ruehrei-mit-raeuchertofu",
   "note": "nach Aldi Süd; keine Nährwerte auf der Seite, geschätzt",
-  "img": null
+  "img": "img/rezepte/x-102.jpg",
+  "imgCredit": {
+   "artist": "HaJunkiyada",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Breakfast_in_Israel_scrambled_eggs_with_herbs_and_vegetables.jpg",
+   "title": "File:Liat Portal for Foodie Disorder - Breakfast in Israel scrambled eggs with herbs and vegetables.jpg"
+  }
  },
  {
   "name": "Veggie-Bowl mit Crispy-Tofu, Ofengemüse & Kichererbsen",
@@ -4121,7 +4349,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/ausgewogene-ernaehrung/rdp-veggie-bowl-mit-crispy-tofu",
   "note": "nach Aldi Süd; Reismenge auf 120 g festgelegt, Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-103.jpg",
+  "imgCredit": {
+   "artist": "Simmer + Sauce",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Smokey_Millet_Super_Grain_Bowl_With_Crispy_Tofu.jpg",
+   "title": "File:Smokey Millet Super Grain Bowl With Crispy Tofu.jpg"
+  }
  },
  {
   "name": "Kichererbsen-Pasta mit Linsennudeln & Hartkäse",
@@ -4156,7 +4390,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/menueart/mittagessen/rdp-kichererbsen-pasta",
   "note": "nach Aldi Süd; Hälfte der Nudeln durch Linsennudeln ersetzt (Protein), Grana durch veg. Hartkäse; Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-104.jpg",
+  "imgCredit": {
+   "artist": "spurekar",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pasta_e_ceci_(49671162847).jpg",
+   "title": "File:Pasta e ceci (49671162847).jpg"
+  }
  },
  {
   "name": "Dinkel-Wraps mit Hüttenkäse-Avocado-Creme",
@@ -4194,7 +4434,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/spezielles/wraps/rdp-dinkel-wraps-mit-huettenkaese",
   "note": "nach Aldi Süd; auf 2 Portionen à 2 Wraps umgerechnet, Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-105.jpg",
+  "imgCredit": {
+   "artist": "Gordana Adzieva",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%BE%D1%80%D1%82%D0%B8%D1%99%D0%B0_%D1%81%D0%BE_%D0%B0%D0%B2%D0%BE%D0%BA%D0%B0%D0%B4%D0%BE,_%D1%98%D0%B0%D1%98%D1%86%D0%B0_%D0%B8_%D1%81%D0%B0%D0%BB%D0%B0%D1%82%D0%BA%D0%B0.jpg",
+   "title": "File:Тортиља со авокадо, јајца и салатка.jpg"
+  }
  },
  {
   "name": "Tofu-Shawarma mit Ofen-Blumenkohl & Skyr-Soße",
@@ -4237,7 +4483,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.tofu-shawarma-blumenkohl.r_id=Recipe_7101003.html",
   "note": "nach Kaufland; Sojagurt durch Skyr ersetzt (mehr Protein)",
-  "img": null
+  "img": "img/rezepte/x-106.jpg",
+  "imgCredit": {
+   "artist": "Roee Shpernik",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D7%A9%D7%95%D7%95%D7%90%D7%A8%D7%9E%D7%94_%D7%A6%D7%9E%D7%97%D7%95%D7%A0%D7%99%D7%AA_%D7%91%D7%98%D7%95%D7%A8%D7%98%D7%99%D7%94.JPG",
+   "title": "File:שווארמה צמחונית בטורטיה.JPG"
+  }
  },
  {
   "name": "Süßkartoffel-Curry-Omelett mit Kichererbsen",
@@ -4274,7 +4526,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.suesskartoffel-curry-omelett.r_id=Recipe_3323176.html",
   "note": "nach Kaufland",
-  "img": null
+  "img": "img/rezepte/x-107.jpg",
+  "imgCredit": {
+   "artist": "Jarrod Baniqued",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tortilla_espa%C3%B1ola_kuku_sabzi_hybrid.jpg",
+   "title": "File:Tortilla española kuku sabzi hybrid.jpg"
+  }
  },
  {
   "name": "Gemüse-Reisrösti mit Kräuterquark & Radieschensalat",
@@ -4315,7 +4573,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.gemuese-reisroesti-kraeuterquark.r_id=DE_1299.html",
   "note": "nach Kaufland; Distelöl durch Rapsöl ersetzt",
-  "img": null
+  "img": "img/rezepte/x-108.jpg",
+  "imgCredit": {
+   "artist": "AbuSayeed",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%EA%A0%98%EA%A0%A5%EA%A0%98_%EA%A0%89%EA%A0%A0%EA%A0%A3.jpg",
+   "title": "File:ꠘꠥꠘ ꠉꠠꠣ.jpg"
+  }
  },
  {
   "name": "Wraps mit gerösteten weißen Bohnen, Avocado & Rotkohl",
@@ -4356,7 +4620,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.geroestete-bohnen-wraps.r_id=Recipe_10189185.html",
   "note": "nach Kaufland",
-  "img": null
+  "img": "img/rezepte/x-109.jpg",
+  "imgCredit": {
+   "artist": "Vegan Feast Catering",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/25128194@N02/3310697872",
+   "title": "Veggie Wrap with Eggplant Dip"
+  }
  },
  {
   "name": "Linsen-Brokkoli-Salat mit Feta & Aprikosen",
@@ -4394,7 +4664,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-brokkoli-salat.r_id=DE_4675.html",
   "note": "nach Kaufland",
-  "img": null
+  "img": "img/rezepte/x-110.jpg",
+  "imgCredit": {
+   "artist": "spurekar",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lentil_Salad_(49195230383).jpg",
+   "title": "File:Lentil Salad (49195230383).jpg"
+  }
  },
  {
   "name": "Soba-Bowl mit Räuchertofu, Spargel & Paprika",
@@ -4432,7 +4708,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.tofu-bowl-soba.r_id=Recipe_50734485.html",
   "note": "nach Kaufland; Sesamöl halbiert",
-  "img": null
+  "img": "img/rezepte/x-111.jpg",
+  "imgCredit": {
+   "artist": "joyosity",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/33993074@N00/9345210661",
+   "title": "Cold soba noodle salad with baked tofu"
+  }
  },
  {
   "name": "Linsen-Haferflocken-Bratlinge mit Quark-Joghurt-Dip",
@@ -4473,7 +4755,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-haferflocken-bratlinge.r_id=DE_4632.html",
   "note": "nach Kaufland; Quark im Dip von 250 g auf 500 g Magerquark erhöht",
-  "img": null
+  "img": "img/rezepte/x-112.jpg",
+  "imgCredit": {
+   "artist": "https://www.flickr.com/photos/rusvaplauke/",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegan_patties_with_potatoes_and_salad.jpg",
+   "title": "File:Vegan patties with potatoes and salad.jpg"
+  }
  },
  {
   "name": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
@@ -4513,7 +4801,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2231421357481765/Tofu-Brokkoli-Pfanne-mit-Cashewkernen.html",
   "note": "nach Chefkoch (4,5 Sterne, 133 Bewertungen)",
-  "img": null
+  "img": "img/rezepte/x-113.jpg",
+  "imgCredit": {
+   "artist": "artethgray",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bento_box_lunch.jpg",
+   "title": "File:Bento box lunch.jpg"
+  }
  },
  {
   "name": "Avocado-Hüttenkäse-Salat mit Ei & Rucola",
@@ -4547,7 +4841,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/370901122823962/Avocado-Huettenkaese-Salat.html",
   "note": "nach Chefkoch (4,3 Sterne, 111 Bewertungen)",
-  "img": null
+  "img": "img/rezepte/x-114.jpg",
+  "imgCredit": {
+   "artist": "Daderot",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Avocado_and_hard-boiled_egg_on_mixed_greens,_with_vinegar,_garlic_olive_oil,_and_black_pepper_-_Massachusetts.jpg",
+   "title": "File:Avocado and hard-boiled egg on mixed greens, with vinegar, garlic olive oil, and black pepper - Massachusetts.jpg"
+  }
  },
  {
   "name": "Gefüllte Paprika mit Kräuter-Hüttenkäse",
@@ -4578,7 +4878,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1786451288801668/Gefuellte-Paprika-mit-Huettenkaese.html",
   "note": "nach Chefkoch (4,35 Sterne, 173 Bewertungen)",
-  "img": null
+  "img": "img/rezepte/x-115.jpg",
+  "imgCredit": {
+   "artist": "Maina Bosco",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Stuffed_bell_peppers_Karnataka_DSC0001.jpg",
+   "title": "File:Stuffed bell peppers Karnataka DSC0001.jpg"
+  }
  },
  {
   "name": "Gemüse-Frittata mit Hüttenkäse & Tomaten",
@@ -4615,7 +4921,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3122161465385844/Zucchini-Paprika-Moehren-Frittata-mit-Huettenkaese-und-Tomaten.html",
   "note": "nach Chefkoch (4,6 Sterne, 94 Bewertungen)",
-  "img": null
+  "img": "img/rezepte/x-116.jpg",
+  "imgCredit": {
+   "artist": "Dedda 71",
+   "license": "CC BY 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Frittata_slice.jpg",
+   "title": "File:Frittata slice.jpg"
+  }
  },
  {
   "name": "Tofu-Gemüse-Pfanne mit Kokosmilch & Reis",
@@ -4653,7 +4965,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1893301308285830/Tofu-Gemuese-Pfanne-mit-Kokosmilch.html",
   "note": "nach Chefkoch (4,6 Sterne, 301 Bewertungen); Kokosmilch light, Reismenge festgelegt",
-  "img": null
+  "img": "img/rezepte/x-117.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Red_curry_with_tofu,_egg_fried_rice_-_Little_Thai_2024-07-21.jpg",
+   "title": "File:Red curry with tofu, egg fried rice - Little Thai 2024-07-21.jpg"
+  }
  },
  {
   "name": "Quark-Pizza ohne Hefe mit Mozzarella & Gemüse",
@@ -4689,7 +5007,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3573581536503630/Pizzateig-mit-Quark-ohne-Oel-und-ohne-Hefe.html",
   "note": "nach Chefkoch (4,7 Sterne, 113 Bewertungen); Teig verdoppelt und konkreter Belag ergänzt, Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-118.jpg",
+  "imgCredit": {
+   "artist": "Food Recipes",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_pizza.jpg",
+   "title": "File:Vegetarian pizza.jpg"
+  }
  },
  {
   "name": "Hüttenkäse-Laibchen mit Kernen & Kräutern",
@@ -4724,7 +5048,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/452611137753390/Huettenkaeselaibchen.html",
   "note": "nach Chefkoch (4,8 Sterne, 24 Bewertungen); \"Becher\"-Angaben in Gramm umgerechnet, auf 6 Snack-Portionen ausgelegt, Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-119.jpg",
+  "imgCredit": {
+   "artist": "Leon Brooks",
+   "license": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:Veggie_patties_nicely_grilled.jpg",
+   "title": "File:Veggie patties nicely grilled.jpg"
+  }
  },
  {
   "name": "Penne-Spinat-Auflauf mit Feta & Ei",
@@ -4758,7 +5088,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/penne-spinat-auflauf/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-120.jpg",
+  "imgCredit": {
+   "artist": "avlxyz",
+   "license": "CC BY-SA 2.0",
+   "url": "https://www.flickr.com/photos/10559879@N00/4571025610",
+   "title": "Filled - Julia's Jamie Oliver Spinach and Ricotta Cannelloni"
+  }
  },
  {
   "name": "Rosenkohl-Kartoffel-Auflauf mit Hartkäse",
@@ -4792,7 +5128,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/rosenkohl-kartoffel-auflauf/",
   "note": "nach REWE; Bergkäse durch veg. Hartkäse, Kochsahne 15 % statt Sahne",
-  "img": null
+  "img": "img/rezepte/x-121.jpg",
+  "imgCredit": {
+   "artist": "dalecruse",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/91873384@N04/49800371042",
+   "title": "purple cauliflower & brussel sprout gratin"
+  }
  },
  {
   "name": "Pikante Berglinsen-Gemüse-Pfanne mit Kräuterquark",
@@ -4831,7 +5173,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/pikante-berglinsen-pfanne/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-122.jpg",
+  "imgCredit": {
+   "artist": "Deodora333",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D0%B5%D1%9C%D0%B0_2025.jpg",
+   "title": "File:Леќа 2025.jpg"
+  }
  },
  {
   "name": "Linsen-Pilz-Bowl mit Naturreis, Avocado & Skyr",
@@ -4872,7 +5220,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/vegane-linsen-bowl/",
   "note": "nach REWE; Sojajoghurt durch Skyr ersetzt (mehr Protein)",
-  "img": null
+  "img": "img/rezepte/x-123.jpg",
+  "imgCredit": {
+   "artist": "Martin Lewison",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Delica_Squash_with_Lentils_and_Wild_Mushrooms_at_Kettner%27s_-_Clarence_Tavern.jpg",
+   "title": "File:Delica Squash with Lentils and Wild Mushrooms at Kettner's - Clarence Tavern.jpg"
+  }
  },
  {
   "name": "Thai-Curry mit Tofu, Kürbis & grünen Bohnen",
@@ -4917,7 +5271,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/thai-curry/",
   "note": "nach REWE; Kokosmilch light statt normal, Rapsöl statt Kokosöl",
-  "img": null
+  "img": "img/rezepte/x-124.jpg",
+  "imgCredit": {
+   "artist": "Ryan Snyder",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Curried_Tofu_at_Green_Papaya_(3375805731).jpg",
+   "title": "File:Curried Tofu at Green Papaya (3375805731).jpg"
+  }
  },
  {
   "name": "Pilzragout mit Räuchertofu, Paprika & Wildreis",
@@ -4959,7 +5319,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/veganes-pilzragout-raeuchertofu-wildreis/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-125.jpg",
+  "imgCredit": {
+   "artist": "MartinThoma",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pilzragout-mit-Reis.jpg",
+   "title": "File:Pilzragout-mit-Reis.jpg"
+  }
  },
  {
   "name": "Smashed Potatoes mit Zitronen-Kräuterquark",
@@ -4996,7 +5362,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/smashed-potatoes-frische-quarkcreme/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-126.jpg",
+  "imgCredit": {
+   "artist": "Missvain",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Wild_Goat_Bistro_-_April_2019_-_Stierch_03.jpg",
+   "title": "File:Wild Goat Bistro - April 2019 - Stierch 03.jpg"
+  }
  },
  {
   "name": "Gefüllte Spitzpaprika mit Feta-Hüttenkäse-Creme",
@@ -5028,7 +5400,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/vegetarische-gefuellte-spitzpaprika/",
   "note": "nach REWE; Frischkäse durch Hüttenkäse ersetzt und weniger Öl (deutlich weniger Fett, mehr Protein)",
-  "img": null
+  "img": "img/rezepte/x-127.jpg",
+  "imgCredit": {
+   "artist": "Vegan Feast Catering",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Stuffed_Peppers_Ready_for_the_Oven_(4067530220).jpg",
+   "title": "File:Stuffed Peppers Ready for the Oven (4067530220).jpg"
+  }
  },
  {
   "name": "Vegetarischer falscher Hase mit Erbsen-Möhren-Gemüse",
@@ -5071,7 +5449,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/vegetarischer-falscher-hase-erbsen-moehren-gemuese/",
   "note": "nach REWE",
-  "img": null
+  "img": "img/rezepte/x-128.jpg",
+  "imgCredit": {
+   "artist": "Lahti213",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lentil_loaf_and_sides.jpg",
+   "title": "File:Lentil loaf and sides.jpg"
+  }
  },
  {
   "name": "Curry-Tomatensuppe mit roten Linsen & Hirtenkäse",
@@ -5109,7 +5493,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/tomatensuppe-linsen/",
   "note": "nach REWE; Fertig-Tomatensauce durch passierte Tomaten ersetzt, Öl halbiert – Nährwerte angepasst geschätzt",
-  "img": null
+  "img": "img/rezepte/x-129.jpg",
+  "imgCredit": {
+   "artist": "E4024",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Tomato_soup,_Turkish_style.jpg",
+   "title": "File:Tomato soup, Turkish style.jpg"
+  }
  },
  {
   "name": "Halloumi-Carbonara mit Hartkäse",
@@ -5144,7 +5534,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/halloumi-carbonara/",
   "note": "nach REWE; Pecorino durch vegetarischen Hartkäse ersetzt",
-  "img": null
+  "img": "img/rezepte/x-130.jpg",
+  "imgCredit": {
+   "artist": "Popo le Chien",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cacio_e_pepe.jpg",
+   "title": "File:Cacio e pepe.jpg"
+  }
  },
  {
   "name": "Ofengemüse-Salat mit Halloumi & Kichererbsen",
@@ -5184,7 +5580,13 @@
   ],
   "source": "https://www.rewe.de/rezepte/ofengemuese-salat-halloumi/",
   "note": "nach REWE; Öl von 7 auf 4 EL reduziert",
-  "img": null
+  "img": "img/rezepte/x-131.jpg",
+  "imgCredit": {
+   "artist": "Andy Li",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Halloumi_%26_Crispy_Chickpeas_Salad_-_No.16_2025-08-24.jpg",
+   "title": "File:Halloumi & Crispy Chickpeas Salad - No.16 2025-08-24.jpg"
+  }
  },
  {
   "name": "Seitan-Gulasch mit Paprika & Kartoffeln",
@@ -5224,7 +5626,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/seitan-gulasch-mit-kartoffeln",
   "note": "nach Lidl Kochen; Seitan fertig gekauft statt selbst gemacht",
-  "img": null
+  "img": "img/rezepte/x-132.jpg",
+  "imgCredit": {
+   "artist": "Lablascovegmenu",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/35022955@N06/31427214752",
+   "title": "Goulash vegan"
+  }
  },
  {
   "name": "Kohlrabi-Lasagne mit Senfcreme",
@@ -5265,7 +5673,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/kohlrabilasagne-mit-senfcreme",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-133.jpg",
+  "imgCredit": {
+   "artist": "Wheeler Cowperthwaite",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Eggplant_Lasagna_(Vegitarian)_(2_of_6).jpg",
+   "title": "File:Eggplant Lasagna (Vegitarian) (2 of 6).jpg"
+  }
  },
  {
   "name": "Rosmarinkartoffeln mit Weiße-Bohnen-Creme & Caprese",
@@ -5307,7 +5721,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/rosmarinkartoffeln-mit-weisser-bohnenpaste-und-caprese-salat",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-134.jpg",
+  "imgCredit": {
+   "artist": "Chris Olszewski",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Potatoes_ready_for_roasting_with_rosemary_and_garlic,_2026.jpg",
+   "title": "File:Potatoes ready for roasting with rosemary and garlic, 2026.jpg"
+  }
  },
  {
   "name": "Tofu-Burger mit Senf-Skyr-Soße",
@@ -5345,7 +5765,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/veggie-burger-mit-tofu",
   "note": "nach Lidl Kochen; Crème fraîche durch Skyr ersetzt",
-  "img": null
+  "img": "img/rezepte/x-135.jpg",
+  "imgCredit": {
+   "artist": "Markus Spiske markusspiske",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Veggie_burger_on_plate_(Unsplash).jpg",
+   "title": "File:Veggie burger on plate (Unsplash).jpg"
+  }
  },
  {
   "name": "Lauch-Soja-Hack-Suppe",
@@ -5382,7 +5808,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/vegane-hack-lauch-suppe",
   "note": "nach Lidl Kochen; Fertig-Hackmischung durch Sojagranulat ersetzt, etwas Frischkäse ergänzt; Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-136.jpg",
+  "imgCredit": {
+   "artist": "Ewan Munro from London, UK",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mon_Plaisir,_Covent_Garden,_London_(3717184145).jpg",
+   "title": "File:Mon Plaisir, Covent Garden, London (3717184145).jpg"
+  }
  },
  {
   "name": "Spinat-Crêpes mit Kräuterquark & Radieschen-Feldsalat",
@@ -5422,7 +5854,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/spinatcrepe-mit-kraeuterquark-und-feldsalat-mit-knackigen-radieschen",
   "note": "nach Lidl Kochen; Quark 40 % durch doppelte Menge Magerquark ersetzt",
-  "img": null
+  "img": "img/rezepte/x-137.jpg",
+  "imgCredit": {
+   "artist": "Karen and Brad Emerson",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Spinach_crepes_(3236762733).jpg",
+   "title": "File:Spinach crepes (3236762733).jpg"
+  }
  },
  {
   "name": "Rote-Bete-Quinoa mit Tofu & Basilikum",
@@ -5459,7 +5897,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/rote-bete-quinoa-und-tofu",
   "note": "nach Lidl Kochen",
-  "img": null
+  "img": "img/rezepte/x-138.jpg",
+  "imgCredit": {
+   "artist": "OcikaUouil",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:MC_%E6%BE%B3%E9%96%80_Macau_JW_Marriott_%E8%90%AC%E8%B1%AA%E9%85%92%E5%BA%97_hotel_restaurant_%E8%87%AA%E5%8A%A9%E9%A4%90%E5%BB%B3_buffet_food_Lunch_January_2019_SSG_28.jpg",
+   "title": "File:MC 澳門 Macau JW Marriott 萬豪酒店 hotel restaurant 自助餐廳 buffet food Lunch January 2019 SSG 28.jpg"
+  }
  },
  {
   "name": "Hokkaido-Linsen-Cashew-Curry-Eintopf mit Joghurt",
@@ -5498,7 +5942,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/hokkaido-linsen-cashew-curry-eintopf",
   "note": "nach Lidl Kochen; Kokosöl durch Rapsöl ersetzt",
-  "img": null
+  "img": "img/rezepte/x-139.jpg",
+  "imgCredit": {
+   "artist": "Mdsmds0",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pumpkin_Curry_(Kaddu_Ki_Sabzi).JPG",
+   "title": "File:Pumpkin Curry (Kaddu Ki Sabzi).JPG"
+  }
  },
  {
   "name": "Tofu süß-sauer mit Quinoa",
@@ -5536,7 +5986,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/tofu-suess-sauer",
   "note": "nach Lidl Kochen; Tofu von 400 auf 600 g erhöht",
-  "img": null
+  "img": "img/rezepte/x-140.jpg",
+  "imgCredit": {
+   "artist": "Miikka H from Helsinki, Finland",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:JerkTofu.jpg",
+   "title": "File:JerkTofu.jpg"
+  }
  },
  {
   "name": "Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße",
@@ -5578,7 +6034,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/gebackener-tofu-auf-nudeln-mit-gemuese",
   "note": "nach Lidl Kochen; Nudelmenge von 500 auf 400 g reduziert",
-  "img": null
+  "img": "img/rezepte/x-141.jpg",
+  "imgCredit": {
+   "artist": "naotakem",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Spaghetti_al_Pomodoro_with_broccoli_%E3%82%B9%E3%83%91%E3%82%B2%E3%83%83%E3%83%86%E3%82%A3%E3%83%9D%E3%83%A2%E3%83%89%E3%83%BC%E3%83%AD%E3%80%81%E3%83%96%E3%83%AD%E3%83%83%E3%82%B3%E3%83%AA%E3%83%BC%E6%B7%BB%E3%81%88.jpg",
+   "title": "File:Spaghetti al Pomodoro with broccoli スパゲッティポモドーロ、ブロッコリー添え.jpg"
+  }
  },
  {
   "name": "Rote-Linsen-Salat mit Camembert, Trauben & Walnüssen",
@@ -5614,7 +6076,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/salat-mit-roten-linsen-camembert-und-trauben",
   "note": "nach Lidl Kochen; für den Herd statt Küchenmaschine beschrieben",
-  "img": null
+  "img": "img/rezepte/x-142.jpg",
+  "imgCredit": {
+   "artist": "Joey Doll",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Lentil_salad_(29308018298).jpg",
+   "title": "File:Lentil salad (29308018298).jpg"
+  }
  },
  {
   "name": "Spaghetti-Auflauf mit Hüttenkäse & Tomaten",
@@ -5648,7 +6116,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2227511356870054/Spaghettiauflauf-mit-Huettenkaese-und-Tomaten.html",
   "note": "nach Chefkoch (4,6 Sterne, 18 Bewertungen); 200 g Parmesan durch 100 g veg. Hartkäse ersetzt",
-  "img": null
+  "img": "img/rezepte/x-143.jpg",
+  "imgCredit": {
+   "artist": "Robert Loescher",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Baked_Spaghetti_with_mushrooms.JPG",
+   "title": "File:Baked Spaghetti with mushrooms.JPG"
+  }
  },
  {
   "name": "Zucchini-Kichererbsen-Curry mit Reis",
@@ -5688,7 +6162,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2746431426709816/Zucchini-Kichererbsen-Curry.html",
   "note": "nach Chefkoch (4,8 Sterne, 20 Bewertungen); Kokosmilch light",
-  "img": null
+  "img": "img/rezepte/x-144.jpg",
+  "imgCredit": {
+   "artist": "Deodora333",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%B0%D1%80%D0%B8_%D1%81%D0%BE_%D0%BD%D0%B0%D1%83%D1%82_%D0%B8_%D1%82%D0%B8%D0%BA%D0%B2%D0%B8%D1%87%D0%BA%D0%B8.jpg",
+   "title": "File:Кари со наут и тиквички.jpg"
+  }
  },
  {
   "name": "Mango-Linsensalat mit mariniertem Tofu",
@@ -5727,7 +6207,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3218701478967636/Mango-Linsensalat-mit-mariniertem-Tofu.html",
   "note": "nach Chefkoch (4,7 Sterne, 71 Bewertungen); Linsenmenge verdoppelt (Protein)",
-  "img": null
+  "img": "img/rezepte/x-145.jpg",
+  "imgCredit": {
+   "artist": "Ella Olsson from Stockholm, Sweden",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kabocha_Lentil_Salad_(45603480082).jpg",
+   "title": "File:Kabocha Lentil Salad (45603480082).jpg"
+  }
  },
  {
   "name": "Indischer Spinat-Tofu mit Reis (Palak-Style)",
@@ -5765,7 +6251,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/671151169215630/Tofu-mit-indischem-Spinat.html",
   "note": "nach Chefkoch (4,5 Sterne, 153 Bewertungen); Tofu verdoppelt, Reis als Beilage ergänzt",
-  "img": null
+  "img": "img/rezepte/x-146.jpg",
+  "imgCredit": {
+   "artist": "Radhikamprabhu82",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cottage_cheese_in_spinach_gravy(palak_paneer).jpg",
+   "title": "File:Cottage cheese in spinach gravy(palak paneer).jpg"
+  }
  },
  {
   "name": "Tofu-Stroganoff mit Champignons & Bandnudeln",
@@ -5804,7 +6296,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2913411443624213/Tofu-Stroganoff.html",
   "note": "nach Chefkoch (4,8 Sterne, 19 Bewertungen); mehr Tofu, Kochsahne statt Sahne, weniger Butter, Nudeln als Beilage",
-  "img": null
+  "img": "img/rezepte/x-147.jpg",
+  "imgCredit": {
+   "artist": "rhettigan",
+   "license": "CC BY 2.0",
+   "url": "https://www.flickr.com/photos/33990010@N02/4784227049",
+   "title": "mushroom stroganoff at noodles & co in crystal city"
+  }
  },
  {
   "name": "Backofengemüse mit Kidneybohnen & Schafskäse",
@@ -5844,7 +6342,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.backofengemuese-kidneybohnen.r_id=DE_3899.html",
   "note": "nach Kaufland",
-  "img": null
+  "img": "img/rezepte/x-148.jpg",
+  "imgCredit": {
+   "artist": "Lori L. Stalteri",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Couscous_with_Roasted_Vegetables_%26_Feta.jpg",
+   "title": "File:Couscous with Roasted Vegetables & Feta.jpg"
+  }
  },
  {
   "name": "Crispy-Tempeh-Bowl mit Reis, Gemüse & Kresse",
@@ -5886,7 +6390,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.crispy-tempeh-bowl-kresse.r_id=Recipe_32605251.html",
   "note": "nach Kaufland; Sesamöl reduziert",
-  "img": null
+  "img": "img/rezepte/x-149.jpg",
+  "imgCredit": {
+   "artist": "Mx. Granger",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Warung_Bu_Tika.jpg",
+   "title": "File:Warung Bu Tika.jpg"
+  }
  },
  {
   "name": "Schmorgurken mit Kichererbsen, Feta & Dill",
@@ -5925,7 +6435,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.schmorgurken-kichererbsen-feta.r_id=Recipe_5675877.html",
   "note": "nach Kaufland; Kichererbsen verdoppelt und Feta erhöht (Protein), vegane Kochcreme durch Kochsahne ersetzt; Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-150.jpg",
+  "imgCredit": {
+   "artist": "Jennifer from Vancouver, Canada",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Moroccan_Chickpea_and_Vegetable_Stew_(6750034613).jpg",
+   "title": "File:Moroccan Chickpea and Vegetable Stew (6750034613).jpg"
+  }
  },
  {
   "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
@@ -5972,7 +6488,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.reis-bowl-hummus-falafel.r_id=Recipe_49519987.html",
   "note": "nach Kaufland; Naturjoghurt durch Skyr ersetzt",
-  "img": null
+  "img": "img/rezepte/x-151.jpg",
+  "imgCredit": {
+   "artist": "Gerda Arendt",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Kunstmuseum_Bonn,_museum_bowl.jpg",
+   "title": "File:Kunstmuseum Bonn, museum bowl.jpg"
+  }
  },
  {
   "name": "Gelbes Tofu-Linsen-Curry mit Möhren & Paprika",
@@ -6012,7 +6534,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/vegane-rezepte/rdp-gelbes-tofu-curry-mit-moehren-und-paprika",
   "note": "nach Aldi Süd; rote Linsen und Reis ergänzt, Kokosmilch light (Protein von ca. 16 auf ~30 g); Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-152.jpg",
+  "imgCredit": {
+   "artist": "Dana Yi",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Thai_yellow_curry_with_jasmine_rice.jpg",
+   "title": "File:Thai yellow curry with jasmine rice.jpg"
+  }
  },
  {
   "name": "Griechischer Spinatreis mit gebackenem Feta",
@@ -6050,7 +6578,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/internationale-rezepte/griechenland/rdp-griechischer-spinatreis-mit-gebackenem-feta",
   "note": "nach Aldi Süd; Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-153.jpg",
+  "imgCredit": {
+   "artist": "El Mono Español",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%CE%A3%CF%80%CE%B1%CE%BD%CE%B1%CE%BA%CF%8C%CF%81%CF%85%CE%B6%CE%BF_Spanakorizo_(Las_Siete_Orillas_project)_(2).jpg",
+   "title": "File:Σπανακόρυζο Spanakorizo (Las Siete Orillas project) (2).jpg"
+  }
  },
  {
   "name": "Tofu-Köttbullar mit Rahmsoße & Kartoffeln",
@@ -6092,7 +6626,13 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/vegane-rezepte/rdp-vegane-koettbullar-mit-rahmsauce",
   "note": "nach Aldi Süd; Mandeldrink durch Milch, veganer Aufstrich durch Frischkäse ersetzt, Kartoffeln ergänzt; Nährwerte geschätzt",
-  "img": null
+  "img": "img/rezepte/x-154.jpg",
+  "imgCredit": {
+   "artist": "GeoTrinity",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_German_Cuisine.jpg",
+   "title": "File:Vegetarian German Cuisine.jpg"
+  }
  },
  {
   "name": "Vegetarische Moussaka mit Linsen & Hartkäse",
@@ -6135,6 +6675,1496 @@
   ],
   "source": "https://www.aldi-sued.de/rezepte/internationale-rezepte/griechenland/rdp-vegetarische-moussaka",
   "note": "nach Aldi Süd; 200 g rote Linsen ergänzt (Protein), Grana Padano durch veg. Hartkäse; Nährwerte geschätzt",
+  "img": "img/rezepte/x-155.jpg",
+  "imgCredit": {
+   "artist": "Joey Doll",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Eggplant_Potato_Moussaka_(43128259612).jpg",
+   "title": "File:Eggplant Potato Moussaka (43128259612).jpg"
+  }
+ },
+ {
+  "name": "Indischer Rote-Linsen-Eintopf mit Reis & Skyr",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 789,
+  "protein": 40,
+  "carbs": 113,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "400 g rote Linsen",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "20 g Ingwer",
+   "1 Paprika",
+   "1 EL Öl",
+   "2 TL Currypulver",
+   "1 TL Senfsamen",
+   "1 Dose (400 g) gehackte Tomaten",
+   "200 ml Kokosmilch",
+   "600 ml Gemüsebrühe",
+   "250 g Reis",
+   "250 g Skyr",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebel, Knoblauch und Ingwer fein hacken, Paprika würfeln. Reis nach Packung garen.",
+   "Currypulver und Senfsamen im heißen Öl kurz rösten, Zwiebel, Knoblauch, Ingwer und Paprika 3 Min. mitbraten.",
+   "Linsen, Tomaten, Kokosmilch und Brühe zugeben, aufkochen und ca. 15 Min. sämig köcheln, bis die Linsen zerfallen.",
+   "Mit Salz und Pfeffer abschmecken, mit Reis und je 1 Klecks Skyr servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1156681221835614/Indischer-Linseneintopf.html",
+  "note": "adaptiert: Linsenmenge erhöht, Kokosmilch reduziert, Reis und Skyr-Topping für Protein und Sättigung ergänzt",
+  "img": null
+ },
+ {
+  "name": "Rote-Linsen-Kartoffel-Eintopf mit Quark-Klecks",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 656,
+  "protein": 38,
+  "carbs": 99,
+  "fat": 7,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "350 g rote Linsen",
+   "600 g Kartoffeln",
+   "3 Möhren",
+   "1 Zwiebel",
+   "1 EL Öl",
+   "1 TL Currypulver",
+   "2 EL Tomatenmark",
+   "1,2 l Gemüsebrühe",
+   "1 Lorbeerblatt",
+   "1 EL Essig",
+   "250 g Magerquark",
+   "4 Scheiben Vollkornbrot",
+   "Salz, Pfeffer, Petersilie"
+  ],
+  "steps": [
+   "Zwiebel, Möhren und Kartoffeln würfeln, Linsen abspülen.",
+   "Zwiebel im Öl glasig dünsten, Gemüse und Curry zugeben, Tomatenmark kurz mitrösten.",
+   "Mit Brühe ablöschen, Linsen und Lorbeer zugeben und 20–25 Min. köcheln.",
+   "Mit Essig, Salz und Pfeffer abschmecken, mit gewürztem Magerquark und Brot servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1597321267001647/Linseneintopf-mit-roten-Linsen.html",
+  "note": "adaptiert: Sellerie/Ketchup weggelassen, mehr Linsen, Magerquark statt Sauerrahm, Brot als Beilage",
+  "img": null
+ },
+ {
+  "name": "Kenianischer Tellerlinsen-Eintopf mit Kartoffeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 587,
+  "protein": 38,
+  "carbs": 90,
+  "fat": 4,
+  "estimated": true,
+  "timeMin": 60,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "350 g Tellerlinsen",
+   "2 Lorbeerblätter",
+   "1,5 l Gemüsebrühe",
+   "500 g Kartoffeln",
+   "1 Paprika",
+   "1 Zwiebel",
+   "1 Dose (400 g) gehackte Tomaten",
+   "4 Knoblauchzehen",
+   "1 TL Paprikapulver",
+   "1 EL Chili-Gewürzmischung",
+   "250 g Magerquark",
+   "4 Scheiben Vollkornbrot",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsen mit Lorbeer in der kalten Brühe aufsetzen und ca. 30 Min. fast weich köcheln.",
+   "Kartoffeln, Paprika und Zwiebel klein würfeln, Knoblauch hacken.",
+   "Gemüse, Tomaten und Gewürze zu den Linsen geben und weitere 15 Min. garen.",
+   "Abschmecken und mit einem Klecks Magerquark und Brot servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3766611573583474/Linseneintopf-aus-Kenia.html",
+  "note": "adaptiert: Linsen erhöht, Frühlingszwiebeln durch Zwiebel ersetzt, Magerquark-Topping und Brot für Protein",
+  "img": null
+ },
+ {
+  "name": "Chana Masala mit Sojagranulat & Reis",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 581,
+  "protein": 37,
+  "carbs": 80,
+  "fat": 8,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "2 Dosen (je 400 g) Kichererbsen",
+   "120 g Sojagranulat",
+   "1 Zwiebel",
+   "3 Knoblauchzehen",
+   "15 g Ingwer",
+   "1 Dose (400 g) gehackte Tomaten",
+   "1 EL Öl",
+   "1 TL Garam Masala",
+   "1 TL Kurkuma",
+   "1 TL Kreuzkümmel",
+   "300 ml Gemüsebrühe",
+   "250 g Reis",
+   "250 g Skyr",
+   "Salz, Chili"
+  ],
+  "steps": [
+   "Sojagranulat 10 Min. in heißer Brühe quellen lassen. Reis nach Packung garen.",
+   "Gewürze im Öl kurz anrösten, gehackte Zwiebel, Knoblauch und Ingwer 3 Min. mitbraten.",
+   "Tomaten, Kichererbsen und Sojagranulat samt Brühe zugeben, 15 Min. köcheln.",
+   "Mit Salz und Chili abschmecken, mit Reis und Skyr servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2065511334033834/Kichererbsen-Curry-Chana-Masala.html",
+  "note": "adaptiert: auf 4 Portionen hochgerechnet, Sojagranulat für Protein, Dosentomaten statt frischer, Skyr statt Joghurt",
+  "img": null
+ },
+ {
+  "name": "Chili sin Carne mit Sojagranulat, Kidney & Mais",
+  "category": "abend",
+  "servings": 5,
+  "kcal": 573,
+  "protein": 32,
+  "carbs": 86,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "150 g Sojagranulat",
+   "2 Dosen (je 400 g) Kidneybohnen",
+   "1 Dose (285 g) Mais",
+   "2 Dosen (je 400 g) gehackte Tomaten",
+   "3 EL Tomatenmark",
+   "2 Zwiebeln",
+   "2 Knoblauchzehen",
+   "2 Möhren",
+   "1 EL Öl",
+   "500 ml Gemüsebrühe",
+   "2 EL Sojasauce",
+   "2 EL Paprikapulver",
+   "1 TL Kreuzkümmel",
+   "300 g Reis",
+   "Salz, Chili"
+  ],
+  "steps": [
+   "Sojagranulat in heißer Brühe mit Sojasauce 10 Min. einweichen. Reis garen.",
+   "Zwiebeln, Knoblauch und Möhren würfeln und im Öl anbraten, Sojagranulat zugeben und kräftig mitbraten.",
+   "Tomatenmark und Gewürze kurz mitrösten, Tomaten, Bohnen und Mais zugeben.",
+   "20 Min. köcheln, scharf abschmecken und mit Reis servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/879321193312846/Chili-NON-carne.html",
+  "note": "adaptiert: Sojagranulat statt Tofu (günstiger), doppelte Bohnen, Reis ergänzt",
+  "img": null
+ },
+ {
+  "name": "Hüttenkäse-Tomaten-Pasta mit Linsen",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 647,
+  "protein": 35,
+  "carbs": 98,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Nudeln",
+   "120 g rote Linsen",
+   "400 g Hüttenkäse",
+   "2 Zwiebeln",
+   "3 Knoblauchzehen",
+   "1 Dose (400 g) gehackte Tomaten",
+   "4 EL Tomatenmark",
+   "1 EL Öl",
+   "Basilikum, Salz, Pfeffer, Chili"
+  ],
+  "steps": [
+   "Nudeln in Salzwasser garen, die Linsen in den letzten 8 Min. mitkochen, dann abgießen.",
+   "Zwiebeln und Knoblauch hacken und im Öl scharf anbraten, Tomatenmark kurz mitrösten.",
+   "Tomaten zugeben, 5 Min. köcheln, Pfanne vom Herd nehmen und Hüttenkäse unterrühren.",
+   "Nudeln und Linsen untermischen, mit Basilikum, Salz, Pfeffer und Chili abschmecken."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/385401125155824/Pasta-mit-Huettenkaese.html",
+  "note": "adaptiert: rote Linsen mitgekocht für mehr Protein, Dosentomaten statt frischer",
+  "img": null
+ },
+ {
+  "name": "Paprika-Rahm-Nudeln mit Hüttenkäse & Erbsen",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 608,
+  "protein": 34,
+  "carbs": 89,
+  "fat": 11,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Nudeln",
+   "300 g TK-Erbsen",
+   "1 Paprika",
+   "2 Zwiebeln",
+   "1 EL Öl",
+   "2 TL Paprikapulver",
+   "3 EL Tomatenmark",
+   "200 ml Gemüsebrühe",
+   "250 g Magerquark",
+   "200 g Hüttenkäse",
+   "30 g Hartkäse (vegetarisch, mikrobielles Lab)",
+   "Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Nudeln garen, Erbsen 3 Min. vor Ende zugeben, abgießen.",
+   "Paprika und Zwiebeln würfeln, im Öl anrösten, Paprikapulver und Tomatenmark kurz mitbraten.",
+   "Mit Brühe ablöschen, 3 Min. köcheln, vom Herd nehmen und Magerquark sowie Hüttenkäse einrühren.",
+   "Nudeln untermischen, mit geriebenem Hartkäse und Schnittlauch servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2620971411655164/Bandnudeln-an-Paprika-Rahm-Sosse-mit-Huettenkaese.html",
+  "note": "adaptiert: Ajvar durch Tomatenmark, saure Sahne durch Magerquark, Parmesan durch vegetarischen Hartkäse ersetzt; Erbsen ergänzt",
+  "img": null
+ },
+ {
+  "name": "Gemüsecurry mit Sojaschnetzeln & Reis",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 630,
+  "protein": 36,
+  "carbs": 73,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "200 g Sojaschnetzel",
+   "1 l Gemüsebrühe",
+   "2 Möhren",
+   "200 g TK-Erbsen",
+   "1 Zucchini",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "15 g Ingwer",
+   "1 EL Öl",
+   "2 EL Currypaste",
+   "200 ml Kokosmilch",
+   "250 g Reis",
+   "2 TL Currypulver",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojaschnetzel 10 Min. in 700 ml heißer Brühe einweichen, abtropfen und gut ausdrücken. Reis garen.",
+   "Zwiebel, Knoblauch, Ingwer und Currypaste im Öl anbraten, Schnetzel zugeben und 5 Min. kräftig braten.",
+   "Gemüse in Stücken zugeben, Currypulver darüber, mit restlicher Brühe und Kokosmilch ablöschen.",
+   "10 Min. köcheln, abschmecken und mit Reis servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2408991380559999/Gemuesecurry-mit-Sojaschnetzel.html",
+  "note": "adaptiert: von 1 auf 4 Portionen hochgerechnet, Sojaschnetzel-Anteil erhöht, Erbsen statt Paprika",
+  "img": null
+ },
+ {
+  "name": "Lauwarmer Tellerlinsen-Salat mit Feta & Ei",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 509,
+  "protein": 33,
+  "carbs": 44,
+  "fat": 19,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "350 g Tellerlinsen",
+   "900 ml Gemüsebrühe",
+   "4 Eier",
+   "1 Bund Frühlingszwiebeln",
+   "1 Gurke",
+   "75 g Feta",
+   "3 EL Essig",
+   "2 EL Öl",
+   "1 TL Senf",
+   "1 TL Honig",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsen ca. 25 Min. in der Brühe bissfest garen und abgießen. Eier 9 Min. hart kochen.",
+   "Frühlingszwiebeln in Ringe schneiden, Gurke würfeln.",
+   "Aus Essig, Öl, Senf, Honig, Salz und Pfeffer eine Vinaigrette rühren und mit den noch warmen Linsen mischen.",
+   "Gemüse unterheben, mit geviertelten Eiern und zerbröseltem Feta anrichten."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/493471143709716/Linsensalat-wie-ich-ihn-mag.html",
+  "note": "adaptiert: Linsen erhöht, Eier und Feta ergänzt, Gurke statt Kirschtomaten (günstiger)",
+  "img": null
+ },
+ {
+  "name": "Linsen-Quark-Puffer mit Kräuterquark & Kartoffeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 700,
+  "protein": 45,
+  "carbs": 91,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "250 g rote Linsen",
+   "250 g Magerquark",
+   "120 g Mehl",
+   "1 Zwiebel",
+   "4 Eier",
+   "2 EL Öl",
+   "800 g Kartoffeln",
+   "250 g Magerquark (für den Dip)",
+   "1 TL Paprikapulver",
+   "1 TL Kreuzkümmel",
+   "Petersilie, Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsen in wenig Wasser ca. 10 Min. dick einkochen und abkühlen lassen. Kartoffeln als Salzkartoffeln garen.",
+   "Linsen mit Quark, Mehl, gehackter Zwiebel, Eiern und Gewürzen zu einem Teig verrühren.",
+   "Im Öl portionsweise flache Puffer von beiden Seiten goldbraun braten.",
+   "Restlichen Magerquark mit Kräutern, Salz und Pfeffer verrühren und zu Puffern und Kartoffeln servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2820971434141099/Linsen-Quark-Puffer.html",
+  "note": "adaptiert: auf 4 Portionen skaliert, Kartoffeln und Kräuterquark als Beilage",
+  "img": null
+ },
+ {
+  "name": "Erbsen-Linsen-Eintopf mit Sojaschnetzeln",
+  "category": "mittag",
+  "servings": 5,
+  "kcal": 467,
+  "protein": 36,
+  "carbs": 58,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 50,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "200 g Tellerlinsen",
+   "100 g Sojaschnetzel",
+   "500 g TK-Erbsen",
+   "500 g Kartoffeln",
+   "1 Stück Lauch",
+   "1 Zwiebel",
+   "3 Möhren",
+   "1 EL Öl",
+   "1,5 l Gemüsebrühe",
+   "2 EL Sojasauce",
+   "1 TL Majoran",
+   "250 g Magerquark",
+   "Salz, Pfeffer, Schnittlauch"
+  ],
+  "steps": [
+   "Sojaschnetzel 10 Min. in heißem Wasser mit Sojasauce einweichen, ausdrücken und im Öl kräftig anbraten, herausnehmen.",
+   "Lauch, Zwiebel, Möhren und Kartoffeln klein schneiden und im Topf andünsten.",
+   "Linsen und Brühe zugeben, 25 Min. köcheln. Erbsen und Sojaschnetzel zugeben, 5 Min. weiter garen.",
+   "Mit Majoran, Salz und Pfeffer abschmecken, mit einem Klecks Schnittlauch-Quark servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/436391135261523/Schrats-Erbsen-Linsen-Eintopf.html",
+  "note": "vegetarisch adaptiert: Wurst und Schinken durch Sojaschnetzel ersetzt, Tellerlinsen statt Belugalinsen, Sahne durch Magerquark-Topping ersetzt",
+  "img": null
+ },
+ {
+  "name": "Brokkoli-Kichererbsen-Reis mit Erdnusssoße",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 563,
+  "protein": 34,
+  "carbs": 78,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Reis",
+   "2 Dosen (je 400 g) Kichererbsen",
+   "500 g Brokkoli",
+   "3 EL Erdnussmus",
+   "2 EL Sojasauce",
+   "250 ml Gemüsebrühe",
+   "500 g Skyr",
+   "1 Knoblauchzehe",
+   "Salz, Pfeffer, Chili"
+  ],
+  "steps": [
+   "Reis nach Packung garen. Brokkoli in Röschen teilen und 6–8 Min. bissfest dämpfen.",
+   "Erdnussmus mit Brühe, Sojasauce, gepresstem Knoblauch und 2 EL Skyr glatt rühren und erwärmen.",
+   "Kichererbsen abgießen und mit Brokkoli und Reis in die Soße geben, gut erhitzen.",
+   "Mit dem restlichen Skyr als kühlem Dip servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3074691460107033/Brokkoli-Erdnuss-Reis.html",
+  "note": "adaptiert: Brokkoli-Menge reduziert (Kosten), Skyr-Dip für Protein ergänzt, weißer Reis",
+  "img": null
+ },
+ {
+  "name": "Spanische Kichererbsen-Spinat-Pfanne mit Ei & Brot",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 478,
+  "protein": 33,
+  "carbs": 51,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 Dose (400 g) Kichererbsen",
+   "100 g rote Linsen",
+   "1 Dose (400 g) gehackte Tomaten",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "1 EL Tomatenmark",
+   "1 EL Öl",
+   "300 g TK-Spinat",
+   "4 Eier",
+   "250 g Magerquark",
+   "4 Scheiben Vollkornbrot",
+   "1 TL Paprikapulver, geräuchert",
+   "1 TL Oregano",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebel und Knoblauch würfeln und im Öl glasig dünsten, Tomatenmark kurz mitrösten.",
+   "Tomaten, Linsen, Gewürze und 250 ml Wasser zugeben, 12 Min. köcheln, dann Kichererbsen und Spinat unterrühren.",
+   "Mit einem Löffel Mulden formen, Eier hineinschlagen und zugedeckt 6–8 Min. stocken lassen.",
+   "Mit Brot und gewürztem Quark servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/spanische-kichererbsen-gemuese-pfanne",
+  "note": "adaptiert: Mandeln und Paprika aus dem Glas weggelassen, halbe Kichererbsen durch rote Linsen ersetzt, TK-Spinat, Eier, Quark und Brot für Protein und Sättigung",
+  "img": null
+ },
+ {
+  "name": "Bratkartoffeln mit Bohnen-Gemüse & Kräuterquark",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 459,
+  "protein": 31,
+  "carbs": 68,
+  "fat": 5,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 kg Kartoffeln",
+   "2 Zwiebeln",
+   "1 Knoblauchzehe",
+   "1 EL Öl",
+   "300 g grüne Bohnen (TK)",
+   "2 Dosen (je 400 g) weiße Bohnen",
+   "2 EL Tomatenmark",
+   "250 ml Gemüsebrühe",
+   "500 g Magerquark",
+   "1 TL Oregano",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Kartoffeln würfeln und im Öl ca. 15 Min. goldbraun braten, Zwiebelringe und Knoblauch die letzten 3 Min. mitbraten.",
+   "Grüne Bohnen zugeben, kurz anbraten, Tomatenmark kurz mitrösten, mit Brühe ablöschen und 8 Min. garen.",
+   "Weiße Bohnen unterheben und heiß werden lassen, mit Oregano, Salz und Pfeffer würzen.",
+   "Quark mit Kräutern, Salz und Pfeffer verrühren und dazu servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/bratkartoffeln-mit-bohnen-tomaten-gemuese-und-feta",
+  "note": "adaptiert: weiße Bohnen und Kräuterquark statt Feta für Protein, Tomatenmark statt Cherrytomaten (günstiger), Öl statt Butter",
+  "img": null
+ },
+ {
+  "name": "Rote Linsen mit Kokos-Spinat & Reis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 700,
+  "protein": 38,
+  "carbs": 94,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "350 g rote Linsen",
+   "2 Zwiebeln",
+   "15 g Ingwer",
+   "1 EL Öl",
+   "2 TL Currypulver",
+   "200 ml Kokosmilch",
+   "450 g TK-Spinat",
+   "700 ml Gemüsebrühe",
+   "200 g Reis",
+   "250 g Skyr",
+   "Salz, Pfeffer, Zitronensaft"
+  ],
+  "steps": [
+   "Reis nach Packung garen. Zwiebeln und Ingwer fein würfeln.",
+   "Hälfte der Zwiebeln im Öl anbraten, Curry kurz mitrösten, Linsen und Brühe zugeben und 12 Min. köcheln.",
+   "Restliche Zwiebeln und Ingwer anbraten, Spinat und Kokosmilch zugeben und 5 Min. garen.",
+   "Linsen und Spinat mischen, mit Salz, Pfeffer und Zitronensaft abschmecken, mit Reis und Skyr servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/rote-linsen-mit-kokos-spinat",
+  "note": "adaptiert: TK-Spinat statt frischem, Paprika weggelassen, Kokosmilch halbiert, Reis und Skyr ergänzt",
+  "img": null
+ },
+ {
+  "name": "Bohnen-Möhren-Chili mit Knoblauchbrot",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 501,
+  "protein": 32,
+  "carbs": 58,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "2 Dosen (je 400 g) Kidneybohnen",
+   "120 g Sojagranulat",
+   "3 Möhren",
+   "2 Zwiebeln",
+   "1 EL Öl",
+   "2 Dosen (je 400 g) gehackte Tomaten",
+   "1 EL Tomatenmark",
+   "300 ml Gemüsebrühe",
+   "1 TL Kreuzkümmel",
+   "1 TL Chiliflocken",
+   "1 EL Essig",
+   "4 Scheiben Vollkornbrot",
+   "1 EL Butter",
+   "1 Knoblauchzehe",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojagranulat in heißer Brühe einweichen. Zwiebeln und Möhren würfeln und im Öl mit Kreuzkümmel anbraten.",
+   "Sojagranulat, Tomatenmark, Tomaten und Bohnen zugeben, 20 Min. köcheln, mit Essig, Chili, Salz abschmecken.",
+   "Butter mit gepresstem Knoblauch verrühren, aufs Brot streichen und im Ofen bei 220 °C 5 Min. rösten.",
+   "Chili mit dem Knoblauchbrot servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/kidneybohnen-chili-mit-kraeuterbaguette",
+  "note": "adaptiert: Sojagranulat ergänzt, Paprika weggelassen, Vollkornbrot statt Baguette",
+  "img": null
+ },
+ {
+  "name": "Kartoffel-Bohnen-Stampf mit Tomatensoße & Kräuterquark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 421,
+  "protein": 30,
+  "carbs": 57,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "800 g Kartoffeln",
+   "2 Dosen (je 400 g) weiße Bohnen",
+   "200 ml Milch",
+   "1 EL Öl",
+   "2 Knoblauchzehen",
+   "1 Dose (400 g) gehackte Tomaten",
+   "1 EL Tomatenmark",
+   "500 g Magerquark",
+   "Thymian, Salz, Pfeffer, Muskat"
+  ],
+  "steps": [
+   "Tomaten mit Tomatenmark, Öl, Thymian und Salz 15 Min. zu einer dicken Soße einköcheln.",
+   "Kartoffeln in Salzwasser 20 Min. weich kochen, abgießen.",
+   "Bohnen abgießen, mit Kartoffeln, warmer Milch, der Hälfte des Quarks und gepresstem Knoblauch grob stampfen und würzen.",
+   "Restlichen Quark mit Kräutern würzen und mit Stampf und Tomatensoße servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kartoffel-bohnenstampf-knoblauch-ofenpaprika.r_id=DE_5787.html",
+  "note": "adaptiert: Ofenpaprika durch Tomatensoße aus der Dose ersetzt (Kosten), Magerquark für Protein, weniger Öl",
+  "img": null
+ },
+ {
+  "name": "Eier in Tomaten-Linsen-Soße mit Röstkartoffeln",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 627,
+  "protein": 38,
+  "carbs": 76,
+  "fat": 17,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "6 Eier",
+   "1 kg Kartoffeln",
+   "200 g rote Linsen",
+   "1 Dose (500 g) passierte Tomaten",
+   "3 Knoblauchzehen",
+   "3 EL Tomatenmark",
+   "2 EL Öl",
+   "1 TL Zucker",
+   "250 g Magerquark",
+   "Chiliflocken, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Eier 8 Min. hart kochen und pellen. Kartoffeln als Pellkartoffeln garen, pellen und halbieren.",
+   "Knoblauch in 1 EL Öl anschwitzen, Tomatenmark, Tomaten, Linsen und 200 ml Wasser zugeben und 15 Min. sämig köcheln.",
+   "Mit Zucker, Chili, Salz und Pfeffer abschmecken, Eier in die Soße legen und kurz ziehen lassen.",
+   "Kartoffeln im restlichen Öl goldbraun rösten und mit Eiern, Soße und Quark servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.eier-tomaten-chili-sosse.r_id=DE_5774.html",
+  "note": "adaptiert: mehr Eier, rote Linsen in der Soße, passierte Tomaten statt Kirschtomaten, Quark-Dip ergänzt",
+  "img": null
+ },
+ {
+  "name": "Ofen-Frittata mit Erbsen, Kartoffeln & Quark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 446,
+  "protein": 36,
+  "carbs": 43,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "6 Eier",
+   "500 g Magerquark",
+   "100 ml Milch",
+   "700 g Kartoffeln",
+   "300 g TK-Erbsen",
+   "1 Zwiebel",
+   "30 g geriebener Gouda",
+   "1 TL Öl",
+   "Salz, Pfeffer, Basilikum"
+  ],
+  "steps": [
+   "Kartoffeln in dünne Scheiben schneiden und 8 Min. in Salzwasser vorgaren. Ofen auf 180 °C vorheizen.",
+   "Eier mit Quark und Milch glatt verquirlen, fein gewürfelte Zwiebel unterheben, würzen.",
+   "Kartoffeln und Erbsen in eine geölte Form geben, Eiermasse darübergießen, Gouda darüberstreuen.",
+   "Ca. 30 Min. backen, bis die Masse gestockt ist."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/frittata-mit-erbsen-und-feta",
+  "note": "adaptiert: Kartoffeln und Magerquark ergänzt, Erbsen erhöht, Feta durch wenig Gouda ersetzt, Zwiebel statt Frühlingszwiebeln",
+  "img": null
+ },
+ {
+  "name": "Gemüse-Eintopf mit grünen & weißen Bohnen und Sojaschnetzeln",
+  "category": "mittag",
+  "servings": 5,
+  "kcal": 513,
+  "protein": 35,
+  "carbs": 69,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "600 g Kartoffeln",
+   "400 g grüne Bohnen (TK)",
+   "2 Dosen (je 400 g) weiße Bohnen",
+   "120 g Sojaschnetzel",
+   "2 Möhren",
+   "1 Zwiebel",
+   "1 EL Öl",
+   "1 Dose (500 g) passierte Tomaten",
+   "1,2 l Gemüsebrühe",
+   "2 EL Sojasauce",
+   "1 TL Bohnenkraut",
+   "250 g Magerquark",
+   "5 Scheiben Vollkornbrot",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojaschnetzel in heißem Wasser mit Sojasauce einweichen, ausdrücken und im Öl anbraten.",
+   "Zwiebel, Möhren und Kartoffeln würfeln, mit Brühe und grünen Bohnen 20 Min. garen.",
+   "Passierte Tomaten, weiße Bohnen und Sojaschnetzel zugeben und 5 Min. mitköcheln.",
+   "Mit Bohnenkraut, Salz und Pfeffer abschmecken, mit Quark-Klecks und Brot servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kartoffel-bohnen-topf.r_id=DE_4492.html",
+  "note": "adaptiert: weiße Bohnen und Sojaschnetzel für Protein, Magerquark statt Crème fraîche, Vollkornbrot statt Kräuterbutter-Baguette",
+  "img": null
+ },
+ {
+  "name": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping",
+  "category": "mittag",
+  "servings": 5,
+  "kcal": 703,
+  "protein": 37,
+  "carbs": 114,
+  "fat": 8,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "250 g rote Linsen",
+   "500 g Nudeln",
+   "2 Zwiebeln",
+   "2 Möhren",
+   "2 Knoblauchzehen",
+   "1 EL Öl",
+   "3 EL Tomatenmark",
+   "2 Dosen (je 500 g) passierte Tomaten",
+   "400 ml Gemüsebrühe",
+   "250 g Magerquark",
+   "30 g Hartkäse (vegetarisch, mikrobielles Lab)",
+   "Oregano, Salz, Pfeffer, Zucker"
+  ],
+  "steps": [
+   "Zwiebeln, Möhren und Knoblauch fein würfeln und im Öl anbraten, Tomatenmark kurz mitrösten.",
+   "Linsen, passierte Tomaten und Brühe zugeben, 15 Min. köcheln, bis die Linsen weich sind; würzen.",
+   "Nudeln nach Packung garen.",
+   "Mit je einem Klecks Magerquark und etwas geriebenem Hartkäse servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3735491566893477/Rote-Linsen-Bolognese.html",
+  "note": "adaptiert: Magerquark-Topping und vegetarischer Hartkäse für Protein, Mengen für 5 Meal-Prep-Portionen",
+  "img": null
+ },
+ {
+  "name": "Linsen-Lasagne mit Quark-Schicht",
+  "category": "abend",
+  "servings": 6,
+  "kcal": 553,
+  "protein": 38,
+  "carbs": 68,
+  "fat": 12,
+  "estimated": true,
+  "timeMin": 75,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "300 g Tellerlinsen",
+   "1 Zwiebel",
+   "3 Möhren",
+   "2 Knoblauchzehen",
+   "1 EL Öl",
+   "2 Dosen (je 400 g) gehackte Tomaten",
+   "3 EL Tomatenmark",
+   "400 ml Gemüsebrühe",
+   "250 g Lasagneplatten",
+   "500 g Magerquark",
+   "2 Eier",
+   "200 ml Milch",
+   "100 g geriebener Gouda",
+   "Oregano, Muskat, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebel, Möhren und Knoblauch würfeln und im Öl anbraten, Tomatenmark kurz mitrösten.",
+   "Linsen, Tomaten und Brühe zugeben und ca. 25 Min. köcheln, bis die Linsen weich sind; würzen.",
+   "Quark mit Eiern, Milch, Muskat, Salz und Pfeffer glatt rühren.",
+   "Abwechselnd Linsensoße, Platten und Quarkcreme in eine Form schichten, mit Gouda bestreuen.",
+   "Bei 180 °C ca. 35 Min. backen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/linsen-lasagne",
+  "note": "adaptiert: Crème fraîche/Parmesan/Mozzarella durch Magerquark-Ei-Creme und etwas Gouda ersetzt, ohne Rotwein, mehr Linsen",
+  "img": null
+ },
+ {
+  "name": "Bohnen-Reis-Burritos mit Sojagranulat & Quark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 736,
+  "protein": 41,
+  "carbs": 103,
+  "fat": 12,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "2 Dosen (je 400 g) Kidneybohnen",
+   "150 g Reis",
+   "100 g Sojagranulat",
+   "1 Zwiebel",
+   "1 Dose (400 g) gehackte Tomaten",
+   "1 EL Öl",
+   "1 TL Paprikapulver",
+   "1 TL Kreuzkümmel",
+   "200 ml Gemüsebrühe",
+   "6 Wraps",
+   "250 g Magerquark",
+   "Salz, Cayennepfeffer"
+  ],
+  "steps": [
+   "Sojagranulat in heißer Brühe 10 Min. einweichen. Reis nach Packung garen.",
+   "Zwiebel würfeln und im Öl anbraten, Sojagranulat und Gewürze zugeben und 5 Min. braten.",
+   "Tomaten und abgespülte Bohnen zugeben, 5 Min. einköcheln lassen und den Reis untermischen.",
+   "Wraps erwärmen, mit Quark bestreichen, mit der Füllung belegen und fest einrollen (1,5 Wraps pro Portion)."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/gefuellte-burritos-mit-tomaten-salsa-und-bohnen-mais-gemuese",
+  "note": "adaptiert: Sojagranulat und Reis ergänzt, Mais/Käse weggelassen (Kosten), Magerquark statt Crème fraîche, Dosentomaten statt frischer Salsa",
+  "img": null
+ },
+ {
+  "name": "Curry-Reispfanne mit Sojaschnetzeln, Erbsen & Ei",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 611,
+  "protein": 36,
+  "carbs": 72,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "120 g Sojaschnetzel",
+   "250 g Reis",
+   "300 g TK-Erbsen",
+   "2 Möhren",
+   "500 g Brokkoli",
+   "4 Eier",
+   "2 EL Öl",
+   "3 TL Currypulver",
+   "750 ml Gemüsebrühe",
+   "2 EL Sojasauce",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Sojaschnetzel 10 Min. in heißem Wasser mit Sojasauce einweichen, ausdrücken und im Öl kräftig anbraten.",
+   "Möhren würfeln, Brokkoli in Röschen teilen, mit den Erbsen zugeben und kurz andünsten.",
+   "Reis und Curry zugeben, mit Brühe ablöschen und zugedeckt ca. 15 Min. garen.",
+   "Eier in die Pfanne schlagen und unter Rühren stocken lassen, abschmecken."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.curry-reispfanne.r_id=DE_6120.html",
+  "note": "vegetarisch adaptiert: Geflügel durch Sojaschnetzel ersetzt, Eier ergänzt",
+  "img": null
+ },
+ {
+  "name": "Curry-Reis-Eintopf mit Kichererbsen & Lauch",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 588,
+  "protein": 34,
+  "carbs": 91,
+  "fat": 6,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "1 Stück Lauch",
+   "3 Möhren",
+   "180 g Reis",
+   "2 Dosen (je 400 g) Kichererbsen",
+   "200 g rote Linsen",
+   "1,3 l Gemüsebrühe",
+   "3 TL Currypulver",
+   "250 g Skyr",
+   "1 TL Ingwerpulver",
+   "Koriander, Salz"
+  ],
+  "steps": [
+   "Lauch in Ringe schneiden, Möhren würfeln.",
+   "Brühe aufkochen, Lauch, Möhren, Reis und Linsen zugeben und 15–20 Min. garen.",
+   "Kichererbsen abgießen, zugeben und 5 Min. erhitzen, mit Curry, Koriander und Salz abschmecken.",
+   "Skyr mit Ingwer und Salz verrühren und als Dip zum Eintopf reichen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.curry-reis-eintopf.r_id=DE_2243.html",
+  "note": "vegetarisch adaptiert: Geflügel durch Kichererbsen und rote Linsen ersetzt, Skyr statt saurer Sahne",
+  "img": null
+ },
+ {
+  "name": "Kichererbsen-Soja-Bolognese mit Nudeln & Joghurt-Dip",
+  "category": "mittag",
+  "servings": 5,
+  "kcal": 611,
+  "protein": 34,
+  "carbs": 94,
+  "fat": 7,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "100 g Sojagranulat",
+   "1 Dose (400 g) Kichererbsen",
+   "2 Zwiebeln",
+   "2 Knoblauchzehen",
+   "1 EL Tomatenmark",
+   "1 EL Öl",
+   "2 Dosen (je 500 g) passierte Tomaten",
+   "300 ml Gemüsebrühe",
+   "500 g Nudeln",
+   "250 g Skyr",
+   "Thymian, Chiliflocken, Salz, Pfeffer, Zucker"
+  ],
+  "steps": [
+   "Sojagranulat in heißer Brühe 10 Min. einweichen. Zwiebeln und 1 Knoblauchzehe fein hacken.",
+   "Sojagranulat im Öl kräftig anbraten, Zwiebeln, Knoblauch und Tomatenmark kurz mitbraten.",
+   "Passierte Tomaten zugeben, 15 Min. köcheln, Kichererbsen untermischen und würzen. Nudeln garen.",
+   "Skyr mit der zweiten gepressten Knoblauchzehe und Salz verrühren und dazu servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kichererbsen-bolognese.r_id=DE_2663.html",
+  "note": "vegetarisch adaptiert: Tatar durch Sojagranulat ersetzt, Skyr statt Magerjoghurt, Nudeln als Beilage",
+  "img": null
+ },
+ {
+  "name": "Linsen-Kartoffel-Chili mit Skyr",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 604,
+  "protein": 37,
+  "carbs": 91,
+  "fat": 7,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "300 g rote Linsen",
+   "800 g Kartoffeln",
+   "2 Zwiebeln",
+   "2 Knoblauchzehen",
+   "1 Paprika",
+   "1 Dose (400 g) Kidneybohnen",
+   "1 Dose (400 g) gehackte Tomaten",
+   "1 EL Öl",
+   "1 l Gemüsebrühe",
+   "250 g Skyr",
+   "Chilipulver, Kreuzkümmel, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebeln, Knoblauch, Paprika und Kartoffeln würfeln.",
+   "Zwiebeln und Knoblauch im Öl andünsten, Kartoffeln und Paprika kurz mitbraten.",
+   "Brühe, Tomaten und Linsen zugeben, 15–20 Min. garen, dann Bohnen zugeben.",
+   "Mit Chili, Kreuzkümmel, Salz und Pfeffer abschmecken und mit Skyr servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-chili.r_id=DE_6126.html",
+  "note": "adaptiert: Linsen verdoppelt, Kidneybohnen, Dosentomaten und Skyr ergänzt",
+  "img": null
+ },
+ {
+  "name": "Kidney-Hafer-Burger mit Quark-Senf-Soße",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 577,
+  "protein": 30,
+  "carbs": 76,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Bratlinge einfrierbar)",
+  "ingredients": [
+   "2 Dosen (je 400 g) Kidneybohnen",
+   "100 g Haferflocken",
+   "1 Ei",
+   "1 Zwiebel",
+   "1 Möhre",
+   "1 Knoblauchzehe",
+   "2 EL Öl",
+   "4 Burgerbrötchen",
+   "250 g Magerquark",
+   "1 EL Senf",
+   "½ Gurke",
+   "Thymian, Koriander, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Zwiebel fein würfeln und glasig dünsten. Bohnen abspülen und mit Knoblauch grob zerdrücken.",
+   "Bohnen mit Haferflocken, geriebener Möhre, Zwiebel, Eiern und Gewürzen verkneten, 10 Min. quellen lassen.",
+   "Aus der Masse 4 große oder 8 kleine Bratlinge formen und im Öl von beiden Seiten je 4 Min. braten.",
+   "Quark mit Senf, Salz und Pfeffer verrühren, Brötchen mit Soße, Bratling und Gurkenscheiben belegen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.bohnen-burger.r_id=DE_5918.html",
+  "note": "adaptiert: doppelte Bohnenmenge, Ei als Bindung, Quark-Senf-Soße statt Avocado, Gurke statt Tomate",
+  "img": null
+ },
+ {
+  "name": "Ofenkartoffeln mit Ei-Kresse-Quark & Gurkensalat",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 496,
+  "protein": 38,
+  "carbs": 59,
+  "fat": 11,
+  "estimated": true,
+  "timeMin": 60,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1200 g Kartoffeln",
+   "750 g Magerquark",
+   "150 g Joghurt",
+   "4 Eier",
+   "1 Zwiebel",
+   "½ Gurke",
+   "1 EL Öl",
+   "1 EL Essig",
+   "Kresse, Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Kartoffeln waschen, halbieren und mit der Schnittfläche nach unten auf einem geölten Blech bei 200 °C ca. 40 Min. backen.",
+   "Eier hart kochen, pellen und würfeln. Quark mit Joghurt glatt rühren, Eier, fein gehackte Zwiebel und Kräuter unterheben, würzen.",
+   "Gurke in Scheiben hobeln, mit Essig, Salz und Pfeffer anmachen.",
+   "Kartoffeln mit Ei-Quark und Gurkensalat servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.ofenkartoffeln-joghurt-ei-dip.r_id=DE_4510.html",
+  "note": "adaptiert: Quarkmenge verdreifacht, Rote-Bete-Salat durch günstigen Gurkensalat ersetzt (ohne Obst)",
+  "img": null
+ },
+ {
+  "name": "Kohlrabi-Kartoffel-Frittata mit Quark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 494,
+  "protein": 31,
+  "carbs": 52,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "600 g Kartoffeln",
+   "1 Kohlrabi",
+   "1 Zwiebel",
+   "8 Eier",
+   "250 g Magerquark",
+   "100 ml Milch",
+   "1 EL Öl",
+   "4 Scheiben Vollkornbrot",
+   "Muskat, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Kartoffeln als Pellkartoffeln garen, pellen und in Scheiben schneiden. Kohlrabi in dünne Stifte schneiden.",
+   "Kartoffeln und Kohlrabi im Öl in einer ofenfesten Pfanne 5 Min. anbraten, gewürfelte Zwiebel zugeben.",
+   "Eier mit Quark, Milch und Gewürzen verquirlen, darübergießen und bei kleiner Hitze 8 Min. stocken lassen.",
+   "Im Ofen bei 200 °C 5 Min. fertig garen, mit Brot servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/kohlrabi-kartoffel-frittata",
+  "note": "vegetarisch adaptiert: Speck durch Magerquark ersetzt, Zwiebel statt Frühlingszwiebeln, Eier erhöht, Brot ergänzt",
+  "img": null
+ },
+ {
+  "name": "Grünkohl-Kartoffel-Linsen-Pfanne mit Senfquark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 542,
+  "protein": 40,
+  "carbs": 71,
+  "fat": 7,
+  "estimated": true,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Tellerlinsen",
+   "800 g Kartoffeln",
+   "450 g Grünkohl (TK)",
+   "2 Zwiebeln",
+   "1 EL Öl",
+   "500 ml Gemüsebrühe",
+   "500 g Magerquark",
+   "2 EL Senf",
+   "1 EL Essig",
+   "Muskat, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsen in der Brühe ca. 25 Min. bissfest garen, Kartoffeln würfeln und in Salzwasser 12 Min. vorgaren.",
+   "Zwiebeln würfeln und im Öl anbraten, Kartoffeln zugeben und goldbraun rösten.",
+   "Grünkohl und Linsen untermischen, 5 Min. mitbraten, mit Essig, Muskat, Salz und Pfeffer würzen.",
+   "Quark mit Senf, Salz und etwas Wasser cremig rühren und dazu servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3660921551207262/Gruenkohl-Kartoffel-Linsen-Salat.html",
+  "note": "adaptiert: als warme Pfanne mit TK-Grünkohl, Linsen erhöht, Senfquark statt Dressing für Protein",
+  "img": null
+ },
+ {
+  "name": "Schwäbischer Spätzle-Linsen-Salat mit Ei",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 727,
+  "protein": 40,
+  "carbs": 99,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Spätzle (trocken)",
+   "200 g Tellerlinsen",
+   "4 Eier",
+   "1 Gurke",
+   "1 Zwiebel",
+   "250 g Magerquark",
+   "3 EL Essig",
+   "2 EL Öl",
+   "2 TL Senf",
+   "Petersilie, Salz, Pfeffer, Zucker"
+  ],
+  "steps": [
+   "Spätzle nach Packung garen und abkühlen lassen. Eier 9 Min. hart kochen, pellen und würfeln.",
+   "Linsen in Salzwasser ca. 25 Min. bissfest garen und abgießen. Gurke und Zwiebel fein würfeln.",
+   "Quark mit Essig, Öl, Senf, Salz, Pfeffer und einer Prise Zucker zu einem Dressing rühren.",
+   "Alles mischen, mindestens 15 Min. durchziehen lassen und mit Petersilie bestreuen."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/798381183474128/Linsensalat-mit-Spaetzle.html",
+  "note": "vegetarisch adaptiert: Würstchen durch Eier ersetzt, Gurke statt Essiggurken, Quark-Dressing statt viel Öl",
+  "img": null
+ },
+ {
+  "name": "Quark-Hafer-Auflauf mit Banane",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 498,
+  "protein": 43,
+  "carbs": 57,
+  "fat": 9,
+  "estimated": true,
+  "timeMin": 50,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1000 g Magerquark",
+   "4 Eier",
+   "120 g Haferflocken",
+   "200 ml Milch",
+   "60 g Zucker",
+   "2 Bananen",
+   "1 TL Backpulver",
+   "1 Pck. Vanillezucker",
+   "Zimt"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen. Eier mit Zucker und Vanillezucker schaumig rühren.",
+   "Quark, Milch, Haferflocken und Backpulver unterrühren, 5 Min. quellen lassen.",
+   "Bananen in Scheiben schneiden, die Hälfte unterheben, Masse in eine Form füllen und restliche Scheiben obenauf legen.",
+   "Mit Zimt bestreuen und ca. 40 Min. goldgelb backen; warm oder kalt essen."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1793911289973255/Quarkauflauf-luftig-und-locker.html",
+  "note": "adaptiert: Magerquark verdoppelt, Haferflocken statt Mehl/Grieß, Zucker deutlich reduziert, ohne Butter; Banane statt Früchte der Saison",
+  "img": null
+ },
+ {
+  "name": "Quark-Hafer-Schüssel mit Banane & Erdnussmus",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 454,
+  "protein": 36,
+  "carbs": 55,
+  "fat": 8,
+  "estimated": true,
+  "timeMin": 5,
+  "activeMin": 5,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "200 g Magerquark",
+   "50 g Haferflocken",
+   "100 ml Milch",
+   "½ Banane",
+   "1 TL Erdnussmus",
+   "Zimt"
+  ],
+  "steps": [
+   "Quark mit Milch glatt rühren.",
+   "Haferflocken unterheben und kurz quellen lassen.",
+   "Banane in Scheiben schneiden und mit Erdnussmus und Zimt obenauf geben."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/himbeer-muesli-mit-quark-und-joghurt",
+  "note": "adaptiert: Magerquark statt 40-%-Quark und Joghurt, Haferflocken statt Knuspermüsli, Banane statt Himbeeren/Konfitüre (günstiger)",
+  "img": null
+ },
+ {
+  "name": "Bananen-Overnight-Oats mit Skyr & Leinsamen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 550,
+  "protein": 39,
+  "carbs": 63,
+  "fat": 13,
+  "estimated": true,
+  "timeMin": 485,
+  "activeMin": 5,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "60 g Haferflocken",
+   "200 g Skyr",
+   "150 ml Milch",
+   "1 EL Leinsamen",
+   "½ Banane",
+   "Zimt"
+  ],
+  "steps": [
+   "Haferflocken, Leinsamen und Zimt in ein Glas geben.",
+   "Skyr und Milch einrühren, Deckel drauf und über Nacht kühlen.",
+   "Morgens mit Bananenscheiben toppen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/haferflocken-bowl",
+  "note": "adaptiert: über Nacht eingeweicht, Skyr und Milch statt Sojadrink, Erdnussbutter/Beeren weggelassen (Kosten)",
+  "img": null
+ },
+ {
+  "name": "Bananen-Hafer-Quark-Pfannkuchen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 527,
+  "protein": 35,
+  "carbs": 56,
+  "fat": 16,
+  "estimated": true,
+  "timeMin": 15,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 Ei",
+   "60 g Haferflocken",
+   "150 g Magerquark",
+   "½ Banane",
+   "50 ml Milch",
+   "1 TL Öl",
+   "Zimt, Prise Salz"
+  ],
+  "steps": [
+   "Banane zerdrücken und mit Ei, Quark, Milch, Haferflocken, Zimt und Salz zu einem dicken Teig verrühren.",
+   "5 Min. quellen lassen.",
+   "Im Öl bei mittlerer Hitze 3–4 kleine Pfannkuchen je 2–3 Min. pro Seite backen."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2824371434526210/Saftiger-Bananen-Protein-Pancake.html",
+  "note": "adaptiert: ohne Proteinpulver, Protein über Magerquark und Haferflocken",
+  "img": null
+ },
+ {
+  "name": "Kakao-Porridge mit Quark",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 496,
+  "protein": 33,
+  "carbs": 63,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 10,
+  "activeMin": 8,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "70 g Haferflocken",
+   "250 ml Milch",
+   "120 g Magerquark",
+   "1 TL Kakao",
+   "1 TL Zucker",
+   "Prise Salz"
+  ],
+  "steps": [
+   "Haferflocken mit Milch und Salz aufkochen und 3–4 Min. unter Rühren köcheln.",
+   "Vom Herd nehmen, Kakao und Zucker einrühren.",
+   "Quark unterrühren (nicht mehr kochen) und warm essen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.sojamuesli.r_id=DE_1187.html",
+  "note": "frei adaptiert: warmes Porridge mit Kuhmilch statt Sojadrink, Magerquark für Protein, ohne Trockenobst und Nüsse",
+  "img": null
+ },
+ {
+  "name": "Schnittlauch-Quark-Brote mit Gurke",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 366,
+  "protein": 32,
+  "carbs": 48,
+  "fat": 2,
+  "estimated": true,
+  "timeMin": 8,
+  "activeMin": 8,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "Aufstrich 3 Tage Kühlschrank",
+  "ingredients": [
+   "2 Scheiben Vollkornbrot",
+   "200 g Magerquark",
+   "100 g Gurke",
+   "Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Quark mit gehacktem Schnittlauch, Salz und Pfeffer cremig rühren.",
+   "Brote dick bestreichen.",
+   "Mit Gurkenscheiben belegen."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1211971226999404/Quark-Huettenkaese-Dip.html",
+  "note": "adaptiert: Dip als Brotaufstrich nur mit Magerquark (Hüttenkäse optional, sprengt sonst das 0,90-€-Ziel), Gurke als Belag",
+  "img": null
+ },
+ {
+  "name": "Weiße-Bohnen-Quark-Hummus mit Möhrensticks",
+  "category": "snack",
+  "servings": 3,
+  "kcal": 205,
+  "protein": 16,
+  "carbs": 24,
+  "fat": 3,
+  "estimated": true,
+  "timeMin": 10,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 Dose (400 g) weiße Bohnen",
+   "200 g Magerquark",
+   "1 Knoblauchzehe",
+   "2 EL Zitronensaft",
+   "1 EL Sesam",
+   "400 g Möhren",
+   "Kreuzkümmel, Salz"
+  ],
+  "steps": [
+   "Bohnen abgießen und abspülen, Sesam ohne Fett anrösten.",
+   "Bohnen, Quark, Knoblauch, Zitronensaft, Sesam und Gewürze fein pürieren.",
+   "Möhren in Sticks schneiden und zum Dippen servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/weisse-bohnen-hummus",
+  "note": "adaptiert: Magerquark für Protein und Cremigkeit, Möhrensticks dazu",
+  "img": null
+ },
+ {
+  "name": "Gefüllte Senf-Quark-Eier",
+  "category": "snack",
+  "servings": 2,
+  "kcal": 182,
+  "protein": 18,
+  "carbs": 2,
+  "fat": 11,
+  "estimated": true,
+  "timeMin": 15,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "4 Eier",
+   "60 g Magerquark",
+   "1 TL Senf",
+   "Paprikapulver, Schnittlauch, Salz, Pfeffer"
+  ],
+  "steps": [
+   "Eier 10 Min. hart kochen, kalt abschrecken und pellen.",
+   "Längs halbieren, Eigelb herauslösen und mit Quark, Senf, Salz und Pfeffer cremig zerdrücken.",
+   "Creme in die Eiweißhälften füllen, mit Paprika und Schnittlauch bestreuen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/mediterran-gefuellte-eier",
+  "note": "adaptiert: Schmand durch Magerquark ersetzt, Oliven/getrocknete Tomaten/Pinienkerne weggelassen (Kosten)",
+  "img": null
+ },
+ {
+  "name": "Vanille-Zimt-Quark mit Banane",
+  "category": "snack",
+  "servings": 1,
+  "kcal": 213,
+  "protein": 26,
+  "carbs": 22,
+  "fat": 1,
+  "estimated": true,
+  "timeMin": 3,
+  "activeMin": 3,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "200 g Magerquark",
+   "50 ml Milch",
+   "½ Banane",
+   "Zimt, etwas Vanille"
+  ],
+  "steps": [
+   "Quark mit Milch, Zimt und Vanille cremig rühren.",
+   "Banane in Scheiben schneiden.",
+   "Bananenscheiben auf dem Quark verteilen und sofort essen oder abgedeckt mitnehmen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.vanille-quark-creme.r_id=DE_225.html",
+  "note": "adaptiert: Magerquark und Banane statt Sahne/Zucker, als schneller Protein-Snack",
   "img": null
  }
 ]
