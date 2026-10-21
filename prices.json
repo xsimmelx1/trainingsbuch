@@ -3,6 +3,131 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "cremefraiche",
+"name": "Crème fraîche / Schmand",
+"pack": 200,
+"unit": "g",
+"match": "crème fraîche|creme fraiche|cr[eè]me fra[iî]che|schmand|saure sahne",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.84,
+"aldi": 0.84,
+"kaufland": 0.91
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "currypaste",
+"name": "Currypaste",
+"pack": 110,
+"unit": "g",
+"match": "currypaste|curry-paste",
+"pantry": true,
+"prices": {
+"rewe": 1.49,
+"lidl": 1.27,
+"aldi": 1.27,
+"kaufland": 1.37
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "currypulver",
+"name": "Currypulver",
+"pack": 45,
+"unit": "g",
+"match": "currypulver|curry gemahlen|^curry$",
+"pantry": true,
+"prices": {
+"rewe": 0.75,
+"lidl": 0.64,
+"aldi": 0.64,
+"kaufland": 0.69
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kerne",
+"name": "Kürbis- oder Hanfsamen",
+"pack": 200,
+"unit": "g",
+"match": "kürbiskern|hanfsamen|sesam(?!öl)|sonnenblumenkern",
+"pantry": true,
+"prices": {
+"rewe": 2.29,
+"lidl": 1.93,
+"aldi": 1.82,
+"kaufland": 1.89
+}
+},
+{
+"id": "kuerbis",
+"name": "Hokkaido-Kürbis",
+"pack": 1400,
+"unit": "g",
+"match": "hokkaido|kürbis(?!kern)",
+"piece": 1400,
+"prices": {
+"rewe": 1.25,
+"lidl": 1.06,
+"aldi": 1.06,
+"kaufland": 1.15
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "mandeln",
+"name": "Mandeln gemahlen/gehobelt",
+"pack": 200,
+"unit": "g",
+"match": "mandeln(?!drink|milch|mus)",
+"prices": {
+"rewe": 2.49,
+"lidl": 2.12,
+"aldi": 2.12,
+"kaufland": 2.29
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "oliven",
+"name": "Oliven schwarz",
+"pack": 150,
+"unit": "g",
+"match": "oliven(?!öl)",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.52,
+"aldi": 1.52,
+"kaufland": 1.65
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
 "id": "seidentofu",
 "name": "Seidentofu",
 "pack": 400,
@@ -810,7 +935,7 @@
 "name": "Langkorn- oder Basmatireis",
 "pack": 1000,
 "unit": "g",
-"match": "\\breis\\b|basmati",
+"match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis\\b|basmati",
 "prices": {
 "rewe": 1.39,
 "lidl": 1.59,
@@ -826,7 +951,7 @@
 "name": "Hartweizennudeln",
 "pack": 500,
 "unit": "g",
-"match": "nudeln|pasta|spaghetti|lasagne",
+"match": "nudeln|pasta|spaghetti|lasagne|penne|fusilli|spätzle|rigatoni|farfalle|tagliatelle|maccheroni",
 "prices": {
 "rewe": 0.69,
 "lidl": 0.79,
@@ -1084,7 +1209,7 @@
 "pack": 500,
 "unit": "g",
 "piece": 100,
-"match": "^tomaten?$|tomate\\b",
+"match": "^tomaten?$|tomate\\b|strauchtomaten?|rispentomaten?",
 "loose": true,
 "prices": {
 "rewe": 1.25,
@@ -1103,7 +1228,7 @@
 "pack": 1000,
 "unit": "g",
 "piece": 100,
-"match": "zwiebel(?!n? ?-?frühling)|rote zwiebel",
+"match": "zwiebel(?!n? ?-?frühling)|rote zwiebel|schalotte",
 "prices": {
 "rewe": 0.86,
 "lidl": 0.99,
@@ -1325,20 +1450,6 @@
 "lidl",
 "kaufland"
 ]
-},
-{
-"id": "kerne",
-"name": "Kürbis- oder Hanfsamen",
-"pack": 200,
-"unit": "g",
-"match": "kürbiskern|hanfsamen|sesam(?!öl)|sonnenblumenkern",
-"pantry": true,
-"prices": {
-"rewe": 2.29,
-"lidl": 1.93,
-"aldi": 1.82,
-"kaufland": 1.89
-}
 },
 {
 "id": "oel",
@@ -1586,6 +1697,333 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "avocado",
+"name": "Avocado",
+"pack": 1,
+"unit": "Stück",
+"match": "avocado",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.01,
+"aldi": 1.01,
+"kaufland": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "halloumi",
+"name": "Halloumi / Grillkäse",
+"pack": 200,
+"unit": "g",
+"match": "halloumi|grillkäse",
+"prices": {
+"rewe": 3.89,
+"lidl": 3.31,
+"aldi": 3.31,
+"kaufland": 3.58
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "joghurt",
+"name": "Naturjoghurt 1,5 %",
+"pack": 500,
+"unit": "g",
+"match": "joghurt",
+"prices": {
+"rewe": 0.79,
+"lidl": 0.67,
+"aldi": 0.67,
+"kaufland": 0.73
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "mango",
+"name": "Mango",
+"pack": 1,
+"unit": "Stück",
+"match": "mango(?!.*(chutney|saft))",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.84,
+"aldi": 0.84,
+"kaufland": 0.91
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "aubergine",
+"name": "Aubergine",
+"pack": 1,
+"unit": "Stück",
+"match": "aubergine",
+"prices": {
+"rewe": 1.19,
+"lidl": 1.01,
+"aldi": 1.01,
+"kaufland": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "blattsalat",
+"name": "Feldsalat / Salatmix",
+"pack": 150,
+"unit": "g",
+"match": "feldsalat|salat-?mix|salatmischung|rucola|kopfsalat|romana|blattsalat|eisbergsalat",
+"prices": {
+"rewe": 1.59,
+"lidl": 1.35,
+"aldi": 1.35,
+"kaufland": 1.46
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "radieschen",
+"name": "Radieschen, Bund",
+"pack": 1,
+"unit": "Stück",
+"match": "radieschen",
+"prices": {
+"rewe": 0.59,
+"lidl": 0.5,
+"aldi": 0.5,
+"kaufland": 0.54
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "kohlrabi",
+"name": "Kohlrabi",
+"pack": 1,
+"unit": "Stück",
+"match": "kohlrabi",
+"prices": {
+"rewe": 0.69,
+"lidl": 0.59,
+"aldi": 0.59,
+"kaufland": 0.63
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "pakchoi",
+"name": "Pak Choi",
+"pack": 300,
+"unit": "g",
+"match": "pak ?choi",
+"prices": {
+"rewe": 1.59,
+"lidl": 1.35,
+"aldi": 1.35,
+"kaufland": 1.46
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "spargel",
+"name": "Grüner Spargel",
+"pack": 250,
+"unit": "g",
+"match": "spargel",
+"prices": {
+"rewe": 4.04,
+"lidl": 3.43,
+"aldi": 3.43,
+"kaufland": 3.72
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "fladenbrot",
+"name": "Fladenbrot / Pita",
+"pack": 500,
+"unit": "g",
+"match": "fladenbrot|pita",
+"prices": {
+"rewe": 1.69,
+"lidl": 1.44,
+"aldi": 1.44,
+"kaufland": 1.55
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "falafel",
+"name": "Falafel (fertig)",
+"pack": 160,
+"unit": "g",
+"match": "falafel",
+"prices": {
+"rewe": 2.49,
+"lidl": 2.12,
+"aldi": 2.12,
+"kaufland": 2.29
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "senf",
+"name": "Senf mittelscharf",
+"pack": 250,
+"unit": "ml",
+"match": "senf",
+"pantry": true,
+"prices": {
+"rewe": 0.59,
+"lidl": 0.5,
+"aldi": 0.5,
+"kaufland": 0.54
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "essig",
+"name": "Balsamico / Essig",
+"pack": 500,
+"unit": "ml",
+"match": "balsamico|essig",
+"pantry": true,
+"prices": {
+"rewe": 1.69,
+"lidl": 1.44,
+"aldi": 1.44,
+"kaufland": 1.55
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "pinienkerne",
+"name": "Pinienkerne",
+"pack": 50,
+"unit": "g",
+"match": "pinienkerne",
+"prices": {
+"rewe": 3.99,
+"lidl": 3.39,
+"aldi": 3.39,
+"kaufland": 3.67
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "sellerie",
+"name": "Knollensellerie",
+"pack": 1,
+"unit": "Stück",
+"match": "sellerie",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.52,
+"aldi": 1.52,
+"kaufland": 1.65
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "agave",
+"name": "Agavendicksaft",
+"pack": 250,
+"unit": "ml",
+"match": "agaven",
+"pantry": true,
+"prices": {
+"rewe": 1.79,
+"lidl": 1.52,
+"aldi": 1.52,
+"kaufland": 1.65
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland"
+]
+},
+{
+"id": "jalapenos",
+"name": "Jalapeños (Glas)",
+"pack": 160,
+"unit": "g",
+"match": "jalape",
+"prices": {
+"rewe": 1.79,
+"lidl": 1.52,
+"aldi": 1.52,
+"kaufland": 1.65
 },
 "est": [
 "lidl",

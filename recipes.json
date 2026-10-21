@@ -8,7 +8,7 @@
   "carbs": 57,
   "fat": 11,
   "estimated": true,
-  "timeMin": 5,
+  "timeMin": 365,
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
@@ -34,10 +34,12 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:-2019-02-07_Overnight_Oats,_Cromer.JPG",
    "title": "File:-2019-02-07 Overnight Oats, Cromer.JPG"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
-  "name": "Bratapfel-Overnight-Oats mit Skyr",
+  "name": "Zimt-Birnen-Overnight-Oats mit Skyr",
   "category": "fruehstueck",
   "servings": 1,
   "kcal": 532,
@@ -45,7 +47,7 @@
   "carbs": 57,
   "fat": 14,
   "estimated": true,
-  "timeMin": 10,
+  "timeMin": 370,
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
@@ -53,25 +55,27 @@
    "40 g Haferflocken",
    "80 ml Milch",
    "8 g Chiasamen",
-   "1 Apfel (150 g), gewürfelt",
+   "1 Birne (150 g), gewürfelt",
    "10 g Walnüsse",
    "Zimt, Prise Salz"
   ],
   "steps": [
-   "Apfelwürfel mit Zimt 3–4 Min. in der Pfanne/Mikrowelle weich garen.",
-   "Skyr, Hafer, Milch, Chia verrühren.",
-   "Apfel unterheben bzw. obenauf, Walnüsse drüber.",
+   "Birnenwürfel mit Zimt 3–4 Min. in der Pfanne oder Mikrowelle weich garen.",
+   "Skyr, Hafer, Milch und Chia verrühren.",
+   "Birne unterheben oder obenauf geben, Walnüsse darüber.",
    "Über Nacht kühlen."
   ],
   "source": "https://pdf.susannafuhrmann.de/bratapfel-overnight-oats-mit-skyr.pdf",
-  "note": "Quelle nennt ca. 34 g Protein/435 kcal; hier mit Walnüssen nachgerechnet",
+  "note": "Quelle nennt ca. 34 g Protein/435 kcal; hier mit Walnüssen nachgerechnet Birne statt Apfel (Allergie).",
   "img": "img/rezepte/r01.jpg",
   "imgCredit": {
    "artist": "Shisma",
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Apple_cinnamon_oatmeal.jpg",
    "title": "File:Apple cinnamon oatmeal.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Quark-Hafer-Protein-Pancakes",
@@ -82,7 +86,7 @@
   "carbs": 56,
   "fat": 21,
   "estimated": true,
-  "timeMin": 15,
+  "timeMin": 20,
   "mealPrep": true,
   "shelfLife": "2 Tage Kühlschrank, 2 Monate TK",
   "ingredients": [
@@ -108,7 +112,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Pancakes_with_Berries_(Unsplash).jpg",
    "title": "File:Pancakes with Berries (Unsplash).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Hüttenkäse-Rührei auf Vollkornbrot",
@@ -145,7 +151,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Scrambled_eggs_on_toast_-_Joe%27s_Cafe_2024-04-14.jpg",
    "title": "File:Scrambled eggs on toast - Joe's Cafe 2024-04-14.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Räuchertofu-Scramble mit Spinat & Zucchini",
@@ -183,7 +191,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tofu_Scrambler.jpg",
    "title": "File:Tofu Scrambler.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Freezer-Breakfast-Burritos (2 Stück)",
@@ -226,7 +236,9 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Breakfast_burrito_(cropped).jpg",
    "title": "File:Breakfast burrito (cropped).jpg"
-  }
+  },
+  "activeMin": 30,
+  "difficulty": "mittel"
  },
  {
   "name": "Jalapeño-Hüttenkäse-Toast (XL)",
@@ -261,7 +273,9 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Avocado_toast_at_the_girl_%26_the_fig_-_Sarah_Stierch.jpg",
    "title": "File:Avocado toast at the girl & the fig - Sarah Stierch.jpg"
-  }
+  },
+  "activeMin": 7,
+  "difficulty": "leicht"
  },
  {
   "name": "Beeren-Zimt-Baked-Protein-Oats",
@@ -287,7 +301,7 @@
   ],
   "steps": [
    "Ofen auf 180 °C vorheizen.",
-   "Alle Zutaten außer Äpfeln verrühren, Äpfel unterheben.",
+   "Alle Zutaten außer den Beeren verrühren, dann die Beeren unterheben.",
    "In Auflaufform (ca. 20×30 cm) 30–35 Min. backen.",
    "Abkühlen, in 4 Stücke schneiden, kalt oder kurz erwärmt essen."
   ],
@@ -299,7 +313,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Flapjacks.jpg",
    "title": "File:Flapjacks.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Ei-Hüttenkäse-Muffins (3 Stück)",
@@ -336,7 +352,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Frittata_-_Bam%27s_Kitchen_2024-04-02.jpg",
    "title": "File:Frittata - Bam's Kitchen 2024-04-02.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Quinoa-Kichererbsen-Salat im Glas + Edamame",
@@ -378,7 +396,9 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Healthy_quinoa_salad_with_dried_fruit.jpg",
    "title": "File:Healthy quinoa salad with dried fruit.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Linsen-Soja-Bolognese mit Vollkornnudeln",
@@ -417,7 +437,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Ingredients_for_spaghetti_with_tomato_sauce.jpg",
    "title": "File:Ingredients for spaghetti with tomato sauce.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Chili sin Carne mit Sojagranulat & Reis",
@@ -457,7 +479,9 @@
    "license": "CC BY-SA 2.5",
    "url": "https://commons.wikimedia.org/wiki/File:Bowl_of_chili.jpg",
    "title": "File:Bowl of chili.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "White Chickpea Chili mit Skyr-Topping",
@@ -497,7 +521,9 @@
    "license": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:White-bean-chili-burritos.jpg",
    "title": "File:White-bean-chili-burritos.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
@@ -534,7 +560,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Making_tomato_sauce_for_pasta_dish.jpg",
    "title": "File:Making tomato sauce for pasta dish.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Teriyaki-Tofu-Edamame-Bowl",
@@ -574,7 +602,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Salt_%26_Pepper_Tofu_Rice_Bowl_-_Tiger_Bites_Pig_2025-11-20.jpg",
    "title": "File:Salt & Pepper Tofu Rice Bowl - Tiger Bites Pig 2025-11-20.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "mittel"
  },
  {
   "name": "Couscous-Kichererbsen-Pfanne mit Feta",
@@ -612,7 +642,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Couscous_with_vegetables_(6177185023).jpg",
    "title": "File:Couscous with vegetables (6177185023).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
@@ -651,7 +683,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tofu_wrap.jpg",
    "title": "File:Tofu wrap.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Marry-Me-Linsen mit Räuchertofu (light)",
@@ -691,7 +725,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Homemade_Lentil_Soup_-_Lavash_2025-02-10.jpg",
    "title": "File:Homemade Lentil Soup - Lavash 2025-02-10.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
@@ -730,7 +766,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Chana_Masala_-_Mohammed_-_Spice_Of_Life_2024-05-27.jpg",
    "title": "File:Chana Masala - Mohammed - Spice Of Life 2024-05-27.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "mittel"
  },
  {
   "name": "Nudelgulasch mit Soja-Hack",
@@ -770,7 +808,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bohnen_-_Eintopf.JPG",
    "title": "File:Bohnen - Eintopf.JPG"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
@@ -808,7 +848,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Roasted_sweet_potatoes,_green_beans,_and_shallots_(for_a_salad)_(7753558234).jpg",
    "title": "File:Roasted sweet potatoes, green beans, and shallots (for a salad) (7753558234).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
@@ -846,7 +888,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Spinach_pasta_(3383218355).jpg",
    "title": "File:Spinach pasta (3383218355).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
@@ -885,7 +929,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Dal_Tadka-Delhi.jpg",
    "title": "File:Dal Tadka-Delhi.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Shakshuka mit Kichererbsen & Feta",
@@ -924,7 +970,9 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Shakshuka_by_Calliopejen1.jpg",
    "title": "File:Shakshuka by Calliopejen1.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Blech-Fajitas mit Räuchertofu & Bohnen",
@@ -963,7 +1011,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetable_Fajitas_(4188499456).jpg",
    "title": "File:Vegetable Fajitas (4188499456).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Harzer-Käse-Brot mit Gurke",
@@ -997,7 +1047,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Harzer_K%C3%A4se_13_WikiCheese_Lokal_K.jpg",
    "title": "File:Harzer Käse 13 WikiCheese Lokal K.jpg"
-  }
+  },
+  "activeMin": 3,
+  "difficulty": "leicht"
  },
  {
   "name": "Hüttenkäse-Gemüse-Box mit Knäckebrot",
@@ -1031,7 +1083,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Veggie_pasta_bento_(3948839857).jpg",
    "title": "File:Veggie pasta bento (3948839857).jpg"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
   "name": "Knusper-Kichererbsen & Edamame",
@@ -1064,7 +1118,9 @@
    "license": "Public domain",
    "url": "https://commons.wikimedia.org/wiki/File:Leblebi.jpg",
    "title": "File:Leblebi.jpg"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
   "name": "Erdnuss-Hafer-Energy-Balls (2 Stück)",
@@ -1075,7 +1131,7 @@
   "carbs": 33,
   "fat": 9,
   "estimated": true,
-  "timeMin": 15,
+  "timeMin": 45,
   "mealPrep": true,
   "shelfLife": "7 Tage Kühlschrank, 3 Monate TK",
   "ingredients": [
@@ -1098,7 +1154,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Energy_Balls_(Unsplash).jpg",
    "title": "File:Energy Balls (Unsplash).jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Quark-Beeren-Bowl mit Hafer & Erdnussmus",
@@ -1133,7 +1191,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Muesli_with_Berries.jpg",
    "title": "File:Muesli with Berries.jpg"
-  }
+  },
+  "activeMin": 3,
+  "difficulty": "leicht"
  },
  {
   "name": "Bananen-Kakao-Skyr-Shake",
@@ -1169,7 +1229,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tricolor_Smoothie,_Papaya,_Banana_%26_Kiwi_-_Gujarat_-_SHAILI_006.jpg",
    "title": "File:Tricolor Smoothie, Papaya, Banana & Kiwi - Gujarat - SHAILI 006.jpg"
-  }
+  },
+  "activeMin": 3,
+  "difficulty": "leicht"
  },
  {
   "name": "Skyr-Quark-Eis / Frozen-Bark",
@@ -1180,7 +1242,7 @@
   "carbs": 26,
   "fat": 1,
   "estimated": true,
-  "timeMin": 10,
+  "timeMin": 160,
   "mealPrep": true,
   "shelfLife": "1 Monat TK",
   "ingredients": [
@@ -1203,7 +1265,9 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:French_fry_frozen_yoghurt.jpg",
    "title": "File:French fry frozen yoghurt.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Quark-Tiramisu im Glas",
@@ -1214,7 +1278,7 @@
   "carbs": 28,
   "fat": 2,
   "estimated": true,
-  "timeMin": 8,
+  "timeMin": 40,
   "mealPrep": true,
   "shelfLife": "2 Tage Kühlschrank",
   "ingredients": [
@@ -1236,7 +1300,9 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tiramisu_in_glass.jpg",
    "title": "File:Tiramisu in glass.jpg"
-  }
+  },
+  "activeMin": 8,
+  "difficulty": "leicht"
  },
  {
   "name": "Chia-Skyr-Pudding mit Beeren",
@@ -1247,7 +1313,7 @@
   "carbs": 25,
   "fat": 8,
   "estimated": true,
-  "timeMin": 5,
+  "timeMin": 125,
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
@@ -1270,7 +1336,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Coconut_chia_seed_pudding,_fresh_fruit,_honey_%26_hemp_seeds_(30539936772).jpg",
    "title": "File:Coconut chia seed pudding, fresh fruit, honey & hemp seeds (30539936772).jpg"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
   "name": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
@@ -1281,7 +1349,7 @@
   "carbs": 17,
   "fat": 36,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 55,
   "mealPrep": false,
   "shelfLife": "Pilz-Bacon 4 Tage Kühlschrank",
   "ingredients": [
@@ -1309,7 +1377,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Mushrooms_On_Toast_-_North_Laine_Caf%C3%A9_2025-09-08.jpg",
    "title": "File:Mushrooms On Toast - North Laine Café 2025-09-08.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "mittel"
  },
  {
   "name": "Quark-Kaiserschmarrn mit Zwetschgen",
@@ -1348,7 +1418,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Hofzuckerb%C3%A4cker_Demel_Kaiserschmarrn_3.jpg",
    "title": "File:Hofzuckerbäcker Demel Kaiserschmarrn 3.jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
@@ -1380,7 +1452,9 @@
    "Mit Skyr bestreichen, mit Spinat, Tomate und Paprikastreifen belegen und einrollen."
   ],
   "source": "https://cleananddelicious.com/cottage-cheese-egg-flatbread-20g-protein/",
-  "note": "adaptiert: Vorbild ergibt 2 Portionen à ca. 20 g Protein; hier die ganze Menge (240 g Cottage Cheese ≈ 200 g Hüttenkäse) als eine Portion plus Skyr-Aufstrich, damit >30 g Protein. Am Sonntag mehrere Fladen backen."
+  "note": "adaptiert: Vorbild ergibt 2 Portionen à ca. 20 g Protein; hier die ganze Menge (240 g Cottage Cheese ≈ 200 g Hüttenkäse) als eine Portion plus Skyr-Aufstrich, damit >30 g Protein. Am Sonntag mehrere Fladen backen.",
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
@@ -1420,7 +1494,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Chickpea_Omelette_Complete.jpg",
    "title": "File:Chickpea Omelette Complete.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "mittel"
  },
  {
   "name": "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
@@ -1454,7 +1530,9 @@
    "Oats in eine Schüssel geben, Gemüse und Eier darauf, mit Chiliflocken bestreuen."
   ],
   "source": "https://feelgoodfoodie.net/recipe/savory-oatmeal/",
-  "note": "adaptiert: zweites Ei und Hüttenkäse ergänzt, Milch statt nur Wasser, damit >30 g Protein. Die Quellseite blockiert automatische Abrufe; Zutaten nach Rezeptbeschreibung (Hartkäse-Oats, Pilze, Spinat, Spiegelei)."
+  "note": "adaptiert: zweites Ei und Hüttenkäse ergänzt, Milch statt nur Wasser, damit >30 g Protein. Die Quellseite blockiert automatische Abrufe; Zutaten nach Rezeptbeschreibung (Hartkäse-Oats, Pilze, Spinat, Spiegelei).",
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Spinat-Pilz-Feta-Quiche ohne Boden",
@@ -1495,7 +1573,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Quiche_of_the_Day_(mushroom_and_spinach)_-_The_Hummingbird_2026-05-05.jpg",
    "title": "File:Quiche of the Day (mushroom and spinach) - The Hummingbird 2026-05-05.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Huevos Rancheros mit schwarzen Bohnen & Feta",
@@ -1535,7 +1615,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Huevos_rancheros_-_Pescadero.jpg",
    "title": "File:Huevos rancheros - Pescadero.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
@@ -1577,7 +1659,9 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Quark_rolls.jpg",
    "title": "File:Quark rolls.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
@@ -1615,7 +1699,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tahu_goreng_crispy.jpg",
    "title": "File:Tahu goreng crispy.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Gefüllte Skyr-Senf-Eier",
@@ -1651,7 +1737,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Deviled_Eggs_topped_with_Scallions.JPG",
    "title": "File:Deviled Eggs topped with Scallions.JPG"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
@@ -1690,7 +1778,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:White_bean_dip_with_garlic_and_fresh_herbs.jpg",
    "title": "File:White bean dip with garlic and fresh herbs.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Skyr-Tzatziki mit Vollkorn-Knäcke",
@@ -1701,7 +1791,7 @@
   "carbs": 30,
   "fat": 6,
   "estimated": true,
-  "timeMin": 10,
+  "timeMin": 20,
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
@@ -1727,7 +1817,9 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tzatziki_IMGP1444.jpg",
    "title": "File:Tzatziki IMGP1444.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Erdnuss-Bananen-Quark-Shake",
@@ -1764,7 +1856,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Banana_Smoothie.jpg",
    "title": "File:Banana Smoothie.jpg"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
   "name": "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
@@ -1775,7 +1869,7 @@
   "carbs": 31,
   "fat": 20,
   "estimated": true,
-  "timeMin": 15,
+  "timeMin": 135,
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
@@ -1802,7 +1896,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Chocolate_mousse_-_stonesoup.jpg",
    "title": "File:Chocolate mousse - stonesoup.jpg"
-  }
+  },
+  "activeMin": 15,
+  "difficulty": "leicht"
  },
  {
   "name": "Protein-Käsekuchen ohne Boden mit Beeren",
@@ -1813,7 +1909,7 @@
   "carbs": 33,
   "fat": 4,
   "estimated": true,
-  "timeMin": 75,
+  "timeMin": 180,
   "mealPrep": true,
   "shelfLife": "4 Tage Kühlschrank, 2 Monate TK (Stücke)",
   "ingredients": [
@@ -1842,7 +1938,9 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Souffl%C3%A9-style_cheesecake_001.jpg",
    "title": "File:Soufflé-style cheesecake 001.jpg"
-  }
+  },
+  "activeMin": 30,
+  "difficulty": "aufwendig"
  },
  {
   "name": "Blaubeer-Seidentofu-Skyr-Smoothie",
@@ -1879,7 +1977,9 @@
    "license": "CC BY-SA 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Blueberry_smoothie.jpg",
    "title": "File:Blueberry smoothie.jpg"
-  }
+  },
+  "activeMin": 5,
+  "difficulty": "leicht"
  },
  {
   "name": "Linseneintopf mit Räuchertofu & Kartoffeln",
@@ -1920,7 +2020,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
    "title": "File:Bowl of lentil soup with green and red lentils.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Erdnuss-Nudeln mit Tofu & Edamame",
@@ -1961,7 +2063,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegan_Peanut_Cold_Noodles_with_Cucumbers_(6002018387).jpg",
    "title": "File:Vegan Peanut Cold Noodles with Cucumbers (6002018387).jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "leicht"
  },
  {
   "name": "Gebratener Reis mit Tofu, Ei & Erbsen",
@@ -2002,7 +2106,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Fried_Rice_1_(Eggs_%26_Vegetables).jpg",
    "title": "File:Fried Rice 1 (Eggs & Vegetables).jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
@@ -2042,7 +2148,9 @@
    "license": "CC BY-SA 3.0 de",
    "url": "https://commons.wikimedia.org/wiki/File:Nudelsalat_Feta-Kidneybohnen-Gurke-Zwiebel.jpg",
    "title": "File:Nudelsalat Feta-Kidneybohnen-Gurke-Zwiebel.jpg"
-  }
+  },
+  "activeMin": 20,
+  "difficulty": "leicht"
  },
  {
   "name": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
@@ -2082,7 +2190,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Mapo_Tofu_with_rice.jpg",
    "title": "File:Mapo Tofu with rice.jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Kartoffel-Tortilla mit Hüttenkäse",
@@ -2119,7 +2229,9 @@
    "license": "CC BY 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tortilla_espa%C3%B1ola_con_patatas_y_cebolla.jpg",
    "title": "File:Tortilla española con patatas y cebolla.jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Soja-Gyros-Bowl mit Reis & Quark-Tzatziki",
@@ -2159,7 +2271,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Tzatiki_(3656301454).jpg",
    "title": "File:Tzatiki (3656301454).jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
@@ -2203,7 +2317,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Lasagne_piece.jpg",
    "title": "File:Lasagne piece.jpg"
-  }
+  },
+  "activeMin": 35,
+  "difficulty": "aufwendig"
  },
  {
   "name": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
@@ -2248,7 +2364,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Shepherd%27s_pie_(22470901009)_(cropped).jpg",
    "title": "File:Shepherd's pie (22470901009) (cropped).jpg"
-  }
+  },
+  "activeMin": 35,
+  "difficulty": "aufwendig"
  },
  {
   "name": "Eier-Curry mit Kichererbsen, Spinat & Reis",
@@ -2287,7 +2405,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Egg_Curry_(Anda_Curry).JPG",
    "title": "File:Egg Curry (Anda Curry).JPG"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "mittel"
  },
  {
   "name": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
@@ -2327,7 +2447,9 @@
    "license": "CC BY-SA 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Quesadilla_plate,_New_Orleans_November_2016.jpg",
    "title": "File:Quesadilla plate, New Orleans November 2016.jpg"
-  }
+  },
+  "activeMin": 25,
+  "difficulty": "leicht"
  },
  {
   "name": "Gefüllte Paprika mit Sojahack, Reis & Feta",
@@ -2367,7 +2489,9 @@
    "license": "CC BY-SA 4.0",
    "url": "https://commons.wikimedia.org/wiki/File:Gef%C3%BCllte_Paprika_Nahansicht_2026.jpg",
    "title": "File:Gefüllte Paprika Nahansicht 2026.jpg"
-  }
+  },
+  "activeMin": 30,
+  "difficulty": "mittel"
  },
  {
   "name": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
@@ -2408,7 +2532,9 @@
    "license": "CC BY 2.0",
    "url": "https://commons.wikimedia.org/wiki/File:Vegetarian_black_bean_burger_with_homefries.jpg",
    "title": "File:Vegetarian black bean burger with homefries.jpg"
-  }
+  },
+  "activeMin": 35,
+  "difficulty": "mittel"
  },
  {
   "name": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
@@ -2445,7 +2571,9 @@
    "license": "CC BY 3.0",
    "url": "https://commons.wikimedia.org/wiki/File:Baked_feta_pasta.jpg",
    "title": "File:Baked feta pasta.jpg"
-  }
+  },
+  "activeMin": 10,
+  "difficulty": "leicht"
  },
  {
   "name": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
@@ -2486,6 +2614,3527 @@
    "license": "CC0",
    "url": "https://commons.wikimedia.org/wiki/File:Brighton_Bibimbap_(tofu)_-_Time_For_Kimchi.jpg",
    "title": "File:Brighton Bibimbap (tofu) - Time For Kimchi.jpg"
-  }
+  },
+  "activeMin": 30,
+  "difficulty": "mittel"
+ },
+ {
+  "name": "Protein-Porridge mit Skyr, Walnüssen & Mango",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 442,
+  "protein": 29,
+  "carbs": 47,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 20,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "150 g Haferflocken",
+   "500 ml Milch 1,5 %",
+   "240 ml Wasser",
+   "1 Prise Salz",
+   "600 g Skyr natur",
+   "60 g Walnusskerne",
+   "1 Mango",
+   "1 TL Honig"
+  ],
+  "steps": [
+   "Haferflocken mit Milch, Wasser und Salz aufkochen und bei kleiner Hitze ca. 10 Min. sämig köcheln.",
+   "Etwas abkühlen lassen, dann den Skyr einrühren (nicht mehr kochen) und mit Honig abschmecken.",
+   "Walnüsse grob hacken, Mango schälen und würfeln.",
+   "Porridge auf 4 Schalen oder Gläser verteilen, mit Mango und Walnüssen toppen – kalt oder kurz erwärmt essen."
+  ],
+  "source": "https://www.rewe.de/rezepte/protein-porridge-skyr/",
+  "note": "nach REWE; Proteinriegel und Vanille-Skyr durch Skyr natur + Walnüsse ersetzt (ohne Supplements), Nährwerte neu geschätzt",
+  "img": null
+ },
+ {
+  "name": "Hüttenkäse-Pancakes mit Blaubeeren & Mandeln",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 384,
+  "protein": 25,
+  "carbs": 27,
+  "fat": 19,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (oder einfrieren)",
+  "ingredients": [
+   "250 g Hüttenkäse",
+   "3 Eier (M)",
+   "200 g Magerquark",
+   "100 g zarte Haferflocken",
+   "30 g gemahlene Mandeln",
+   "1/2 TL Backpulver",
+   "1 Prise Salz",
+   "1 TL Ahornsirup",
+   "120 g Blaubeeren (frisch oder TK-Beeren)",
+   "2 EL Rapsöl",
+   "20 g gehobelte Mandeln"
+  ],
+  "steps": [
+   "Hüttenkäse, Eier, Quark, Haferflocken, gemahlene Mandeln, Backpulver, Salz und Sirup mit dem Stabmixer glatt pürieren, 5 Min. quellen lassen.",
+   "Blaubeeren vorsichtig unterheben.",
+   "Öl portionsweise in einer beschichteten Pfanne erhitzen, kleine Pancakes bei mittlerer Hitze je Seite 2–3 Min. backen.",
+   "Mit gehobelten Mandeln bestreuen; Reste abgekühlt in Dosen packen."
+  ],
+  "source": "https://www.rewe.de/rezepte/huettenkaese-pancakes-blaubeeren-mandeln/",
+  "note": "nach REWE; Proteinpulver durch 200 g Magerquark + mehr Hafer ersetzt",
+  "img": null
+ },
+ {
+  "name": "Herzhafte Spinat-Pancakes mit Kräuter-Skyr",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 527,
+  "protein": 34,
+  "carbs": 70,
+  "fat": 14,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "100 g TK-Blattspinat (gehackt)",
+   "4 Eier (M)",
+   "150 g Dinkelmehl Type 630",
+   "150 g Dinkel-Vollkornmehl",
+   "2 TL Backpulver",
+   "1 Prise Zucker",
+   "Salz, Pfeffer",
+   "300 ml Sojadrink natur",
+   "2 EL Rapsöl",
+   "300 g Skyr natur",
+   "1 EL Olivenöl",
+   "20 g TK-Kräuter",
+   "1 Salatgurke",
+   "2 Möhren",
+   "1 Spritzer Zitronensaft"
+  ],
+  "steps": [
+   "Spinat auftauen und gut ausdrücken.",
+   "Eier schaumig schlagen, Mehle mit Backpulver, Zucker, Salz und Pfeffer mischen, mit dem Sojadrink zu einem Teig rühren und den Spinat unterheben.",
+   "Skyr mit Olivenöl und Kräutern verrühren, salzen und pfeffern.",
+   "Gurke und Möhren in feine Streifen hobeln, mit etwas Zitronensaft marinieren.",
+   "Im Rapsöl portionsweise kleine Pancakes ausbacken und mit Kräuter-Skyr und Gemüse servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/herzhafte-pancakes/",
+  "note": "nach REWE; Mandeldrink durch Sojadrink ersetzt (mehr Protein)",
+  "img": null
+ },
+ {
+  "name": "Mediterranes Omelett-Sandwich",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 408,
+  "protein": 26,
+  "carbs": 34,
+  "fat": 20,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "1 kleine Zucchini",
+   "1 Paprika rot",
+   "1/2 Aubergine",
+   "6 Champignons",
+   "1 EL Olivenöl",
+   "Salz, Pfeffer",
+   "8 Eier (M)",
+   "8 EL Milch 1,5 %",
+   "4 Scheiben Vollkornbrot",
+   "1 Handvoll Rucola",
+   "60 g Hartkäse (vegetarisch, mikrobielles Lab)"
+  ],
+  "steps": [
+   "Zucchini, Paprika und Aubergine klein würfeln, Pilze in Scheiben schneiden; alles im Öl anbraten und würzen.",
+   "Eier mit Milch, Salz und Pfeffer verquirlen.",
+   "Einen Teil des Gemüses in der Pfanne lassen, Eimasse darübergießen und bei kleiner Hitze stocken lassen; so 4 Omeletts backen.",
+   "Brot toasten, mit Rucola, Omelett und restlichem Gemüse belegen und mit gehobeltem Hartkäse bestreuen."
+  ],
+  "source": "https://www.rewe.de/rezepte/mediterranes-omelett-sandwich/",
+  "note": "nach REWE; Parmesan durch vegetarischen Hartkäse ersetzt",
+  "img": null
+ },
+ {
+  "name": "Rote-Linsen-Pasta mit Rucola, Mozzarella & Pinienkernen",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 692,
+  "protein": 44,
+  "carbs": 82,
+  "fat": 27,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Rucola separat)",
+  "ingredients": [
+   "500 g Linsennudeln (rote Linsen)",
+   "40 g Pinienkerne",
+   "250 g Cherrytomaten",
+   "2 Knoblauchzehen",
+   "1 Zitrone",
+   "125 g Rucola",
+   "250 g Mozzarella",
+   "3 EL Olivenöl",
+   "Salz, Pfeffer"
+  ],
+  "steps": [
+   "Linsennudeln nach Packungsangabe bissfest garen.",
+   "Pinienkerne ohne Fett rösten. Tomaten halbieren, Knoblauch hacken, Zitronenschale abreiben und Saft auspressen.",
+   "Knoblauch und Tomaten kurz im Öl schwenken, Nudeln, Zitronenschale und -saft untermischen, kräftig würzen.",
+   "Mozzarella zerzupfen und mit Rucola und Pinienkernen unterheben – warm oder als Nudelsalat kalt essen."
+  ],
+  "source": "https://www.rewe.de/rezepte/rote-linsen-pasta-rucola-mozzarella-pinienkernen/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Linsennudel-Auflauf mit Brokkoli & Mozzarella",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 414,
+  "protein": 27,
+  "carbs": 57,
+  "fat": 11,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Linsennudeln (rote Linsen, Penne)",
+   "1 Brokkoli",
+   "200 g Cherrytomaten",
+   "2 Knoblauchzehen",
+   "1 EL Rapsöl",
+   "850 ml stückige Tomaten (Dose)",
+   "Salz, Pfeffer, Cayennepfeffer",
+   "125 g Mozzarella"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen. Linsennudeln knapp bissfest kochen.",
+   "Brokkoli in Röschen teilen und 2 Min. blanchieren; Tomaten halbieren, Knoblauch hacken.",
+   "Knoblauch im Öl andünsten, Dosentomaten zugeben, 5 Min. köcheln und würzen.",
+   "Nudeln, Brokkoli und Sauce in einer Form mischen, Cherrytomaten und zerzupften Mozzarella darauf verteilen und ca. 15 Min. überbacken."
+  ],
+  "source": "https://www.rewe.de/rezepte/linsennudel-auflauf/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Sushi-Bowl mit Tofu & Edamame",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 737,
+  "protein": 29,
+  "carbs": 89,
+  "fat": 31,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Avocado frisch dazu)",
+  "ingredients": [
+   "300 g Basmatireis",
+   "Salz",
+   "1 Noriblatt",
+   "1 Avocado",
+   "2 EL Sesam",
+   "200 g TK-Edamame geschält",
+   "1/2 Salatgurke",
+   "2 Möhren",
+   "2 Frühlingszwiebeln",
+   "300 g Tofu natur",
+   "4 EL Rapsöl",
+   "1 Limette",
+   "4 EL Sojasauce",
+   "4 TL Ahornsirup",
+   "1 EL Sesamöl"
+  ],
+  "steps": [
+   "Reis nach Packungsangabe kochen; Edamame 6–8 Min. in Salzwasser garen.",
+   "Tofu würfeln und im Rapsöl rundum knusprig braten.",
+   "Gurke würfeln, Möhren raspeln, Frühlingszwiebeln in Ringe, Nori in Streifen schneiden; Sesam rösten.",
+   "Sojasauce, Limettensaft, Ahornsirup und Sesamöl zu einem Dressing verrühren.",
+   "Reis auf Schalen verteilen, Tofu, Edamame und Gemüse darauf anrichten, mit Dressing, Sesam und Nori servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/sushi-bowl-edamame/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Linsen-Kürbis-Eintopf mit Tofu",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 409,
+  "protein": 27,
+  "carbs": 46,
+  "fat": 15,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "1/2 Hokkaido-Kürbis",
+   "1 Stange Lauch",
+   "1 rote Zwiebel",
+   "1 Stück Ingwer (ca. 2 cm)",
+   "200 g Tofu natur",
+   "2 EL Rapsöl",
+   "200 g rote Linsen (trocken)",
+   "1 EL gelbe Currypaste",
+   "400 g gehackte Tomaten (Dose)",
+   "400 ml Kokosmilch light",
+   "800 ml Gemüsebrühe",
+   "Salz, Pfeffer",
+   "50 g Kürbiskerne"
+  ],
+  "steps": [
+   "Kürbis würfeln (Schale kann dranbleiben), Lauch in Ringe schneiden, Zwiebel und Ingwer fein hacken, Tofu würfeln.",
+   "Tofu, Linsen, Zwiebel, Ingwer und Currypaste im Öl 2 Min. anschwitzen.",
+   "Kürbis und Lauch zugeben, mit Tomaten, Kokosmilch und Brühe auffüllen und 15–20 Min. köcheln, bis Linsen und Kürbis weich sind.",
+   "Abschmecken und mit gerösteten Kürbiskernen bestreut servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/veganer-linsen-kuerbis-eintopf-tofu/",
+  "note": "nach REWE; Kokosmilch light statt normal (Nährwerte der Quelle beibehalten, real etwas weniger Fett)",
+  "img": null
+ },
+ {
+  "name": "Schwäbische Linsen mit Spätzle & Räuchertofu",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 535,
+  "protein": 32,
+  "carbs": 79,
+  "fat": 14,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "2 Möhren",
+   "150 g Knollensellerie",
+   "1 Stange Lauch",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "2 EL Rapsöl",
+   "1 EL Tomatenmark",
+   "250 g Berglinsen (trocken)",
+   "2 Lorbeerblätter",
+   "1 TL Thymian getrocknet",
+   "1 l Gemüsebrühe",
+   "200 g Räuchertofu",
+   "Salz, Pfeffer",
+   "500 g Spätzle (Kühlregal)",
+   "1 EL Butter",
+   "3 EL Rotweinessig"
+  ],
+  "steps": [
+   "Möhren, Sellerie, Zwiebel und Knoblauch fein würfeln, Lauch in Ringe schneiden.",
+   "Zwiebel und Knoblauch im Öl andünsten, Gemüse und Tomatenmark kurz mitbraten.",
+   "Linsen, Lorbeer, Thymian und Brühe zugeben und ca. 30 Min. köcheln, bis die Linsen weich sind.",
+   "Räuchertofu würfeln und in einer Pfanne knusprig braten; Spätzle in Butter erhitzen.",
+   "Linsen mit Essig, Salz und Pfeffer säuerlich abschmecken und mit Spätzle und Tofuwürfeln servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/spaetzle-linsengemuese/",
+  "note": "nach REWE; Protein erhöht mit 200 g Räuchertofu",
+  "img": null
+ },
+ {
+  "name": "Kürbis-Tofu-Curry mit Reis",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 625,
+  "protein": 32,
+  "carbs": 75,
+  "fat": 25,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "600 g Butternut-Kürbis",
+   "600 g Tofu natur",
+   "1 große rote Zwiebel",
+   "1 Knoblauchzehe",
+   "4 Scheiben Ingwer",
+   "1 EL Rapsöl",
+   "2 EL gelbe Currypaste",
+   "750 ml Kokosmilch light",
+   "250 ml Gemüsebrühe",
+   "200 g Basmatireis",
+   "Salz, 1 Prise Zucker",
+   "2 Limetten",
+   "1 Bund Basilikum"
+  ],
+  "steps": [
+   "Reis nach Packungsangabe kochen. Kürbis schälen und mit Tofu, Zwiebel und Knoblauch würfeln.",
+   "Zwiebel, Knoblauch und Currypaste im Öl anrösten, mit Kokosmilch und Brühe ablöschen, Ingwer zugeben und 3 Min. köcheln.",
+   "Kürbis 5 Min. mitgaren, dann den Tofu 3 Min. darin ziehen lassen.",
+   "Mit Salz, Zucker und Limettensaft abschmecken, Basilikum unterheben und mit Reis servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/kuerbis-curry-tofu/",
+  "note": "nach REWE; Kokosmilch light statt normal, Reis als Beilage ergänzt",
+  "img": null
+ },
+ {
+  "name": "Halloumi-Tikka-Masala mit Reis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 766,
+  "protein": 37,
+  "carbs": 68,
+  "fat": 40,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "250 g Basmatireis",
+   "Salz",
+   "400 g Halloumi",
+   "1 Zwiebel",
+   "15 g Ingwer",
+   "2 Knoblauchzehen",
+   "2 EL Rapsöl",
+   "1 TL Kreuzkümmel",
+   "1,5 TL Garam Masala",
+   "1 TL Currypulver",
+   "1/2 TL Kurkuma",
+   "1 EL Tomatenmark",
+   "400 g stückige Tomaten (Dose)",
+   "200 ml Kokosmilch light",
+   "150 ml Gemüsebrühe",
+   "1 Paprika rot",
+   "150 g TK-Erbsen",
+   "1 TL Honig",
+   "Pfeffer",
+   "15 g Koriander"
+  ],
+  "steps": [
+   "Reis waschen und mit 375 ml Salzwasser zugedeckt bei kleiner Hitze garen.",
+   "Halloumi in Würfel schneiden und in einer Pfanne ohne Fett goldbraun braten, herausnehmen.",
+   "Zwiebel, Ingwer und Knoblauch hacken und im Öl andünsten; Gewürze und Tomatenmark 1 Min. mitrösten.",
+   "Tomaten, Kokosmilch, Brühe und Paprikastreifen zugeben, 10 Min. köcheln; Erbsen und Halloumi 3 Min. mitziehen lassen.",
+   "Mit Honig, Salz und Pfeffer abschmecken, mit Koriander und Reis servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/halloumi-tikka-masala-reis/",
+  "note": "nach REWE; Kokosmilch light statt normal",
+  "img": null
+ },
+ {
+  "name": "Knusprige Tofu-Ecken in Erdnusssoße mit Brokkoli",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 755,
+  "protein": 37,
+  "carbs": 88,
+  "fat": 30,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Tofu natur",
+   "250 g Vollkornreis",
+   "4 EL Weizenmehl",
+   "1 TL Paprikapulver",
+   "1/2 TL Knoblauchgranulat",
+   "Salz, Pfeffer",
+   "50 ml Sojadrink natur",
+   "1 EL Speisestärke",
+   "50 g Cornflakes",
+   "1 Brokkoli",
+   "2 Knoblauchzehen",
+   "20 g Ingwer",
+   "1 Chilischote",
+   "1 EL Rapsöl",
+   "200 ml Gemüsebrühe",
+   "6 EL Erdnussmus",
+   "2 EL Sojasauce",
+   "1 TL Limettensaft",
+   "1 EL Ahornsirup",
+   "4 EL Rapsöl (zum Braten)",
+   "4 EL geröstete Erdnüsse"
+  ],
+  "steps": [
+   "Tofublöcke diagonal in 8 Ecken schneiden; Reis garen.",
+   "Mehl mit Gewürzen mischen, Sojadrink mit Stärke verrühren, Cornflakes zerbröseln. Tofu nacheinander in Mehl, Sojadrink und Cornflakes wenden.",
+   "Tofu-Ecken im Öl rundum knusprig braten. Brokkoli in Röschen dämpfen.",
+   "Knoblauch, Ingwer und Chili im Öl anschwitzen, mit Brühe ablöschen, Erdnussmus, Sojasauce, Limettensaft und Sirup einrühren und kurz einköcheln.",
+   "Reis, Brokkoli und Tofu anrichten, Soße darübergeben und mit gehackten Erdnüssen bestreuen."
+  ],
+  "source": "https://www.rewe.de/rezepte/tofu-ecken-erdnusssosse/",
+  "note": "nach REWE; Kokosöl durch Rapsöl, Hafer-Soja-Drink durch Sojadrink ersetzt",
+  "img": null
+ },
+ {
+  "name": "Wirsingrouladen mit Räuchertofu-Füllung & Tomatensugo",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 446,
+  "protein": 31,
+  "carbs": 26,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "16 Wirsingblätter",
+   "Salz",
+   "50 g Cashewkerne",
+   "370 g Räuchertofu",
+   "3 Eier (M)",
+   "75 g Feta",
+   "Pfeffer",
+   "1 kg Tomaten",
+   "1 Zwiebel",
+   "1 Knoblauchzehe",
+   "2 EL Olivenöl",
+   "1 EL Tomatenmark"
+  ],
+  "steps": [
+   "Dicke Blattrippen flach schneiden, Wirsingblätter kurz blanchieren, kalt abschrecken und trocken tupfen.",
+   "Cashews und Räuchertofu im Mixer fein zerkleinern, mit Eiern und zerbröseltem Feta zu einer Füllung verrühren, pfeffern.",
+   "Je zwei Blätter überlappend legen, Füllung daraufgeben, seitlich einschlagen und aufrollen.",
+   "Zwiebel und Knoblauch im Öl andünsten, Tomatenmark und gewürfelte Tomaten zugeben und zu einem Sugo einkochen.",
+   "Rouladen in den Sugo setzen und zugedeckt ca. 15 Min. sanft schmoren."
+  ],
+  "source": "https://www.rewe.de/rezepte/kohlrouladen-raeuchertofu-tomatensugo/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Rührtofu mit Kartoffelpüree & Rahmspinat",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 535,
+  "protein": 31,
+  "carbs": 47,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "450 g TK-Blattspinat",
+   "1 kg Kartoffeln (mehligkochend)",
+   "Salz",
+   "1 Zwiebel",
+   "200 g braune Champignons",
+   "400 g Tofu natur",
+   "2 EL Rapsöl",
+   "300 ml Milch 1,5 %",
+   "Pfeffer",
+   "Kala Namak (optional)",
+   "1/4 TL Kurkuma",
+   "200 ml Hafer-Cuisine (oder Kochsahne)",
+   "3 EL Butter oder Margarine",
+   "Muskat"
+  ],
+  "steps": [
+   "Spinat auftauen. Kartoffeln schälen und ca. 20 Min. in Salzwasser weich kochen.",
+   "Zwiebel würfeln, Pilze in Scheiben schneiden, Tofu mit den Händen zerkrümeln.",
+   "Pilze im Öl anbraten, Tofu mit Kurkuma 3–4 Min. mitbraten, mit Salz, Pfeffer und ggf. Kala Namak würzen.",
+   "Zwiebel in etwas Öl andünsten, Spinat und Cuisine zugeben, kurz köcheln und mit Muskat würzen.",
+   "Kartoffeln mit warmer Milch und Butter stampfen und mit Spinat und Rührtofu servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/ruehrtofu-kartoffelpueree-rahmspinat/",
+  "note": "nach REWE; Haferdrink durch Milch ersetzt (mehr Protein)",
+  "img": null
+ },
+ {
+  "name": "High-Protein-Spinat-Lasagne mit Hüttenkäse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 432,
+  "protein": 30,
+  "carbs": 27,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "400 g TK-Blattspinat",
+   "100 g Skyr natur",
+   "2 Knoblauchzehen",
+   "1 EL Olivenöl",
+   "250 g Hüttenkäse",
+   "50 g Hartkäse (vegetarisch, mikrobielles Lab), gerieben",
+   "Salz, Pfeffer, Muskat",
+   "1/2 Zitrone",
+   "12 Lasagneplatten",
+   "200 g Feta"
+  ],
+  "steps": [
+   "Spinat auftauen und ausdrücken; Knoblauch hacken und im Öl kurz anschwitzen, mit Spinat und Skyr mischen.",
+   "Hüttenkäse mit Hartkäse verrühren, mit Salz, Pfeffer, Muskat und Zitronensaft würzen und die Spinatmasse unterheben. Ofen auf 180 °C vorheizen.",
+   "Lasagneplatten und Spinat-Käse-Masse abwechselnd in eine Form schichten, mit Füllung abschließen.",
+   "Feta darüberbröseln und ca. 30 Min. backen."
+  ],
+  "source": "https://www.rewe.de/rezepte/high-protein-spinat-lasagne/",
+  "note": "nach REWE; Fertig-Rahmspinat (Marke) durch TK-Spinat + Skyr ersetzt, Parmesan durch veg. Hartkäse",
+  "img": null
+ },
+ {
+  "name": "Burrito mit Soja-Hack, Bohnen & Käsesoße",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 703,
+  "protein": 31,
+  "carbs": 76,
+  "fat": 31,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Salat separat)",
+  "ingredients": [
+   "125 g Langkornreis",
+   "3 Knoblauchzehen",
+   "275 g veganes Hack (Kühlregal)",
+   "1 EL Olivenöl",
+   "100 g Kidneybohnen (Dose, abgetropft)",
+   "50 ml Kochsahne 15 %",
+   "100 ml Sojadrink natur",
+   "100 g geriebener Käse (Cheddar/Gouda)",
+   "20 g Weizenmehl",
+   "75 g Feldsalat",
+   "1/2 Glas Jalapeños",
+   "4 Weizen-Tortillas"
+  ],
+  "steps": [
+   "Reis kochen. Hack im Öl scharf anbraten, etwas Knoblauch zugeben und die Bohnen unterheben.",
+   "Restlichen Knoblauch mit Sahne, Sojadrink und Käse erhitzen, bis der Käse schmilzt; mit Mehl leicht binden.",
+   "Tortillas kurz erwärmen, mit Reis, Hackmischung, Käsesoße, Feldsalat und Jalapeños füllen.",
+   "Seiten einschlagen, fest aufrollen und optional in der Pfanne kurz anrösten."
+  ],
+  "source": "https://www.rewe.de/rezepte/vegetarischer-burrito/",
+  "note": "nach REWE; veganer Cheddar durch normalen Käse ersetzt (vegetarisch, mehr Protein), Pintobohnen -> Kidneybohnen",
+  "img": null
+ },
+ {
+  "name": "Hüttenkäse-Taler mit Rucolasalat & Kräuterquark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 490,
+  "protein": 29,
+  "carbs": 25,
+  "fat": 31,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 Paprika rot",
+   "1 Bund Frühlingszwiebeln",
+   "400 g Hüttenkäse",
+   "2 Eier (M)",
+   "100 g geriebener Emmentaler",
+   "50 g Weizenmehl",
+   "Salz, Pfeffer",
+   "1 TL Basilikum getrocknet",
+   "1 TL Paprikapulver edelsüß",
+   "125 g Rucola",
+   "2 EL Balsamico",
+   "4 EL Olivenöl",
+   "1 TL Honig",
+   "200 g Kräuterquark"
+  ],
+  "steps": [
+   "Ofen auf 220 °C vorheizen. Paprika fein würfeln, Frühlingszwiebeln zur Hälfte hacken, den Rest in Ringe schneiden.",
+   "Hüttenkäse, Eier, Käse und Mehl verrühren, Paprika und gehackte Zwiebeln unterheben und würzen.",
+   "Mit einem Esslöffel 12 Taler aufs Backpapier setzen, flach drücken und ca. 20 Min. goldbraun backen.",
+   "Balsamico, Öl und Honig verrühren, Rucola damit anmachen und mit Talern, Kräuterquark und Zwiebelringen servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/huettenkaese-taler-fruehlingszwiebeln/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Knäcke-Pizza mit Hüttenkäse, Oliven & Gouda",
+  "category": "snack",
+  "servings": 4,
+  "kcal": 418,
+  "protein": 21,
+  "carbs": 48,
+  "fat": 16,
+  "estimated": false,
+  "timeMin": 20,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "frisch essen",
+  "ingredients": [
+   "150 g Cherrytomaten",
+   "400 g Hüttenkäse",
+   "Salz, Pfeffer",
+   "1/2 Bund Schnittlauch",
+   "2 rote Zwiebeln",
+   "100 g schwarze Oliven",
+   "16 Scheiben Vollkorn-Knäckebrot",
+   "100 g geriebener Gouda"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Die Hälfte der Tomaten fein hacken, mit Hüttenkäse und der Hälfte des Schnittlauchs mischen und würzen.",
+   "Restliche Tomaten vierteln, Zwiebeln in Ringe und Oliven in Scheiben schneiden.",
+   "Knäckebrot aufs Blech legen, mit Hüttenkäsecreme bestreichen, belegen und mit Gouda bestreuen.",
+   "Ca. 8–10 Min. backen, bis der Käse schmilzt, mit restlichem Schnittlauch bestreuen."
+  ],
+  "source": "https://www.rewe.de/rezepte/proteinreiche-knaecke-pizza/",
+  "note": "nach REWE; Marken-Protein-Knäcke durch normales Vollkorn-Knäcke ersetzt",
+  "img": null
+ },
+ {
+  "name": "Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 770,
+  "protein": 43,
+  "carbs": 94,
+  "fat": 25,
+  "estimated": false,
+  "timeMin": 50,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "1/2 Brokkoli",
+   "2 Zucchini",
+   "1 EL Currypulver",
+   "1 Prise Zimt",
+   "Pfeffer",
+   "20 g Ingwer",
+   "1 TL Kreuzkümmel",
+   "4 EL Rapsöl",
+   "Salz",
+   "3 Schalotten",
+   "1 l Gemüsebrühe",
+   "1 TL Knoblauchgranulat",
+   "15 g Koriander",
+   "500 g Tofu natur",
+   "1 Limette",
+   "600 g gehackte Tomaten (Dose)",
+   "200 g Quinoa",
+   "200 g rote Linsen (trocken)",
+   "5 Knoblauchzehen",
+   "2 EL Speisestärke"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Tofu gut ausdrücken, in Stücke zupfen, mit Stärke, Knoblauchgranulat, Salz, Pfeffer und 1 EL Öl mischen und ca. 25 Min. knusprig backen.",
+   "Quinoa nach Packungsangabe garen.",
+   "Schalotten, Knoblauch und Ingwer hacken und im restlichen Öl andünsten; Curry, Kreuzkümmel und Zimt kurz mitrösten.",
+   "Linsen, Tomaten und Brühe zugeben und ca. 15 Min. köcheln; Brokkoli und Zucchini klein schneiden und die letzten 7 Min. mitgaren.",
+   "Dal mit Limettensaft abschmecken und mit Quinoa, Tofu-Bites und Koriander servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/linsendal-mit-brokkoli-tofu-bites-und-quinoa",
+  "note": "nach Lidl Kochen; Einfrieren des Tofus am Vortag optional weggelassen",
+  "img": null
+ },
+ {
+  "name": "Panierte Tofu-Sticks mit Kichererbsen-Spinat & Kartoffeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 804,
+  "protein": 40,
+  "carbs": 92,
+  "fat": 29,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "100 g Paniermehl",
+   "1 Zwiebel",
+   "Pfeffer, Salz, Muskat",
+   "30 g Weizenmehl",
+   "5 EL Rapsöl",
+   "1 kg Kartoffeln (festkochend)",
+   "600 g Tofu natur",
+   "400 g Kichererbsen (Dose, abgetropft)",
+   "800 g Blattspinat (frisch oder TK)"
+  ],
+  "steps": [
+   "Kartoffeln schälen, würfeln und ca. 20 Min. in Salzwasser garen.",
+   "Zwiebel würfeln und in 2 EL Öl anbraten, Spinat und Kichererbsen zugeben, zusammenfallen lassen und mit Salz, Pfeffer und Muskat würzen.",
+   "Tofu in ca. 1 cm dicke Sticks schneiden, salzen, in Mehl, etwas Wasser und dann Paniermehl wenden.",
+   "Tofu-Sticks im restlichen Öl rundum goldbraun braten und mit Kartoffeln und Spinat servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/panierte-tofusticks-mit-spinat-und-kartoffeln",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Tomaten-Mozzarella-Omelett aus dem Ofen",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 452,
+  "protein": 36,
+  "carbs": 10,
+  "fat": 30,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "20 g Basilikum",
+   "Salz, Pfeffer",
+   "3 Strauchtomaten",
+   "1/2 TL Muskat",
+   "12 Eier (M)",
+   "250 g Mozzarella light",
+   "4 EL Olivenöl",
+   "Abrieb von 1/2 Zitrone",
+   "1 Knoblauchzehe",
+   "1 EL Balsamicocreme"
+  ],
+  "steps": [
+   "Ofen auf 190 °C Umluft vorheizen. Eier mit Salz, Pfeffer, Muskat, gepresstem Knoblauch und Zitronenabrieb verquirlen.",
+   "In einer ofenfesten Pfanne 2 EL Öl erhitzen, Eimasse hineingeben und 3–4 Min. anstocken lassen, dabei ein-, zweimal rühren.",
+   "Ein Drittel des Mozzarellas hineinzupfen, Tomaten- und restliche Mozzarellascheiben darauflegen.",
+   "Im Ofen ca. 10 Min. fertig garen, mit Basilikum, restlichem Öl und Balsamicocreme servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/tomaten-mozzarella-omelett-aus-dem-ofen",
+  "note": "nach Lidl Kochen; Mozzarella light statt normal",
+  "img": null
+ },
+ {
+  "name": "Chinesischer Zitronen-Tofu mit Gemüsereis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 720,
+  "protein": 34,
+  "carbs": 93,
+  "fat": 31,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "40 g Zucker",
+   "1 TL Kurkuma",
+   "1 Möhre",
+   "Salz",
+   "800 g Tofu natur",
+   "300 g Langkornreis",
+   "3 EL Joghurt (oder Sojaghurt)",
+   "2 Zitronen (Bio)",
+   "4 EL Speisestärke",
+   "100 g TK-Erbsen",
+   "4 EL Sesam",
+   "1 Peperoni",
+   "3 EL Rapsöl"
+  ],
+  "steps": [
+   "Tofu würfeln und mit 3 EL Stärke und Joghurt vermengen.",
+   "Möhre würfeln. Reis mit 700 ml Salzwasser und Kurkuma ca. 15 Min. garen, nach 10 Min. Möhre und Erbsen zugeben.",
+   "Tofu in einer großen Pfanne im Öl rundum knusprig braten (statt frittieren).",
+   "Zitronensaft, -abrieb, Zucker, 100 ml Wasser und 1 EL Stärke aufkochen, bis die Soße andickt; Tofu darin schwenken.",
+   "Mit Gemüsereis anrichten und mit Sesam und Peperoniringen bestreuen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/chinesischer-zitronen-tofu-an-gemuesereis",
+  "note": "nach Lidl Kochen; in der Pfanne gebraten statt frittiert, Zucker halbiert – Nährwerte daher angepasst geschätzt",
+  "img": null
+ },
+ {
+  "name": "Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 644,
+  "protein": 33,
+  "carbs": 77,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Avocado frisch)",
+  "ingredients": [
+   "1 Avocado",
+   "1 EL heller Balsamico",
+   "1 Brokkoli",
+   "Salz, Pfeffer",
+   "250 g Naturjoghurt",
+   "2 TL Honig",
+   "2 EL Sonnenblumenöl",
+   "2 Orangen",
+   "2 EL Sojasauce",
+   "2 Schalotten",
+   "600 ml Gemüsebrühe",
+   "400 g Tofu natur",
+   "2 EL Pinienkerne",
+   "1 Limette",
+   "200 g Bulgur",
+   "250 g Zuckerschoten"
+  ],
+  "steps": [
+   "Bulgur in kochende Brühe rühren, 1 Min. kochen und vom Herd genommen 10 Min. quellen lassen.",
+   "Brokkoli in Röschen teilen und 3–4 Min. garen, Zuckerschoten die letzten 2 Min. mitgaren, abschrecken.",
+   "Tofu würfeln, im Öl knusprig braten und mit Sojasauce ablöschen.",
+   "Joghurt mit Limettensaft, Honig, Balsamico, Salz und Pfeffer verrühren; Orangen schälen und in Stücke schneiden, Avocado und Schalotten schneiden.",
+   "Alles auf Bulgur anrichten, mit Dressing und gerösteten Pinienkernen servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/power-bowl-mit-bulgur-und-tofu",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 630,
+  "protein": 39,
+  "carbs": 46,
+  "fat": 33,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Salat separat)",
+  "ingredients": [
+   "2 rote Zwiebeln",
+   "1 Zitrone",
+   "4 EL schwarze Oliven",
+   "Salz, Pfeffer",
+   "4 Strauchtomaten",
+   "1 Salatgurke",
+   "5 EL Olivenöl",
+   "1 Paprika gelb",
+   "800 g Tofu natur",
+   "1 Fladenbrot",
+   "150 g Feta",
+   "2 TL italienische Kräuter",
+   "8 eingelegte Peperoni",
+   "2 TL Oregano, 2 TL Paprikapulver, 1 TL Knoblauchgranulat"
+  ],
+  "steps": [
+   "Tofu in ca. 3 cm große Würfel schneiden und mit Oregano, Paprika, Knoblauch, Salz und 2 EL Öl marinieren.",
+   "Gurke, Tomaten und Paprika würfeln, Zwiebeln in Streifen schneiden, Feta würfeln, Peperoni klein schneiden.",
+   "Tofu auf Spieße stecken (optional) und in der Pfanne rundum goldbraun braten.",
+   "Gemüse mit Oliven, Kräutern, Zitronensaft und restlichem Öl mischen, Feta darübergeben und mit Tofu und Fladenbrot servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/tofu-souvlaki-auf-griechischem-bauernsalat",
+  "note": "nach Lidl Kochen; veganer Hirtenkäse durch Feta, Fertig-Gewürzmischung durch Einzelgewürze ersetzt, weniger Öl",
+  "img": null
+ },
+ {
+  "name": "Linsen-Tofu-Curry mit Pak Choi",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 481,
+  "protein": 31,
+  "carbs": 49,
+  "fat": 18,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "1 Zwiebel",
+   "1 TL Currypulver",
+   "1 Prise Zimt",
+   "Salz, Pfeffer",
+   "10 g Ingwer",
+   "2 EL Rapsöl",
+   "200 ml Gemüsebrühe",
+   "20 g Koriander",
+   "250 g Tofu natur",
+   "400 ml Kokosmilch light",
+   "4 Pak Choi",
+   "300 g rote Linsen (trocken)",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Zwiebel, Knoblauch und Ingwer fein hacken, Tofu würfeln, Pak Choi achteln.",
+   "Zwiebel, Knoblauch, Ingwer und Tofu im Öl kräftig anbraten und mit Curry, Zimt, Salz und Pfeffer würzen.",
+   "Pak Choi 2 Min. mitbraten, Linsen zugeben, mit Kokosmilch und Brühe auffüllen und 10–12 Min. köcheln.",
+   "Abschmecken und mit Koriander bestreut servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/linsen-tofu-curry-mit-pak-choi",
+  "note": "nach Lidl Kochen; Kokosmilch light statt normal",
+  "img": null
+ },
+ {
+  "name": "Rote-Linsen-Salat mit Feta, Mango & Cashews",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 609,
+  "protein": 30,
+  "carbs": 69,
+  "fat": 25,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Rucola separat)",
+  "ingredients": [
+   "1/2 Bund Frühlingszwiebeln",
+   "Salz, Pfeffer",
+   "1 Mango",
+   "1 TL Honig",
+   "1 Salatgurke",
+   "4 EL Olivenöl",
+   "125 g Rucola",
+   "200 g Feta",
+   "1 Limette",
+   "4 EL Cashewkerne",
+   "300 g rote Linsen (trocken)"
+  ],
+  "steps": [
+   "Linsen in Salzwasser ca. 10 Min. bissfest garen, abgießen, kalt abspülen und abtropfen lassen.",
+   "Gurke und Mango würfeln, Frühlingszwiebeln in Ringe schneiden, Feta zerbröseln.",
+   "Cashews ohne Fett rösten; Limettensaft, Öl, Honig, Salz und Pfeffer verrühren.",
+   "Linsen, Gemüse, Mango und Dressing mischen und mit Rucola, Feta und Cashews servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/roter-linsensalat",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Gebratene Quarkklöße mit Salat & Radieschen",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 393,
+  "protein": 30,
+  "carbs": 32,
+  "fat": 16,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "1 Prise Zucker",
+   "Salz, Pfeffer, Muskat",
+   "3 Eier (M)",
+   "100 g Weizenmehl",
+   "1 EL Weißweinessig",
+   "3 EL Rapsöl",
+   "1 Bund Radieschen",
+   "10 g Schnittlauch",
+   "800 g Quark 20 %",
+   "300 g Salat-Mix",
+   "4 EL Crème fraîche"
+  ],
+  "steps": [
+   "Einen breiten Topf Wasser zum Sieden bringen. Zwei Eier trennen; Quark mit den Eigelben und dem dritten Ei verrühren und würzen.",
+   "Eiweiß mit einer Prise Salz steif schlagen und unterheben, dann das Mehl locker unterarbeiten.",
+   "Mit einem nassen Löffel Klöße abstechen und im siedenden (nicht kochenden) Wasser garen, bis sie oben schwimmen; abtropfen lassen.",
+   "Klöße im Öl rundum goldbraun braten. Salat und Radieschen mit Essig, Öl, Zucker, Salz und Crème fraîche anmachen und mit Schnittlauch servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/gebratene-quarkkloesse-mit-salat-und-radieschen",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Nudel-Frittata mit grünem Spargel",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 585,
+  "protein": 27,
+  "carbs": 79,
+  "fat": 17,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (kalt essbar)",
+  "ingredients": [
+   "1 Zwiebel",
+   "Salz, Pfeffer",
+   "8 Eier (M)",
+   "2 EL Olivenöl",
+   "400 g Penne",
+   "100 g Kochsahne 15 %",
+   "1 Bund grüner Spargel (oder 2 Zucchini)"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Penne bissfest kochen. Spargel im unteren Drittel schälen und in Stücke schneiden, Zwiebel würfeln.",
+   "Eier mit Sahne, Salz und Pfeffer verquirlen.",
+   "Zwiebel und Spargel in einer ofenfesten Pfanne im Öl 3–4 Min. anbraten, Nudeln untermischen.",
+   "Eiermischung darübergießen, kurz anstocken lassen und im Ofen ca. 10–15 Min. fertig backen. In Stücke schneiden."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/nudel-spargel-frittata",
+  "note": "nach Lidl Kochen; Schlagsahne -> Kochsahne",
+  "img": null
+ },
+ {
+  "name": "Falafel in orientalischer Linsensuppe mit Skyr",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 577,
+  "protein": 31,
+  "carbs": 66,
+  "fat": 20,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Falafel separat)",
+  "ingredients": [
+   "2 Zwiebeln",
+   "1 Prise Zucker",
+   "1 Zitrone",
+   "Salz, Pfeffer",
+   "1 Prise Kreuzkümmel",
+   "3 EL Rapsöl",
+   "400 ml Gemüsebrühe",
+   "10 g Koriander",
+   "400 g passierte Tomaten",
+   "200 g rote Linsen (trocken)",
+   "3 Knoblauchzehen",
+   "250 g Falafel (Kühlregal)",
+   "200 g Skyr natur"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen und die Falafel ca. 10 Min. aufbacken.",
+   "Zwiebeln und Knoblauch hacken und im Öl 3 Min. anbraten, Linsen 3 Min. mitrösten.",
+   "Brühe, passierte Tomaten und 400 ml Wasser zugeben und ca. 15 Min. köcheln, dann mit Kreuzkümmel, Zitronensaft, Zucker, Salz und Pfeffer abschmecken (nach Wunsch pürieren).",
+   "Skyr mit etwas Zitronensaft und Salz verrühren; Suppe mit Falafel, einem Klecks Skyr und Koriander servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/falafel-in-orientalischer-linsensuppe",
+  "note": "nach Lidl Kochen; veganen Frischaufstrich/Sojaghurt durch Skyr ersetzt",
+  "img": null
+ },
+ {
+  "name": "Gebackener Halloumi mit Ofengemüse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 544,
+  "protein": 27,
+  "carbs": 22,
+  "fat": 41,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 Aubergine",
+   "20 g Basilikum",
+   "1 rote Zwiebel",
+   "1 Zucchini",
+   "Pfeffer, Salz",
+   "1 TL Honig",
+   "5 EL Olivenöl",
+   "1 Paprika gelb",
+   "5 g Rosmarin",
+   "5 g Thymian",
+   "250 g Cherrytomaten",
+   "450 g Halloumi",
+   "50 g Kalamata-Oliven"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Paprika in Streifen, Zucchini und Aubergine in 2-cm-Würfel, Zwiebel grob schneiden, Tomaten halbieren.",
+   "Gemüse mit Kräutern, 4 EL Öl, Salz und Pfeffer in einer Auflaufform mischen und ca. 15 Min. rösten.",
+   "Halloumi in Scheiben schneiden, mit Oliven auf das Gemüse legen, mit Honig und restlichem Öl beträufeln und weitere 10 Min. backen.",
+   "Mit Basilikum servieren (dazu passt Brot oder Bulgur)."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/gebackener-halloumi-mit-gemuese",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Orientalischer Linsen-Feta-Eintopf",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 482,
+  "protein": 26,
+  "carbs": 42,
+  "fat": 23,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "100 g Zwiebeln",
+   "1 TL Kreuzkümmel",
+   "1/2 Bund Minze",
+   "30 ml Olivenöl",
+   "300 g Feta",
+   "1 TL Salz",
+   "700 ml Gemüsebrühe",
+   "1/2 Bund Koriander",
+   "400 g gehackte Tomaten (Dose)",
+   "200 g rote Linsen (trocken)",
+   "2 TL Ras el Hanout",
+   "2 Knoblauchzehen"
+  ],
+  "steps": [
+   "Minze und Koriander fein hacken, Zwiebel und Knoblauch würfeln.",
+   "Zwiebel und Knoblauch im Öl andünsten, Ras el Hanout und Kreuzkümmel kurz mitrösten.",
+   "Linsen, Tomaten und Brühe zugeben und ca. 15 Min. köcheln, bis die Linsen zerfallen.",
+   "Salzen, Kräuter unterrühren und den Eintopf mit zerbröseltem Feta servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/orientalischer-linseneintopf",
+  "note": "nach Lidl Kochen; Zubereitung für den Herd statt Küchenmaschine beschrieben",
+  "img": null
+ },
+ {
+  "name": "Tofu-Bowl mit Bohnen, Ofengemüse & Hummus",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 453,
+  "protein": 25,
+  "carbs": 45,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "2 Auberginen",
+   "2 Zucchini",
+   "1 Zitrone",
+   "160 g Kidneybohnen (Dose, abgetropft)",
+   "2 Paprika rot",
+   "160 g weiße Bohnen (Dose, abgetropft)",
+   "4 EL Rapsöl",
+   "80 g Feldsalat",
+   "80 g Rucola",
+   "4 EL Sojasauce",
+   "Salz",
+   "10 g Schnittlauch",
+   "1 TL Kräuter der Provence",
+   "1 TL Knoblauchgranulat",
+   "400 g Tofu natur",
+   "4 EL Hummus"
+  ],
+  "steps": [
+   "Tofu würfeln und in Sojasauce, 2 EL Zitronensaft und Knoblauch ca. 30 Min. marinieren (geht auch über Nacht).",
+   "Zucchini und Aubergine in Scheiben, Paprika in Streifen schneiden, mit Kräutern und Salz würzen und im Öl portionsweise anbraten.",
+   "Tofu in derselben Pfanne knusprig braten, Bohnen abspülen und kurz miterwärmen.",
+   "Salat mit Gemüse, Bohnen und Tofu in Schalen anrichten, je 1 EL Hummus und Schnittlauch darauf."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/tofu-bowl-mit-bohnen-toskana-gemuese-und-hummus",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Schnelle Miso-Ramen mit Tofu & Ei",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 542,
+  "protein": 32,
+  "carbs": 54,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank (Nudeln separat)",
+  "ingredients": [
+   "1/2 Bund Frühlingszwiebeln",
+   "20 g Ingwer",
+   "8 EL Sojasauce",
+   "1 l Gemüsebrühe",
+   "1 EL Agavendicksaft",
+   "3 EL Sesamöl",
+   "400 g Tofu natur",
+   "2 Pak Choi",
+   "2 EL helle Misopaste",
+   "2 Knoblauchzehen",
+   "200 g Mie-Nudeln",
+   "2 EL Speisestärke",
+   "250 g braune Champignons",
+   "1 EL Sesam",
+   "1 Peperoni",
+   "4 Eier (M)"
+  ],
+  "steps": [
+   "Knoblauch, Ingwer und Peperoni hacken, Frühlingszwiebeln in Ringe, Pilze in Scheiben schneiden, Pak Choi halbieren.",
+   "Tofu zerkrümeln, mit Stärke, der Hälfte von Knoblauch/Ingwer und 2 EL Sojasauce mischen und in 2 EL Sesamöl knusprig braten.",
+   "Eier 7 Min. kochen, abschrecken und pellen. Mie-Nudeln nach Packungsangabe garen.",
+   "Restlichen Knoblauch/Ingwer und Pilze im übrigen Öl anbraten, mit Brühe, restlicher Sojasauce und Agavendicksaft aufkochen, Pak Choi 2 Min. mitgaren; vom Herd nehmen und Miso einrühren.",
+   "Nudeln in Schalen verteilen, Brühe darübergeben und mit Tofu, halbierten Eiern, Frühlingszwiebeln und Sesam toppen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/schnelle-vegane-miso-ramen-mit-tofu",
+  "note": "nach Lidl Kochen; Protein erhöht mit 4 Eiern, Sesamöl halbiert",
+  "img": null
+ },
+ {
+  "name": "Pellkartoffeln mit extra Kräuterquark",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 341,
+  "protein": 31,
+  "carbs": 50,
+  "fat": 1,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Quark)",
+  "ingredients": [
+   "1 Zitrone",
+   "100 g Naturjoghurt",
+   "10 g Dill",
+   "10 g Petersilie",
+   "10 g Kresse",
+   "Salz, Pfeffer",
+   "10 g Schnittlauch",
+   "1 kg Kartoffeln (festkochend)",
+   "750 g Magerquark"
+  ],
+  "steps": [
+   "Kartoffeln gründlich waschen und in Salzwasser ca. 20 Min. weich garen.",
+   "Kräuter fein hacken, Zitrone auspressen.",
+   "Quark mit Joghurt, Kräutern und 1 EL Zitronensaft glatt rühren, mit Salz und Pfeffer abschmecken (ggf. etwas Mineralwasser für die Cremigkeit).",
+   "Kartoffeln nach Wunsch pellen, aufschneiden und mit reichlich Kräuterquark und Kresse servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/pellkartoffeln-mit-kraeuterquark",
+  "note": "nach Lidl Kochen; Quarkmenge um 250 g erhöht",
+  "img": null
+ },
+ {
+  "name": "Frühstücks-Quarkspeise mit Beeren & Studentenfutter",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 453,
+  "protein": 28,
+  "carbs": 63,
+  "fat": 10,
+  "estimated": false,
+  "timeMin": 10,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Toppings separat)",
+  "ingredients": [
+   "1 Zitrone",
+   "200 g Heidelbeeren",
+   "200 g Himbeeren",
+   "2 EL Honig",
+   "200 g Erdbeeren (oder TK-Beeren)",
+   "500 g Magerquark",
+   "200 g Skyr natur",
+   "120 g Studentenfutter",
+   "120 g kernige Haferflocken"
+  ],
+  "steps": [
+   "Beeren waschen, Erdbeeren vierteln.",
+   "Etwas Zitronenschale abreiben und den Saft auspressen.",
+   "Quark und Skyr mit Zitronenschale, 1 EL Saft und Honig cremig rühren, Beeren unterheben.",
+   "In Schalen oder Meal-Prep-Gläser füllen und mit Haferflocken und Studentenfutter bestreuen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/fruehstuecksquarkspeise",
+  "note": "nach Lidl Kochen; Quark 20 % durch Magerquark + Skyr ersetzt (mehr Protein, weniger Fett)",
+  "img": null
+ },
+ {
+  "name": "Dinkel-Crêpes mit Blaubeerquark",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 502,
+  "protein": 31,
+  "carbs": 64,
+  "fat": 13,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "30 g brauner Zucker",
+   "300 g Heidelbeeren (oder TK-Beeren)",
+   "4 Eier (M)",
+   "1 TL Honig",
+   "400 ml Milch 1,5 %",
+   "4 EL Rapsöl",
+   "1 Prise Salz",
+   "500 g Magerquark",
+   "200 g Dinkelmehl Type 1050"
+  ],
+  "steps": [
+   "Eier verquirlen, Mehl, Salz und Zucker unterrühren und die Milch nach und nach zu einem glatten Teig einrühren; kurz quellen lassen.",
+   "Quark mit Honig und ggf. einem Schuss Milch cremig rühren und die Blaubeeren unterheben.",
+   "Etwas Öl in einer beschichteten Pfanne erhitzen, je eine Kelle Teig dünn verteilen und von beiden Seiten goldbraun backen.",
+   "Crêpes mit Blaubeerquark füllen, zusammenklappen und servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/dinkel-crepes-mit-blaubeerquark",
+  "note": "nach Lidl Kochen; 250 g Quark 40 % durch 500 g Magerquark ersetzt",
+  "img": null
+ },
+ {
+  "name": "Beeren-Skyr mit Mandeln & Rosinen",
+  "category": "snack",
+  "servings": 4,
+  "kcal": 266,
+  "protein": 24,
+  "carbs": 38,
+  "fat": 4,
+  "estimated": false,
+  "timeMin": 5,
+  "activeMin": 5,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 Banane",
+   "150 g Brombeeren (oder TK-Beeren)",
+   "150 g Himbeeren",
+   "20 g Mandeln",
+   "20 g Rosinen",
+   "500 g Skyr natur"
+  ],
+  "steps": [
+   "Beeren waschen, Banane schälen.",
+   "Skyr mit Beeren und Banane fein pürieren (nach Wunsch mit etwas Honig süßen).",
+   "In Schälchen oder Gläser füllen und mit gehackten Mandeln und Rosinen bestreuen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/beeren-skyr-mit-mandeln-und-rosinen",
+  "note": "nach Lidl Kochen; auf 4 Snack-Portionen statt 2 Portionen aufgeteilt",
+  "img": null
+ },
+ {
+  "name": "Möhren-Rührei mit Räuchertofu & Feta",
+  "category": "fruehstueck",
+  "servings": 4,
+  "kcal": 394,
+  "protein": 28,
+  "carbs": 11,
+  "fat": 26,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "2 Zwiebeln",
+   "5 Möhren (ca. 400 g)",
+   "175 g Räuchertofu",
+   "8 Eier (M)",
+   "Salz, Pfeffer",
+   "4 Zweige Petersilie",
+   "2 Knoblauchzehen",
+   "2 EL Rapsöl",
+   "100 g Feta"
+  ],
+  "steps": [
+   "Zwiebeln in Halbringe schneiden, Möhren mit dem Sparschäler in dünne Streifen hobeln, Tofu würfeln.",
+   "Eier mit Salz, Pfeffer, gehackter Petersilie und gepresstem Knoblauch verquirlen.",
+   "Zwiebeln und Tofu im Öl anbraten, Möhren zugeben und braten, bis sie leicht Farbe nehmen.",
+   "Eier darübergießen, unter gelegentlichem Schieben stocken lassen und mit Feta bestreut servieren."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/low-carb/rdp-low-carb-moehren-ruehrei-mit-raeuchertofu",
+  "note": "nach Aldi Süd; keine Nährwerte auf der Seite, geschätzt",
+  "img": null
+ },
+ {
+  "name": "Veggie-Bowl mit Crispy-Tofu, Ofengemüse & Kichererbsen",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 769,
+  "protein": 32,
+  "carbs": 95,
+  "fat": 27,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "175 g Tofu natur",
+   "2 EL Speisestärke",
+   "1 EL Paprikapulver scharf",
+   "Salz, Pfeffer",
+   "1 Zucchini",
+   "1 Brokkoli (ca. 150 g)",
+   "2 Möhren",
+   "1 Dose Kichererbsen (240 g abgetropft)",
+   "2 EL Olivenöl",
+   "1 Knoblauchzehe",
+   "1 Prise Cayennepfeffer",
+   "120 g Basmatireis",
+   "1 EL Erdnussmus",
+   "1 EL Honig",
+   "1/2 Zitrone"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Zucchini und Möhren in Scheiben schneiden, Brokkoli in Röschen teilen.",
+   "Gemüse und abgetropfte Kichererbsen mit Öl, Knoblauch, Cayenne, Salz und Pfeffer auf einem Blech 20–25 Min. rösten.",
+   "Reis garen. Tofu würfeln, mit Stärke und Gewürzen mischen und in wenig Öl knusprig braten.",
+   "Erdnussmus mit Honig, Zitronensaft und etwas warmem Wasser zu einer Soße rühren und über die Bowls geben."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/ausgewogene-ernaehrung/rdp-veggie-bowl-mit-crispy-tofu",
+  "note": "nach Aldi Süd; Reismenge auf 120 g festgelegt, Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Kichererbsen-Pasta mit Linsennudeln & Hartkäse",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 576,
+  "protein": 29,
+  "carbs": 74,
+  "fat": 15,
+  "estimated": true,
+  "timeMin": 20,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "3 Knoblauchzehen",
+   "360 g Kichererbsen (Dose, abgetropft)",
+   "3 EL Olivenöl",
+   "Salz, Pfeffer",
+   "1,5 TL Paprikapulver edelsüß",
+   "200 g Bandnudeln (Hartweizen)",
+   "200 g Linsennudeln",
+   "50 g Hartkäse (vegetarisch, mikrobielles Lab), gerieben",
+   "1–2 Zweige Basilikum"
+  ],
+  "steps": [
+   "Knoblauch fein hacken, Kichererbsen abspülen und gut abtropfen lassen.",
+   "Knoblauch im Öl sanft anbraten, Kichererbsen und Paprikapulver zugeben und ca. 5 Min. braten, bis sie leicht knusprig sind.",
+   "Beide Nudelsorten nach Packungsangabe kochen, etwas Kochwasser auffangen.",
+   "Nudeln mit den Kichererbsen mischen, Hartkäse und etwas Nudelwasser unterrühren, bis eine cremige Soße entsteht; mit Basilikum servieren."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/menueart/mittagessen/rdp-kichererbsen-pasta",
+  "note": "nach Aldi Süd; Hälfte der Nudeln durch Linsennudeln ersetzt (Protein), Grana durch veg. Hartkäse; Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Dinkel-Wraps mit Hüttenkäse-Avocado-Creme",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 682,
+  "protein": 32,
+  "carbs": 68,
+  "fat": 30,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 20,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "1 Tag Kühlschrank (Creme separat)",
+  "ingredients": [
+   "160 g Dinkelmehl Type 630",
+   "75 ml Wasser",
+   "2 EL Olivenöl",
+   "Salz",
+   "50 g Rucola",
+   "150 g Cherrytomaten",
+   "1 Paprika grün",
+   "1 Avocado",
+   "1/2 Zitrone",
+   "300 g Hüttenkäse",
+   "Pfeffer"
+  ],
+  "steps": [
+   "Mehl, 1/2 TL Salz, Wasser und Öl zu einem glatten Teig kneten, in 4 Kugeln teilen und abgedeckt ruhen lassen.",
+   "Rucola waschen, Tomaten halbieren, Paprika in Streifen schneiden.",
+   "Avocado zerdrücken, mit Zitronensaft und Hüttenkäse verrühren, salzen und pfeffern.",
+   "Teigkugeln dünn ausrollen und in einer trockenen Pfanne je Seite ca. 1 Min. backen.",
+   "Wraps mit Creme bestreichen, mit Gemüse belegen und aufrollen (2 Wraps pro Portion)."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/spezielles/wraps/rdp-dinkel-wraps-mit-huettenkaese",
+  "note": "nach Aldi Süd; auf 2 Portionen à 2 Wraps umgerechnet, Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Tofu-Shawarma mit Ofen-Blumenkohl & Skyr-Soße",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 694,
+  "protein": 37,
+  "carbs": 74,
+  "fat": 25,
+  "estimated": false,
+  "timeMin": 60,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank (Fladen separat)",
+  "ingredients": [
+   "160 g Weizenmehl",
+   "1/3 TL Salz",
+   "3 EL Olivenöl",
+   "100 ml Wasser",
+   "1/2 Zitrone (Bio)",
+   "200 g Tofu natur",
+   "1 TL Sesam",
+   "1 TL Currypulver",
+   "1 TL Kreuzkümmel",
+   "1/2 Blumenkohl",
+   "125 g Cherrytomaten",
+   "1/2 Salatgurke",
+   "2 Frühlingszwiebeln",
+   "1 Römersalatherz",
+   "150 g Skyr natur",
+   "Pfeffer"
+  ],
+  "steps": [
+   "Mehl, Salz, 1 EL Öl und Wasser zu einem glatten Teig kneten und abgedeckt ca. 45 Min. kühl ruhen lassen.",
+   "Ofen auf 200 °C vorheizen. Tofu würfeln und mit 1 EL Öl, Sesam, Curry, Kreuzkümmel und etwas Zitronenabrieb marinieren.",
+   "Blumenkohl in kleine Röschen teilen, mit Tofu und restlichem Öl auf einem Blech ca. 20 Min. rösten.",
+   "Skyr mit Zitronensaft, Salz und Pfeffer verrühren; Tomaten, Gurke, Frühlingszwiebeln und Salat schneiden.",
+   "Teig in 4 Stücke teilen, dünn ausrollen und in einer trockenen Pfanne kurz backen; mit Tofu, Blumenkohl, Gemüse und Soße füllen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.tofu-shawarma-blumenkohl.r_id=Recipe_7101003.html",
+  "note": "nach Kaufland; Sojagurt durch Skyr ersetzt (mehr Protein)",
+  "img": null
+ },
+ {
+  "name": "Süßkartoffel-Curry-Omelett mit Kichererbsen",
+  "category": "fruehstueck",
+  "servings": 3,
+  "kcal": 605,
+  "protein": 30,
+  "carbs": 60,
+  "fat": 23,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 Paprika gelb",
+   "Salz",
+   "8 Eier (M)",
+   "1 TL Kurkuma",
+   "1 EL Sonnenblumenöl",
+   "240 g Kichererbsen (Dose, abgetropft)",
+   "500 g Süßkartoffeln",
+   "2 TL Currypulver",
+   "2 Zwiebeln",
+   "250 g Cherrytomaten",
+   "50 g Mungobohnensprossen"
+  ],
+  "steps": [
+   "Süßkartoffeln in ca. 1-cm-Würfel, Zwiebeln in Streifen, Paprika in Würfel schneiden; Tomaten halbieren, Kichererbsen abtropfen.",
+   "Süßkartoffeln und Zwiebeln im Öl ca. 3 Min. anbraten, dann zugedeckt einige Minuten weich garen.",
+   "Kichererbsen, Paprika, Tomaten und Sprossen zugeben und 2 Min. mitbraten.",
+   "Eier mit Curry, Kurkuma und Salz verquirlen, über das Gemüse gießen und bei kleiner Hitze zugedeckt stocken lassen. In Stücke teilen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.suesskartoffel-curry-omelett.r_id=Recipe_3323176.html",
+  "note": "nach Kaufland",
+  "img": null
+ },
+ {
+  "name": "Gemüse-Reisrösti mit Kräuterquark & Radieschensalat",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 397,
+  "protein": 29,
+  "carbs": 39,
+  "fat": 11,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "500 g Magerquark",
+   "500 ml Buttermilch",
+   "4 EL gehackte Kräuter (z. B. Schnittlauch, Petersilie)",
+   "Salz, Pfeffer",
+   "100 g gemischter Salat",
+   "100 g Sprossen",
+   "5 EL Zitronensaft",
+   "1 Prise Zucker",
+   "1 Bund Radieschen",
+   "2 Eier (M)",
+   "1 Kohlrabi",
+   "3 EL Rapsöl",
+   "100 g Langkorn- und Wildreis",
+   "2 EL Weizenmehl",
+   "1 Möhre"
+  ],
+  "steps": [
+   "Quark mit 100 ml Buttermilch und den Kräutern glatt rühren und würzen. Reis nach Packungsangabe garen und etwas abkühlen lassen.",
+   "Salat, Sprossen und Radieschenscheiben anrichten; restliche Buttermilch mit Zitronensaft, Salz, Pfeffer und Zucker zu einem Dressing verrühren.",
+   "Kohlrabi und Möhre schälen und grob raspeln, mit Reis, Eiern und Mehl vermengen und würzen.",
+   "Aus der Masse im heißen Öl portionsweise flache Rösti braten (je Seite ca. 3–4 Min.) und mit Kräuterquark und Salat servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.gemuese-reisroesti-kraeuterquark.r_id=DE_1299.html",
+  "note": "nach Kaufland; Distelöl durch Rapsöl ersetzt",
+  "img": null
+ },
+ {
+  "name": "Wraps mit gerösteten weißen Bohnen, Avocado & Rotkohl",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 610,
+  "protein": 27,
+  "carbs": 50,
+  "fat": 32,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Avocado frisch)",
+  "ingredients": [
+   "2 Frühlingszwiebeln",
+   "1 Avocado",
+   "1 Limette",
+   "2 Weizen-Tortillas (Wraps)",
+   "1 TL grobes Meersalz",
+   "2 EL Olivenöl",
+   "1 rote Chili",
+   "2 TL Kreuzkümmel",
+   "400 g weiße Bohnen (Dose, abgetropft, z. B. Riesenbohnen)",
+   "200 g Rotkohl",
+   "1 Knoblauchzehe",
+   "6 EL Weißweinessig",
+   "2 EL Wasser",
+   "1 TL Agavendicksaft",
+   "Salz"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen. Bohnen gut abtropfen, mit Öl, gehackter Chili, Kreuzkümmel und Meersalz mischen und ca. 20 Min. rösten (nach 10 Min. wenden).",
+   "Rotkohl in feine Streifen schneiden und mit Knoblauch, Essig, Wasser und Agavendicksaft ca. 10 Min. köcheln, salzen.",
+   "Avocado mit Limettensaft und Salz zerdrücken, Frühlingszwiebeln in Ringe schneiden.",
+   "Wraps kurz erwärmen, mit Avocado bestreichen, Bohnen, Rotkohl und Frühlingszwiebeln darauf verteilen und fest einrollen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.geroestete-bohnen-wraps.r_id=Recipe_10189185.html",
+  "note": "nach Kaufland",
+  "img": null
+ },
+ {
+  "name": "Linsen-Brokkoli-Salat mit Feta & Aprikosen",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 493,
+  "protein": 25,
+  "carbs": 39,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Feldsalat separat)",
+  "ingredients": [
+   "Salz, Pfeffer",
+   "5 EL heller Balsamico",
+   "30 g getrocknete Aprikosen",
+   "100 g Feldsalat",
+   "200 g Beluga- oder Berglinsen (trocken)",
+   "1 Prise Nelke, Zimt und Currypulver",
+   "200 g Feta",
+   "5 EL Olivenöl",
+   "1 TL Honig",
+   "1 TL Senf",
+   "2 TL Schnittlauch",
+   "500 g Brokkoli"
+  ],
+  "steps": [
+   "Linsen in Wasser 20–25 Min. bissfest garen und abtropfen lassen; Brokkoli in Röschen 3–5 Min. in Salzwasser garen.",
+   "Aprikosen fein würfeln und mit Öl, Balsamico, Senf, Honig und den Gewürzen zu einem Dressing verrühren.",
+   "Linsen und Brokkoli mit dem Dressing mischen und mind. 30 Min. durchziehen lassen (ideal über Nacht).",
+   "Mit Feldsalat, gewürfeltem Feta und Schnittlauch servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-brokkoli-salat.r_id=DE_4675.html",
+  "note": "nach Kaufland",
+  "img": null
+ },
+ {
+  "name": "Soba-Bowl mit Räuchertofu, Spargel & Paprika",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 590,
+  "protein": 27,
+  "carbs": 67,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "2 TL Limettensaft",
+   "1 Paprika rot",
+   "1 Knoblauchzehe",
+   "1 Bund grüner Spargel (oder 250 g Zuckerschoten)",
+   "2 EL Sesam",
+   "1 EL Ahornsirup",
+   "4 EL Sojasauce",
+   "3 Frühlingszwiebeln",
+   "2 EL Sesamöl",
+   "200 g Räuchertofu",
+   "1 TL geriebener Ingwer",
+   "180 g Soba-Nudeln"
+  ],
+  "steps": [
+   "Tofu trocken tupfen, in Scheiben schneiden und in 1 EL Sesamöl je Seite ca. 4 Min. braten, mit 1 EL Sojasauce ablöschen und herausnehmen.",
+   "Soba nach Packungsangabe kochen und kalt abspülen. Spargel in Stücke, Paprika in Streifen schneiden.",
+   "Gemüse im restlichen Öl einige Minuten bissfest braten.",
+   "Restliche Sojasauce mit Ahornsirup, Limettensaft, Ingwer und Knoblauch verrühren, mit Nudeln und Gemüse mischen und mit Tofu, Frühlingszwiebeln und Sesam anrichten."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.tofu-bowl-soba.r_id=Recipe_50734485.html",
+  "note": "nach Kaufland; Sesamöl halbiert",
+  "img": null
+ },
+ {
+  "name": "Linsen-Haferflocken-Bratlinge mit Quark-Joghurt-Dip",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 436,
+  "protein": 29,
+  "carbs": 41,
+  "fat": 18,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "Salz, Pfeffer",
+   "2 Möhren",
+   "1 EL Crème fraîche",
+   "150 g Naturjoghurt",
+   "40 g Weizenmehl",
+   "80 g zarte Haferflocken",
+   "2 kleine Zwiebeln",
+   "4 EL Olivenöl",
+   "1 Ei (M)",
+   "300 ml Gemüsebrühe",
+   "500 g Magerquark",
+   "1 Lorbeerblatt",
+   "4 EL Schnittlauchröllchen",
+   "100 g rote Linsen (trocken)",
+   "2 EL gehackte Petersilie"
+  ],
+  "steps": [
+   "Linsen mit Lorbeer in der Brühe ca. 10 Min. garen und gut abtropfen lassen.",
+   "Möhren und Zwiebeln fein reiben, mit Linsen, Haferflocken, Ei, Mehl, Crème fraîche und 2 EL Schnittlauch vermengen und würzen.",
+   "Mit feuchten Händen kleine Bratlinge formen und portionsweise im Öl von beiden Seiten goldbraun braten.",
+   "Quark und Joghurt mit restlichem Schnittlauch, Petersilie, Salz und Pfeffer verrühren und dazu reichen – auch kalt ein guter Snack."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-haferflocken-bratlinge.r_id=DE_4632.html",
+  "note": "nach Kaufland; Quark im Dip von 250 g auf 500 g Magerquark erhöht",
+  "img": null
+ },
+ {
+  "name": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 828,
+  "protein": 44,
+  "carbs": 90,
+  "fat": 32,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "200 g Tofu natur (fest)",
+   "350 g Brokkoli",
+   "170 g Bandnudeln",
+   "1 Zwiebel",
+   "1 Stück Ingwer (ca. 2 cm)",
+   "65 g Cashewkerne",
+   "4 EL Sojasauce",
+   "8 EL Wasser",
+   "1,5 EL Speisestärke",
+   "1 EL Sesamöl (zum Braten)",
+   "Salz, Pfeffer",
+   "1 TL Honig",
+   "Wokgewürz nach Belieben"
+  ],
+  "steps": [
+   "Nudeln al dente kochen; Cashews ohne Fett rösten und beiseitestellen.",
+   "Tofu trocken tupfen, würfeln, salzen und pfeffern und in einem Beutel mit der Stärke schütteln; überschüssige Stärke absieben.",
+   "Tofu im Öl rundum knusprig braten und herausnehmen; Zwiebel, Ingwer und Brokkoliröschen in der Pfanne einige Minuten bissfest braten.",
+   "Sojasauce, Wasser, Honig und die restliche Stärke verrühren, zugießen und kurz andicken lassen.",
+   "Nudeln, Tofu und Cashews unterschwenken und mit Wokgewürz abschmecken."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2231421357481765/Tofu-Brokkoli-Pfanne-mit-Cashewkernen.html",
+  "note": "nach Chefkoch (4,5 Sterne, 133 Bewertungen)",
+  "img": null
+ },
+ {
+  "name": "Avocado-Hüttenkäse-Salat mit Ei & Rucola",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 638,
+  "protein": 40,
+  "carbs": 33,
+  "fat": 37,
+  "estimated": false,
+  "timeMin": 15,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "1 Tag Kühlschrank (Avocado erst frisch schneiden)",
+  "ingredients": [
+   "2 Avocados",
+   "400 g Hüttenkäse",
+   "1 Zwiebel",
+   "1 TL Currypulver",
+   "Kräutersalz, Pfeffer",
+   "10 Cherrytomaten",
+   "2 Eier (M, hart gekocht)",
+   "1 Bund Rucola"
+  ],
+  "steps": [
+   "Eier hart kochen, abschrecken und würfeln; Zwiebel sehr fein hacken.",
+   "Hüttenkäse mit Zwiebel, Curry, Kräutersalz und Pfeffer kräftig abschmecken und die Eier unterheben.",
+   "Avocados würfeln, Tomaten halbieren, Rucola waschen.",
+   "Rucola mit Tomaten und Avocado anrichten und die Hüttenkäse-Mischung daraufgeben."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/370901122823962/Avocado-Huettenkaese-Salat.html",
+  "note": "nach Chefkoch (4,3 Sterne, 111 Bewertungen)",
+  "img": null
+ },
+ {
+  "name": "Gefüllte Paprika mit Kräuter-Hüttenkäse",
+  "category": "snack",
+  "servings": 1,
+  "kcal": 300,
+  "protein": 31,
+  "carbs": 12,
+  "fat": 14,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 10,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "1 Paprika rot",
+   "200 g Hüttenkäse",
+   "2 TL Tomatenmark",
+   "3 EL gehackte Kräuter (z. B. Petersilie, Schnittlauch)",
+   "Salz, Pfeffer",
+   "2 EL geriebener Käse (Gouda)"
+  ],
+  "steps": [
+   "Ofen auf 200 °C Ober-/Unterhitze vorheizen. Paprika waschen, Deckel abschneiden und entkernen.",
+   "Hüttenkäse mit Tomatenmark, Kräutern, Salz und Pfeffer verrühren und in die Paprika füllen.",
+   "Mit Käse bestreuen und ca. 20 Min. überbacken, bis die Paprikahaut leicht bräunt."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1786451288801668/Gefuellte-Paprika-mit-Huettenkaese.html",
+  "note": "nach Chefkoch (4,35 Sterne, 173 Bewertungen)",
+  "img": null
+ },
+ {
+  "name": "Gemüse-Frittata mit Hüttenkäse & Tomaten",
+  "category": "fruehstueck",
+  "servings": 2,
+  "kcal": 473,
+  "protein": 31,
+  "carbs": 22,
+  "fat": 28,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (kalt essbar)",
+  "ingredients": [
+   "1 große Zucchini",
+   "2 kleine Zwiebeln",
+   "1 Paprika rot",
+   "1 große Möhre",
+   "4 Eier (M)",
+   "50 ml Milch 1,5 %",
+   "200 g Hüttenkäse",
+   "2 große Tomaten",
+   "Salz, Pfeffer",
+   "2 EL Olivenöl",
+   "Petersilie, Kräuter der Provence"
+  ],
+  "steps": [
+   "Möhre raspeln, Zwiebeln würfeln und in 2 EL Öl glasig anbraten; Paprikawürfel und Zucchinischeiben zugeben und zugedeckt kurz garen.",
+   "Eier mit Milch, Salz, Pfeffer und Kräutern verquirlen und über das Gemüse gießen.",
+   "Hüttenkäse in Klecksen und Tomatenscheiben darauf verteilen.",
+   "Zugedeckt bei kleiner Hitze ca. 20 Min. stocken lassen, mit Petersilie bestreuen und in Stücke schneiden."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3122161465385844/Zucchini-Paprika-Moehren-Frittata-mit-Huettenkaese-und-Tomaten.html",
+  "note": "nach Chefkoch (4,6 Sterne, 94 Bewertungen)",
+  "img": null
+ },
+ {
+  "name": "Tofu-Gemüse-Pfanne mit Kokosmilch & Reis",
+  "category": "mittag",
+  "servings": 3,
+  "kcal": 494,
+  "protein": 32,
+  "carbs": 68,
+  "fat": 11,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 30,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Tofu natur",
+   "1 Stange Lauch",
+   "1 Paprika gelb",
+   "5 mittelgroße Möhren",
+   "1 Zwiebel",
+   "400 ml Kokosmilch light",
+   "1 EL Currypulver",
+   "1 TL Gemüsebrühe (Pulver)",
+   "8 EL Sojasauce",
+   "1 Prise Chiliflocken",
+   "3 EL Olivenöl",
+   "180 g Basmatireis"
+  ],
+  "steps": [
+   "Tofu würfeln und mit Curry, Sojasauce und ca. 100 ml Kokosmilch ca. 30 Min. marinieren; Reis kochen.",
+   "Lauch in Ringe, Möhren in feine Streifen, Paprika in Würfel schneiden, Zwiebel hacken.",
+   "Tofu abtropfen lassen und im Öl anbraten, Gemüse zugeben und einige Minuten mitbraten.",
+   "Marinade, restliche Kokosmilch, Brühe und Chili zugeben und ca. 10 Min. sämig köcheln; mit Reis servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/1893301308285830/Tofu-Gemuese-Pfanne-mit-Kokosmilch.html",
+  "note": "nach Chefkoch (4,6 Sterne, 301 Bewertungen); Kokosmilch light, Reismenge festgelegt",
+  "img": null
+ },
+ {
+  "name": "Quark-Pizza ohne Hefe mit Mozzarella & Gemüse",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 621,
+  "protein": 43,
+  "carbs": 85,
+  "fat": 10,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "200 g Weizenmehl (oder Dinkelmehl)",
+   "300 g Magerquark",
+   "1 TL Backpulver",
+   "1 TL Salz",
+   "150 g passierte Tomaten",
+   "1 TL Oregano",
+   "125 g Mozzarella light",
+   "1 Paprika rot",
+   "100 g Champignons",
+   "1 TL Olivenöl"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Mehl, Quark, Backpulver und Salz zu einem glatten Teig kneten.",
+   "Teig auf Backpapier rund oder rechteckig dünn ausrollen.",
+   "Passierte Tomaten mit Oregano und Salz würzen und aufstreichen; mit Mozzarella, Paprikastreifen und Pilzscheiben belegen, mit Öl beträufeln.",
+   "Ca. 15–20 Min. backen, bis der Rand goldbraun ist."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3573581536503630/Pizzateig-mit-Quark-ohne-Oel-und-ohne-Hefe.html",
+  "note": "nach Chefkoch (4,7 Sterne, 113 Bewertungen); Teig verdoppelt und konkreter Belag ergänzt, Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Hüttenkäse-Laibchen mit Kernen & Kräutern",
+  "category": "snack",
+  "servings": 6,
+  "kcal": 313,
+  "protein": 20,
+  "carbs": 19,
+  "fat": 18,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Hüttenkäse",
+   "120 g Paniermehl",
+   "100 g Kürbiskerne oder Sonnenblumenkerne (gehackt)",
+   "1 große Zwiebel",
+   "3 Knoblauchzehen",
+   "3 Eier (M)",
+   "1 EL gehackter Salbei oder Thymian",
+   "Salz, Pfeffer",
+   "2 EL Rapsöl (zum Braten)"
+  ],
+  "steps": [
+   "Kerne grob hacken, Zwiebel und Kräuter fein schneiden, Knoblauch pressen.",
+   "Alles mit Hüttenkäse, Paniermehl und Eiern zu einer formbaren Masse mischen und würzen (zu weich: etwas mehr Brösel).",
+   "Ca. 12 kleine Laibchen formen und im heißen Öl beidseitig knusprig braten.",
+   "Warm mit Salat oder kalt als Snack (2 Stück pro Portion) essen."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/452611137753390/Huettenkaeselaibchen.html",
+  "note": "nach Chefkoch (4,8 Sterne, 24 Bewertungen); \"Becher\"-Angaben in Gramm umgerechnet, auf 6 Snack-Portionen ausgelegt, Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Penne-Spinat-Auflauf mit Feta & Ei",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 821,
+  "protein": 38,
+  "carbs": 107,
+  "fat": 29,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "900 g TK-Rahmspinat",
+   "500 g Penne",
+   "Salz, Pfeffer",
+   "1 EL Rapsöl",
+   "2 rote Spitzpaprika",
+   "200 g Feta",
+   "4 Eier (M)",
+   "2 Knoblauchzehen"
+  ],
+  "steps": [
+   "Spinat auftauen. Penne knapp al dente kochen, Ofen auf 200 °C vorheizen und eine Form fetten.",
+   "Paprika in Ringe schneiden, Feta würfeln, Knoblauch pressen.",
+   "Eier verquirlen und mit Spinat, Knoblauch, Salz und Pfeffer verrühren, Nudeln und Paprika untermischen.",
+   "In die Form geben, Feta darauf verteilen und ca. 15 Min. überbacken."
+  ],
+  "source": "https://www.rewe.de/rezepte/penne-spinat-auflauf/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Rosenkohl-Kartoffel-Auflauf mit Hartkäse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 519,
+  "protein": 28,
+  "carbs": 45,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "800 g Kartoffeln",
+   "500 g Rosenkohl",
+   "150 g Hartkäse (vegetarisch, mikrobielles Lab), gerieben",
+   "Salz, Pfeffer, Muskat",
+   "2 Eier (M)",
+   "300 ml Kochsahne 15 %",
+   "1 Knoblauchzehe",
+   "15 g Schnittlauch"
+  ],
+  "steps": [
+   "Kartoffeln schälen, in Spalten schneiden und ca. 10 Min. vorkochen (noch fest); Rosenkohl putzen, halbieren und 5 Min. blanchieren.",
+   "Ofen auf 200 °C vorheizen. Eier mit Kochsahne, gepresstem Knoblauch, der Hälfte des Käses, Salz, Pfeffer und Muskat verquirlen.",
+   "Kartoffeln und Rosenkohl in eine Form geben, Guss darübergießen und mit restlichem Käse bestreuen.",
+   "Ca. 20–25 Min. goldbraun backen und mit Schnittlauch servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/rosenkohl-kartoffel-auflauf/",
+  "note": "nach REWE; Bergkäse durch veg. Hartkäse, Kochsahne 15 % statt Sahne",
+  "img": null
+ },
+ {
+  "name": "Pikante Berglinsen-Gemüse-Pfanne mit Kräuterquark",
+  "category": "mittag",
+  "servings": 6,
+  "kcal": 410,
+  "protein": 27,
+  "carbs": 61,
+  "fat": 9,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "500 g Berglinsen (trocken)",
+   "1 Lorbeerblatt",
+   "3 Möhren",
+   "1 Zwiebel",
+   "1 Stange Staudensellerie",
+   "2 EL Olivenöl",
+   "Salz, Pfeffer, Chilipulver",
+   "1/2 Bund Schnittlauch",
+   "1/2 Bund Petersilie",
+   "150 g Naturjoghurt",
+   "250 g Magerquark",
+   "1 EL Zitronensaft",
+   "1 TL Zucker"
+  ],
+  "steps": [
+   "Linsen mit Lorbeer nach Packungsangabe bissfest garen und abgießen.",
+   "Möhren, Zwiebel und Sellerie klein würfeln und im Öl ca. 5 Min. anbraten.",
+   "Linsen unterheben und kräftig mit Salz, Pfeffer und Chili würzen.",
+   "Kräuter hacken, mit Quark, Joghurt, Zitronensaft und Zucker verrühren und zur Linsenpfanne servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/pikante-berglinsen-pfanne/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Linsen-Pilz-Bowl mit Naturreis, Avocado & Skyr",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 608,
+  "protein": 33,
+  "carbs": 86,
+  "fat": 20,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank (Avocado frisch)",
+  "ingredients": [
+   "150 g Naturreis",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "250 g Champignons",
+   "2 EL Rapsöl",
+   "300 g rote Linsen (trocken)",
+   "1 TL Garam Masala",
+   "1 TL Currypulver",
+   "500 ml Gemüsebrühe",
+   "400 g gehackte Tomaten (Dose)",
+   "Salz, Pfeffer",
+   "2 Avocados",
+   "1 Zitrone",
+   "10 g Schnittlauch",
+   "250 g Skyr natur"
+  ],
+  "steps": [
+   "Reis nach Packungsangabe garen. Zwiebel und Knoblauch hacken, Pilze vierteln.",
+   "Die Hälfte von Zwiebel/Knoblauch im Öl anschwitzen, Linsen und Gewürze kurz mitrösten, mit Brühe und Tomaten ablöschen und ca. 12 Min. köcheln.",
+   "Pilze mit dem Rest Zwiebel/Knoblauch im restlichen Öl kräftig anbraten.",
+   "Skyr mit Zitronensaft, Salz und Schnittlauch verrühren; Reis, Linsen, Pilze und Avocadowürfel in Schalen anrichten und mit Skyr toppen."
+  ],
+  "source": "https://www.rewe.de/rezepte/vegane-linsen-bowl/",
+  "note": "nach REWE; Sojajoghurt durch Skyr ersetzt (mehr Protein)",
+  "img": null
+ },
+ {
+  "name": "Thai-Curry mit Tofu, Kürbis & grünen Bohnen",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 613,
+  "protein": 28,
+  "carbs": 82,
+  "fat": 23,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "200 g TK-grüne Bohnen",
+   "300 g Hokkaido (frisch oder TK)",
+   "1 Paprika rot",
+   "250 g Champignons",
+   "1 Stange Lauch",
+   "2 Knoblauchzehen",
+   "30 g Ingwer",
+   "300 g Tofu natur",
+   "250 g Basmatireis",
+   "Salz",
+   "2 EL Rapsöl",
+   "1 EL brauner Zucker",
+   "2 EL Sojasauce",
+   "2 EL rote Currypaste",
+   "400 ml Kokosmilch light",
+   "1 Limette",
+   "15 g Koriander",
+   "2 EL geröstete Erdnüsse"
+  ],
+  "steps": [
+   "Gemüse in mundgerechte Stücke schneiden, Knoblauch und Ingwer fein hacken, Tofu würfeln; Reis garen.",
+   "Tofu im Öl goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen.",
+   "Knoblauch, Ingwer und Currypaste anrösten, Kürbis, Bohnen, Lauch, Paprika und Pilze zugeben und kurz mitbraten.",
+   "Mit Kokosmilch und etwas Wasser ablöschen und ca. 10 Min. köcheln, Tofu zurückgeben und mit Limettensaft abschmecken.",
+   "Mit Reis, Koriander und gehackten Erdnüssen servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/thai-curry/",
+  "note": "nach REWE; Kokosmilch light statt normal, Rapsöl statt Kokosöl",
+  "img": null
+ },
+ {
+  "name": "Pilzragout mit Räuchertofu, Paprika & Wildreis",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 529,
+  "protein": 26,
+  "carbs": 93,
+  "fat": 10,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "4 Paprika rot",
+   "300 g Vollkorn-Wildreis-Mischung",
+   "Salz",
+   "250 g braune Champignons",
+   "250 g Shiitake (oder mehr Champignons)",
+   "185 g Räuchertofu",
+   "1 Zwiebel",
+   "1 Knoblauchzehe",
+   "1 Bund Petersilie",
+   "4 Frühlingszwiebeln",
+   "2 EL Rapsöl",
+   "100 ml Gemüsebrühe",
+   "150 ml Hafer-Cuisine (oder Kochsahne)",
+   "1 Msp. Cayennepfeffer",
+   "1 EL Zitronensaft",
+   "1 Prise Zucker"
+  ],
+  "steps": [
+   "Paprika im Ofen bei 180 °C ca. 25 Min. rösten, bis die Haut Blasen wirft; abgedeckt abkühlen lassen, häuten und in Streifen schneiden. Reis garen.",
+   "Pilze in Scheiben, Tofu in Würfel schneiden; Zwiebel, Knoblauch und Frühlingszwiebeln hacken.",
+   "Tofu im Öl knusprig braten, Pilze, Zwiebel und Knoblauch zugeben und kräftig anbraten.",
+   "Mit Brühe und Cuisine ablöschen, Paprika zugeben, kurz einköcheln und mit Cayenne, Zitronensaft, Zucker und Salz abschmecken; mit Petersilie und Reis servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/veganes-pilzragout-raeuchertofu-wildreis/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Smashed Potatoes mit Zitronen-Kräuterquark",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 658,
+  "protein": 28,
+  "carbs": 93,
+  "fat": 18,
+  "estimated": false,
+  "timeMin": 55,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank (Quark)",
+  "ingredients": [
+   "1 kg Drillinge (kleine Kartoffeln)",
+   "Salz",
+   "2 EL Olivenöl",
+   "1 TL schwarzer Pfeffer",
+   "250 g Magerquark",
+   "50 g Kochsahne 15 %",
+   "1 Zitrone (Bio)",
+   "1/2 Bund Schnittlauch",
+   "3 Zweige Minze",
+   "1 Knoblauchzehe",
+   "Chiliflocken"
+  ],
+  "steps": [
+   "Kartoffeln ca. 20 Min. in Salzwasser kochen; Ofen auf 220 °C vorheizen.",
+   "Kartoffeln aufs Blech legen, mit einem Glas- oder Topfboden flach drücken, mit Öl bepinseln, salzen, pfeffern und ca. 30 Min. knusprig backen.",
+   "Quark mit Sahne, Zitronenabrieb und -saft, gehackten Kräutern, Knoblauch und Salz glatt rühren.",
+   "Kartoffeln mit Quarkcreme und Chiliflocken servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/smashed-potatoes-frische-quarkcreme/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Gefüllte Spitzpaprika mit Feta-Hüttenkäse-Creme",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 523,
+  "protein": 36,
+  "carbs": 23,
+  "fat": 32,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "500 g rote Spitzpaprika",
+   "100 g Feta",
+   "300 g Hüttenkäse",
+   "100 g getrocknete Tomaten",
+   "1 Knoblauchzehe",
+   "Salz, Pfeffer",
+   "1 EL Olivenöl"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Paprika längs aufschneiden und entkernen.",
+   "Feta zerbröseln und mit Hüttenkäse, gewürfelten getrockneten Tomaten und gepresstem Knoblauch mischen, würzen.",
+   "Paprika füllen, in eine geölte Form legen und ca. 20 Min. backen (dazu passt Brot oder Reis)."
+  ],
+  "source": "https://www.rewe.de/rezepte/vegetarische-gefuellte-spitzpaprika/",
+  "note": "nach REWE; Frischkäse durch Hüttenkäse ersetzt und weniger Öl (deutlich weniger Fett, mehr Protein)",
+  "img": null
+ },
+ {
+  "name": "Vegetarischer falscher Hase mit Erbsen-Möhren-Gemüse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 622,
+  "protein": 25,
+  "carbs": 65,
+  "fat": 32,
+  "estimated": false,
+  "timeMin": 50,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "100 g rote Linsen (trocken)",
+   "200 ml Gemüsebrühe",
+   "5 Eier (M)",
+   "200 g Kartoffeln (mehligkochend)",
+   "2 Zwiebeln",
+   "1 Knoblauchzehe",
+   "1 Bund Frühlingszwiebeln",
+   "100 g Möhre",
+   "100 g gemahlene Haselnüsse",
+   "1 EL Rapsöl",
+   "2 EL Weizenmehl",
+   "Salz, Pfeffer, Muskat",
+   "1 Bund Möhren",
+   "1 Zitrone",
+   "25 g Butter",
+   "1/2 EL Zucker",
+   "150 g TK-Erbsen"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen. Linsen 10–12 Min. in der Brühe garen (nicht zerfallen lassen) und abkühlen; 3 Eier hart kochen.",
+   "Kartoffeln reiben und ausdrücken, Zwiebeln, Knoblauch, Frühlingszwiebeln und Möhre fein schneiden und im Öl andünsten.",
+   "Linsen, Kartoffeln, Gemüse, Haselnüsse, Mehl und 2 rohe Eier verkneten und würzen; die Hälfte in eine Kastenform drücken, gekochte Eier darauflegen, mit der restlichen Masse bedecken.",
+   "Ca. 35 Min. backen. Möhren in Butter mit Zucker und etwas Wasser glasieren, Erbsen zugeben und mit Zitrone abschmecken; zum in Scheiben geschnittenen Braten servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/vegetarischer-falscher-hase-erbsen-moehren-gemuese/",
+  "note": "nach REWE",
+  "img": null
+ },
+ {
+  "name": "Curry-Tomatensuppe mit roten Linsen & Hirtenkäse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 560,
+  "protein": 26,
+  "carbs": 52,
+  "fat": 27,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank (Suppe)",
+  "ingredients": [
+   "2 Zwiebeln",
+   "3 EL Rapsöl",
+   "2 EL mildes Currypulver",
+   "100 g rote Linsen (trocken)",
+   "800 g passierte Tomaten",
+   "600 ml Gemüsebrühe",
+   "Salz, 1 TL Zucker",
+   "15 g Koriander oder Basilikum",
+   "300 g Feta / Hirtenkäse",
+   "1/2 Fladenbrot",
+   "2 Knoblauchzehen",
+   "Chiliflocken"
+  ],
+  "steps": [
+   "Zwiebeln würfeln und in 1 EL Öl glasig dünsten, Curry und Linsen kurz mitdünsten.",
+   "Passierte Tomaten und Brühe zugeben, würzen und zugedeckt 10–15 Min. köcheln, bis die Linsen weich sind.",
+   "Fladenbrot würfeln und mit Knoblauch, Chili und restlichem Öl in der Pfanne rösten.",
+   "Suppe mit zerbröseltem Hirtenkäse, Brotwürfeln und Kräutern servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/tomatensuppe-linsen/",
+  "note": "nach REWE; Fertig-Tomatensauce durch passierte Tomaten ersetzt, Öl halbiert – Nährwerte angepasst geschätzt",
+  "img": null
+ },
+ {
+  "name": "Halloumi-Carbonara mit Hartkäse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 678,
+  "protein": 33,
+  "carbs": 75,
+  "fat": 28,
+  "estimated": false,
+  "timeMin": 20,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "400 g Spaghetti",
+   "Salz",
+   "200 g Halloumi",
+   "2 EL Rapsöl",
+   "1/2 TL geräuchertes Paprikapulver",
+   "60 g Hartkäse (vegetarisch, mikrobielles Lab)",
+   "4 Eier (M)",
+   "Pfeffer",
+   "15 g Basilikum"
+  ],
+  "steps": [
+   "Spaghetti al dente kochen, 100 ml Nudelwasser auffangen.",
+   "Halloumi würfeln, im Öl rundum kross braten und mit Paprika würzen.",
+   "Eier mit 40 g geriebenem Hartkäse und viel Pfeffer verquirlen.",
+   "Pfanne vom Herd nehmen, Nudeln, Halloumi, Eimasse und etwas Nudelwasser zügig vermengen, bis eine cremige Soße entsteht (nicht stocken lassen); mit restlichem Käse und Basilikum servieren."
+  ],
+  "source": "https://www.rewe.de/rezepte/halloumi-carbonara/",
+  "note": "nach REWE; Pecorino durch vegetarischen Hartkäse ersetzt",
+  "img": null
+ },
+ {
+  "name": "Ofengemüse-Salat mit Halloumi & Kichererbsen",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 730,
+  "protein": 42,
+  "carbs": 56,
+  "fat": 41,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 Süßkartoffel",
+   "2 kleine Zucchini",
+   "1 Zwiebel",
+   "430 g Kichererbsen (2 Gläser, abgetropft)",
+   "4 EL Olivenöl",
+   "1 TL Thymian",
+   "1 TL Paprikapulver edelsüß",
+   "Salz, Pfeffer",
+   "400 g Halloumi",
+   "400 g Cherrytomaten",
+   "1 Paprika rot",
+   "1/2 Zitrone",
+   "1 TL Ahornsirup",
+   "1 TL Senf"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Süßkartoffel würfeln, Zucchini in Scheiben, Zwiebel in Spalten schneiden, Kichererbsen abtropfen.",
+   "Mit 2 EL Öl, Thymian, Paprika, Salz und Pfeffer auf einem Blech ca. 25 Min. rösten.",
+   "Halloumi in Scheiben schneiden und in einer Pfanne ohne Fett goldbraun braten; Tomaten und Paprika schneiden.",
+   "Restliches Öl mit Zitronensaft, Ahornsirup und Senf verrühren und alles zu einem lauwarmen Salat mischen."
+  ],
+  "source": "https://www.rewe.de/rezepte/ofengemuese-salat-halloumi/",
+  "note": "nach REWE; Öl von 7 auf 4 EL reduziert",
+  "img": null
+ },
+ {
+  "name": "Seitan-Gulasch mit Paprika & Kartoffeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 576,
+  "protein": 51,
+  "carbs": 62,
+  "fat": 14,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "2 Zwiebeln",
+   "Pfeffer, Salz",
+   "3 Paprika (rot, grün, gelb)",
+   "2 EL Tomatenmark",
+   "2 Lorbeerblätter",
+   "4 EL Rapsöl",
+   "1 TL Paprikapulver edelsüß",
+   "10 g Petersilie",
+   "1/2 TL Rosmarin und 1/2 TL Thymian getrocknet",
+   "800 g Kartoffeln (festkochend)",
+   "400 ml Gemüsebrühe",
+   "400 g gehackte Tomaten (Dose)",
+   "1 Knoblauchzehe",
+   "600 g Seitan (Kühlregal oder selbst gemacht)"
+  ],
+  "steps": [
+   "Kartoffeln schälen, vierteln und ca. 25 Min. in Salzwasser garen.",
+   "Zwiebeln grob würfeln, Knoblauch hacken, Paprika würfeln, Seitan in 2-cm-Stücke schneiden oder zupfen.",
+   "Seitan im Öl 3–4 Min. kräftig anbraten, Zwiebeln, Knoblauch und Paprika zugeben, Tomatenmark und Paprikapulver kurz mitrösten.",
+   "Mit Brühe und Tomaten ablöschen, Kräuter und Lorbeer zugeben und ca. 15 Min. schmoren; mit Kartoffeln und Petersilie servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/seitan-gulasch-mit-kartoffeln",
+  "note": "nach Lidl Kochen; Seitan fertig gekauft statt selbst gemacht",
+  "img": null
+ },
+ {
+  "name": "Kohlrabi-Lasagne mit Senfcreme",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 661,
+  "protein": 33,
+  "carbs": 82,
+  "fat": 24,
+  "estimated": false,
+  "timeMin": 60,
+  "activeMin": 20,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "15 g Basilikum",
+   "1 Zwiebel",
+   "1 Prise Zucker",
+   "Salz, Pfeffer",
+   "4 Kohlrabi",
+   "75 ml Milch 1,5 %",
+   "3 TL Senf",
+   "2 EL Rapsöl",
+   "100 ml trockener Weißwein (oder Brühe)",
+   "1 TL Kräuter der Provence",
+   "12 Lasagneplatten",
+   "800 g gehackte Tomaten (Dose)",
+   "150 g Frischkäse",
+   "1 Knoblauchzehe",
+   "200 g geriebener Gouda"
+  ],
+  "steps": [
+   "Ofen auf 200 °C (Umluft) vorheizen. Kohlrabi in dünne Scheiben hobeln und 3 Min. in Salzwasser blanchieren.",
+   "Zwiebel und Knoblauch im Öl andünsten, mit Wein ablöschen, Tomaten zugeben und mit Kräutern, Zucker, Salz und Pfeffer 10 Min. köcheln.",
+   "Frischkäse mit Milch und Senf glatt rühren.",
+   "Tomatensoße, Lasagneplatten, Kohlrabi und Senfcreme in eine Form schichten, mit Gouda abschließen und ca. 35 Min. backen; mit Basilikum servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/kohlrabilasagne-mit-senfcreme",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Rosmarinkartoffeln mit Weiße-Bohnen-Creme & Caprese",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 681,
+  "protein": 30,
+  "carbs": 76,
+  "fat": 30,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "1 TL heller Balsamico",
+   "10 g Basilikum",
+   "1 Prise Zucker",
+   "Pfeffer",
+   "425 g weiße Bohnen (Dose)",
+   "1 EL Butter",
+   "250 g Mozzarella",
+   "5 EL Olivenöl",
+   "10 g Rosmarin",
+   "1 TL Salz",
+   "400 g grüne Bohnen",
+   "1 kg Kartoffeln (festkochend)",
+   "250 g Cherrytomaten",
+   "25 g Pinienkerne",
+   "1 Limette",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Ofen auf 220 °C vorheizen. Kartoffeln vierteln, mit gehacktem Rosmarin, Salz und 2 EL Öl mischen und ca. 25 Min. backen.",
+   "Weiße Bohnen abspülen und mit Knoblauch, Limettensaft, 2 EL Öl, Pinienkernen und etwas Wasser cremig pürieren, würzen.",
+   "Grüne Bohnen 6–8 Min. garen und in Butter schwenken.",
+   "Tomaten und Mozzarella schneiden, mit Basilikum, Balsamico und restlichem Öl anmachen und alles zusammen servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/rosmarinkartoffeln-mit-weisser-bohnenpaste-und-caprese-salat",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Tofu-Burger mit Senf-Skyr-Soße",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 490,
+  "protein": 31,
+  "carbs": 52,
+  "fat": 18,
+  "estimated": false,
+  "timeMin": 25,
+  "activeMin": 25,
+  "difficulty": "leicht",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank (Tofu)",
+  "ingredients": [
+   "4 Vollkorn-Burgerbrötchen",
+   "1 Frühlingszwiebel",
+   "Pfeffer, Salz",
+   "1 Tomate",
+   "2 EL Weizenmehl",
+   "1 TL Honig",
+   "1 TL Senf",
+   "2 EL Rapsöl",
+   "1 Paprika gelb",
+   "600 g Tofu natur",
+   "150 g Skyr natur",
+   "1 Prise Rosenpaprika"
+  ],
+  "steps": [
+   "Tomate in Scheiben, Paprika in Streifen, Frühlingszwiebel in Ringe schneiden; Tofu in ca. 1 cm dicke Scheiben schneiden.",
+   "Mehl mit Salz, Pfeffer und Paprika mischen, Tofu darin wenden und im Öl je Seite ca. 4 Min. goldbraun braten.",
+   "Skyr mit Senf, Honig und Frühlingszwiebeln verrühren und abschmecken.",
+   "Brötchen aufbacken, mit Soße, Tofu, Tomate und Paprika belegen."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/veggie-burger-mit-tofu",
+  "note": "nach Lidl Kochen; Crème fraîche durch Skyr ersetzt",
+  "img": null
+ },
+ {
+  "name": "Lauch-Soja-Hack-Suppe",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 338,
+  "protein": 28,
+  "carbs": 18,
+  "fat": 14,
+  "estimated": true,
+  "timeMin": 25,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "150 g Sojagranulat",
+   "1 Zwiebel",
+   "1 Zitrone",
+   "Pfeffer, Salz, Muskat",
+   "2 EL Weizenmehl",
+   "3 EL Rapsöl",
+   "1 Stange Lauch",
+   "400 ml Gemüsebrühe (+ 300 ml zum Einweichen)",
+   "600 ml Sojadrink natur",
+   "100 g Frischkäse (light)",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Sojagranulat ca. 10 Min. in 300 ml heißer Brühe einweichen und gut ausdrücken.",
+   "Lauch in Streifen schneiden und waschen, Zwiebel und Knoblauch würfeln.",
+   "Granulat im Öl ca. 5 Min. kräftig anbraten, Zwiebel, Knoblauch und Lauch zugeben und kurz mitdünsten, mit Mehl bestäuben.",
+   "Mit Brühe und Sojadrink ablöschen, 10 Min. köcheln, Frischkäse einrühren und mit Zitronenschale, -saft, Muskat, Salz und Pfeffer abschmecken."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/vegane-hack-lauch-suppe",
+  "note": "nach Lidl Kochen; Fertig-Hackmischung durch Sojagranulat ersetzt, etwas Frischkäse ergänzt; Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Spinat-Crêpes mit Kräuterquark & Radieschen-Feldsalat",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 607,
+  "protein": 35,
+  "carbs": 60,
+  "fat": 24,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "2 EL heller Balsamico",
+   "1 Bund Frühlingszwiebeln",
+   "4 Eier (M)",
+   "3 EL Mayonnaise (oder Skyr)",
+   "400 ml Milch 1,5 %",
+   "1 EL Senf",
+   "4 EL Olivenöl",
+   "20 g Petersilie",
+   "150 g Feldsalat",
+   "2 Bund Radieschen",
+   "Salz",
+   "500 g Magerquark",
+   "200 g Babyspinat",
+   "250 g Dinkelmehl Type 630"
+  ],
+  "steps": [
+   "Weiße Frühlingszwiebelringe in 1 EL Öl anschwitzen, Spinat zugeben und zusammenfallen lassen, leicht salzen und abkühlen lassen.",
+   "Mehl, Milch, Eier und Salz glatt rühren, Spinat fein hacken und unterrühren.",
+   "Quark mit Petersilie, grünen Frühlingszwiebeln, Salz und ggf. etwas Milch cremig rühren.",
+   "Aus dem Teig in wenig Öl dünne Crêpes backen; Feldsalat und Radieschen mit Balsamico, Senf, Mayonnaise und Öl anmachen und mit gefüllten Crêpes servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/spinatcrepe-mit-kraeuterquark-und-feldsalat-mit-knackigen-radieschen",
+  "note": "nach Lidl Kochen; Quark 40 % durch doppelte Menge Magerquark ersetzt",
+  "img": null
+ },
+ {
+  "name": "Rote-Bete-Quinoa mit Tofu & Basilikum",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 535,
+  "protein": 26,
+  "carbs": 65,
+  "fat": 17,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank",
+  "ingredients": [
+   "20 g Basilikum",
+   "1 Zwiebel",
+   "1 Prise Zimt",
+   "Salz, Pfeffer",
+   "2 EL Rapsöl",
+   "4 EL Sojasauce",
+   "900 ml Gemüsebrühe",
+   "400 g Tofu natur",
+   "1 Limette",
+   "300 g Quinoa",
+   "500 g Rote Bete (vorgegart)"
+  ],
+  "steps": [
+   "Zwiebel und Rote Bete würfeln, Quinoa heiß abspülen.",
+   "Zwiebel in 1 EL Öl anbraten, Rote Bete und Quinoa zugeben, mit Brühe auffüllen und ca. 15 Min. köcheln; mit Salz, Pfeffer und Zimt würzen und 10 Min. quellen lassen.",
+   "Tofu würfeln, im restlichen Öl knusprig braten und mit Sojasauce und Limettensaft ablöschen.",
+   "Quinoa mit Tofu und Basilikum servieren – schmeckt warm und kalt."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/rote-bete-quinoa-und-tofu",
+  "note": "nach Lidl Kochen",
+  "img": null
+ },
+ {
+  "name": "Hokkaido-Linsen-Cashew-Curry-Eintopf mit Joghurt",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 524,
+  "protein": 25,
+  "carbs": 53,
+  "fat": 24,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "1 Prise Chili",
+   "1 EL Currypulver",
+   "200 g griechischer Joghurt",
+   "1 TL Honig",
+   "Salz",
+   "2 Schalotten",
+   "600 ml Gemüsebrühe",
+   "2 EL Rapsöl",
+   "400 g Hokkaido-Kürbis",
+   "1 Limette",
+   "150 g Cashewkerne",
+   "200 g rote Linsen (trocken)",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Kürbis mit Schale in ca. 1-cm-Würfel schneiden, Schalotten und Knoblauch würfeln.",
+   "Alles im Öl anschwitzen, mit Curry bestäuben, Linsen kurz mitrösten und mit Brühe ablöschen; ca. 15 Min. köcheln.",
+   "Joghurt mit Limettenschale, -saft, Honig und Salz verrühren; Cashews ohne Fett rösten.",
+   "Eintopf mit Chili abschmecken und mit Limetten-Joghurt und Cashews servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/hokkaido-linsen-cashew-curry-eintopf",
+  "note": "nach Lidl Kochen; Kokosöl durch Rapsöl ersetzt",
+  "img": null
+ },
+ {
+  "name": "Tofu süß-sauer mit Quinoa",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 573,
+  "protein": 31,
+  "carbs": 62,
+  "fat": 23,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 Zwiebel",
+   "1 Frühlingszwiebel",
+   "Pfeffer, Salz",
+   "20 g Ingwer",
+   "2 EL Honig",
+   "1 EL Reis- oder Weißweinessig",
+   "3 EL Rapsöl",
+   "50 ml Sojasauce",
+   "600 g Tofu natur",
+   "300 g Quinoa",
+   "2 EL Sriracha",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Quinoa abspülen und in ca. 900 ml Salzwasser ca. 12 Min. garen, dann 5 Min. quellen lassen.",
+   "Zwiebel, Knoblauch und Ingwer hacken, Frühlingszwiebel in Ringe schneiden, Tofu würfeln.",
+   "Tofu im Öl rundum knusprig braten, Zwiebel, Knoblauch und Ingwer kurz mitbraten.",
+   "Sojasauce, Honig, Essig, Sriracha und 4 EL Wasser verrühren, zugießen und einkochen lassen, bis der Tofu glänzt; mit Quinoa und Frühlingszwiebeln servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/tofu-suess-sauer",
+  "note": "nach Lidl Kochen; Tofu von 400 auf 600 g erhöht",
+  "img": null
+ },
+ {
+  "name": "Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 811,
+  "protein": 40,
+  "carbs": 114,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "10 g Basilikum",
+   "1 Brokkoli",
+   "1 Zwiebel",
+   "2 EL brauner Zucker",
+   "Salz, Pfeffer",
+   "2 EL Tomatenmark",
+   "3 EL Rapsöl",
+   "2 Paprika gelb",
+   "400 ml Gemüsebrühe",
+   "600 g Tofu natur",
+   "400 g gehackte Tomaten (Dose)",
+   "400 g Bandnudeln",
+   "1 Knoblauchzehe",
+   "200 g TK-Erbsen",
+   "2 EL Weichweizengrieß",
+   "2 TL italienische Kräuter"
+  ],
+  "steps": [
+   "Ofen auf 180 °C vorheizen. Tofu würfeln, mit Kräutern, Grieß, 1 EL Öl und Salz mischen und ca. 20 Min. knusprig backen.",
+   "Zwiebel in Streifen schneiden, Knoblauch hacken, Brokkoli in Röschen und Paprika in Streifen schneiden; Nudeln kochen.",
+   "Zwiebel, Knoblauch und Paprika im restlichen Öl anbraten, Tomatenmark und Zucker kurz mitrösten, mit Tomaten und Brühe ablöschen.",
+   "Brokkoli und Erbsen ca. 6 Min. in der Soße garen, abschmecken und mit Nudeln, Ofentofu und Basilikum servieren."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/gebackener-tofu-auf-nudeln-mit-gemuese",
+  "note": "nach Lidl Kochen; Nudelmenge von 500 auf 400 g reduziert",
+  "img": null
+ },
+ {
+  "name": "Rote-Linsen-Salat mit Camembert, Trauben & Walnüssen",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 619,
+  "protein": 33,
+  "carbs": 54,
+  "fat": 29,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank (Salat separat)",
+  "ingredients": [
+   "Pfeffer, Salz",
+   "2 EL Weißweinessig",
+   "4 EL Rapsöl",
+   "40 g Walnusskerne",
+   "1 Schalotte",
+   "1,2 l Gemüsebrühe",
+   "1 Camembert (ca. 125 g, mit mikrobiellem Lab)",
+   "400 g Salat-Mix",
+   "200 g Weintrauben (hell und dunkel)",
+   "300 g rote Linsen (trocken)"
+  ],
+  "steps": [
+   "Linsen in der Brühe ca. 10–12 Min. bissfest garen, abgießen und abkühlen lassen.",
+   "Schalotte fein hacken und mit Essig, Öl, Salz und Pfeffer zu einem Dressing verrühren.",
+   "Salat waschen, Trauben halbieren, Camembert in Stücke schneiden, Walnüsse grob hacken.",
+   "Linsen mit Dressing mischen und mit Salat, Trauben, Camembert und Walnüssen anrichten."
+  ],
+  "source": "https://rezepte.lidl.de/rezepte/salat-mit-roten-linsen-camembert-und-trauben",
+  "note": "nach Lidl Kochen; für den Herd statt Küchenmaschine beschrieben",
+  "img": null
+ },
+ {
+  "name": "Spaghetti-Auflauf mit Hüttenkäse & Tomaten",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 719,
+  "protein": 36,
+  "carbs": 94,
+  "fat": 21,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "500 g Spaghetti",
+   "400 g stückige Tomaten (Dose)",
+   "400 g Hüttenkäse",
+   "100 g Hartkäse (vegetarisch, mikrobielles Lab), gerieben",
+   "2 EL Schmand",
+   "1 EL gehackte Kräuter (Basilikum, Oregano)",
+   "Salz, Pfeffer, 1 Prise Zucker",
+   "1 TL Olivenöl (für die Form)"
+  ],
+  "steps": [
+   "Spaghetti bissfest kochen und abgießen; Ofen auf 175 °C vorheizen.",
+   "Tomaten mit Hüttenkäse, Schmand und Kräutern mischen und mit Salz, Pfeffer und Zucker abschmecken.",
+   "Soße mit den Nudeln vermengen und in eine geölte Auflaufform geben.",
+   "Mit Hartkäse bestreuen und ca. 20–25 Min. überbacken."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2227511356870054/Spaghettiauflauf-mit-Huettenkaese-und-Tomaten.html",
+  "note": "nach Chefkoch (4,6 Sterne, 18 Bewertungen); 200 g Parmesan durch 100 g veg. Hartkäse ersetzt",
+  "img": null
+ },
+ {
+  "name": "Zucchini-Kichererbsen-Curry mit Reis",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 684,
+  "protein": 26,
+  "carbs": 130,
+  "fat": 6,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "150 g Reis",
+   "1 Schalotte",
+   "1 Knoblauchzehe",
+   "2 cm Ingwer",
+   "1 EL Rapsöl",
+   "2 Kartoffeln",
+   "2 Möhren",
+   "1 Zucchini",
+   "1 Dose Kichererbsen (240 g abgetropft)",
+   "200 ml Gemüsebrühe",
+   "200 ml Kokosmilch light",
+   "3 EL Mangochutney",
+   "2 EL Currypulver",
+   "Salz, Pfeffer, Chili, Kurkuma"
+  ],
+  "steps": [
+   "Reis nach Packungsangabe garen.",
+   "Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen; Schalotte, Knoblauch und Ingwer hacken.",
+   "Schalotte, Knoblauch und Ingwer im Öl andünsten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
+   "Mit Mangochutney, Curry, Salz, Pfeffer, Chili und Kurkuma abschmecken und mit Reis servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2746431426709816/Zucchini-Kichererbsen-Curry.html",
+  "note": "nach Chefkoch (4,8 Sterne, 20 Bewertungen); Kokosmilch light",
+  "img": null
+ },
+ {
+  "name": "Mango-Linsensalat mit mariniertem Tofu",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 516,
+  "protein": 28,
+  "carbs": 45,
+  "fat": 23,
+  "estimated": false,
+  "timeMin": 75,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "300 g Tofu natur",
+   "200 g Beluga- oder Berglinsen (trocken)",
+   "1 Mango",
+   "1 Zwiebel",
+   "1 Bund Koriander",
+   "4 EL Sesamöl",
+   "Salz, Pfeffer",
+   "1 TL Ajvar",
+   "4 EL Orangensaft",
+   "4 EL Zitronensaft",
+   "3 EL Sojasauce",
+   "1 EL Ahornsirup",
+   "2 EL Erdnussmus"
+  ],
+  "steps": [
+   "Ajvar, Orangen- und Zitronensaft, Sojasauce, Ahornsirup und Erdnussmus fein pürieren; Tofuscheiben in der Hälfte davon mind. 3 Std. (am besten über Nacht) marinieren.",
+   "Linsen in Salzwasser bissfest garen (Beluga ca. 25–40 Min.), abgießen und abkühlen lassen.",
+   "Mango und Zwiebel fein würfeln, Koriander hacken und mit Linsen und restlicher Marinade mischen.",
+   "Tofu im Sesamöl beidseitig knusprig braten und auf dem Salat anrichten."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/3218701478967636/Mango-Linsensalat-mit-mariniertem-Tofu.html",
+  "note": "nach Chefkoch (4,7 Sterne, 71 Bewertungen); Linsenmenge verdoppelt (Protein)",
+  "img": null
+ },
+ {
+  "name": "Indischer Spinat-Tofu mit Reis (Palak-Style)",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 641,
+  "protein": 40,
+  "carbs": 60,
+  "fat": 26,
+  "estimated": false,
+  "timeMin": 30,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Tofu natur",
+   "2 EL Rapsöl",
+   "1 Zwiebel",
+   "1 Knoblauchzehe",
+   "300 g Babyspinat",
+   "2 Tomaten",
+   "100 ml Kokosmilch",
+   "1 TL Kurkuma",
+   "1 TL Korianderpulver",
+   "Chilipulver",
+   "Salz, Pfeffer",
+   "120 g Basmatireis"
+  ],
+  "steps": [
+   "Reis garen. Tofu würfeln und im Öl (Wok) leicht goldig anbraten, herausnehmen.",
+   "Zwiebel und Knoblauch im Wok anbraten, Spinat kurz zusammenfallen lassen und an den Rand schieben.",
+   "Kokosmilch und gewürfelte Tomaten in die Mitte geben und leicht einköcheln, Gewürze einrühren.",
+   "Tofu zurückgeben, alles vermengen, abschmecken und mit Reis servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/671151169215630/Tofu-mit-indischem-Spinat.html",
+  "note": "nach Chefkoch (4,5 Sterne, 153 Bewertungen); Tofu verdoppelt, Reis als Beilage ergänzt",
+  "img": null
+ },
+ {
+  "name": "Tofu-Stroganoff mit Champignons & Bandnudeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 638,
+  "protein": 34,
+  "carbs": 53,
+  "fat": 29,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 20,
+  "difficulty": "mittel",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "500 g Tofu natur",
+   "4 EL Sojasauce",
+   "1 Gemüsezwiebel",
+   "400 g braune Champignons",
+   "1 EL Butter",
+   "2 EL Rapsöl",
+   "1 Knoblauchzehe",
+   "3 EL Tomatenmark",
+   "125 ml trockener Rotwein (oder Brühe)",
+   "200 ml Kochsahne 15 %",
+   "1 EL Basilikum",
+   "Salz, Pfeffer",
+   "250 g Bandnudeln"
+  ],
+  "steps": [
+   "Tofu in Scheiben schneiden und kurz in der Sojasauce marinieren; Nudeln kochen.",
+   "Zwiebelringe und Pilzscheiben in der Butter langsam weich schmoren und beiseitestellen.",
+   "Tofu im Öl scharf anbraten, Knoblauch, Pilze und Zwiebeln zugeben.",
+   "Tomatenmark, Rotwein und Sahne verrühren, zugießen und leicht einkochen; vorsichtig abschmecken und mit Nudeln servieren."
+  ],
+  "source": "https://www.chefkoch.de/rezepte/2913411443624213/Tofu-Stroganoff.html",
+  "note": "nach Chefkoch (4,8 Sterne, 19 Bewertungen); mehr Tofu, Kochsahne statt Sahne, weniger Butter, Nudeln als Beilage",
+  "img": null
+ },
+ {
+  "name": "Backofengemüse mit Kidneybohnen & Schafskäse",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 591,
+  "protein": 29,
+  "carbs": 55,
+  "fat": 28,
+  "estimated": false,
+  "timeMin": 45,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "Salz, Pfeffer, Muskat",
+   "1 kleine rote Paprika",
+   "1 Zucchini",
+   "1 Zwiebel",
+   "2 EL Haferflocken",
+   "1 kleine Knoblauchzehe",
+   "3 EL Olivenöl",
+   "200 g Kartoffeln",
+   "1 Ei (M)",
+   "2 EL Vollkornmehl",
+   "200 g Kidneybohnen (Dose, abgetropft)",
+   "300 g passierte Tomaten",
+   "1 TL Kräuter der Provence",
+   "80 g Feta / Schafskäse"
+  ],
+  "steps": [
+   "Ofen auf 200 °C vorheizen. Paprika und Zucchini grob würfeln, Zwiebel und Knoblauch hacken.",
+   "Gemüse in 1 EL Öl andünsten, mit Bohnen und Tomaten mischen, würzen und in eine Form geben; Schafskäse darüberbröseln.",
+   "Kartoffeln reiben und ausdrücken, mit Ei, Mehl, Haferflocken, Salz und Muskat zu einem Teig mischen.",
+   "Aus dem Teig im restlichen Öl kleine Puffer braten, auf das Gemüse legen und alles ca. 20 Min. backen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.backofengemuese-kidneybohnen.r_id=DE_3899.html",
+  "note": "nach Kaufland",
+  "img": null
+ },
+ {
+  "name": "Crispy-Tempeh-Bowl mit Reis, Gemüse & Kresse",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 669,
+  "protein": 27,
+  "carbs": 68,
+  "fat": 29,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 30,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "2 Möhren",
+   "2 EL Agavendicksaft",
+   "1/2 Salatgurke",
+   "Salz",
+   "3 EL Sojasauce",
+   "1/2 Avocado",
+   "120 g Jasmin- oder Basmatireis",
+   "1 rote Chilischote",
+   "2 Knoblauchzehen",
+   "1 EL Sesam",
+   "1/2 Bund Radieschen",
+   "2 EL geröstetes Sesamöl",
+   "1 Limette",
+   "1 Beet Kresse",
+   "200 g Tempeh",
+   "20 g Ingwer"
+  ],
+  "steps": [
+   "Reis kochen und abschrecken. Möhren in Streifen hobeln, Radieschen in Scheiben, Gurke in Stifte schneiden.",
+   "Tempeh in dünne Scheiben schneiden und im Sesamöl beidseitig knusprig braten.",
+   "Knoblauch, Ingwer und Chili hacken, mit Sojasauce, Agavendicksaft und Limettensaft verrühren und den Tempeh darin kurz glasieren.",
+   "Reis, Gemüse, Avocado und Tempeh anrichten und mit Sesam und Kresse bestreuen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.crispy-tempeh-bowl-kresse.r_id=Recipe_32605251.html",
+  "note": "nach Kaufland; Sesamöl reduziert",
+  "img": null
+ },
+ {
+  "name": "Schmorgurken mit Kichererbsen, Feta & Dill",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 628,
+  "protein": 27,
+  "carbs": 62,
+  "fat": 28,
+  "estimated": true,
+  "timeMin": 35,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "800 g Schmor- oder Salatgurken",
+   "1 Paprika gelb",
+   "1 Zwiebel",
+   "2 Gläser Kichererbsen (480 g abgetropft)",
+   "1 TL Currypulver",
+   "1 EL Gemüsebrühe (Pulver)",
+   "2 EL Olivenöl",
+   "1 Bund Dill",
+   "200 ml Kochsahne 15 %",
+   "250 g Cherrytomaten",
+   "200 g Feta",
+   "80 ml Weißwein (oder Wasser)",
+   "200 g Baguette oder Vollkornbrot"
+  ],
+  "steps": [
+   "Gurken schälen, längs halbieren, entkernen und in Stücke schneiden; Zwiebel würfeln, Paprika in Streifen schneiden, Tomaten halbieren.",
+   "Zwiebel, Gurken und Paprika im Öl 2 Min. andünsten, mit Wein ablöschen und Brühe einstreuen.",
+   "Sahne, Kichererbsen, Curry und Tomaten zugeben und ca. 10 Min. sanft schmoren.",
+   "Dill hacken und unterrühren, mit zerbröseltem Feta bestreuen und mit Brot servieren."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.schmorgurken-kichererbsen-feta.r_id=Recipe_5675877.html",
+  "note": "nach Kaufland; Kichererbsen verdoppelt und Feta erhöht (Protein), vegane Kochcreme durch Kochsahne ersetzt; Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 604,
+  "protein": 27,
+  "carbs": 70,
+  "fat": 22,
+  "estimated": false,
+  "timeMin": 40,
+  "activeMin": 30,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "100 g Mais (Dose)",
+   "1 EL Sesam",
+   "1 Salatgurke",
+   "100 g Cherrytomaten",
+   "1 EL Butter",
+   "150 g Basmatireis",
+   "2 EL gehackte Petersilie",
+   "1 Paprika",
+   "1 Möhre",
+   "240 g Kichererbsen (Dose, abgetropft)",
+   "Salz, Pfeffer",
+   "500 ml Gemüsebrühe",
+   "1 EL Kürbiskerne",
+   "150 g Skyr natur",
+   "1 Knoblauchzehe",
+   "1 TL Senf",
+   "1/2 TL Kreuzkümmel",
+   "4 TL Zitronensaft",
+   "300 g Falafel (Kühlregal)",
+   "1 TL Ahornsirup",
+   "2 EL Tahin"
+  ],
+  "steps": [
+   "Reis in der Brühe garen, Butter und Mais unterrühren.",
+   "Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken.",
+   "Gurke, Paprika und Möhre schneiden, Tomaten halbieren; Falafel nach Packungsangabe erhitzen.",
+   "Skyr mit Senf, Ahornsirup, restlichem Zitronensaft und Petersilie verrühren; alles in Schalen anrichten und mit Sesam und Kürbiskernen bestreuen."
+  ],
+  "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.reis-bowl-hummus-falafel.r_id=Recipe_49519987.html",
+  "note": "nach Kaufland; Naturjoghurt durch Skyr ersetzt",
+  "img": null
+ },
+ {
+  "name": "Gelbes Tofu-Linsen-Curry mit Möhren & Paprika",
+  "category": "mittag",
+  "servings": 4,
+  "kcal": 610,
+  "protein": 30,
+  "carbs": 74,
+  "fat": 21,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "4 Möhren",
+   "2 Paprika rot",
+   "2 Zwiebeln",
+   "1 Knoblauchzehe",
+   "2 Frühlingszwiebeln",
+   "400 g Tofu natur",
+   "2 EL Rapsöl",
+   "Salz, Pfeffer, Chili",
+   "3 EL Currypulver",
+   "400 ml Kokosmilch light",
+   "150 g rote Linsen (trocken)",
+   "450 ml Gemüsebrühe",
+   "1 EL Zitronensaft",
+   "200 g Basmatireis"
+  ],
+  "steps": [
+   "Möhren in Scheiben, Paprika in Streifen schneiden, Zwiebeln und Knoblauch würfeln, Frühlingszwiebeln in Ringe, Tofu in Stücke schneiden; Reis garen.",
+   "Tofu in 1 EL Öl goldbraun braten, würzen und herausnehmen.",
+   "Gemüse im restlichen Öl glasig dünsten, mit Curry bestäuben, Linsen zugeben, mit Kokosmilch und Brühe ablöschen und ca. 12 Min. köcheln.",
+   "Mit Zitronensaft, Salz und Chili abschmecken, Tofu unterheben und mit Reis und Frühlingszwiebeln servieren."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/vegane-rezepte/rdp-gelbes-tofu-curry-mit-moehren-und-paprika",
+  "note": "nach Aldi Süd; rote Linsen und Reis ergänzt, Kokosmilch light (Protein von ca. 16 auf ~30 g); Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Griechischer Spinatreis mit gebackenem Feta",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 610,
+  "protein": 27,
+  "carbs": 48,
+  "fat": 34,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank",
+  "ingredients": [
+   "1 Bund Frühlingszwiebeln",
+   "3 Knoblauchzehen",
+   "4 EL Olivenöl",
+   "200 g Basmatireis",
+   "500 g TK-Blattspinat",
+   "500 ml Gemüsebrühe",
+   "1 Ei (M)",
+   "Salz, Pfeffer",
+   "4 EL Paniermehl",
+   "400 g Feta",
+   "1 Zitrone",
+   "1/2 Bund Petersilie"
+  ],
+  "steps": [
+   "Frühlingszwiebeln und Knoblauch in 3 EL Öl anbraten, Reis kurz mitdünsten.",
+   "Spinat und Brühe zugeben, aufkochen und bei kleiner Hitze ca. 25 Min. garen.",
+   "Feta in 4 Stücke teilen, durch verquirltes Ei ziehen und in Paniermehl wenden; im restlichen Öl beidseitig goldbraun braten.",
+   "Spinatreis mit Zitrone und Petersilie abschmecken und mit dem Feta servieren."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/internationale-rezepte/griechenland/rdp-griechischer-spinatreis-mit-gebackenem-feta",
+  "note": "nach Aldi Süd; Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Tofu-Köttbullar mit Rahmsoße & Kartoffeln",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 595,
+  "protein": 26,
+  "carbs": 53,
+  "fat": 31,
+  "estimated": true,
+  "timeMin": 45,
+  "activeMin": 35,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "2 Zwiebeln",
+   "1 EL Rapsöl",
+   "1 EL Agavendicksaft",
+   "40 g Walnusskerne",
+   "250 g Champignons",
+   "400 g Tofu natur",
+   "5 EL Weizenmehl",
+   "3 EL Paniermehl",
+   "Salz, Pfeffer, Muskat",
+   "4 EL Olivenöl",
+   "3 EL Frischkäse",
+   "250 ml Gemüsebrühe",
+   "250 ml Milch 1,5 %",
+   "1 TL Sojasauce",
+   "1 Knoblauchzehe",
+   "800 g Kartoffeln"
+  ],
+  "steps": [
+   "Kartoffeln kochen. Zwiebeln fein hacken, im Rapsöl anschwitzen und mit Agavendicksaft leicht karamellisieren.",
+   "Walnüsse und Pilze sehr fein hacken, Tofu zerbröseln und alles mit Zwiebeln, 2 EL Mehl und Paniermehl verkneten, würzen und 18–20 Bällchen formen.",
+   "Bällchen im Olivenöl rundum knusprig braten und herausnehmen.",
+   "Restliches Mehl im Bratfett anschwitzen, mit Brühe und Milch ablöschen, Frischkäse, Sojasauce, Knoblauch und Muskat einrühren und sämig köcheln; Bällchen darin schwenken und mit Kartoffeln servieren."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/ernaehrungsweise/vegane-rezepte/rdp-vegane-koettbullar-mit-rahmsauce",
+  "note": "nach Aldi Süd; Mandeldrink durch Milch, veganer Aufstrich durch Frischkäse ersetzt, Kartoffeln ergänzt; Nährwerte geschätzt",
+  "img": null
+ },
+ {
+  "name": "Vegetarische Moussaka mit Linsen & Hartkäse",
+  "category": "abend",
+  "servings": 4,
+  "kcal": 632,
+  "protein": 34,
+  "carbs": 70,
+  "fat": 21,
+  "estimated": true,
+  "timeMin": 70,
+  "activeMin": 25,
+  "difficulty": "mittel",
+  "mealPrep": true,
+  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
+  "ingredients": [
+   "1 Aubergine",
+   "Salz, Pfeffer",
+   "600 g Kartoffeln",
+   "1 Zwiebel",
+   "1 Knoblauchzehe",
+   "1–2 EL Olivenöl",
+   "2 EL Tomatenmark",
+   "800 g gehackte Tomaten (Dose)",
+   "200 g rote Linsen (trocken)",
+   "1 TL Baharat (oder Zimt + Piment)",
+   "1 Zucchini",
+   "20 g Butter",
+   "20 g Weizenmehl",
+   "200 ml Gemüsebrühe",
+   "150 ml Milch",
+   "150 g Hartkäse (vegetarisch, mikrobielles Lab), gerieben",
+   "Muskat"
+  ],
+  "steps": [
+   "Aubergine in Scheiben schneiden, salzen und 15 Min. ziehen lassen, dann trocken tupfen; Kartoffeln garen und in Scheiben schneiden.",
+   "Zwiebel und Knoblauch im Öl anbraten, Tomatenmark einrühren, Tomaten, Linsen und 300 ml Wasser zugeben und ca. 12 Min. köcheln; mit Baharat, Salz und Pfeffer würzen.",
+   "Butter schmelzen, Mehl anschwitzen, mit Brühe und Milch zu einer Béchamel kochen, die Hälfte des Käses einrühren und mit Muskat würzen.",
+   "Ofen auf 180 °C vorheizen. Kartoffeln, Aubergine, Zucchini und Linsensoße in eine Form schichten, Béchamel und restlichen Käse darauf geben und ca. 40 Min. backen."
+  ],
+  "source": "https://www.aldi-sued.de/rezepte/internationale-rezepte/griechenland/rdp-vegetarische-moussaka",
+  "note": "nach Aldi Süd; 200 g rote Linsen ergänzt (Protein), Grana Padano durch veg. Hartkäse; Nährwerte geschätzt",
+  "img": null
  }
 ]
