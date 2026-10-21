@@ -8,6 +8,10 @@ on:
     - cron: "20 18,19 * * *"   # Nachfrage Training ~20:20
     - cron: "50 19,20 * * *"   # Nachfrage Schmerz-Log ~21:50
     - cron: "40 16,17 * * 0"   # Sonntag Check-in ~18:40
+    # GitHub verzögert Zeitpläne oft um Stunden: zusätzliche Läufe auf krummen Minuten, doppelte Nachrichten verhindert state.json
+    - cron: "37 4,5,6 * * *"
+    - cron: "13 18,19,20 * * *"
+    - cron: "29 19,20,21 * * *"
   push:
     branches: [main]           # App-Änderungen sofort mit aktuellen Feeds veröffentlichen
   workflow_dispatch: {}

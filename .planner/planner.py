@@ -459,7 +459,7 @@ def load_prices():
 def parse_ing(line, P, subst):
     import re
     global ING_RE
-    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$")
+    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$")
     line = re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)
     m = ING_RE.match(line)
     q = None
@@ -485,6 +485,8 @@ def parse_ing(line, P, subst):
         amt = q * 30
     elif unit.startswith(("Dose", "Glas", "Gläser")):
         amt = q * (pr["pack"] if pr.get("dose") else 400)
+    elif unit.startswith("Prise"):
+        amt = q
     elif unit == "Bund":
         amt = q if pr["unit"] == "Stück" else q * pr["pack"]
     elif unit == "Becher":
@@ -558,6 +560,15 @@ def recipe_vec(r, P, subst, memo):
     return memo[key]
 
 
+BASIS = set(["haferflocken", "reis", "nudeln", "vollkornnudeln", "linsennudeln", "couscous", "quinoa", "bulgur", "roteLinsen", "linsenBraun", "kichererbsen", "kidney", "weissebohnen", "schwarzeBohnen", "linsendose", "mais", "tomatenGehackt", "tomatenPassiert", "tomatenmark", "kokosmilch", "sojagranulat", "tkSpinat", "erbsen", "bohnenGruen", "edamame", "tkbeeren", "mehl", "zucker", "staerke", "oel", "sojasauce", "bruehe", "honig", "kakao", "chia", "leinsamen", "kerne", "walnuesse", "cashews", "mandeln", "pinienkerne", "erdnussmus", "tahin", "knaeckebrot", "magermilchpulver", "milch", "sojadrink", "haferdrink", "pflanzendrink", "currypaste", "currypulver", "senf", "essig", "agave", "oliven", "jalapenos", "loeffelbiskuits", "schokolade", "kartoffeln", "zwiebeln", "knoblauch", "margarine", "eiweissbrot", "tortillas"])  # wie BASIS in der App
+
+
+def budget_share(pr, amt):  # wie budgetShare in der App: Lagerware anteilig
+    if pr.get("pantry") or pr.get("dose") or pr["id"] in BASIS or pr["id"].lower().startswith("tk") or pr["name"].startswith("TK-"):
+        return amt / pr["pack"]
+    return pack_share(pr, amt)
+
+
 def pack_share(pr, amt):
     if pr.get("pantry"):
         return amt / pr["pack"]
@@ -582,7 +593,7 @@ def shop_cost(counts, rec, P, store, subst, memo):
         pr = byid.get(pid)
         v = price_of(pr, store, P) if pr else None
         if v is not None:
-            c += pack_share(pr, amt) * v
+            c += budget_share(pr, amt) * v
     return c
 
 
@@ -656,14 +667,16 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
         return shop_cost(c, rec, P, store, subst, memo)
     cur_cost = total(subs)
 
-    def day_p(sb):  # wie dayP in der App
-        return min(sum(rec[sb.get(n, n)]["protein"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
+    def day_v(sb, f):  # Tageswerte wie dayP/dayK in der App
+        return [sum(rec[sb.get(n, n)][f] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws]
     fd = settings.get("food") or {}
-    p_floor = min(num(fd.get("protein")) or (mp.get("target") or {}).get("protein") or 140, day_p({}))
+    tp = num(fd.get("protein")) or (mp.get("target") or {}).get("protein") or 140
+    tk = (num(fd.get("kcal")) or (mp.get("target") or {}).get("kcal") or 2650) - 250
+    p0 = [min(tp, v) for v in day_v({}, "protein")]
+    k0 = [min(tk, v) for v in day_v({}, "kcal")]
 
-    def day_k(sb):  # wie dayK in der App
-        return min(sum(rec[sb.get(n, n)]["kcal"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
-    k_floor = min((num(fd.get("kcal")) or (mp.get("target") or {}).get("kcal") or 2650) - 250, day_k({}))
+    def floors_ok(sb):  # jeder Tag einzeln
+        return all(v >= p0[i] for i, v in enumerate(day_v(sb, "protein"))) and all(v >= k0[i] for i, v in enumerate(day_v(sb, "kcal")))
     minp = lambda k: 13 if k in ("sn", "ex") else 25
     text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
 
@@ -696,7 +709,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
                     continue
                 sb = dict(subs, **{x["n"]: c["name"]})
                 save = cur_cost - total(sb)
-                if save > 0.01 and (not best or save > best[2]) and day_p(sb) >= p_floor and day_k(sb) >= k_floor:
+                if save > 0.01 and (not best or save > best[2]) and floors_ok(sb):
                     best = (x["n"], c["name"], save)
         if not best:
             break
@@ -721,7 +734,7 @@ def meal_defaults(mp, settings, d, train, is_train=None, boulder=False):
     # Snacks rotieren über die Ruhetage der Woche (wie in der App)
     ri = sum(1 for k in range(i) if not is_train(d - dt.timedelta(days=i - k))) if is_train else i
     sn = W.get("snacks", mp["snacks"])
-    o["sn"] = W.get("trainingSnack", mp["trainingSnack"]) if train else sn[ri % len(sn)]
+    o["sn"] = W.get("trainingSnack", mp["trainingSnack"]) if train else sn[(ri + 3 * w) % len(sn)]
     if not train:
         o["ex"] = W.get("trainingSnack", mp["trainingSnack"]) if boulder else mp["restExtra"][ri % 2]  # Shake nach dem Bouldern
     return o
@@ -870,7 +883,7 @@ def send_push(subs, payload, dead):
             continue
         try:
             webpush({"endpoint": s["endpoint"], "keys": s["keys"]}, json.dumps(payload), vapid_private_key=vapid,
-                    vapid_claims={"sub": "mailto:trainingsbuch@users.noreply.github.com"}, ttl=6 * 3600)
+                    vapid_claims={"sub": "mailto:trainingsbuch@users.noreply.github.com"}, ttl=6 * 3600, timeout=15)
             keep.append(s)
         except WebPushException as ex:
             code = ex.response.status_code if ex.response is not None else None
@@ -880,7 +893,7 @@ def send_push(subs, payload, dead):
             # sonst (z. B. 5xx): nicht als zugestellt zählen, im nächsten Lauf erneut
         except Exception as ex:  # Netzwerk, Timeout …: nur dieses Abo überspringen
             print("Push fehlgeschlagen:", type(ex).__name__)
-    print(f"Push gesendet an {len(keep)} Gerät(e)")
+    print("Push-Lauf beendet")  # keine Zahlen: öffentliche Logs sollen kein Verhalten verraten
     return keep
 
 
@@ -888,6 +901,11 @@ def main():
     now = dt.datetime.now(TZ)
     today = now.date()
     settings = load("settings.json", {})
+    try:  # ein kaputtes Startdatum darf den ganzen Lauf (Pushes, Feeds) nicht stoppen
+        dt.date.fromisoformat(settings.get("startDate") or "2000-01-01")
+    except (ValueError, TypeError):
+        settings.pop("startDate", None)
+        print("Startdatum ungültig – ignoriert")
     days = load_days()
     state = load("state.json", {"sent": {}})
     push = load("push.json", {"subs": []})
@@ -974,7 +992,7 @@ def main():
     cutoff = (today - dt.timedelta(days=14)).isoformat()
     state["sent"] = {k: v for k, v in state["sent"].items() if v[:10] >= cutoff}
     save("state.json", state)
-    print(f"Fertig. Nachrichten: {len(msgs)}")
+    print("Fertig.")
     return 1 if feed_failed else 0
 
 

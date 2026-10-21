@@ -667,7 +667,8 @@
   "difficulty": "mittel",
   "temp": "beides",
   "dev": [
-   "herd"
+   "herd",
+   "ofenk"
   ]
  },
  {
@@ -3036,7 +3037,9 @@
    "title": "File:Spinach pancake with curd.jpg"
   },
   "temp": "warm",
-  "dev": []
+  "dev": [
+   "herd"
+  ]
  },
  {
   "name": "Mediterranes Omelett-Sandwich",
@@ -4188,7 +4191,7 @@
   "kcal": 510,
   "protein": 30,
   "carbs": 32,
-  "fat": 16,
+  "fat": 26,
   "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
@@ -5756,7 +5759,7 @@
   "category": "abend",
   "servings": 4,
   "kcal": 613,
-  "protein": 28,
+  "protein": 21,
   "carbs": 82,
   "fat": 23,
   "estimated": false,
@@ -6101,7 +6104,7 @@
   "category": "abend",
   "servings": 4,
   "kcal": 730,
-  "protein": 42,
+  "protein": 32,
   "carbs": 56,
   "fat": 41,
   "estimated": false,
@@ -6444,7 +6447,9 @@
    "title": "File:Spinach crepes (3236762733).jpg"
   },
   "temp": "warm",
-  "dev": []
+  "dev": [
+   "herd"
+  ]
  },
  {
   "name": "Rote-Bete-Quinoa mit Tofu & Basilikum",
@@ -8254,6 +8259,7 @@
   },
   "temp": "warm",
   "dev": [
+   "herd",
    "ofenk"
   ]
  },
@@ -9035,7 +9041,9 @@
    "title": "File:Banana Pancakes Pk021.jpg"
   },
   "temp": "warm",
-  "dev": []
+  "dev": [
+   "herd"
+  ]
  },
  {
   "name": "Kakao-Porridge mit Quark",
@@ -9154,7 +9162,6 @@
   },
   "temp": "kalt",
   "dev": [
-   "herd",
    "mixer"
   ]
  },
@@ -9233,5 +9240,37 @@
   },
   "temp": "kalt",
   "dev": []
+ },
+ {
+  "name": "Porridge mit Banane, Zimt & Nüssen",
+  "category": "fruehstueck",
+  "servings": 1,
+  "kcal": 600,
+  "protein": 24,
+  "carbs": 67,
+  "fat": 24,
+  "estimated": true,
+  "timeMin": 8,
+  "activeMin": 5,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": false,
+  "ingredients": [
+   "70 g zarte Haferflocken",
+   "300 ml Sojadrink natur (oder Haferdrink)",
+   "1 Banane",
+   "20 g Walnüsse oder andere Nüsse",
+   "1 TL Zimt",
+   "1 Prise Salz"
+  ],
+  "steps": [
+   "Haferflocken mit dem Drink und einer Prise Salz aufkochen und 3–4 Min. unter Rühren köcheln, bis es cremig ist.",
+   "Die Hälfte der Banane hineinzerdrücken, Zimt einrühren.",
+   "In eine Schale geben, mit der übrigen Banane in Scheiben und den grob gehackten Nüssen belegen."
+  ],
+  "note": "Dein Lieblingsfrühstück. Mit Sojadrink etwa 24 g Protein, mit Haferdrink etwa 16 g – wer mehr will: 2 EL Sojaskyr oder Magerquark unterrühren.",
+  "dev": [
+   "herd"
+  ]
  }
 ]

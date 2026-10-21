@@ -249,6 +249,12 @@ h3.sub3{margin:14px 0 4px;font-size:14px;text-transform:uppercase;letter-spacing
 [data-swipe=meal]::before{content:attr(data-swr);right:100%;width:calc(var(--dx, 0) * 1px);overflow:hidden;justify-content:center;background:var(--good-soft);color:var(--good)}
 [data-swipe=meal]::after{content:attr(data-swl);left:100%;width:calc(var(--dx, 0) * -1px);overflow:hidden;justify-content:center;background:var(--warn-soft);color:var(--warn)}
 [data-swipe=meal].sw-r::before,[data-swipe=meal].sw-l::after{opacity:1}
+[data-swipe=meal].swiping.sw-r{background:var(--good-soft);box-shadow:inset 4px 0 0 var(--good)}
+[data-swipe=meal].swiping.sw-l{background:var(--warn-soft);box-shadow:inset -4px 0 0 var(--warn)}
+[data-swipe=meal].sw-go::before{background:var(--good);color:#fff}
+[data-swipe=meal].sw-go::after{background:var(--warn);color:#fff}
+[data-swipe=meal].flash{animation:mflash .7s ease-out}
+@keyframes mflash{0%{background:var(--good)}100%{background:transparent}}
 .chips.scrollx{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .chips.scrollx button{flex:none}
 .catgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -363,8 +369,8 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .scanframe{position:absolute;left:12%;right:12%;top:32%;bottom:32%;border:3px solid var(--accent);border-radius:10px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
 .scanres{display:grid;grid-template-columns:64px minmax(0,1fr);gap:10px;align-items:center}
 .scanres img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:8px}
-.cbars{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:150px;margin:8px 0}
-.cb{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:2px;text-align:center}
+.cbars{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;align-items:end;height:150px;margin:8px 0}
+.cb{min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:2px;text-align:center}
 .cb .bar{width:70%;min-height:3px;background:var(--accent);border-radius:6px 6px 2px 2px}
 .ttag{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--sunk)}
 .ttag.warm{background:color-mix(in srgb,#f97316 22%,transparent)}
@@ -1013,6 +1019,8 @@ function mergeDay(srv, loc){
   // Zurücksetzen verwirft nur die Trainingsdaten des Servers, alles andere wird normal zusammengeführt
   if (loc.resetAt && (!srv.resetAt || loc.resetAt > srv.resetAt)) srv = Object.assign({}, srv, {sets: {}, antag: {}, startedAt: null, finishedAt: null, where: null, swap: null, swapHome: null});
   const out = Object.assign({}, srv, loc);
+  if (srv.boulder && (srv.boulder.at || 0) > (loc.boulder?.at || 0)) out.boulder = srv.boulder;
+  if (srv.session && (srv.sessAt || 0) > (loc.sessAt || 0) && !(loc.startedAt || loggedSets(loc))) { out.session = srv.session; out.sessAt = srv.sessAt; }
   out.sets = Object.assign({}, srv.sets || {}, loc.sets || {});
   out.antag = Object.assign({}, srv.antag || {}, loc.antag || {});
   out.mobility = Object.assign({}, srv.mobility || {}, loc.mobility || {});
@@ -1538,7 +1546,7 @@ function readHash(){
   const e = location.hash.match(/[#&]e=(\d{4}-\d{2}-\d{2})/); if (e) { tab = "essen"; essenView = "plan"; essenMon = monday(e[1]); essenDay = e[1]; openDays = {mo: essenMon, set: new Set([e[1]])}; return; }
   const m = location.hash.match(/d=(\d{4}-\d{2}-\d{2})/); if (m) { selDate = m[1]; tab = "heute"; cur = null; }
   const t = location.hash.match(/t=(\w+)/); if (t) { const k = t[1];
-    if (["heute","training","essen","fortschritt","mehr"].includes(k)) { tab = k; if (k === "essen") { essenView = "plan"; essenMon = null; } }
+    if (["heute","training","essen","fortschritt","mehr"].includes(k)) { tab = k; if (k === "essen") { essenView = "plan"; essenMon = null; } if (k === "mehr") sub.mehr = "menu"; }
     else if (["reise","weg","lektionen"].includes(k)) { tab = "fortschritt"; sub.fortschritt = "reise"; if (k !== "reise") sub.reise = k; }
     else if (["einkauf","rezepte"].includes(k)) { tab = "essen"; essenView = k; }
     else if (["messen","checkin","verlauf","uebersicht"].includes(k)) { tab = "fortschritt"; sub.fortschritt = k === "verlauf" ? "uebersicht" : k; }
@@ -1546,7 +1554,9 @@ function readHash(){
     else if (k === "routine") { selDate = todayIso(); tab = "heute"; cur = null; deep = ["mob"]; } }
 }
 function blankDay(d){ return {date:d, session:defaultSession(d), sets:{}, boulder:{done:false,min:null}, mobility:{}, pain:{sc:null,knee:null,finger:null,kneeTest:null}, weight:null, sleep:null, note:""}; }
-function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false}; dirty = false; }
+function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false};
+  if (d?.session && !d.sessAt && !d.startedAt && !loggedSets(d)) cur.session = defaultSession(selDate);  // alte, nur abgeleitete Einheit folgt dem aktuellen Plan
+  dirty = false; }
 function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveTimer); saveTimer = setTimeout(saveCur, 1200); }
 // Feld als „bewusst geleert“ merken (Pfad wie "note", "pain.sc", "sets.legpress")
 function clr(path){ cur._clr = [...new Set([...(cur._clr || []), path])]; }
@@ -1555,7 +1565,11 @@ function saveCur(){ clearTimeout(saveTimer); if (!dirty) return; dirty = false;
   for (const [o, nm] of [[cur.sets, "sets"], [cur.antag || {}, "antag"]]) for (const id of Object.keys(o)) { const a = o[id]; a.length = lastMeaningful(a); if (!a.length) { delete o[id]; clr(nm + "." + id); } }
   // wieder gesetzte Felder sind nicht mehr „geleert“
   if (cur._clr) { cur._clr = cur._clr.filter(p => pathVal(cur, p) == null); if (!cur._clr.length) delete cur._clr; }
-  saveDay(JSON.parse(JSON.stringify(cur))); renderHeader(); }
+  const out = JSON.parse(JSON.stringify(cur));
+  // Abgeleitete Werte nicht festschreiben: Einheit nur, wenn bewusst gewählt oder trainiert; Bouldern nur, wenn umgeschaltet
+  if (!out.sessAt && !out.startedAt && !loggedSets(out)) delete out.session;
+  if (!out.boulder?.at && !out.boulder?.done) delete out.boulder;
+  saveDay(out); renderHeader(); }
 const ensureCur = () => { if (!cur || cur.date !== selDate) loadCur(); };
 
 // ---------- Hilfen ----------
@@ -1670,7 +1684,7 @@ function render(){
   ({heute:renderToday, training:renderTraining, essen:renderEssen, fortschritt:renderProgress, mehr:renderMore})[tab]();
   updateRestBar();
 }
-function go(t){ if (dirty) saveCur(); if (t !== "training") woSession = null; tab = t; history.replaceState(null, "", t === "heute" ? `#d=${selDate}` : `#t=${t}`); render(); scrollTo(0,0); }
+function go(t){ if (dirty) saveCur(); if (t !== "training") woSession = null; tab = t; const h = t === "heute" ? `#d=${selDate}` : `#t=${t}`; if (location.hash !== h) history.pushState(null, "", h); render(); scrollTo(0,0); }
 
 // ---------- HEUTE ----------
 function trainState(){
@@ -1720,7 +1734,7 @@ function todayItems(focus){
   }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
     const tm = m.time ? hm(m.time) : 20 * 60;
-    out.push({k: "meal:" + m.k, prio: hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, meal: m});
+    out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, meal: m});
   }
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   out.push({k: "pain", prio: hm0 >= 19 * 60 ? 1 : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
@@ -1747,19 +1761,6 @@ function renderToday(){
   const t = todayIso(), isToday = selDate === t, hour = new Date().getHours(), wd = parse(selDate).getDay();
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate);
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
-  const items = [];
-  const mobFin = mobFinished(cur, selDate);
-  items.push({k:"mob", order: hour < 12 ? 1 : 6, done: mobFin, html: `<button type="button" class="task ${mobFin ? "done" : ""}" data-sheet="mob"><span class="dot">${mobFin ? "✓" : mobDone || ""}</span><span><span class="t">Morgenroutine</span><br><span class="s">12 min · ${mobDone}/${mobN} · Knie-Test${cur.pain.kneeTest != null ? `: ${cur.pain.kneeTest}/10` : ""}</span></span><span class="go">›</span></button>`});
-  items.push({k:"w", order: hour < 12 ? 2 : 7, done: num(cur.sleep) != null, html: `<div class="task ${num(cur.sleep) != null ? "done" : ""}"><span class="dot">${num(cur.sleep) != null ? "✓" : ""}</span><span><span class="t">Schlaf</span><br><span class="s">Gewicht nur, wenn gewogen (z. B. im Gym)</span></span><span class="mini"><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></span></div>`});
-  const ca = cur.cardio || [];
-  items.push({k:"cardio", order: 4.5, done: ca.length > 0, html: `<button type="button" class="task ${ca.length ? "done" : ""}" data-sheet="cardio" data-v="${selDate}"><span class="dot">${ca.length ? "✓" : ""}</span><span><span class="t">Laufen / Ausdauer</span><br><span class="s">${ca.length ? esc(ca.map(cardioTxt).join(" · ")) : "optional · Dauer reicht, Distanz wenn bekannt"}</span></span><span class="go">›</span></button>`});
-  items.push({k:"boulder", order: 4, done: !!cur.boulder.done, html: `<div class="task ${cur.boulder.done ? "done" : ""}"><span class="dot">${cur.boulder.done ? "✓" : ""}</span><span><span class="t">Bouldern heute?</span><br><span class="s">${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag" style="padding:0">Antagonisten loggen (10 min) ›</button>` : "spontan, einfach umschalten"}</span></span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></div>`});
-  items.push({k:"pain", order: hour >= 18 ? 0 : 5, done: painDone, html: `<button type="button" class="task ${painDone ? "done" : ""}" data-sheet="pain"><span class="dot">${painDone ? "✓" : ""}</span><span><span class="t">Schmerz-Log</span><br><span class="s">abends · SC ${cur.pain.sc ?? "–"} · Knie ${cur.pain.knee ?? "–"} · Finger ${cur.pain.finger ?? "–"}</span></span><span class="go">›</span></button>`});
-  if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate,-7))])) {
-    const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate,-7)), ok = !!store.checkins[mo];
-    items.push({k:"ci", order: 5.5, done: ok, html: `<button type="button" class="task ${ok ? "done" : ""}" data-act="checkin" data-v="${mo}"><span class="dot">${ok ? "✓" : ""}</span><span><span class="t">Wochen-Check-in</span><br><span class="s">10 min · Bilanz und Modus für nächste Woche</span></span><span class="go">›</span></button>`});
-  }
-  items.sort((a, b) => (a.done - b.done) || (a.order - b.order));
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
   h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["alles","Alles"],["training","🏋 Training"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
@@ -1777,13 +1778,6 @@ function renderToday(){
     if (todayFocus !== "essen") h += weekStrip();
     view.innerHTML = h + `</div>`; return;
   }
-  if (todayFocus !== "essen") h += heroCard();
-  if (todayFocus !== "training") h += mealCard(selDate, todayFocus === "essen");
-  if (todayFocus === "essen") { view.innerHTML = h + `</div>`; return; }
-  h += `<div class="lab sec">Aufgaben ${isToday ? "heute" : "an diesem Tag"}</div><div class="tasks">${items.map(i => i.html).join("")}</div>`;
-  const mo = monday(selDate);
-  h += weekStrip(mo);
-  view.innerHTML = h + `</div>`;
 }
 // Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
 function weekStrip(mo){
@@ -1962,7 +1956,8 @@ function finishWorkout(){
   const sk = woSession || cur.session;
   if (woSession) { woSession = null; saveCur(); go("heute"); return; }
   if (!Object.values(setsObj()).some(a => a.some(doneSet)) && !finishWorkout.ok) { finishWorkout.ok = true; setTimeout(() => { finishWorkout.ok = false; }, 4000); toast("Noch keine Sätze eingetragen – zum Beenden nochmal tippen"); return; }
-  finishWorkout.ok = false;
+  if (loggedSets(cur) < 3 && Object.values(setsObj()).some(a => a.some(doneSet)) && !finishWorkout.ok2) { finishWorkout.ok2 = true; setTimeout(() => { finishWorkout.ok2 = false; }, 4000); toast("Unter 3 Sätzen zählt es nicht als Einheit – zum Beenden nochmal tippen"); return; }
+  finishWorkout.ok = false; finishWorkout.ok2 = false;
   cur.finishedAt = new Date().toISOString(); stopRest(); releaseWake(); touch(); saveCur();
   let sets = 0; const prs = [];
   for (const base of exList(sk)) { const id = eff(base); if (!id) continue; const mine = doneSetsOf(base); sets += mine.length;
@@ -2067,7 +2062,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
     const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
     h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
-      <div class="exchips"><span class="xc strong">${e.sets ? e.sets + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}</div>
+      <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}</div>
       ${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
       ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && realOpen !== sheetArg ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
       <div class="tabs3 ${alts.length ? "n4" : ""}" role="tablist" id="ttabs">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(alts.length ? [["alt", `Alternativen (${alts.length})`]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
@@ -2175,7 +2170,7 @@ function progressOverview(){
   const wPts = dates.map(d => ({v: num(store.days[d]?.weight)}));
   const avg = dates.map((d,i) => { const win = wPts.slice(Math.max(0,i-13), i+1).map(p => p.v).filter(v => v != null); return {v: win.length >= 1 ? win.reduce((a,b)=>a+b,0)/win.length : null}; });
   const la = [...avg].reverse().find(p => p.v != null)?.v;
-  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Schlaf & Gewicht ein."})}${info("Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.")}</div>`;
+  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Kurz notieren ein."})}${info("Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.")}</div>`;
   const d28 = dates.slice(-28);
   h += `<div class="card"><h2>Schmerz-Trend</h2>${lineChart([{pts:d28.map(d => ({v:store.days[d]?.pain?.sc ?? null})),color:"var(--bad)",line:1,dots:1},{pts:d28.map(d => ({v:store.days[d]?.pain?.knee ?? null})),color:"var(--warn)",line:1,dots:1}], {dates:d28, min:0, max:10, ticks:[0,2,5,10], label:"Schmerz SC und Knie", empty:"Noch keine Schmerzwerte."})}
     <div class="small"><span style="color:var(--bad)">●</span> SC-Gelenk &nbsp; <span style="color:var(--warn)">●</span> Knie</div></div>`;
@@ -2358,7 +2353,7 @@ function journeySheet(kind, arg){
   if (kind === "alt") {
     const base = arg, curId = eff(base), keep = prefMap()[base], opts = altOptions(base);
     return `<div class="sh"><h2>Alternative wählen</h2>${close}</div><div class="small muted">${atHome() ? "Zuhause ohne Geräte" : "Im Gym"}: Varianten für ${esc(EX[base].name)}, falls ein Gerät besetzt ist, Schulter oder Knie sich melden oder du Abwechslung willst. Fortschritt wird pro Übung getrennt gespeichert.</div>` +
-      opts.map(([id, why]) => { const e = EX[id]; if (!e) return ""; return `<button type="button" class="altopt ${id === curId ? "sel" : ""}" data-alt="${id}" data-base="${base}">${e.img ? `<span class="athumb">${animHtml(e.img, e.name)}</span>` : `<span class="athumb noimg"></span>`}<span><b>${esc(e.name)}</b><br><span class="small muted">${esc(why)} · ${e.sets} × ${esc(e.reps)}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}</span></span>${id === curId ? `<span class="tag up">aktiv</span>` : ""}</button>`; }).join("") +
+      opts.map(([id, why]) => { const e = EX[id]; if (!e) return ""; return `<button type="button" class="altopt ${id === curId ? "sel" : ""}" data-alt="${id}" data-base="${base}">${e.img ? `<span class="athumb">${animHtml(e.img, e.name)}</span>` : `<span class="athumb noimg"></span>`}<span><b>${esc(e.name)}</b><br><span class="small muted">${esc(why)} · ${setsFor(id, weekNo(selDate) ?? 0)} × ${esc(e.reps)}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}</span></span>${id === curId ? `<span class="tag up">aktiv</span>` : ""}</button>`; }).join("") +
       `<label class="check small"><input type="checkbox" id="altKeep" ${keep ? "checked" : ""}><span>Diese Wahl dauerhaft merken (auch nächste Woche)</span></label>`;
   }
   if (kind === "recipe") {
@@ -2427,7 +2422,7 @@ function shelfHtml(){
     ["🥣 Frühstück", ok.filter(r => r.category === "fruehstueck"), {cat: "fruehstueck"}],
     ["🥤 Snacks & Shakes", ok.filter(r => r.category === "snack" || r.category === "shake"), {cat: "snack"}]];
   return `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
-    + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle (${l.length}) ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
+    + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
 }
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
@@ -2529,7 +2524,7 @@ function calEntries(d, noMeals){
   if (isStrength(day)) out.push({tm: p?.start || "", en: p?.end || "", title: `Training: ${sess ? sess.title : "Einheit"}`, kind:"train", done:true, go:`#w=${d}`});
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
   if (day?.boulder?.done) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
-  for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${c.min} min${c.km ? " · " + fmtQ(c.km) + " km" : ""}`, kind:"boulder", done:true, go:`#d=${d}`});
+  for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${c.min} min${c.km ? " · " + fmtQ(c.km) + " km" : ""}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
   if (d >= t || mob) out.push({tm:"07:30", en:"07:45", title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
@@ -2669,11 +2664,14 @@ function recipeVec(n){
 }
 // Gekaufte Menge als Anteil der Referenzpackung: ganze Packungen, loses Obst in Stück, Vorrat anteilig
 function packShare(pr, amt){ if (pr.pantry) return amt / pr.pack; if (pr.loose && pr.piece) return Math.max(1, Math.ceil(amt / pr.piece - 0.1)) * pr.piece / pr.pack; return Math.max(1, Math.ceil(amt / pr.pack - 0.05)); }
+// Budget: was lange hält, wird über mehrere Wochen verbraucht → anteilig; Frisches in ganzen Packungen
+const storable = pr => !!(pr.pantry || pr.dose || BASIS.has(pr.id) || /^tk/i.test(pr.id) || /^TK-/.test(pr.name));
+const budgetShare = (pr, amt) => storable(pr) ? amt / pr.pack : packShare(pr, amt);
 const weekFactor = (cnt, r) => Math.ceil(cnt / (r.servings || 1) * 2) / 2;
 function shopCostCounts(counts, store){
   const tot = {}; let c = 0;
   for (const [n, cnt] of Object.entries(counts)) { const r = recipeByName(n); if (!r || !cnt) continue; const f = weekFactor(cnt, r); for (const [pid, a] of Object.entries(recipeVec(n))) tot[pid] = (tot[pid] || 0) + a * f; }
-  for (const [pid, amt] of Object.entries(tot)) { const pr = prodById(pid), v = pr && priceOf(pr, store); if (v != null) c += packShare(pr, amt) * v; }
+  for (const [pid, amt] of Object.entries(tot)) { const pr = prodById(pid), v = pr && priceOf(pr, store); if (v != null) c += budgetShare(pr, amt) * v; }
   return c;
 }
 function weekShopCost(mo){ const counts = {}; let extra = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) { if (recipeByName(m.name)) counts[m.name] = (counts[m.name] || 0) + 1; else if (m.name === "away") extra += 4.5; } return shopCostCounts(counts) + extra; }
@@ -2712,11 +2710,10 @@ function budgetSubs0(mo){
   // Bewertet wird der echte Wocheneinkauf (Packungen), nicht die Portionskosten
   const total = sb => { const c = {}; for (const x of Object.values(occ)) { const n = sb[x.n] || x.n; c[n] = (c[n] || 0) + x.cnt; } return shopCostCounts(c); };
   // Kein Tausch darf einen Tag unter das Protein-Ziel drücken (bzw. unter den Ausgangswert, falls der schon darunter liegt)
-  const dayP = sb => Math.min(...raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).protein || 0), 0)));
-  const pFloor = Math.min(foodTarget().protein, dayP({}));
+  const dayP = sb => raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).protein || 0), 0)), P0 = dayP({}).map(v => Math.min(foodTarget().protein, v));
   // auch Kalorien: kein Tausch darf einen Tag mehr als 250 kcal unter das Ziel drücken (bzw. unter den Ausgangswert)
-  const dayK = sb => Math.min(...raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).kcal || 0), 0)));
-  const kFloor = Math.min(foodTarget().kcal - 250, dayK({}));
+  const dayK = sb => raw.map(o => Object.values(o).reduce((s, n) => s + (mealInfo(sb[n] || n).kcal || 0), 0)), K0 = dayK({}).map(v => Math.min(foodTarget().kcal - 250, v));
+  const floorsOk = sb => dayP(sb).every((v, i) => v >= P0[i]) && dayK(sb).every((v, i) => v >= K0[i]);  // jeder Tag einzeln
   const subs = {}, before = total(subs), candMemo = new Map();
   let cost = before;
   for (let g = 0; cost > budget && g < 40; g++) {
@@ -2726,7 +2723,7 @@ function budgetSubs0(mo){
       for (const c of cands) { const c1 = portionCost(c.name), ci = mealInfo(c.name);
         if ((batch.has(x.n) && !(c.mealPrep && (c.servings || 1) >= 4)) || recipeCost(c).miss > 0 || (!batch.has(x.n) && effortOn() && !effortOk(c))) continue;
         if (c1 >= c0 || ci.protein < Math.min(ref.protein * 0.8, x.slot === "sn" || x.slot === "ex" ? 18 : 30) || Math.abs(ci.kcal - ref.kcal) > 300 || occ[c.name] || Object.values(subs).includes(c.name)) continue;
-        const sb = Object.assign({}, subs, {[x.n]: c.name}), save = cost - total(sb); if (save > 0.01 && (!best || save > best.save) && dayP(sb) >= pFloor && dayK(sb) >= kFloor) best = {n: x.n, c: c.name, save}; } }
+        const sb = Object.assign({}, subs, {[x.n]: c.name}), save = cost - total(sb); if (save > 0.01 && (!best || save > best.save) && floorsOk(sb)) best = {n: x.n, c: c.name, save}; } }
     if (!best) break; subs[best.n] = best.c; cost = total(subs);
   }
   const res = {subs, before, cost, budget, ok: cost <= budget}; budgetMemo.set(key, res); return res;
@@ -2740,7 +2737,7 @@ function mealDefaults(d, raw){
   // Snacks rotieren über die Ruhetage der Woche, damit jeder einmal drankommt
   let ri = 0; for (let x = monday(d); x < d; x = addDays(x, 1)) if (!isTrainDay(x)) ri++;
   const sn = W.snacks || mealPlan.snacks;
-  o.sn = tr ? (W.trainingSnack || mealPlan.trainingSnack) : sn[ri % sn.length];
+  o.sn = tr ? (W.trainingSnack || mealPlan.trainingSnack) : sn[(ri + 3 * w) % sn.length];
   if (!tr) o.ex = !raw && dayObj(d)?.boulder?.done ?  // Budget rechnet ohne den Bouldern-Shake, damit der Schalter keine anderen Gerichte tauscht
     (W.trainingSnack || mealPlan.trainingSnack) : mealPlan.restExtra[ri % 2];
   const re = avoidRe();
@@ -2908,7 +2905,7 @@ function priceOf(pr, store){
 // Zutatenzeile → {pr: Produkt, amt: Menge in der Basiseinheit des Produkts} oder null
 function parseIng(line){
   line = line.replace(/^(ca\.|etwas|etwa|optional:?)\s+/i, "");
-  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$/);
+  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$/);
   const q = m ? (m[1] === "½" ? .5 : m[1].includes("/") ? m[1].split("/").reduce((a, b) => a / b) : Number(m[1].replace(",", "."))) : null;
   const unit = m ? (m[2] || "") : "", name = (m ? m[3] : line).replace(/\(.*?\)/g, "").split(", ")[0].trim();
   const pr = prices?.products.find(x => x.re.test(name)); if (!pr) return {name, q, unit, pr: null, amt: 0};
@@ -2920,6 +2917,7 @@ function parseIng(line){
   else if (unit === "TL") amt = q * 5;
   else if (unit === "Handvoll") amt = q * 30;
   else if (/^(Dose|Glas|Gläser)/.test(unit)) amt = q * (pr.dose ? pr.pack : 400);
+  else if (/^Prise/.test(unit)) amt = q;
   else if (unit === "Bund") amt = pr.unit === "Stück" ? q : q * pr.pack;
   else if (unit === "Becher") amt = q * 250;
   else if (/^Pck/.test(unit)) amt = q * pr.pack;
@@ -3029,12 +3027,16 @@ function scanCmd(c){
 }
 // ---------- Kassenbon-Import ----------
 let rcpt = null; // {status, store, items:[{name, price, pid, size, ref, use}]}
-const loadScript = src => new Promise((ok, no) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const el = document.createElement("script"); el.src = src; el.onload = ok; el.onerror = () => no(new Error("Bibliothek nicht ladbar")); document.head.appendChild(el); });
+// Fremdbibliotheken nur mit geprüfter Prüfsumme (Subresource Integrity)
+const SRI = {"https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js": "sha384-BzBxP10ZE72aitqj5UMmUsbKFliP/DZqA8Wq+BNNhlIJDGoEd1tpkMYXOg9+n6sB",
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js": "sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e",
+  "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js": "sha384-1zP4ZOtlk2FXAOiUArpMuWf7INJJKe/ROfYFAVSeUa11DEfXdKWGiPI3dVma2Gt0"};
+const loadScript = src => new Promise((ok, no) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const el = document.createElement("script"); el.src = src; if (SRI[src]) { el.integrity = SRI[src]; el.crossOrigin = "anonymous"; } el.onload = ok; el.onerror = () => no(new Error("Bibliothek nicht ladbar")); document.head.appendChild(el); });
 async function receiptText(file){
   if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) {
     await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-    const doc = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise; const lines = [];
+    const doc = await pdfjsLib.getDocument({data: await file.arrayBuffer(), isEvalSupported: false}).promise; const lines = [];
     for (let i = 1; i <= doc.numPages; i++) { const tc = await (await doc.getPage(i)).getTextContent(), rows = {};
       for (const it of tc.items) { const y = Math.round(it.transform[5]); (rows[y] = rows[y] || []).push([it.transform[4], it.str]); }
       for (const y of Object.keys(rows).map(Number).sort((a, b) => b - a)) lines.push(rows[y].sort((a, b) => a[0] - b[0]).map(x => x[1]).join(" ").replace(/\s+/g, " ").trim()); }
@@ -3175,13 +3177,14 @@ const stockOn = () => FOOD().stockOn !== false && (FOOD().stock || []).length > 
 const prodLabel = pr => pr.name.replace(/\s*\(.*?\)/g, "").replace(/,\s+\d.*$/, "").trim();
 let stQ = "", reste = {have: lsGet("resteHave") || [], mode: lsGet("resteMode") || "nur", stock: true}, shopFromReste = false;
 const resteTerm = t => { const w = t.toLowerCase().trim().replace(/(en|n|e|s)$/, ""); return w.length >= 3 ? w : t.toLowerCase().trim(); };
+const resteHit = (text, term) => new RegExp("(^|[^a-zäöüß])" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
 // Produkt-IDs zu den eingegebenen Resten (für „habe ich“ beim Einkauf)
-const resteIds = () => new Set((prices?.products || []).filter(pr => reste.have.some(t => pr.re.test(t.toLowerCase()) || prodLabel(pr).toLowerCase().includes(resteTerm(t)))).map(pr => pr.id));
+const resteIds = () => new Set((prices?.products || []).filter(pr => reste.have.some(t => pr.re.test(t.toLowerCase()) || resteHit(prodLabel(pr), resteTerm(t)))).map(pr => pr.id));
 function resteRank(){
   const terms = reste.have.map(resteTerm), st = reste.stock && stockOn() ? STOCK() : new Set(), are = avoidRe();
   return recipes.filter(r => recipeOk(r, are)).map(r => { let hit = 0; const used = new Set(), miss = [];
     for (const l of r.ingredients || []) { const ll = l.toLowerCase(), x = prices ? parseIng(l) : null, ids = x?.pr ? (x.parts || [x]).map(pt => pt.pr.id) : [];
-      const th = reste.have.filter((t, i) => ll.includes(terms[i])); if (th.length) { hit++; th.forEach(t => used.add(t)); continue; }
+      const th = reste.have.filter((t, i) => resteHit(ll, terms[i])); if (th.length) { hit++; th.forEach(t => used.add(t)); continue; }
       if (ids.some(id => st.has(id)) || SPICE_RE.test(l) || x?.pr?.pantry || /wasser\b/i.test(l)) continue;
       miss.push(x?.pr ? prodLabel(x.pr) : (x?.name || l)); }
     return {r, hit, used: [...used], miss: [...new Set(miss)]}; })
@@ -3233,6 +3236,7 @@ function ingWords(){ if (ingVocab && ingVocab.ver === dataVer) return ingVocab.v
     if (w.length < 3 || w.length > 26 || /\d|^(etwas|nach|je|ca|evtl)\b/i.test(w)) return; const k = w.toLowerCase(), o = c.get(k); o ? o.n++ : c.set(k, {w: w[0].toUpperCase() + w.slice(1), n: 1}); };
   for (const r of recipes || []) for (const l of r.ingredients || []) { const m = l.match(/^\s*(?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Msp\.?|Stiele?|Zweige?)?\s+(.+)$/); add(m ? m[1] : l); }
   for (const pr of prices?.products || []) for (const part of pr.name.split(/\s*\/\s*/)) add(part);
+  for (const w of ["Äpfel", "Pilze", "Champignons", "Koriander", "Sellerie", "Senf", "Sesam", "Erdnüsse", "Nüsse", "Soja", "Laktose", "Gluten", "Kokos", "Oliven", "Paprika", "Zwiebeln", "Knoblauch", "Tomaten", "Aubergine", "Rosinen", "Kidneybohnen"]) add(w);
   for (const [k, o] of [...c]) for (const suf of ["n", "en", "s"]) { const pl = c.get(k + suf); if (pl && c.has(k)) { const [keep, drop] = pl.n >= o.n ? [pl, k] : [o, k + suf]; keep.n += c.get(drop).n; c.delete(drop); } }  // Tomate/Tomaten nur einmal
   const v = [...c.values()].sort((a, b) => b.n - a.n); ingVocab = {ver: dataVer, v}; return v; }
 function ingSuggest(qq, n = 6, skip = []){ qq = qq.trim().toLowerCase(); if (qq.length < 2) return []; const sk = new Set(skip.map(x => x.toLowerCase())), v = ingWords().filter(x => !sk.has(x.w.toLowerCase()));
@@ -3285,7 +3289,7 @@ function shopHtml(){
     h += `<div class="card budgetbar"><div class="mhead"><b>Wochenbudget <span id="budVal">${bud ? eur(bud) : "aus"}</span></b><label class="check small"><input type="checkbox" id="budOn" ${bud && !FOOD().budgetIgnore ? "checked" : ""}><span>aktiv</span></label></div>
       <input type="range" id="budRange" min="30" max="120" step="5" value="${bud || 60}" aria-label="Wochenbudget in Euro">
       ${shopScope === "woche" && bud ? (() => { const wc = weekShopCost(shopWeek()), bs = budgetOn() ? budgetSubs(shopWeek()) : null;
-        return `<div class="small ${wc > bud ? "warnt" : "okt"}">Einkauf diese Woche: <b>${eur(wc)}</b> ${wc > bud ? (budgetOn() ? (bs && !bs.ok ? "· günstigere Rezepte reichen nicht ganz" : "· über dem Budget") : "· über dem Budget (Grenze aus)") : "· passt ✓"}${bs && Object.keys(bs.subs).length ? ` · ${Object.keys(bs.subs).length} ${Object.keys(bs.subs).length === 1 ? "Gericht" : "Gerichte"} getauscht` : ""}</div>`; })() : ""}</div>`;
+        return `<div class="small ${wc > bud ? "warnt" : "okt"}">Verbrauch diese Woche: <b>${eur(wc)}</b> <span class="muted">(Vorräte anteilig)</span> ${wc > bud ? (budgetOn() ? (bs && !bs.ok ? "· günstigere Rezepte reichen nicht ganz" : "· über dem Budget") : "· über dem Budget (Grenze aus)") : "· passt ✓"}${bs && Object.keys(bs.subs).length ? ` · ${Object.keys(bs.subs).length} ${Object.keys(bs.subs).length === 1 ? "Gericht" : "Gerichte"} getauscht` : ""}</div>`; })() : ""}</div>`;
     h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.miss ? `${v.miss} ohne Preis` : `${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt`}</span></div>`).join("")}</div>${info(`Ganze Packungen bzw. ganze Stück, Vorräte anteilig, ohne Gewürze. * = geschätzter Preis. ${priceNote()}`)}</div>`; }
   const src = !!lsGet("shopSrc");
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b>${got ? `<button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button>` : ""}</div>
@@ -3486,7 +3490,7 @@ async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const cb = t.closest("[data-coach]"); if (cb) { const k = cb.dataset.coach; ensureCur(); if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { const are = avoidRe(), pool = rnd.dataset.random === "meal" ? favFirst(mainAlts(...rnd.dataset.v.split("|").slice(1).concat(rnd.dataset.cur))) : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
@@ -3611,7 +3615,7 @@ async function onClick(e){
   const pb = t.closest("[data-pain]"); if (pb) { const k = pb.dataset.pain, v = Number(pb.dataset.v); cur.pain[k] = cur.pain[k] === v ? null : v; if (cur.pain[k] == null) clr("pain." + k); pb.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur.pain[k]))); touch(); return; }
   const s2 = t.closest("[data-sub2]"); if (s2) { sub.mehr = s2.dataset.sub2; go("mehr"); history.replaceState(null, "", `#t=${s2.dataset.sub2}`); return; }
   const rs = t.closest("[data-rsub]"); if (rs) { sub.reise = rs.dataset.rsub; renderProgress(); return; }
-  const sb = t.closest("[data-sub]"); if (sb) { sub[tab] = sb.dataset.sub; history.replaceState(null, "", `#t=${sb.dataset.sub}`); render(); scrollTo(0, 0); return; }
+  const sb = t.closest("[data-sub]"); if (sb) { sub[tab] = sb.dataset.sub; history.pushState(null, "", `#t=${sb.dataset.sub}`); render(); scrollTo(0, 0); return; }
   const ac = t.closest("[data-act]");
   if (ac) { const a = ac.dataset.act, v = ac.dataset.v;
     if (a === "closeSheet") { closeSheet(); return; }
@@ -3625,7 +3629,7 @@ async function onClick(e){
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "alt"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
-    if (a === "setSession") { cur.session = v; touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
+    if (a === "setSession") { cur.session = v; cur.sessAt = Date.now(); touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
     if (a === "rcReset") { rcpt = null; renderSheet(); return; }
@@ -3644,20 +3648,20 @@ async function onClick(e){
       if (pendingConfirm !== a) { pendingConfirm = a; renderSheet(); return; }
       pendingConfirm = null; stopRest(); releaseWake(); clearInterval(clockTimer);
       cur.sets = {}; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null;
-      if (a === "delTraining") { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; }
+      if (a === "delTraining") { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; }
       dirty = true; saveCur(); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
     if (a === "resetWhere") { delete cur.where; clr("where"); cur.swap = {}; openEx = null; touch(); renderTraining(); return; }
     if (a === "toHeute") { go("heute"); return; }
     if (a === "summaryDone") { if (sheet.open) { sheetKind = null; sheet.close(); } go("heute"); return; }
     if (a === "finish") { finishWorkout(); return; }
-    if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = setsFor(v, weekNo(selDate), SESS[woSession || cur.session]), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
+    if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = setsFor(v, weekNo(selDate), SESS[woSession || cur.session], ac.dataset.base || v), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
     if (a === "nextex") { const ids = exList(woSession || cur.session); openEx = ids[ids.indexOf(v)+1] || null; renderTraining(); return; }
     if (a === "checkin") { openSheet("checkin", v); return; }
     if (a === "ciSave") { const sel = sheet.querySelector("#ciMode [aria-pressed=true]")?.dataset.mode || "normal";
       saveMap("checkins.json", "checkins", v, {week:v, stress:num(sheet.querySelector("#ci_stress").value), hurdle:sheet.querySelector("#ci_hurdle").value, ifthen:sheet.querySelector("#ci_ifthen").value, good:sheet.querySelector("#ci_good").value, nextMode:sel});
       if (sel !== (S().mode || "normal")) saveSettings({mode:sel}); closeSheet(); return; } }
   const cm = t.closest("#ciMode [data-mode]"); if (cm) { cm.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === cm))); return; }
-  if (t.closest("#bDone")) { cur.boulder.done = !cur.boulder.done; touch(); saveCur(); renderToday();
+  if (t.closest("#bDone")) { cur.boulder.done = !cur.boulder.done; cur.boulder.at = Date.now(); touch(); saveCur(); renderToday();
     if (cur.boulder.done && /^ok/.test(cur.session || "") && !loggedSets(cur)) toast("Heute gebouldert: Oberkörper lieber auslassen – der Planer verschiebt ihn.");
     return; }
   const rc = t.closest("#recCat [data-cat]"); if (rc) { recFilter.cat = rc.dataset.cat; renderRecipes(); return; }
@@ -3742,21 +3746,23 @@ for (const el of [document.querySelector("header.top"), document.getElementById(
 function onSwipe(s0, dx){
   const z = s0.z;
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
-    if (dx > 0) { editDay(d, day => { day.ate = Object.assign({}, day.ate, {[k]: !(day.ate || {})[k]}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render(); }
+    if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
+      const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
+      const row = view.querySelector(`.mrow[data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
     else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
   if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
-  if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); }
+  if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); toast(`${dx < 0 ? "→" : "←"} ${selDate === todayIso() ? "Heute" : fmt(selDate)}`); }
 }
 // Wischgesten: horizontal über [data-swipe]
 let swp = null, swipedAt = 0;
 // Nach einer Wischgeste den folgenden Klick verwerfen (sonst würde z. B. das Häkchen gleich wieder umschalten)
 view.addEventListener("click", e => { if (swipedAt && Date.now() - swipedAt < 350) { swipedAt = 0; e.preventDefault(); e.stopPropagation(); } }, true);
 view.addEventListener("pointerdown", e => { const z = e.target.closest("[data-swipe]"); swp = z && !e.target.closest("input,textarea,select") ? {x: e.clientX, y: e.clientY, z, kind: z.dataset.swipe} : null; });
-const swReset = z => { if (z) { z.style.removeProperty("--dx"); z.classList.remove("sw-r", "sw-l", "swiping"); } };
+const swReset = z => { if (z) { z.style.removeProperty("--dx"); z.classList.remove("sw-r", "sw-l", "swiping", "sw-go"); } };
 view.addEventListener("pointermove", e => { if (!swp || !swp.z.dataset.swr) return; const dx = e.clientX - swp.x, dy = e.clientY - swp.y;
   if (Math.abs(dy) > 40) { swReset(swp.z); return; } if (Math.abs(dx) < 8) return;
   const z = swp.z, v = Math.max(-140, Math.min(140, dx)); if (dx < 0 && !z.dataset.swl) return;
-  z.classList.add("swiping"); z.style.setProperty("--dx", v); z.classList.toggle("sw-r", dx > 0); z.classList.toggle("sw-l", dx < 0); });
+  z.classList.add("swiping"); z.style.setProperty("--dx", v); z.classList.toggle("sw-r", dx > 0); z.classList.toggle("sw-l", dx < 0); z.classList.toggle("sw-go", Math.abs(dx) >= 70); });
 view.addEventListener("pointercancel", () => { if (swp) swReset(swp.z); swp = null; });
 view.addEventListener("pointerup", e => { if (!swp) return; const dx = e.clientX - swp.x, dy = e.clientY - swp.y, s0 = swp; swp = null; swReset(s0.z);
   if (Math.abs(dx) < 70 || Math.abs(dy) > 50) return;
@@ -3769,7 +3775,10 @@ sheet.addEventListener("pointercancel", () => { shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 addEventListener("hashchange", () => { if (dirty) saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
-document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { if (tab === "training" && cur?.startedAt && !cur.finishedAt) requestWake(); if (token && !dirty && !sheet.open && tab !== "training") loadAll().then(() => { if (!dirty && !sheet.open) { cur = null; render(); } }); } });
+let todayAtHide = todayIso();
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") todayAtHide = todayIso();
+  if (document.visibilityState === "visible" && todayIso() !== todayAtHide && selDate === todayAtHide && !(cur?.startedAt && !cur.finishedAt)) { if (dirty) saveCur(); selDate = todayIso(); cur = null; if (tab === "heute") history.replaceState(null, "", `#d=${selDate}`); render(); }
+  if (document.visibilityState === "visible") { if (tab === "training" && cur?.startedAt && !cur.finishedAt) requestWake(); if (token && !dirty && !sheet.open && tab !== "training") chain.then(() => loadAll()).then(() => { if (!dirty && !sheet.open) { cur = null; render(); } }); } });
 
 // ---------- Start ----------
 if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(() => {}); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }

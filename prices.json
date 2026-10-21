@@ -1320,7 +1320,7 @@
 "name": "Langkorn- oder Basmatireis",
 "pack": 1000,
 "unit": "g",
-"match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis(?!-?essig)\\b|basmati",
+"match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis(?!-?essig|- oder)\\b|basmati",
 "prices": {
 "rewe": 1.39,
 "lidl": 1.59,
