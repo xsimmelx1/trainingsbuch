@@ -153,7 +153,7 @@ textarea{min-height:64px;resize:vertical}
 .ev.done .ti b{text-decoration:line-through;text-decoration-thickness:1px}
 .ev .st{font-size:12px;color:var(--muted)}
 .ev.done .st{color:var(--good)}
-.storecmp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.storecmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .storecmp div{border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;font-size:12px;background:var(--surface)}
 .storecmp div b{font-family:var(--f-num);font-size:14px}
 .budget .track{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
@@ -2819,7 +2819,7 @@ function trainLine(d){
 }
 // ---------- Preise: recherchierte Richtpreise je Markt (prices.json), keine Live-Daten ----------
 let prices = null, pricesReady = null;
-const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland"};
+const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny"};
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
   if (prices) return Promise.resolve();
@@ -2998,7 +2998,7 @@ async function receiptText(file){
 // Zeilen eines deutschen Kassenbons → Positionen mit Preis; Gewichts- und Mengenzeilen werden verrechnet
 function parseReceipt(text){
   const lines = text.split(/\n/).map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean), up = text.toUpperCase();
-  const store = /REWE/.test(up) ? "rewe" : /LIDL/.test(up) ? "lidl" : /ALDI/.test(up) ? "aldi" : /KAUFLAND/.test(up) ? "kaufland" : (FOOD().store !== "min" && FOOD().store) || "aldi";
+  const store = /REWE/.test(up) ? "rewe" : /LIDL/.test(up) ? "lidl" : /ALDI/.test(up) ? "aldi" : /KAUFLAND/.test(up) ? "kaufland" : /NETTO/.test(up) ? "netto" : /PENNY/.test(up) ? "penny" : (FOOD().store !== "min" && FOOD().store) || "aldi";
   const skip = /^(SUMME|ZU ZAHLEN|GESAMT|ZWISCHENSUMME|GEGEBEN|R[ÜU]CKGELD|BAR\b|EC[- ]|VISA|MASTERCARD|KARTE|KARTENZAHLUNG|PFAND|LEERGUT|RABATT|COUPON|BONUS|PAYBACK|PUNKTE|STEUER|MWST|NETTO\s*(EUR|€|\d)|BRUTTO\s*(EUR|€|\d)|DATUM|UHRZEIT|KASSE|BELEG|TSE|FILIALE|ST\.?NR|TEL\.|WWW\.)|\b(MWST|SUMME|PFAND|RABATT|R[ÜU]CKGELD|GEGEBEN)\b/i;
   const items = [];
   for (const l of lines) {
@@ -3231,13 +3231,13 @@ function shopHtml(){
   else h += `<div class="card shopopts"><div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>
     ${shopScope === "tage" ? `<div class="lab">Zeitraum</div><div class="chips sm">${[2, 3, 4].map(n => `<button type="button" data-shopdays="${n}" aria-pressed="${shopDays === n}">${n} Tage</button>`).join("")}</div>` : ""}
     <div class="lab">Mahlzeiten</div><div class="chips sm">${SHOPM.map(([k, l]) => `<button type="button" data-shopm="${k}" aria-pressed="${shopMeals.includes(k)}">${l}</button>`).join("")}</div></div>`;
-  if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => a[1].sum - b[1].sum)[0][0];
+  if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => (a[1].miss - b[1].miss) || (a[1].sum - b[1].sum))[0][0];  // unvollständige Märkte nie „günstigster“
     const bud = num(FOOD().budget);
     h += `<div class="card budgetbar"><div class="mhead"><b>Wochenbudget <span id="budVal">${bud ? eur(bud) : "aus"}</span></b><label class="check small"><input type="checkbox" id="budOn" ${bud && !FOOD().budgetIgnore ? "checked" : ""}><span>aktiv</span></label></div>
       <input type="range" id="budRange" min="30" max="120" step="5" value="${bud || 60}" aria-label="Wochenbudget in Euro">
       ${shopScope === "woche" && bud ? (() => { const wc = weekShopCost(shopWeek()), bs = budgetOn() ? budgetSubs(shopWeek()) : null;
         return `<div class="small ${wc > bud ? "warnt" : "okt"}">Einkauf diese Woche: <b>${eur(wc)}</b> ${wc > bud ? (budgetOn() ? (bs && !bs.ok ? "· günstigere Rezepte reichen nicht ganz" : "· über dem Budget") : "· über dem Budget (Grenze aus)") : "· passt ✓"}${bs && Object.keys(bs.subs).length ? ` · ${Object.keys(bs.subs).length} ${Object.keys(bs.subs).length === 1 ? "Gericht" : "Gerichte"} getauscht` : ""}</div>`; })() : ""}</div>`;
-    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt</span></div>`).join("")}</div>${info(`Ganze Packungen bzw. ganze Stück, Vorräte anteilig, ohne Gewürze. * = geschätzter Preis. ${priceNote()}`)}</div>`; }
+    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.miss ? `${v.miss} ohne Preis` : `${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt`}</span></div>`).join("")}</div>${info(`Ganze Packungen bzw. ganze Stück, Vorräte anteilig, ohne Gewürze. * = geschätzter Preis. ${priceNote()}`)}</div>`; }
   const src = !!lsGet("shopSrc");
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b>${got ? `<button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button>` : ""}</div>
     <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
@@ -3274,7 +3274,7 @@ function foodSettingsHtml(){
       ${info("Der Plan tauscht frisch gekochte Gerichte, die darüber liegen, gegen ähnliche mit passendem Protein. Meal Prep bleibt, weil es nur einmal pro Woche gekocht wird. Jedes Rezept zeigt aktive Zeit, Gesamtzeit und Schwierigkeit.")}</div>
     <div class="card"><h2>Preise</h2>
       <label class="check"><input type="checkbox" id="foodPrices" ${f.prices ? "checked" : ""}><span>Preise pro Gericht und Einkauf anzeigen</span></label>
-      <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
+      <div class="field"><label for="foodStore">Markt</label><select id="foodStore">${[["aldi","Aldi"],["lidl","Lidl"],["rewe","REWE"],["kaufland","Kaufland"],["netto","Netto"],["penny","Penny"],["min","Jeweils günstigster"]].filter(([k]) => k === "min" || !prices || prices.stores.includes(k)).map(([k, l]) => `<option value="${k}" ${(f.store || "aldi") === k ? "selected" : ""}>${l}</option>`).join("")}</select></div>
       <label class="check"><input type="checkbox" id="foodBio" ${f.bio ? "checked" : ""}><span>Bio für alle Produkte <span class="small muted">(Bio-Preis, wo bekannt; Budget und Einkauf rechnen damit)</span></span></label>
       ${prices && !f.bio ? bioPicker(f) : ""}
       <div class="small muted">${prices ? priceNote() : "Richtpreise werden geladen …"}</div></div>
