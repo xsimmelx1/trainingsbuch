@@ -242,7 +242,8 @@ body.wo main{padding-bottom:110px}
 .pps .pp.due > span:first-child{color:var(--warn)}
 .nextc .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}.nextc .actions .btn{white-space:nowrap}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
-.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.quick .qcard.wide{grid-column:span 2}.quick .qcard b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.odline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .quick .qcard{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font:inherit;font-size:13px;color:var(--muted);text-align:left}
 .quick .qcard b{color:var(--ink);font-size:18px;line-height:28px}
 .quick label{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font-size:13px;color:var(--muted)}
@@ -1823,7 +1824,7 @@ function todayItems(focus){
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate), st = trainState(), plan = planFor(selDate);
   out.push({k: "mob", prio: hm0 < 11 * 60 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `12 min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
   if (focus !== "essen") { const ca = cur.cardio || [];
-    out.push({k: "cardio", prio: ca.length ? 9 : 9.5, done: ca.length > 0, icon: "🏃", title: "Laufen / Ausdauer", sub: ca.length ? ca.map(cardioTxt).join(" · ") : "optional · Dauer reicht", act: `data-sheet="cardio" data-v="${selDate}"`, cta: ca.length ? "Noch eins" : "Eintragen"}); }
+    out.push({k: "cardio", prio: ca.length ? 9 : 9.5, done: ca.length > 0, icon: "🏅", title: "Andere Aktivität", sub: ca.length ? ca.map(cardioTxt).join(" · ") : "optional · Bouldern, Laufen, Rad … nur Dauer", act: `data-sheet="cardio" data-v="${selDate}"`, cta: ca.length ? "Noch eins" : "Eintragen"}); }
   if (focus !== "essen" && st !== "frei") {
     const startM = plan?.start ? hm(plan.start) : 18 * 60;
     out.push({k: "train", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : "heute", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
@@ -1871,16 +1872,20 @@ function dayPreps(d, ev){
 }
 function nextBlock(d){
   const ev = dayEvents(d), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
-  // nächster offener Termin: noch nicht vorbei bzw. höchstens 90 min überfällig
-  const nx = ev.find(e => !e.done && hm(e.t) + (e.meal ? 90 : e.train ? 120 : 60) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
+  // Mahlzeiten sind keine Aufgaben: nur kommende zählen. Aufgaben bleiben offen, bis sie erledigt sind.
+  const win = e => e.meal ? 30 : e.train ? 120 : e.k === "mob" ? 240 : 24 * 60;
+  const nx = ev.find(e => !e.done && hm(e.t) + win(e) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
+  const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
   const line = `<div class="tline">${ev.map(e => { const past = hm(e.t) < nm; const act = e.meal ? (recipeByName(e.meal.name) ? `data-recipe="${esc(e.meal.name)}" data-rctx="${d}|${e.meal.k}"` : `data-sheet="meal" data-v="${d}|${e.meal.k}"`) : e.act;
     return `<button type="button" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${!e.done && past && e !== nx ? "miss" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}"><b>${e.t}</b>${e.done ? "✓" : e.icon}</button>`; }).join("")}</div>`;
   let h = `<div class="lab sec">Als Nächstes</div>` + line;
-  if (!nx) return {h: h + `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`, key: null};
+  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>`).join("")}</div>` : "";
+  if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
     <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
+  h += odHtml;
   const other = [];
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
   return {h, key: nx.k};
@@ -1950,12 +1955,15 @@ function renderToday(){
     const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
     if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
     let nxKey = null;
+    if (todayFocus === "essen" && mealPlan && recipes) { const ms = mealsFor(selDate), tt = mealTotals(ms), tg = foodTarget();
+      h += `<div class="card diary"><div class="small muted nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div><div class="mrows">${ms.map(m => diaryRow(selDate, m)).join("")}</div><a class="btn ghost small" href="#t=essen">Wochenplan ›</a></div>`;
+      view.innerHTML = h + `</div>`; return; }
     let nbOk = false; if (isToday && todayFocus === "alles") try { const nb = nextBlock(selDate); h += nb.h; nxKey = nb.key; nbOk = true; } catch (e) { console.error(e); }
     if (isToday && !nbOk) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
     const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
     if (later.length && !nbOk) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
     if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
-    if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><label><span>🧗 Bouldern</span><button type="button" class="toggle" id="bDone" aria-label="Heute gebouldert" aria-pressed="${!!cur.boulder.done}"></button></label><button type="button" class="qcard" data-sheet="cardio" data-v="${selDate}"><span>🏃 Laufen</span><b>${(cur.cardio || []).length ? (cur.cardio || []).reduce((a, c) => a + (num(c.min) || 0), 0) + " min" : "＋"}</b></button></div>
+    if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><button type="button" class="qcard wide" data-sheet="cardio" data-v="${selDate}"><span>🏅 Aktivität</span><b>${(() => { const ca = cur.cardio || [], hasB = ca.some(c => c.type === "boulder"); const parts = ca.map(c => (CARDIO[c.type]?.[0] || "🏃") + " " + c.min); if (cur.boulder.done && !hasB) parts.unshift("🧗"); return parts.length ? parts.join(" · ") : "＋"; })()}</b></button></div>
       ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
     if (done.length && !nbOk) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
     if (todayFocus !== "essen") h += weekStrip();
@@ -3138,22 +3146,24 @@ function mealCost(name, store){ const r = recipeByName(name); if (r) return reci
 
 
 // ---------- Ausdauer: Laufen, Joggen, Gehen, Rad ----------
-const CARDIO = {lauf: ["🏃", "Laufen/Joggen", 9.8], geh: ["🚶", "Gehen/Wandern", 3.8], rad: ["🚴", "Radfahren", 6.8]};
+const CARDIO = {boulder: ["🧗", "Bouldern", 5.8], lauf: ["🏃", "Laufen/Joggen", 9.8], rad: ["🚴", "Radfahren", 6.8], geh: ["🚶", "Gehen/Wandern", 3.8], schwimm: ["🏊", "Schwimmen", 7], ball: ["⚽", "Fußball/Ballsport", 7], schlaeger: ["🎾", "Tennis/Badminton", 7], yoga: ["🧘", "Yoga/Dehnen", 3], tanz: ["💃", "Tanzen", 5], kurs: ["🤸", "Fitnesskurs", 6], ski: ["⛷", "Wintersport", 6], sonst: ["✨", "Sonstiges", 5]};
+const KM_TYPES = new Set(["lauf", "rad", "geh", "schwimm"]);
 const pace = c => c.km > 0 ? `${Math.floor(c.min / c.km)}:${String(Math.round((c.min / c.km % 1) * 60)).padStart(2, "0")} min/km` : "";
 const cardioKcal = c => { const kg = num(S().weight) || 74; return c.type === "lauf" && c.km > 0 ? Math.round(kg * c.km) : Math.round((CARDIO[c.type]?.[2] || 6) * 3.5 * kg / 200 * c.min); };
 const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${c.min} min${c.km ? ` · ${fmtQ(c.km)} km · ${pace(c)}` : ""}${c.feel ? ` · ${c.feel}` : ""}`;
 function cardioSheet(d){
   const day = d === cur?.date ? cur : dayObj(d), list = day?.cardio || [], close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
-  return `<div class="sh"><h2>Laufen & Ausdauer · ${fmt(d)}</h2>${close}</div>
+  return `<div class="sh"><h2>Aktivität · ${fmt(d)}</h2>${close}</div>
     ${list.length ? `<div class="lrows">${list.map(c => `<div class="mhead"><span><b>${esc(CARDIO[c.type]?.[1] || c.type)}</b><br><span class="small">${esc(cardioTxt(c))} · ca. ${cardioKcal(c)} kcal</span>${c.note ? `<br><span class="small muted">${esc(c.note)}</span>` : ""}</span><button class="btn ghost small" type="button" data-cardiodel="${c.id}" data-d="${d}" aria-label="Löschen">✕</button></div>`).join("")}</div>` : ""}
     <div class="card"><div class="chips" id="caType">${Object.entries(CARDIO).map(([k, [i, l]]) => `<button type="button" data-catype="${k}" aria-pressed="${cardioType === k}">${i} ${l}</button>`).join("")}</div>
-      <div class="grid2"><div class="field"><label for="caMin">Dauer (min)</label><input type="text" inputmode="numeric" id="caMin" placeholder="z. B. 30"></div><div class="field"><label for="caKm">Distanz (km, optional)</label><input type="text" inputmode="decimal" id="caKm" placeholder="ca. 5"></div></div>
-      <div class="lab">Wie war's?</div><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
-      <div class="field"><label for="caNote">Notiz (optional)</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div>
+      <div class="lab">Dauer ca.</div><div class="chips sm">${[15, 30, 45, 60, 90, 120].map(m => `<button type="button" data-camin="${m}">${m < 60 ? m + " min" : m / 60 + (m % 60 ? ",5" : "") + " h"}</button>`).join("")}</div>
+      <div class="grid2"><div class="field"><label for="caMin">Minuten</label><input type="text" inputmode="numeric" id="caMin" placeholder="z. B. 45"></div>${KM_TYPES.has(cardioType) ? `<div class="field"><label for="caKm">Distanz (km, optional)</label><input type="text" inputmode="decimal" id="caKm" placeholder="ca. 5"></div>` : ""}</div>
+      <details class="small"><summary>Mehr (Anstrengung, Notiz)</summary><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
+      <div class="field"><label for="caNote">Notiz</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div></details>
       <button class="btn primary big" type="button" data-act="cardioSave" data-v="${d}">Eintragen</button>
-      ${info("Knie: Nach dem Laufen kurz auf die Knie-Ampel achten. Liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.")}</div>`;
+      ${info("Bouldern zählt für den Trainingsplan (kein Oberkörper am selben und am nächsten Tag) und bringt abends den Shake. Knie: nach dem Laufen auf die Ampel achten – liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.")}</div>`;
 }
-let cardioType = "lauf", cardioFeel = "";
+let cardioType = "boulder", cardioFeel = "";
 // ---------- Barcode-Scanner: Kamera → EAN → Open Food Facts (freie Datenbank) ----------
 let scanStream = null, scanRaf = 0, scanReader = null, scanMode = null, scanProd = null;
 function stopScan(){
@@ -3777,9 +3787,10 @@ async function onClick(e){
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") ? t : null;
   if (mzb || mzo) { const v = (mzb || mzo).dataset.mobzoom; mobZoom = v === "close" ? null : Number(v); renderSheet(); return; }
   const md = t.closest("[data-mobdone]"); if (md) { const k = md.dataset.mobdone; cur.mobility[k] = !cur.mobility[k]; touch(); try { navigator.vibrate && navigator.vibrate(20); } catch {} if (cur.mobility[k] && mobZoom < MOBILITY.length - 1) mobZoom++; else if (cur.mobility[k]) mobZoom = null; renderSheet(); return; }
-  const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; sheet.querySelectorAll("[data-catype]").forEach(b => b.setAttribute("aria-pressed", b === cty)); return; }
+  const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
   const cfe = t.closest("[data-cafeel]"); if (cfe) { cardioFeel = cardioFeel === cfe.dataset.cafeel ? "" : cfe.dataset.cafeel; sheet.querySelectorAll("[data-cafeel]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cafeel === cardioFeel)); return; }
-  const cdl = t.closest("[data-cardiodel]"); if (cdl) { const id = cdl.dataset.cardiodel, d = cdl.dataset.d, f = day => { day.cardio = (day.cardio || []).filter(c => c.id !== id); day.cardioDel = [...(day.cardioDel || []), id]; };
+  const cmn = t.closest("[data-camin]"); if (cmn) { const el = sheet.querySelector("#caMin"); if (el) el.value = cmn.dataset.camin; sheet.querySelectorAll("[data-camin]").forEach(b => b.setAttribute("aria-pressed", b === cmn)); return; }
+  const cdl = t.closest("[data-cardiodel]"); if (cdl) { const id = cdl.dataset.cardiodel, d = cdl.dataset.d, f = day => { const wasB = (day.cardio || []).some(c => c.id === id && c.type === "boulder"); day.cardio = (day.cardio || []).filter(c => c.id !== id); day.cardioDel = [...(day.cardioDel || []), id]; if (wasB && !day.cardio.some(c => c.type === "boulder")) day.boulder = {done: false, at: Date.now()}; };
     if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f); renderSheet(); render(); return; }
   const scs = t.closest("[data-scanstart]"); if (scs) { startScan(scs.dataset.scanstart); return; }
   const sc = t.closest("[data-scan]"); if (sc) { scanCmd(sc.dataset.scan); return; }
@@ -3849,7 +3860,7 @@ async function onClick(e){
     if (a === "closeSheet") { closeSheet(); return; }
     if (a === "cardioSave") { const min = num(sheet.querySelector("#caMin")?.value), km = num(sheet.querySelector("#caKm")?.value), note = sheet.querySelector("#caNote")?.value.trim() || "";
       if (!(min > 0)) { toast("Bitte die Dauer in Minuten eintragen"); sheet.querySelector("#caMin")?.focus(); return; }
-      const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min, km: km > 0 ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; };
+      const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min, km: km > 0 && KM_TYPES.has(cardioType) ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
       cardioFeel = ""; toast(`Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
     if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
