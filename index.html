@@ -93,7 +93,10 @@ textarea{min-height:64px;resize:vertical}
 .chips.sm button{padding:5px 11px;font-size:.92em}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
-.acl{margin-top:6px}.acl:empty{display:none}.acl button{padding:4px 12px;font-weight:500}
+.acl{margin-top:6px}
+.rsrow{padding:8px}.rsrow .lrow{border:0;padding:0;background:none}.rsrow .btn{margin-top:6px}
+.fsbox ol{margin:6px 0 0;padding-left:20px}.fsbox li{margin:3px 0}
+.stockrow{margin:8px 0 2px}.acl:empty{display:none}.acl button{padding:4px 12px;font-weight:500}
 .lrow.sel{border-color:var(--good);background:var(--good-soft)}
 
 /* Heute: Aufgabenliste */
@@ -2035,7 +2038,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","ownfood","receipt","ownprices","scan","cardio","cook","shoprec"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -2253,6 +2256,13 @@ function journeySheet(kind, arg){
       <button class="btn ${lessonRead(l.id) ? "" : "primary"} big" type="button" data-act="lessonRead" data-v="${l.id}">${lessonRead(l.id) ? "✓ Gelesen" : "Als gelesen markieren"}</button>`;
   }
   if (kind === "cook") return cookHtml(arg);
+  if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
+  if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
+    return `<div class="sh"><h2>🏠 Vorrat zuhause</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
+      <div class="mhead"><span>Beim Einkauf abziehen<br><span class="small muted">${STOCK().size} Produkte markiert</span></span><button type="button" class="toggle" data-stockon aria-pressed="${FOOD().stockOn !== false}" aria-label="Vorrat beim Einkauf berücksichtigen"></button></div>
+      <div class="small muted">Antippen, was du zuhause hast – hervorgehoben heißt vorhanden. Diese Produkte stehen dann nicht mehr auf der Einkaufsliste, und der Resteverwerter zählt sie mit.</div>
+      <input type="text" id="stQ" value="${esc(stQ)}" placeholder="🔎 Produkt suchen" aria-label="Produkt suchen" autocomplete="off">
+      <div id="stList">${stockHtml()}</div>${STOCK().size ? `<button class="btn ghost small" type="button" data-stockclear>Vorrat leeren</button>` : ""}`; }
   if (kind === "shoprec") return `<div class="sh"><h2>Gericht wählen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="srQ" value="${esc(srQ)}" placeholder="🔎 Name oder Zutat" aria-label="Gericht suchen" autocomplete="off"><div id="srList">${shopRecList()}</div>`;
   if (kind === "cardio") return cardioSheet(arg || selDate);
   if (kind === "scan") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } setTimeout(() => { if (!scanSlot()?.innerHTML) startScan("price"); }, 50);
@@ -2357,7 +2367,7 @@ function shelfHtml(){
     ["🔥 Warm & sättigend", ok.filter(r => main(r) && r.temp === "warm").sort((a, b) => recipeNutri(b).protein - recipeNutri(a).protein), {temp: "warm", cat: "haupt"}],
     ["🥣 Frühstück", ok.filter(r => r.category === "fruehstueck"), {cat: "fruehstueck"}],
     ["🥤 Snacks & Shakes", ok.filter(r => r.category === "snack" || r.category === "shake"), {cat: "snack"}]];
-  return `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
+  return `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
     + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle (${l.length}) ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
 }
 function renderRecipes(b){
@@ -3096,6 +3106,64 @@ let shopScope = lsGet("shopScope") || "woche", shopDay = null, shopRec = null, s
 // Lagerart je Produkt: Basis = lange haltbar (Trocken, Dose, TK, H-Milch, Zwiebeln/Kartoffeln), sonst frisch; Spezial = kommt nur in wenigen Rezepten vor
 const BASIS = new Set(["haferflocken","reis","nudeln","vollkornnudeln","linsennudeln","couscous","quinoa","bulgur","roteLinsen","linsenBraun","kichererbsen","kidney","weissebohnen","schwarzeBohnen","linsendose","mais","tomatenGehackt","tomatenPassiert","tomatenmark","kokosmilch","sojagranulat","tkSpinat","erbsen","bohnenGruen","edamame","tkbeeren","mehl","zucker","staerke","oel","sojasauce","bruehe","honig","kakao","chia","leinsamen","kerne","walnuesse","cashews","mandeln","pinienkerne","erdnussmus","tahin","knaeckebrot","magermilchpulver","milch","sojadrink","haferdrink","pflanzendrink","currypaste","currypulver","senf","essig","agave","oliven","jalapenos","loeffelbiskuits","schokolade","kartoffeln","zwiebeln","knoblauch","margarine","eiweissbrot","tortillas"]);
 let prodUse = null, ingVocab = null;
+// Vorrat zuhause: Produkt-IDs in food.stock; Schalter food.stockOn (Standard an)
+const STOCK = () => new Set(FOOD().stock || []);
+const stockOn = () => FOOD().stockOn !== false && (FOOD().stock || []).length > 0;
+const prodLabel = pr => pr.name.replace(/\s*\(.*?\)/g, "").replace(/,\s+\d.*$/, "").trim();
+let stQ = "", reste = {have: lsGet("resteHave") || [], mode: lsGet("resteMode") || "nur", stock: true}, shopFromReste = false;
+const resteTerm = t => { const w = t.toLowerCase().trim().replace(/(en|n|e|s)$/, ""); return w.length >= 3 ? w : t.toLowerCase().trim(); };
+// Produkt-IDs zu den eingegebenen Resten (für „habe ich“ beim Einkauf)
+const resteIds = () => new Set((prices?.products || []).filter(pr => reste.have.some(t => pr.re.test(t.toLowerCase()) || prodLabel(pr).toLowerCase().includes(resteTerm(t)))).map(pr => pr.id));
+function resteRank(){
+  const terms = reste.have.map(resteTerm), st = reste.stock && stockOn() ? STOCK() : new Set(), are = avoidRe();
+  return recipes.filter(r => recipeOk(r, are)).map(r => { let hit = 0; const used = new Set(), miss = [];
+    for (const l of r.ingredients || []) { const ll = l.toLowerCase(), x = prices ? parseIng(l) : null, ids = x?.pr ? (x.parts || [x]).map(pt => pt.pr.id) : [];
+      const th = reste.have.filter((t, i) => ll.includes(terms[i])); if (th.length) { hit++; th.forEach(t => used.add(t)); continue; }
+      if (ids.some(id => st.has(id)) || SPICE_RE.test(l) || x?.pr?.pantry || /wasser\b/i.test(l)) continue;
+      miss.push(x?.pr ? prodLabel(x.pr) : (x?.name || l)); }
+    return {r, hit, used: [...used], miss: [...new Set(miss)]}; })
+    .filter(o => o.used.length && (reste.mode === "kauf" || o.miss.length <= 1))
+    .sort((a, b) => b.used.length - a.used.length || a.miss.length - b.miss.length || b.hit - a.hit).slice(0, 30);
+}
+// Baukasten: aus den Resten ein schnelles Gericht ohne Rezept
+function resteFreestyle(){
+  const h = reste.have, has = re => h.filter(t => re.test(t)), base = has(/reis|nudel|pasta|spaghetti|penne|kartoffel|couscous|quinoa|bulgur|brot|tortilla|wrap|gnocchi/i),
+    prot = has(/tofu|\beier?\b|linse|kichererbse|bohne|feta|halloumi|quark|skyr|hüttenkäse|tempeh|seitan|soja|edamame|käse|mozzarella|erbse/i), veg = h.filter(t => !base.includes(t) && !prot.includes(t));
+  if (!h.length) return "";
+  const b0 = (base[0] || "").toLowerCase(), kind = /tortilla|wrap/.test(b0) ? "Wraps" : /nudel|pasta|spaghetti|penne|gnocchi/.test(b0) ? "Pasta-Pfanne" : /kartoffel/.test(b0) ? "Bratkartoffel-Pfanne" : /reis|couscous|quinoa|bulgur/.test(b0) ? "Bowl" : /brot/.test(b0) ? "Ofen-Stulle" : "Gemüsepfanne";
+  const steps = [base.length ? `${base.join(", ")} nach Packung garen${/kartoffel/.test(b0) ? " (vorgekocht geht schneller)" : ""}.` : "Als Beilage passt alles, was da ist – Reis, Nudeln oder Brot.",
+    `${veg.length ? veg.join(", ") : "Gemüse"} klein schneiden und in 1 EL Öl 5–8 Min. kräftig anbraten.`,
+    prot.length ? `${prot.join(", ")} zugeben und mitgaren${prot.some(t => /quark|skyr|hüttenkäse/i.test(t)) ? " – Quark/Skyr erst am Ende unterrühren oder als Soße kalt dazu" : ""}.` : "Protein ergänzen: 2 Eier, Tofu oder eine Dose Kichererbsen – sonst fehlt Eiweiß.",
+    "Mit Salz, Pfeffer, Paprika/Curry oder Sojasoße abschmecken, etwas Zitrone oder Kräuter drüber."];
+  return `<div class="card fsbox"><div class="mhead"><b>🧩 Freestyle: ${kind}</b><span class="small muted">ohne Rezept</span></div><ol class="small">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${prot.length ? "" : `<div class="pill warn">Kein Protein dabei</div>`}</div>`;
+}
+function resteHtml(){
+  const st = stockOn() ? STOCK().size : 0;
+  return `<div class="sh"><h2>♻️ Resteverwerter</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
+    <div class="small muted">Was muss weg oder worauf hast du Lust? Zutaten eingeben – passende Rezepte erscheinen sofort.</div>
+    <div class="field acwrap"><input type="text" id="rsQ" data-ac="reste" autocomplete="off" placeholder="Zutat, z. B. Zucchini" aria-label="Zutat hinzufügen"></div>
+    <div id="rsHave">${resteHaveHtml()}</div>
+    ${st ? `<label class="check small"><input type="checkbox" id="rsStock" ${reste.stock ? "checked" : ""}><span>Vorrat zuhause mitzählen (${st} Produkte)</span></label>` : `<div class="small muted">Tipp: Unter Einkauf → 🏠 Vorrat kannst du festhalten, was immer da ist.</div>`}
+    <div class="seg" role="group" aria-label="Einkaufen">${[["nur", "Nur was da ist"], ["kauf", "Darf einkaufen"]].map(([k, l]) => `<button type="button" data-rsmode="${k}" aria-pressed="${reste.mode === k}">${l}</button>`).join("")}</div>
+    <div id="rsList">${resteListHtml()}</div>`;
+}
+const resteHaveHtml = () => reste.have.length ? `<div class="chips">${reste.have.map((t, i) => `<button type="button" data-rsdel="${i}" aria-pressed="true" aria-label="${esc(t)} entfernen">${esc(t)} ✕</button>`).join("")}<button type="button" class="btn ghost small" data-rsclear>Alle löschen</button></div>` : "";
+function resteListHtml(){
+  if (!reste.have.length) return `<p class="muted small">Noch keine Zutaten.</p>`;
+  const L = resteRank();
+  let h = L.length ? `<div class="lab sec">${L.length} passende Rezepte</div>` : `<p class="muted small">${reste.mode === "nur" ? "Kein Rezept geht nur mit dem, was da ist – „Darf einkaufen“ zeigt mehr." : "Kein Rezept mit diesen Zutaten."}</p>`;
+  const rows = L.map(o => `<div class="card rsrow"><button type="button" class="lrow menu" data-recipe="${esc(o.r.name)}">${mealThumb(o.r.name)}<span class="lmain"><b>${esc(o.r.name)}</b><span class="small muted"><span class="nutri">${o.r.protein} g P · </span>${o.r.activeMin ?? o.r.timeMin} min</span></span><span class="go">›</span></button>
+    <div class="small"><span class="okt">✓ ${o.used.map(esc).join(", ")}</span>${o.miss.length ? ` · <span class="muted">fehlt: ${o.miss.slice(0, 5).map(esc).join(", ")}${o.miss.length > 5 ? ` +${o.miss.length - 5}` : ""}</span>` : ` · <b>alles da</b>`}</div>
+    ${o.miss.length ? `<button class="btn small ghost" type="button" data-resteshop="${esc(o.r.name)}">🛒 Fehlendes einkaufen</button>` : ""}</div>`);
+  rows.splice(Math.min(3, rows.length), 0, resteFreestyle());  // Freestyle nach den besten Treffern, nicht ganz unten
+  return h + rows.join("");
+}
+function stockHtml(){
+  const has = STOCK(), qq = stQ.trim().toLowerCase(), G = SHOP_GROUPS.map(([g]) => [g, []]); G.push(["Vorrat & Gewürze", []]);
+  for (const pr of prices?.products || []) { const n = prodLabel(pr); if (qq && !n.toLowerCase().includes(qq)) continue; const gi = SHOP_GROUPS.findIndex(([, re]) => re.test(n)); G[gi < 0 ? G.length - 1 : gi][1].push([pr.id, n]); }
+  for (const [, a] of G) a.sort((x, y) => (has.has(y[0]) - has.has(x[0])) || x[1].localeCompare(y[1], "de"));
+  return G.filter(([, a]) => a.length).map(([g, a]) => `<div class="lab sec">${esc(g)}</div><div class="chips devs">${a.map(([id, n]) => `<button type="button" data-stock="${id}" aria-pressed="${has.has(id)}">${esc(n)}</button>`).join("")}</div>`).join("") || `<p class="muted small">Nichts gefunden.</p>`;
+}
 // Zutaten-Wortschatz aus Rezeptzeilen und Produktnamen, nach Häufigkeit
 function ingWords(){ if (ingVocab && ingVocab.ver === dataVer) return ingVocab.v; const c = new Map();
   const add = w => { w = w.replace(/\(.*?\)/g, "").replace(/[,;:].*$/, "").replace(/\s+(oder|und|für|zum|nach)\s.*$/i, "").replace(/\s+(Dose|getrocknet|natur|light|zart|geschnitten|gewürfelt|gehackt|frisch|\d.*)$/i, "").trim();
@@ -3108,7 +3176,9 @@ function ingSuggest(qq, n = 6, skip = []){ qq = qq.trim().toLowerCase(); if (qq.
   return [...v.filter(x => x.w.toLowerCase().startsWith(qq)), ...v.filter(x => !x.w.toLowerCase().startsWith(qq) && x.w.toLowerCase().includes(qq))].slice(0, n).map(x => x.w); }
 function acShow(inp){ let el = inp.parentElement.querySelector(".acl"); if (!el) { el = document.createElement("div"); el.className = "chips acl"; inp.after(el); }
   const toks = inp.value.split(","), cur = toks.pop(); el.innerHTML = ingSuggest(cur, 6, toks.map(x => x.trim())).map(w => `<button type="button" data-acw="${esc(w)}">${esc(w)}</button>`).join(""); }
-function acPick(btn){ const el = btn.closest(".acl"), inp = el?.previousElementSibling; if (!inp) return; const toks = inp.value.split(","); toks[toks.length - 1] = btn.dataset.acw;
+function resteAdd(w){ w = w.trim().replace(/,$/, ""); if (!w || reste.have.some(x => x.toLowerCase() === w.toLowerCase())) return; reste.have.push(w[0].toUpperCase() + w.slice(1)); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsList"]); }
+function acPick(btn){ const el = btn.closest(".acl"), inp = el?.previousElementSibling; if (!inp) return;
+  if (inp.dataset.ac === "reste") { inp.value = ""; el.innerHTML = ""; resteAdd(btn.dataset.acw); inp.focus(); return; } const toks = inp.value.split(","); toks[toks.length - 1] = btn.dataset.acw;
   inp.value = toks.map(x => x.trim()).filter(Boolean).join(", ") + ", "; el.innerHTML = ""; inp.focus();
   if (inp.dataset.ac === "avoid") saveFood({avoid: inp.value.replace(/,\s*$/, "")}); }
 function prodUseCount(){ if (prodUse) return prodUse; prodUse = {}; for (const r of recipes || []) { const seen = new Set(); for (const l of r.ingredients || []) { const x = prices ? parseIng(l) : null; for (const pt of x?.parts || (x?.pr ? [x] : [])) seen.add(pt.pr.id); } for (const id of seen) prodUse[id] = (prodUse[id] || 0) + 1; } return prodUse; }
@@ -3134,11 +3204,14 @@ function shopCtx(){
 }
 const fmtQ = q => q == null ? "" : (Math.round(q * 10) / 10).toLocaleString("de-DE");
 function shopHtml(){
-  const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), hide = !!lsGet("shopHide"), {recs, groups} = shopList(cx.entries);
+  const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), hide = !!lsGet("shopHide"), sl = shopList(cx.entries), recs = sl.recs;
+  // Vorrat zuhause (und beim Resteverwerter genannte Zutaten) kommen nicht auf die Liste
+  const home = new Set([...(stockOn() ? STOCK() : []), ...(shopScope === "gericht" && shopFromReste ? resteIds() : [])]), homeItems = [];
+  const groups = sl.groups.map(([g, a]) => [g, a.filter(i => i.pr && home.has(i.pr.id) ? (homeItems.push(i), false) : true)]).filter(([, a]) => a.length);
   const total = groups.reduce((n, [, a]) => n + a.length, 0), got = groups.reduce((n, [, a]) => n + a.filter(i => done.has(i.key)).length, 0);
   let h = `<div class="lab">Einkaufen für</div><div class="seg" role="group" aria-label="Einkaufen für">${[["tage","Tage"],["woche","Woche"],["tag","Tag"],["gericht","Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const r = recipeByName(cx.n);
-    h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(cx.n)}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept</span></span><span class="go">›</span></button>
+    h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(cx.n)}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept${shopFromReste ? " · ohne deine Reste" : ""}</span></span><span class="go">›</span></button>
       <div class="actions"><button class="btn small" type="button" data-recipe="${esc(cx.n)}">📖 Rezept ansehen</button><button class="btn small ghost" type="button" data-sheet="shoprec">Anderes Gericht</button></div>
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
   else h += `<div class="card shopopts"><div class="calnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>
@@ -3155,6 +3228,7 @@ function shopHtml(){
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b>${got ? `<button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button>` : ""}</div>
     <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
     <div class="btnrow"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>
+    <div class="mhead stockrow"><label class="check small"><input type="checkbox" id="stockOnCb" ${stockOn() ? "checked" : ""} ${(FOOD().stock || []).length ? "" : "disabled"}><span>Vorrat zuhause abziehen${homeItems.length ? ` (${homeItems.length})` : ""}</span></label><button class="btn small ghost" type="button" data-sheet="stock">🏠 Vorrat</button></div>
     <div class="lab">Sortieren</div><div class="seg">${[["gang", "Nach Gang"], ["lager", "Frisch/Basis"]].map(([k, l]) => `<button type="button" data-shopkind="${k}" aria-pressed="${shopKind === k}">${l}</button>`).join("")}</div>
     <div class="row2"><label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label><label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Für welches Gericht</span></label></div>
     ${shopScope === "gericht" ? info(esc(cx.note)) : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
@@ -3163,7 +3237,8 @@ function shopHtml(){
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
     if (shopKind === "lager" && g.startsWith("🗄") && shopScope !== "woche") { h += `<details class="shopbasis"><summary class="lab sec">${esc(g)} (${vis.length})</summary><div class="small muted">Lange haltbar – nur nachkaufen, was fehlt.</div><div class="shopg">${vis.map(shopItemHtml).join("")}</div></details>`; continue; }
     h += `<div class="lab sec">${esc(g)}</div><div class="shopg">${vis.map(shopItemHtml).join("")}</div>`; }
-  return h + info("Was schon im Vorrat ist (Gewürze, Öl, Haferflocken), einfach abhaken. Wischen hakt ebenfalls ab.");
+  if (homeItems.length) h += `<details class="shopbasis"><summary class="lab sec">🏠 Hast du zuhause (${homeItems.length})</summary><div class="small muted">${homeItems.map(i => esc(i.name)).join(" · ")}</div></details>`;
+  return h + info("Was schon im Vorrat ist, unter 🏠 Vorrat markieren – oder einfach abhaken. Wischen hakt ebenfalls ab.");
 }
 function shopText(){
   const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), {groups} = shopList(cx.entries);
@@ -3374,10 +3449,17 @@ async function onClick(e){
   const sd = t.closest("[data-shopdays]"); if (sd) { shopDays = Number(sd.dataset.shopdays); lsSet("shopDays", shopDays); renderMore(); return; }
   const sk2 = t.closest("[data-shopkind]"); if (sk2) { shopKind = sk2.dataset.shopkind; lsSet("shopKind", shopKind); renderMore(); return; }
   const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else if (shopScope === "tage") shopDay = addDays(shopDay || todayIso(), v * shopDays); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
-  const srp = t.closest("[data-shoprec]"); if (srp) { shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; closeSheet(); renderMore(); return; }
+  const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
+  const stk = t.closest("[data-stock]"); if (stk) { const a = STOCK(), k = stk.dataset.stock; a.has(k) ? a.delete(k) : a.add(k); saveFood({stock: [...a]}); stk.setAttribute("aria-pressed", a.has(k)); const m = sheetBody.querySelector(".mhead .small.muted"); if (m) m.textContent = `${a.size} Produkte markiert`; return; }
+  if (t.closest("[data-stockon]")) { saveFood({stockOn: FOOD().stockOn === false}); renderSheet(); return; }
+  if (t.closest("[data-stockclear]")) { saveFood({stock: []}); renderSheet(); return; }
+  const rsm = t.closest("[data-rsmode]"); if (rsm) { reste.mode = rsm.dataset.rsmode; lsSet("resteMode", reste.mode); sheetBody.querySelectorAll("[data-rsmode]").forEach(b => b.setAttribute("aria-pressed", b === rsm)); renderSheetPart(["#rsList"]); return; }
+  const rsd = t.closest("[data-rsdel]"); if (rsd) { reste.have.splice(Number(rsd.dataset.rsdel), 1); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsList"]); return; }
+  if (t.closest("[data-rsclear]")) { reste.have = []; lsSet("resteHave", []); renderSheetPart(["#rsHave", "#rsList"]); return; }
+  const rss = t.closest("[data-resteshop]"); if (rss) { shopScope = "gericht"; shopRec = rss.dataset.resteshop; shopMul = 1; shopFromReste = true; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const kt = t.closest("[data-kitchen]"); if (kt) { const h = kitchenHas(), k = kt.dataset.kitchen; h.has(k) ? h.delete(k) : h.add(k); saveFood({devices: Object.keys(KITCHEN).filter(x => h.has(x))}); renderEssen(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
   if (t.closest("[data-budgettoggle]")) { saveFood({budgetIgnore: !FOOD().budgetIgnore}); render(); return; }
@@ -3527,6 +3609,7 @@ function onInput(e){
   if (t.id === "effAct") { const v = Number(t.value), el = document.getElementById("effVal"); if (el) el.textContent = v ? `max. ${v} min` : "egal"; return; }
   if (t.id === "budRange") { const el = document.getElementById("budVal"); if (el) el.textContent = eur(Number(t.value)); return; }
   if (t.id === "srQ") { srQ = t.value; renderSheetPart(["#srList"]); return; }
+  if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
   if (t.id === "catQ") { catF.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { renderMore(); const q = document.getElementById("catQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
   if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
@@ -3543,6 +3626,9 @@ function onChange(e){
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
+  if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
+  if (t.id === "rsStock") { reste.stock = t.checked; renderSheetPart(["#rsList"]); return; }
+  if (t.id === "stockOnCb") { saveFood({stockOn: t.checked}); renderMore(); return; }
   if (t.id === "foodAvoid") { saveFood({avoid: t.value}); renderEssen(); return; }
   if (t.id === "foodBudget") { const v = num(t.value); saveFood({budget: v && v > 0 ? v : null}); return; }
   if (t.id === "foodBudgetIgnore") { saveFood({budgetIgnore: t.checked}); return; }
