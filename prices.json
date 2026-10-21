@@ -1,5 +1,5 @@
 {
-"date": "2026-10-20",
+"date": "2026-10-21",
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
@@ -28,13 +28,12 @@
 "unit": "g",
 "match": "tk-?(blatt)?spinat|spinat \\(tk|blattspinat",
 "prices": {
-"rewe": 1.49,
+"rewe": 3.11,
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -48,13 +47,12 @@
 "dose": true,
 "match": "schwarze bohnen",
 "prices": {
-"rewe": 0.99,
+"rewe": 1.49,
 "lidl": 0.89,
 "aldi": 0.89,
 "kaufland": 0.89
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -67,13 +65,12 @@
 "unit": "g",
 "match": "tellerlinsen|berglinsen|braune linsen",
 "prices": {
-"rewe": 1.79,
+"rewe": 1.99,
 "lidl": 1.49,
 "aldi": 1.49,
 "kaufland": 1.59
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -87,13 +84,12 @@
 "match": "leinsamen",
 "pantry": true,
 "prices": {
-"rewe": 1.29,
+"rewe": 1.24,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 1.09
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -107,7 +103,7 @@
 "dose": true,
 "match": "kichererbsen",
 "prices": {
-"rewe": 0.69,
+"rewe": 0.59,
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.79
@@ -126,13 +122,12 @@
 "match": "milchpulver",
 "pantry": true,
 "prices": {
-"rewe": 2.49,
+"rewe": 3.29,
 "lidl": 2.49,
 "aldi": 2.49,
 "kaufland": 2.49
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -164,7 +159,7 @@
 "unit": "ml",
 "match": "sojadrink",
 "prices": {
-"rewe": 0.95,
+"rewe": 1.39,
 "lidl": 1.09,
 "aldi": 0.99,
 "kaufland": 1.09
@@ -199,7 +194,7 @@
 "unit": "g",
 "match": "veganes hack|chorizo",
 "prices": {
-"rewe": 2.21,
+"rewe": 3.29,
 "lidl": 2.29,
 "aldi": 2.0,
 "kaufland": 2.11
@@ -306,7 +301,7 @@
 "unit": "g",
 "match": "gerieben|cheddar|gouda",
 "prices": {
-"rewe": 1.59,
+"rewe": 1.43,
 "lidl": 1.19,
 "aldi": 1.43,
 "kaufland": 1.43
@@ -322,7 +317,7 @@
 "unit": "g",
 "match": "quark",
 "prices": {
-"rewe": 0.99,
+"rewe": 1.19,
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19
@@ -389,13 +384,12 @@
 "dose": true,
 "match": "weiße bohnen",
 "prices": {
-"rewe": 0.79,
+"rewe": 1.49,
 "lidl": 0.79,
 "aldi": 0.69,
 "kaufland": 0.69
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -427,7 +421,7 @@
 "dose": true,
 "match": "kidney",
 "prices": {
-"rewe": 0.79,
+"rewe": 0.69,
 "lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69
@@ -496,13 +490,12 @@
 "unit": "g",
 "match": "cherrytomate|kirschtomate",
 "prices": {
-"rewe": 1.29,
+"rewe": 0.89,
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.4
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -515,13 +508,12 @@
 "unit": "Stück",
 "match": "frühlingszwiebel",
 "prices": {
-"rewe": 0.79,
+"rewe": 0.75,
 "lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -535,7 +527,7 @@
 "piece": 50,
 "match": "eiweißbrot",
 "prices": {
-"rewe": 2.69,
+"rewe": 2.29,
 "lidl": 1.79,
 "aldi": 1.99,
 "kaufland": 1.99
@@ -589,13 +581,12 @@
 "unit": "g",
 "match": "(?<!icher)erbsen(?!nudel|mehl)",
 "prices": {
-"rewe": 1.49,
+"rewe": 1.79,
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -608,7 +599,7 @@
 "unit": "g",
 "match": "skyr",
 "prices": {
-"rewe": 1.19,
+"rewe": 1.29,
 "lidl": 1.39,
 "aldi": 1.29,
 "kaufland": 1.29
@@ -668,7 +659,7 @@
 "unit": "g",
 "match": "harzer",
 "prices": {
-"rewe": 1.89,
+"rewe": 1.99,
 "lidl": 1.72,
 "aldi": 1.99,
 "kaufland": 1.29
@@ -685,7 +676,7 @@
 "match": "mozzarella",
 "piece": 125,
 "prices": {
-"rewe": 1.29,
+"rewe": 0.85,
 "lidl": 0.79,
 "aldi": 0.85,
 "kaufland": 0.85
@@ -724,7 +715,6 @@
 "kaufland": 1.19
 },
 "est": [
-"rewe",
 "kaufland"
 ]
 },
@@ -735,7 +725,7 @@
 "unit": "g",
 "match": "(?<!seiden)tofu(?! ?-?räucher)",
 "prices": {
-"rewe": 2.29,
+"rewe": 3.76,
 "lidl": 2.19,
 "aldi": 2.29,
 "kaufland": 1.99
@@ -771,7 +761,7 @@
 "dose": true,
 "match": "^linsen|dosen? linsen",
 "prices": {
-"rewe": 1.29,
+"rewe": 1.39,
 "lidl": 0.99,
 "aldi": 0.89,
 "kaufland": 0.99
@@ -790,7 +780,7 @@
 "dose": true,
 "match": "\\bmais\\b",
 "prices": {
-"rewe": 0.89,
+"rewe": 0.99,
 "lidl": 0.99,
 "aldi": 0.89,
 "kaufland": 0.89
@@ -822,7 +812,7 @@
 "unit": "g",
 "match": "\\breis\\b|basmati",
 "prices": {
-"rewe": 1.59,
+"rewe": 1.39,
 "lidl": 1.59,
 "aldi": 1.39,
 "kaufland": 1.39
@@ -891,7 +881,7 @@
 "piece": 50,
 "match": "vollkornbrot|sauerteigbrot|\\bbrot\\b",
 "prices": {
-"rewe": 0.79,
+"rewe": 1.19,
 "lidl": 1.19,
 "aldi": 0.89,
 "kaufland": 1.19
@@ -908,7 +898,7 @@
 "unit": "Stück",
 "match": "tortilla|wrap",
 "prices": {
-"rewe": 1.19,
+"rewe": 1.59,
 "lidl": 1.29,
 "aldi": 1.19,
 "kaufland": 1.29
@@ -926,7 +916,7 @@
 "match": "löffelbiskuit",
 "piece": 6,
 "prices": {
-"rewe": 0.75,
+"rewe": 1.0,
 "lidl": 1.29,
 "aldi": 0.75,
 "kaufland": 1.19
@@ -980,13 +970,12 @@
 "match": "banane",
 "loose": true,
 "prices": {
-"rewe": 1.79,
+"rewe": 1.29,
 "lidl": 1.39,
 "aldi": 1.19,
 "kaufland": 1.39
 },
 "est": [
-"rewe",
 "lidl",
 "kaufland"
 ]
@@ -1039,13 +1028,12 @@
 "match": "paprika(?!pulver| ?geräuchert| edelsüß)",
 "loose": true,
 "prices": {
-"rewe": 2.49,
+"rewe": 1.79,
 "lidl": 1.99,
 "aldi": 1.99,
 "kaufland": 1.99
 },
 "est": [
-"rewe",
 "lidl",
 "aldi"
 ]
@@ -1079,13 +1067,12 @@
 "match": "zucchini",
 "loose": true,
 "prices": {
-"rewe": 1.25,
+"rewe": 0.9,
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1100,13 +1087,12 @@
 "match": "^tomaten?$|tomate\\b",
 "loose": true,
 "prices": {
-"rewe": 1.5,
+"rewe": 1.25,
 "lidl": 1.49,
 "aldi": 1.49,
 "kaufland": 1.5
 },
 "est": [
-"rewe",
 "lidl",
 "aldi"
 ]
@@ -1119,13 +1105,12 @@
 "piece": 100,
 "match": "zwiebel(?!n? ?-?frühling)|rote zwiebel",
 "prices": {
-"rewe": 1.29,
+"rewe": 0.86,
 "lidl": 0.99,
 "aldi": 0.79,
 "kaufland": 1.0
 },
 "est": [
-"rewe",
 "lidl",
 "aldi"
 ]
@@ -1138,13 +1123,12 @@
 "piece": 5,
 "match": "knoblauch",
 "prices": {
-"rewe": 1.29,
+"rewe": 0.94,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1158,13 +1142,12 @@
 "piece": 100,
 "match": "möhre|karotte",
 "prices": {
-"rewe": 1.19,
+"rewe": 0.93,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1178,13 +1161,12 @@
 "piece": 150,
 "match": "kartoffel",
 "prices": {
-"rewe": 2.49,
+"rewe": 1.6,
 "lidl": 2.29,
 "aldi": 1.49,
 "kaufland": 3.19
 },
 "est": [
-"rewe",
 "lidl"
 ]
 },
@@ -1195,13 +1177,12 @@
 "unit": "g",
 "match": "brokkoli",
 "prices": {
-"rewe": 1.5,
+"rewe": 1.59,
 "lidl": 1.49,
 "aldi": 1.11,
 "kaufland": 1.49
 },
 "est": [
-"rewe",
 "lidl",
 "kaufland"
 ]
@@ -1219,7 +1200,6 @@
 "kaufland": 2.54
 },
 "est": [
-"rewe",
 "lidl"
 ]
 },
@@ -1248,7 +1228,7 @@
 "unit": "g",
 "match": "grünkohl",
 "prices": {
-"rewe": 0.99,
+"rewe": 1.08,
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29
@@ -1266,13 +1246,12 @@
 "unit": "g",
 "match": "ingwer",
 "prices": {
-"rewe": 0.6,
+"rewe": 0.79,
 "lidl": 0.4,
 "aldi": 0.49,
 "kaufland": 0.49
 },
 "est": [
-"rewe",
 "lidl"
 ]
 },
@@ -1320,7 +1299,7 @@
 "unit": "g",
 "match": "waln[uü]",
 "prices": {
-"rewe": 2.8,
+"rewe": 2.99,
 "lidl": 2.49,
 "aldi": 2.49,
 "kaufland": 2.49
@@ -1337,7 +1316,7 @@
 "unit": "g",
 "match": "cashew",
 "prices": {
-"rewe": 2.89,
+"rewe": 3.19,
 "lidl": 2.49,
 "aldi": 2.49,
 "kaufland": 2.89
@@ -1355,7 +1334,7 @@
 "match": "kürbiskern|hanfsamen|sesam(?!öl)|sonnenblumenkern",
 "pantry": true,
 "prices": {
-"rewe": 1.99,
+"rewe": 2.29,
 "lidl": 1.93,
 "aldi": 1.82,
 "kaufland": 1.89
@@ -1383,7 +1362,7 @@
 "match": "sojasauce|sojasoße",
 "pantry": true,
 "prices": {
-"rewe": 1.79,
+"rewe": 1.89,
 "lidl": 1.19,
 "aldi": 1.39,
 "kaufland": 1.49
@@ -1419,7 +1398,7 @@
 "match": "honig|ahornsirup|sirup",
 "pantry": true,
 "prices": {
-"rewe": 3.19,
+"rewe": 3.98,
 "lidl": 3.29,
 "aldi": 3.29,
 "kaufland": 2.69
@@ -1436,13 +1415,12 @@
 "match": "kakao",
 "pantry": true,
 "prices": {
-"rewe": 4.49,
+"rewe": 3.29,
 "lidl": 2.49,
 "aldi": 3.29,
 "kaufland": 3.29
 },
 "est": [
-"rewe",
 "lidl",
 "kaufland"
 ]
@@ -1493,13 +1471,12 @@
 "match": "cuisine|kochcreme",
 "subst": true,
 "prices": {
-"rewe": 0.99,
+"rewe": 0.75,
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.85
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1513,13 +1490,12 @@
 "match": "margarine",
 "subst": true,
 "prices": {
-"rewe": 1.99,
+"rewe": 1.58,
 "lidl": 1.79,
 "aldi": 1.79,
 "kaufland": 1.79
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1533,13 +1509,12 @@
 "match": "pflanzendrink",
 "subst": true,
 "prices": {
-"rewe": 1.29,
+"rewe": 1.39,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1559,7 +1534,6 @@
 "kaufland": 0.99
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1572,13 +1546,12 @@
 "unit": "Stück",
 "match": "lauch(?!zwiebel)",
 "prices": {
-"rewe": 0.99,
+"rewe": 0.66,
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.89
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1591,13 +1564,12 @@
 "unit": "Stück",
 "match": "burgerbrötchen|burger-brötchen",
 "prices": {
-"rewe": 1.79,
+"rewe": 0.66,
 "lidl": 1.49,
 "aldi": 1.49,
 "kaufland": 1.59
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"
@@ -1610,13 +1582,12 @@
 "unit": "g",
 "match": "zartbitter|schokolade",
 "prices": {
-"rewe": 1.29,
+"rewe": 1.69,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 1.09
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland"

@@ -565,6 +565,44 @@ def alt_meals(mp, rec, k, cur, rx):
     return c[:8]
 
 
+DIFF_RANK = {"leicht": 0, "mittel": 1, "aufwendig": 2}
+
+
+def effort_on(settings):
+    e = (settings.get("food") or {}).get("effort") or {}
+    return bool(e.get("lvl") or num(e.get("active")))
+
+
+def effort_ok(settings, r):
+    """Wie effortOk in der App."""
+    e = (settings.get("food") or {}).get("effort") or {}
+    rk = DIFF_RANK.get(r.get("difficulty"), 0)
+    act = r.get("activeMin") if r.get("activeMin") is not None else r.get("timeMin")
+    if e.get("lvl") == 1 and rk > 1:
+        return False
+    if e.get("lvl") == 2 and rk > 0:
+        return False
+    a = num(e.get("active"))
+    if a and a > 0 and act is not None and act > a:
+        return False
+    return True
+
+
+def effort_subst(mp, rec, settings, o, rx, W):
+    """Zu aufwendige frische Gerichte tauschen, Batch-Gerichte bleiben (wie mealDefaults in der App)."""
+    if not effort_on(settings):
+        return o
+    bt = {W["batchA"], W["batchB"]}
+    o = dict(o)
+    for k in list(o):
+        r = rec.get(o[k])
+        if r and o[k] not in bt and not effort_ok(settings, r):
+            alt = next((c for c in alt_meals(mp, rec, k, o[k], rx) if effort_ok(settings, c)), None)
+            if alt:
+                o[k] = alt["name"]
+    return o
+
+
 def budget_subs(mp, rec, settings, raws, rx, P, W=None):
     f = settings.get("food") or {}
     budget = num(f.get("budget"))
@@ -596,7 +634,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
             c0, ref = cost(x["n"]), rec[x["n"]]
             for c in alt_meals(mp, rec, x["slot"], x["n"], rx):
                 c1 = cost(c["name"])
-                if (x["n"] in batch and not (c.get("mealPrep") and (c.get("servings") or 1) >= 4)) or memo.get(c["name"] + "#miss", 0) > 1:
+                if (x["n"] in batch and not (c.get("mealPrep") and (c.get("servings") or 1) >= 4)) or memo.get(c["name"] + "#miss", 0) > 1 or (x["n"] not in batch and effort_on(settings) and not effort_ok(settings, c)):
                     continue
                 if c1 >= c0 or c["protein"] < ref["protein"] * 0.8 or abs(c["kcal"] - ref["kcal"]) > 300 or c["name"] in occ or c["name"] in subs.values():
                     continue
@@ -658,9 +696,9 @@ def build_meal_ics(now, settings, plan, days, past=None):
     def subs_for(dd):
         mo = dd - dt.timedelta(days=dd.weekday())
         if mo not in week_subs:
-            raws = [substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train), rx) for i in range(7)]
             w0 = week_no(settings, mo)
             W0 = mp["weeks"][(w0 - 1) % len(mp["weeks"]) if w0 > 0 else len(mp["weeks"]) - 1]
+            raws = [effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train), rx), rx, W0) for i in range(7)]
             week_subs[mo] = budget_subs(mp, rec, settings, raws, rx, P, W0)
         return week_subs[mo]
     stamp = now.strftime("%Y%m%dT000000Z")
@@ -671,7 +709,8 @@ def build_meal_ics(now, settings, plan, days, past=None):
         iso = d.isoformat()
         day = days.get(iso) or {}
         pl = by_date.get(iso)
-        names = substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train), rx)
+        wd = week_no(settings, d)
+        names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
