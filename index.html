@@ -94,6 +94,15 @@ textarea{min-height:64px;resize:vertical}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
 .acl{margin-top:6px}
+details.shopview{margin-top:6px}details.shopview > summary{cursor:pointer;color:var(--accent);padding:4px 0}
+.rhero{display:flex;flex-direction:column;gap:6px}
+.rhero .rimg{width:100%;max-height:190px;object-fit:cover;border-radius:14px}
+.rfacts{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:14px}
+.rnut{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:14px}.rnut b{font-size:18px}
+details.rprice summary{cursor:pointer;font-size:14px;list-style:none}details.rprice summary::-webkit-details-marker{display:none}details.rprice summary::after{content:" ›";color:var(--muted)}
+details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{margin-top:6px}
+.rsteps{padding-left:22px;margin:8px 0}.rsteps li{margin:8px 0;line-height:1.45}
+.rinfo{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .ingt{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;margin-top:6px}
 .ingt th:first-child,.ingt td.amt{width:72px}.ingt th.num,.ingt td.num{width:68px}
 .ingt td{overflow-wrap:anywhere}
@@ -1135,7 +1144,7 @@ let pendSet = lsGet("pendSet") || {}, pendMap = lsGet("pendMap") || {};
 const applyFood = (old, v) => { const o = Object.assign({}, old);
   for (const [k, x] of Object.entries(v || {})) {
     if (x && x._ops) { const st = new Set(o[k] || []); for (const a of x.add || []) st.add(a); for (const d of x.del || []) st.delete(d); o[k] = [...st]; }
-    else if (k === "ownPrices" && x && typeof x === "object" && x._delta) { const op = Object.assign({}, o.ownPrices); for (const [id, m] of Object.entries(x)) { if (id === "_delta") continue; if (m == null) delete op[id]; else op[id] = m; } o.ownPrices = op; }
+    else if (x && typeof x === "object" && x._delta) { const op = Object.assign({}, o[k]); for (const [id, m] of Object.entries(x)) { if (id === "_delta") continue; if (m == null) delete op[id]; else op[id] = m; } o[k] = op; }
     else o[k] = x; }
   return o; };
 const applySet = (d, ps) => { const o = Object.assign({}, d || {}); for (const [k, v] of Object.entries(ps)) o[k] = k === "food" ? applyFood(o.food, v) : v; return o; };
@@ -2506,22 +2515,23 @@ function journeySheet(kind, arg){
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
       ${ctxM ? `<div class="actions"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
-      <button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button>${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
+      <div class="rhero">${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
+        <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
+        <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
+        ${showPrices() ? (() => { const st = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi", c = recipeCost(r, st), best = prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
+          return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${STORES[st]}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
+      </div>
       ${avoidHit(r) ? `<div class="pill warn">${avoidHit(r)[0] === "§" ? `Braucht ${esc(DEV_NEED[avoidHit(r)])} – fehlt in deiner Küche` : `Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)`}</div>` : ""}
-      ${devLine(r)}
-      ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div>${info(`Pro Portion, anteilig gerechnet. ${priceNote()}`)}` : ""}
-      <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span><b>${r.servings}</b> Portion${r.servings > 1 ? "en" : ""}</span></div>
-      <div class="effort">${tempTag(r)}<span>⏱ ${r.activeMin != null ? `<b>${r.activeMin} min</b> aktiv · ` : ""}${r.timeMin} min gesamt</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${effortOn() && !effortOk(r) ? `<span class="small muted">über deinem Aufwand-Limit</span>` : ""}</div>
-      <div id="ingTab">${ingTable(r)}</div>
-      <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
-      ${r.shelfLife ? `<div class="small muted">Haltbarkeit: ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}
-      ${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}
-      ${r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}`;
+      <button class="btn primary big" type="button" data-cook="${esc(r.name)}">▶ Kochen – Schritt für Schritt</button>
+      <div class="seg" id="rTabs" role="tablist">${[["zutaten", "Zutaten"], ["schritte", `Zubereitung (${r.steps.length})`], ["info", "Info"]].map(([k, l]) => `<button type="button" role="tab" data-rtab="${k}" aria-pressed="${recTab === k}">${l}</button>`).join("")}</div>
+      <div id="rTab">${recTab === "schritte" ? `<ol class="rsteps">${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol>`
+        : recTab === "info" ? `<div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small">${esc(r.note)}</div>` : ""}${effortOn() && !effortOk(r) ? `<div class="small muted">Über deiner Aufwand-Einstellung.</div>` : ""}${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}${r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`
+        : `<div id="ingTab">${ingTable(r)}</div>`}</div>`;
   }
   return null;
 }
 let sheetQuiz = null;
-let recShelves = true, recipeCtx = null, swapCand = null, srQ = "";
+let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
   const qq = srQ.trim().toLowerCase(), wr = Object.keys(weekRecipes(shopWeek())), hit = r => !qq || recipeText(r).includes(qq);
   const row = r => `<button type="button" class="lrow menu ${r.name === shopRec ? "sel" : ""}" data-shoprec="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal · ${r.protein} g P · </span>${r.activeMin ?? r.timeMin} min${r.mealPrep ? " · Meal Prep" : ""}</span></span><span class="go">${r.name === shopRec ? "✓" : "›"}</span></button>`;
@@ -2778,7 +2788,7 @@ const SUBST = {
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
 const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
   for (const k of ["favs", "stock", "bioItems"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
-  if (pt.ownPrices && !pt.ownPrices._delta) { const a = f0.ownPrices || {}, b = pt.ownPrices, dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt.ownPrices = dl; }
+  for (const k of ["ownPrices", "myProds"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
   saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
@@ -2801,7 +2811,14 @@ const isTrainDay = d => isStrength(dayObj(d)) || !!planFor(d) || (store.plan.pas
 const mealWeek = w => mealPlan.weeks[w > 0 ? (w - 1) % mealPlan.weeks.length : mealPlan.weeks.length - 1];
 // Mengen je Produkt für ein ganzes Rezept (einmal berechnet), Packungsanteil und Wocheneinkauf in €
 const recVec = new Map();
-const prodById = id => prices?.products.find(x => x.id === id);
+const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => ({id: "my:" + k, name: v.name, price: v.price, store: v.store, date: v.date, my: true}));
+const prodById = id => id && id.startsWith("my:") ? myProdList().find(x => x.id === id) : prices?.products.find(x => x.id === id);
+// Bonzeile → lesbarer Name: Mengen/Preise weg, Großbuchstaben normalisieren
+const RC_JUNK = /pfand|leergut|tüte|tasche|beutel|rabatt|nachlass|summe|zwischensumme|gutschein|coupon|payback|bonus|karte|mwst|kasse/i;
+const RC_ABBR = [[/\bnat\.?\b/gi, "natur"], [/\bgriech\.?/gi, "griechischer "], [/\bjogh\.?/gi, "joghurt"], [/\bvollm\.?\b/gi, "vollmilch"], [/\bfettarme?\.?\b/gi, "fettarm"], [/\bh-?milch\b/gi, "H-Milch"], [/\bscheib\.?\b/gi, "scheiben"], [/\bkaese\b/gi, "käse"], [/\btk\b/gi, "TK"]];
+const RC_BRAND = /^(gg|g&g|gut\s*&\s*günstig|ja!?|k-?classic|k-?bio|milbona|rewe( beste wahl| bio)?|edeka|penny|netto|aldi|lidl|bio|gut bio|enjoy free|vemondo|harvest basket|freshona|lose)\s+/i;
+const rcClean0 = n => { let x = n; for (const [re, w] of RC_ABBR) x = x.replace(re, w); for (let i = 0; i < 2; i++) x = x.replace(RC_BRAND, ""); return x.replace(/\s+lose$/i, ""); };
+const rcClean = n => rcClean0(n).replace(/\btk\b/gi, "TK").replace(/\b\d+[.,]?\d*\s*(g|kg|ml|l|st|stk|x|er)\b/gi, "").replace(/[*#%]+/g, " ").replace(/\s{2,}/g, " ").trim().toLowerCase().replace(/(^|[\s/-])([a-zäöü])/g, (m, a, b) => a + b.toUpperCase());
 const defAmt = pr => pr.unit === "Stück" ? 0.5 : pr.piece ? pr.piece / 2 : 20;
 function recipeVec(n){
   if (recVec.has(n)) return recVec.get(n);
@@ -3231,6 +3248,7 @@ function ownPricesHtml(){
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, own = FOOD().ownPrices || {}, by = {};
   for (const [pid, o] of Object.entries(own)) for (const [st, x] of Object.entries(o)) (by[st] = by[st] || []).push([pid, x]);
   let h = `<div class="sh"><h2>Meine Preise</h2>${close}</div>${info("Aus deinen Kassenbons. Sie gelten vor den Richtpreisen, im Budget und im Planer, und werden mit deinem privaten Repo synchronisiert.")}`;
+  const mine = myProdList(); if (mine.length) h += `<details class="opgroup"><summary><b>🧾 Eigene Produkte</b> <span class="small muted">${mine.length} vom Kassenbon gemerkt</span></summary>${mine.sort((a, b) => a.name.localeCompare(b.name, "de")).map(mp => `<div class="mhead small"><span>${esc(mp.name)} <span class="muted">· ${eur(mp.price)} · ${STORES[mp.store] || mp.store || ""}</span></span><button class="btn ghost small" type="button" data-act="myDel" data-v="${esc(mp.id.slice(3))}" aria-label="Entfernen">✕</button></div>`).join("")}</details>`;
   if (!Object.keys(by).length) return h + `<div class="empty small">Noch keine eigenen Preise. Im Einkauf über „🧾 Bon“ einen Kassenbon einlesen.</div>`;
   for (const [st, rows] of Object.entries(by)) {
     rows.sort((a, b) => (prodById(a[0])?.name || a[0]).localeCompare(prodById(b[0])?.name || b[0], "de"));
@@ -3255,7 +3273,7 @@ function receiptHtml(){
       ${pr ? `<div class="small">→ <input type="text" inputmode="decimal" data-rcref="${i}" value="${it.ref == null ? "" : String(it.ref).replace(".", ",")}" aria-label="Preis Referenzpackung"> € für ${esc(pr.dose ? "1 Dose" : pr.unit === "Stück" && pr.pack > 1 ? pr.pack + " Stück" : fmtAmt(pr.pack, pr.unit))} <span class="muted">(Richtpreis ${eur((pr.basePrices || pr.prices || {})[rcpt.store])})</span></div>` : ""}</div>`; };
   const idx = rcpt.items.map((it, i) => [it, i]), hit = idx.filter(([it]) => it.pid), miss = idx.filter(([it]) => !it.pid);
   h += hit.map(([it, i]) => rcRow(it, i)).join("");
-  if (miss.length) h += `<details class="rcmore"><summary class="small">Nicht zugeordnet (${miss.length}) · nur bei Bedarf zuordnen</summary><div class="rcl">${miss.map(([it, i]) => rcRow(it, i)).join("")}</div></details>`;
+  if (miss.length) h += `<details class="rcmore" open><summary class="small">Nicht zugeordnet (${miss.length}) · werden als eigene Produkte gemerkt</summary><div class="small muted">Haken weg, wenn etwas nicht in deine Zutatenliste soll. Oder oben ein passendes Produkt wählen.</div><div class="rcl">${miss.map(([it, i]) => `<div class="rci ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "off" : ""}"><label class="check small"><input type="checkbox" data-rckeep="${i}" ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "" : "checked"}><span><b>${esc(rcClean(it.name) || it.name)}</b> · ${eur(it.unit || it.price)}</span></label><select data-rcpid="${i}" aria-label="Produkt">${opts(it.pid)}</select></div>`).join("")}</div></details>`;
   return h + `</div><button class="btn primary big" type="button" data-act="rcSave">Preise übernehmen</button><button class="btn ghost" type="button" data-act="rcReset">Anderen Bon wählen</button>`;
 }
 // Kleine Info-Schaltfläche statt langer Erklärtexte
@@ -3352,12 +3370,18 @@ function resteFreestyle(){
     "Mit Salz, Pfeffer, Paprika/Curry oder Sojasoße abschmecken, etwas Zitrone oder Kräuter drüber."];
   return `<div class="card fsbox"><div class="mhead"><b>🧩 Freestyle: ${kind}</b><span class="small muted">ohne Rezept</span></div><ol class="small">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${prot.length ? "" : `<div class="pill warn">Kein Protein dabei</div>`}</div>`;
 }
+const RESTE_COMMON = ["Reis", "Nudeln", "Kartoffeln", "Eier", "Tofu", "Feta", "Quark", "Skyr", "Käse", "Zucchini", "Paprika", "Tomaten", "Spinat", "Brokkoli", "Champignons", "Möhren", "Zwiebeln", "Kichererbsen", "Linsen", "Bohnen", "Haferflocken", "Banane", "Brot", "Joghurt"];
+function resteQuickHtml(){ const has = new Set(reste.have.map(fold));
+  const fromStock = stockOn() ? [...STOCK()].map(id => prodById(id)).filter(Boolean).map(pr => prodLabel(pr).split(/[ /(,]/)[0]) : [];
+  const list = [...new Set([...fromStock, ...RESTE_COMMON])].filter(w => w && !has.has(fold(w))).slice(0, 18);
+  return list.length ? `<div class="lab">Schnell wählen</div><div class="chips sm">${list.map(w => `<button type="button" data-rsadd="${esc(w)}">＋ ${esc(w)}</button>`).join("")}</div>` : ""; }
 function resteHtml(){
   const st = stockOn() ? STOCK().size : 0;
   return `<div class="sh"><h2>♻️ Resteverwerter</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
     <div class="small muted">Was muss weg oder worauf hast du Lust? Zutaten eingeben – passende Rezepte erscheinen sofort.</div>
     <div class="field acwrap"><input type="text" id="rsQ" data-ac="reste" autocomplete="off" placeholder="Zutat, z. B. Zucchini" aria-label="Zutat hinzufügen"></div>
     <div id="rsHave">${resteHaveHtml()}</div>
+    <div id="rsQuick">${resteQuickHtml()}</div>
     ${st ? `<label class="check small"><input type="checkbox" id="rsStock" ${reste.stock ? "checked" : ""}><span>Vorrat zuhause mitzählen (${st} Produkte)</span></label>` : `<div class="small muted">Tipp: Unter Einkauf → 🏠 Vorrat kannst du festhalten, was immer da ist.</div>`}
     <div class="seg" role="group" aria-label="Einkaufen">${[["nur", "Nur was da ist"], ["kauf", "Darf einkaufen"]].map(([k, l]) => `<button type="button" data-rsmode="${k}" aria-pressed="${reste.mode === k}">${l}</button>`).join("")}</div>
     <div id="rsList">${resteListHtml()}</div>`;
@@ -3375,24 +3399,34 @@ function resteListHtml(){
 }
 function stockHtml(){
   const has = STOCK(), qq = stQ.trim().toLowerCase(), G = SHOP_GROUPS.map(([g]) => [g, []]); G.push(["Vorrat & Gewürze", []]);
-  for (const pr of prices?.products || []) { const n = prodLabel(pr); if (qq && !n.toLowerCase().includes(qq)) continue; const gi = SHOP_GROUPS.findIndex(([, re]) => re.test(n)); G[gi < 0 ? G.length - 1 : gi][1].push([pr.id, n]); }
+  for (const pr of prices?.products || []) { const n = prodLabel(pr); if (qq && !n.toLowerCase().includes(qq)) continue; const gi = pr.group ? G.findIndex(([g]) => g === pr.group) : SHOP_GROUPS.findIndex(([, re]) => re.test(n)); G[gi < 0 ? G.length - 1 : gi][1].push([pr.id, n]); }
+  const mine = myProdList().filter(mp => !qq || mp.name.toLowerCase().includes(qq)); if (mine.length) G.push(["🧾 Vom Kassenbon", mine.map(mp => [mp.id, mp.name])]);
   for (const [, a] of G) a.sort((x, y) => (has.has(y[0]) - has.has(x[0])) || x[1].localeCompare(y[1], "de"));
   return G.filter(([, a]) => a.length).map(([g, a]) => `<div class="lab sec">${esc(g)}</div><div class="chips devs">${a.map(([id, n]) => `<button type="button" data-stock="${id}" aria-pressed="${has.has(id)}">${esc(n)}</button>`).join("")}</div>`).join("") || `<p class="muted small">Nichts gefunden.</p>`;
 }
 // Zutaten-Wortschatz aus Rezeptzeilen und Produktnamen, nach Häufigkeit
 function ingWords(){ if (ingVocab && ingVocab.ver === dataVer) return ingVocab.v; const c = new Map();
-  const add = w => { w = w.replace(/\(.*?\)/g, "").replace(/[,;:].*$/, "").replace(/\s+(oder|und|für|zum|nach)\s.*$/i, "").replace(/\s+(Dose|getrocknet|natur|light|zart|geschnitten|gewürfelt|gehackt|frisch|\d.*)$/i, "").trim();
+  const add = w0 => { for (const w1 of String(w0).replace(/\(.*?\)/g, "").split(/\s*\/\s*/)) add1(w1); };
+  const add1 = w => { w = w.trim().replace(/-$/, "").replace(/[,;:].*$/, "").replace(/\s+(oder|und|für|zum|nach)\s.*$/i, "").replace(/\s+(Dose|getrocknet|natur|light|zart|geschnitten|gewürfelt|gehackt|frisch|\d.*)$/i, "").replace(/^((kleine?[nrs]?|große?[nrs]?|frische?[nrs]?|reife?[nrs]?|zarte?|kernige?|mehligkochende?|festkochende?|vorwiegend festkochende?|gekochte?[nrs]?|tk-|bio-?)\s*)+/i, "").replace(/\s+(rot|gelb|grün|weiß|braun|natur|light|dose|glas|tk|freiland|flüssig)$/i, "").replace(/\s*-$/, "").trim();
     if (w.length < 3 || w.length > 26 || /\d|^(etwas|nach|je|ca|evtl)\b/i.test(w)) return; const k = w.toLowerCase(), o = c.get(k); o ? o.n++ : c.set(k, {w: w[0].toUpperCase() + w.slice(1), n: 1}); };
   for (const r of recipes || []) for (const l of r.ingredients || []) { const m = l.match(/^\s*(?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Msp\.?|Stiele?|Zweige?)?\s+(.+)$/); add(m ? m[1] : l); }
   for (const pr of prices?.products || []) for (const part of pr.name.split(/\s*\/\s*/)) add(part);
+  for (const mp of myProdList()) add(mp.name);
   for (const w of ["Äpfel", "Pilze", "Champignons", "Koriander", "Sellerie", "Senf", "Sesam", "Erdnüsse", "Nüsse", "Soja", "Laktose", "Gluten", "Kokos", "Oliven", "Paprika", "Zwiebeln", "Knoblauch", "Tomaten", "Aubergine", "Rosinen", "Kidneybohnen"]) add(w);
   for (const [k, o] of [...c]) for (const suf of ["n", "en", "s"]) { const pl = c.get(k + suf); if (pl && c.has(k)) { const [keep, drop] = pl.n >= o.n ? [pl, k] : [o, k + suf]; keep.n += c.get(drop).n; c.delete(drop); } }  // Tomate/Tomaten nur einmal
   const v = [...c.values()].sort((a, b) => b.n - a.n); ingVocab = {ver: dataVer, v}; return v; }
-function ingSuggest(qq, n = 6, skip = []){ qq = qq.trim().toLowerCase(); if (qq.length < 2) return []; const sk = new Set(skip.map(x => x.toLowerCase())), v = ingWords().filter(x => !sk.has(x.w.toLowerCase()));
-  return [...v.filter(x => x.w.toLowerCase().startsWith(qq)), ...v.filter(x => !x.w.toLowerCase().startsWith(qq) && x.w.toLowerCase().includes(qq))].slice(0, n).map(x => x.w); }
+const fold = s => s.toLowerCase().replace(/ä/g, "a").replace(/ö/g, "o").replace(/ü/g, "u").replace(/ß/g, "ss");
+function lev1(a, b){ if (Math.abs(a.length - b.length) > 1) return false; let i = 0, j = 0, e = 0;
+  while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; continue; } if (++e > 1) return false; if (a.length > b.length) i++; else if (a.length < b.length) j++; else { i++; j++; } }
+  return e + (a.length - i) + (b.length - j) <= 1; }
+function ingSuggest(qq, n = 8, skip = []){ const q = fold(qq.trim()); if (q.length < 2) return []; const sk = new Set(skip.map(fold)), out = [];
+  for (const x of ingWords()) { const w = fold(x.w); if (sk.has(w)) continue; const ws = w.split(/[\s-]+/);
+    const sc = w.startsWith(q) ? 0 : ws.some(t => t.startsWith(q)) ? 1 : w.includes(q) ? 2 : q.length >= 4 && ws.some(t => [q.length - 1, q.length, q.length + 1].some(L => lev1(q, t.slice(0, L)))) ? 3 : 9;
+    if (sc < 9) out.push([sc, -x.n, x.w.length, x.w]); }
+  return out.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]).slice(0, n).map(x => x[3]); }
 function acShow(inp){ let el = inp.parentElement.querySelector(".acl"); if (!el) { el = document.createElement("div"); el.className = "chips acl"; inp.after(el); }
-  const toks = inp.value.split(","), cur = toks.pop(); el.innerHTML = ingSuggest(cur, 6, toks.map(x => x.trim())).map(w => `<button type="button" data-acw="${esc(w)}">${esc(w)}</button>`).join(""); }
-function resteAdd(w){ w = w.trim().replace(/,$/, ""); if (!w || reste.have.some(x => x.toLowerCase() === w.toLowerCase())) return; reste.have.push(w[0].toUpperCase() + w.slice(1)); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsList"]); }
+  const toks = inp.value.split(","), cur = toks.pop(); el.innerHTML = ingSuggest(cur, 8, toks.map(x => x.trim()).concat(inp.dataset.ac === "reste" ? reste.have : [])).map(w => `<button type="button" data-acw="${esc(w)}">${esc(w)}</button>`).join(""); }
+function resteAdd(w){ w = w.trim().replace(/,$/, ""); if (!w || reste.have.some(x => x.toLowerCase() === w.toLowerCase())) return; reste.have.push(w[0].toUpperCase() + w.slice(1)); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsQuick", "#rsList"]); }
 function acPick(btn){ const el = btn.closest(".acl"), inp = el?.previousElementSibling; if (!inp) return;
   if (inp.dataset.ac === "reste") { inp.value = ""; el.innerHTML = ""; resteAdd(btn.dataset.acw); inp.focus(); return; } const toks = inp.value.split(","); toks[toks.length - 1] = btn.dataset.acw;
   inp.value = toks.map(x => x.trim()).filter(Boolean).join(", ") + ", "; el.innerHTML = ""; inp.focus();
@@ -3435,18 +3469,21 @@ function shopHtml(){
     <div class="lab">Mahlzeiten</div><div class="chips sm">${SHOPM.map(([k, l]) => `<button type="button" data-shopm="${k}" aria-pressed="${shopMeals.includes(k)}">${l}</button>`).join("")}</div></div>`;
   if (showPrices() && total) { const c = shopCosts(groups, done), best = Object.entries(c).filter(([st]) => prices.stores.includes(st)).sort((a, b) => (a[1].miss - b[1].miss) || (a[1].sum - b[1].sum))[0][0];  // unvollständige Märkte nie „günstigster“
     const bud = num(FOOD().budget);
-    h += `<div class="card budgetbar"><div class="mhead"><b>Wochenbudget <span id="budVal">${bud ? eur(bud) : "aus"}</span></b><label class="check small"><input type="checkbox" id="budOn" ${bud && !FOOD().budgetIgnore ? "checked" : ""}><span>aktiv</span></label></div>
+    let ph = `<div class="card budgetbar"><div class="mhead"><b>Wochenbudget <span id="budVal">${bud ? eur(bud) : "aus"}</span></b><label class="check small"><input type="checkbox" id="budOn" ${bud && !FOOD().budgetIgnore ? "checked" : ""}><span>aktiv</span></label></div>
       <input type="range" id="budRange" min="30" max="120" step="5" value="${bud || 60}" aria-label="Wochenbudget in Euro">
       ${shopScope === "woche" && bud ? (() => { const wc = weekShopCost(shopWeek()), bs = budgetOn() ? budgetSubs(shopWeek()) : null;
         return `<div class="small ${wc > bud ? "warnt" : "okt"}">Verbrauch diese Woche: <b>${eur(wc)}</b> <span class="muted">(Vorräte anteilig)</span> ${wc > bud ? (budgetOn() ? (bs && !bs.ok ? "· günstigere Rezepte reichen nicht ganz" : "· über dem Budget") : "· über dem Budget (Grenze aus)") : "· passt ✓"}${bs && Object.keys(bs.subs).length ? ` · ${Object.keys(bs.subs).length} ${Object.keys(bs.subs).length === 1 ? "Gericht" : "Gerichte"} getauscht` : ""}</div>`; })() : ""}</div>`;
-    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.miss ? `${v.miss} ohne Preis` : `${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt`}</span></div>`).join("")}</div>${info(`Ganze Packungen bzw. ganze Stück, Vorräte anteilig, ohne Gewürze. * = geschätzter Preis. ${priceNote()}`)}</div>`; }
+    const selSt = FOOD().store && FOOD().store !== "min" ? FOOD().store : best, wcx = shopScope === "woche" && bud ? weekShopCost(shopWeek()) : null;
+    h += `<details class="slim"><summary><span>💶 Noch offen ≈ ${eur(c[selSt]?.sum || 0)}</span><span class="${wcx != null && wcx > bud ? "warnt" : "muted"}">${STORES[selSt]}${best !== selSt ? ` · ${STORES[best]} ${eur(c[best].sum)}` : ""}${wcx != null ? ` · Budget ${wcx > bud ? "⚠" : "✓"}` : ""}</span></summary>${ph}`;
+    h += `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => prices.stores.includes(st)).map(([st, v]) => `<div class="${st === best ? "best" : ""} ${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.miss ? `${v.miss} ohne Preis` : `${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt`}</span></div>`).join("")}</div>${info(`Ganze Packungen bzw. ganze Stück, Vorräte anteilig, ohne Gewürze. * = geschätzter Preis. ${priceNote()}`)}</div></details>`; }
   const src = !!lsGet("shopSrc");
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b>${got ? `<button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button>` : ""}</div>
     <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
     <div class="btnrow"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>
+    <details class="shopview"><summary class="small">⚙ Ansicht & Vorrat</summary>
     <div class="mhead stockrow"><label class="check small"><input type="checkbox" id="stockOnCb" ${stockOn() ? "checked" : ""} ${(FOOD().stock || []).length ? "" : "disabled"}><span>Vorrat zuhause abziehen${homeItems.length ? ` (${homeItems.length})` : ""}</span></label><button class="btn small ghost" type="button" data-sheet="stock">🏠 Vorrat</button></div>
     <div class="lab">Sortieren</div><div class="seg">${[["gang", "Nach Gang"], ["lager", "Frisch/Basis"]].map(([k, l]) => `<button type="button" data-shopkind="${k}" aria-pressed="${shopKind === k}">${l}</button>`).join("")}</div>
-    <div class="row2"><label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label><label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Für welches Gericht</span></label></div>
+    <div class="row2"><label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label><label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Für welches Gericht</span></label></div></details>
     ${shopScope === "gericht" ? info(esc(cx.note)) : `<details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div>`;
   if (!total) h += `<p class="muted">Für diese Auswahl gibt es nichts einzukaufen.</p>`;
   const shopItemHtml = i => `<label class="shopi ${done.has(i.key) ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${done.has(i.key) ? "checked" : ""}><span><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<br><span class="small"><b class="buy">${esc(i.buy)}</b> <span class="muted">· Bedarf ${esc(i.need)}</span>${showPrices() && priceOf(i.pr) != null ? ` · <b>${eur(i.share * priceOf(i.pr))}</b>${isEst(i.pr, FOOD().store || "aldi") ? `<span class="muted">*</span>` : ownOf(i.pr)[FOOD().store || "aldi"] ? ` <span class="tag">dein Preis</span>` : ""}${bioAlt(i.pr, i.share)}` : ""}</span>` : ""}${shopScope === "gericht" || !src ? "" : `<br><span class="muted small">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>`}</span></label>`;
@@ -3642,7 +3679,7 @@ async function onClick(e){
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
   const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
-  const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; openSheet("recipe", rc2.dataset.recipe); return; }
+  const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; if (sheetArg !== rc2.dataset.recipe) recTab = "zutaten"; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
     if (g === "messen" || g === "fotos") { sub.fortschritt = "messen"; go("fortschritt"); if (g === "fotos") document.getElementById("photos")?.scrollIntoView({block:"start"}); } else { sub.mehr = g; go("mehr"); } return; }
   const al = t.closest("[data-alt]"); if (al) { const base = al.dataset.base, id = al.dataset.alt, keep = !!sheet.querySelector("#altKeep")?.checked;
@@ -3680,13 +3717,15 @@ async function onClick(e){
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
+  const rtb = t.closest("[data-rtab]"); if (rtb) { recTab = rtb.dataset.rtab; renderSheetPart(["#rTabs", "#rTab"]); return; }
   const isr = t.closest("[data-ingsort]"); if (isr) { lsSet("ingSort", isr.dataset.ingsort); const box = document.getElementById("ingTab"), r = recipeByName(sheetArg); if (box && r) box.innerHTML = ingTable(r); return; }
   const stk = t.closest("[data-stock]"); if (stk) { const a = STOCK(), k = stk.dataset.stock; a.has(k) ? a.delete(k) : a.add(k); saveFood({stock: [...a]}); stk.setAttribute("aria-pressed", a.has(k)); const m = sheetBody.querySelector(".mhead .small.muted"); if (m) m.textContent = `${a.size} Produkte markiert`; return; }
   if (t.closest("[data-stockon]")) { saveFood({stockOn: FOOD().stockOn === false}); renderSheet(); return; }
   if (t.closest("[data-stockclear]")) { saveFood({stock: []}); renderSheet(); return; }
   const rsm = t.closest("[data-rsmode]"); if (rsm) { reste.mode = rsm.dataset.rsmode; lsSet("resteMode", reste.mode); sheetBody.querySelectorAll("[data-rsmode]").forEach(b => b.setAttribute("aria-pressed", b === rsm)); renderSheetPart(["#rsList"]); return; }
-  const rsd = t.closest("[data-rsdel]"); if (rsd) { reste.have.splice(Number(rsd.dataset.rsdel), 1); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsList"]); return; }
-  if (t.closest("[data-rsclear]")) { reste.have = []; lsSet("resteHave", []); renderSheetPart(["#rsHave", "#rsList"]); return; }
+  const rsa = t.closest("[data-rsadd]"); if (rsa) { resteAdd(rsa.dataset.rsadd); return; }
+  const rsd = t.closest("[data-rsdel]"); if (rsd) { reste.have.splice(Number(rsd.dataset.rsdel), 1); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsQuick", "#rsList"]); return; }
+  if (t.closest("[data-rsclear]")) { reste.have = []; lsSet("resteHave", []); renderSheetPart(["#rsHave", "#rsQuick", "#rsList"]); return; }
   const rss = t.closest("[data-resteshop]"); if (rss) { shopScope = "gericht"; shopRec = rss.dataset.resteshop; shopMul = 1; shopFromReste = true; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const kt = t.closest("[data-kitchen]"); if (kt) { const h = kitchenHas(), k = kt.dataset.kitchen; h.has(k) ? h.delete(k) : h.add(k); saveFood({devices: Object.keys(KITCHEN).filter(x => h.has(x))}); renderEssen(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
@@ -3784,9 +3823,13 @@ async function onClick(e){
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
     if (a === "rcReset") { rcpt = null; renderSheet(); return; }
+    if (a === "myDel") { const my = Object.assign({}, FOOD().myProds || {}); delete my[v]; saveFood({myProds: my}); renderSheet(); return; }
     if (a === "rcSave") { if (!rcpt?.items) return; const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), d = todayIso(); let n = 0;
       for (const it of rcpt.items) if (it.use && it.pid && it.ref > 0) { own[it.pid] = Object.assign(own[it.pid] || {}, {[rcpt.store]: {price: it.ref, date: d, src: it.name.slice(0, 40)}}); n++; }
-      saveFood({ownPrices: own}); rcpt = null; sheetKind = null; sheet.close(); toast(`${n} Preise übernommen`); render(); return; }
+      const my = Object.assign({}, FOOD().myProds || {}); let nm = 0;
+      for (const it of rcpt.items) { if (it.pid) continue; const keep = it.keep ?? !RC_JUNK.test(it.name), name = rcClean(it.name); if (!keep || name.length < 3) continue;
+        const key = fold(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); if (!key) continue; my[key] = {name, price: it.unit || it.price, store: rcpt.store, date: d}; nm++; }
+      saveFood(nm ? {ownPrices: own, myProds: my} : {ownPrices: own}); rcpt = null; sheetKind = null; sheet.close(); toast(`${n} Preise übernommen${nm ? ` · ${nm} neue Produkte gemerkt` : ""}`); render(); return; }
     if (a === "ownDel") { const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), [pid, st] = v.split("|"); if (own[pid]) { delete own[pid][st]; if (!Object.keys(own[pid]).length) delete own[pid]; } saveFood({ownPrices: own}); render(); if (sheet.open) renderSheet(); return; }
     if (a === "toggleDone") { showDone = !showDone; renderToday(); return; }
     if (a === "retrySync") { Object.keys(pending).forEach(flushDay); loadAll().then(() => render()); return; }
@@ -3861,7 +3904,7 @@ function onChange(e){
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
-  if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
+  if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(ingSuggest(t.value, 1, reste.have)[0] || t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
   if (t.id === "rsStock") { reste.stock = t.checked; renderSheetPart(["#rsList"]); return; }
   if (t.id === "stockOnCb") { saveFood({stockOn: t.checked}); renderMore(); return; }
   if (t.id === "foodAvoid") { saveFood({avoid: t.value}); renderEssen(); return; }
@@ -3876,6 +3919,7 @@ function onChange(e){
   if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet();
     const run = rcpt; receiptText(f).then(txt => { if (rcpt !== run) return; const r = parseReceipt(txt); rcpt = r.items.length ? r : {status: "Keine Positionen erkannt. Besser ausgeleuchtetes, gerades Foto oder den eBon als PDF versuchen."}; }, e => { if (rcpt === run) rcpt = {status: "Fehler: " + e.message}; }).then(() => { if (sheet.open && sheetKind === "receipt") renderSheet(); }); return; }
   if (t.id === "rcStore") { rcpt.store = t.value; renderSheet(); return; }
+  if (t.dataset.rckeep) { rcpt.items[t.dataset.rckeep].keep = t.checked; renderSheet(); return; }
   if (t.dataset.rcuse) { rcpt.items[t.dataset.rcuse].use = t.checked; renderSheet(); return; }
   if (t.dataset.rcpid != null && t.dataset.rcpid !== "") { const it = rcpt.items[t.dataset.rcpid], pr = prodById(t.value); it.pid = t.value; it.use = !!pr; it.ref = pr ? refPrice(pr, it.unit || it.price, it.size, it.perKg) : null; renderSheet(); return; }
   if (t.dataset.rcref) { rcpt.items[t.dataset.rcref].ref = num(t.value); return; }
