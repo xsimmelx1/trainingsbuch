@@ -478,6 +478,7 @@ td.n{font-family:var(--f-num);text-align:right}
 .mobopen .go{color:var(--muted)}
 .zoomov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:grid;place-items:center;padding:16px;animation:fadein .15s ease-out}
 .zoomcard{width:100%;max-width:520px;max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 20px 50px rgba(0,0,0,.4);animation:popin .18s ease-out}
+.zoomcard>*{flex-shrink:0}
 .zoomcard .anim{aspect-ratio:4/3}
 .zh{display:flex;justify-content:space-between;align-items:center}
 .zt{font-size:17px;line-height:1.45}
@@ -1321,7 +1322,7 @@ function suggestion(id){
   return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Gewicht halten, +1 Wdh. anpeilen", text:`= Gewicht halten, Ziel: in einem Satz +1 Wdh. Letztes Mal: ${list}.`};
 }
 for (const [id, r] of Object.entries(RDB)) { if (id.startsWith("mob:")) { const mb = MOBILITY.find(x => x[0] === id.slice(4)); if (mb) mb[2] = "r/" + r; } else if (EX[id]) { EX[id].img = "r/" + r; EX[id].credit = RDB_CREDIT; } }
-const animHtml = (img, alt, hint) => img ? `<span class="anim"><span class="ph a">Start</span><span class="ph b">Ende</span><img src="${isrc(img, 0)}" alt="${esc(alt)}" loading="lazy" decoding="async"><img class="b" src="${isrc(img, 1)}" alt="" loading="lazy" decoding="async">${hint ? `<span class="hint">${hint}</span>` : ""}</span>` : "";
+const animHtml = (img, alt, hint) => img ? `<span class="anim"><img src="${isrc(img, 0)}" alt="${esc(alt)}" loading="lazy" decoding="async"><img class="b" src="${isrc(img, 1)}" alt="" loading="lazy" decoding="async">${hint ? `<span class="hint">${hint}</span>` : ""}</span>` : "";
 // Erklärvideos je Übung (videos.json); Player lädt erst nach Tipp, über youtube-nocookie
 let VIDS = null, vidsReady = null;
 function ensureVideos(){ return vidsReady = vidsReady || fetch("videos.json").then(r => r.ok ? r.json() : {}).then(j => { VIDS = j; }).catch(() => { VIDS = {}; }); }
