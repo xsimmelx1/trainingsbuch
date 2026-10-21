@@ -1456,8 +1456,9 @@ function videoHtml(key, fallbackQ, noNote){
 function clipOf(key){
   const v = VIDS?.[key]; if (!v?.video) return null;
   const mk = (v.markers || []).find(x => /Ausführung|Demo/i.test(x.label)), short = v.dur && v.dur <= 75;
-  const st = short ? 0 : mk ? mk.t : (v.start || 0);
-  return {id: v.video, s: st, e: short ? 0 : st + 10};
+  // geprüfte Clip-Sekunde (Transkript + Einzelbilder) hat Vorrang
+  const st = v.clip != null ? v.clip : short ? 0 : mk ? mk.t : (v.start || 0);
+  return {id: v.video, s: st, e: v.clip != null ? st + 10 : short ? 0 : st + 10};
 }
 function clipHtml(key){
   const c = clipOf(key); if (!c) return "";
