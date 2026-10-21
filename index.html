@@ -94,6 +94,8 @@ textarea{min-height:64px;resize:vertical}
 .shopopts .calnav{margin:0 0 4px}.shopopts .lab{margin-top:8px}
 .btnrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0 4px}.btnrow .btn{width:100%}
 .acl{margin-top:6px}
+.nwest{margin:8px 0;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.nwrow{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0}.nwrow.miss span:first-child{color:var(--warn)}.nwrow.sum{border-top:1px solid var(--line);margin-top:4px;padding-top:6px}
 .restmini{position:sticky;top:0;z-index:5;margin:-4px 0 8px;padding:6px 12px;border-radius:999px;background:var(--accent-soft);color:var(--ink);font-size:14px;text-align:center}
 .restmini.over{background:var(--good-soft)}
 .gaphint{margin-top:6px;padding:8px 10px;border-radius:10px;background:var(--warn-soft)}
@@ -1226,6 +1228,39 @@ Object.assign(EX, {
 });
 const HOME = {legpress:"hw_squat",legpress60:"hw_squat",bss:"hw_bss",rdl:"hw_slrdl",legext:"wallsit",legext45:"wallsit",seatedcurl:"hw_slidecurl",lyingcurl:"hw_slidecurl",calfstand:"hw_calf",calfseated:"hw_calf",rowchest:"hw_tablerow",cablerow:"hw_tablerow",onearmrow:"hw_tablerow",inclinedb:"alt_inclpush",chestpress:"alt_inclpush",latneutral:"hw_doorrow",chinneutral:"hw_doorrow",cablelat:"hw_latraise",dblateral:"hw_latraise",dblathome:"hw_latraise",facepull:"ytw",revfly:"ytw",cableshrug:"hw_shrug",dbshrug:"hw_shrug",bayesian:"hw_curl",inclinecurl:"hw_curl",spidercurl:"hw_curl",pushdown:"closepushup",skull:"closepushup",hipthrust:"hw_hipthrust",abduction:"hw_abd",abduction30:"hw_abd",pallof:"sideplank",landmine:null,serratus:"pushupplus",extrot:"hw_extrot",revwrist:null,abroller:"deadbug"};
 SESS_CHOICES.splice(SESS_CHOICES.indexOf("okBhome"), 1);
+
+
+// ---------- Essen in eigenen Worten: Nährwert-Tabelle (Richtwerte) und eigene Rezepte ----------
+let NW = null;
+const nwNorm = s => s.toLowerCase().replace(/[^a-zäöüß0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+function ensureNW(){ return NW ? Promise.resolve(NW) : fetch("naehrwerte.json").then(r => r.json()).then(j => NW = j.items.map(x => Object.assign(x, {keys: [x.n, ...x.a].map(nwNorm)}))); }
+const NUMW = {ein: 1, eine: 1, einen: 1, einer: 1, eins: 1, zwei: 2, drei: 3, vier: 4, "fünf": 5, halb: .5, halbe: .5, halber: .5, halbes: .5, paar: 2};
+function nwFind(name){ const n = " " + nwNorm(name) + " ", stem = w => w.replace(/(en|n|e|s)$/, ""), ns = " " + n.trim().split(" ").map(stem).join(" ") + " ";
+  let best = null; for (const x of NW) for (const k of x.keys) if (n.includes(" " + k + " ") || ns.includes(" " + k.split(" ").map(stem).join(" ") + " ") || (k.length > 5 && n.includes(k))) { if (!best || k.length > best.len) best = {x, len: k.length}; }
+  return best?.x || null; }
+function nwItem(p){
+  let q = 1, unit = "", rest = p.trim();
+  const m = rest.match(/^(\d+(?:[.,]\d+)?|½|[a-zäöü]+)\s*(g|gramm|kg|ml|l|liter|stück|stk\.?|scheiben?|portionen?|teller|tassen?|becher|gläser|glas|el|tl|handvoll|kugeln?|riegel|schalen?|dosen?|flaschen?)?(?:\s+|$)(.*)$/i);
+  if (m) { const v = m[1].toLowerCase(), n0 = /^\d/.test(v) ? Number(v.replace(",", ".")) : v === "½" ? .5 : NUMW[v]; if (n0 != null) { q = n0; unit = (m[2] || "").toLowerCase(); rest = m[3] || m[2] || ""; } }
+  rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
+  const r = recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest)));
+  if (r) { const nu = recipeNutri(r); return {text: p, ok: true, name: r.name, g: null, kcal: Math.round(q * nu.kcal), protein: Math.round(q * nu.protein)}; }
+  const x = nwFind(rest || p); if (!x) return {text: p, ok: false};
+  const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
+  return {text: p, ok: true, name: x.n, g: Math.round(g), kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
+}
+function nwParse(text){
+  const out = [];
+  for (const part of text.split(/,|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/i).map(s => s.trim()).filter(Boolean)) {
+    const it = nwItem(part); if (!/\bmit\b/i.test(part) || (it.ok && /\bmit\b/i.test(it.name))) { out.push(it); continue; }  // „Brot mit Frischkäse“ = zwei Posten, „Curry mit Reis“ = ein Gericht
+    for (const sp of part.split(/\bmit\b/i).map(s => s.trim()).filter(Boolean)) out.push(nwItem(sp)); }
+  return out;
+}
+function nwHtml(items){
+  const ok = items.filter(i => i.ok), sk = ok.reduce((a, i) => a + i.kcal, 0), sp = ok.reduce((a, i) => a + i.protein, 0);
+  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map(i => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} g</span>` : ""}</span><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
+    <div class="nwrow sum"><b>Summe</b><b>${sk} kcal · ${Math.round(sp)} g P</b></div><div class="small muted">Richtwerte – Zahlen unten bei Bedarf anpassen.</div></div>`;
+}
 
 // ---------- Arzttermin: Steckbrief und Fragen (wie im Plan-Doc) ----------
 const ARZT = {
@@ -2872,6 +2907,8 @@ function mealSheet(arg){
 function ownForm(mode){
   const tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="card ownf"><div class="lab">${mode === "slot" ? "Oder eigenes Essen eintragen" : "Was hast du gegessen?"}</div>
+    <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea></div>
+    <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
     <button class="btn small" type="button" data-scanstart="own">📷 Barcode scannen</button><div id="scanSlot"></div>
     <div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" placeholder="z. B. Mensa-Curry, Brezel, Pizza"></div>
     <div class="grid2">${mode === "slot" ? "" : `<div class="field"><label for="ownTime">Uhrzeit</label><input type="time" id="ownTime" value="${tm}"></div>`}
@@ -3677,6 +3714,10 @@ async function onClick(e){
     if (a === "toHeute") { go("heute"); return; }
     if (a === "summaryDone") { if (sheet.open) { sheetKind = null; sheet.close(); } go("heute"); return; }
     if (a === "finish") { finishWorkout(); return; }
+    if (a === "ownEstimate") { const tx = sheet.querySelector("#ownText")?.value.trim(), box = sheet.querySelector("#ownEst"); if (!tx) { sheet.querySelector("#ownText")?.focus(); return; }
+      Promise.all([ensureNW(), recipes ? null : ensureMeals().catch(() => {})]).then(() => { const items = nwParse(tx); box.innerHTML = nwHtml(items); const ok = items.filter(i => i.ok); if (!ok.length) return;
+        const nm = sheet.querySelector("#ownName"), kc = sheet.querySelector("#ownKcal"), pr = sheet.querySelector("#ownProt");
+        if (nm && !nm.value.trim()) nm.value = tx.slice(0, 60); if (kc) kc.value = ok.reduce((x, i) => x + i.kcal, 0); if (pr) pr.value = Math.round(ok.reduce((x, i) => x + i.protein, 0)); }).catch(() => { box.innerHTML = `<div class="small muted">Tabelle nicht ladbar – bitte Werte selbst eintragen.</div>`; }); return; }
     if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = setsFor(v, weekNo(selDate), SESS[woSession || cur.session], ac.dataset.base || v), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
     if (a === "nextex") { const ids = exList(woSession || cur.session); openEx = ids[ids.indexOf(v)+1] || null; renderTraining(); return; }
     if (a === "checkin") { openSheet("checkin", v); return; }
