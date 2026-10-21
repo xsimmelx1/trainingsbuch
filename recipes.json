@@ -1454,7 +1454,14 @@
   "source": "https://cleananddelicious.com/cottage-cheese-egg-flatbread-20g-protein/",
   "note": "adaptiert: Vorbild ergibt 2 Portionen à ca. 20 g Protein; hier die ganze Menge (240 g Cottage Cheese ≈ 200 g Hüttenkäse) als eine Portion plus Skyr-Aufstrich, damit >30 g Protein. Am Sonntag mehrere Fladen backen.",
   "activeMin": 10,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "img": "img/rezepte/x-036.jpg",
+  "imgCredit": {
+   "artist": "Gordana Adzieva",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D0%A2%D0%BE%D1%80%D1%82%D0%B8%D1%99%D0%B8_%D1%81%D0%BE_%D1%98%D0%B0%D1%98%D1%86%D0%B5_%D0%B8_%D1%81%D0%BF%D0%B0%D0%BD%D0%B0%D1%9C.jpg",
+   "title": "File:Тортиљи со јајце и спанаќ.jpg"
+  }
  },
  {
   "name": "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
@@ -1532,7 +1539,14 @@
   "source": "https://feelgoodfoodie.net/recipe/savory-oatmeal/",
   "note": "adaptiert: zweites Ei und Hüttenkäse ergänzt, Milch statt nur Wasser, damit >30 g Protein. Die Quellseite blockiert automatische Abrufe; Zutaten nach Rezeptbeschreibung (Hartkäse-Oats, Pilze, Spinat, Spiegelei).",
   "activeMin": 15,
-  "difficulty": "leicht"
+  "difficulty": "leicht",
+  "img": "img/rezepte/x-038.jpg",
+  "imgCredit": {
+   "artist": "Alpha from Melbourne, Australia",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Risotto_of_leek,_mushroom,_pea,_spinach_-_Relish_Food_Store_AUD14_(4139673555).jpg",
+   "title": "File:Risotto of leek, mushroom, pea, spinach - Relish Food Store AUD14 (4139673555).jpg"
+  }
  },
  {
   "name": "Spinat-Pilz-Feta-Quiche ohne Boden",
@@ -6721,7 +6735,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1156681221835614/Indischer-Linseneintopf.html",
   "note": "adaptiert: Linsenmenge erhöht, Kokosmilch reduziert, Reis und Skyr-Topping für Protein und Sättigung ergänzt",
-  "img": null
+  "img": "img/rezepte/x-156.jpg",
+  "imgCredit": {
+   "artist": "Alone mask",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:The_Dal_Chawal.jpg",
+   "title": "File:The Dal Chawal.jpg"
+  }
  },
  {
   "name": "Rote-Linsen-Kartoffel-Eintopf mit Quark-Klecks",
@@ -6760,7 +6780,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1597321267001647/Linseneintopf-mit-roten-Linsen.html",
   "note": "adaptiert: Sellerie/Ketchup weggelassen, mehr Linsen, Magerquark statt Sauerrahm, Brot als Beilage",
-  "img": null
+  "img": "img/rezepte/x-157.jpg",
+  "imgCredit": {
+   "artist": "Deodora333",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:%D0%9A%D0%BE%D0%BC%D0%BF%D0%B8%D1%80_%D0%BC%D0%B0%D0%BD%D1%9F%D0%B0_%D1%81%D0%BE_%D0%BB%D0%B5%D1%9C%D0%B0.jpg",
+   "title": "File:Компир манџа со леќа.jpg"
+  }
  },
  {
   "name": "Kenianischer Tellerlinsen-Eintopf mit Kartoffeln",
@@ -6799,7 +6825,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3766611573583474/Linseneintopf-aus-Kenia.html",
   "note": "adaptiert: Linsen erhöht, Frühlingszwiebeln durch Zwiebel ersetzt, Magerquark-Topping und Brot für Protein",
-  "img": null
+  "img": "img/rezepte/x-158.jpg",
+  "imgCredit": {
+   "artist": "Xufanc",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Catalan_lentil_soup.JPG",
+   "title": "File:Catalan lentil soup.JPG"
+  }
  },
  {
   "name": "Chana Masala mit Sojagranulat & Reis",
@@ -6839,7 +6871,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2065511334033834/Kichererbsen-Curry-Chana-Masala.html",
   "note": "adaptiert: auf 4 Portionen hochgerechnet, Sojagranulat für Protein, Dosentomaten statt frischer, Skyr statt Joghurt",
-  "img": null
+  "img": "img/rezepte/x-159.jpg",
+  "imgCredit": {
+   "artist": "Johan Bichel Lindegaard from Copenhagen, Denmark",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chana_masala_(5727362126).jpg",
+   "title": "File:Chana masala (5727362126).jpg"
+  }
  },
  {
   "name": "Chili sin Carne mit Sojagranulat, Kidney & Mais",
@@ -6880,7 +6918,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/879321193312846/Chili-NON-carne.html",
   "note": "adaptiert: Sojagranulat statt Tofu (günstiger), doppelte Bohnen, Reis ergänzt",
-  "img": null
+  "img": "img/rezepte/x-160.jpg",
+  "imgCredit": {
+   "artist": "Thriving Vegetarian",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Two-Bean_Vegetarian_Chili.jpg",
+   "title": "File:Two-Bean Vegetarian Chili.jpg"
+  }
  },
  {
   "name": "Hüttenkäse-Tomaten-Pasta mit Linsen",
@@ -6915,7 +6959,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/385401125155824/Pasta-mit-Huettenkaese.html",
   "note": "adaptiert: rote Linsen mitgekocht für mehr Protein, Dosentomaten statt frischer",
-  "img": null
+  "img": "img/rezepte/x-161.jpg",
+  "imgCredit": {
+   "artist": "Katrin Gilger",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Pasta,_Tomato_Sauce,_Red_Lentils_%26_Sprouts_(4368525956).jpg",
+   "title": "File:Pasta, Tomato Sauce, Red Lentils & Sprouts (4368525956).jpg"
+  }
  },
  {
   "name": "Paprika-Rahm-Nudeln mit Hüttenkäse & Erbsen",
@@ -6953,7 +7003,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2620971411655164/Bandnudeln-an-Paprika-Rahm-Sosse-mit-Huettenkaese.html",
   "note": "adaptiert: Ajvar durch Tomatenmark, saure Sahne durch Magerquark, Parmesan durch vegetarischen Hartkäse ersetzt; Erbsen ergänzt",
-  "img": null
+  "img": "img/rezepte/x-162.jpg",
+  "imgCredit": {
+   "artist": "HaJunkiyada",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Spaghetti_with_Whipping_Cream_and_Green_Peas.jpg",
+   "title": "File:Liat Portal for Foodie Disorder - Spaghetti with Whipping Cream and Green Peas.jpg"
+  }
  },
  {
   "name": "Gemüsecurry mit Sojaschnetzeln & Reis",
@@ -6993,7 +7049,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2408991380559999/Gemuesecurry-mit-Sojaschnetzel.html",
   "note": "adaptiert: von 1 auf 4 Portionen hochgerechnet, Sojaschnetzel-Anteil erhöht, Erbsen statt Paprika",
-  "img": null
+  "img": "img/rezepte/x-163.jpg",
+  "imgCredit": {
+   "artist": "RuinDig/Yuki Uchida",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:CURRY-SHOP-C-and-C---Steamed-Vegetable-Curry---2025.jpg",
+   "title": "File:CURRY-SHOP-C-and-C---Steamed-Vegetable-Curry---2025.jpg"
+  }
  },
  {
   "name": "Lauwarmer Tellerlinsen-Salat mit Feta & Ei",
@@ -7030,7 +7092,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/493471143709716/Linsensalat-wie-ich-ihn-mag.html",
   "note": "adaptiert: Linsen erhöht, Eier und Feta ergänzt, Gurke statt Kirschtomaten (günstiger)",
-  "img": null
+  "img": "img/rezepte/x-164.jpg",
+  "imgCredit": {
+   "artist": "Pastilla the Mannequin",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Majadra_haystack_(on_the_plate)_(4291546125).jpg",
+   "title": "File:Majadra haystack (on the plate) (4291546125).jpg"
+  }
  },
  {
   "name": "Linsen-Quark-Puffer mit Kräuterquark & Kartoffeln",
@@ -7067,7 +7135,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2820971434141099/Linsen-Quark-Puffer.html",
   "note": "adaptiert: auf 4 Portionen skaliert, Kartoffeln und Kräuterquark als Beilage",
-  "img": null
+  "img": "img/rezepte/x-165.jpg",
+  "imgCredit": {
+   "artist": "Kay 2015",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Bengali_Dal_Pakora_RedLentilFritter.JPG",
+   "title": "File:Bengali Dal Pakora RedLentilFritter.JPG"
+  }
  },
  {
   "name": "Erbsen-Linsen-Eintopf mit Sojaschnetzeln",
@@ -7106,7 +7180,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/436391135261523/Schrats-Erbsen-Linsen-Eintopf.html",
   "note": "vegetarisch adaptiert: Wurst und Schinken durch Sojaschnetzel ersetzt, Tellerlinsen statt Belugalinsen, Sahne durch Magerquark-Topping ersetzt",
-  "img": null
+  "img": "img/rezepte/x-166.jpg",
+  "imgCredit": {
+   "artist": "Mx. Granger",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Amy%27s_split_pea_soup.jpg",
+   "title": "File:Amy's split pea soup.jpg"
+  }
  },
  {
   "name": "Brokkoli-Kichererbsen-Reis mit Erdnusssoße",
@@ -7141,7 +7221,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3074691460107033/Brokkoli-Erdnuss-Reis.html",
   "note": "adaptiert: Brokkoli-Menge reduziert (Kosten), Skyr-Dip für Protein ergänzt, weißer Reis",
-  "img": null
+  "img": "img/rezepte/x-167.jpg",
+  "imgCredit": {
+   "artist": "VinPrasad",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mantharai_Ilai_1.jpg",
+   "title": "File:Mantharai Ilai 1.jpg"
+  }
  },
  {
   "name": "Spanische Kichererbsen-Spinat-Pfanne mit Ei & Brot",
@@ -7181,7 +7267,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/spanische-kichererbsen-gemuese-pfanne",
   "note": "adaptiert: Mandeln und Paprika aus dem Glas weggelassen, halbe Kichererbsen durch rote Linsen ersetzt, TK-Spinat, Eier, Quark und Brot für Protein und Sättigung",
-  "img": null
+  "img": "img/rezepte/x-168.jpg",
+  "imgCredit": {
+   "artist": "Tubamirum at French Wikipedia",
+   "license": "Public domain",
+   "url": "https://commons.wikimedia.org/wiki/File:GarbanzosConEspinacas.jpg",
+   "title": "File:GarbanzosConEspinacas.jpg"
+  }
  },
  {
   "name": "Bratkartoffeln mit Bohnen-Gemüse & Kräuterquark",
@@ -7218,7 +7310,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/bratkartoffeln-mit-bohnen-tomaten-gemuese-und-feta",
   "note": "adaptiert: weiße Bohnen und Kräuterquark statt Feta für Protein, Tomatenmark statt Cherrytomaten (günstiger), Öl statt Butter",
-  "img": null
+  "img": "img/rezepte/x-169.jpg",
+  "imgCredit": {
+   "artist": "Gerda Arendt",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Eggs_with_Frankfurt_green_sauce,_Bad_Soden.jpg",
+   "title": "File:Eggs with Frankfurt green sauce, Bad Soden.jpg"
+  }
  },
  {
   "name": "Rote Linsen mit Kokos-Spinat & Reis",
@@ -7255,7 +7353,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/rote-linsen-mit-kokos-spinat",
   "note": "adaptiert: TK-Spinat statt frischem, Paprika weggelassen, Kokosmilch halbiert, Reis und Skyr ergänzt",
-  "img": null
+  "img": "img/rezepte/x-170.jpg",
+  "imgCredit": {
+   "artist": "Yummy O Yummy",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Dal_Palak_Spinach_and_lentil_curry_(15914333462).jpg",
+   "title": "File:Dal Palak Spinach and lentil curry (15914333462).jpg"
+  }
  },
  {
   "name": "Bohnen-Möhren-Chili mit Knoblauchbrot",
@@ -7296,7 +7400,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/kidneybohnen-chili-mit-kraeuterbaguette",
   "note": "adaptiert: Sojagranulat ergänzt, Paprika weggelassen, Vollkornbrot statt Baguette",
-  "img": null
+  "img": "img/rezepte/x-171.jpg",
+  "imgCredit": {
+   "artist": "Tony Webster from Minneapolis, Minnesota, United States",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Instant_Pot_Pressure_Cooker_Vegetables_and_Quinoa_(44383321600).jpg",
+   "title": "File:Instant Pot Pressure Cooker Vegetables and Quinoa (44383321600).jpg"
+  }
  },
  {
   "name": "Kartoffel-Bohnen-Stampf mit Tomatensoße & Kräuterquark",
@@ -7331,7 +7441,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kartoffel-bohnenstampf-knoblauch-ofenpaprika.r_id=DE_5787.html",
   "note": "adaptiert: Ofenpaprika durch Tomatensoße aus der Dose ersetzt (Kosten), Magerquark für Protein, weniger Öl",
-  "img": null
+  "img": "img/rezepte/x-172.jpg",
+  "imgCredit": {
+   "artist": "MOs810",
+   "license": "CC BY-SA 3.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mashed_potatoes,_eggs,_beans.jpg",
+   "title": "File:Mashed potatoes, eggs, beans.jpg"
+  }
  },
  {
   "name": "Eier in Tomaten-Linsen-Soße mit Röstkartoffeln",
@@ -7367,7 +7483,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.eier-tomaten-chili-sosse.r_id=DE_5774.html",
   "note": "adaptiert: mehr Eier, rote Linsen in der Soße, passierte Tomaten statt Kirschtomaten, Quark-Dip ergänzt",
-  "img": null
+  "img": "img/rezepte/x-173.jpg",
+  "imgCredit": {
+   "artist": "Junbinhuang",
+   "license": "CC BY 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Shakshuka_Dish.jpg",
+   "title": "File:Shakshuka Dish.jpg"
+  }
  },
  {
   "name": "Ofen-Frittata mit Erbsen, Kartoffeln & Quark",
@@ -7402,7 +7524,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/frittata-mit-erbsen-und-feta",
   "note": "adaptiert: Kartoffeln und Magerquark ergänzt, Erbsen erhöht, Feta durch wenig Gouda ersetzt, Zwiebel statt Frühlingszwiebeln",
-  "img": null
+  "img": "img/rezepte/x-174.jpg",
+  "imgCredit": {
+   "artist": "transcendancing",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:My_randomly_inspired_frittata,_potato,_leek,_pea_and_boccocini,_made_up_off_the_top_of_my_head_and_delighted_that_it_worked_out_so_well!_-mycookingadventures_-vegcookingadventures_(49836716203).jpg",
+   "title": "File:My randomly inspired frittata, potato, leek, pea and boccocini, made up off the top of my head and delighted that it worked out so well! -mycookingadventures -vegcookingadventures (49836716203).jpg"
+  }
  },
  {
   "name": "Gemüse-Eintopf mit grünen & weißen Bohnen und Sojaschnetzeln",
@@ -7442,7 +7570,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kartoffel-bohnen-topf.r_id=DE_4492.html",
   "note": "adaptiert: weiße Bohnen und Sojaschnetzel für Protein, Magerquark statt Crème fraîche, Vollkornbrot statt Kräuterbutter-Baguette",
-  "img": null
+  "img": "img/rezepte/x-175.jpg",
+  "imgCredit": {
+   "artist": "EUGASTRONOMES",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:FASOLADA.jpg",
+   "title": "File:FASOLADA.jpg"
+  }
  },
  {
   "name": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping",
@@ -7480,7 +7614,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3735491566893477/Rote-Linsen-Bolognese.html",
   "note": "adaptiert: Magerquark-Topping und vegetarischer Hartkäse für Protein, Mengen für 5 Meal-Prep-Portionen",
-  "img": null
+  "img": "img/rezepte/x-176.jpg",
+  "imgCredit": {
+   "artist": "pelican from Tokyo, Japan",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mushroom_and_tomato_sauce_pasta_(4261192837).jpg",
+   "title": "File:Mushroom and tomato sauce pasta (4261192837).jpg"
+  }
  },
  {
   "name": "Linsen-Lasagne mit Quark-Schicht",
@@ -7521,7 +7661,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/linsen-lasagne",
   "note": "adaptiert: Crème fraîche/Parmesan/Mozzarella durch Magerquark-Ei-Creme und etwas Gouda ersetzt, ohne Rotwein, mehr Linsen",
-  "img": null
+  "img": "img/rezepte/x-177.jpg",
+  "imgCredit": {
+   "artist": "Ewan Munro from London, UK",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Cask,_Pimlico,_London_(3859632633).jpg",
+   "title": "File:Cask, Pimlico, London (3859632633).jpg"
+  }
  },
  {
   "name": "Bohnen-Reis-Burritos mit Sojagranulat & Quark",
@@ -7559,7 +7705,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/gefuellte-burritos-mit-tomaten-salsa-und-bohnen-mais-gemuese",
   "note": "adaptiert: Sojagranulat und Reis ergänzt, Mais/Käse weggelassen (Kosten), Magerquark statt Crème fraîche, Dosentomaten statt frischer Salsa",
-  "img": null
+  "img": "img/rezepte/x-178.jpg",
+  "imgCredit": {
+   "artist": "Splintercell10",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:VEGAN_HOME_MADE_BURRITO_,_TOFU_TEMPEH,_SOY_BEANS,.jpg",
+   "title": "File:VEGAN HOME MADE BURRITO , TOFU TEMPEH, SOY BEANS,.jpg"
+  }
  },
  {
   "name": "Curry-Reispfanne mit Sojaschnetzeln, Erbsen & Ei",
@@ -7596,7 +7748,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.curry-reispfanne.r_id=DE_6120.html",
   "note": "vegetarisch adaptiert: Geflügel durch Sojaschnetzel ersetzt, Eier ergänzt",
-  "img": null
+  "img": "img/rezepte/x-179.jpg",
+  "imgCredit": {
+   "artist": "Daderot",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Rice,_carrots,_peas,_and_chive,_stir-fried_-_Massachusetts.jpg",
+   "title": "File:Rice, carrots, peas, and chive, stir-fried - Massachusetts.jpg"
+  }
  },
  {
   "name": "Curry-Reis-Eintopf mit Kichererbsen & Lauch",
@@ -7632,7 +7790,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.curry-reis-eintopf.r_id=DE_2243.html",
   "note": "vegetarisch adaptiert: Geflügel durch Kichererbsen und rote Linsen ersetzt, Skyr statt saurer Sahne",
-  "img": null
+  "img": "img/rezepte/x-180.jpg",
+  "imgCredit": {
+   "artist": "HaJunkiyada",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Harira_soup_prepared_at_home.jpg",
+   "title": "File:Liat Portal for Foodie Disorder - Harira soup prepared at home.jpg"
+  }
  },
  {
   "name": "Kichererbsen-Soja-Bolognese mit Nudeln & Joghurt-Dip",
@@ -7669,7 +7833,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.kichererbsen-bolognese.r_id=DE_2663.html",
   "note": "vegetarisch adaptiert: Tatar durch Sojagranulat ersetzt, Skyr statt Magerjoghurt, Nudeln als Beilage",
-  "img": null
+  "img": "img/rezepte/x-181.jpg",
+  "imgCredit": {
+   "artist": "Petar Milošević",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Penne_Arrabbiata.jpg",
+   "title": "File:Penne Arrabbiata.jpg"
+  }
  },
  {
   "name": "Linsen-Kartoffel-Chili mit Skyr",
@@ -7706,7 +7876,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-chili.r_id=DE_6126.html",
   "note": "adaptiert: Linsen verdoppelt, Kidneybohnen, Dosentomaten und Skyr ergänzt",
-  "img": null
+  "img": "img/rezepte/x-182.jpg",
+  "imgCredit": {
+   "artist": "Daderot",
+   "license": "CC0",
+   "url": "https://commons.wikimedia.org/wiki/File:Red_onions,_potatoes,_black_beans,_peas,_and_chickpeas_in_tomato_sauce,_atop_textured_vegetable_protein,_with_Ning_Chi_garlic_chili_paste_and_black_pepper_-_Massachusetts.jpg",
+   "title": "File:Red onions, potatoes, black beans, peas, and chickpeas in tomato sauce, atop textured vegetable protein, with Ning Chi garlic chili paste and black pepper - Massachusetts.jpg"
+  }
  },
  {
   "name": "Kidney-Hafer-Burger mit Quark-Senf-Soße",
@@ -7744,7 +7920,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.bohnen-burger.r_id=DE_5918.html",
   "note": "adaptiert: doppelte Bohnenmenge, Ei als Bindung, Quark-Senf-Soße statt Avocado, Gurke statt Tomate",
-  "img": null
+  "img": "img/rezepte/x-183.jpg",
+  "imgCredit": {
+   "artist": "divinemisscopa",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Veggie_burger_flickr_user_divinemisscopa_creative_commons.jpg",
+   "title": "File:Veggie burger flickr user divinemisscopa creative commons.jpg"
+  }
  },
  {
   "name": "Ofenkartoffeln mit Ei-Kresse-Quark & Gurkensalat",
@@ -7779,7 +7961,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.ofenkartoffeln-joghurt-ei-dip.r_id=DE_4510.html",
   "note": "adaptiert: Quarkmenge verdreifacht, Rote-Bete-Salat durch günstigen Gurkensalat ersetzt (ohne Obst)",
-  "img": null
+  "img": "img/rezepte/x-184.jpg",
+  "imgCredit": {
+   "artist": "Gerda Arendt",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Baked_potato_with_quark,_Oberauroff.jpg",
+   "title": "File:Baked potato with quark, Oberauroff.jpg"
+  }
  },
  {
   "name": "Kohlrabi-Kartoffel-Frittata mit Quark",
@@ -7814,7 +8002,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/kohlrabi-kartoffel-frittata",
   "note": "vegetarisch adaptiert: Speck durch Magerquark ersetzt, Zwiebel statt Frühlingszwiebeln, Eier erhöht, Brot ergänzt",
-  "img": null
+  "img": "img/rezepte/x-185.jpg",
+  "imgCredit": {
+   "artist": "Karen and Brad Emerson",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Potato_and_chard_fritatta_(4432998866).jpg",
+   "title": "File:Potato and chard fritatta (4432998866).jpg"
+  }
  },
  {
   "name": "Grünkohl-Kartoffel-Linsen-Pfanne mit Senfquark",
@@ -7850,7 +8044,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/3660921551207262/Gruenkohl-Kartoffel-Linsen-Salat.html",
   "note": "adaptiert: als warme Pfanne mit TK-Grünkohl, Linsen erhöht, Senfquark statt Dressing für Protein",
-  "img": null
+  "img": "img/rezepte/x-186.jpg",
+  "imgCredit": {
+   "artist": "Kari Sullivan from Austin, TX",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Three_Bowls_vegan_sweet_potato_kale_(3141703785).jpg",
+   "title": "File:Three Bowls vegan sweet potato kale (3141703785).jpg"
+  }
  },
  {
   "name": "Schwäbischer Spätzle-Linsen-Salat mit Ei",
@@ -7886,7 +8086,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/798381183474128/Linsensalat-mit-Spaetzle.html",
   "note": "vegetarisch adaptiert: Würstchen durch Eier ersetzt, Gurke statt Essiggurken, Quark-Dressing statt viel Öl",
-  "img": null
+  "img": "img/rezepte/x-187.jpg",
+  "imgCredit": {
+   "artist": "Sharon Chen from Austin, United States",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Mediterranean_Lentil_Salad_1_(28905407141).jpg",
+   "title": "File:Mediterranean Lentil Salad 1 (28905407141).jpg"
+  }
  },
  {
   "name": "Quark-Hafer-Auflauf mit Banane",
@@ -7921,7 +8127,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1793911289973255/Quarkauflauf-luftig-und-locker.html",
   "note": "adaptiert: Magerquark verdoppelt, Haferflocken statt Mehl/Grieß, Zucker deutlich reduziert, ohne Butter; Banane statt Früchte der Saison",
-  "img": null
+  "img": "img/rezepte/x-188.jpg",
+  "imgCredit": {
+   "artist": "David Loong",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Blueberry_clafoutis,_April_2006.jpg",
+   "title": "File:Blueberry clafoutis, April 2006.jpg"
+  }
  },
  {
   "name": "Quark-Hafer-Schüssel mit Banane & Erdnussmus",
@@ -7952,7 +8164,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/himbeer-muesli-mit-quark-und-joghurt",
   "note": "adaptiert: Magerquark statt 40-%-Quark und Joghurt, Haferflocken statt Knuspermüsli, Banane statt Himbeeren/Konfitüre (günstiger)",
-  "img": null
+  "img": "img/rezepte/x-189.jpg",
+  "imgCredit": {
+   "artist": "Comotoze",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Porrrrrrage.jpg",
+   "title": "File:Porrrrrrage.jpg"
+  }
  },
  {
   "name": "Bananen-Overnight-Oats mit Skyr & Leinsamen",
@@ -7983,7 +8201,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/haferflocken-bowl",
   "note": "adaptiert: über Nacht eingeweicht, Skyr und Milch statt Sojadrink, Erdnussbutter/Beeren weggelassen (Kosten)",
-  "img": null
+  "img": "img/rezepte/x-190.jpg",
+  "imgCredit": {
+   "artist": "Nervy8924",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Protein_overnight_oats.jpg",
+   "title": "File:Protein overnight oats.jpg"
+  }
  },
  {
   "name": "Bananen-Hafer-Quark-Pfannkuchen",
@@ -8015,7 +8239,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/2824371434526210/Saftiger-Bananen-Protein-Pancake.html",
   "note": "adaptiert: ohne Proteinpulver, Protein über Magerquark und Haferflocken",
-  "img": null
+  "img": "img/rezepte/x-191.jpg",
+  "imgCredit": {
+   "artist": "PallaviKhale",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Banana_Pancakes_Pk021.jpg",
+   "title": "File:Banana Pancakes Pk021.jpg"
+  }
  },
  {
   "name": "Kakao-Porridge mit Quark",
@@ -8046,7 +8276,13 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.sojamuesli.r_id=DE_1187.html",
   "note": "frei adaptiert: warmes Porridge mit Kuhmilch statt Sojadrink, Magerquark für Protein, ohne Trockenobst und Nüsse",
-  "img": null
+  "img": "img/rezepte/x-192.jpg",
+  "imgCredit": {
+   "artist": "Kotivalo",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Chocolate_porridge_from_wheat_middlings.jpg",
+   "title": "File:Chocolate porridge from wheat middlings.jpg"
+  }
  },
  {
   "name": "Schnittlauch-Quark-Brote mit Gurke",
@@ -8075,7 +8311,13 @@
   ],
   "source": "https://www.chefkoch.de/rezepte/1211971226999404/Quark-Huettenkaese-Dip.html",
   "note": "adaptiert: Dip als Brotaufstrich nur mit Magerquark (Hüttenkäse optional, sprengt sonst das 0,90-€-Ziel), Gurke als Belag",
-  "img": null
+  "img": "img/rezepte/x-193.jpg",
+  "imgCredit": {
+   "artist": "Christian Kadluba from Vienna, Austria",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Schnittlauchbrot-01.jpg",
+   "title": "File:Schnittlauchbrot-01.jpg"
+  }
  },
  {
   "name": "Weiße-Bohnen-Quark-Hummus mit Möhrensticks",
@@ -8107,7 +8349,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/weisse-bohnen-hummus",
   "note": "adaptiert: Magerquark für Protein und Cremigkeit, Möhrensticks dazu",
-  "img": null
+  "img": "img/rezepte/x-194.jpg",
+  "imgCredit": {
+   "artist": "Vegan Feast Catering",
+   "license": "CC BY 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Basil_White_Bean_Hummus_and_Chipotle_Hummus_(3618854542).jpg",
+   "title": "File:Basil White Bean Hummus and Chipotle Hummus (3618854542).jpg"
+  }
  },
  {
   "name": "Gefüllte Senf-Quark-Eier",
@@ -8136,7 +8384,13 @@
   ],
   "source": "https://rezepte.lidl.de/rezepte/mediterran-gefuellte-eier",
   "note": "adaptiert: Schmand durch Magerquark ersetzt, Oliven/getrocknete Tomaten/Pinienkerne weggelassen (Kosten)",
-  "img": null
+  "img": "img/rezepte/x-195.jpg",
+  "imgCredit": {
+   "artist": "Michele Ursino",
+   "license": "CC BY-SA 2.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Deviled_eggs_closeup.jpg",
+   "title": "File:Deviled eggs closeup.jpg"
+  }
  },
  {
   "name": "Vanille-Zimt-Quark mit Banane",
@@ -8165,6 +8419,12 @@
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.vanille-quark-creme.r_id=DE_225.html",
   "note": "adaptiert: Magerquark und Banane statt Sahne/Zucker, als schneller Protein-Snack",
-  "img": null
+  "img": "img/rezepte/x-196.jpg",
+  "imgCredit": {
+   "artist": "Jumbocombo0811",
+   "license": "CC BY-SA 4.0",
+   "url": "https://commons.wikimedia.org/wiki/File:Yogurt_fruit_bowl.jpg",
+   "title": "File:Yogurt fruit bowl.jpg"
+  }
  }
 ]
