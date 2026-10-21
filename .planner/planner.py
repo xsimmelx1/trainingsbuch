@@ -488,6 +488,10 @@ def price_of(pr, store, P):
     return ps.get(store)
 
 
+# Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“ (wie SPICE_RE in der App)
+SPICE_RE = __import__("re").compile(r"pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", __import__("re").I)
+
+
 def portion_cost(r, P, store, subst, memo):
     """Kosten pro Portion; memo[name + '#miss'] = Zutaten mit Menge ohne Preis (wie recipeCost().miss)."""
     import re
@@ -497,7 +501,7 @@ def portion_cost(r, P, store, subst, memo):
     for line in r.get("ingredients") or []:
         parts = parse_ing(line, P, subst)
         if not parts:
-            if ING_RE.match(re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)):
+            if ING_RE.match(re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)) and not SPICE_RE.search(line):
                 miss += 1
             continue
         for pr, amt in parts:
@@ -624,7 +628,27 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
             c[n] = c.get(n, 0) + x["cnt"]
         return shop_cost(c, rec, P, store, subst, memo)
     cur_cost = total(subs)
-    for _ in range(20):
+
+    def day_p(sb):  # wie dayP in der App
+        return min(sum(rec[sb.get(n, n)]["protein"] if sb.get(n, n) in rec else 0 for n in o.values()) for o in raws)
+    p_floor = min((mp.get("target") or {}).get("protein") or 140, day_p({}))
+    minp = lambda k: 13 if k in ("sn", "ex") else 25
+    text = lambda r: r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()
+
+    cand_memo = {}
+
+    def cands(k, cur):
+        """altMeals plus die 15 günstigsten passenden Gerichte des Slots (wie budgetCands in der App)."""
+        if (k, cur) in cand_memo:
+            return cand_memo[(k, cur)]
+        al = alt_meals(mp, rec, k, cur, rx)
+        slot = next(x for x in mp["slots"] if x["k"] == k)
+        cheap = [r for r in rec.values() if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp(k) and not (rx and rx.search(text(r)))]
+        cheap = sorted(cheap, key=lambda r: math.floor(cost(r["name"]) * 1e4 + 0.5) / 1e4)[:15]
+        names = {r["name"] for r in al}
+        cand_memo[(k, cur)] = al + [r for r in cheap if r["name"] not in names]
+        return cand_memo[(k, cur)]
+    for _ in range(40):
         if cur_cost <= budget:
             break
         best = None
@@ -632,14 +656,15 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
             if x["n"] in subs or x["n"] not in rec:
                 continue
             c0, ref = cost(x["n"]), rec[x["n"]]
-            for c in alt_meals(mp, rec, x["slot"], x["n"], rx):
+            for c in cands(x["slot"], x["n"]):
                 c1 = cost(c["name"])
                 if (x["n"] in batch and not (c.get("mealPrep") and (c.get("servings") or 1) >= 4)) or memo.get(c["name"] + "#miss", 0) > 1 or (x["n"] not in batch and effort_on(settings) and not effort_ok(settings, c)):
                     continue
-                if c1 >= c0 or c["protein"] < ref["protein"] * 0.8 or abs(c["kcal"] - ref["kcal"]) > 300 or c["name"] in occ or c["name"] in subs.values():
+                if c1 >= c0 or c["protein"] < min(ref["protein"] * 0.8, 18 if x["slot"] in ("sn", "ex") else 30) or abs(c["kcal"] - ref["kcal"]) > 300 or c["name"] in occ or c["name"] in subs.values():
                     continue
-                save = cur_cost - total(dict(subs, **{x["n"]: c["name"]}))
-                if save > 0.01 and (not best or save > best[2]):
+                sb = dict(subs, **{x["n"]: c["name"]})
+                save = cur_cost - total(sb)
+                if save > 0.01 and (not best or save > best[2]) and day_p(sb) >= p_floor:
                     best = (x["n"], c["name"], save)
         if not best:
             break

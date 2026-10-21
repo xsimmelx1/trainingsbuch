@@ -614,6 +614,7 @@
 "pack": 250,
 "unit": "g",
 "match": "cherrytomate|kirschtomate",
+"piece": 15,
 "prices": {
 "rewe": 0.89,
 "lidl": 1.19,
@@ -1301,6 +1302,7 @@
 "pack": 500,
 "unit": "g",
 "match": "brokkoli",
+"piece": 400,
 "prices": {
 "rewe": 1.59,
 "lidl": 1.49,
@@ -1318,6 +1320,7 @@
 "pack": 400,
 "unit": "g",
 "match": "champignon|pilz",
+"piece": 20,
 "prices": {
 "rewe": 1.99,
 "lidl": 1.59,
@@ -1655,7 +1658,7 @@
 "name": "Lauch (Stange)",
 "pack": 1,
 "unit": "Stück",
-"match": "lauch(?!zwiebel)",
+"match": "(?<!schnitt)lauch(?!zwiebel)|porree",
 "prices": {
 "rewe": 0.66,
 "lidl": 0.79,
@@ -1815,9 +1818,10 @@
 {
 "id": "radieschen",
 "name": "Radieschen, Bund",
-"pack": 1,
-"unit": "Stück",
+"pack": 150,
+"unit": "g",
 "match": "radieschen",
+"piece": 10,
 "prices": {
 "rewe": 0.59,
 "lidl": 0.5,
