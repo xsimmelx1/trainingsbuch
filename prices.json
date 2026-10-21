@@ -85,6 +85,7 @@
 "pack": 250,
 "unit": "g",
 "match": "leinsamen",
+"pantry": true,
 "prices": {
 "rewe": 1.29,
 "lidl": 0.99,
@@ -123,6 +124,7 @@
 "pack": 250,
 "unit": "g",
 "match": "milchpulver",
+"pantry": true,
 "prices": {
 "rewe": 2.49,
 "lidl": 2.49,
@@ -568,6 +570,7 @@
 "pack": 350,
 "unit": "g",
 "match": "erdnuss",
+"pantry": true,
 "prices": {
 "rewe": 1.75,
 "lidl": 1.99,
@@ -940,6 +943,7 @@
 "pack": 1000,
 "unit": "g",
 "match": "mehl",
+"pantry": true,
 "prices": {
 "rewe": 0.59,
 "lidl": 0.59,
@@ -1278,6 +1282,7 @@
 "pack": 300,
 "unit": "g",
 "match": "tahin",
+"pantry": true,
 "prices": {
 "rewe": 3.89,
 "lidl": 2.29,
@@ -1296,6 +1301,7 @@
 "pack": 200,
 "unit": "g",
 "match": "chia",
+"pantry": true,
 "prices": {
 "rewe": 1.23,
 "lidl": 1.99,
@@ -1347,6 +1353,7 @@
 "pack": 200,
 "unit": "g",
 "match": "kürbiskern|hanfsamen|sesam(?!öl)|sonnenblumenkern",
+"pantry": true,
 "prices": {
 "rewe": 1.99,
 "lidl": 1.93,
@@ -1360,6 +1367,7 @@
 "pack": 1000,
 "unit": "ml",
 "match": "öl\\b",
+"pantry": true,
 "prices": {
 "rewe": 1.69,
 "lidl": 1.69,
@@ -1373,6 +1381,7 @@
 "pack": 250,
 "unit": "ml",
 "match": "sojasauce|sojasoße",
+"pantry": true,
 "prices": {
 "rewe": 1.79,
 "lidl": 1.19,
@@ -1390,6 +1399,7 @@
 "pack": 10000,
 "unit": "ml",
 "match": "brühe",
+"pantry": true,
 "prices": {
 "rewe": 1.41,
 "lidl": 1.49,
@@ -1407,6 +1417,7 @@
 "pack": 500,
 "unit": "g",
 "match": "honig|ahornsirup|sirup",
+"pantry": true,
 "prices": {
 "rewe": 3.19,
 "lidl": 3.29,
@@ -1423,6 +1434,7 @@
 "pack": 250,
 "unit": "g",
 "match": "kakao",
+"pantry": true,
 "prices": {
 "rewe": 4.49,
 "lidl": 2.49,
@@ -1441,6 +1453,7 @@
 "pack": 400,
 "unit": "g",
 "match": "stärke",
+"pantry": true,
 "prices": {
 "rewe": 0.79,
 "lidl": 0.79,
@@ -1538,6 +1551,7 @@
 "pack": 1000,
 "unit": "g",
 "match": "\\bzucker\\b|rohrzucker",
+"pantry": true,
 "prices": {
 "rewe": 1.19,
 "lidl": 0.99,

@@ -47,6 +47,8 @@ jobs:
           CAL_TOKEN: ${{ secrets.CAL_TOKEN }}
         run: test ${#CAL_TOKEN} -ge 20 || { echo "CAL_TOKEN fehlt"; exit 1; }
       - name: Planen und erinnern
+        id: plan
+        continue-on-error: true   # Daten (state.json) trotzdem zurückschreiben, damit Pushes nicht doppelt kommen
         env:
           DATA_ROOT: daten
           # Feed-Dateiname kommt aus einem Secret und landet nie im Repo, in der Git-Geschichte oder in den Logs
@@ -57,8 +59,8 @@ jobs:
           VAPID_PRIVATE_PEM: ${{ secrets.VAPID_PRIVATE_PEM }}
         run: python .planner/planner.py
       - name: Daten zurückschreiben
+        if: ${{ !cancelled() }}
         working-directory: daten
-        continue-on-error: true
         run: |
           git config user.name "planner"
           git config user.email "planner@users.noreply.github.com"
@@ -71,6 +73,9 @@ jobs:
             sleep 5
           done
           exit 1
+      - name: Planer-Fehler melden (dann kein Deploy, die letzte Seite bleibt online)
+        if: ${{ steps.plan.outcome == 'failure' }}
+        run: exit 1
       - name: Seite und Feeds zusammenstellen
         run: |
           mkdir -p _site

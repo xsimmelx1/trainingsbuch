@@ -7,6 +7,7 @@ Gibt bewusst keine Kalender- oder Gesundheitsdaten ins Log aus.
 """
 import datetime as dt
 import json
+import math
 import os
 import sys
 import urllib.request
@@ -319,7 +320,7 @@ def build_ics(now, settings, plan, extras, past):
     for x in extras:
         d = dt.date.fromisoformat(x["date"])
         ev(f"checkin-{x['date']}", "Check-in & Meal Prep", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser).",
-           f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=15)
+           f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=15 if (settings.get("pushPrefs") or {}).get("checkin") is not False else None)
     st = settings.get("startDate")
     if st:
         s0 = dt.date.fromisoformat(st)
@@ -412,7 +413,8 @@ def adjust_recipes(rec, P, subst):
                 p += amt / 100 * d[1]
                 extra += " " + " ".join(x[0]["name"] for x in subd)
         sv = r.get("servings") or 1
-        out[n] = dict(r, kcal=round(r["kcal"] + k / sv), protein=round(r["protein"] + p / sv), _text=(r["name"] + " " + " ".join(r.get("ingredients", [])) + extra).lower())
+        rnd = lambda x: math.floor(x + 0.5)  # wie Math.round in der App
+        out[n] = dict(r, kcal=rnd(r["kcal"] + k / sv), protein=rnd(r["protein"] + p / sv), _text=(r["name"] + " " + " ".join(r.get("ingredients", [])) + extra).lower())
     return out
 
 
@@ -509,6 +511,50 @@ def portion_cost(r, P, store, subst, memo):
     return memo[r["name"]]
 
 
+def def_amt(pr):
+    return 0.5 if pr["unit"] == "Stück" else (pr["piece"] / 2 if pr.get("piece") else 20)
+
+
+def recipe_vec(r, P, subst, memo):
+    """Mengen je Produkt für ein ganzes Rezept (wie recipeVec in der App)."""
+    key = "vec#" + r["name"]
+    if key not in memo:
+        v = {}
+        for line in r.get("ingredients") or []:
+            for pr, amt in parse_ing(line, P, subst):
+                v[pr["id"]] = v.get(pr["id"], 0) + (amt or def_amt(pr))
+        memo[key] = v
+    return memo[key]
+
+
+def pack_share(pr, amt):
+    if pr.get("pantry"):
+        return amt / pr["pack"]
+    if pr.get("loose") and pr.get("piece"):
+        return max(1, math.ceil(amt / pr["piece"] - 0.1)) * pr["piece"] / pr["pack"]
+    return max(1, math.ceil(amt / pr["pack"] - 0.05))
+
+
+def shop_cost(counts, rec, P, store, subst, memo):
+    """Wocheneinkauf in € wie shopCostCounts in der App: halbe/ganze Rezepte, Packungen, Vorrat anteilig."""
+    tot = {}
+    for n, cnt in counts.items():
+        r = rec.get(n)
+        if not r or not cnt:
+            continue
+        f = math.ceil(cnt / (r.get("servings") or 1) * 2) / 2
+        for pid, a in recipe_vec(r, P, subst, memo).items():
+            tot[pid] = tot.get(pid, 0) + a * f
+    byid = {p["id"]: p for p in P["products"]}
+    c = 0.0
+    for pid, amt in tot.items():
+        pr = byid.get(pid)
+        v = price_of(pr, store, P) if pr else None
+        if v is not None:
+            c += pack_share(pr, amt) * v
+    return c
+
+
 def alt_meals(mp, rec, k, cur, rx):
     slot = next(x for x in mp["slots"] if x["k"] == k)
     ref = rec.get(cur) or {"kcal": 0, "protein": 0}
@@ -532,8 +578,14 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
         for k, n in o.items():
             occ.setdefault(n, {"n": n, "slot": k, "cnt": 0})["cnt"] += 1
     subs = {}
-    total = lambda: sum(x["cnt"] * cost(subs.get(x["n"], x["n"])) for x in occ.values())
-    cur_cost = total()
+
+    def total(sb):
+        c = {}
+        for x in occ.values():
+            n = sb.get(x["n"], x["n"])
+            c[n] = c.get(n, 0) + x["cnt"]
+        return shop_cost(c, rec, P, store, subst, memo)
+    cur_cost = total(subs)
     for _ in range(20):
         if cur_cost <= budget:
             break
@@ -548,13 +600,13 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
                     continue
                 if c1 >= c0 or c["protein"] < ref["protein"] * 0.8 or abs(c["kcal"] - ref["kcal"]) > 300 or c["name"] in occ or c["name"] in subs.values():
                     continue
-                save = (c0 - c1) * x["cnt"]
-                if not best or save > best[2]:
+                save = cur_cost - total(dict(subs, **{x["n"]: c["name"]}))
+                if save > 0.01 and (not best or save > best[2]):
                     best = (x["n"], c["name"], save)
         if not best:
             break
         subs[best[0]] = best[1]
-        cur_cost = total()
+        cur_cost = total(subs)
     return subs
 
 
@@ -589,6 +641,12 @@ def build_meal_ics(now, settings, plan, days, past=None):
     past_dates = {p["date"] for p in (past or [])}
     rx = avoid_re(settings)
     P = load_prices()
+    if P:  # eigene Preise aus Kassenbons vor den Richtpreisen (wie priceOf in der App)
+        own = (settings.get("food") or {}).get("ownPrices") or {}
+        for pr in P["products"]:
+            for st, o in (own.get(pr["id"]) or {}).items():
+                if o and o.get("price") is not None:
+                    pr.setdefault("prices", {})[st] = o["price"]
     rec = adjust_recipes(rec, P, (settings.get("food") or {}).get("subst") or {})
 
     def is_train(dd):
