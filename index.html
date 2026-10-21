@@ -193,6 +193,18 @@ body.wo main{padding-bottom:110px}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
+.subhead{margin:4px 0 10px}
+.subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
+h2.ptitle{margin:6px 0 10px}
+.dayhead .dt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;text-align:center}
+.dayhead .dt h2{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.btnrow.two{grid-template-columns:repeat(2,1fr)}
+.btnrow .btn{display:flex;align-items:center;justify-content:center;text-align:center}
+/* ⓘ direkt unter einer Überschrift: rechts in die Überschriftenzeile */
+.card{position:relative}
+.card > h2 + details.info:not([open]), .card > h3 + details.info:not([open]){position:absolute;right:12px;top:12px}
+h3.sub3{margin:14px 0 4px;font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.agday h3{font-size:15px;margin-top:12px}
 .lrow.menu{width:100%;text-align:left;font:inherit;color:var(--ink);min-height:64px}
 .chips.scope{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 .chips.scope button{min-height:40px}
@@ -532,7 +544,8 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 
 /* Fortschritt */
 .bars{display:flex;flex-direction:column;gap:8px}
-.bar{display:grid;grid-template-columns:112px minmax(0,1fr) 74px;gap:8px;align-items:center;font-size:13px}
+.bar{display:grid;grid-template-columns:128px minmax(0,1fr) 58px;gap:8px;align-items:center;font-size:13px}
+.bars .bar > span:first-child{font-size:12px;line-height:1.2}
 .track{position:relative;height:12px;background:var(--sunk);border-radius:6px;overflow:hidden}
 .track .zone{position:absolute;top:0;bottom:0;background:var(--accent-soft)}
 .track .fill{position:absolute;top:3px;bottom:3px;left:0;background:var(--accent);border-radius:4px}
@@ -592,8 +605,9 @@ dialog.sheet .sh{display:flex;justify-content:space-between;align-items:center;g
 .rec summary::-webkit-details-marker{display:none}
 .rec .rb{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px;font-size:14px}
 .rec ul,.rec ol,.card ul,.card ol,.sb ul{margin:0;padding-left:20px}
-.macro{display:flex;gap:10px;flex-wrap:wrap;font-family:var(--f-num);font-size:13px;color:var(--muted)}
-.macro b{color:var(--ink);font-weight:500}
+.macro{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;font-size:12px;color:var(--muted);text-align:center}
+.macro span{border:1px solid var(--line);border-radius:10px;padding:6px 2px;display:flex;flex-direction:column;line-height:1.2}
+.macro b{color:var(--ink);font-weight:700;font-family:var(--f-num);font-size:15px}
 code.copy{display:block;background:var(--sunk);padding:8px 10px;border-radius:8px;font-family:var(--f-num);font-size:12px;overflow-wrap:anywhere}
 .coach{background:var(--accent-soft);border:1px solid var(--accent);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px}
 .coach .ct{font-family:var(--f-display);font-size:22px;font-weight:700;line-height:1.15}
@@ -648,7 +662,7 @@ ol.prev li:last-child{border-bottom:0}
 .altopt.sel{border:2px solid var(--accent)}
 .athumb .anim{aspect-ratio:4/3}
 .athumb.noimg{display:block;aspect-ratio:4/3;background:var(--sunk);border-radius:8px}
-@media (max-width:400px){.bar{grid-template-columns:96px minmax(0,1fr) 70px}.kpi .v{font-size:26px}}
+@media (max-width:400px){.bar{grid-template-columns:122px minmax(0,1fr) 52px}.kpi .v{font-size:26px}}
 
 /* Feinschliff: schmale Bildschirme und Touch-Ziele ≥ 40 px */
 header.top{min-width:0}
@@ -1628,7 +1642,7 @@ function trainState(){
 function nextPlanned(after){ return (store.plan.days || []).find(x => x.date > after); }
 function restInfo(){
   const sd = S().startDate, np = nextPlanned(selDate);
-  const why = sd && selDate < sd ? `Woche 1 startet am ${fmt(sd)}. Bis dahin: Ausgangswerte sammeln.` : "Ruhetag. Erholung gehört zum Plan.";
+  const why = sd && selDate < sd ? `Woche 1 startet am ${fmt(sd)} – bis dahin Ausgangswerte sammeln.` : "Ruhetag. Erholung gehört zum Plan.";
   const next = np ? `Nächstes Training: <b>${fmt(np.date)}${np.start ? `, ${np.start} Uhr` : ""}</b> · ${esc(SESS[variantOf(np.session, np.date)].title)}` : "";
   return {why, next};
 }
@@ -1706,8 +1720,8 @@ function renderToday(){
     items.push({k:"ci", order: 5.5, done: ok, html: `<button type="button" class="task ${ok ? "done" : ""}" data-act="checkin" data-v="${mo}"><span class="dot">${ok ? "✓" : ""}</span><span><span class="t">Wochen-Check-in</span><br><span class="s">10 min · Bilanz und Modus für nächste Woche</span></span><span class="go">›</span></button>`});
   }
   items.sort((a, b) => (a.done - b.done) || (a.order - b.order));
-  let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div>
-    <h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? `<span></span>` : `<button class="btn ghost" type="button" data-day="0">Heute</button>`}</div>`;
+  let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
+    <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
   h += `<div class="seg" role="group" aria-label="Ansicht">${[["training","Training"],["essen","Essen"],["alles","Alles"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
   if (isToday && todayFocus !== "essen") {
@@ -2311,8 +2325,8 @@ function journeySheet(kind, arg){
       <button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button>${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
       ${avoidHit(r) ? `<div class="pill warn">${avoidHit(r)[0] === "§" ? `Braucht ${esc(DEV_NEED[avoidHit(r)])} – fehlt in deiner Küche` : `Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)`}</div>` : ""}
       ${devLine(r)}
-      ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div><div class="small muted">Pro Portion, anteilig gerechnet. ${priceNote()}</div>` : ""}
-      <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span>${r.servings} Port.</span></div>
+      ${showPrices() ? `<div class="storecmp">${prices.stores.map(st => { const c = recipeCost(r, st); return `<div class="${st === (FOOD().store || "aldi") ? "sel" : ""}"><span>${STORES[st]}</span><b>${eur(c.portion)}</b></div>`; }).join("")}</div>${info(`Pro Portion, anteilig gerechnet. ${priceNote()}`)}` : ""}
+      <div class="macro"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span><b>${r.carbs}</b> g KH</span><span><b>${r.fat}</b> g Fett</span><span><b>${r.servings}</b> Portion${r.servings > 1 ? "en" : ""}</span></div>
       <div class="effort">${tempTag(r)}<span>⏱ ${r.activeMin != null ? `<b>${r.activeMin} min</b> aktiv · ` : ""}${r.timeMin} min gesamt</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${effortOn() && !effortOk(r) ? `<span class="small muted">über deinem Aufwand-Limit</span>` : ""}</div>
       <div><div class="lab">Zutaten</div><ul>${r.ingredients.map(i => { const x = prices ? parseIng(i) : null; return `<li>${esc(i)}${x?.orig ? ` <b>→ ${esc(SUBST[x.orig.id].opts[x.subKey][0])}</b>` : ""}</li>`; }).join("")}</ul></div>
       <div><div class="lab">Zubereitung</div><ol>${r.steps.map(i => `<li>${esc(i)}</li>`).join("")}</ol></div>
@@ -2442,7 +2456,7 @@ function renderMore(){
   const s = sub.mehr || "menu";
   if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" data-sub="${k}"><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
   const title = (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
-  view.innerHTML = `<div class="subhead"><button type="button" class="btn ghost small" data-sub="menu">‹ Mehr</button><h2>${esc(title)}</h2></div><div id="moreBody"></div>`;
+  view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
   if (s === "uebungen") b.innerHTML = catalogHtml(); else if (s === "kalender") b.innerHTML = calHtml() + calExportHtml(); else if (s === "plan") b.innerHTML = planHtml();
   else if (s === "essenset") { if (!mealPlan || !recipes) { b.innerHTML = `<p class="muted">Lade …</p>`; ensureMeals().then(() => { if (tab === "mehr") renderMore(); }).catch(() => {}); } else b.innerHTML = foodSettingsHtml(); }
@@ -2508,14 +2522,14 @@ function calExportHtml(){
   const url = S().icsUrl;
   return `<div class="card"><h2>Kalender exportieren & abonnieren</h2>${url ? `${info("Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.")}
     <code class="copy" id="icsUrl">${esc(url)}</code>
-    <div class="actions"><button class="btn" id="icsCopy" type="button">iCal-Link kopieren</button>
-    <a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:"))}" target="_blank" rel="noopener">In Google Kalender ↗</a>
+    <div class="btnrow two"><button class="btn" id="icsCopy" type="button">Link kopieren</button>
+    <a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:"))}" target="_blank" rel="noopener">Google Kalender ↗</a>
     <a class="btn ghost" href="${esc(url.replace(/^https:/, "webcal:"))}">Andere Kalender-App</a>
     <a class="btn ghost" href="${esc(url)}" download="trainingsbuch.ics">.ics herunterladen</a></div>
     ${info("Die heruntergeladene Datei ist eine Momentaufnahme. Für automatische Updates das Abo nutzen. Google Kalender übernimmt bei Abos keine Wecker; dafür erinnern dich die Push-Nachrichten der App (Apple Kalender und ICSx5 übernehmen sie).")}
-    <div class="lab">Essensplan als eigener Kalender</div>${info("Separat abonnieren, dann lässt er sich in Google Kalender unabhängig vom Training ein- und ausblenden.")}
+    <h3 class="sub3">Essensplan als eigener Kalender</h3>${info("Separat abonnieren, dann lässt er sich in Google Kalender unabhängig vom Training ein- und ausblenden.")}
     <code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
-    <div class="actions"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">In Google Kalender ↗</a></div>` : `<div class="small muted">Nach dem Verbinden unter Einrichtung erscheint hier der iCal-Link.</div>`}</div>`;
+    <div class="btnrow two"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">Google Kalender ↗</a></div>` : `<div class="small muted">Nach dem Verbinden unter Einrichtung erscheint hier der iCal-Link.</div>`}</div>`;
 }
 function calHtml(){
   const t = todayIso(), d = calDate || t;
@@ -3281,7 +3295,7 @@ function foodSettingsHtml(){
     <div class="card nutri"><h2>Tagesziel</h2><div class="grid2"><div class="field"><label for="fkcal">kcal</label><input type="text" inputmode="numeric" id="fkcal" value="${T.kcal}"></div><div class="field"><label for="fprot">Protein (g)</label><input type="text" inputmode="numeric" id="fprot" value="${T.protein}"></div></div>
       ${info("Start laut Plan: 2.650 kcal, 140 g Protein. Angepasst wird erst nach 4 Gym-Wiegungen und Bauchumfang (siehe Regeln).")}</div>
     ${url ? `<div class="card"><h2>Essens-Kalender abonnieren</h2><div class="small muted">Eigener Kalender, getrennt vom Training, in Google ein- und ausblendbar.</div><code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
-      <div class="actions"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">In Google Kalender ↗</a></div></div>` : ""}`;
+      <div class="btnrow two"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">Google Kalender ↗</a></div></div>` : ""}`;
 }
 function weekPlanCost(mo){ let c = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) c += mealCost(m.name) || 0; return c; }
 function budgetCard(mo){
@@ -3330,7 +3344,7 @@ function essenHtml(b){
   h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted nutri">Plan ${tt.kcal} kcal · ${tt.protein} g P</span></div>
     <div class="rings nutri">${ringHtml(tt.eKcal, tg.kcal, "kcal")}${ringHtml(tt.eProtein, tg.protein, "g Protein")}</div><div class="small">${trainLine(d)}</div></div>
     <div class="mcards">${ms.map(m => diaryCard(d, m)).join("")}</div>
-    <div class="actions"><button class="btn" type="button" data-sheet="ownfood" data-v="${d}">＋ Essen</button><button class="btn" type="button" data-ownscan="${d}">📷 Scan</button></div>`;
+    <div class="btnrow two"><button class="btn" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn" type="button" data-ownscan="${d}">📷 Barcode scannen</button></div>`;
   b.innerHTML = h;
 }
 
