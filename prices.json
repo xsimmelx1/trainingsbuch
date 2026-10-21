@@ -303,7 +303,7 @@
 "prices": {
 "rewe": 1.49,
 "lidl": 1.49,
-"kaufland": 1.66,
+"kaufland": 1.57,
 "netto": 1.49,
 "penny": 1.53,
 "edeka": 1.49,
@@ -331,7 +331,7 @@
 "lidl": 0.75,
 "aldi": 0.75,
 "kaufland": 0.75,
-"netto": 0.8,
+"netto": 0.81,
 "penny": 0.77,
 "edeka": 0.75
 },
@@ -374,15 +374,16 @@
 "piece": 1400,
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.25,
+"rewe": 2.79,
 "lidl": 2.65,
 "aldi": 2.65,
 "kaufland": 2.79,
-"netto": 2.83,
+"netto": 2.87,
 "penny": 2.73,
 "edeka": 2.09
 },
 "est": [
+"rewe",
 "lidl",
 "netto",
 "penny"
@@ -404,7 +405,7 @@
 "lidl": 2.49,
 "aldi": 2.5,
 "kaufland": 2.5,
-"netto": 2.67,
+"netto": 2.71,
 "penny": 2.58,
 "edeka": 2.5
 },
@@ -472,7 +473,7 @@
 "lidl": 2.69,
 "aldi": 2.69,
 "kaufland": 2.69,
-"netto": 2.87,
+"netto": 2.92,
 "penny": 2.77,
 "edeka": 2.69
 },
@@ -499,7 +500,7 @@
 "prices": {
 "rewe": 1.49,
 "lidl": 1.49,
-"kaufland": 1.66,
+"kaufland": 1.57,
 "netto": 1.49,
 "penny": 1.53,
 "edeka": 1.49,
@@ -529,7 +530,7 @@
 "lidl": 1.45,
 "aldi": 1.45,
 "kaufland": 1.45,
-"netto": 1.55,
+"netto": 1.57,
 "penny": 1.49,
 "edeka": 1.45
 },
@@ -559,7 +560,7 @@
 "lidl": 0.78,
 "aldi": 0.78,
 "kaufland": 0.78,
-"netto": 0.83,
+"netto": 0.85,
 "penny": 0.8,
 "edeka": 0.78
 },
@@ -587,7 +588,7 @@
 "rewe": 0.59,
 "lidl": 0.59,
 "aldi": 0.79,
-"kaufland": 0.66,
+"kaufland": 0.62,
 "netto": 0.59,
 "penny": 0.61,
 "edeka": 0.59
@@ -617,7 +618,7 @@
 "rewe": 3.29,
 "lidl": 3.29,
 "aldi": 2.49,
-"kaufland": 3.66,
+"kaufland": 3.47,
 "netto": 3.29,
 "penny": 3.39,
 "edeka": 3.29
@@ -644,7 +645,7 @@
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19,
-"netto": 1.27,
+"netto": 1.29,
 "penny": 1.23,
 "edeka": 1.49
 },
@@ -671,7 +672,7 @@
 "rewe": 1.39,
 "lidl": 1.39,
 "aldi": 0.99,
-"kaufland": 1.55,
+"kaufland": 1.47,
 "netto": 1.39,
 "penny": 1.43,
 "edeka": 1.39
@@ -700,7 +701,7 @@
 "lidl": 1.31,
 "aldi": 1.31,
 "kaufland": 1.31,
-"netto": 1.4,
+"netto": 1.42,
 "penny": 1.35,
 "edeka": 1.31
 },
@@ -728,7 +729,7 @@
 "lidl": 2.24,
 "aldi": 2.24,
 "kaufland": 2.24,
-"netto": 2.39,
+"netto": 2.43,
 "penny": 2.31,
 "edeka": 2.24
 },
@@ -751,7 +752,7 @@
 "rewe": 3.08,
 "lidl": 3.08,
 "aldi": 1.79,
-"kaufland": 3.42,
+"kaufland": 3.25,
 "netto": 3.08,
 "penny": 3.17,
 "edeka": 3.08
@@ -800,7 +801,7 @@
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19,
-"netto": 1.27,
+"netto": 1.29,
 "penny": 1.23,
 "edeka": 1.19
 },
@@ -921,7 +922,7 @@
 "lidl": 0.99,
 "aldi": 0.85,
 "kaufland": 0.85,
-"netto": 0.91,
+"netto": 0.92,
 "penny": 0.88,
 "edeka": 0.85
 },
@@ -948,7 +949,7 @@
 "lidl": 1.55,
 "aldi": 1.55,
 "kaufland": 1.55,
-"netto": 1.66,
+"netto": 1.68,
 "penny": 1.6,
 "edeka": 1.55
 },
@@ -976,7 +977,7 @@
 "lidl": 1.45,
 "aldi": 1.45,
 "kaufland": 1.45,
-"netto": 1.55,
+"netto": 1.57,
 "penny": 1.49,
 "edeka": 1.45
 },
@@ -1005,7 +1006,7 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 1.06,
+"netto": 1.07,
 "penny": 1.02,
 "edeka": 0.99
 },
@@ -1031,7 +1032,7 @@
 "rewe": 1.79,
 "lidl": 1.79,
 "aldi": 1.79,
-"kaufland": 1.99,
+"kaufland": 1.89,
 "netto": 1.79,
 "penny": 1.84,
 "edeka": 1.79
@@ -1061,7 +1062,7 @@
 "lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69,
-"netto": 0.74,
+"netto": 0.75,
 "penny": 0.71,
 "edeka": 0.69
 },
@@ -1114,7 +1115,7 @@
 "lidl": 0.65,
 "aldi": 0.65,
 "kaufland": 0.99,
-"netto": 0.69,
+"netto": 0.7,
 "penny": 0.67,
 "edeka": 0.65
 },
@@ -1141,7 +1142,7 @@
 "lidl": 0.95,
 "aldi": 0.89,
 "kaufland": 0.89,
-"netto": 0.95,
+"netto": 0.96,
 "penny": 0.92,
 "edeka": 0.95
 },
@@ -1190,7 +1191,7 @@
 "rewe": 0.75,
 "lidl": 0.75,
 "aldi": 0.69,
-"kaufland": 0.83,
+"kaufland": 0.79,
 "netto": 0.75,
 "penny": 0.77,
 "edeka": 0.75
@@ -1217,7 +1218,7 @@
 "lidl": 1.0,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 1.06,
+"netto": 1.07,
 "penny": 1.02,
 "edeka": 0.99
 },
@@ -1244,7 +1245,7 @@
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29,
-"netto": 1.38,
+"netto": 1.4,
 "penny": 1.33,
 "edeka": 1.29
 },
@@ -1268,7 +1269,7 @@
 "lidl": 2.79,
 "aldi": 1.75,
 "kaufland": 1.75,
-"netto": 1.87,
+"netto": 1.9,
 "penny": 1.8,
 "edeka": 1.75
 },
@@ -1295,7 +1296,7 @@
 "lidl": 2.69,
 "aldi": 2.69,
 "kaufland": 2.69,
-"netto": 2.87,
+"netto": 2.92,
 "penny": 2.77,
 "edeka": 2.69
 },
@@ -1395,7 +1396,7 @@
 "lidl": 1.43,
 "aldi": 1.19,
 "kaufland": 1.19,
-"netto": 1.27,
+"netto": 1.29,
 "penny": 1.23,
 "edeka": 1.19
 },
@@ -1441,7 +1442,7 @@
 "lidl": 0.85,
 "aldi": 0.85,
 "kaufland": 0.85,
-"netto": 0.91,
+"netto": 0.92,
 "penny": 0.88,
 "edeka": 0.85
 },
@@ -1469,7 +1470,7 @@
 "lidl": 0.79,
 "aldi": 0.71,
 "kaufland": 0.71,
-"netto": 0.76,
+"netto": 0.77,
 "penny": 0.73,
 "edeka": 0.89
 },
@@ -1512,15 +1513,16 @@
 "match": "(?<!seiden)tofu(?! ?-?räucher)",
 "group": "Tofu & Soja",
 "prices": {
-"rewe": 3.76,
+"rewe": 2.29,
 "lidl": 2.19,
 "aldi": 2.29,
 "kaufland": 2.29,
-"netto": 2.45,
+"netto": 2.48,
 "penny": 2.36,
 "edeka": 2.29
 },
 "est": [
+"rewe",
 "kaufland",
 "netto",
 "penny",
@@ -1566,7 +1568,7 @@
 "rewe": 1.39,
 "lidl": 1.39,
 "aldi": 0.89,
-"kaufland": 1.55,
+"kaufland": 1.47,
 "netto": 1.39,
 "penny": 1.43,
 "edeka": 1.39
@@ -1596,7 +1598,7 @@
 "lidl": 0.99,
 "aldi": 0.89,
 "kaufland": 0.69,
-"netto": 0.95,
+"netto": 0.96,
 "penny": 0.92,
 "edeka": 0.89
 },
@@ -1728,7 +1730,7 @@
 "rewe": 2.29,
 "lidl": 2.29,
 "aldi": 2.99,
-"kaufland": 2.55,
+"kaufland": 2.42,
 "netto": 2.29,
 "penny": 2.36,
 "edeka": 2.29
@@ -1758,13 +1760,14 @@
 "lidl": 0.89,
 "aldi": 1.32,
 "kaufland": 1.99,
-"netto": 1.41,
+"netto": 1.43,
 "penny": 1.36,
-"edeka": 2.19
+"edeka": 1.32
 },
 "est": [
 "netto",
-"penny"
+"penny",
+"edeka"
 ],
 "bio": {
 "rewe": 2.19,
@@ -1783,7 +1786,7 @@
 "lidl": 1.19,
 "aldi": 1.27,
 "kaufland": 1.27,
-"netto": 1.36,
+"netto": 1.38,
 "penny": 1.31,
 "edeka": 1.19
 },
@@ -1805,7 +1808,7 @@
 "rewe": 1.0,
 "lidl": 1.0,
 "aldi": 0.75,
-"kaufland": 1.11,
+"kaufland": 1.06,
 "netto": 1.0,
 "penny": 1.03,
 "edeka": 1.0
@@ -1941,10 +1944,11 @@
 "kaufland": 1.99,
 "netto": 2.29,
 "penny": 1.39,
-"edeka": 4.34
+"edeka": 1.79
 },
 "est": [
-"aldi"
+"aldi",
+"edeka"
 ],
 "bio": {
 "rewe": 4.36
@@ -1988,7 +1992,7 @@
 "rewe": 0.9,
 "lidl": 0.5,
 "aldi": 1.29,
-"kaufland": 1.0,
+"kaufland": 0.95,
 "netto": 0.6,
 "penny": 0.93,
 "edeka": 0.9
@@ -2043,13 +2047,14 @@
 "lidl": 0.86,
 "aldi": 0.79,
 "kaufland": 0.99,
-"netto": 1.49,
+"netto": 0.86,
 "penny": 0.89,
 "edeka": 0.86
 },
 "est": [
 "lidl",
 "aldi",
+"netto",
 "penny",
 "edeka"
 ],
@@ -2069,7 +2074,7 @@
 "rewe": 0.94,
 "lidl": 0.94,
 "aldi": 0.99,
-"kaufland": 1.05,
+"kaufland": 0.99,
 "netto": 0.94,
 "penny": 0.97,
 "edeka": 0.94
@@ -2099,16 +2104,17 @@
 "rewe": 0.93,
 "lidl": 0.93,
 "aldi": 0.99,
-"kaufland": 1.03,
+"kaufland": 0.98,
 "netto": 0.9,
 "penny": 0.96,
-"edeka": 1.99
+"edeka": 0.93
 },
 "est": [
 "lidl",
 "aldi",
 "kaufland",
-"penny"
+"penny",
+"edeka"
 ],
 "bio": {
 "rewe": 1.69
@@ -2179,11 +2185,12 @@
 "kaufland": 2.54,
 "netto": 1.99,
 "penny": 1.95,
-"edeka": 3.99
+"edeka": 1.89
 },
 "est": [
 "lidl",
-"penny"
+"penny",
+"edeka"
 ],
 "bio": {
 "lidl": 3.02
@@ -2201,7 +2208,7 @@
 "lidl": 2.06,
 "aldi": 2.06,
 "kaufland": 2.06,
-"netto": 2.2,
+"netto": 2.23,
 "penny": 2.12,
 "edeka": 2.06
 },
@@ -2225,7 +2232,7 @@
 "rewe": 1.08,
 "lidl": 1.08,
 "aldi": 1.29,
-"kaufland": 1.2,
+"kaufland": 1.14,
 "netto": 1.08,
 "penny": 1.11,
 "edeka": 1.08
@@ -2248,15 +2255,16 @@
 "piece": 5,
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 0.79,
+"rewe": 0.49,
 "lidl": 0.49,
 "aldi": 0.49,
 "kaufland": 0.49,
-"netto": 0.52,
+"netto": 0.53,
 "penny": 0.5,
 "edeka": 0.49
 },
 "est": [
+"rewe",
 "lidl",
 "netto",
 "penny",
@@ -2279,7 +2287,7 @@
 "rewe": 3.89,
 "lidl": 3.89,
 "aldi": 2.29,
-"kaufland": 4.33,
+"kaufland": 4.11,
 "netto": 3.89,
 "penny": 4.01,
 "edeka": 3.89
@@ -2306,7 +2314,7 @@
 "lidl": 1.24,
 "aldi": 1.24,
 "kaufland": 1.24,
-"netto": 1.32,
+"netto": 1.34,
 "penny": 1.28,
 "edeka": 1.24
 },
@@ -2410,7 +2418,7 @@
 "lidl": 1.39,
 "aldi": 1.39,
 "kaufland": 1.39,
-"netto": 1.48,
+"netto": 1.51,
 "penny": 1.43,
 "edeka": 1.39
 },
@@ -2435,7 +2443,7 @@
 "lidl": 1.41,
 "aldi": 1.41,
 "kaufland": 1.41,
-"netto": 1.51,
+"netto": 1.53,
 "penny": 1.45,
 "edeka": 1.41
 },
@@ -2485,7 +2493,7 @@
 "lidl": 3.29,
 "aldi": 3.29,
 "kaufland": 3.29,
-"netto": 3.51,
+"netto": 3.57,
 "penny": 3.39,
 "edeka": 3.29
 },
@@ -2509,7 +2517,7 @@
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.79,
-"netto": 0.84,
+"netto": 0.86,
 "penny": 0.81,
 "edeka": 0.79
 },
@@ -2531,7 +2539,7 @@
 "lidl": 0.85,
 "aldi": 0.9,
 "kaufland": 0.9,
-"netto": 0.96,
+"netto": 0.98,
 "penny": 0.93,
 "edeka": 0.9,
 "rewe": 1.29
@@ -2560,7 +2568,7 @@
 "prices": {
 "rewe": 0.75,
 "lidl": 0.75,
-"kaufland": 0.83,
+"kaufland": 0.79,
 "netto": 0.75,
 "penny": 0.77,
 "edeka": 0.75,
@@ -2592,7 +2600,7 @@
 "lidl": 1.49,
 "aldi": 1.49,
 "kaufland": 1.49,
-"netto": 1.59,
+"netto": 1.62,
 "penny": 1.53,
 "edeka": 1.49
 },
@@ -2620,7 +2628,7 @@
 "lidl": 0.85,
 "aldi": 0.9,
 "kaufland": 0.9,
-"netto": 0.96,
+"netto": 0.98,
 "penny": 0.93,
 "edeka": 0.9
 },
@@ -2646,15 +2654,16 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 1.19,
-"lidl": 1.69,
-"aldi": 1.69,
-"kaufland": 1.69,
+"lidl": 1.19,
+"aldi": 0.99,
+"kaufland": 1.26,
 "netto": 0.85,
-"penny": 1.74,
-"edeka": 1.69
+"penny": 1.23,
+"edeka": 1.19
 },
 "est": [
 "lidl",
+"aldi",
 "kaufland",
 "penny",
 "edeka"
@@ -2672,7 +2681,7 @@
 "lidl": 0.59,
 "aldi": 0.59,
 "kaufland": 0.59,
-"netto": 0.63,
+"netto": 0.64,
 "penny": 0.61,
 "edeka": 0.59
 },
@@ -2696,7 +2705,7 @@
 "lidl": 0.66,
 "aldi": 0.66,
 "kaufland": 0.66,
-"netto": 0.7,
+"netto": 0.72,
 "penny": 0.68,
 "edeka": 0.66
 },
@@ -2716,7 +2725,7 @@
 "match": "zartbitter|schokolade",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.69,
+"rewe": 0.99,
 "lidl": 0.89,
 "aldi": 0.89,
 "kaufland": 0.89,
@@ -2725,6 +2734,7 @@
 "edeka": 0.89
 },
 "est": [
+"rewe",
 "kaufland",
 "penny"
 ],
@@ -2742,7 +2752,7 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.19,
-"kaufland": 1.32,
+"kaufland": 1.26,
 "netto": 1.19,
 "penny": 1.23,
 "edeka": 0.69,
@@ -2769,7 +2779,7 @@
 "prices": {
 "rewe": 3.89,
 "lidl": 3.89,
-"kaufland": 4.33,
+"kaufland": 4.11,
 "netto": 3.89,
 "penny": 4.01,
 "edeka": 2.39,
@@ -2844,7 +2854,7 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.19,
-"kaufland": 1.32,
+"kaufland": 1.26,
 "netto": 1.19,
 "penny": 1.23,
 "edeka": 1.19,
@@ -2870,13 +2880,14 @@
 "rewe": 1.59,
 "lidl": 0.99,
 "aldi": 0.99,
-"kaufland": 2.24,
+"kaufland": 0.99,
 "netto": 1.19,
 "penny": 1.02,
 "edeka": 0.99
 },
 "est": [
 "lidl",
+"kaufland",
 "penny",
 "edeka"
 ],
@@ -2896,7 +2907,7 @@
 "prices": {
 "rewe": 0.59,
 "lidl": 0.59,
-"kaufland": 0.66,
+"kaufland": 0.62,
 "netto": 0.59,
 "penny": 0.61,
 "edeka": 0.99,
@@ -2920,7 +2931,7 @@
 "prices": {
 "rewe": 0.69,
 "lidl": 0.69,
-"kaufland": 0.77,
+"kaufland": 0.73,
 "netto": 0.69,
 "penny": 0.71,
 "edeka": 0.59,
@@ -2946,7 +2957,7 @@
 "prices": {
 "rewe": 1.59,
 "lidl": 1.59,
-"kaufland": 1.77,
+"kaufland": 1.68,
 "netto": 1.59,
 "penny": 1.64,
 "edeka": 1.59,
@@ -2971,7 +2982,7 @@
 "prices": {
 "rewe": 4.04,
 "lidl": 4.04,
-"kaufland": 4.49,
+"kaufland": 4.27,
 "netto": 4.04,
 "penny": 4.16,
 "edeka": 4.04,
@@ -2997,7 +3008,7 @@
 "prices": {
 "rewe": 1.69,
 "lidl": 1.69,
-"kaufland": 1.88,
+"kaufland": 1.78,
 "netto": 1.69,
 "penny": 1.74,
 "edeka": 1.69,
@@ -3024,7 +3035,7 @@
 "lidl": 1.43,
 "aldi": 1.43,
 "kaufland": 1.43,
-"netto": 1.53,
+"netto": 1.55,
 "penny": 1.47,
 "edeka": 1.43
 },
@@ -3053,13 +3064,14 @@
 "lidl": 0.69,
 "aldi": 0.86,
 "kaufland": 0.49,
-"netto": 0.92,
+"netto": 0.93,
 "penny": 0.89,
-"edeka": 1.89
+"edeka": 0.86
 },
 "est": [
 "netto",
-"penny"
+"penny",
+"edeka"
 ]
 },
 {
@@ -3075,7 +3087,7 @@
 "lidl": 1.69,
 "aldi": 1.69,
 "kaufland": 1.69,
-"netto": 1.8,
+"netto": 1.83,
 "penny": 1.74,
 "edeka": 1.69
 },
@@ -3098,7 +3110,7 @@
 "lidl": 2.49,
 "aldi": 2.49,
 "kaufland": 2.49,
-"netto": 2.66,
+"netto": 2.7,
 "penny": 2.56,
 "edeka": 2.49
 },
@@ -3121,7 +3133,7 @@
 "prices": {
 "rewe": 1.79,
 "lidl": 1.79,
-"kaufland": 1.99,
+"kaufland": 1.89,
 "netto": 1.79,
 "penny": 1.84,
 "edeka": 1.79,
@@ -3149,7 +3161,7 @@
 "lidl": 1.63,
 "aldi": 1.63,
 "kaufland": 1.63,
-"netto": 1.74,
+"netto": 1.77,
 "penny": 1.68,
 "edeka": 1.63
 },
@@ -3175,7 +3187,7 @@
 "prices": {
 "rewe": 1.79,
 "lidl": 1.79,
-"kaufland": 1.99,
+"kaufland": 1.89,
 "netto": 1.79,
 "penny": 1.84,
 "edeka": 1.79,
