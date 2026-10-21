@@ -1825,8 +1825,9 @@ function dayPreps(d, ev){
       out.push({t: T - (home ? 15 : 60), for: e.k, icon: "🎒", txt: home ? `Platz und Sachen bereitlegen (Matte, Kurzhanteln, Wasser) – Training ${e.t}` : `Tasche packen: Schuhe, Handtuch, Wasser, Schloss – Training ${e.t}`});
       out.push({t: T - 90, for: e.k, icon: "🍌", txt: "Kleine Mahlzeit 1–2 h vorher (z. B. Banane, Skyr), dann nichts Schweres mehr"}); }
     if (e.meal) { const r = recipeByName(e.meal.name); if (!r) continue; const act = r.activeMin ?? r.timeMin ?? 15, tot = r.timeMin ?? act;
-      if (r.mealPrep && e.meal.k !== "fr" && wd >= 1 && wd <= 4) out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"});
-      else if (tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
+      const main = e.meal.k === "mi" || e.meal.k === "ab";
+      if (r.mealPrep) { if (main && wd >= 1 && wd <= 4) out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"}); }
+      else if (tot >= 10 && tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
   // für morgen: Gerichte, die über Nacht ziehen
   if (mealPlan && recipes) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
   if (wd === 0) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
