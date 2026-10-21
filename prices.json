@@ -10,15 +10,10 @@
 "match": "crème fraîche|creme fraiche|cr[eè]me fra[iî]che|schmand|saure sahne",
 "prices": {
 "rewe": 0.99,
-"lidl": 0.84,
-"aldi": 0.84,
-"kaufland": 0.91
-},
-"est": [
-"lidl",
-"aldi",
-"kaufland"
-]
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.59
+}
 },
 {
 "id": "currypaste",
@@ -48,13 +43,12 @@
 "pantry": true,
 "prices": {
 "rewe": 0.75,
+"aldi": 0.75,
 "lidl": 0.64,
-"aldi": 0.64,
 "kaufland": 0.69
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -81,14 +75,12 @@
 "piece": 1400,
 "prices": {
 "rewe": 1.25,
-"lidl": 1.06,
-"aldi": 1.06,
-"kaufland": 1.15
+"aldi": 2.65,
+"kaufland": 2.79,
+"lidl": 1.06
 },
 "est": [
-"lidl",
-"aldi",
-"kaufland"
+"lidl"
 ]
 },
 {
@@ -99,13 +91,11 @@
 "match": "mandeln(?!drink|milch|mus)",
 "prices": {
 "rewe": 2.49,
-"lidl": 2.12,
-"aldi": 2.12,
+"lidl": 2.49,
+"aldi": 2.5,
 "kaufland": 2.29
 },
 "est": [
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -117,13 +107,12 @@
 "match": "oliven(?!öl)",
 "prices": {
 "rewe": 1.79,
+"aldi": 1.21,
 "lidl": 1.52,
-"aldi": 1.52,
 "kaufland": 1.65
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -154,13 +143,12 @@
 "match": "tk-?(blatt)?spinat|spinat \\(tk|blattspinat",
 "prices": {
 "rewe": 3.11,
+"aldi": 2.69,
 "lidl": 1.19,
-"aldi": 1.19,
 "kaufland": 1.19
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -191,13 +179,12 @@
 "match": "tellerlinsen|berglinsen|braune linsen",
 "prices": {
 "rewe": 1.99,
+"aldi": 1.45,
 "lidl": 1.49,
-"aldi": 1.49,
 "kaufland": 1.59
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -210,13 +197,12 @@
 "pantry": true,
 "prices": {
 "rewe": 1.24,
+"aldi": 0.78,
 "lidl": 0.99,
-"aldi": 0.99,
 "kaufland": 1.09
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -273,7 +259,6 @@
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -321,12 +306,11 @@
 "prices": {
 "rewe": 3.29,
 "lidl": 2.29,
-"aldi": 2.0,
+"aldi": 2.24,
 "kaufland": 2.11
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -427,7 +411,7 @@
 "match": "gerieben|cheddar|gouda",
 "prices": {
 "rewe": 1.43,
-"lidl": 1.19,
+"lidl": 1.43,
 "aldi": 1.43,
 "kaufland": 1.43
 },
@@ -493,7 +477,7 @@
 "prices": {
 "rewe": 1.65,
 "lidl": 1.49,
-"aldi": 1.65,
+"aldi": 1.45,
 "kaufland": 1.45
 },
 "est": [
@@ -511,12 +495,11 @@
 "prices": {
 "rewe": 1.49,
 "lidl": 0.79,
-"aldi": 0.69,
+"aldi": 0.99,
 "kaufland": 0.69
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -565,12 +548,11 @@
 "match": "gehackte tomaten|stückige tomaten|dosen? tomaten",
 "prices": {
 "rewe": 0.59,
-"lidl": 0.55,
+"lidl": 0.59,
 "aldi": 0.59,
 "kaufland": 0.59
 },
 "est": [
-"lidl",
 "kaufland"
 ]
 },
@@ -584,11 +566,10 @@
 "rewe": 0.65,
 "lidl": 0.55,
 "aldi": 0.65,
-"kaufland": 0.65
+"kaufland": 0.99
 },
 "est": [
-"lidl",
-"kaufland"
+"lidl"
 ]
 },
 {
@@ -604,8 +585,7 @@
 "kaufland": 0.89
 },
 "est": [
-"lidl",
-"kaufland"
+"lidl"
 ]
 },
 {
@@ -623,8 +603,7 @@
 },
 "est": [
 "lidl",
-"aldi",
-"kaufland"
+"aldi"
 ]
 },
 {
@@ -655,12 +634,11 @@
 "prices": {
 "rewe": 2.29,
 "lidl": 1.79,
-"aldi": 1.99,
+"aldi": 0.99,
 "kaufland": 1.99
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -708,13 +686,12 @@
 "match": "(?<!icher)erbsen(?!nudel|mehl)",
 "prices": {
 "rewe": 1.79,
+"aldi": 2.69,
 "lidl": 1.29,
-"aldi": 1.29,
 "kaufland": 1.29
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -955,7 +932,7 @@
 "match": "nudeln|pasta|spaghetti|lasagne|penne|fusilli|spätzle|rigatoni|farfalle|tagliatelle|maccheroni",
 "prices": {
 "rewe": 0.69,
-"lidl": 0.79,
+"lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69
 },
@@ -973,12 +950,11 @@
 "rewe": 1.29,
 "lidl": 1.29,
 "aldi": 1.29,
-"kaufland": 1.29
+"kaufland": 1.98
 },
 "est": [
 "lidl",
-"aldi",
-"kaufland"
+"aldi"
 ]
 },
 {
@@ -1009,7 +985,7 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.19,
-"aldi": 0.89,
+"aldi": 1.32,
 "kaufland": 1.19
 },
 "est": [
@@ -1026,7 +1002,7 @@
 "prices": {
 "rewe": 1.59,
 "lidl": 1.29,
-"aldi": 1.19,
+"aldi": 1.27,
 "kaufland": 1.29
 },
 "est": [
@@ -1155,12 +1131,11 @@
 "loose": true,
 "prices": {
 "rewe": 1.79,
-"lidl": 1.99,
+"lidl": 1.79,
 "aldi": 1.99,
 "kaufland": 1.99
 },
 "est": [
-"lidl",
 "aldi"
 ]
 },
@@ -1234,7 +1209,7 @@
 "rewe": 0.86,
 "lidl": 0.99,
 "aldi": 0.79,
-"kaufland": 1.0
+"kaufland": 0.99
 },
 "est": [
 "lidl",
@@ -1307,11 +1282,10 @@
 "rewe": 1.59,
 "lidl": 1.49,
 "aldi": 1.11,
-"kaufland": 1.49
+"kaufland": 1.79
 },
 "est": [
-"lidl",
-"kaufland"
+"lidl"
 ]
 },
 {
@@ -1412,7 +1386,7 @@
 "prices": {
 "rewe": 1.23,
 "lidl": 1.99,
-"aldi": 1.13,
+"aldi": 1.24,
 "kaufland": 1.24
 },
 "est": [
@@ -1429,11 +1403,10 @@
 "prices": {
 "rewe": 2.99,
 "lidl": 2.49,
-"aldi": 2.49,
+"aldi": 2.19,
 "kaufland": 2.49
 },
 "est": [
-"lidl",
 "kaufland"
 ]
 },
@@ -1446,7 +1419,7 @@
 "prices": {
 "rewe": 3.19,
 "lidl": 2.49,
-"aldi": 2.49,
+"aldi": 2.89,
 "kaufland": 2.89
 },
 "est": [
@@ -1496,7 +1469,7 @@
 "prices": {
 "rewe": 1.41,
 "lidl": 1.49,
-"aldi": 1.57,
+"aldi": 1.41,
 "kaufland": 1.29
 },
 "est": [
@@ -1530,12 +1503,11 @@
 "pantry": true,
 "prices": {
 "rewe": 3.29,
-"lidl": 2.49,
+"lidl": 3.29,
 "aldi": 3.29,
 "kaufland": 3.29
 },
 "est": [
-"lidl",
 "kaufland"
 ]
 },
@@ -1553,7 +1525,6 @@
 "kaufland": 0.79
 },
 "est": [
-"lidl",
 "kaufland"
 ]
 },
@@ -1565,15 +1536,13 @@
 "match": "haferdrink",
 "subst": true,
 "prices": {
+"lidl": 0.85,
+"aldi": 0.9,
 "rewe": 1.29,
-"lidl": 0.99,
-"aldi": 0.99,
 "kaufland": 0.99
 },
 "est": [
 "rewe",
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1605,13 +1574,12 @@
 "subst": true,
 "prices": {
 "rewe": 1.58,
+"aldi": 1.49,
 "lidl": 1.79,
-"aldi": 1.79,
 "kaufland": 1.79
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1624,13 +1592,11 @@
 "subst": true,
 "prices": {
 "rewe": 1.39,
-"lidl": 0.99,
-"aldi": 0.99,
+"lidl": 0.85,
+"aldi": 0.9,
 "kaufland": 0.99
 },
 "est": [
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1643,13 +1609,12 @@
 "pantry": true,
 "prices": {
 "rewe": 1.19,
+"aldi": 1.69,
 "lidl": 0.99,
-"aldi": 0.99,
 "kaufland": 0.99
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1661,13 +1626,12 @@
 "match": "(?<!schnitt)lauch(?!zwiebel)|porree",
 "prices": {
 "rewe": 0.66,
+"aldi": 0.59,
 "lidl": 0.79,
-"aldi": 0.79,
 "kaufland": 0.89
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1679,13 +1643,12 @@
 "match": "burgerbrötchen|burger-brötchen",
 "prices": {
 "rewe": 0.66,
+"aldi": 0.66,
 "lidl": 1.49,
-"aldi": 1.49,
 "kaufland": 1.59
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1697,13 +1660,11 @@
 "match": "zartbitter|schokolade",
 "prices": {
 "rewe": 1.69,
-"lidl": 0.99,
-"aldi": 0.99,
+"lidl": 0.89,
+"aldi": 0.89,
 "kaufland": 1.09
 },
 "est": [
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1751,13 +1712,11 @@
 "match": "joghurt",
 "prices": {
 "rewe": 0.79,
-"lidl": 0.67,
-"aldi": 0.67,
+"lidl": 0.79,
+"aldi": 0.79,
 "kaufland": 0.73
 },
 "est": [
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1769,13 +1728,12 @@
 "match": "mango(?!.*(chutney|saft))",
 "prices": {
 "rewe": 0.99,
+"aldi": 1.11,
 "lidl": 0.84,
-"aldi": 0.84,
 "kaufland": 0.91
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1805,14 +1763,12 @@
 "match": "feldsalat|salat-?mix|salatmischung|rucola|kopfsalat|romana|blattsalat|eisbergsalat",
 "prices": {
 "rewe": 1.59,
-"lidl": 1.35,
-"aldi": 1.35,
-"kaufland": 1.46
+"aldi": 0.99,
+"kaufland": 2.24,
+"lidl": 1.35
 },
 "est": [
-"lidl",
-"aldi",
-"kaufland"
+"lidl"
 ]
 },
 {
@@ -1914,13 +1870,12 @@
 "match": "falafel",
 "prices": {
 "rewe": 2.49,
+"aldi": 1.43,
 "lidl": 2.12,
-"aldi": 2.12,
 "kaufland": 2.29
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1933,13 +1888,12 @@
 "pantry": true,
 "prices": {
 "rewe": 0.59,
+"aldi": 0.86,
 "lidl": 0.5,
-"aldi": 0.5,
 "kaufland": 0.54
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1952,13 +1906,11 @@
 "pantry": true,
 "prices": {
 "rewe": 1.69,
-"lidl": 1.44,
-"aldi": 1.44,
+"lidl": 1.69,
+"aldi": 1.69,
 "kaufland": 1.55
 },
 "est": [
-"lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -1970,13 +1922,12 @@
 "match": "pinienkerne",
 "prices": {
 "rewe": 3.99,
+"aldi": 2.49,
 "lidl": 3.39,
-"aldi": 3.39,
 "kaufland": 3.67
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
@@ -2007,13 +1958,12 @@
 "pantry": true,
 "prices": {
 "rewe": 1.79,
+"aldi": 1.63,
 "lidl": 1.52,
-"aldi": 1.52,
 "kaufland": 1.65
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland"
 ]
 },
