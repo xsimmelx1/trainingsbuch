@@ -3141,7 +3141,7 @@ function ringHtml(v, target, label){
   const pct = target ? Math.min(v / target, 1) : 0, r = 30, c = 2 * Math.PI * r;
   return `<div class="ring"><svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="${r}" class="rbg"/><circle cx="36" cy="36" r="${r}" class="rfg ${v >= target ? "full" : ""}" stroke-dasharray="${(pct * c).toFixed(1)} ${c.toFixed(1)}"/></svg><div><b>${Math.round(v)}</b><span class="small muted">/ ${Math.round(target)} ${label}</span></div></div>`;
 }
-function mealCard(d, m){
+function diaryCard(d, m){
   const r = m.info, rec = recipeByName(m.name);
   return `<div class="mcard ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}">
     ${rec?.img ? `<img class="mcimg" src="${esc(rec.img)}" alt="" loading="lazy" decoding="async">` : `<div class="mcimg ph">${mealThumb(m.name)}</div>`}
@@ -3173,7 +3173,7 @@ function essenHtml(b){
   const d = essenDay, ms = mealsFor(d), tt = mealTotals(ms), tg = foodTarget();
   h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted nutri">Plan ${tt.kcal} kcal · ${tt.protein} g P</span></div>
     <div class="rings nutri">${ringHtml(tt.eKcal, tg.kcal, "kcal")}${ringHtml(tt.eProtein, tg.protein, "g Protein")}</div><div class="small">${trainLine(d)}</div></div>
-    <div class="mcards">${ms.map(m => mealCard(d, m)).join("")}</div>
+    <div class="mcards">${ms.map(m => diaryCard(d, m)).join("")}</div>
     <div class="actions"><button class="btn" type="button" data-sheet="ownfood" data-v="${d}">＋ Essen</button><button class="btn" type="button" data-ownscan="${d}">📷 Scan</button></div>`;
   b.innerHTML = h;
 }
