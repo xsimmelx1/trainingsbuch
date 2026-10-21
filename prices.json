@@ -13,6 +13,9 @@
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.59
+},
+"bio": {
+"rewe": 1.45
 }
 },
 {
@@ -79,6 +82,10 @@
 "kaufland": 2.79,
 "lidl": 1.06
 },
+"bio": {
+"rewe": 3.07,
+"aldi": 2.65
+},
 "est": [
 "lidl"
 ]
@@ -110,6 +117,10 @@
 "aldi": 1.21,
 "lidl": 1.52,
 "kaufland": 1.65
+},
+"bio": {
+"rewe": 1.28,
+"aldi": 1.49
 },
 "est": [
 "lidl",
@@ -147,6 +158,10 @@
 "lidl": 1.19,
 "kaufland": 1.19
 },
+"bio": {
+"rewe": 3.11,
+"aldi": 2.69
+},
 "est": [
 "lidl",
 "kaufland"
@@ -164,6 +179,9 @@
 "lidl": 0.89,
 "aldi": 0.89,
 "kaufland": 0.89
+},
+"bio": {
+"rewe": 1.59
 },
 "est": [
 "lidl",
@@ -183,6 +201,10 @@
 "lidl": 1.49,
 "kaufland": 1.59
 },
+"bio": {
+"rewe": 1.45,
+"aldi": 1.45
+},
 "est": [
 "lidl",
 "kaufland"
@@ -200,6 +222,10 @@
 "aldi": 0.78,
 "lidl": 0.99,
 "kaufland": 1.09
+},
+"bio": {
+"rewe": 1.24,
+"aldi": 0.78
 },
 "est": [
 "lidl",
@@ -223,7 +249,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.85
+}
 },
 {
 "id": "magermilchpulver",
@@ -260,7 +289,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.59
+}
 },
 {
 "id": "sojadrink",
@@ -278,7 +310,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.39
+}
 },
 {
 "id": "raeuchertofu",
@@ -295,7 +330,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.19
+}
 },
 {
 "id": "veghack",
@@ -330,7 +368,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 3.08
+}
 },
 {
 "id": "eiklar",
@@ -366,7 +407,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.49
+}
 },
 {
 "id": "frischkaese",
@@ -382,7 +426,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.59
+}
 },
 {
 "id": "hartkaese",
@@ -417,7 +464,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.12,
+"aldi": 2.12
+}
 },
 {
 "id": "magerquark",
@@ -433,7 +484,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.98,
+"aldi": 1.98
+}
 },
 {
 "id": "vollkornnudeln",
@@ -449,7 +504,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.95,
+"aldi": 0.85
+}
 },
 {
 "id": "linsennudeln",
@@ -466,7 +525,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.59,
+"aldi": 1.55
+}
 },
 {
 "id": "roteLinsen",
@@ -483,7 +546,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.65,
+"aldi": 1.45
+}
 },
 {
 "id": "weissebohnen",
@@ -501,7 +568,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.39
+}
 },
 {
 "id": "bohnenGruen",
@@ -519,7 +589,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"aldi": 2.69
+}
 },
 {
 "id": "kidney",
@@ -537,7 +610,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.19
+}
 },
 {
 "id": "tomatenGehackt",
@@ -554,7 +630,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.65,
+"aldi": 0.65
+}
 },
 {
 "id": "tomatenPassiert",
@@ -570,7 +650,11 @@
 },
 "est": [
 "lidl"
-]
+],
+"bio": {
+"rewe": 0.69,
+"aldi": 0.69
+}
 },
 {
 "id": "tomatenmark",
@@ -586,7 +670,12 @@
 },
 "est": [
 "lidl"
-]
+],
+"bio": {
+"rewe": 0.95,
+"aldi": 0.95,
+"kaufland": 2.49
+}
 },
 {
 "id": "cherrytomaten",
@@ -640,7 +729,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.49
+}
 },
 {
 "id": "knaeckebrot",
@@ -676,7 +768,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.65
+}
 },
 {
 "id": "erbsen",
@@ -689,6 +784,9 @@
 "aldi": 2.69,
 "lidl": 1.29,
 "kaufland": 1.29
+},
+"bio": {
+"aldi": 2.69
 },
 "est": [
 "lidl",
@@ -710,7 +808,10 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.86
+}
 },
 {
 "id": "milch",
@@ -723,6 +824,10 @@
 "lidl": 0.85,
 "aldi": 0.85,
 "kaufland": 0.79
+},
+"bio": {
+"rewe": 1.15,
+"aldi": 1.15
 }
 },
 {
@@ -740,7 +845,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 3.99,
+"aldi": 3.99
+}
 },
 {
 "id": "feta",
@@ -753,6 +862,10 @@
 "lidl": 1.43,
 "aldi": 1.19,
 "kaufland": 1.19
+},
+"bio": {
+"rewe": 2.19,
+"aldi": 2.89
 }
 },
 {
@@ -787,7 +900,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.29,
+"aldi": 1.29
+}
 },
 {
 "id": "kochsahne",
@@ -819,7 +936,12 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.69,
+"lidl": 2.69,
+"aldi": 2.69
+}
 },
 {
 "id": "tofu",
@@ -835,7 +957,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 3.98
+}
 },
 {
 "id": "edamame",
@@ -854,7 +979,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 6.15
+}
 },
 {
 "id": "linsendose",
@@ -873,7 +1001,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.39
+}
 },
 {
 "id": "mais",
@@ -890,7 +1021,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.99
+}
 },
 {
 "id": "haferflocken",
@@ -906,7 +1040,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.85
+}
 },
 {
 "id": "reis",
@@ -922,7 +1059,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 3.79,
+"aldi": 4.5
+}
 },
 {
 "id": "nudeln",
@@ -938,7 +1079,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.85,
+"aldi": 1.45
+}
 },
 {
 "id": "couscous",
@@ -955,7 +1100,10 @@
 "est": [
 "lidl",
 "aldi"
-]
+],
+"bio": {
+"rewe": 1.29
+}
 },
 {
 "id": "quinoa",
@@ -973,7 +1121,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.29
+}
 },
 {
 "id": "vollkornbrot",
@@ -991,7 +1142,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.19,
+"aldi": 1.32
+}
 },
 {
 "id": "tortillas",
@@ -1044,7 +1199,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 0.85
+}
 },
 {
 "id": "tkbeeren",
@@ -1061,7 +1219,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 9.47,
+"aldi": 9.22
+}
 },
 {
 "id": "banane",
@@ -1080,7 +1242,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.99,
+"kaufland": 1.99
+}
 },
 {
 "id": "apfel",
@@ -1099,7 +1265,11 @@
 "est": [
 "rewe",
 "lidl"
-]
+],
+"bio": {
+"rewe": 2.99,
+"kaufland": 3.49
+}
 },
 {
 "id": "zitrone",
@@ -1119,7 +1289,10 @@
 "rewe",
 "lidl",
 "aldi"
-]
+],
+"bio": {
+"rewe": 1.99
+}
 },
 {
 "id": "paprika",
@@ -1137,7 +1310,10 @@
 },
 "est": [
 "aldi"
-]
+],
+"bio": {
+"rewe": 4.36
+}
 },
 {
 "id": "gurke",
@@ -1157,7 +1333,11 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.19,
+"kaufland": 1.29
+}
 },
 {
 "id": "zucchini",
@@ -1177,7 +1357,11 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.99,
+"kaufland": 2.99
+}
 },
 {
 "id": "tomaten",
@@ -1214,7 +1398,10 @@
 "est": [
 "lidl",
 "aldi"
-]
+],
+"bio": {
+"rewe": 2.25
+}
 },
 {
 "id": "knoblauch",
@@ -1233,7 +1420,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.78
+}
 },
 {
 "id": "moehren",
@@ -1252,7 +1442,10 @@
 "lidl",
 "aldi",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.69
+}
 },
 {
 "id": "kartoffeln",
@@ -1269,7 +1462,11 @@
 },
 "est": [
 "lidl"
-]
+],
+"bio": {
+"rewe": 3.45,
+"aldi": 2.39
+}
 },
 {
 "id": "brokkoli",
@@ -1355,7 +1552,10 @@
 },
 "est": [
 "lidl"
-]
+],
+"bio": {
+"rewe": 0.79
+}
 },
 {
 "id": "tahin",
@@ -1392,7 +1592,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 1.23,
+"aldi": 1.24
+}
 },
 {
 "id": "walnuesse",
@@ -1408,7 +1612,11 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"rewe": 2.99,
+"aldi": 2.19
+}
 },
 {
 "id": "cashews",
@@ -1425,7 +1633,11 @@
 "est": [
 "lidl",
 "kaufland"
-]
+],
+"bio": {
+"rewe": 3.19,
+"aldi": 2.19
+}
 },
 {
 "id": "oel",
@@ -1439,6 +1651,9 @@
 "lidl": 1.69,
 "aldi": 1.69,
 "kaufland": 1.89
+},
+"bio": {
+"rewe": 3.5
 }
 },
 {
@@ -1492,7 +1707,10 @@
 },
 "est": [
 "lidl"
-]
+],
+"bio": {
+"rewe": 3.95
+}
 },
 {
 "id": "kakao",
@@ -1541,6 +1759,10 @@
 "rewe": 1.29,
 "kaufland": 0.99
 },
+"bio": {
+"rewe": 0.9,
+"aldi": 0.9
+},
 "est": [
 "rewe",
 "kaufland"
@@ -1558,6 +1780,9 @@
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.85
+},
+"bio": {
+"rewe": 0.75
 },
 "est": [
 "lidl",
@@ -1578,6 +1803,9 @@
 "lidl": 1.79,
 "kaufland": 1.79
 },
+"bio": {
+"rewe": 3.58
+},
 "est": [
 "lidl",
 "kaufland"
@@ -1595,6 +1823,10 @@
 "lidl": 0.85,
 "aldi": 0.9,
 "kaufland": 0.99
+},
+"bio": {
+"rewe": 0.9,
+"aldi": 0.9
 },
 "est": [
 "kaufland"
@@ -1664,6 +1896,9 @@
 "aldi": 0.89,
 "kaufland": 1.09
 },
+"bio": {
+"rewe": 1.65
+},
 "est": [
 "kaufland"
 ]
@@ -1679,6 +1914,9 @@
 "lidl": 1.01,
 "aldi": 1.01,
 "kaufland": 1.09
+},
+"bio": {
+"rewe": 1.69
 },
 "est": [
 "lidl",
@@ -1698,6 +1936,9 @@
 "aldi": 3.31,
 "kaufland": 3.58
 },
+"bio": {
+"rewe": 3.89
+},
 "est": [
 "lidl",
 "aldi",
@@ -1715,6 +1956,10 @@
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.73
+},
+"bio": {
+"rewe": 1.15,
+"aldi": 1.15
 },
 "est": [
 "kaufland"
@@ -1767,6 +2012,9 @@
 "kaufland": 2.24,
 "lidl": 1.35
 },
+"bio": {
+"rewe": 2.38
+},
 "est": [
 "lidl"
 ]
@@ -1801,6 +2049,9 @@
 "lidl": 0.59,
 "aldi": 0.59,
 "kaufland": 0.63
+},
+"bio": {
+"rewe": 1.39
 },
 "est": [
 "lidl",
@@ -1873,6 +2124,9 @@
 "aldi": 1.43,
 "lidl": 2.12,
 "kaufland": 2.29
+},
+"bio": {
+"rewe": 2.49
 },
 "est": [
 "lidl",
@@ -1961,6 +2215,9 @@
 "aldi": 1.63,
 "lidl": 1.52,
 "kaufland": 1.65
+},
+"bio": {
+"aldi": 1.63
 },
 "est": [
 "lidl",
