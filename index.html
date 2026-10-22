@@ -602,6 +602,8 @@ body.wo .exbody{gap:10px}
 .gcin:has(.gcmedia) .gcnum{font-size:64px}
 .gcin:has(.gcmedia) .gcph{font-size:28px}
 .gcin:has(.gcmedia) .gcbig{gap:8px}
+.nowbig .exhero > .lab{display:none}
+.nowbig .exhero{gap:10px}
 .nowbig .nowc{padding:22px 18px;gap:16px}
 .nowbig .nowh b{font-size:24px;line-height:1.2}
 .nowbig .nowh .small{font-size:15px}
@@ -1950,7 +1952,7 @@ function heroCard(noCoach){
     const pill = st === "bereit" ? `<span class="pillst plan">Geplant${plan && plan.start ? ` · ${plan.start} Uhr` : ""}</span>` : st === "läuft" ? `<span class="pillst run">Läuft</span>` : st === "leer" ? `<span class="pillst plan">Ohne Sätze beendet</span>` : `<span class="pillst done">Erledigt</span>`;
     const stateTxt = st === "leer" ? "Nichts eingetragen. Über ⋯ zurücksetzen oder löschen." : st === "fertig" ? `${p.d} von ${p.t} Sätzen` : st === "läuft" ? `${p.d} von ${p.t} Sätzen geschafft` : `${sess.ex.length} Übungen · ca. ${mins} min`;
     h += `<div class="tb ${st === "fertig" ? "done" : ""}"><div class="tbm">${pill}<b>${esc(sess.title)}</b><div class="small muted">${stateTxt}</div></div><button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button></div>`;
-    if (scHigh()) h += `<div class="banner bad small">SC-Schmerz heute oder gestern ≥ 3: Übungen mit SC-Ampel tauschen.</div>`;
+    if (scHigh()) h += `<div class="small scnote">⚠️ SC-Schmerz ≥ 3: Übungen mit SC-Ampel tauschen.</div>`;
     if (st === "bereit") h += `<button class="btn primary big" type="button" data-act="start">▶ Training starten</button>`;
     else if (st === "läuft") h += `<button class="btn primary big" type="button" data-act="start">Weiter trainieren</button>`;
     else h += `<div class="actions"><button class="btn" type="button" data-act="start">Ansehen</button><button class="btn" type="button" data-act="resume">Weiter trainieren</button></div>`;
