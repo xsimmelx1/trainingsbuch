@@ -3562,15 +3562,23 @@ function mealSheet(arg){
 let ownSugList = [];
 // kurze Eingaben nur am Wortanfang (sonst findet „dö“ auch „Avocado“), längere irgendwo im Wort
 const sugHit = (t, q) => q.length < 4 ? fold(t).split(/[^a-z0-9ß]+/).some(w => w.startsWith(q)) : fold(t).includes(q);
+// tippfehlertolerant: jedes Suchwort muss in einem Wort vorkommen – exakt oder mit 1 (bis 6 Buchstaben) bzw. 2 Abweichungen (Wortanfang gleicher Länge)
+function lev(a, b){ const m = a.length, n = b.length; if (Math.abs(m - n) > 2) return 9; let p = Array.from({length: n + 1}, (_, j) => j);
+  for (let i = 1; i <= m; i++) { const c = [i]; for (let j = 1; j <= n; j++) c[j] = Math.min(p[j] + 1, c[j - 1] + 1, p[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); p = c; } return p[n]; }
+function sugScore(t, q){ const words = fold(t).split(/[^a-z0-9ß]+/).filter(Boolean), qs = q.split(/\s+/).filter(Boolean); let fuzzy = 0;
+  for (const w of qs) { if (sugHit(t, w)) continue; if (w.length < 4) return 0; const tol = w.length >= 7 ? 2 : 1;
+    if (!words.some(x => lev(w, x.slice(0, w.length)) <= tol || lev(w, x) <= tol)) return 0; fuzzy++; }
+  return fuzzy ? 1 : 2; }
 function ownHistory(){ const m = new Map();
   const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
   for (const d of Object.keys(store.days).sort().reverse()) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) add(o); for (const v of Object.values(day?.meals || {})) if (v && typeof v === "object") add(v); }
   return [...m.values()]; }
 function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
-  const hit = t => sugHit(t, q), first = a => a.sort((x, y) => fold(y.name).startsWith(q) - fold(x.name).startsWith(q));
-  const hist = first(ownHistory().filter(x => hit(x.name)));
-  const rec = first((recipes || []).filter(r => hit(r.name)).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})));
-  const nw = first((NW || []).filter(x => [x.n, ...x.a].some(hit)).map(x => ({name: x.n, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})));
+  // Treffer je Quelle: exakte vor tippfehlertoleranten, dann die mit passendem Anfang
+  const pick = (arr, names) => arr.map(x => ({x, sc: Math.max(...names(x).map(n => sugScore(n, q)))})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || fold(b.x.name).startsWith(q) - fold(a.x.name).startsWith(q)).map(o => o.x);
+  const hist = pick(ownHistory(), x => [x.name]);
+  const rec = pick((recipes || []).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})), x => [x.name]);
+  const nw = pick((NW || []).map(x => ({name: x.n, al: x.a, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})), x => [x.name, ...x.al]);
   const seen = new Set(); return [...hist, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
 const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${x.protein || 0} g P</span>` : ""}</span></button>`).join("");
 // Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
