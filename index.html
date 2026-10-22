@@ -16,7 +16,7 @@
 /* Layout: Daumen-App. Oben schmale Kopfzeile, unten feste Navigation (4 Tabs), Details in Sheets von unten. */
 :root{
   --bg:#ECEFEC; --surface:#FAFBF9; --sunk:#E2E7E3; --ink:#16201B; --muted:#58665F; --line:#CDD5CF;
-  --meal:#B85C1E; --accent:#1D5BB8;--warm:#C0652F; --accent-ink:#FFFFFF; --accent-soft:#DAE5F6;
+  --meal:#B85C1E; --accent:#1D5BB8;--warm:#C0652F;--c-train:#D2553C;--c-food:#4E8A3A;--c-drink:#2F86B8;--c-sun:#D38A10;--c-night:#5B58B8;--c-move:#178C86;--c-log:#8A4FB0;--c-money:#3E7F5E;--c-heat:#DE5B21;--c-cold:#3B8FD0;--c-home:#9A6538;--c-media:#C24D7C; --accent-ink:#FFFFFF; --accent-soft:#DAE5F6;
   --good:#23824F; --good-soft:#D7EEDF; --warn:#A87100; --warn-soft:#F6E8C6; --bad:#BC3326; --bad-soft:#F6D9D5;
   --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -26,7 +26,7 @@
 }
 @media (prefers-color-scheme: dark){:root{
   --bg:#0F1412; --surface:#171E1B; --sunk:#111815; --ink:#E4EBE7; --muted:#95A39C; --line:#2A3530;
-  --accent:#6FA1EE;--warm:#E8A273; --accent-ink:#0A1322; --accent-soft:#1A2943;
+  --accent:#6FA1EE;--warm:#E8A273;--c-train:#F08A72;--c-food:#8CC976;--c-drink:#6CB8E6;--c-sun:#F2B544;--c-night:#9C98F0;--c-move:#4FC7BF;--c-log:#C493E6;--c-money:#7CC39C;--c-heat:#FF8F57;--c-cold:#7DBDF2;--c-home:#D39A68;--c-media:#EC88B0; --accent-ink:#0A1322; --accent-soft:#1A2943;
   --meal:#EE9A5C; --good:#5BC489; --good-soft:#163323; --warn:#E3B13E; --warn-soft:#3A2E10; --bad:#EE6B5E; --bad-soft:#3D1A16; color-scheme:dark}}
 *{box-sizing:border-box}
 html{background:var(--bg)}
@@ -540,7 +540,23 @@ body.gcon .restbar{display:none}
 .gcstep .btn{min-width:56px;min-height:56px;font-size:26px}
 .gcgo{margin-bottom:4px}
 .ic{width:1.15em;height:1.15em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none;display:inline-block}
-.nowi .ic,.tline .ti .ic,.mdot .ic,.quick .ic,.coachline .ic,.pp .ic,.lab .ic,.qcard .ic{color:var(--warm)}
+.ic-train{color:var(--c-train)}
+.ic-food{color:var(--c-food)}
+.ic-drink{color:var(--c-drink)}
+.ic-sun{color:var(--c-sun)}
+.ic-night{color:var(--c-night)}
+.ic-move{color:var(--c-move)}
+.ic-log{color:var(--c-log)}
+.ic-money{color:var(--c-money)}
+.ic-heat{color:var(--c-heat)}
+.ic-cold{color:var(--c-cold)}
+.ic-home{color:var(--c-home)}
+.ic-media{color:var(--c-media)}
+.ic-warn{color:var(--warn)}.ic-neutral{color:var(--muted)}
+.btn.primary .ic,.pillst .ic,nav .ic,.chips button[aria-pressed="true"] .ic{color:inherit}
+/* Getönte Plakette an den Stellen, wo das Icon eine Aufgabe kennzeichnet */
+.nowi .ic,.mdot .ic,.tline .ti .ic,.coachline > span:first-child .ic{padding:.22em;border-radius:50%;background:color-mix(in srgb,currentColor 16%,transparent);box-sizing:content-box}
+.tline .ti .ic{width:1.05em;height:1.05em}
 .nowi .ic{width:1em;height:1em;stroke-width:1.5}
 .quick label > span{white-space:nowrap}
 .gcrepbig{display:flex;flex-direction:column;align-items:center;line-height:1}
@@ -4383,7 +4399,8 @@ const ICON_SVG = {"receipt":"<path d=\"M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2
 const ICON_OF = {"🧾":"receipt","🏠":"house","🔥":"flame","❄️":"snowflake","❄":"snowflake","⚠":"triangle-alert","⚠️":"triangle-alert","🏋":"dumbbell","⏱":"timer","🍽":"utensils","📖":"book-open","🔎":"search","🎲":"dices","🥕":"carrot","🧘":"sunrise","🍳":"egg-fried","🥣":"soup","🥤":"cup-soda","⚙":"settings","🍲":"cooking-pot","♨️":"microwave","♨":"microwave","🏃":"footprints","🧗":"mountain","🛒":"shopping-cart","🍴":"utensils-crossed","💶":"euro","📷":"camera","🎬":"clapperboard","🏅":"medal","📝":"notebook-pen","📊":"chart-column","⏸":"pause","💪":"biceps-flexed","🏆":"trophy","🔒":"lock","📅":"calendar","♻️":"recycle","♻":"recycle","🧰":"package","🌀":"wind","🗄":"archive","🎯":"target","🌬":"wind","🖼":"image","🎒":"backpack","🍌":"banana","🥡":"package","🔪":"chef-hat","🌙":"moon","💬":"message-circle","😴":"bed","⚖":"scale","🎥":"video","🧍":"person-standing","🔊":"volume-2","🔇":"volume-x","📈":"trending-up","🗓":"calendar-days","📋":"clipboard-list","⚡":"zap","📡":"radio-tower","🧮":"calculator","🚴":"bike","🚶":"footprints","🏊":"waves","⚽":"volleyball","🎾":"circle-dot","💃":"music","🤸":"activity","⛷":"mountain-snow","✨":"sparkles","🥬":"leaf","⭐":"star","🧩":"puzzle","✎":"pencil","↺":"rotate-ccw","🍎":"apple"};
 const ICON_KEYS = Object.keys(ICON_OF).sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
 const ICON_T = new RegExp(`(?:${ICON_KEYS})`, "u"), ICON_G = new RegExp(`(?:${ICON_KEYS})️?`, "gu");
-const icon = n => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICON_SVG[n] || ""}</svg>`;
+const ICON_CAT = {"dumbbell":"train","timer":"train","biceps-flexed":"train","trophy":"train","medal":"train","target":"train","zap":"train","utensils":"food","utensils-crossed":"food","carrot":"food","soup":"food","cooking-pot":"food","egg-fried":"food","banana":"food","apple":"food","leaf":"food","salad":"food","chef-hat":"food","microwave":"food","package":"food","dices":"food","book-open":"food","cup-soda":"drink","sunrise":"sun","sparkles":"sun","star":"sun","moon":"night","bed":"night","footprints":"move","bike":"move","waves":"move","mountain":"move","mountain-snow":"move","activity":"move","volleyball":"move","circle-dot":"move","music":"move","person-standing":"move","wind":"move","notebook-pen":"log","clipboard-list":"log","chart-column":"log","trending-up":"log","calendar":"log","calendar-days":"log","message-circle":"log","pencil":"log","puzzle":"log","calculator":"log","receipt":"money","euro":"money","shopping-cart":"money","scale":"money","flame":"heat","snowflake":"cold","house":"home","backpack":"home","camera":"media","video":"media","clapperboard":"media","image":"media","volume-2":"media","volume-x":"media","radio-tower":"media","triangle-alert":"warn","settings":"neutral","lock":"neutral","archive":"neutral","recycle":"neutral","search":"neutral","rotate-ccw":"neutral","pause":"neutral"};
+const icon = n => `<svg class="ic ic-${ICON_CAT[n] || "neutral"}" viewBox="0 0 24 24" aria-hidden="true">${ICON_SVG[n] || ""}</svg>`;
 function iconize(root){
   if (!root || root.nodeType !== 1 || root.closest?.("svg")) return;
   const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: n => ICON_T.test(n.data) && !n.parentElement?.closest("input,textarea,select,option,script,style,svg,title") ? 1 : 3}), list = [];
