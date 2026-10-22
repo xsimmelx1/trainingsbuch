@@ -566,9 +566,10 @@ body.gcon .restbar{display:none}
 .gcbig.tempo .gcph{transition:color .3s}
 .gcbig.tempo .gcbarw{height:8px}
 .gcmedia{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;flex:none}
-.gcmedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.gcmedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;transform:scale(1.34);transition:opacity .35s}
+.gcmedia iframe.hide{opacity:0}
 .gcmedia.fig{aspect-ratio:3/2;background:#fff}
-.gcmedia.fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.gcmedia .gcfi{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff}
 .gcvtag:empty{display:none}
 .gcvtag{position:absolute;left:8px;bottom:8px;font-size:12px;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;padding:2px 6px}
 .gcview{justify-content:center;margin-top:6px}
@@ -2358,29 +2359,48 @@ const gcFollow = id => { const f = GCM?.follow?.[id]; return f && f.video && f.q
 function gcMediaHtml(pl){
   const e = EX[pl.id], f = gcFollow(pl.id), img = e.img, vid = f && (gcView === "video" || !img);
   const sw = f && img ? `<div class="chips sm gcview">${[["video", "🎥 Video"], ["figur", "🧍 Figur"]].map(([k, l]) => `<button type="button" data-gc="view" data-v="${k}" aria-pressed="${(vid ? "video" : "figur") === k}">${l}</button>`).join("")}</div>` : "";
-  if (vid) return `<div class="gcmedia vid" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(f.video)}/hqdefault.jpg) center/cover"><iframe id="gcV" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(f.video)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${Math.floor(f.t0)}" allow="autoplay; encrypted-media" title="Vorturner"></iframe><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`;
+  if (vid) return `<div class="gcmedia vid" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(f.video)}/hqdefault.jpg) center/cover"><iframe id="gcV" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(f.video)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&cc_load_policy=0&start=${Math.floor(f.t0)}" class="hide" allow="autoplay; encrypted-media" title="Vorturner"></iframe><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`.replace('<iframe', gcFigImgs(pl) + '<iframe');
   if (!img) return "";
-  const s = GCM?.frames?.[pl.id] ?? 0;
-  return `<div class="gcmedia fig"><img src="${isrc(img, s)}" alt=""><img id="gcFigB" src="${isrc(img, 1 - s)}" alt="" style="opacity:0"></div>${sw}`;
+  return `<div class="gcmedia fig">${gcFigImgs(pl)}</div>${sw}`;
 }
+function gcFigImgs(pl){ const img = EX[pl.id].img; if (!img) return ""; const s = GCM?.frames?.[pl.id] ?? 0;
+  return `<img class="gcfi" src="${isrc(img, s)}" alt=""><img class="gcfi" id="gcFigB" src="${isrc(img, 1 - s)}" alt="" style="opacity:0">`; }
 // Figur: bei Bewegungsphasen zur anderen Position überblenden, bei Haltephasen stehen bleiben
 function gcFig(moved, sec){ const b = document.getElementById("gcFigB"); if (!b) return; b.style.transition = sec ? `opacity ${sec}s ease-in-out` : "none"; b.style.opacity = moved ? 1 : 0; }
 // Video per postMessage steuern (wie bei den Technik-Clips)
+const gcPlay = () => { if (gcVst !== 1) gcV("playVideo"); }, gcNoCC = () => { gcV("setOption", ["captions", "track", {}]); gcV("unloadModule", ["captions"]); gcV("unloadModule", ["cc"]); };
 const gcV = (func, args = []) => { const f = document.getElementById("gcV"); try { f?.contentWindow?.postMessage(JSON.stringify({event: "command", func, args}), "*"); } catch {} };
-let gcVt = null; // zuletzt gemeldete Videozeit
+let gcVt = null, gcVtAt = 0, gcVst = -1, gcVrate = 1, gcVtm = null, gcVdur = 0; // zuletzt gemeldete Videozeit und Player-Status (1 = läuft)
 window.addEventListener("message", ev => { if (!/youtube/.test(ev.origin)) return; const f = document.getElementById("gcV"); if (!f || f.contentWindow !== ev.source) return;
-  let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; } const ct = d?.event === "infoDelivery" ? d.info?.currentTime : null;
-  if (ct == null || !gc) return; gcVt = ct; const fo = gcFollow(gc.pl.id); if (!fo) return;
-  // Wiederholung im Video vorbei: anhalten (Tempo) bzw. von vorn (Halten)
-  if (ct >= fo.t1 - 0.05) { if (gc.pl.mode !== "tempo" && gc.stage === "work") { gcV("seekTo", [fo.t0, true]); gcV("playVideo"); } else gcV("pauseVideo"); } });
-function gcMediaHook(){ const f = document.getElementById("gcV"); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id: "gcV", channel: "widget"}), "*"); } catch {} gcV("mute"); gcMediaRest(); }); } }
+  let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; } const ct = d?.event === "infoDelivery" ? d.info?.currentTime : null, ps = d?.event === "onStateChange" ? d.info : d?.event === "infoDelivery" ? d.info?.playerState : null;
+  if (ps != null) gcVst = ps; if (d?.info?.duration) gcVdur = d.info.duration;
+  if (ct == null || !gc) return; gcVt = ct; gcVtAt = Date.now(); const fo = gcFollow(gc.pl.id); if (!fo) return;
+  // Halten/frei: Ausschnitt in Schleife. Außerhalb des Satzes (verdeckt) ebenfalls zurück, damit das Video nie ans Ende läuft
+  if (gc.stage === "work" ? gc.pl.mode !== "tempo" && ct >= fo.t1 - 0.05 : ct >= fo.t1 + 1) gcV("seekTo", [fo.t0, true]); });
+function gcMediaHook(){ const f = document.getElementById("gcV"); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id: "gcV", channel: "widget"}), "*"); } catch {} gcVrate = 1; gcV("mute"); gcNoCC(); gcMediaRest(); }); } }
 // Ausgangsposition zeigen (Bereit, 3-2-1, Pause)
-function gcMediaRest(){ if (!gc) return; gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { gcV("seekTo", [fo.t0, true]); gcV("pauseVideo"); } }
-// Beginn einer Wiederholung: Video auf den Anfang der Wiederholung, Tempo so, dass sie in den Takt passt
-function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const rep = gc.pl.ph.reduce((a, p) => a + p[1], 0) || 1, want = (fo.t1 - fo.t0) / rep;
-  const rate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].reduce((b, r) => Math.abs(r - want) < Math.abs(b - want) ? r : b, 1);
-  gcV("setPlaybackRate", [rate]); gcV("seekTo", [fo.t0, true]); gcV("playVideo"); }
-function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { gcV("setPlaybackRate", [1]); gcV("seekTo", [fo.t0, true]); gcV("playVideo"); } }
+const gcVShow = on => { const f = document.getElementById("gcV"); if (f) { clearTimeout(f._t); if (on) f.classList.remove("hide"); else f.classList.add("hide"); } };
+function gcMediaRest(){ if (!gc) return; gcFig(false, .4); clearTimeout(gcVtm); const fo = gcFollow(gc.pl.id); if (fo) { gcVShow(false); gcV("seekTo", [fo.t0, true]); } } // nicht anhalten: Pause/Play blendet die YouTube-Leiste ein, das Video läuft verdeckt weiter
+const GC_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+const gcRepLen = () => gc.pl.ph.reduce((a, p) => a + p[1], 0) || 1;
+const gcVnow = () => gcVt == null ? null : gcVt + (gcVst === 1 ? (Date.now() - gcVtAt) / 1000 * gcVrate : 0);
+const gcRate = r => { if (gcVrate !== r) { gcVrate = r; gcV("setPlaybackRate", [r]); } };
+// Mittlere Geschwindigkeit R über die Dauer dur erreichen: erst die höhere, dann die niedrigere der verfügbaren Stufen
+function gcRateFor(R, dur){ clearTimeout(gcVtm); R = Math.max(GC_RATES[0], Math.min(2, R));
+  const lo = [...GC_RATES].reverse().find(r => r <= R + 1e-6), hi = GC_RATES.find(r => r >= R - 1e-6);
+  if (hi === lo) return gcRate(lo); gcRate(hi); gcVtm = setTimeout(() => gcRate(lo), (R - lo) / (hi - lo) * dur * 1000); }
+// Im 3-2-1: verdeckt so weit vor den Wiederholungsanfang springen, dass das Video genau zum „Los“ dort ist
+function gcMediaLead(sec){ const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; const R = Math.max(0.25, Math.min(2, (fo.t1 - fo.t0) / gcRepLen()));
+  clearTimeout(gcVtm); gcRate(GC_RATES.reduce((b, r) => Math.abs(r - R) < Math.abs(b - R) ? r : b, 1)); gcV("seekTo", [Math.max(0, fo.t0 - sec * gcVrate), true]); gcPlay(); gc.vk = -1; }
+function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0, k = gc.rep;
+  // so viele Video-Wiederholungen am Stück, wie das Video hergibt (max. 3), dann verdeckt zurück
+  const maxK = gcVdur ? Math.min(2, Math.floor((gcVdur - 0.3 - fo.t0) / vrep) - 1) : 2;
+  if (maxK < 1 && k > 0) { gcRateFor(vrep / len, len); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(true); return; } // nur eine Wiederholung im Video: jedes Mal ansetzen
+  if (k > 0 && (gc.vk ?? -1) + 1 > maxK) { gcVShow(false); clearTimeout(gcVtm); gcV("seekTo", [Math.max(0, fo.t0 - vrep), true]); gc.vk = -1; gcRateFor(vrep / len, len); gcPlay(); return; } // verdeckt eine Wiederholung vor den Anfang: danach wieder zwei sichtbare
+  gc.vk = (gc.vk ?? -1) + 1; const exp = fo.t0 + gc.vk * vrep, now = gcVnow(), err = now == null ? 0 : now - exp;
+  if (Math.abs(err) > 1.2) { gcVShow(false); gcV("seekTo", [exp, true]); gcRateFor(vrep / len, len); return; } // zu weit weg: verdeckt korrigieren, nächste Wiederholung wieder sichtbar
+  gcRateFor((vrep - err) / len, len); gcPlay(); gcVShow(true); }
+function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(true); } }
 // Bewegungsphase? (Haltephasen ändern die Position nicht)
 const gcMoves = lab => !GC_HOLD.test(lab);
 function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; box.innerHTML = gcMediaHtml(gc.pl); gcMediaHook(); if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); }
@@ -2408,7 +2428,7 @@ function gcGo(){ // nach dem 3-2-1: Satz beginnt
 }
 // Figur zur aktuellen Phase: Bewegung = in der Phasendauer zur anderen Position, Halten = stehen bleiben
 function gcPhaseFig(){ const [lab, sec] = gc.pl.ph[gc.pi]; if (gcMoves(lab)) { gc.moved = !gc.moved; gcFig(gc.moved, sec); } }
-function gcCountIn(){ gcMediaRest(); gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
+function gcCountIn(){ gcMediaRest(); gcMediaLead(4); gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
 function gcAfterWork(){
   const pl = gc.pl;
   gcMediaRest();
@@ -2505,8 +2525,8 @@ function gcCmd(c, v){
   if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
   if (c === "pause") { const b = document.getElementById("gcFigB");
-    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcV("playVideo"); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
-    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcV("pauseVideo"); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcPlay(); gcVShow(true); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
+    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcVShow(false); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
     return gcPaint(); }
   if (c === "relax") { gcRelax = v === "1"; lsSet("coachRelax", gcRelax); const keep = {i: gc.i, side: gc.side}; gc.pl = gcPlan(pl.base); Object.assign(gc, keep); return gcPaint(); }
   if (c === "view") { gcView = v; lsSet("coachView", v); return gcMediaMount(); }
