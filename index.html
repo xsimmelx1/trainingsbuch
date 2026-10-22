@@ -1981,7 +1981,7 @@ function todayItems(focus){
     out.push({k: "cardio", prio: ca.length ? 9 : 9.5, done: ca.length > 0, icon: "🏅", title: "Andere Aktivität", sub: ca.length ? ca.map(cardioTxt).join(" · ") : "optional · Bouldern, Laufen, Rad … nur Dauer", act: `data-sheet="cardio" data-v="${selDate}"`, cta: ca.length ? "Noch eins" : "Eintragen"}); }
   if (focus !== "essen" && st !== "frei") {
     const startM = plan?.start ? hm(plan.start) : 18 * 60;
-    out.push({k: "train", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : "heute", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
+    out.push({k: "train", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : selDate === todayIso() ? "heute" : selDate < todayIso() ? "nicht gemacht" : "geplant", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
   }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
     const tm = m.time ? hm(m.time) : 20 * 60;
