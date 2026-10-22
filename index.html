@@ -609,6 +609,12 @@ body.wo .exbody{gap:10px}
 .otherbtn{align-self:flex-start;font-size:14px;color:var(--accent);background:none;border:0;padding:4px 0;font-weight:600}
 .otherdet summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:center;gap:6px}
 .otherdet[open]{display:flex;flex-direction:column;gap:8px}
+.pastfood{gap:10px}.pfl{display:flex;flex-direction:column;gap:6px}
+.pfi{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;color:var(--ink);font:inherit;min-height:44px}
+.pfi:has(.btn){grid-template-columns:28px minmax(0,1fr) auto auto}
+.pfi .pfc{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--good)}
+.pfi.on .pfc{border-color:var(--good);background:var(--good-soft)}.pfi:not(.on) .pfn{color:var(--muted)}
+.pfi .pfn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nowbig .nowc{padding:22px 18px;gap:16px}
 .nowbig .nowh b{font-size:24px;line-height:1.2}
 .nowbig .nowh .small{font-size:15px}
@@ -2136,6 +2142,16 @@ function nowCard(it){
   return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh"><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
 const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : m.own ? "✓ Gegessen" : "✎ Anderes gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}"`;
+// Rückblick Essen: Summe, geplante Gerichte zum Abhaken, eigene Einträge; Nachtragen ohne Uhrzeit oder Slot
+function pastFoodCard(d){
+  if (!mealPlan || !recipes) return "";
+  const ms = mealsFor(d), tt = mealTotals(ms), tg = foodTarget(), plan = ms.filter(m => !m.own), own = ms.filter(m => m.own);
+  const row = (m, inner) => `<span class="pfc">${m.ate ? "✓" : ""}</span><span class="pfn">${esc(m.info.name)}</span><span class="small muted nutri">${nutTxt(m.info)}</span>${inner || ""}`;
+  return `<div class="lab sec">Essen an diesem Tag</div><div class="card pastfood"><div class="small nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div>
+    <div class="pfl">${plan.map(m => `<button type="button" class="pfi ${m.ate ? "on" : ""}" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.info.name)} gegessen">${row(m)}</button>`).join("")}
+    ${own.map(m => `<div class="pfi on">${row(m, `<button type="button" class="btn ghost small" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag entfernen">✕</button>`)}</div>`).join("")}</div>
+    <div class="actions"><button class="btn primary" type="button" data-sheet="ownfood" data-v="${d}">＋ Nachtragen</button>${plan.some(m => !m.ate) ? `<button class="btn" type="button" data-act="ateAll" data-v="${d}">✓ Alles wie geplant</button>` : ""}</div></div>`;
+}
 function laterRow(it){
   if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}" ${mealSw(selDate, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${selDate}|${m.k}"` : `data-sheet="meal" data-v="${selDate}|${m.k}"`}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
   return `<div class="lrow ${it.done ? "done" : ""}"><span class="mdot static">${it.done ? "✓" : it.icon}</span><button type="button" class="lmain" ${it.act}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button><span class="go">›</span></div>`;
@@ -2152,9 +2168,11 @@ function renderToday(){
   h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
   {
-    const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
+    const pastD = selDate < todayIso(); // vergangene Tage: Essen nur als Übersicht mit „Nachtragen“
+    const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus).filter(i => !(pastD && i.meal)), open = its.filter(i => !i.done), done = its.filter(i => i.done);
     if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
     let nxKey = null;
+    if (todayFocus === "essen" && pastD) { h += pastFoodCard(selDate); view.innerHTML = h + `</div>`; return; }
     if (todayFocus === "essen" && mealPlan && recipes) { const ms = mealsFor(selDate), tt = mealTotals(ms), tg = foodTarget();
       h += `<div class="card diary"><div class="small muted nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div><div class="mrows">${ms.map(m => diaryRow(selDate, m)).join("")}</div><a class="btn ghost small" href="#t=essen">Wochenplan ›</a></div>`;
       view.innerHTML = h + `</div>`; return; }
@@ -2162,6 +2180,7 @@ function renderToday(){
     if (isToday && !nbOk) h += open.length ? (todayFocus === "training" ? `<div class="nowbig">${nowCard(open[0])}</div>` : nowCard(open[0])) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
     const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
     if (later.length && !nbOk) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
+    if (pastD && todayFocus === "alles") h += pastFoodCard(selDate);
     if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
     if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><button type="button" class="qcard wide" data-sheet="cardio" data-v="${selDate}"><span>🏅 Aktivität</span><b>${(() => { const ca = cur.cardio || [], hasB = ca.some(c => c.type === "boulder"); const parts = ca.map(c => (CARDIO[c.type]?.[0] || "🏃") + " " + c.min); if (cur.boulder.done && !hasB) parts.unshift("🧗"); return parts.length ? parts.join(" · ") : "＋"; })()}</b></button></div>
       ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
@@ -3013,7 +3032,9 @@ function journeySheet(kind, arg){
   if (kind === "receipt") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } return receiptHtml(); }
   if (kind === "meal") return mealPlan && recipes ? mealSheet(arg) : close;
   if (kind === "other") return otherSheet(arg);
-  if (kind === "ownfood") return `<div class="sh"><h2>Eigenes Essen · ${fmt(arg)}</h2>${close}</div><div class="small muted">Zusätzlich zum Plan, z. B. ein Snack unterwegs. Wird als gegessen gezählt.</div>${ownForm("extra")}`;
+  if (kind === "ownfood") return arg < todayIso()
+    ? `<div class="sh"><h2>Nachtragen · ${fmt(arg)}</h2>${close}</div><div class="small muted">Was du an dem Tag gegessen hast, egal wann. Wird als gegessen gezählt. Geplantes, das du so gegessen hast, einfach in der Liste abhaken.</div>${ownForm("past")}`
+    : `<div class="sh"><h2>Eigenes Essen · ${fmt(arg)}</h2>${close}</div><div class="small muted">Zusätzlich zum Plan, z. B. ein Snack unterwegs. Wird als gegessen gezählt.</div>${ownForm("extra")}`;
   if (kind === "arzt") {
     const d28 = []; for (let i = 0; i < 28; i++) d28.push(addDays(todayIso(), -i));
     const vals = k => d28.map(d => store.days[d]?.pain?.[k]).filter(v => v != null);
@@ -3552,7 +3573,7 @@ function ownForm(mode){
     <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
     <button class="btn small" type="button" data-scanstart="own">📷 Barcode scannen</button><div id="scanSlot"></div>
     <div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" placeholder="z. B. Mensa-Curry, Brezel, Pizza"></div>
-    <div class="grid2">${mode === "slot" ? "" : `<div class="field"><label for="ownTime">Uhrzeit</label><input type="time" id="ownTime" value="${tm}"></div>`}
+    <div class="grid2">${mode === "slot" || mode === "past" ? "" : `<div class="field"><label for="ownTime">Uhrzeit</label><input type="time" id="ownTime" value="${tm}"></div>`}
     <div class="field nutri"><label for="ownKcal">kcal (optional)</label><input type="text" inputmode="numeric" id="ownKcal"></div><div class="field nutri"><label for="ownProt">Protein g (optional)</label><input type="text" inputmode="numeric" id="ownProt"></div></div>
     <button class="btn primary" type="button" id="ownSave" data-mode="${mode}">Eintragen</button></div>`;
 }
@@ -4203,7 +4224,10 @@ async function enablePush(){
 }
 
 // ---------- Ereignisse (ein Handler für Seite und Sheet) ----------
-document.querySelector("nav.bottom").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) go(b.dataset.tab); });
+// „Heute“ antippen, während Heute schon offen ist (also auch Doppeltipp): zurück zum heutigen Tag
+document.querySelector("nav.bottom").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return;
+  if (b.dataset.tab === "heute" && tab === "heute" && selDate !== todayIso()) { if (dirty) saveCur(); selDate = todayIso(); history.replaceState(null, "", "#t=heute"); loadCur(); renderToday(); scrollTo(0, 0); toast("Heute"); return; }
+  go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
 sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
@@ -4387,6 +4411,7 @@ async function onClick(e){
     if (a === "resetTraining" || a === "delTraining") {
       if (pendingConfirm !== a) { pendingConfirm = a; renderSheet(); return; }
       pendingConfirm = null; trainClear(a === "delTraining"); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
+    if (a === "ateAll") { const ks = mealsFor(v).filter(m => !m.own).map(m => m.k); editDay(v, day => { day.ate = Object.assign({}, day.ate, Object.fromEntries(ks.map(k => [k, true]))); }); toast("Alle geplanten Mahlzeiten als gegessen eingetragen"); render(); return; }
     if (a === "trainDrop") { // ✕ unter „Noch offen“ bzw. „Heute nicht trainieren“: zweimal tippen
       if (trainDrop.armed !== selDate) { trainDrop.armed = selDate; clearTimeout(trainDrop.t); trainDrop.t = setTimeout(() => { trainDrop.armed = null; }, 4000); toast("Nochmal tippen, um das Training für heute zu entfernen"); return; }
       trainDrop.armed = null; trainClear(true); toast("Training für heute entfernt"); render(); return; }
