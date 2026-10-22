@@ -278,6 +278,7 @@ body.wo main{padding-bottom:110px}
 .nextc .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}.nextc .actions .btn{white-space:nowrap}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.quick .qcard.wide{grid-column:span 2}.quick .qcard b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.odit{display:inline-flex;gap:2px;align-items:center}.odx{min-width:36px;padding:0 8px;color:var(--muted)}
 .odline{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
 .quick .qcard{display:flex;flex-direction:column;gap:4px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--surface);font:inherit;font-size:13px;color:var(--muted);text-align:left}
 .quick .qcard b{color:var(--ink);font-size:18px;line-height:28px}
@@ -1801,6 +1802,13 @@ function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(
   dirty = false; }
 function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveTimer); saveTimer = setTimeout(saveCur, 1200); }
 // Feld als „bewusst geleert“ merken (Pfad wie "note", "pain.sc", "sets.legpress")
+// Training zurücksetzen (Sätze, Zeiten); mit drop zusätzlich die Einheit verwerfen = zurück zum Plan, auch auf dem Server
+function trainClear(drop){
+  stopRest(); releaseWake(); clearInterval(clockTimer);
+  cur.sets = {}; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null; woSession = null;
+  if (drop) { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; clr("sessAt"); clr("session"); }
+  dirty = true; saveCur(); }
+function trainDrop(){}
 function clr(path){ cur._clr = [...new Set([...(cur._clr || []), path])]; }
 const pathVal = (o, path) => { const [a, b] = path.split("."); const v = b ? o?.[a]?.[b] : o?.[a]; return Array.isArray(v) ? (v.length ? v : null) : v === "" || v === false ? null : v; };
 function saveCur(){ clearTimeout(saveTimer); if (!dirty) return; dirty = false;
@@ -2030,7 +2038,7 @@ function nextBlock(d){
     return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">jetzt</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
     <div class="tleg small muted"><span><i class="lg next"></i>jetzt dran</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
-  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>`).join("")}</div>` : "";
+  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
   if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
@@ -2233,7 +2241,7 @@ function renderTraining(){
       <div class="pvlist">${ids0.map((id, i) => previewRow(id, w, sk, i)).join("")}</div>
       <div class="small muted">Bild antippen: Technik und Video. ⇄ tauscht eine Übung, z. B. wenn ein Gerät besetzt ist. <a href="#t=uebungen">Alle Übungen ›</a></div>
       <button class="btn primary big" type="button" data-act="begin">▶ Training starten</button>
-      <button class="btn ghost" type="button" data-sheet="session">Andere Einheit wählen</button></div>`;
+      <div class="actions"><button class="btn ghost" type="button" data-sheet="session">Andere Einheit wählen</button><button class="btn ghost" type="button" data-act="trainDrop">Heute nicht trainieren</button></div></div>`;
     return;
   }
   const ids = exList(sk), cleared = !!S().scCleared, fin = !!cur.finishedAt && !woSession;
@@ -4374,11 +4382,10 @@ async function onClick(e){
     if (a === "resume") { delete cur.finishedAt; clr("finishedAt"); touch(); saveCur(); woSession = null; go("training"); return; }
     if (a === "resetTraining" || a === "delTraining") {
       if (pendingConfirm !== a) { pendingConfirm = a; renderSheet(); return; }
-      pendingConfirm = null; stopRest(); releaseWake(); clearInterval(clockTimer);
-      cur.sets = {}; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null;
-      // Löschen = zurück zum Plan: bewusste Wahl der Einheit verwerfen, auch auf dem Server (sonst käme „Beine A“ beim Abgleich zurück)
-      if (a === "delTraining") { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; clr("sessAt"); clr("session"); }
-      dirty = true; saveCur(); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
+      pendingConfirm = null; trainClear(a === "delTraining"); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
+    if (a === "trainDrop") { // ✕ unter „Noch offen“ bzw. „Heute nicht trainieren“: zweimal tippen
+      if (trainDrop.armed !== selDate) { trainDrop.armed = selDate; clearTimeout(trainDrop.t); trainDrop.t = setTimeout(() => { trainDrop.armed = null; }, 4000); toast("Nochmal tippen, um das Training für heute zu entfernen"); return; }
+      trainDrop.armed = null; trainClear(true); toast("Training für heute entfernt"); render(); return; }
     if (a === "resetWhere") { delete cur.where; clr("where"); cur.swap = {}; openEx = null; touch(); renderTraining(); return; }
     if (a === "toHeute") { go("heute"); return; }
     if (a === "summaryDone") { if (sheet.open) { sheetKind = null; sheet.close(); } go("heute"); return; }
