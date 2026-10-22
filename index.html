@@ -3866,13 +3866,22 @@ function resteRank(){
 // Baukasten: aus den Resten ein schnelles Gericht ohne Rezept
 function resteFreestyle(){
   const h = reste.have, has = re => h.filter(t => re.test(t)), base = has(/reis|nudel|pasta|spaghetti|penne|kartoffel|couscous|quinoa|bulgur|brot|tortilla|wrap|gnocchi/i),
-    prot = has(/tofu|\beier?\b|linse|kichererbse|bohne|feta|halloumi|quark|skyr|hüttenkäse|tempeh|seitan|soja|edamame|käse|mozzarella|erbse/i), veg = h.filter(t => !base.includes(t) && !prot.includes(t));
+    prot = has(/tofu|\beier?\b|linse|kichererbse|bohne|feta|halloumi|quark|skyr|hüttenkäse|tempeh|seitan|soja(?!soße|sauce)|edamame|käse|mozzarella|erbse/i),
+    // nicht alles ist Gemüse zum Schneiden: Würze/Soßen, Blattgrün, Obst und Frühstückszutaten bekommen eigene Schritte
+    paste = has(/tomatenmark|currypaste|misopaste|harissa/i).filter(t => !prot.includes(t)),
+    sauce = has(/passata|stückige tomaten|tomaten.*dose|pesto|so(ß|ss)e|sauce|senf|\böl\b|essig|brühe|kokosmilch|sahne|milch|frischkäse|cr[eè]me|honig|ketchup|joghurt|zitronensaft|limettensaft/i).filter(t => !prot.includes(t) && !paste.includes(t)),
+    leafy = has(/spinat|rucola|feldsalat|salat|mangold|petersilie|koriander|basilikum|kräuter/i),
+    sweet = has(/banane|apfel|birne|beere|orange|mandarine|mango|kiwi|traube|obst|haferflocken|müsli|granola|schokolade|nüsse|mandeln/i),
+    veg = h.filter(t => ![base, prot, paste, sauce, leafy, sweet].some(g => g.includes(t)));
   if (!h.length) return "";
   const b0 = (base[0] || "").toLowerCase(), kind = /tortilla|wrap/.test(b0) ? "Wraps" : /nudel|pasta|spaghetti|penne|gnocchi/.test(b0) ? "Pasta-Pfanne" : /kartoffel/.test(b0) ? "Bratkartoffel-Pfanne" : /reis|couscous|quinoa|bulgur/.test(b0) ? "Bowl" : /brot/.test(b0) ? "Ofen-Stulle" : "Gemüsepfanne";
   const steps = [base.length ? `${base.join(", ")} nach Packung garen${/kartoffel/.test(b0) ? " (vorgekocht geht schneller)" : ""}.` : "Als Beilage passt alles, was da ist – Reis, Nudeln oder Brot.",
-    `${veg.length ? veg.join(", ") : "Gemüse"} klein schneiden und in 1 EL Öl 5–8 Min. kräftig anbraten.`,
+    `${veg.length ? veg.join(", ") : "Gemüse"} klein schneiden und in 1 EL Öl 5–8 Min. kräftig anbraten.` + (paste.length ? ` ${paste.join(", ")} die letzte Minute kurz mitrösten.` : ""),
     prot.length ? `${prot.join(", ")} zugeben und mitgaren${prot.some(t => /quark|skyr|hüttenkäse/i.test(t)) ? " – Quark/Skyr erst am Ende unterrühren oder als Soße kalt dazu" : ""}.` : "Protein ergänzen: 2 Eier, Tofu oder eine Dose Kichererbsen – sonst fehlt Eiweiß.",
-    "Mit Salz, Pfeffer, Paprika/Curry oder Sojasoße abschmecken, etwas Zitrone oder Kräuter drüber."];
+    ...(sauce.length ? [`${sauce.join(", ")} unterrühren und kurz mit erhitzen${sauce.some(t => /joghurt|frischkäse/i.test(t)) ? " (Joghurt/Frischkäse lieber kalt als Soße dazu)" : ""}.`] : []),
+    ...(leafy.length ? [`${leafy.join(", ")} zum Schluss unterheben und kurz zusammenfallen lassen.`] : []),
+    "Mit Salz, Pfeffer, Paprika/Curry oder Sojasoße abschmecken, etwas Zitrone oder Kräuter drüber.",
+    ...(sweet.length ? [`${sweet.join(", ")} ${sweet.length > 1 ? "passen" : "passt"} nicht in die Pfanne – lieber als Frühstück oder Nachtisch (z. B. mit Skyr).`] : [])];
   return `<div class="card fsbox"><div class="mhead"><b>🧩 Freestyle: ${kind}</b><span class="small muted">ohne Rezept</span></div><ol class="small">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${prot.length ? "" : `<div class="pill warn">Kein Protein dabei</div>`}</div>`;
 }
 const RESTE_COMMON = ["Reis", "Nudeln", "Kartoffeln", "Eier", "Tofu", "Feta", "Quark", "Skyr", "Käse", "Zucchini", "Paprika", "Tomaten", "Spinat", "Brokkoli", "Champignons", "Möhren", "Zwiebeln", "Kichererbsen", "Linsen", "Bohnen", "Haferflocken", "Banane", "Brot", "Joghurt"];
