@@ -539,6 +539,17 @@ body.gcon .restbar{display:none}
 .gcstep{display:flex;align-items:center;gap:14px}.gcstep b{font-family:var(--f-num);font-size:44px;min-width:64px}
 .gcstep .btn{min-width:56px;min-height:56px;font-size:26px}
 .gcgo{margin-bottom:4px}
+.gcmedia{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;flex:none}
+.gcmedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.gcmedia.fig{aspect-ratio:3/2;background:#fff}
+.gcmedia.fig img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.gcvtag:empty{display:none}
+.gcvtag{position:absolute;left:8px;bottom:8px;font-size:12px;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;padding:2px 6px}
+.gcview{justify-content:center;margin-top:6px}
+.gcmid{flex:1;display:flex;flex-direction:column}
+.gcin:has(.gcmedia) .gcnum{font-size:64px}
+.gcin:has(.gcmedia) .gcph{font-size:28px}
+.gcin:has(.gcmedia) .gcbig{gap:8px}
 .nowbig .nowc{padding:22px 18px;gap:16px}
 .nowbig .nowh b{font-size:24px;line-height:1.2}
 .nowbig .nowh .small{font-size:15px}
@@ -2290,6 +2301,7 @@ function finishWorkout(){
 // ---------- Coach: führt Satz für Satz durch – Tempo je Wiederholung, Halten, Seitenwechsel, Eintragen, Pause, nächster Satz ----------
 // Countdowns zeigen jede Zahl eine volle Sekunde, auch die 0; Tempo-Phasen laufen exakt im vorgegebenen Takt.
 let gc = null, gcInt = null, gcVoice = lsGet("coachVoice") ?? true;
+const GC_HOLD = /halten|Dehnung|^oben|^unten|antippen|Gesäß fest|ablegen/, GC_PRESS = new Set(["legpress", "legpress60", "inclinedb", "chestpress", "alt_cablepress", "alt_floorpress", "landmine", "skull"]);
 function gcPhases(d){
   const par = (d.tempo || "").match(/\(([^)]*)\)/)?.[1], out = [];
   if (par) for (let p of par.split(/,\s*/)) { p = p.trim(); if (!p || /direkt weiter|1½/.test(p)) continue;
@@ -2304,12 +2316,47 @@ function gcPhases(d){
 function gcPlan(base){
   const id = eff(base), e = EX[id], d = DOSE[id] || {}, sg = suggestion(id), w = weekNo(selDate), sk = woSession || cur.session;
   const ph = gcPhases(d), hold = d.hold >= 10 && !ph.length;
-  // Zug-, Curl- und Hebeübungen starten unten: erst die Arbeitsphase, „ablassen“ zuletzt (Drücken startet gestreckt)
-  if (ph.length > 1 && /^(ablassen|zurück|zurücklassen|nach vorn( lassen)?|hoch lassen)$/.test(ph[0][0]) && !ph.some(([l]) => /drücken|ablegen/.test(l)) && id !== "skull") ph.push(ph.shift());
+  // Zug-, Curl- und Hebeübungen starten in der Dehnung: Takt beginnt mit der ersten Arbeitsbewegung, „ablassen“ kommt danach.
+  // Drückübungen (und Skull Crusher) starten gestreckt und bleiben, wie sie sind.
+  if (ph.length > 1 && /^(ablassen|zurück|zurücklassen|nach vorn( lassen)?|hoch lassen)$/.test(ph[0][0]) && !GC_PRESS.has(id)) { const k = ph.findIndex(([l], j) => j > 0 && !GC_HOLD.test(l)); if (k > 0) ph.push(...ph.splice(0, k)); }
   const m = (d.dose || "").match(/×\s*(\d+)\s*Wdh/);
   const target = hold ? (num(sg.reps) >= 10 ? num(sg.reps) : d.hold) : (d.hold > 0 && d.hold < 10 && !d.tempo && m ? +m[1] : num(sg.reps) || lo(e) || 10);
   return {id, base, name: e.name, mode: hold ? "hold" : ph.length ? "tempo" : "free", ph, target, side: !!d.perSide, rest: restFor(id), n: nSets(base, w, sk), breath: d.breath || "", load: !!e.load, sg};
 }
+// Vorturner im Coach: Figur (zwei Positionsbilder, im Takt überblendet) oder echtes Video (eine Wiederholung, an den Takt angepasst)
+// coach.json: frames = Bild der Ausgangsposition je Übung (0/1), follow = {video, t0, t1, …} eine saubere Wiederholung im Video
+let GCM = null, gcmReady = null, gcView = lsGet("coachView") || "video";
+const ensureCoachData = () => gcmReady = gcmReady || fetch("coach.json").then(r => r.ok ? r.json() : {}).catch(() => ({})).then(j => { GCM = {frames: j.frames || {}, follow: j.follow || {}}; });
+const gcFollow = id => { const f = GCM?.follow?.[id]; return f && f.video && f.quality !== "none" && f.t1 > f.t0 ? f : null; };
+function gcMediaHtml(pl){
+  const e = EX[pl.id], f = gcFollow(pl.id), img = e.img, vid = f && (gcView === "video" || !img);
+  const sw = f && img ? `<div class="chips sm gcview">${[["video", "🎥 Video"], ["figur", "🧍 Figur"]].map(([k, l]) => `<button type="button" data-gc="view" data-v="${k}" aria-pressed="${(vid ? "video" : "figur") === k}">${l}</button>`).join("")}</div>` : "";
+  if (vid) return `<div class="gcmedia vid" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(f.video)}/hqdefault.jpg) center/cover"><iframe id="gcV" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(f.video)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${Math.floor(f.t0)}" allow="autoplay; encrypted-media" title="Vorturner"></iframe><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`;
+  if (!img) return "";
+  const s = GCM?.frames?.[pl.id] ?? 0;
+  return `<div class="gcmedia fig"><img src="${isrc(img, s)}" alt=""><img id="gcFigB" src="${isrc(img, 1 - s)}" alt="" style="opacity:0"></div>${sw}`;
+}
+// Figur: bei Bewegungsphasen zur anderen Position überblenden, bei Haltephasen stehen bleiben
+function gcFig(moved, sec){ const b = document.getElementById("gcFigB"); if (!b) return; b.style.transition = sec ? `opacity ${sec}s ease-in-out` : "none"; b.style.opacity = moved ? 1 : 0; }
+// Video per postMessage steuern (wie bei den Technik-Clips)
+const gcV = (func, args = []) => { const f = document.getElementById("gcV"); try { f?.contentWindow?.postMessage(JSON.stringify({event: "command", func, args}), "*"); } catch {} };
+let gcVt = null; // zuletzt gemeldete Videozeit
+window.addEventListener("message", ev => { if (!/youtube/.test(ev.origin)) return; const f = document.getElementById("gcV"); if (!f || f.contentWindow !== ev.source) return;
+  let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; } const ct = d?.event === "infoDelivery" ? d.info?.currentTime : null;
+  if (ct == null || !gc) return; gcVt = ct; const fo = gcFollow(gc.pl.id); if (!fo) return;
+  // Wiederholung im Video vorbei: anhalten (Tempo) bzw. von vorn (Halten)
+  if (ct >= fo.t1 - 0.05) { if (gc.pl.mode !== "tempo" && gc.stage === "work") { gcV("seekTo", [fo.t0, true]); gcV("playVideo"); } else gcV("pauseVideo"); } });
+function gcMediaHook(){ const f = document.getElementById("gcV"); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id: "gcV", channel: "widget"}), "*"); } catch {} gcV("mute"); gcMediaRest(); }); } }
+// Ausgangsposition zeigen (Bereit, 3-2-1, Pause)
+function gcMediaRest(){ if (!gc) return; gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { gcV("seekTo", [fo.t0, true]); gcV("pauseVideo"); } }
+// Beginn einer Wiederholung: Video auf den Anfang der Wiederholung, Tempo so, dass sie in den Takt passt
+function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const rep = gc.pl.ph.reduce((a, p) => a + p[1], 0) || 1, want = (fo.t1 - fo.t0) / rep;
+  const rate = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2].reduce((b, r) => Math.abs(r - want) < Math.abs(b - want) ? r : b, 1);
+  gcV("setPlaybackRate", [rate]); gcV("seekTo", [fo.t0, true]); gcV("playVideo"); }
+function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { gcV("setPlaybackRate", [1]); gcV("seekTo", [fo.t0, true]); gcV("playVideo"); } }
+// Bewegungsphase? (Haltephasen ändern die Position nicht)
+const gcMoves = lab => !GC_HOLD.test(lab);
+function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; box.innerHTML = gcMediaHtml(gc.pl); gcMediaHook(); if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
 function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 1.1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
 function gcBeep(f = 880, len = .12, vol = .08){ try { const a = audioCtx; if (!a) return; const o = a.createOscillator(), g = a.createGain(); o.frequency.value = f; o.connect(g); g.connect(a.destination); g.gain.value = vol; o.start(); o.stop(a.currentTime + len); } catch {} }
@@ -2317,20 +2364,25 @@ function gcOpen(base){
   audioReady(); requestWake(); try { speechSynthesis.getVoices(); } catch {}
   const pl = gcPlan(base); gc = {pl, i: gcSetIdx(pl.id), side: 0, rep: 0, pi: 0, stage: "ready", end: 0, t0: 0, paused: 0, said: {}};
   if (gc.i >= pl.n) gc.stage = "done";
-  document.getElementById("gc").hidden = false; document.body.classList.add("gcon"); gcPaint();
+  const el = document.getElementById("gc"); el.hidden = false; document.body.classList.add("gcon");
+  el.innerHTML = `<div class="gcin"><div id="gcHead"></div><div id="gcMediaBox"></div><div id="gcMid" class="gcmid"></div><div class="gcbtns" id="gcBtns"></div></div>`; gcPaint();
+  const me = gc; ensureCoachData().then(() => { if (gc === me) gcMediaMount(); });
 }
 function gcClose(){ clearInterval(gcInt); gcInt = null; try { speechSynthesis.cancel(); } catch {} gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
 // Abschnitt starten: sec = Länge (null = Stoppuhr); countdown = Zahl zählt sichtbar bis 0 und bleibt dort 1 s
 function gcSeg(stage, sec, countdown){ gc.stage = stage; gc.t0 = Date.now(); gc.len = sec; gc.end = sec == null ? 0 : gc.t0 + (sec + (countdown ? 1 : 0)) * 1000; gc.cd = !!countdown; gc.said = {}; gc.paused = 0; gcPaint(); clearInterval(gcInt); gcInt = setInterval(gcTick, 100); }
 function gcGo(){ // nach dem 3-2-1: Satz beginnt
   const pl = gc.pl; gc.rep = 0; gc.pi = 0;
-  if (pl.mode === "tempo") { gcSay(pl.ph[0][0]); gcSeg("work", pl.ph[0][1]); }
-  else if (pl.mode === "hold") { gcSay(pl.side ? (gc.side ? "Rechte Seite. Halten" : "Linke Seite. Halten") : "Halten"); gcSeg("work", pl.target, true); }
-  else { gcSay(`Los. ${pl.target} Wiederholungen`); gcSeg("work", null); }
+  if (pl.mode === "tempo") { gcSay(pl.ph[0][0]); gcSeg("work", pl.ph[0][1]); gc.moved = false; gcMediaRep(); gcPhaseFig(); }
+  else if (pl.mode === "hold") { gcSay(pl.side ? (gc.side ? "Rechte Seite. Halten" : "Linke Seite. Halten") : "Halten"); gcSeg("work", pl.target, true); gcMediaHold(); }
+  else { gcSay(`Los. ${pl.target} Wiederholungen`); gcSeg("work", null); gcMediaHold(); }
 }
-function gcCountIn(){ gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
+// Figur zur aktuellen Phase: Bewegung = in der Phasendauer zur anderen Position, Halten = stehen bleiben
+function gcPhaseFig(){ const [lab, sec] = gc.pl.ph[gc.pi]; if (gcMoves(lab)) { gc.moved = !gc.moved; gcFig(gc.moved, sec); } }
+function gcCountIn(){ gcMediaRest(); gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
 function gcAfterWork(){
   const pl = gc.pl;
+  gcMediaRest();
   if (pl.side && !gc.side) { gc.side = 1; gcBeep(660, .2); gcSay("Seite wechseln"); gcSeg("switch", 5, true); return; }
   gcBeep(988, .25); gcSay("Geschafft. Eintragen"); gc.logReps = pl.mode === "tempo" ? gc.rep : pl.target;
   gc.stage = "log"; clearInterval(gcInt); gcPaint();
@@ -2355,6 +2407,8 @@ function gcTick(){
     if (gc.rep >= pl.target) { gcAfterWork(); return; }
     const [lab, sec] = pl.ph[gc.pi]; gcBeep(gc.pi ? 660 : 880, .06, .05);
     gcSay(gc.pi === 0 ? String(gc.rep + 1) : lab); gcSeg("work", sec);
+    if (gc.pi === 0) { if (gc.moved) gcFig(false, 0); gc.moved = false; gcMediaRep(); }
+    gcPhaseFig();
   }
 }
 function gcSave(){
@@ -2409,7 +2463,7 @@ function gcPaint(){
     mid = `<div class="gcbig"><div class="gcph">${gc.next === null ? "Alles geschafft 💪" : "Übung erledigt ✓"}</div><div class="gcsub">Alle Sätze sind eingetragen.</div></div>`;
     btns = `<button type="button" class="btn primary big" data-gc="close">Zurück zum Training</button>`;
   }
-  el.innerHTML = `<div class="gcin">${head}${mid}<div class="gcbtns">${btns}</div></div>`;
+  document.getElementById("gcHead").innerHTML = head; document.getElementById("gcMid").innerHTML = mid; document.getElementById("gcBtns").innerHTML = btns;
   if (gcInt && !gc.paused && ["count", "switch", "work", "rest", "next"].includes(st)) gcTick();
 }
 function gcCmd(c, v){
@@ -2417,8 +2471,12 @@ function gcCmd(c, v){
   if (c === "close") return gcClose();
   if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
-  if (c === "pause") { if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; } else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} } return gcPaint(); }
-  if (c === "finish") { clearInterval(gcInt); gcInt = null;
+  if (c === "pause") { const b = document.getElementById("gcFigB");
+    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcV("playVideo"); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
+    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcV("pauseVideo"); if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    return gcPaint(); }
+  if (c === "view") { gcView = v; lsSet("coachView", v); return gcMediaMount(); }
+  if (c === "finish") { clearInterval(gcInt); gcInt = null; gcMediaRest();
     gc.logReps = pl.mode === "free" ? pl.target : pl.mode === "hold" ? Math.max(1, Math.min(pl.target, Math.round((Date.now() - gc.t0) / 1000))) : gc.rep + (gc.pi > 0 ? 1 : 0);
     if (pl.side && !gc.side && pl.mode !== "free") { gc.side = 1; gcSay("Seite wechseln"); return gcSeg("switch", 5, true); }
     gc.stage = "log"; return gcPaint(); }
