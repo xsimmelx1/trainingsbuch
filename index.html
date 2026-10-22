@@ -886,8 +886,11 @@ const MOB_OLD = ["knietest", "hipflexor", "deadbug", "shrug30", "tilt"], MOB_SIN
 const mobTotal = d => d < MOB_SINCE ? MOB_OLD.length : MOBILITY.length;
 // Routine gilt als abgeschlossen, wenn alles erledigt ist oder bewusst abgeschlossen wurde (übersprungene Übungen ok)
 function mobAlt(k){ // Hinweis, wenn für eine Routine-Übung das Zubehör fehlt
-  if (k === "shrug30" && !hasGear("kh")) return hasGear("gewicht") ? "Ohne Kurzhanteln: mit Rucksack oder zwei vollen Wasserflaschen, gleiche Ausführung." : "Ohne Gewichte: Handtuch-Shrug – auf ein Handtuch stellen, Enden greifen, Schultern 5 × 6 s gegen das Handtuch hochziehen.";
-  if ((k === "glutebr" || k === "rkc" || k === "deadbug" || k === "tiltlie") && !hasGear("matte")) return "Ohne Matte: auf Teppich oder einem gefalteten Handtuch.";
+  if (k === "shrug30" && !hasGear("kh")) return hasGear("gewicht") ? "Ohne Kurzhanteln: mit Rucksack oder zwei vollen Wasserflaschen, gleiche Ausführung."
+    : hasGear("band") ? "Ohne Gewichte: Band-Shrug – mittig auf das Widerstandsband stellen, Enden greifen, Schultern 5 × 6 s gegen den Zug hochziehen."
+    : hasGear("handtuch") ? "Ohne Gewichte: Handtuch-Shrug – auf ein Handtuch stellen, Enden greifen, Schultern 5 × 6 s gegen das Handtuch hochziehen."
+    : "Ohne Zubehör: Arme locker hängen lassen, Schultern 5 × 6 s so weit wie möglich hochziehen und fest anspannen, langsam ablassen.";
+  if ((k === "glutebr" || k === "rkc" || k === "deadbug" || k === "tiltlie") && !hasGear("matte")) return hasGear("handtuch") ? "Ohne Matte: auf Teppich oder einem gefalteten Handtuch." : "Ohne Matte: auf Teppich oder einer weichen Decke.";
   return "";
 }
 const mobFinished = (day, d) => mobCount(day, d) >= mobTotal(d) || !!day?.mobility?._done;
