@@ -2393,12 +2393,12 @@ function gcRateFor(R, dur){ clearTimeout(gcVtm); R = Math.max(GC_RATES[0], Math.
 function gcMediaLead(sec){ const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; const R = Math.max(0.25, Math.min(2, (fo.t1 - fo.t0) / gcRepLen()));
   clearTimeout(gcVtm); gcRate(GC_RATES.reduce((b, r) => Math.abs(r - R) < Math.abs(b - R) ? r : b, 1)); gcV("seekTo", [Math.max(0, fo.t0 - sec * gcVrate), true]); gcPlay(); gc.vk = -1; }
 function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0, k = gc.rep;
-  // so viele Video-Wiederholungen am Stück, wie das Video hergibt (max. 3), dann verdeckt zurück
-  const maxK = gcVdur ? Math.min(2, Math.floor((gcVdur - 0.3 - fo.t0) / vrep) - 1) : 2;
-  if (maxK < 1 && k > 0) { gcRateFor(vrep / len, len); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(true); return; } // nur eine Wiederholung im Video: jedes Mal ansetzen
-  if (k > 0 && (gc.vk ?? -1) + 1 > maxK) { gcVShow(false); clearTimeout(gcVtm); gcV("seekTo", [Math.max(0, fo.t0 - vrep), true]); gc.vk = -1; gcRateFor(vrep / len, len); gcPlay(); return; } // verdeckt eine Wiederholung vor den Anfang: danach wieder zwei sichtbare
+  // Video bleibt im Satz immer sichtbar. reps = geprüfte saubere Wiederholungen am Stück ab t0 (fehlt: 2), begrenzt durch die Videolänge;
+  // danach sichtbar zurück an den Anfang (YouTube blendet dabei kurz Titel/Symbol ein, gewollt statt Wechsel zur Figur)
+  const maxK = Math.max(0, Math.min((fo.reps || 2) - 1, gcVdur ? Math.floor((gcVdur - 0.3 - fo.t0) / vrep) - 1 : 1));
+  if (k > 0 && (gc.vk ?? -1) + 1 > maxK) { clearTimeout(gcVtm); gcV("seekTo", [fo.t0, true]); gc.vk = 0; gcRateFor(vrep / len, len); gcPlay(); gcVShow(true); return; }
   gc.vk = (gc.vk ?? -1) + 1; const exp = fo.t0 + gc.vk * vrep, now = gcVnow(), err = now == null ? 0 : now - exp;
-  if (Math.abs(err) > 1.2) { gcVShow(false); gcV("seekTo", [exp, true]); gcRateFor(vrep / len, len); return; } // zu weit weg: verdeckt korrigieren, nächste Wiederholung wieder sichtbar
+  if (Math.abs(err) > 1.2) { gcV("seekTo", [exp, true]); gcRateFor(vrep / len, len); gcPlay(); gcVShow(true); return; } // zu weit weg: auf den Wiederholungsanfang setzen
   gcRateFor((vrep - err) / len, len); gcPlay(); gcVShow(true); }
 function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(true); } }
 // Bewegungsphase? (Haltephasen ändern die Position nicht)
