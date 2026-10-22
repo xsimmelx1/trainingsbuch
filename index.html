@@ -213,6 +213,17 @@ details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{marg
 .nonutri .nutri,.nonutri .mbar,.nonutri .macro{display:none !important}
 .ownf{background:var(--sunk)}
 body.wo nav.bottom{display:none}
+body.wo header.top,body.wo #syncLine{display:none}
+body.wo .wohead{padding:calc(env(safe-area-inset-top,0px) + 6px) 0 8px;margin-bottom:4px}
+.wohead .woback{min-width:44px;min-height:44px;font-size:24px;padding:0 6px;flex:none}
+.wot{flex:1;min-width:0;display:flex;flex-direction:column}
+.wot h2{margin:0;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scnote{color:var(--bad)}
+body.wo .exdots{gap:5px}
+body.wo .exdots button{width:34px;height:34px}
+.fxname{font-size:26px;line-height:1.15;text-transform:none}
+body.wo .focusex .anim{max-height:220px}
+body.wo .focusex .anim img{max-height:220px}
 body.wo .restbar{bottom:env(safe-area-inset-bottom,0px)}
 body.wo main{padding-bottom:110px}
 .woback{padding:4px 0;margin-bottom:2px}
@@ -503,6 +514,31 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .nowh .mthumb{width:64px;height:64px}
 .nowi{font-size:30px;width:48px;text-align:center}
 .nowc .actions .btn{flex:1}
+.gc{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto}
+body.gcon{overflow:hidden}
+body.gcon .restbar{display:none}
+.gcin{min-height:100%;display:flex;flex-direction:column;gap:14px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);max-width:560px;margin:0 auto;box-sizing:border-box}
+.gch{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.gch b{font-size:18px;line-height:1.25}
+.gch .btn{min-width:44px;min-height:44px;font-size:18px}
+.gcbig{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.gcph{font-size:34px;font-weight:800;line-height:1.1;text-transform:uppercase;letter-spacing:.02em;color:var(--accent)}
+.gcbig.rest .gcph{color:var(--good)}
+.gcnum{font-family:var(--f-num);font-size:96px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.gcsub{font-size:17px}
+.gctempo{font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.gcrep{font-size:22px}.gcrep b{font-family:var(--f-num);font-size:40px}
+.gcbarw{width:100%;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.gcbar{height:100%;width:0;background:var(--accent);border-radius:99px}
+.gcbig.rest .gcbar{background:var(--good)}
+.gcbtns{display:flex;flex-direction:column;gap:10px}
+.gcbtns .actions{display:flex;gap:10px}.gcbtns .actions .btn{flex:1}
+.gcbtns .btn.big{min-height:58px;font-size:18px}
+.gclog{display:flex;gap:18px;align-items:flex-end;justify-content:center;flex-wrap:wrap}
+.gclog input{width:110px;font-size:28px;text-align:center;padding:8px}
+.gcstep{display:flex;align-items:center;gap:14px}.gcstep b{font-family:var(--f-num);font-size:44px;min-width:64px}
+.gcstep .btn{min-width:56px;min-height:56px;font-size:26px}
+.gcgo{margin-bottom:4px}
 .nowbig .nowc{padding:22px 18px;gap:16px}
 .nowbig .nowh b{font-size:24px;line-height:1.2}
 .nowbig .nowh .small{font-size:15px}
@@ -814,6 +850,7 @@ input[type=time]{min-height:40px}
 <div id="syncLine" hidden></div>
 <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 <div class="wrap"><main id="view"></main></div>
+<div class="gc" id="gc" hidden role="dialog" aria-label="Coach"></div>
 <div class="restbar" id="restBar" hidden><span>Pause <span class="t" id="restT">0:00</span></span><span class="actions"><button type="button" data-rest="-10">−10</button><button type="button" data-rest="10">+10</button><button type="button" data-rest="stop">Weiter</button></span></div>
 <nav class="bottom" aria-label="Hauptnavigation">
   <button type="button" data-tab="heute"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M8 15l3 3 5-5"/></svg>Heute</button>
@@ -980,8 +1017,8 @@ function guideTick(){
   const el = document.getElementById("gT"), [k] = MOBILITY[sheetArg] || [], g = GUIDE[k];
   if (!el || !g || sheetKind !== "mobguide") { clearInterval(guideTimer); guide.end = 0; return; }
   if (g.stop) { el.textContent = fmtDur(guide.acc + (guide.end ? (Date.now() - guide.start) / 1000 : 0)); return; }
-  const left = Math.max(0, (guide.end - Date.now()) / 1000); el.textContent = fmtDur(left);
-  if (guide.end && left <= 0) { guide.end = 0; guide.round++; clearInterval(guideTimer); try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} toast(guide.round < g.rounds ? (g.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); renderSheet(); }
+  const left = (guide.end - Date.now()) / 1000; el.textContent = fmtDur(Math.max(0, Math.ceil(left)));
+  if (guide.end && left <= -1) { guide.end = 0; guide.round++; clearInterval(guideTimer); try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} toast(guide.round < g.rounds ? (g.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); renderSheet(); }
 }
 
 // ---------- Halte-/Satz-Timer: läuft im Blatt, ohne neu zu zeichnen (Video läuft weiter), ±10 s ----------
@@ -1001,7 +1038,7 @@ function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
   const head = t.mode === "stop" ? "Stoppuhr" : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
   const val = t.mode === "stop" ? t.acc : t.left;
-  return `<div class="lab">${head}</div><div class="gt" id="tmrT">${fmtDur(Math.max(0, val))}</div>
+  return `<div class="lab">${head}</div><div class="gt" id="tmrT">${fmtDur(Math.max(0, t.mode === "stop" ? val : Math.ceil(val)))}</div>
     <div class="tmrbtns"><button type="button" class="btn" data-tm="minus" aria-label="10 Sekunden weniger">−10</button><button type="button" class="btn primary" data-tm="toggle">${t.run ? "Pause" : t.mode === "stop" && t.acc ? "Weiter" : "Start"}</button><button type="button" class="btn" data-tm="plus" aria-label="10 Sekunden mehr">+10</button></div>
     <button type="button" class="btn ghost small" data-tm="reset">Zurücksetzen</button>`;
 }
@@ -1014,7 +1051,7 @@ function tmrTick(){
   const now = Date.now(), dt = (now - t.last) / 1000; t.last = now;
   if (t.mode === "stop") { t.acc += dt; const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(t.acc); return; }
   t.left -= dt;
-  if (t.left > 0) { const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(t.left); return; }
+  if (t.left > -1) { const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(Math.max(0, Math.ceil(t.left))); return; }
   beep();
   if (t.mode === "reps") {
     if (t.phase === "hold") { t.phase = "rest"; t.left = 2; }
@@ -2130,11 +2167,11 @@ function renderTraining(){
   const ids = exList(sk), cleared = !!S().scCleared, fin = !!cur.finishedAt && !woSession;
   if (!openEx || !ids.includes(openEx)) openEx = ids.find(id => eff(id) && doneCount(id, w, sk) < nSets(id, w, sk)) || ids[0];
   const clockTxt = !cur.startedAt || woSession ? "" : fin ? `beendet · ${fmtDur((Date.parse(cur.finishedAt) - Date.parse(cur.startedAt))/1000)}` : fmtDur((Date.now() - Date.parse(cur.startedAt))/1000);
-  let h = `<div class="wohead"><div>${fin ? "" : `<button class="btn ghost small woback" type="button" data-act="toHeute">‹ Heute</button>`}<h2>${esc(sess.title)}</h2><span class="clock" id="woClock">${clockTxt}</span></div>
+  let h = `<div class="wohead">${fin ? "" : `<button class="btn ghost woback" type="button" data-act="toHeute" aria-label="Zurück zu Heute">‹</button>`}<div class="wot"><h2>${esc(sess.title)}</h2><span class="small muted">${woSession ? "" : (atHome() ? "Zuhause" : "Gym") + " · "}<span class="clock" id="woClock">${clockTxt}</span></span></div>
     <span class="actions">${woSession ? "" : `<button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button>`}${fin ? "" : `<button class="btn primary" type="button" data-act="finish">Beenden</button>`}</span></div>`;
   if (fin) { const pr = progress(sk); h += `<div class="finbar"><div><b>Beendet</b><div class="small">${pr.d} von ${pr.t} Sätzen</div></div><span class="actions"><button class="btn small" type="button" data-act="resume">Weiter trainieren</button><button class="btn small" type="button" data-act="toHeute">Zu Heute</button></span></div>`; }
-  if (!woSession) h += `<div class="small muted">Ort: <b>${atHome() ? "Zuhause ohne Geräte" : "Gym"}</b></div>`;
-  if (scHigh()) h += `<div class="banner bad small">SC-Schmerz heute oder gestern ≥ 3: Übungen mit SC-Ampel sind automatisch gegen schonende ersetzt.</div>`;
+  if (fin && !woSession) h += `<div class="small muted">Ort: <b>${atHome() ? "Zuhause ohne Geräte" : "Gym"}</b></div>`;
+  if (scHigh()) h += fin ? `<div class="banner bad small">SC-Schmerz heute oder gestern ≥ 3: Übungen mit SC-Ampel sind automatisch gegen schonende ersetzt.</div>` : `<div class="small scnote">⚠️ SC-Schmerz ≥ 3: schonende Übungen sind eingesetzt.</div>`;
   if (!fin) {
     // Fokus: eine Übung groß, Fortschrittspunkte oben, Wischen oder Pfeile zum Wechseln
     document.body.classList.add("wo");
@@ -2146,7 +2183,7 @@ function renderTraining(){
     h += `<div class="focusex" data-swipe="ex">`;
     if (!e_) h += `<div class="card"><b>${esc(EX[id].name)}</b><div class="small muted">entfällt zuhause</div></div>`;
     else { const n = nSets(id, w, sk), dn = doneCount(id, w, sk);
-      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2>${esc(EX[e_].name)}</h2></div></div>` + exBody(id, n, w); }
+      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2></div></div>` + exBody(id, n, w); }
     h += `</div><div class="fxnav"><button class="btn big" type="button" data-exnav="-1" ${idx <= 0 ? "disabled" : ""}>‹ Vorherige</button><button class="btn big" type="button" data-exnav="1" ${idx >= ids.length - 1 ? "disabled" : ""}>Nächste ›</button></div>`;
     view.innerHTML = h; startClock(); return;
   }
@@ -2169,7 +2206,7 @@ function renderTraining(){
 function warmHtml(title){
   const legs = /Beine/.test(title), wm = cur.warm || {}, items = [["w1", "4–5 min locker warm: Ergometer/Rudergerät, zuhause marschieren oder Treppe (ohne Sprünge, Arme unter Schulterhöhe)"],
     ["w2", legs ? "Korrektiv: Dead Bug und Glute Bridge" : "Korrektiv: 30°-Shrug und Push-up Plus"], ["w3", "Erste Übung: ein leichter Aufwärmsatz"]], n = items.filter(([k]) => wm[k]).length;
-  return `<details class="warm" ${n < items.length ? "open" : ""}><summary>Aufwärmen · ${n}/${items.length}</summary>${items.map(([k, t]) => `<label class="check small"><input type="checkbox" data-warm="${k}" ${wm[k] ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</details>`;
+  return `<details class="warm"><summary>🔥 Aufwärmen · ${n}/${items.length}${n < items.length ? ` <span class="small muted">· antippen</span>` : " ✓"}</summary>${items.map(([k, t]) => `<label class="check small"><input type="checkbox" data-warm="${k}" ${wm[k] ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</details>`;
 }
 function previewRow(id, w, sk, i){
   const e_ = eff(id);
@@ -2183,7 +2220,8 @@ function exBody(base, n, w){
   const id = eff(base), e = EX[id], rir = rirFor(id, w), sg = suggestion(id), mine = setsObj()[id] || [], cleared = !!S().scCleared;
   const rows = Math.max(n, lastMeaningful(mine));
   const gsw = atHome() && eff0(base) !== id ? missingGear(eff0(base)) : [];
-  let h = `<div class="exbody">${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}${doseHtml(id, true)}${atHome() ? gearHtml(id, true) : ""}${DOSE[id]?.hold ? `<div class="tmrslot"></div><button type="button" class="btn small" data-tmrin="${id}">⏱ Halte-Timer</button>` : ""}`;
+  const dn0 = (setsObj()[id] || []).filter(doneSet).length;
+  let h = `<div class="exbody">${dn0 < n ? `<button type="button" class="btn primary big gcgo" data-gc="open" data-v="${base}">▶ Mit Coach: Satz ${dn0 + 1} von ${n}</button>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}${doseHtml(id, true)}${atHome() ? gearHtml(id, true) : ""}${DOSE[id]?.hold ? `<div class="tmrslot"></div><button type="button" class="btn small" data-tmrin="${id}">⏱ Halte-Timer</button>` : ""}`;
   const nAlt = altOptions(base).length - 1;
   if (nAlt > 0) h += `<div class="actions"><button class="btn small" type="button" data-sheet="alt" data-v="${base}">⇄ Alternativen (${nAlt})</button></div>`;
   if (e.img) h += `<button type="button" style="border:0;padding:0;background:none" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${animHtml(e.img, e.name, "Technik ›")}</button>`;
@@ -2249,6 +2287,149 @@ function finishWorkout(){
   openSheet("summary", {sets, prs, prDet, dur, title: SESS[sk].title, vol: vol(cur), prevVol: prevDay ? vol(store.days[prevDay]) : null, prevSets: prevDay ? loggedSets(store.days[prevDay]) : null});
 }
 
+// ---------- Coach: führt Satz für Satz durch – Tempo je Wiederholung, Halten, Seitenwechsel, Eintragen, Pause, nächster Satz ----------
+// Countdowns zeigen jede Zahl eine volle Sekunde, auch die 0; Tempo-Phasen laufen exakt im vorgegebenen Takt.
+let gc = null, gcInt = null, gcVoice = lsGet("coachVoice") ?? true;
+function gcPhases(d){
+  const par = (d.tempo || "").match(/\(([^)]*)\)/)?.[1], out = [];
+  if (par) for (let p of par.split(/,\s*/)) { p = p.trim(); if (!p || /direkt weiter|1½/.test(p)) continue;
+    const m = p.match(/(\d+)(?:–(\d+))?\s*s\b/), sec = m ? (m[2] ? Math.round((+m[1] + +m[2]) / 2) : +m[1]) : /zurück hoch/.test(p) ? 2 : 1;
+    let lab = (m ? p.replace(m[0], " ") : p).replace(/ohne Pause\s*/, "").replace(/\s+/g, " ").trim();
+    lab = lab.replace(/^Pause unten$/, "unten halten").replace(/^(Pause|Stopp)$/, "halten") || "halten";
+    out.push([lab, sec]); }
+  if (!out.length && d.tempo) { const t = d.tempo.match(/^(\w)-(\w)-(\w)-(\w)/); if (t) [["runter", t[1]], ["unten halten", t[2]], ["hoch", t[3]], ["oben halten", t[4]]].forEach(([l, v]) => { const x = v === "X" ? 1 : +v; if (x > 0) out.push([l, x]); }); }
+  if (!out.length && d.hold > 0 && d.hold < 10) out.push(["anspannen", d.hold], ["lösen", 3]);
+  return out;
+}
+function gcPlan(base){
+  const id = eff(base), e = EX[id], d = DOSE[id] || {}, sg = suggestion(id), w = weekNo(selDate), sk = woSession || cur.session;
+  const ph = gcPhases(d), hold = d.hold >= 10 && !ph.length;
+  // Zug-, Curl- und Hebeübungen starten unten: erst die Arbeitsphase, „ablassen“ zuletzt (Drücken startet gestreckt)
+  if (ph.length > 1 && /^(ablassen|zurück|zurücklassen|nach vorn( lassen)?|hoch lassen)$/.test(ph[0][0]) && !ph.some(([l]) => /drücken|ablegen/.test(l)) && id !== "skull") ph.push(ph.shift());
+  const m = (d.dose || "").match(/×\s*(\d+)\s*Wdh/);
+  const target = hold ? (num(sg.reps) >= 10 ? num(sg.reps) : d.hold) : (d.hold > 0 && d.hold < 10 && !d.tempo && m ? +m[1] : num(sg.reps) || lo(e) || 10);
+  return {id, base, name: e.name, mode: hold ? "hold" : ph.length ? "tempo" : "free", ph, target, side: !!d.perSide, rest: restFor(id), n: nSets(base, w, sk), breath: d.breath || "", load: !!e.load, sg};
+}
+const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
+function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 1.1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
+function gcBeep(f = 880, len = .12, vol = .08){ try { const a = audioCtx; if (!a) return; const o = a.createOscillator(), g = a.createGain(); o.frequency.value = f; o.connect(g); g.connect(a.destination); g.gain.value = vol; o.start(); o.stop(a.currentTime + len); } catch {} }
+function gcOpen(base){
+  audioReady(); requestWake(); try { speechSynthesis.getVoices(); } catch {}
+  const pl = gcPlan(base); gc = {pl, i: gcSetIdx(pl.id), side: 0, rep: 0, pi: 0, stage: "ready", end: 0, t0: 0, paused: 0, said: {}};
+  if (gc.i >= pl.n) gc.stage = "done";
+  document.getElementById("gc").hidden = false; document.body.classList.add("gcon"); gcPaint();
+}
+function gcClose(){ clearInterval(gcInt); gcInt = null; try { speechSynthesis.cancel(); } catch {} gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
+// Abschnitt starten: sec = Länge (null = Stoppuhr); countdown = Zahl zählt sichtbar bis 0 und bleibt dort 1 s
+function gcSeg(stage, sec, countdown){ gc.stage = stage; gc.t0 = Date.now(); gc.len = sec; gc.end = sec == null ? 0 : gc.t0 + (sec + (countdown ? 1 : 0)) * 1000; gc.cd = !!countdown; gc.said = {}; gc.paused = 0; gcPaint(); clearInterval(gcInt); gcInt = setInterval(gcTick, 100); }
+function gcGo(){ // nach dem 3-2-1: Satz beginnt
+  const pl = gc.pl; gc.rep = 0; gc.pi = 0;
+  if (pl.mode === "tempo") { gcSay(pl.ph[0][0]); gcSeg("work", pl.ph[0][1]); }
+  else if (pl.mode === "hold") { gcSay(pl.side ? (gc.side ? "Rechte Seite. Halten" : "Linke Seite. Halten") : "Halten"); gcSeg("work", pl.target, true); }
+  else { gcSay(`Los. ${pl.target} Wiederholungen`); gcSeg("work", null); }
+}
+function gcCountIn(){ gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
+function gcAfterWork(){
+  const pl = gc.pl;
+  if (pl.side && !gc.side) { gc.side = 1; gcBeep(660, .2); gcSay("Seite wechseln"); gcSeg("switch", 5, true); return; }
+  gcBeep(988, .25); gcSay("Geschafft. Eintragen"); gc.logReps = pl.mode === "tempo" ? gc.rep : pl.target;
+  gc.stage = "log"; clearInterval(gcInt); gcPaint();
+}
+function gcTick(){
+  if (!gc || gc.paused) return; const now = Date.now(), pl = gc.pl;
+  if (gc.stage === "work" && pl.mode === "free") { const el = document.getElementById("gcT"); if (el) el.textContent = fmtDur((now - gc.t0) / 1000); return; }
+  const left = (gc.end - now) / 1000, show = gc.cd ? Math.max(0, Math.ceil(left - 1)) : Math.max(0, Math.ceil(left));
+  const el = document.getElementById("gcT"); if (el) el.textContent = gc.stage === "rest" || gc.stage === "next" || gc.len >= 60 ? fmtDur(show) : show;
+  const bar = document.getElementById("gcBar"); if (bar) bar.style.width = Math.min(100, (now - gc.t0) / ((gc.len || 1) * 1000) * 100) + "%";
+  if (gc.cd && show <= 3 && show >= 1 && !gc.said[show]) { gc.said[show] = 1; if (gc.stage === "count") { if (show < 3) gcSay(["", "Eins", "Zwei"][show]); } else gcBeep(show === 1 ? 880 : 660, .08, .06); }
+  if (gc.stage === "rest" && show === 10 && gc.len > 15 && !gc.said.t10) { gc.said.t10 = 1; gcSay(`Noch zehn Sekunden. Gleich Satz ${gc.i + 1}`); }
+  if (gc.stage === "work" && pl.mode === "hold" && gc.len >= 20 && show === Math.round(gc.len / 2) && !gc.said.half) { gc.said.half = 1; gcSay("Halbzeit"); }
+  if (gc.stage === "work" && pl.mode === "hold" && gc.len >= 20 && show === 10 && !gc.said.t10) { gc.said.t10 = 1; gcSay("Noch zehn"); }
+  if (left > 0) return;
+  if (gc.stage === "count") { gcBeep(988, .2); gcGo(); }
+  else if (gc.stage === "switch" || gc.stage === "rest") gcCountIn();
+  else if (gc.stage === "next") { gcBeep(988, .2); gcSay("Pause vorbei"); gc.stage = "nextready"; clearInterval(gcInt); gcPaint(); }
+  else if (gc.stage === "work" && pl.mode === "hold") gcAfterWork();
+  else if (gc.stage === "work" && pl.mode === "tempo") {
+    gc.pi++; if (gc.pi >= pl.ph.length) { gc.pi = 0; gc.rep++; }
+    if (gc.rep >= pl.target) { gcAfterWork(); return; }
+    const [lab, sec] = pl.ph[gc.pi]; gcBeep(gc.pi ? 660 : 880, .06, .05);
+    gcSay(gc.pi === 0 ? String(gc.rep + 1) : lab); gcSeg("work", sec);
+  }
+}
+function gcSave(){
+  const pl = gc.pl, id = pl.id, kgIn = document.getElementById("gcKg");
+  setsObj()[id] = setsObj()[id] || []; while (setsObj()[id].length <= gc.i) setsObj()[id].push({});
+  const s = setsObj()[id][gc.i];
+  if (pl.load) { const v = (kgIn?.value || "").trim(); if (!v) { kgIn?.focus(); toast("Gewicht eintragen (0 = Körpergewicht)"); return; } s.kg = v; }
+  s.reps = String(gc.logReps); s.done = false; checkSet(id, pl.base, gc.i); stopRest();
+  gc.i = gcSetIdx(id); gc.side = 0;
+  if (gc.i < pl.n) { gcSay(`Satz gespeichert. ${pl.rest >= 60 ? String(Math.round(pl.rest / 30) / 2).replace(".", ",") + " Minuten" : pl.rest + " Sekunden"} Pause`); gcSeg("rest", pl.rest, true); return; }
+  const sk = woSession || cur.session, w = weekNo(selDate), nx = exList(sk).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk));
+  gc.next = nx || null; gcSay(nx ? `Übung geschafft. Als Nächstes ${EX[eff(nx)].name}` : "Alle Übungen geschafft. Stark!");
+  if (nx) gcSeg("next", pl.rest, true); else { gc.stage = "done"; clearInterval(gcInt); gcPaint(); }
+}
+function gcPaint(){
+  const el = document.getElementById("gc"); if (!el || !gc) return; const pl = gc.pl, st = gc.stage;
+  const setTxt = `Satz ${Math.min(gc.i + 1, pl.n)} von ${pl.n}${pl.side ? (gc.side ? " · rechts" : " · links") : ""}`;
+  const head = `<div class="gch"><div><div class="lab">${esc(setTxt)}</div><b>${esc(pl.name)}</b></div><span class="actions"><button type="button" class="btn ghost" data-gc="voice" aria-label="Stimme ${gcVoice ? "aus" : "an"}">${gcVoice ? "🔊" : "🔇"}</button><button type="button" class="btn ghost" data-gc="close" aria-label="Coach schließen">✕</button></span></div>`;
+  const what = pl.mode === "hold" ? `${pl.target} s halten${pl.side ? " je Seite" : ""}` : `${pl.target} Wdh.${pl.side ? " je Seite" : ""}`;
+  const tempoTxt = pl.mode === "tempo" ? pl.ph.map(([l, x]) => `${x} s ${l}`).join(" · ") : "";
+  const kgTxt = pl.load && pl.sg.kg != null ? ` · ${dec(pl.sg.kg)} kg` : "";
+  const pauseBtn = `<button type="button" class="btn big" data-gc="pause">${gc.paused ? "▶ Weiter" : "⏸ Anhalten"}</button>`;
+  let mid = "", btns = "";
+  if (st === "ready") {
+    mid = `<div class="gcbig"><div class="gcph">Bereit?</div><div class="gcsub">${esc(what)}${kgTxt}</div>${tempoTxt ? `<div class="gctempo">Takt je Wdh.: ${esc(tempoTxt)}</div>` : ""}${pl.breath ? `<div class="small muted">${esc(pl.breath)}</div>` : ""}</div>`;
+    btns = `<button type="button" class="btn primary big" data-gc="start">▶ Los – 3, 2, 1</button>`;
+  } else if (st === "count" || st === "switch") {
+    mid = `<div class="gcbig"><div class="gcph">${st === "switch" ? "Seite wechseln" : "Gleich geht’s los"}</div><div class="gcnum" id="gcT">${gc.len}</div><div class="gcsub">${esc(what)}</div></div>`;
+    btns = pauseBtn;
+  } else if (st === "work") {
+    const big = pl.mode === "tempo" ? pl.ph[gc.pi][0] : pl.mode === "hold" ? "Halten" : "Los!";
+    const nxt = pl.mode === "tempo" && pl.ph.length > 1 ? pl.ph[(gc.pi + 1) % pl.ph.length] : null;
+    mid = `<div class="gcbig work"><div class="gcph">${esc(big)}</div><div class="gcnum" id="gcT">${pl.mode === "free" ? "0:00" : gc.len}</div>${pl.mode === "free" ? "" : `<div class="gcbarw"><div class="gcbar" id="gcBar"></div></div>`}
+      ${pl.mode === "tempo" ? `<div class="gcrep"><b>${gc.rep + 1}</b> / ${pl.target}<span class="small muted"> Wdh.</span></div>${nxt ? `<div class="small muted">danach: ${esc(nxt[0])} ${nxt[1]} s</div>` : ""}` : `<div class="gcsub">${esc(what)}${kgTxt}</div>`}</div>`;
+    btns = pl.mode === "free" ? `<button type="button" class="btn primary big" data-gc="finish">✓ Satz fertig</button>` : `<div class="actions">${pauseBtn}<button type="button" class="btn big" data-gc="finish">Satz beenden</button></div>`;
+  } else if (st === "log") {
+    const a = setsObj()[pl.id] || [], prevKg = a.slice(0, gc.i).reverse().find(x => x.done && x.kg !== "" && x.kg != null)?.kg, kg0 = a[gc.i]?.kg || prevKg || (pl.sg.kg != null ? dec(pl.sg.kg) : "");
+    mid = `<div class="gcbig"><div class="gcph">Satz eintragen</div>
+      <div class="gclog">${pl.load ? `<label><span class="lab">kg</span><input type="text" inputmode="decimal" id="gcKg" value="${esc(kg0)}" placeholder="kg"></label>` : ""}
+      <div><span class="lab">${pl.mode === "hold" ? "Sekunden" : "Wdh."}</span><div class="gcstep"><button type="button" class="btn" data-gc="minus" aria-label="weniger">−</button><b id="gcReps">${gc.logReps}</b><button type="button" class="btn" data-gc="plus" aria-label="mehr">+</button></div></div></div></div>`;
+    btns = `<button type="button" class="btn primary big" data-gc="save">✓ Satz speichern</button>`;
+  } else if (st === "rest") {
+    mid = `<div class="gcbig rest"><div class="gcph">Pause</div><div class="gcnum" id="gcT">${fmtDur(gc.len)}</div><div class="gcbarw"><div class="gcbar" id="gcBar"></div></div><div class="gcsub">Danach: Satz ${gc.i + 1} von ${pl.n} · ${esc(what)}</div><div class="small muted">Locker atmen, Arme ausschütteln.</div></div>`;
+    btns = `<div class="actions"><button type="button" class="btn big" data-gc="rest-15">−15 s</button><button type="button" class="btn big" data-gc="rest15">+15 s</button></div><button type="button" class="btn primary big" data-gc="skip">Pause überspringen ›</button>`;
+  } else if (st === "next" || st === "nextready") {
+    const nn = gc.next ? EX[eff(gc.next)].name : "";
+    mid = `<div class="gcbig rest"><div class="gcph">Übung geschafft ✓</div>${st === "next" ? `<div class="gcnum" id="gcT">${fmtDur(gc.len)}</div><div class="gcbarw"><div class="gcbar" id="gcBar"></div></div>` : `<div class="gcsub">Pause vorbei</div>`}
+      ${EX[pl.id].type !== "k" ? `<div class="lab">Wie viele Wdh. wären im letzten Satz noch gegangen?</div><div class="chips">${["0","1","2","3","4+"].map(r => `<button type="button" data-gc="rir" data-v="${r}" aria-pressed="${String(gc.rir) === r}">${r}</button>`).join("")}</div>` : ""}
+      <div class="gcsub">Als Nächstes: <b>${esc(nn)}</b></div></div>`;
+    btns = `<button type="button" class="btn primary big" data-gc="nextex">▶ Weiter: ${esc(nn)}</button>`;
+  } else {
+    mid = `<div class="gcbig"><div class="gcph">${gc.next === null ? "Alles geschafft 💪" : "Übung erledigt ✓"}</div><div class="gcsub">Alle Sätze sind eingetragen.</div></div>`;
+    btns = `<button type="button" class="btn primary big" data-gc="close">Zurück zum Training</button>`;
+  }
+  el.innerHTML = `<div class="gcin">${head}${mid}<div class="gcbtns">${btns}</div></div>`;
+  if (gcInt && !gc.paused && ["count", "switch", "work", "rest", "next"].includes(st)) gcTick();
+}
+function gcCmd(c, v){
+  if (!gc) return; audioReady(); const pl = gc.pl;
+  if (c === "close") return gcClose();
+  if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
+  if (c === "start" || c === "skip") return gcCountIn();
+  if (c === "pause") { if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; } else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} } return gcPaint(); }
+  if (c === "finish") { clearInterval(gcInt); gcInt = null;
+    gc.logReps = pl.mode === "free" ? pl.target : pl.mode === "hold" ? Math.max(1, Math.min(pl.target, Math.round((Date.now() - gc.t0) / 1000))) : gc.rep + (gc.pi > 0 ? 1 : 0);
+    if (pl.side && !gc.side && pl.mode !== "free") { gc.side = 1; gcSay("Seite wechseln"); return gcSeg("switch", 5, true); }
+    gc.stage = "log"; return gcPaint(); }
+  if (c === "plus" || c === "minus") { gc.logReps = Math.max(0, gc.logReps + (c === "plus" ? 1 : -1)); const r = document.getElementById("gcReps"); if (r) r.textContent = gc.logReps; return; }
+  if (c === "save") return gcSave();
+  if (c === "rest15" || c === "rest-15") { gc.end = Math.max(Date.now() + 2000, gc.end + (c === "rest15" ? 15000 : -15000)); gc.len = Math.round((gc.end - gc.t0) / 1000) - 1; gc.said = {}; return gcTick(); }
+  if (c === "rir") { gc.rir = v; const a = setsObj()[pl.id] || [], last = a[Math.max(a.filter(doneSet).length, 1) - 1]; if (last) { last.rir = v.replace("+", ""); touch(); } return gcPaint(); }
+  if (c === "nextex") { const nx = gc.next; clearInterval(gcInt); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcOpen(nx); }
+}
+addEventListener("click", e => { const b = e.target.closest("[data-gc]"); if (!b) return; if (b.dataset.gc === "open") { gcOpen(b.dataset.v); return; } if (b.closest("#gc")) gcCmd(b.dataset.gc, b.dataset.v); });
+
 // Pausen-Timer & Stoppuhr
 let restNote = null;
 function scheduleNote(){ clearTimeout(restNote); if (restEnd) restNote = setTimeout(() => { if (document.hidden && restEnd) notifyRest(); }, Math.max(0, restEnd - Date.now())); }
@@ -2259,10 +2440,11 @@ function notifyRest(){ try { if (Notification.permission === "granted") navigato
 function updateRestBar(){
   const bar = document.getElementById("restBar"); if (!restEnd || tab !== "training") { bar.hidden = true; return; }
   const left = (restEnd - Date.now())/1000; bar.hidden = false;
-  document.getElementById("restT").textContent = left >= 0 ? fmtDur(left) : "+" + fmtDur(-left);
-  if (left < 0 && !bar.classList.contains("over")) { bar.classList.add("over"); try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch {} }
-  if (left >= 0) bar.classList.remove("over");
-  const mini = document.getElementById("restMiniT"); if (mini) { mini.textContent = left >= 0 ? fmtDur(left) : "+" + fmtDur(-left); mini.parentElement.classList.toggle("over", left < 0); }
+  const rtxt = left > -1 ? fmtDur(Math.max(0, Math.ceil(left))) : "+" + fmtDur(Math.floor(-left));
+  document.getElementById("restT").textContent = rtxt;
+  if (left <= -1 && !bar.classList.contains("over")) { bar.classList.add("over"); try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch {} }
+  if (left > -1) bar.classList.remove("over");
+  const mini = document.getElementById("restMiniT"); if (mini) { mini.textContent = rtxt; mini.parentElement.classList.toggle("over", left <= -1); }
   if (left < -90) stopRest();
 }
 function startClock(){ clearInterval(clockTimer); clockTimer = setInterval(() => { const c = document.getElementById("woClock"); if (!c || !cur?.startedAt || cur.finishedAt || woSession) return clearInterval(clockTimer); c.textContent = fmtDur((Date.now() - Date.parse(cur.startedAt))/1000); }, 1000); }
