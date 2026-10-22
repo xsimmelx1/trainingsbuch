@@ -3036,7 +3036,7 @@ function journeySheet(kind, arg){
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
       ${ctxM ? `<div class="actions"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
-      <div class="rhero">${r.img ? `<img class="rimg" src="${esc(r.img)}" alt="" loading="lazy">` : ""}
+      <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
         ${showPrices() ? (() => { const st = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi", c = recipeCost(r, st), best = prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
@@ -3046,7 +3046,7 @@ function journeySheet(kind, arg){
       <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div><ol class="rsteps">${r.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
-      <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}${r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
+      <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.source ? `<a class="small" href="${esc(r.source)}" target="_blank" rel="noopener">Rezept-Vorlage ↗</a>` : ""}${r.imgOrig ? `<div class="small muted">Foto: <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc((r.source.match(/^https?:\/\/(?:www\.)?([^/]+)/) || [])[1] || "Originalrezept")}</a> (Originalrezept)</div>` : ""}${!r.imgOrig && r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
   }
   return null;
 }
@@ -3084,7 +3084,7 @@ function cookHtml(name){
 function cookTick(){ if (!cook?.run) { clearInterval(cookInt); return; } cook.left = Math.max(0, cook.left - 1); const el = document.getElementById("cookT"); if (el) el.textContent = fmtDur(cook.left);
   if (!cook.left) { cook.run = false; clearInterval(cookInt); beep(); setTimeout(beep, 400); toast("⏱ Zeit ist um"); if (sheetKind === "cook") renderSheetPart(["#cookTm"]); } }
 function shelfHtml(){
-  const are = avoidRe(), ok = recipes.filter(r => recipeOk(r, are)), card = r => `<button type="button" class="scard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">🍴</span>`}<span class="st">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="small muted"><span class="nutri">${recipeNutri(r).protein} g P · </span>${r.activeMin ?? r.timeMin} min${showPrices() ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
+  const are = avoidRe(), ok = recipes.filter(r => recipeOk(r, are)), card = r => `<button type="button" class="scard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">🍴</span>`}<span class="st">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="small muted"><span class="nutri">${recipeNutri(r).protein} g P · </span>${r.activeMin ?? r.timeMin} min${showPrices() ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
   const main = r => catOf(r) === "haupt";
   const shelves = [
     ["★ Favoriten", ok.filter(r => isFav(r.name)), {fav: true}],
@@ -3110,7 +3110,7 @@ function renderRecipes(b){
     <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
     <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · ${list.length} Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
-    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img ? `<img src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
+    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
     ${info("Fotos sind Symbolbilder mit freien Lizenzen (Wikimedia Commons, Flickr), Quelle im Rezept.")}`;
 }
 
@@ -3459,9 +3459,11 @@ function editDay(d, fn){
   store.days[d] = mergeDay(store.days[d], patch); pending[d] = pending[d] ? mergeDay(pending[d], patch) : patch;
   lsSet("pending", pending); cacheAll(); flushDay(d);
 }
+// Rezeptbild: Original der Quellseite (nur verlinkt, nicht kopiert); lädt es nicht, das freie Ersatzfoto
+const recImgTag = (r, cls, lazy = true) => r?.imgOrig || r?.img ? `<img${cls ? ` class="${cls}"` : ""} src="${esc(r.imgOrig || r.img)}" alt="" ${lazy ? 'loading="lazy" ' : ""}decoding="async"${r.imgOrig && r.img ? ` onerror="this.onerror=null;this.src='${esc(r.img)}'"` : ""}>` : "";
 function mealThumb(n){
   const r = recipeByName(n);
-  return r?.img ? `<img class="mthumb" src="${esc(r.img)}" alt="" loading="lazy" decoding="async">` : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : ({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r?.category] || "🍴"}</span>`;
+  return r?.img || r?.imgOrig ? recImgTag(r, "mthumb") : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : ({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r?.category] || "🍴"}</span>`;
 }
 function mealRow(d, m){
   const r = m.info;

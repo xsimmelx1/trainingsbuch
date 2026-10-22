@@ -125,7 +125,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.knuspr.de/cdn-cgi/image/f=auto,onerror=redirect,w=1200,h=630,fit=cover/https://cdn.knuspr.de/images/microsite/hub/protein-pancakes-rezept/1787821560579_1787821454710_fluffy-american-pancakes-with-maple-syrup-and-blueberries_70c377d5.png"
  },
  {
   "name": "Hüttenkäse-Rührei auf Vollkornbrot",
@@ -168,7 +169,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2020/12/vegetarian-denver-omelette-vert.jpg"
  },
  {
   "name": "Räuchertofu-Scramble mit Spinat & Zucchini",
@@ -212,7 +214,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://media.fuersie.de/2023-11/veganes_ruhrei_mit_tofu.jpg?focus_crop=7079%2C3982%2C0.526%2C0.511&width=1200"
  },
  {
   "name": "Freezer-Breakfast-Burritos (2 Stück)",
@@ -262,7 +265,8 @@
   "dev": [
    "mixer",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2025/01/meal-prep-breakfast-burritos-15.jpg"
  },
  {
   "name": "Jalapeño-Hüttenkäse-Toast (XL)",
@@ -303,7 +307,8 @@
   "temp": "warm",
   "dev": [
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2026/05/Jalapeno-Popper-Cottage-Cheese-Toast-process-hero-6.jpg"
  },
  {
   "name": "Beeren-Zimt-Baked-Protein-Oats",
@@ -347,7 +352,8 @@
   "temp": "beides",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://joytothefood.com/wp-content/uploads/2025/07/apple-pie-baked-oats-10.jpg"
  },
  {
   "name": "Ei-Hüttenkäse-Muffins (3 Stück)",
@@ -438,7 +444,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://biancazapatka.com/wp-content/uploads/2026/07/salat-im-glas.jpg"
  },
  {
   "name": "Linsen-Soja-Bolognese mit Vollkornnudeln",
@@ -484,7 +491,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://media.fuersie.de/2024-05/fk_vegetarischebolognese_1.jpg?focus_crop=2003%2C1126%2C0.5%2C0.577&width=1200"
  },
  {
   "name": "Chili sin Carne mit Sojagranulat & Reis",
@@ -578,7 +586,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2025/11/White-Chickpea-Chili-vert.jpg"
  },
  {
   "name": "Pasta mit Hüttenkäse-Paprika-Tomatensauce",
@@ -622,7 +631,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2025/01/high-protein-pasta-sauce-11.jpg"
  },
  {
   "name": "Teriyaki-Tofu-Edamame-Bowl",
@@ -669,7 +679,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.innerbuddies.com/cdn/shop/files/high-protein-high-fiber-tofu-edamame-meal-prep-bowl.webp?v=1790032343&width=1200"
  },
  {
   "name": "Couscous-Kichererbsen-Pfanne mit Feta",
@@ -714,7 +725,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://biancazapatka.com/wp-content/uploads/2026/03/couscous-gemuese-pfanne-1.jpg"
  },
  {
   "name": "Räuchertofu-Döner-Wrap mit Skyr-Knoblauchsoße",
@@ -759,7 +771,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2026/07/eat_this_veganer_raeuchertofu-doener_002.jpg"
  },
  {
   "name": "Marry-Me-Linsen mit Räuchertofu (light)",
@@ -805,7 +818,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2026/10/Marry-Me-Lentils-hero-6.jpg"
  },
  {
   "name": "Tofu-Kichererbsen-Tikka-Masala mit Reis",
@@ -850,7 +864,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2020/09/vegan-chickpea-tikka-masala-11.jpg"
  },
  {
   "name": "Nudelgulasch mit Soja-Hack",
@@ -896,7 +911,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2024/03/eat_this_veganes_nudelgulasch_mit_tofu_003.jpg"
  },
  {
   "name": "Blech-Tofu mit Kartoffeln, Bohnen & Kräuterquark",
@@ -940,7 +956,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2019/04/tofu-vom-blech-mit-spargel-und-kartoffeln-10.jpg"
  },
  {
   "name": "Grüne Spinat-Protein-Pasta mit Tofu-Cashew-Soße",
@@ -985,7 +1002,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2025/04/eat_this_vegane_high_protein_baerlauch-pasta_003.jpg"
  },
  {
   "name": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
@@ -1075,7 +1093,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://joytothefood.com/wp-content/uploads/2026/03/huevos-rancheros-1.jpg"
  },
  {
   "name": "Blech-Fajitas mit Räuchertofu & Bohnen",
@@ -1120,7 +1139,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://biancazapatka.com/wp-content/uploads/2024/05/fajitas.jpg"
  },
  {
   "name": "Harzer-Käse-Brot mit Gurke",
@@ -1235,7 +1255,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.liveeatlearn.com/wp-content/uploads/2024/04/Fried-Chickpeas-hero-vert.jpg"
  },
  {
   "name": "Erdnuss-Hafer-Energy-Balls (2 Stück)",
@@ -1273,7 +1294,8 @@
   "activeMin": 15,
   "difficulty": "leicht",
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2017/06/Energyballs-10.jpg"
  },
  {
   "name": "Quark-Beeren-Bowl mit Hafer & Erdnussmus",
@@ -1392,7 +1414,8 @@
   "activeMin": 10,
   "difficulty": "leicht",
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://joytothefood.com/wp-content/uploads/2026/05/greek-yogurt-ice-cream-3.jpg"
  },
  {
   "name": "Quark-Tiramisu im Glas",
@@ -1429,7 +1452,8 @@
   "activeMin": 8,
   "difficulty": "leicht",
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://joytothefood.com/wp-content/uploads/2024/02/high-protein-tiramisu-slice-1.jpg"
  },
  {
   "name": "Chia-Skyr-Pudding mit Beeren",
@@ -1467,7 +1491,8 @@
   "activeMin": 5,
   "difficulty": "leicht",
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://joytothefood.com/wp-content/uploads/2026/04/chia-pudding-with-greek-yogurt-1.jpg"
  },
  {
   "name": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
@@ -1513,7 +1538,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2019/02/protein-sandwich-mit-pilz-bacon-und-gruenkohl-10.jpg"
  },
  {
   "name": "Quark-Kaiserschmarrn mit Zwetschgen",
@@ -1558,7 +1584,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.tyrol.com//fileadmin/tirol/Kulinarik/Rezepte/Quark-Kaiserschmarrn/Topfen_Kaiserschmarrn_Tirol_Werbung_Koschitzki_Kathrin_Keine_Ortsangabe-2.jpg"
  },
  {
   "name": "Hüttenkäse-Flatbread-Wrap mit Ei & Spinat",
@@ -1604,7 +1631,8 @@
   "dev": [
    "mixer",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://cleananddelicious.com/wp-content/uploads/2024/08/cottage-cheese-flatbread.jpg"
  },
  {
   "name": "Kichererbsen-Omelett mit Räuchertofu & Pilzen",
@@ -1650,7 +1678,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.vegkit.com/wp-content/uploads/sites/2/2021/12/18170228/25096_omelette_full-1024x807.jpg"
  },
  {
   "name": "Herzhafte Hartkäse-Oats mit Spiegelei & Pilzen",
@@ -1697,7 +1726,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://feelgoodfoodie.net/wp-content/uploads/2021/01/Savory-Oatmeal-with-Egg-06.jpg"
  },
  {
   "name": "Spinat-Pilz-Feta-Quiche ohne Boden",
@@ -1745,7 +1775,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2021/11/Spinach-and-Mushrooom-Crustless-Quiche-Overhead-Wide.jpg"
  },
  {
   "name": "Huevos Rancheros mit schwarzen Bohnen & Feta",
@@ -1791,7 +1822,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cookieandkate.com/images/2017/05/best-huevos-rancheros-recipe-2-225x225.jpg"
  },
  {
   "name": "Hafer-Quark-Brötchen mit Hüttenkäse & Gurke (2 Stück)",
@@ -1839,7 +1871,8 @@
   "temp": "kalt",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://media.fuersie.de/2024-06/haferflocken-brotchen-haferflocken-diaet-rezepte.jpeg?focus_crop=1370%2C771%2C0.499%2C0.434&width=1200"
  },
  {
   "name": "Knusprige Ofen-Tofu-Würfel mit Skyr-Sriracha-Dip",
@@ -1883,7 +1916,8 @@
   "temp": "warm",
   "dev": [
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2026/01/Easy-Baked-Tofu-Overhead-With-Spatula.jpg"
  },
  {
   "name": "Gefüllte Skyr-Senf-Eier",
@@ -1925,7 +1959,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2024/02/Deviled-Eggs-Close.jpg"
  },
  {
   "name": "Weißer-Bohnen-Hüttenkäse-Dip mit Gemüse & Knäcke",
@@ -1970,7 +2005,8 @@
   "temp": "kalt",
   "dev": [
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.forkinthekitchen.com/wp-content/uploads/2024/10/241003.white_.bean_.dip-1063.jpg"
  },
  {
   "name": "Skyr-Tzatziki mit Vollkorn-Knäcke",
@@ -2011,7 +2047,8 @@
   "activeMin": 10,
   "difficulty": "leicht",
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://flavorthemoments.com/wp-content/uploads/2024/08/greek-tzatziki-recipe-1.jpg"
  },
  {
   "name": "Erdnuss-Bananen-Quark-Shake",
@@ -2054,7 +2091,8 @@
   "temp": "kalt",
   "dev": [
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2022/07/Peanut-Butter-Banana-Smoothie-side.jpg"
  },
  {
   "name": "Schoko-Seidentofu-Mousse mit Quark & Himbeeren",
@@ -2099,7 +2137,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://itdoesnttastelikechicken.com/wp-content/uploads/2026/04/Silken-Tofu-Chocolate-Mousse.jpg"
  },
  {
   "name": "Protein-Käsekuchen ohne Boden mit Beeren",
@@ -2145,7 +2184,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://baketotheroots.de/wp-content/uploads/2014/04/140406_BottomlessCheesecake_0002_00-225x225.jpg"
  },
  {
   "name": "Blaubeer-Seidentofu-Skyr-Smoothie",
@@ -2188,7 +2228,8 @@
   "temp": "kalt",
   "dev": [
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://naturallieplantbased.com/wp-content/uploads/2024/03/silken-tofu-smoothie-6.jpg"
  },
  {
   "name": "Linseneintopf mit Räuchertofu & Kartoffeln",
@@ -2235,7 +2276,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.kitchenstories.com/wp-content/uploads/sites/13/2026/08/af9cc5f1b8f05b0daec3b0ca0122ea6c-8c48bc0e-bb2d-4785-8e80-ef46931c2106.jpg"
  },
  {
   "name": "Erdnuss-Nudeln mit Tofu & Edamame",
@@ -2282,7 +2324,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://rainbowplantlife.com/wp-content/uploads/2025/04/peanutnoodlesHero-4.jpg"
  },
  {
   "name": "Gebratener Reis mit Tofu, Ei & Erbsen",
@@ -2329,7 +2372,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2022/03/Vegetable-Fried-Rice-Overhead-in-Pan-With-Spoon.jpg"
  },
  {
   "name": "Griechischer Nudelsalat mit Kichererbsen, Feta & Skyr-Dill-Dressing",
@@ -2375,7 +2419,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2016/08/Creamy-Greek-Pasta-Salad-above-1.jpg"
  },
  {
   "name": "Mapo Tofu mit Sojahack, Brokkoli & Reis",
@@ -2513,7 +2558,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://biancazapatka.com/wp-content/uploads/2022/05/veganes-gyros.jpg"
  },
  {
   "name": "Protein-Lasagne mit Linsen-Soja-Ragù & Hüttenkäse",
@@ -2565,7 +2611,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2012/03/vegane-lasagne-bolognese-2.jpg"
  },
  {
   "name": "Linsen-Shepherd's-Pie mit Quark-Kartoffelpüree",
@@ -2617,7 +2664,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2016/01/Vegetarian-Shepherds-Pie-above-scoop-1.jpg"
  },
  {
   "name": "Eier-Curry mit Kichererbsen, Spinat & Reis",
@@ -2662,7 +2710,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/04/egg-curry-recipe.jpg"
  },
  {
   "name": "Bohnen-Käse-Quesadillas mit Skyr-Salsa-Dip",
@@ -2708,7 +2757,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2012/02/Hearty-Black-Bean-Quesadillas-stack.jpg"
  },
  {
   "name": "Gefüllte Paprika mit Sojahack, Reis & Feta",
@@ -2756,7 +2806,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cookieandkate.com/images/2020/10/vegetarian-stuffed-peppers-recipe-3-225x225.jpg"
  },
  {
   "name": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
@@ -2804,7 +2855,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2020/07/1-Black-Bean-Burgers-Front.jpg"
  },
  {
   "name": "Ofen-Feta-Pasta mit weißen Bohnen & Spinat",
@@ -2848,7 +2900,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.budgetbytes.com/wp-content/uploads/2026/02/Feta-Pasta-Overhead-Spoon.jpg"
  },
  {
   "name": "Bibimbap-Bowl mit Tofu, Edamame & Spiegelei",
@@ -2895,7 +2948,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.eat-this.org/wp-content/uploads/2016/08/15-08-good-life-bibimbap-bowl-3.jpg"
  },
  {
   "name": "Protein-Porridge mit Skyr, Walnüssen & Mango",
@@ -2939,7 +2993,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/57468978/1/57468978.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Hüttenkäse-Pancakes mit Blaubeeren & Mandeln",
@@ -2987,7 +3042,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/56846986/1/56846986.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Herzhafte Spinat-Pancakes mit Kräuter-Skyr",
@@ -3039,7 +3095,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/32052049/8/32052049.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Mediterranes Omelett-Sandwich",
@@ -3086,7 +3143,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/34581632/2/34581632.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Rote-Linsen-Pasta mit Rucola, Mozzarella & Pinienkernen",
@@ -3131,7 +3189,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/57174736/1/57174736.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Linsennudel-Auflauf mit Brokkoli & Mozzarella",
@@ -3176,7 +3235,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/34581860/2/34581860.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Sushi-Bowl mit Tofu & Edamame",
@@ -3228,7 +3288,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/31182809/6/31182809.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Linsen-Kürbis-Eintopf mit Tofu",
@@ -3277,7 +3338,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/30636264/7/30636264.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Schwäbische Linsen mit Spätzle & Räuchertofu",
@@ -3330,7 +3392,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/57173930/3/57173930.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Kürbis-Tofu-Curry mit Reis",
@@ -3379,7 +3442,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/31362378/9/31362378.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Halloumi-Tikka-Masala mit Reis",
@@ -3436,7 +3500,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/57506315/1/57506315.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Knusprige Tofu-Ecken in Erdnusssoße mit Brokkoli",
@@ -3494,7 +3559,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/34646961/2/34646961.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Wirsingrouladen mit Räuchertofu-Füllung & Tomatensugo",
@@ -3544,7 +3610,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/36761979/4/36761979.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Rührtofu mit Kartoffelpüree & Rahmspinat",
@@ -3595,7 +3662,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/34937968/5/34937968.png?impolicy=recipe-meta-image"
  },
  {
   "name": "High-Protein-Spinat-Lasagne mit Hüttenkäse",
@@ -3641,7 +3709,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/56966536/4/56966536.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Burrito mit Soja-Hack, Bohnen & Käsesoße",
@@ -3689,7 +3758,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/30961602/8/30961602.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Hüttenkäse-Taler mit Rucolasalat & Kräuterquark",
@@ -3739,7 +3809,8 @@
   "temp": "warm",
   "dev": [
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/55559775/2/55559775.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Knäcke-Pizza mit Hüttenkäse, Oliven & Gouda",
@@ -3783,7 +3854,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/52905458/2/52905458.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Linsen-Dal mit Brokkoli, Tofu-Bites & Quinoa",
@@ -3841,7 +3913,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/bbe32881-11ed-4bff-a1d2-5d0b214712c3/1x1_fallback_linsendal-mit-brokkoli-tofu-bites-und-quinoa-1774377040.jpeg"
  },
  {
   "name": "Panierte Tofu-Sticks mit Kichererbsen-Spinat & Kartoffeln",
@@ -3886,7 +3959,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/15a78986-2aa5-45da-8950-e55361149eeb/1x1_fallback_panierte-tofusticks-mit-spinat-und-kartoffeln-1774377083.jpeg"
  },
  {
   "name": "Tomaten-Mozzarella-Omelett aus dem Ofen",
@@ -3933,7 +4007,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/442535e1-4ebd-474c-b91c-a523ab71ac5b/1x1_fallback_tomaten-mozzarella-omelett-aus-dem-ofen-1774377168.jpeg"
  },
  {
   "name": "Chinesischer Zitronen-Tofu mit Gemüsereis",
@@ -3983,7 +4058,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/63dd38cb-dbe7-4d6d-9da5-3617f6213de8/1x1_fallback_chinesischer-zitronen-tofu-an-gemuesereis-1774376853.jpeg"
  },
  {
   "name": "Power-Bowl mit Bulgur, Tofu & Joghurt-Dressing",
@@ -4036,7 +4112,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/8cfee27f-3196-4fc0-a82a-c91f8c3d3fca/1x1_fallback_power-bowl-mit-bulgur-und-tofu-1774377101.jpeg"
  },
  {
   "name": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
@@ -4086,7 +4163,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/de5d1230-5baf-4f98-8a3e-9b6c6c942440/1x1_fallback_tofu-souvlaki-auf-griechischem-bauernsalat-1774377167.jpeg"
  },
  {
   "name": "Linsen-Tofu-Curry mit Pak Choi",
@@ -4135,7 +4213,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/4e8f289a-8367-4ba8-abce-f799a01cca1d/1x1_fallback_linsen-tofu-curry-mit-pak-choi-1774377040.jpeg"
  },
  {
   "name": "Rote-Linsen-Salat mit Feta, Mango & Cashews",
@@ -4182,7 +4261,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/910893d9-3781-4239-8324-9148186777d8/1x1_fallback_roter-linsensalat-1774377119.jpeg"
  },
  {
   "name": "Gebratene Quarkklöße mit Salat & Radieschen",
@@ -4229,7 +4309,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/cffd898c-d38f-4234-a158-5ca4922cb686/1x1_fallback_gebratene-quarkkloesse-mit-salat-und-radieschen-1774376906.jpeg"
  },
  {
   "name": "Nudel-Frittata mit grünem Spargel",
@@ -4273,7 +4354,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/4a1f5ed4-4279-49d4-a4b2-cbd225862a3d/1x1_fallback_nudel-spargel-frittata-1774377070.jpeg"
  },
  {
   "name": "Falafel in orientalischer Linsensuppe mit Skyr",
@@ -4324,7 +4406,8 @@
    "herd",
    "mixer",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/6e22c482-da19-45d9-a8c8-bc9ff217ed3e/1x1_fallback_falafel-in-orientalischer-linsensuppe-1774376880.jpeg"
  },
  {
   "name": "Gebackener Halloumi mit Ofengemüse",
@@ -4373,7 +4456,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/311dc555-2537-47bf-b754-516f2274f23a/1x1_fallback_gebackener-halloumi-mit-gemuese-1774376903.jpeg"
  },
  {
   "name": "Orientalischer Linsen-Feta-Eintopf",
@@ -4421,7 +4505,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/2eaf0915-9cd8-44f8-a9b2-a41f132180af/1x1_fallback_orientalischer-linseneintopf-1774377080.jpeg"
  },
  {
   "name": "Tofu-Bowl mit Bohnen, Ofengemüse & Hummus",
@@ -4473,7 +4558,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/1f84f9ef-5e9c-4f79-ba08-d4bd33fe324a/1x1_fallback_tofu-bowl-mit-bohnen-toskana-gemuese-und-hummus-1774377167.jpeg"
  },
  {
   "name": "Schnelle Miso-Ramen mit Tofu & Ei",
@@ -4526,7 +4612,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/24c54ded-3353-4ae1-8773-7b527b5f4db0/1x1_fallback_schnelle-vegane-miso-ramen-mit-tofu-1774377131.jpeg"
  },
  {
   "name": "Pellkartoffeln mit extra Kräuterquark",
@@ -4571,7 +4658,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/937790af-743e-44c8-b462-a9468faacddf/1x1_fallback_pellkartoffeln-mit-kraeuterquark-1774377088.jpeg"
  },
  {
   "name": "Frühstücks-Quarkspeise mit Beeren & Studentenfutter",
@@ -4614,7 +4702,8 @@
    "title": "Post-workout meal"
   },
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/1a98a97d-fcef-46c2-8b85-bc0ff72c2240/1x1_fallback_fruehstuecksquarkspeise-1774376898.jpeg"
  },
  {
   "name": "Dinkel-Crêpes mit Blaubeerquark",
@@ -4659,7 +4748,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/20e7b748-db88-47dc-8d72-42104d8926f0/1x1_fallback_dinkel-crepes-mit-blaubeerquark-1774376864.jpeg"
  },
  {
   "name": "Beeren-Skyr mit Mandeln & Rosinen",
@@ -4700,7 +4790,8 @@
   "temp": "kalt",
   "dev": [
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/616ede72-1a22-44a6-af64-bb80b2f4b909/1x1_fallback_beeren-skyr-mit-mandeln-und-rosinen-1774376811.jpeg"
  },
  {
   "name": "Möhren-Rührei mit Räuchertofu & Feta",
@@ -4745,7 +4836,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49613120000000.jpg"
  },
  {
   "name": "Veggie-Bowl mit Crispy-Tofu, Ofengemüse & Kichererbsen",
@@ -4797,7 +4889,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49613070000000.jpg"
  },
  {
   "name": "Kichererbsen-Pasta mit Linsennudeln & Hartkäse",
@@ -4842,7 +4935,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49615950000000.jpg"
  },
  {
   "name": "Dinkel-Wraps mit Hüttenkäse-Avocado-Creme",
@@ -4890,7 +4984,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49611140000000.jpg"
  },
  {
   "name": "Tofu-Shawarma mit Ofen-Blumenkohl & Skyr-Soße",
@@ -4944,7 +5039,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe7101003_chicken-shawarma-blumenkohl:k-smartcrop-og-1354"
  },
  {
   "name": "Süßkartoffel-Curry-Omelett mit Kichererbsen",
@@ -4991,7 +5087,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe3323176_suesskartoffel-curry-omelett:k-smartcrop-og-1354"
  },
  {
   "name": "Gemüse-Reisrösti mit Kräuterquark & Radieschensalat",
@@ -5042,7 +5139,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe1299_gemuese-reis-roesti:k-smartcrop-og-1354"
  },
  {
   "name": "Wraps mit gerösteten weißen Bohnen, Avocado & Rotkohl",
@@ -5094,7 +5192,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe10189185_geroestete-bohnen-wraps:k-smartcrop-og-1354"
  },
  {
   "name": "Linsen-Brokkoli-Salat mit Feta & Aprikosen",
@@ -5142,7 +5241,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe4675_linsen-brokkoli-salat:k-smartcrop-og-1354"
  },
  {
   "name": "Soba-Bowl mit Räuchertofu, Spargel & Paprika",
@@ -5190,7 +5290,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe50734485_tofu-bowl-soba-asia-vegan:k-smartcrop-og-1354"
  },
  {
   "name": "Linsen-Haferflocken-Bratlinge mit Quark-Joghurt-Dip",
@@ -5241,7 +5342,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe4632_linsen-haferflocken-bratlinge-vegetarisch:k-smartcrop-og-1354"
  },
  {
   "name": "Tofu-Brokkoli-Pfanne mit Cashews & Bandnudeln",
@@ -5291,7 +5393,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2231421357481765/bilder/965151/crop-960x540/tofu-brokkoli-pfanne-mit-cashewkernen.jpg"
  },
  {
   "name": "Avocado-Hüttenkäse-Salat mit Ei & Rucola",
@@ -5335,7 +5438,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/370901122823962/bilder/1187155/crop-960x540/avocado-huettenkaese-salat.jpg"
  },
  {
   "name": "Gefüllte Paprika mit Kräuter-Hüttenkäse",
@@ -5376,7 +5480,8 @@
   "temp": "warm",
   "dev": [
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1786451288801668/bilder/1500731/crop-960x540/gefuellte-paprika-mit-huettenkaese.jpg"
  },
  {
   "name": "Gemüse-Frittata mit Hüttenkäse & Tomaten",
@@ -5423,7 +5528,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3122161465385844/bilder/1444703/crop-960x540/zucchini-paprika-moehren-frittata-mit-huettenkaese-und-tomaten.jpg"
  },
  {
   "name": "Tofu-Gemüse-Pfanne mit Kokosmilch & Reis",
@@ -5471,7 +5577,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1893301308285830/bilder/1157150/crop-960x540/tofu-gemuese-pfanne-mit-kokosmilch.jpg"
  },
  {
   "name": "Quark-Pizza ohne Hefe mit Mozzarella & Gemüse",
@@ -5517,7 +5624,8 @@
   "temp": "warm",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3573581536503630/bilder/1596210/crop-960x540/pizzateig-mit-quark-ohne-oel-und-ohne-hefe.jpg"
  },
  {
   "name": "Hüttenkäse-Laibchen mit Kernen & Kräutern",
@@ -5562,7 +5670,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/452611137753390/bilder/1166476/crop-960x540/huettenkaeselaibchen.jpg"
  },
  {
   "name": "Penne-Spinat-Auflauf mit Feta & Ei",
@@ -5607,7 +5716,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/36085419/1/36085419.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Rosenkohl-Kartoffel-Auflauf mit Hartkäse",
@@ -5652,7 +5762,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/33029528/5/33029528.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Pikante Berglinsen-Gemüse-Pfanne mit Kräuterquark",
@@ -5701,7 +5812,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/30230823/9/30230823.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Linsen-Pilz-Bowl mit Naturreis, Avocado & Skyr",
@@ -5752,7 +5864,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/30636212/6/30636212.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Thai-Curry mit Tofu, Kürbis & grünen Bohnen",
@@ -5807,7 +5920,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/32059684/6/32059684.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Pilzragout mit Räuchertofu, Paprika & Wildreis",
@@ -5860,7 +5974,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/31226577/6/31226577.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Smashed Potatoes mit Zitronen-Kräuterquark",
@@ -5908,7 +6023,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/30894498/7/30894498.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Gefüllte Spitzpaprika mit Feta-Hüttenkäse-Creme",
@@ -5950,7 +6066,8 @@
   "temp": "warm",
   "dev": [
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/57309495/2/57309495.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Vegetarischer falscher Hase mit Erbsen-Möhren-Gemüse",
@@ -6004,7 +6121,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/34704539/1/34704539.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Curry-Tomatensuppe mit roten Linsen & Hirtenkäse",
@@ -6052,7 +6170,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/53309218/1/53309218.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Halloumi-Carbonara mit Hartkäse",
@@ -6097,7 +6216,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/44316972/2/44316972.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Ofengemüse-Salat mit Halloumi & Kichererbsen",
@@ -6148,7 +6268,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://c.rewe-static.de/56846684/2/56846684.png?impolicy=recipe-meta-image"
  },
  {
   "name": "Seitan-Gulasch mit Paprika & Kartoffeln",
@@ -6198,7 +6319,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/11f7c6c6-1902-4e2c-b335-3c44f9c89168/1x1_fallback_seitan-gulasch-mit-kartoffeln-1774377143.jpeg"
  },
  {
   "name": "Kohlrabi-Lasagne mit Senfcreme",
@@ -6250,7 +6372,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/94d4a6f0-ced0-4f54-ae8c-834151f9dbcb/1x1_fallback_kohlrabilasagne-mit-senfcreme-1774377013.jpeg"
  },
  {
   "name": "Rosmarinkartoffeln mit Weiße-Bohnen-Creme & Caprese",
@@ -6304,7 +6427,8 @@
    "herd",
    "mixer",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/dcc7f313-43a4-438a-81ff-cf5d592dd1ac/1x1_fallback_rosmarinkartoffeln-mit-weisser-bohnenpaste-und-caprese-salat-1774377116.jpeg"
  },
  {
   "name": "Tofu-Burger mit Senf-Skyr-Soße",
@@ -6352,7 +6476,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/ae2c5b29-f7cf-4f6f-a8e0-f72bc299fba1/1x1_fallback_veggie-burger-mit-tofu-1774377193.jpeg"
  },
  {
   "name": "Lauch-Soja-Hack-Suppe",
@@ -6399,7 +6524,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/500ab310-f37e-4aca-966a-d2da288ff665/1x1_fallback_vegane-hack-lauch-suppe-1774377175.jpeg"
  },
  {
   "name": "Spinat-Crêpes mit Kräuterquark & Radieschen-Feldsalat",
@@ -6449,7 +6575,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/3dcdbfe1-3c37-4363-b221-8803e22ad810/1x1_fallback_spinatcrepe-mit-kraeuterquark-und-feldsalat-mit-knackigen-radieschen-1774377156.jpeg"
  },
  {
   "name": "Rote-Bete-Quinoa mit Tofu & Basilikum",
@@ -6496,7 +6623,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/4a135a3f-a0b0-42a5-94be-b759330cf978/1x1_fallback_rote-bete-quinoa-und-tofu-1774377118.jpeg"
  },
  {
   "name": "Hokkaido-Linsen-Cashew-Curry-Eintopf mit Joghurt",
@@ -6545,7 +6673,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/1bb8ec0d-f695-456e-b81f-3f3a3886e0cb/1x1_fallback_hokkaido-linsen-cashew-curry-eintopf-1774376964.jpeg"
  },
  {
   "name": "Tofu süß-sauer mit Quinoa",
@@ -6593,7 +6722,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/a8f71ea0-e581-4d45-b28a-e4329928b553/1x1_fallback_tofu-suess-sauer-1774377167.jpeg"
  },
  {
   "name": "Ofen-Tofu auf Bandnudeln mit Brokkoli & Tomatensoße",
@@ -6646,7 +6776,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/7065a3dd-1a9a-4c35-bf0c-c96467eee7c7/1x1_fallback_gebackener-tofu-auf-nudeln-mit-gemuese-1774376904.jpeg"
  },
  {
   "name": "Rote-Linsen-Salat mit Camembert, Trauben & Walnüssen",
@@ -6692,7 +6823,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/5ad850b4-7412-4ebe-a983-4b4236c9509a/1x1_fallback_salat-mit-roten-linsen-camembert-und-trauben-1774377125.jpeg"
  },
  {
   "name": "Spaghetti-Auflauf mit Hüttenkäse & Tomaten",
@@ -6737,7 +6869,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2227511356870054/bilder/533113/crop-960x540/spaghettiauflauf-mit-huettenkaese-und-tomaten.jpg"
  },
  {
   "name": "Zucchini-Kichererbsen-Curry mit Reis",
@@ -6787,7 +6920,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2746431426709816/bilder/1225667/crop-960x540/zucchini-kichererbsen-curry.jpg"
  },
  {
   "name": "Mango-Linsensalat mit mariniertem Tofu",
@@ -6837,7 +6971,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3218701478967636/bilder/1094135/crop-960x540/mango-linsensalat-mit-mariniertem-tofu.jpg"
  },
  {
   "name": "Indischer Spinat-Tofu mit Reis (Palak-Style)",
@@ -6885,7 +7020,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/671151169215630/bilder/1035288/crop-960x540/tofu-mit-indischem-spinat.jpg"
  },
  {
   "name": "Tofu-Stroganoff mit Champignons & Bandnudeln",
@@ -6934,7 +7070,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2913411443624213/bilder/839243/crop-960x540/tofu-stroganoff.jpg"
  },
  {
   "name": "Backofengemüse mit Kidneybohnen & Schafskäse",
@@ -6985,7 +7122,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe3899_backofengemuese-reibekuchen:k-smartcrop-og-1354"
  },
  {
   "name": "Crispy-Tempeh-Bowl mit Reis, Gemüse & Kresse",
@@ -7037,7 +7175,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe32605251_crispy-tempeh-bowl-kresse-vegan:k-smartcrop-og-1354"
  },
  {
   "name": "Schmorgurken mit Kichererbsen, Feta & Dill",
@@ -7086,7 +7225,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe5675877_schmorgurken-kichererbsen-feta:k-smartcrop-og-1354"
  },
  {
   "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
@@ -7144,7 +7284,8 @@
   "dev": [
    "herd",
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe49519987_reis-salat-bowl-humus-falafel:k-smartcrop-og-1354"
  },
  {
   "name": "Gelbes Tofu-Linsen-Curry mit Möhren & Paprika",
@@ -7194,7 +7335,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49598040000000.jpg"
  },
  {
   "name": "Griechischer Spinatreis mit gebackenem Feta",
@@ -7242,7 +7384,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49603980000000.jpg"
  },
  {
   "name": "Tofu-Köttbullar mit Rahmsoße & Kartoffeln",
@@ -7294,7 +7437,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49600610000000.jpg"
  },
  {
   "name": "Vegetarische Moussaka mit Linsen & Hartkäse",
@@ -7348,7 +7492,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://www.aldi-sued.de/content/dam/aldi/emea/de-aldisued/editorial/rezepte/rezeptdetailseiten/Rezept_Article_RZ49607870000000.jpg"
  },
  {
   "name": "Indischer Rote-Linsen-Eintopf mit Reis & Skyr",
@@ -7398,7 +7543,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1156681221835614/bilder/961156/crop-960x540/indischer-linseneintopf.jpg"
  },
  {
   "name": "Rote-Linsen-Kartoffel-Eintopf mit Quark-Klecks",
@@ -7447,7 +7593,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1597321267001647/bilder/1343049/crop-960x540/linseneintopf-mit-roten-linsen.jpg"
  },
  {
   "name": "Kenianischer Tellerlinsen-Eintopf mit Kartoffeln",
@@ -7496,7 +7643,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3766611573583474/bilder/1504424/crop-960x540/linseneintopf-aus-kenia.jpg"
  },
  {
   "name": "Chana Masala mit Sojagranulat & Reis",
@@ -7546,7 +7694,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2065511334033834/bilder/1227714/crop-960x540/kichererbsen-curry-chana-masala.jpg"
  },
  {
   "name": "Chili sin Carne mit Sojagranulat, Kidney & Mais",
@@ -7597,7 +7746,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/879321193312846/bilder/1088589/crop-960x540/chili-non-carne.jpg"
  },
  {
   "name": "Hüttenkäse-Tomaten-Pasta mit Linsen",
@@ -7642,7 +7792,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/385401125155824/bilder/706215/crop-960x540/pasta-mit-huettenkaese.jpg"
  },
  {
   "name": "Paprika-Rahm-Nudeln mit Hüttenkäse & Erbsen",
@@ -7690,7 +7841,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2620971411655164/bilder/1518658/crop-960x540/bandnudeln-an-paprika-rahm-sosse-mit-huettenkaese.jpg"
  },
  {
   "name": "Gemüsecurry mit Sojaschnetzeln & Reis",
@@ -7740,7 +7892,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2408991380559999/bilder/619070/crop-960x540/gemuesecurry-mit-sojaschnetzel.jpg"
  },
  {
   "name": "Lauwarmer Tellerlinsen-Salat mit Feta & Ei",
@@ -7787,7 +7940,8 @@
   "temp": "beides",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/493471143709716/bilder/1622415/crop-960x540/linsensalat-wie-ich-ihn-mag.jpg"
  },
  {
   "name": "Linsen-Quark-Puffer mit Kräuterquark & Kartoffeln",
@@ -7834,7 +7988,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2820971434141099/bilder/1065614/crop-960x540/linsen-quark-puffer.jpg"
  },
  {
   "name": "Erbsen-Linsen-Eintopf mit Sojaschnetzeln",
@@ -7883,7 +8038,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/436391135261523/bilder/18887/crop-960x540/schrats-erbsen-linsen-eintopf.jpg"
  },
  {
   "name": "Brokkoli-Kichererbsen-Reis mit Erdnusssoße",
@@ -7928,7 +8084,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3074691460107033/bilder/1026062/crop-960x540/brokkoli-erdnuss-reis.jpg"
  },
  {
   "name": "Spanische Kichererbsen-Spinat-Pfanne mit Ei & Brot",
@@ -7978,7 +8135,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/ff034cbb-ccce-4852-a1b4-69bd0880c57d/1x1_fallback_spanische-kichererbsen-gemuese-pfanne-1774377152.jpeg"
  },
  {
   "name": "Bratkartoffeln mit Bohnen-Gemüse & Kräuterquark",
@@ -8025,7 +8183,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/41477dfd-a4f1-404b-ba7c-09086833c3af/1x1_fallback_bratkartoffeln-mit-bohnen-tomaten-gemuese-und-feta-1774376827.jpeg"
  },
  {
   "name": "Rote Linsen mit Kokos-Spinat & Reis",
@@ -8072,7 +8231,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/ad65c0e9-7ae9-46ae-9951-08f072ed2d72/1x1_fallback_rote-linsen-mit-kokos-spinat-1774377117.jpeg"
  },
  {
   "name": "Bohnen-Möhren-Chili mit Knoblauchbrot",
@@ -8124,7 +8284,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/361c65ad-ac0f-44a3-b56f-c16be732a052/1x1_fallback_kidneybohnen-chili-mit-kraeuterbaguette-1774376996.jpeg"
  },
  {
   "name": "Kartoffel-Bohnen-Stampf mit Tomatensoße & Kräuterquark",
@@ -8169,7 +8330,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe5787_kartoffel-bohnenstampf-ofenpaprika:k-smartcrop-og-1354"
  },
  {
   "name": "Eier in Tomaten-Linsen-Soße mit Röstkartoffeln",
@@ -8215,7 +8377,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe5774_tomaten-chili-eier:k-smartcrop-og-1354"
  },
  {
   "name": "Ofen-Frittata mit Erbsen, Kartoffeln & Quark",
@@ -8261,7 +8424,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/c657a1f7-4b24-4dc0-a14a-f5fa6606310a/1x1_fallback_frittata-mit-erbsen-und-feta-1774376892.jpeg"
  },
  {
   "name": "Gemüse-Eintopf mit grünen & weißen Bohnen und Sojaschnetzeln",
@@ -8311,7 +8475,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe4492_kartoffel-bohnen-topf:k-smartcrop-og-1354"
  },
  {
   "name": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping",
@@ -8359,7 +8524,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3735491566893477/bilder/1454034/crop-960x540/rote-linsen-bolognese.jpg"
  },
  {
   "name": "Linsen-Lasagne mit Quark-Schicht",
@@ -8411,7 +8577,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/77df6b35-cc50-4339-b803-efd8558eb4f0/1x1_fallback_linsen-lasagne-1774377039.jpeg"
  },
  {
   "name": "Bohnen-Reis-Burritos mit Sojagranulat & Quark",
@@ -8459,7 +8626,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/09dc2f3d-5bbc-46de-8984-240acf40a528/1x1_fallback_gefuellte-burritos-mit-tomaten-salsa-und-bohnen-mais-gemuese-1774376912.jpeg"
  },
  {
   "name": "Curry-Reispfanne mit Sojaschnetzeln, Erbsen & Ei",
@@ -8506,7 +8674,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe6120_curry-reispfanne:k-smartcrop-og-1354"
  },
  {
   "name": "Curry-Reis-Eintopf mit Kichererbsen & Lauch",
@@ -8552,7 +8721,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe2243_curry-reis-eintopf:k-smartcrop-og-1354"
  },
  {
   "name": "Kichererbsen-Soja-Bolognese mit Nudeln & Joghurt-Dip",
@@ -8599,7 +8769,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe2663_kichererbsen-bolognese:k-smartcrop-og-1354"
  },
  {
   "name": "Linsen-Kartoffel-Chili mit Skyr",
@@ -8646,7 +8817,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe6126_linsen-chili:k-smartcrop-og-1354"
  },
  {
   "name": "Kidney-Hafer-Burger mit Quark-Senf-Soße",
@@ -8694,7 +8866,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe5918_bohnen-burger-vegan:k-smartcrop-og-1354"
  },
  {
   "name": "Ofenkartoffeln mit Ei-Kresse-Quark & Gurkensalat",
@@ -8740,7 +8913,8 @@
   "dev": [
    "herd",
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe4510_ofenkartoffel-joghurt-ei-dip:k-smartcrop-og-1354"
  },
  {
   "name": "Kohlrabi-Kartoffel-Frittata mit Quark",
@@ -8786,7 +8960,8 @@
   "dev": [
    "herd",
    "ofenk"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/e8c3b526-b6b4-48f9-a71d-2c359191937c/1x1_fallback_kohlrabi-kartoffel-frittata-1774377013.jpeg"
  },
  {
   "name": "Grünkohl-Kartoffel-Linsen-Pfanne mit Senfquark",
@@ -8832,7 +9007,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3660921551207262/bilder/1440009/crop-960x540/gruenkohl-kartoffel-linsen-salat.jpg"
  },
  {
   "name": "Schwäbischer Spätzle-Linsen-Salat mit Ei",
@@ -8878,7 +9054,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/798381183474128/bilder/64738/crop-960x540/linsensalat-mit-spaetzle.jpg"
  },
  {
   "name": "Quark-Hafer-Auflauf mit Banane",
@@ -8923,7 +9100,8 @@
   "temp": "beides",
   "dev": [
    "ofen"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1793911289973255/bilder/1159809/crop-960x540/quarkauflauf-luftig-und-locker.jpg"
  },
  {
   "name": "Quark-Hafer-Schüssel mit Banane & Erdnussmus",
@@ -8962,7 +9140,8 @@
    "title": "File:Porrrrrrage.jpg"
   },
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/97fd95a8-ee3c-4c6b-b916-5e29b50f3704/1x1_fallback_himbeer-muesli-mit-quark-und-joghurt-1774376962.jpeg"
  },
  {
   "name": "Bananen-Overnight-Oats mit Skyr & Leinsamen",
@@ -9001,7 +9180,8 @@
    "title": "File:Protein overnight oats.jpg"
   },
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/0f3163eb-8201-42f2-8b15-6526512fc934/1x1_fallback_haferflocken-bowl-1774376953.jpeg"
  },
  {
   "name": "Bananen-Hafer-Quark-Pfannkuchen",
@@ -9043,7 +9223,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/2824371434526210/bilder/1096360/crop-960x540/saftiger-bananen-protein-pancake.jpg"
  },
  {
   "name": "Kakao-Porridge mit Quark",
@@ -9084,7 +9265,8 @@
   "temp": "warm",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe1187_fruechte-muesli:k-smartcrop-og-1354"
  },
  {
   "name": "Schnittlauch-Quark-Brote mit Gurke",
@@ -9121,7 +9303,8 @@
    "title": "File:Schnittlauchbrot-01.jpg"
   },
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1211971226999404/bilder/1127596/crop-960x540/quark-huettenkaese-dip.jpg"
  },
  {
   "name": "Weiße-Bohnen-Quark-Hummus mit Möhrensticks",
@@ -9163,7 +9346,8 @@
   "temp": "kalt",
   "dev": [
    "mixer"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/7d7e3d7d-736b-4c65-8d4d-e81d184297bb/1x1_fallback_weisse-bohnen-hummus-1774377197.jpeg"
  },
  {
   "name": "Gefüllte Senf-Quark-Eier",
@@ -9202,7 +9386,8 @@
   "temp": "kalt",
   "dev": [
    "herd"
-  ]
+  ],
+  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/c389e3d6-866b-4d89-a0ac-df7332339b4c/1x1_fallback_mediterran-gefuellte-eier-1774377056.jpeg"
  },
  {
   "name": "Vanille-Zimt-Quark mit Banane",
@@ -9239,7 +9424,8 @@
    "title": "File:Yogurt fruit bowl.jpg"
   },
   "temp": "kalt",
-  "dev": []
+  "dev": [],
+  "imgOrig": "https://kaufland.media.schwarz/is/image/schwarz/recipe225_vanille-quark:k-smartcrop-og-1354"
  },
  {
   "name": "Porridge mit Banane, Zimt & Nüssen",
