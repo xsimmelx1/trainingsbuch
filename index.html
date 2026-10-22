@@ -275,6 +275,7 @@ body.wo main{padding-bottom:110px}
 .pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
 .pps .pp > span:first-child{flex:none;width:42px;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
 .pps .pp.due > span:first-child{color:var(--warn)}
+.mealacts{flex-wrap:nowrap !important;gap:6px}.mealacts .btn{flex:1;padding:9px 6px;font-size:14px;min-width:0;white-space:nowrap}
 .nextc .actions{display:flex;flex-wrap:nowrap;gap:6px}.nextc .actions .btn{flex:1;white-space:nowrap;padding:9px 6px;font-size:14px;min-width:0}.nextc .actions .btn[data-sheet="meal"]{flex:none;min-width:44px}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.quick .qcard.wide{grid-column:span 2}.quick .qcard b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
@@ -3047,7 +3048,7 @@ function journeySheet(kind, arg){
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
-      ${ctxM ? `<div class="actions"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>` : ""}
+      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Anderes</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
