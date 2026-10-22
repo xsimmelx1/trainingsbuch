@@ -1444,9 +1444,13 @@ function nwItem(p){
   const m = rest.match(/^(\d+(?:[.,]\d+)?|½|[a-zäöü]+)\s*(g|gramm|kg|ml|l|liter|stück|stk\.?|scheiben?|portionen?|teller|tassen?|becher|gläser|glas|el|tl|handvoll|kugeln?|riegel|schalen?|dosen?|flaschen?)?(?:\s+|$)(.*)$/i);
   if (m) { const v = m[1].toLowerCase(), n0 = /^\d/.test(v) ? Number(v.replace(",", ".")) : v === "½" ? .5 : NUMW[v]; if (n0 != null) { q = n0; unit = (m[2] || "").toLowerCase(); rest = m[3] || m[2] || ""; } }
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
-  const r = recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest)));
+  const key = fold((rest || p).trim()), hist = key.length >= 3 && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
+  if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
+  let r = recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest)));
+  const x = r ? null : nwFind(rest || p);
+  if (!r && !x && key.length >= 4 && typeof sugScore === "function") r = (recipes || []).map(rc => ({rc, sc: sugScore(rc.name, key)})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || a.rc.name.length - b.rc.name.length)[0]?.rc;
   if (r) { const nu = recipeNutri(r); return {text: p, ok: true, name: r.name, g: null, kcal: Math.round(q * nu.kcal), protein: Math.round(q * nu.protein)}; }
-  const x = nwFind(rest || p); if (!x) return {text: p, ok: false};
+  if (!x) return {text: p, ok: false};
   const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
   return {text: p, ok: true, name: x.n, g: Math.round(g), kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
 }
@@ -3598,6 +3602,9 @@ function otherSheet(arg){
     <button class="btn primary big" type="button" id="ownSave" data-mode="other">✓ Eintragen</button></div>`;
 }
 function ownForm(mode){
+  if (mode === "past") return `<div class="card ownf"><div class="field"><label for="ownText">Was hast du gegessen?</label><textarea id="ownText" rows="2" placeholder="z. B. Scramble, 2 Brezeln, eine Cola" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
+    <div id="ownEst" class="small muted">Mehreres mit Komma trennen. Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
+    <button class="btn primary big" type="button" id="ownSave" data-mode="past">✓ Eintragen</button></div>`;
   const tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="card ownf"><div class="lab">${mode === "slot" ? "Oder eigenes Essen eintragen" : "Was hast du gegessen?"}</div>
     <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea><div class="sugg" id="ownIngSug"></div></div>
@@ -4269,8 +4276,8 @@ async function onClick(e){
     if (x.ing && q("#ownText")) q("#ownText").value = x.ing; const det = q(".otherdet"); if (det && (x.kcal || x.protein)) det.open = true;
     q("#ownSug").innerHTML = ""; ownSugList = []; return; }
   const isg = t.closest("[data-ingsug]"); if (isg) { const x = ownIngSug[+isg.dataset.ingsug], ta = sheet.querySelector("#ownText"); if (!x || !ta) return;
-    const {head, amt} = ownIngParts(ta.value); ta.value = head + (head && !/\s$/.test(head) ? " " : "") + (amt.trim() ? amt.trim() + " " : "") + x.n + ", "; ta.focus();
-    sheet.querySelector("#ownIngSug").innerHTML = ""; ownIngSug = []; return; }
+    const {head, amt} = ownIngParts(ta.value); ta.value = head + (head && !/\s$/.test(head) ? " " : "") + (amt.trim() ? amt.trim() + " " : "") + x.name + ", "; ta.focus();
+    sheet.querySelector("#ownIngSug").innerHTML = ""; ownIngSug = []; ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
   const cb = t.closest("[data-coach]"); if (cb) { const k = cb.dataset.coach; ensureCur(); if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
   const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
@@ -4298,6 +4305,12 @@ async function onClick(e){
     const days = [d]; if (all) { const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === def) days.push(dd); } }
     for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); });
     sheetKind = null; sheet.close(); render(); return; }
+  if (t.id === "ownSave" && t.dataset.mode === "past") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
+    t.disabled = true; await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
+    const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
+    const kcal = ok.length ? ok.reduce((a, i) => a + i.kcal, 0) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0)) : null;
+    const d = sheetArg, id = Date.now().toString(36); editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time: ""}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
+    toast(ok.length < items.length ? "Eingetragen – nicht alles erkannt, Werte sind ein Teilwert" : "Eingetragen"); sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave") { if (t.disabled) return; const name = sheet.querySelector("#ownName")?.value.trim(); if (!name) { sheet.querySelector("#ownName").focus(); return; }
     t.disabled = true; const kcal = num(sheet.querySelector("#ownKcal")?.value), protein = num(sheet.querySelector("#ownProt")?.value);
     if (t.dataset.mode === "slot") { const [d, k] = sheetArg.split("|"); editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: {name, kcal, protein}}); }); }
@@ -4490,8 +4503,12 @@ async function onClick(e){
 function onInput(e){
   const t = e.target;
   if (t.id === "ownName") { const show = () => { ownSugList = ownSuggest(t.value); const box = sheet.querySelector("#ownSug"); if (box) box.innerHTML = ownSugHtml(ownSugList); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
-  if (t.id === "ownText") { const show = () => { const {word} = ownIngParts(t.value), q = fold(word); ownIngSug = q.length < 2 ? [] : (NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).slice(0, 6);
-      const box = sheet.querySelector("#ownIngSug"); if (box) box.innerHTML = ownIngSug.map((x, i) => `<button type="button" class="sugi chip" data-ingsug="${i}">${esc(x.n)}</button>`).join(""); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
+  if (t.id === "ownText") { const one = !sheet.querySelector("#ownName"); // Nachtragen: Vorschläge auch aus Rezepten und früheren Einträgen, Erkennung live
+    const show = () => { const {word} = ownIngParts(t.value), q = fold(word);
+      ownIngSug = q.length < 2 ? [] : one ? ownSuggest(word).slice(0, 5) : (NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).slice(0, 6).map(x => ({name: x.n}));
+      const box = sheet.querySelector("#ownIngSug"); if (box) box.innerHTML = one ? ownSugHtml(ownIngSug).replace(/data-ownsug=/g, "data-ingsug=") : ownIngSug.map((x, i) => `<button type="button" class="sugi chip" data-ingsug="${i}">${esc(x.name)}</button>`).join("");
+      if (one) { const est = sheet.querySelector("#ownEst"), items = t.value.trim() && NW ? nwParse(t.value) : []; if (est) est.innerHTML = items.length ? nwHtml(items).replace(/<div class="small muted">Richtwerte[^<]*<\/div>/, "") : ""; } };
+    show(); Promise.all([NW ? null : ensureNW(), recipes ? null : ensureMeals().catch(() => {})]).then(show).catch(() => {}); return; }
   if (t.dataset.ex) { const id = t.dataset.ex, i = Number(t.dataset.i), so = setsObj(); so[id] = so[id] || []; while (so[id].length <= i) so[id].push({}); so[id][i][t.dataset.f] = t.value.trim(); touch(); return; }
   if (t.id === "wIn") { cur.weight = num(t.value); if (cur.weight != null && (cur.weight < 30 || cur.weight > 250)) { cur.weight = null; toast("Gewicht bitte in kg (30–250)"); } if (cur.weight == null) clr("weight"); touch(); return; }
   if (t.id === "slIn") { cur.sleep = num(t.value); if (cur.sleep != null && (cur.sleep < 0 || cur.sleep > 16)) { cur.sleep = null; toast("Schlaf bitte in Stunden (0–16)"); } if (cur.sleep == null) clr("sleep"); touch(); return; }
