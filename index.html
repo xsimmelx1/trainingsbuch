@@ -591,6 +591,7 @@ body.wo .exbody{gap:10px}
 .gcbig.tempo .gcph{transition:color .3s}
 .gcbig.tempo .gcbarw{height:8px}
 .gcmedia{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;flex:none}
+.gcmedia video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 .gcmedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;transform:scale(1.34);transition:opacity .35s}
 .gcmedia iframe.hide{opacity:0}
 .gcmedia.fig{aspect-ratio:3/2;background:#fff}
@@ -2419,7 +2420,7 @@ const gcVShow = () => { for (const id of ["gcV", "gcV2"]) document.getElementByI
 // Verdeckten Player beim ersten Einsatz laden (src erst dann setzen, vorher lädt er nichts)
 const gcStbyLoad = () => true; // beide Player-Hüllen laden beim Öffnen; Videodaten lädt der zweite erst beim ersten Abspielen
 // Bereit/3-2-1/Pause: Video anhalten und stehen lassen (kein Wechsel zur Figur)
-function gcMediaRest(){ if (!gc) return; gcFig(false, .4); clearTimeout(gcVtm); clearTimeout(gcPrepTm); gc.prep = false; if (gcFollow(gc.pl.id)) { gcRate(1); gcPauseX(gcAct); gcPauseX(gcStby()); gcVShow(); } }
+function gcMediaRest(){ if (!gc) return; gcFig(false, .4); const cv = gcClipEl(); if (cv) { cv.loop = false; cv.pause(); try { cv.currentTime = 0; } catch {} return; } clearTimeout(gcVtm); clearTimeout(gcPrepTm); gc.prep = false; if (gcFollow(gc.pl.id)) { gcRate(1); gcPauseX(gcAct); gcPauseX(gcStby()); gcVShow(); } }
 const GC_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 const gcRepLen = () => gc.pl.ph.reduce((a, p) => a + p[1], 0) || 1;
 const gcSnap = R => GC_RATES.reduce((b, r) => Math.abs(r - R) < Math.abs(b - R) ? r : b, 1);
@@ -2434,9 +2435,9 @@ function gcPrep(sec){ const fo = gcFollow(gc.pl.id); if (!fo) return; const sb =
 // Wechsel: vorbereiteten Player einblenden, bisherigen ausblenden und danach anhalten
 function gcSwap(){ const old = gcAct; gcAct = gcStby(); gcVShow(); gc.prep = false; setTimeout(() => { if (gcAct !== old) gcPauseX(old); }, 400); }
 // Im 3-2-1: verdeckter Player läuft so an, dass er genau zum „Los“ am Wiederholungsanfang ist (sichtbarer bleibt stehen)
-function gcMediaLead(sec){ const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; clearTimeout(gcPrepTm);
+function gcMediaLead(sec){ if (gcClipEl()) return; const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; clearTimeout(gcPrepTm);
   gcPrep(sec); gc.vk = -1; }
-function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0;
+function gcMediaRep(){ if (gcClipEl()) return; const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0;
   // reps = geprüfte saubere Wiederholungen am Stück ab t0 (fehlt: 2), begrenzt durch die Videolänge
   const maxK = Math.max(0, Math.min((fo.reps || 2) - 1, gcVdur ? Math.floor((gcVdur - 0.3 - fo.t0) / vrep) - 1 : 1));
   clearTimeout(gcPrepTm);
@@ -2447,10 +2448,43 @@ function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len
     gcPlay(); gcVShow(); }
   // Ist die nächste Wiederholung im Video nicht mehr sauber, rechtzeitig den anderen Player vorbereiten (~2,5 s Vorlauf)
   if (gc.vk + 1 > maxK && gc.rep + 1 < gc.pl.target) { const lead = Math.min(2.5, Math.max(1, len - 0.5)); gcPrepTm = setTimeout(() => { if (gc?.stage === "work") gcPrep(lead); }, Math.max(0, len - lead) * 1000); } }
-function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(); } }
+function gcMediaHold(){ gcFig(false, .4); const cv = gcClipEl(); if (cv) { cv.loop = true; cv.playbackRate = 1; cv.currentTime = 0; cv.play().catch(() => {}); return; } const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(); } }
 // Bewegungsphase? (Haltephasen ändern die Position nicht)
 const gcMoves = lab => !GC_HOLD.test(lab);
-function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; gcAct = "gcV"; clearTimeout(gcPrepTm); box.innerHTML = gcMediaHtml(gc.pl); gcMediaHook(); if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); }
+// Eigene Clips (eine Wiederholung je Übung) aus dem privaten Daten-Repo: data/clips/<id>.mp4. Einmal laden, dann aus dem Gerätespeicher.
+// Mit Clip gibt es keinen YouTube-Player: nahtlos, jede Phase einzeln an den Takt angepasst (Bewegung gestreckt/gestaucht, fehlendes Halten = Standbild).
+let CLIPS = lsGet("clips") || null, clipsReady = null;
+const ensureClips = () => clipsReady = clipsReady || (token ? gh(`contents/data/clips?ref=${CFG.branch}`).then(r => r.ok ? r.json() : r.status === 404 ? [] : Promise.reject(r.status))
+  .then(a => { CLIPS = Object.fromEntries((Array.isArray(a) ? a : []).filter(x => /\.mp4$/.test(x.name)).map(x => [x.name.replace(/\.mp4$/, ""), x.sha])); lsSet("clips", CLIPS); })
+  .catch(() => { CLIPS = CLIPS || {}; }) : Promise.resolve(CLIPS = CLIPS || {}));
+async function clipUrl(id){
+  const sha = CLIPS?.[id]; if (!sha) return null; const key = `https://clips.local/${id}-${sha}.mp4`; let c = null;
+  try { c = await caches.open("tb-clips"); const hit = await c.match(key); if (hit) return URL.createObjectURL(await hit.blob()); } catch {}
+  const r = await gh(`contents/data/clips/${id}.mp4?ref=${CFG.branch}`, {headers: {Accept: "application/vnd.github.raw+json"}}); if (!r.ok) return null;
+  const b = new Blob([await r.arrayBuffer()], {type: "video/mp4"});
+  try { await c?.put(key, new Response(b, {headers: {"Content-Type": "video/mp4"}})); } catch {}
+  return URL.createObjectURL(b);
+}
+const gcClipEl = () => document.getElementById("gcClip");
+const gcHasClip = id => !!CLIPS?.[id];
+function gcClipHtml(pl, sw){ const f = gcFollow(pl.id) || {};
+  return `<div class="gcmedia vid clip">${gcFigImgs(pl)}<video id="gcClip" muted playsinline preload="auto" disablepictureinpicture></video><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`; }
+// Phasen-Zuordnung: Bewegungsphasen der Reihe nach auf die gemessenen Video-Phasen; Halten im Plan = Halten im Video oder Standbild
+function gcClipMap(pl){ const fo = gcFollow(pl.id), vph = fo?.ph; if (!vph?.length || pl.mode !== "tempo") return null;
+  let s = 0; const segs = vph.map(([l, d]) => { const x = {l, d: +d, s, mv: gcMoves(l)}; s += +d; return x; });
+  const vm = segs.filter(x => x.mv); if (!vm.length || vm.length !== pl.ph.filter(([l]) => gcMoves(l)).length) return null;
+  let m = -1; return pl.ph.map(([l]) => { if (gcMoves(l)) return vm[++m];
+    const nx = m >= 0 ? segs[segs.indexOf(vm[m]) + 1] : segs[0]; return nx && !nx.mv ? nx : {freeze: true}; }); }
+function gcClipPhase(){ const v = gcClipEl(); if (!v || !v.src || !gc || gc.pl.mode !== "tempo") return; const sec = gc.pl.ph[gc.pi][1];
+  if (!gc.clipMap) { if (gc.pi === 0) { v.currentTime = 0; v.playbackRate = Math.max(0.1, Math.min(4, (v.duration || 1) / gcRepLen())); v.play().catch(() => {}); } return; }
+  const seg = gc.clipMap[gc.pi]; if (!seg || seg.freeze) { v.pause(); return; }
+  try { v.currentTime = seg.s; } catch {} v.playbackRate = Math.max(0.1, Math.min(4, seg.d / sec)); v.play().catch(() => {}); }
+function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; gcAct = "gcV"; clearTimeout(gcPrepTm);
+  const pl = gc.pl, me = gc, html = gcMediaHtml(pl), sw = (html.match(/<div class="chips sm gcview">[\s\S]*$/) || [""])[0];
+  const after = () => { if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); };
+  if (gcView !== "figur" && gcHasClip(pl.id)) { box.innerHTML = gcClipHtml(pl, sw); gc.clipMap = gcClipMap(pl);
+    clipUrl(pl.id).then(u => { const v = gcClipEl(); if (gc !== me || !v) return; if (!u) { box.innerHTML = html; gcMediaHook(); return after(); } v.src = u; v.addEventListener("loadeddata", after, {once: true}); }).catch(() => {}); return; }
+  box.innerHTML = html; gcMediaHook(); after(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
 function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.95; u.pitch = 1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
 function gcBeep(f = 660, len = .5, vol = .05){ try { const a = audioCtx; if (!a) return; const t = a.currentTime, o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain();
@@ -2474,8 +2508,8 @@ function gcGo(){ // nach dem 3-2-1: Satz beginnt
   else { gcSay(`Los. ${pl.target} Wiederholungen`); gcSeg("work", null); gcMediaHold(); }
 }
 // Figur zur aktuellen Phase: Bewegung = in der Phasendauer zur anderen Position, Halten = stehen bleiben
-function gcPhaseFig(){ const [lab, sec] = gc.pl.ph[gc.pi]; if (gcMoves(lab)) { gc.moved = !gc.moved; gcFig(gc.moved, sec); } }
-function gcCountIn(){ gcMediaRest(); gcMediaLead(4); gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
+function gcPhaseFig(){ gcClipPhase(); const [lab, sec] = gc.pl.ph[gc.pi]; if (gcMoves(lab)) { gc.moved = !gc.moved; gcFig(gc.moved, sec); } }
+function gcCountIn(){ if (gc) gc.clipMap = gcClipMap(gc.pl); gcMediaRest(); gcMediaLead(4); gcSeg("count", 3, true); gcSay(gc.side ? "Andere Seite. Drei" : "Drei"); }
 function gcAfterWork(){
   const pl = gc.pl;
   gcMediaRest();
@@ -2581,8 +2615,8 @@ function gcCmd(c, v){
   if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
   if (c === "pause") { const b = document.getElementById("gcFigB");
-    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcPlay(); gcVShow(); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
-    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); gc.prep = false; const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { const cv = gcClipEl(); if (cv && (gc.pl.mode !== "tempo" || !gc.clipMap?.[gc.pi]?.freeze)) cv.play().catch(() => {}); if (!cv) { gcPlay(); gcVShow(); } if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
+    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); gc.prep = false; gcClipEl()?.pause(); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
     return gcPaint(); }
   if (c === "tempo") { gcTempo = v; lsSet("coachTempo", v); const keep = {i: gc.i, side: gc.side}; gc.pl = gcPlan(pl.base); Object.assign(gc, keep); return gcPaint(); }
   if (c === "view") { gcView = v; lsSet("coachView", v); return gcMediaMount(); }
@@ -4493,7 +4527,7 @@ readHash();
 const c0 = lsGet("cache"); if (c0) Object.assign(store, c0);
 render();
 applyDeep();
-ensureVideos();
+ensureVideos(); setTimeout(() => ensureClips(), 3000);
 loadAll().then(() => { if (!dirty) { cur = null; ensureCur(); } if (sheet.open) renderSheet(); else if (!dirty) render(); renderHeader(); });
 })();
 </script>
