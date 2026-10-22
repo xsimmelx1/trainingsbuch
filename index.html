@@ -3383,7 +3383,15 @@ const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => ({
 const prodById = id => id && id.startsWith("my:") ? myProdList().find(x => x.id === id) : prices?.products.find(x => x.id === id);
 // Bonzeile → lesbarer Name: Mengen/Preise weg, Großbuchstaben normalisieren
 const RC_JUNK = /pfand|leergut|tüte|tasche|beutel|rabatt|nachlass|summe|zwischensumme|gutschein|coupon|payback|bonus|karte|mwst|kasse/i;
-const RC_ABBR = [[/\bnat\.?\b/gi, "natur"], [/\bgriech\.?/gi, "griechischer "], [/\bjogh\.?/gi, "joghurt"], [/\bvollm\.?\b/gi, "vollmilch"], [/\bfettarme?\.?\b/gi, "fettarm"], [/\bh-?milch\b/gi, "H-Milch"], [/\bscheib\.?\b/gi, "scheiben"], [/\bkaese\b/gi, "käse"], [/\btk\b/gi, "TK"]];
+const RC_KINDS = [
+  ["Steuer", /mwst|mehrwert|\bust\b|umsatzst|steuer|\bnetto\b|\bbrutto\b|^[a-d]\s*=|^[a-d]\s+\d{1,2}[,.]\d\s*%|^\d{1,2}[,.]\d\s*%\s/i],
+  ["Zahlung", /summe|zu zahlen|gesamt|gegeben|r[üu]ckgeld|\bbar\b|\bec\b|ec-|girocard|maestro|visa|mastercard|kredit|kartenzahl|trinkgeld|wechselgeld|terminal|beleg|trace|genehmig|kundenbeleg|posten|artikel\s*\d/i],
+  ["Pfand", /pfand|leergut|einweg|mehrweg/i],
+  ["Rabatt", /rabatt|nachlass|preisvorteil|coupon|gutschein|bonus|payback|aktion\s*-|ersparnis|sie sparen/i],
+  ["Tüte", /tüte|tuete|tragetasche|tasche|beutel(?!.*(tee|reis))/i],
+  ["kein Lebensmittel", /sp[üu]l|toilettenp|klopapier|k[üu]chenrolle|taschent|waschmittel|weichsp|duschgel|shampoo|zahnp|zahnb[üu]r|deo\b|deodor|seife|m[üu]llbeutel|alufolie|frischhaltef|backpapier|kerze|blume|zigarett|tabak|zeitung|zeitschr|pflaster|tablette|rasier|windel|katzenf|hundef|tierf|reiniger|schwamm|lappen|batterie|feuerzeug|creme(?!.*(fra|fraiche|käse|kaese))|lotion|wc-|wc\s|kosmetik|haarg|tampon|binden/i]];
+const rcKind = n => (RC_KINDS.find(([, re]) => re.test(n)) || ["Lebensmittel"])[0];
+const RC_ABBR = [[/\btom\.?\s*pass\.?/gi, "passierte tomaten"], [/\bpass\.?\s*tom\.?/gi, "passierte tomaten"], [/\btom\.?\b/gi, "tomaten"], [/\bkart\.?\b/gi, "kartoffeln"], [/\bzwieb\.?\b/gi, "zwiebeln"], [/\bknobl\.?\b/gi, "knoblauch"], [/\bschlagsa\.?\b/gi, "schlagsahne"], [/\bfrischk\.?\b/gi, "frischkäse"], [/\bvollk\.?\b/gi, "vollkorn"], [/\bspagh\.?\b/gi, "spaghetti"], [/\bnud\.?\b/gi, "nudeln"], [/\bkichererbs\.?\b/gi, "kichererbsen"], [/\bnat\.?\b/gi, "natur"], [/\bgriech\.?/gi, "griechischer "], [/\bjogh\.?/gi, "joghurt"], [/\bvollm\.?\b/gi, "vollmilch"], [/\bfettarme?\.?\b/gi, "fettarm"], [/\bh-?milch\b/gi, "H-Milch"], [/\bscheib\.?\b/gi, "scheiben"], [/\bkaese\b/gi, "käse"], [/\btk\b/gi, "TK"]];
 const RC_BRAND = /^(gg|g&g|gut\s*&\s*günstig|ja!?|k-?classic|k-?bio|milbona|rewe( beste wahl| bio)?|edeka|penny|netto|aldi|lidl|bio|gut bio|enjoy free|vemondo|harvest basket|freshona|lose)\s+/i;
 const rcClean0 = n => { let x = n; for (const [re, w] of RC_ABBR) x = x.replace(re, w); for (let i = 0; i < 2; i++) x = x.replace(RC_BRAND, ""); return x.replace(/\s+lose$/i, ""); };
 const rcClean = n => rcClean0(n).replace(/\btk\b/gi, "TK").replace(/\b\d+[.,]?\d*\s*(g|kg|ml|l|st|stk|x|er)\b/gi, "").replace(/[*#%]+/g, " ").replace(/\s{2,}/g, " ").trim().toLowerCase().replace(/(^|[\s/-])([a-zäöü])/g, (m, a, b) => a + b.toUpperCase());
@@ -3827,11 +3835,19 @@ function parseReceipt(text){
 const RC_ALIAS = [[/linsen\s*rot|rote\s*lins/, "roteLinsen"], [/soja\s*-?dr|sojadrink|soja\s*milch/, "sojadrink"], [/hafer\s*-?dr|haferdrink|oat/, "haferdrink"], [/h-?milch|vollmilch|fettarme\s*milch|frischmilch/, "milch"], [/speisequark|magerquark|quark\s*mager/, "magerquark"], [/kichererb/, "kichererbsen"], [/hafer\s*fl|haferfl|bl[äa]tterfl/, "haferflocken"], [/freiland|bodenhalt|\beier\b/, "eier"], [/k[öo]rniger\s*fr|h[üu]ttenk/, "huettenkaese"]];
 function matchItem(it){
   const nm0 = it.name.toLowerCase(), nm = nm0.replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü"); // Bons schreiben Umlaute teils als ae/oe/ue
-  const al = RC_ALIAS.find(([re]) => re.test(nm) || re.test(nm0)), pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm) || x.re.test(nm0));
+  const kind = rcKind(nm) !== "Lebensmittel" ? rcKind(nm) : rcKind(nm0); if (kind !== "Lebensmittel") return Object.assign(it, {kind, pid: "", use: false, keep: false, ref: null});
+  const al = RC_ALIAS.find(([re]) => re.test(nm) || re.test(nm0)), cl = fold(rcClean(it.name));
+  let pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm) || x.re.test(nm0) || x.re.test(cl));
+  if (!pr && cl.length >= 4) { // tippfehlertolerant: Kernwörter des Produktnamens müssen im Bontext vorkommen
+    const bw = cl.split(/[^a-z0-9ß]+/).filter(w => w.length >= 3), hitw = w => bw.some(x => x === w || (w.length >= 5 && (x.startsWith(w.slice(0, 5)) || lev(w, x) <= 1)));
+    let best = null; for (const x of prices.products) { const ws = fold(x.name.replace(/\([^)]*\)/g, "")).split(/[^a-z0-9ß]+/).filter(w => w.length >= 4); if (!ws.length) continue;
+      const sc = ws.filter(hitw).length / ws.length; if (sc >= 0.99 && (!best || ws.length > best.n)) best = {x, n: ws.length}; }
+    pr = best?.x || null; }
+  if (!pr && typeof nwFind === "function" && NW) { const x = nwFind(rcClean(it.name)); if (x) it.nw = {n: x.n, k: x.k, p: x.p}; }
   const sm = it.name.match(/(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i); let size = null;
   if (sm) { const v = Number(sm[1].replace(",", ".")), u = sm[2].toLowerCase(); size = u === "kg" || u === "l" ? v * 1000 : v; }
   const unitPrice = it.unit || it.price;
-  return Object.assign(it, {pid: pr?.id || "", size, use: !!pr, ref: pr ? refPrice(pr, unitPrice, size, it.perKg) : null});
+  return Object.assign(it, {kind, pid: pr?.id || "", size, use: !!pr, ref: pr ? refPrice(pr, unitPrice, size, it.perKg) : null});
 }
 // Preis auf die Referenzpackung des Produkts umrechnen
 function refPrice(pr, price, size, perKg){
@@ -3869,7 +3885,9 @@ function receiptHtml(){
       ${pr ? `<div class="small">→ <input type="text" inputmode="decimal" data-rcref="${i}" value="${it.ref == null ? "" : String(it.ref).replace(".", ",")}" aria-label="Preis Referenzpackung"> € für ${esc(pr.dose ? "1 Dose" : pr.unit === "Stück" && pr.pack > 1 ? pr.pack + " Stück" : fmtAmt(pr.pack, pr.unit))} <span class="muted">(Richtpreis ${eur((pr.basePrices || pr.prices || {})[rcpt.store])})</span></div>` : ""}</div>`; };
   const idx = rcpt.items.map((it, i) => [it, i]), hit = idx.filter(([it]) => it.pid), miss = idx.filter(([it]) => !it.pid);
   h += hit.map(([it, i]) => rcRow(it, i)).join("");
-  if (miss.length) h += `<details class="rcmore" open><summary class="small">Nicht zugeordnet (${miss.length}) · werden als eigene Produkte gemerkt</summary><div class="small muted">Haken weg, wenn etwas nicht in deine Zutatenliste soll. Oder oben ein passendes Produkt wählen.</div><div class="rcl">${miss.map(([it, i]) => `<div class="rci ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "off" : ""}"><label class="check small"><input type="checkbox" data-rckeep="${i}" ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "" : "checked"}><span><b>${esc(rcClean(it.name) || it.name)}</b> · ${eur(it.unit || it.price)}</span></label><select data-rcpid="${i}" aria-label="Produkt">${opts(it.pid)}</select></div>`).join("")}</div></details>`;
+  const missFood = miss.filter(([it]) => (it.kind || "Lebensmittel") === "Lebensmittel"), hidden = miss.filter(([it]) => it.kind && it.kind !== "Lebensmittel");
+  if (missFood.length) h += `<details class="rcmore" open><summary class="small">Neue Lebensmittel (${missFood.length}) · werden zu deinen Zutaten hinzugefügt</summary><div class="small muted">Haken weg, wenn etwas nicht dazu soll – oder ein vorhandenes Produkt wählen.</div><div class="rcl">${missFood.map(([it, i]) => `<div class="rci ${it.keep === false ? "off" : ""}"><label class="check small"><input type="checkbox" data-rckeep="${i}" ${it.keep === false ? "" : "checked"}><span><b>${esc(rcClean(it.name) || it.name)}</b> · ${eur(it.unit || it.price)}${it.nw ? ` <span class="muted">· Nährwerte wie ${esc(it.nw.n)}</span>` : ""}</span></label><select data-rcpid="${i}" aria-label="Produkt">${opts(it.pid)}</select></div>`).join("")}</div></details>`;
+  if (hidden.length) h += `<details class="rcmore"><summary class="small">Ausgeblendet (${hidden.length}) · Steuer, Pfand, Zahlung, Nicht-Lebensmittel</summary><div class="rcl">${hidden.map(([it, i]) => `<div class="rci ${it.keep ? "" : "off"}"><label class="check small"><input type="checkbox" data-rckeep="${i}" ${it.keep ? "checked" : ""}><span><b>${esc(it.name)}</b> · ${eur(it.unit || it.price)} <span class="tag">${esc(it.kind)}</span></span></label></div>`).join("")}</div></details>`;
   return h + `</div><label class="check"><input type="checkbox" id="rcStock" ${lsGet("rcStock") === false ? "" : "checked"}><span>Gekauftes als Vorrat markieren (🏠 habe ich zuhause)</span></label>
     <button class="btn primary big" type="button" data-act="rcSave">Übernehmen</button><button class="btn ghost" type="button" data-act="rcReset">Anderen Bon wählen</button>`;
 }
@@ -4450,8 +4468,8 @@ async function onClick(e){
     if (a === "rcSave") { if (!rcpt?.items) return; const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), d = todayIso(); let n = 0;
       for (const it of rcpt.items) if (it.use && it.pid && it.ref > 0) { own[it.pid] = Object.assign(own[it.pid] || {}, {[rcpt.store]: {price: it.ref, date: d, src: it.name.slice(0, 40)}}); n++; }
       const my = Object.assign({}, FOOD().myProds || {}); let nm = 0;
-      for (const it of rcpt.items) { if (it.pid) continue; const keep = it.keep ?? !RC_JUNK.test(it.name), name = rcClean(it.name); if (!keep || name.length < 3) continue;
-        const key = fold(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); if (!key) continue; my[key] = {name, price: it.unit || it.price, store: rcpt.store, date: d}; nm++; }
+      for (const it of rcpt.items) { if (it.pid) continue; const keep = it.keep ?? ((it.kind || "Lebensmittel") === "Lebensmittel" && !RC_JUNK.test(it.name)), name = rcClean(it.name); if (!keep || name.length < 3) continue;
+        const key = fold(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); if (!key) continue; my[key] = Object.assign({name, price: it.unit || it.price, store: rcpt.store, date: d}, it.nw ? {nw: it.nw} : {}); nm++; }
       // Gekauftes zugeordnetes als Vorrat
       const toStock = !!sheet.querySelector("#rcStock")?.checked; lsSet("rcStock", toStock); let ns = 0, stock = null;
       if (toStock) { stock = STOCK(); for (const it of rcpt.items) if (it.use && it.pid && !stock.has(it.pid)) { stock.add(it.pid); ns++; } }
@@ -4529,7 +4547,7 @@ function onInput(e){
   if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
   if (t.id === "m_waist" || t.id === "m_neck") { const bf = navy(num(document.getElementById("m_waist").value), num(document.getElementById("m_neck").value), S().height || 175); document.getElementById("navyLive").textContent = bf ? `Körperfett (Navy): ${bf.toFixed(1)} %` : "Körperfett (Navy) erscheint nach Taille + Hals."; }
 }
-function onChange(e){
+async function onChange(e){
   const t = e.target;
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
   if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; touch(); return; }
@@ -4552,7 +4570,7 @@ function onChange(e){
   if (t.dataset.bioitem) { const set = new Set(FOOD().bioItems || []); t.checked ? set.add(t.dataset.bioitem) : set.delete(t.dataset.bioitem); saveFood({bioItems: [...set]}); render(); return; }
   if (t.dataset.ftime) { if (t.value) saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
-  if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet();
+  if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet(); await ensureNW().catch(() => {});
     const run = rcpt; receiptText(f).then(txt => { if (rcpt !== run) return; const r = parseReceipt(txt); rcpt = r.items.length ? r : {status: "Keine Positionen erkannt. Besser ausgeleuchtetes, gerades Foto oder den eBon als PDF versuchen."}; }, e => { if (rcpt === run) rcpt = {status: "Fehler: " + e.message}; }).then(() => { if (sheet.open && sheetKind === "receipt") renderSheet(); }); return; }
   if (t.id === "rcStore") { rcpt.store = t.value; renderSheet(); return; }
   if (t.dataset.rckeep) { rcpt.items[t.dataset.rckeep].keep = t.checked; renderSheet(); return; }
