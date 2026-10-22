@@ -1806,7 +1806,8 @@ const pathVal = (o, path) => { const [a, b] = path.split("."); const v = b ? o?.
 function saveCur(){ clearTimeout(saveTimer); if (!dirty) return; dirty = false;
   for (const [o, nm] of [[cur.sets, "sets"], [cur.antag || {}, "antag"]]) for (const id of Object.keys(o)) { const a = o[id]; a.length = lastMeaningful(a); if (!a.length) { delete o[id]; clr(nm + "." + id); } }
   // wieder gesetzte Felder sind nicht mehr „geleert“
-  if (cur._clr) { cur._clr = cur._clr.filter(p => pathVal(cur, p) == null); if (!cur._clr.length) delete cur._clr; }
+  // Ausnahme: die Einheit gilt ohne bewusste Wahl (sessAt) als abgeleitet und bleibt auf dem Server gelöscht
+  if (cur._clr) { cur._clr = cur._clr.filter(p => pathVal(cur, p) == null || (p === "session" && !cur.sessAt && !cur.startedAt)); if (!cur._clr.length) delete cur._clr; }
   const out = JSON.parse(JSON.stringify(cur));
   // Abgeleitete Werte nicht festschreiben: Einheit nur, wenn bewusst gewählt oder trainiert; Bouldern nur, wenn umgeschaltet
   if (!out.sessAt && !out.startedAt && !loggedSets(out)) delete out.session;
@@ -4375,7 +4376,8 @@ async function onClick(e){
       if (pendingConfirm !== a) { pendingConfirm = a; renderSheet(); return; }
       pendingConfirm = null; stopRest(); releaseWake(); clearInterval(clockTimer);
       cur.sets = {}; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null;
-      if (a === "delTraining") { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; }
+      // Löschen = zurück zum Plan: bewusste Wahl der Einheit verwerfen, auch auf dem Server (sonst käme „Beine A“ beim Abgleich zurück)
+      if (a === "delTraining") { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; clr("sessAt"); clr("session"); }
       dirty = true; saveCur(); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
     if (a === "resetWhere") { delete cur.where; clr("where"); cur.swap = {}; openEx = null; touch(); renderTraining(); return; }
     if (a === "toHeute") { go("heute"); return; }
