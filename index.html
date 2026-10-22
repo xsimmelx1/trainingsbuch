@@ -1806,6 +1806,8 @@ function readHash(){
     else if (["kalender","plan","setup","essenset","menu","uebungen","zutaten"].includes(k)) { tab = "mehr"; sub.mehr = k; }
     else if (k === "routine") { selDate = todayIso(); tab = "heute"; cur = null; deep = ["mob"]; } }
 }
+// Finger/Ellbogen sind nur nach dem Bouldern relevant (Überlastung von Ringbändern und Ellbogen)
+const climbed = d => { const day = d === cur?.date ? cur : store.days[d]; return !!(day?.boulder?.done || (day?.cardio || []).some(c => c.type === "boulder")); };
 function blankDay(d){ return {date:d, session:defaultSession(d), sets:{}, boulder:{done:false,min:null}, mobility:{}, pain:{sc:null,knee:null,finger:null,kneeTest:null}, weight:null, sleep:null, note:""}; }
 function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false};
   if (d?.session && !d.sessAt && !d.startedAt && !loggedSets(d)) cur.session = defaultSession(selDate);  // alte, nur abgeleitete Einheit folgt dem aktuellen Plan
@@ -2759,7 +2761,7 @@ function renderSheet(){ setTimeout(hookClips, 0);
     h += `<div class="sh"><h2>Schmerz-Log</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
       <div class="lab">Knie</div>${scaleHtml("knee","knee",cur.pain.knee)}
-      <div class="lab">Finger / Ellbogen</div>${scaleHtml("knee","finger",cur.pain.finger)}
+      ${climbed(selDate) || climbed(addDays(selDate, -1)) || cur.pain.finger != null ? `<div class="lab">Finger / Ellbogen <span class="small muted">(nach dem Bouldern)</span></div>${scaleHtml("knee","finger",cur.pain.finger)}` : ""}
       ${info("SC: 0–2 grün · 3 Übung tauschen · über 3 rot. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.")}
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
