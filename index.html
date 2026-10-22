@@ -2386,7 +2386,7 @@ const gcFollow = id => { const f = GCM?.follow?.[id]; return f && f.video && f.q
 function gcMediaHtml(pl){
   const e = EX[pl.id], f = gcFollow(pl.id), img = e.img, vid = f && (gcView === "video" || !img);
   const sw = f && img ? `<div class="chips sm gcview">${[["video", "🎥 Video"], ["figur", "🧍 Figur"]].map(([k, l]) => `<button type="button" data-gc="view" data-v="${k}" aria-pressed="${(vid ? "video" : "figur") === k}">${l}</button>`).join("")}</div>` : "";
-  if (vid) return `<div class="gcmedia vid" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(f.video)}/hqdefault.jpg) center/cover"><iframe id="gcV" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(f.video)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&cc_load_policy=0&start=${Math.floor(f.t0)}" allow="autoplay; encrypted-media" title="Vorturner"></iframe><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`.replace('<iframe', gcFigImgs(pl) + '<iframe');
+  if (vid) return `<div class="gcmedia vid" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(f.video)}/hqdefault.jpg) center/cover">${["gcV", "gcV2"].map((k, i) => `<iframe id="${k}" class="${k === gcAct ? "" : "hide"}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(f.video)}?autoplay=${k === gcAct ? 1 : 0}&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&cc_load_policy=0&start=${Math.floor(f.t0)}" allow="autoplay; encrypted-media" title="Vorturner" ${i ? 'aria-hidden="true" tabindex="-1"' : ""}></iframe>`).join("")}<span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`.replace('<iframe', gcFigImgs(pl) + '<iframe');
   if (!img) return "";
   return `<div class="gcmedia fig">${gcFigImgs(pl)}</div>${sw}`;
 }
@@ -2394,44 +2394,63 @@ function gcFigImgs(pl){ const img = EX[pl.id].img; if (!img) return ""; const s 
   return `<img class="gcfi" src="${isrc(img, s)}" alt=""><img class="gcfi" id="gcFigB" src="${isrc(img, 1 - s)}" alt="" style="opacity:0">`; }
 // Figur: bei Bewegungsphasen zur anderen Position überblenden, bei Haltephasen stehen bleiben
 function gcFig(moved, sec){ const b = document.getElementById("gcFigB"); if (!b) return; b.style.transition = sec ? `opacity ${sec}s ease-in-out` : "none"; b.style.opacity = moved ? 1 : 0; }
-// Video per postMessage steuern (wie bei den Technik-Clips)
-const gcPlay = () => { if (gcVst !== 1) gcV("playVideo"); }, gcNoCC = () => { gcV("setOption", ["captions", "track", {}]); gcV("unloadModule", ["captions"]); gcV("unloadModule", ["cc"]); };
-const gcV = (func, args = []) => { const f = document.getElementById("gcV"); try { f?.contentWindow?.postMessage(JSON.stringify({event: "command", func, args}), "*"); } catch {} };
-let gcVt = null, gcVtAt = 0, gcVst = -1, gcVrate = 1, gcVtm = null, gcVdur = 0; // zuletzt gemeldete Videozeit und Player-Status (1 = läuft)
-window.addEventListener("message", ev => { if (!/youtube/.test(ev.origin)) return; const f = document.getElementById("gcV"); if (!f || f.contentWindow !== ev.source) return;
-  let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; } const ct = d?.event === "infoDelivery" ? d.info?.currentTime : null, ps = d?.event === "onStateChange" ? d.info : d?.event === "infoDelivery" ? d.info?.playerState : null;
-  if (ps != null) gcVst = ps; if (d?.info?.duration) gcVdur = d.info.duration;
-  if (ct == null || !gc) return; gcVt = ct; gcVtAt = Date.now(); const fo = gcFollow(gc.pl.id); if (!fo) return;
-  // Halten/frei: Ausschnitt in Schleife. Außerhalb des Satzes (verdeckt) ebenfalls zurück, damit das Video nie ans Ende läuft
-  if (gc.stage === "work" ? gc.pl.mode !== "tempo" && ct >= fo.t1 - 0.05 : ct >= fo.t1 + 1) gcV("seekTo", [fo.t0, true]); });
-function gcMediaHook(){ const f = document.getElementById("gcV"); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id: "gcV", channel: "widget"}), "*"); } catch {} gcVrate = 1; gcV("mute"); gcNoCC(); gcMediaRest(); }); } }
-// Ausgangsposition zeigen (Bereit, 3-2-1, Pause)
-const gcVShow = on => { const f = document.getElementById("gcV"); if (f) { clearTimeout(f._t); if (on) f.classList.remove("hide"); else f.classList.add("hide"); } };
+// Video per postMessage steuern (wie bei den Technik-Clips). Zwei Player A/B für dasselbe Video: der sichtbare läuft, der verdeckte
+// springt rechtzeitig vor den Wiederholungsanfang und läuft kurz vorher an – beim Wechsel wird weich überblendet. So sieht man nie
+// YouTubes Sprung-/Pause-Einblendung. Der verdeckte Player lädt erst beim ersten Einsatz und ist sonst angehalten (datensparend).
+const GCP = {gcV: {t: null, at: 0, st: -1, rate: 1}, gcV2: {t: null, at: 0, st: -1, rate: 1}};
+let gcAct = "gcV", gcVtm = null, gcPrepTm = null, gcVdur = 0;
+const gcStby = () => gcAct === "gcV" ? "gcV2" : "gcV";
+const gcVx = (id, func, args = []) => { const f = document.getElementById(id); try { f?.contentWindow?.postMessage(JSON.stringify({event: "command", func, args}), "*"); } catch {} };
+const gcV = (func, args = []) => gcVx(gcAct, func, args);
+const gcPlayX = id => { if (GCP[id].st !== 1) gcVx(id, "playVideo"); }, gcPlay = () => gcPlayX(gcAct);
+const gcPauseX = id => { if (GCP[id].st === 1 || GCP[id].st === 3) gcVx(id, "pauseVideo"); };
+const gcNoCC = id => { gcVx(id, "setOption", ["captions", "track", {}]); gcVx(id, "unloadModule", ["captions"]); gcVx(id, "unloadModule", ["cc"]); };
+const gcRateX = (id, r) => { if (GCP[id].rate !== r) { GCP[id].rate = r; gcVx(id, "setPlaybackRate", [r]); } }, gcRate = r => gcRateX(gcAct, r);
+const gcVnowX = id => { const p = GCP[id]; return p.t == null ? null : p.t + (p.st === 1 ? (Date.now() - p.at) / 1000 * p.rate : 0); }, gcVnow = () => gcVnowX(gcAct);
+window.addEventListener("message", ev => { if (!/youtube/.test(ev.origin)) return; const id = ["gcV", "gcV2"].find(k => document.getElementById(k)?.contentWindow === ev.source); if (!id) return;
+  let d; try { d = typeof ev.data === "string" ? JSON.parse(ev.data) : ev.data; } catch { return; } const p = GCP[id], ct = d?.event === "infoDelivery" ? d.info?.currentTime : null, ps = d?.event === "onStateChange" ? d.info : d?.event === "infoDelivery" ? d.info?.playerState : null;
+  if (ps != null) p.st = ps; if (d?.info?.duration) gcVdur = d.info.duration;
+  if (ct == null || !gc) return; p.t = ct; p.at = Date.now(); const fo = gcFollow(gc.pl.id); if (!fo) return;
+  // Halten/frei: Ausschnitt auf dem sichtbaren Player in Schleife
+  if (id === gcAct && gc.stage === "work" && gc.pl.mode !== "tempo" && ct >= fo.t1 - 0.05) gcVx(id, "seekTo", [fo.t0, true]); });
+function gcMediaHook(){ for (const id of ["gcV", "gcV2"]) { const f = document.getElementById(id); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id, channel: "widget"}), "*"); } catch {} GCP[id] = {t: null, at: 0, st: -1, rate: 1}; gcVx(id, "mute"); gcNoCC(id); if (id === gcAct) gcMediaRest(); }); } } }
+// Sichtbar ist immer nur der aktive Player
+const gcVShow = () => { for (const id of ["gcV", "gcV2"]) document.getElementById(id)?.classList.toggle("hide", id !== gcAct); };
+// Verdeckten Player beim ersten Einsatz laden (src erst dann setzen, vorher lädt er nichts)
+const gcStbyLoad = () => true; // beide Player-Hüllen laden beim Öffnen; Videodaten lädt der zweite erst beim ersten Abspielen
 // Bereit/3-2-1/Pause: Video anhalten und stehen lassen (kein Wechsel zur Figur)
-function gcMediaRest(){ if (!gc) return; gcFig(false, .4); clearTimeout(gcVtm); if (gcFollow(gc.pl.id)) { gcRate(1); if (gcVst === 1 || gcVst === 3) gcV("pauseVideo"); } }
+function gcMediaRest(){ if (!gc) return; gcFig(false, .4); clearTimeout(gcVtm); clearTimeout(gcPrepTm); gc.prep = false; if (gcFollow(gc.pl.id)) { gcRate(1); gcPauseX(gcAct); gcPauseX(gcStby()); gcVShow(); } }
 const GC_RATES = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
 const gcRepLen = () => gc.pl.ph.reduce((a, p) => a + p[1], 0) || 1;
-const gcVnow = () => gcVt == null ? null : gcVt + (gcVst === 1 ? (Date.now() - gcVtAt) / 1000 * gcVrate : 0);
-const gcRate = r => { if (gcVrate !== r) { gcVrate = r; gcV("setPlaybackRate", [r]); } };
+const gcSnap = R => GC_RATES.reduce((b, r) => Math.abs(r - R) < Math.abs(b - R) ? r : b, 1);
 // Mittlere Geschwindigkeit R über die Dauer dur erreichen: erst die höhere, dann die niedrigere der verfügbaren Stufen
-function gcRateFor(R, dur){ clearTimeout(gcVtm); R = Math.max(GC_RATES[0], Math.min(2, R));
+function gcRateFor(R, dur){ clearTimeout(gcVtm); R = Math.max(GC_RATES[0], Math.min(2, R)); const id = gcAct;
   const lo = [...GC_RATES].reverse().find(r => r <= R + 1e-6), hi = GC_RATES.find(r => r >= R - 1e-6);
-  if (hi === lo) return gcRate(lo); gcRate(hi); gcVtm = setTimeout(() => gcRate(lo), (R - lo) / (hi - lo) * dur * 1000); }
-// Im 3-2-1: verdeckt so weit vor den Wiederholungsanfang springen, dass das Video genau zum „Los“ dort ist
-function gcMediaLead(sec){ const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; const R = Math.max(0.25, Math.min(2, (fo.t1 - fo.t0) / gcRepLen()));
-  clearTimeout(gcVtm); gcRate(GC_RATES.reduce((b, r) => Math.abs(r - R) < Math.abs(b - R) ? r : b, 1)); gcV("seekTo", [Math.max(0, fo.t0 - sec * gcVrate), true]); gcPlay(); gc.vk = -1; }
-function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0, k = gc.rep;
-  // Video bleibt im Satz immer sichtbar. reps = geprüfte saubere Wiederholungen am Stück ab t0 (fehlt: 2), begrenzt durch die Videolänge;
-  // danach sichtbar zurück an den Anfang (YouTube blendet dabei kurz Titel/Symbol ein, gewollt statt Wechsel zur Figur)
+  if (hi === lo) return gcRateX(id, lo); gcRateX(id, hi); gcVtm = setTimeout(() => gcRateX(id, lo), (R - lo) / (hi - lo) * dur * 1000); }
+// Verdeckten Player so vorbereiten, dass er in sec Sekunden genau am Wiederholungsanfang t0 ist
+function gcPrep(sec){ const fo = gcFollow(gc.pl.id); if (!fo) return; const sb = gcStby(), R = gcSnap(Math.max(0.25, Math.min(2, (fo.t1 - fo.t0) / gcRepLen())));
+  const extra = GCP[sb].t == null ? 1.0 : 0.1; // Anlaufzeit nach dem Sprung, in der das Video noch steht (beim ersten Mal muss er Daten laden)
+  gcStbyLoad(); gcRateX(sb, R); gcVx(sb, "seekTo", [Math.max(0, fo.t0 - Math.max(0, sec - extra) * R), true]); gcPlayX(sb); gc.prep = true; }
+// Wechsel: vorbereiteten Player einblenden, bisherigen ausblenden und danach anhalten
+function gcSwap(){ const old = gcAct; gcAct = gcStby(); gcVShow(); gc.prep = false; setTimeout(() => { if (gcAct !== old) gcPauseX(old); }, 400); }
+// Im 3-2-1: verdeckter Player läuft so an, dass er genau zum „Los“ am Wiederholungsanfang ist (sichtbarer bleibt stehen)
+function gcMediaLead(sec){ const fo = gcFollow(gc.pl.id); if (!fo || gc.pl.mode !== "tempo") return; clearTimeout(gcPrepTm);
+  gcPrep(sec); gc.vk = -1; }
+function gcMediaRep(){ const fo = gcFollow(gc.pl.id); if (!fo) return; const len = gcRepLen(), vrep = fo.t1 - fo.t0;
+  // reps = geprüfte saubere Wiederholungen am Stück ab t0 (fehlt: 2), begrenzt durch die Videolänge
   const maxK = Math.max(0, Math.min((fo.reps || 2) - 1, gcVdur ? Math.floor((gcVdur - 0.3 - fo.t0) / vrep) - 1 : 1));
-  if (k > 0 && (gc.vk ?? -1) + 1 > maxK) { clearTimeout(gcVtm); gcV("seekTo", [fo.t0, true]); gc.vk = 0; gcRateFor(vrep / len, len); gcPlay(); gcVShow(true); return; }
-  gc.vk = (gc.vk ?? -1) + 1; const exp = fo.t0 + gc.vk * vrep, now = gcVnow(), err = now == null ? 0 : now - exp;
-  if (Math.abs(err) > 1.2) { gcV("seekTo", [exp, true]); gcRateFor(vrep / len, len); gcPlay(); gcVShow(true); return; } // zu weit weg: auf den Wiederholungsanfang setzen
-  gcRateFor((vrep - err) / len, len); gcPlay(); gcVShow(true); }
-function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(true); } }
+  clearTimeout(gcPrepTm);
+  if (gc.prep) { gcSwap(); gc.vk = 0; gcRateFor(vrep / len, len); }
+  else { gc.vk = (gc.vk ?? -1) + 1; const exp = fo.t0 + gc.vk * vrep, now = gcVnow(), err = now == null ? 0 : now - exp;
+    if (gc.vk > maxK || Math.abs(err) > 1.2) { gc.vk = 0; gcV("seekTo", [fo.t0, true]); gcRateFor(vrep / len, len); } // Notfall: sichtbar ansetzen
+    else gcRateFor((vrep - err) / len, len);
+    gcPlay(); gcVShow(); }
+  // Ist die nächste Wiederholung im Video nicht mehr sauber, rechtzeitig den anderen Player vorbereiten (~2,5 s Vorlauf)
+  if (gc.vk + 1 > maxK && gc.rep + 1 < gc.pl.target) { const lead = Math.min(2.5, Math.max(1, len - 0.5)); gcPrepTm = setTimeout(() => { if (gc?.stage === "work") gcPrep(lead); }, Math.max(0, len - lead) * 1000); } }
+function gcMediaHold(){ gcFig(false, .4); const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(); } }
 // Bewegungsphase? (Haltephasen ändern die Position nicht)
 const gcMoves = lab => !GC_HOLD.test(lab);
-function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; box.innerHTML = gcMediaHtml(gc.pl); gcMediaHook(); if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); }
+function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; gcAct = "gcV"; clearTimeout(gcPrepTm); box.innerHTML = gcMediaHtml(gc.pl); gcMediaHook(); if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
 function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.95; u.pitch = 1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
 function gcBeep(f = 660, len = .5, vol = .05){ try { const a = audioCtx; if (!a) return; const t = a.currentTime, o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain();
@@ -2562,8 +2581,8 @@ function gcCmd(c, v){
   if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
   if (c === "pause") { const b = document.getElementById("gcFigB");
-    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcPlay(); gcVShow(true); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
-    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} if (gcVst === 1) gcV("pauseVideo"); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { gcPlay(); gcVShow(); if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
+    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); gc.prep = false; const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
     return gcPaint(); }
   if (c === "tempo") { gcTempo = v; lsSet("coachTempo", v); const keep = {i: gc.i, side: gc.side}; gc.pl = gcPlan(pl.base); Object.assign(gc, keep); return gcPaint(); }
   if (c === "view") { gcView = v; lsSet("coachView", v); return gcMediaMount(); }
