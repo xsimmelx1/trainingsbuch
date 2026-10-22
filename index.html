@@ -240,11 +240,26 @@ body.wo main{padding-bottom:110px}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
 .chips.focus{justify-content:center;margin:2px 0 8px}.esum{margin:8px 2px}
-.tline{display:flex;gap:4px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
-.tline button{flex:none;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:46px;padding:5px 6px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:14px;color:var(--ink)}
+.tline{display:flex;gap:4px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none;align-items:stretch}
+.tline button{flex:1 0 62px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;padding:6px 3px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:14px;color:var(--ink)}
 .tline button b{font-size:11px;color:var(--muted);font-weight:600}
-.tline button.done{opacity:.55}.tline button.miss{border-style:dashed}
-.tline button.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
+.tline button .ti{font-size:16px;line-height:1.2}
+.tline button .tn{font-size:10px;letter-spacing:-.01em;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tline button .ts{font-size:9.5px;font-weight:700;line-height:1.2;text-transform:uppercase;letter-spacing:.02em}
+.tline button.done{opacity:.5}
+.tline button.done .ti{color:var(--good);font-weight:700}
+.tline button.past{opacity:.5}
+.tline button.miss{border-color:var(--warn)}
+.tline button.miss .ts{color:var(--warn)}
+.tline button.next .ts{color:var(--accent)}
+.tnow{flex:none;width:2px;margin:0 1px;border-radius:2px;background:var(--bad,#e5534b);position:relative}
+.tnow i{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9.5px;font-weight:700;color:var(--bad,#e5534b);white-space:nowrap}
+.tleg{display:flex;gap:12px;flex-wrap:wrap;margin:2px 0 4px}
+.tleg span{display:inline-flex;align-items:center;gap:5px}
+.lg{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:4px;border:1px solid var(--line);font-style:normal;font-size:9px}
+.lg.next{border:2px solid var(--accent);background:var(--accent-soft)}
+.lg.miss{border:2px solid var(--warn)}
+.lg.done{color:var(--good);font-weight:700}.tline button.next{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 1px var(--accent)}
 .nextc .nowh .mthumb{width:56px;height:56px;border-radius:12px}
 .pps{display:flex;flex-direction:column;gap:6px;margin:0}
 .pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
@@ -488,6 +503,15 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .nowh .mthumb{width:64px;height:64px}
 .nowi{font-size:30px;width:48px;text-align:center}
 .nowc .actions .btn{flex:1}
+.nowbig .nowc{padding:22px 18px;gap:16px}
+.nowbig .nowh b{font-size:24px;line-height:1.2}
+.nowbig .nowh .small{font-size:15px}
+.nowbig .nowi{font-size:44px;width:60px}
+.nowbig .nowc .btn.big{min-height:60px;font-size:19px}
+.nowbig .tb{padding:18px 16px}
+.nowbig .tb b{font-size:24px;line-height:1.2}
+.nowbig .tb .small{font-size:15px}
+.nowbig .exhero .btn.big{min-height:60px;font-size:19px;margin-top:10px}
 .lrows{display:flex;flex-direction:column;gap:6px}
 .lrow{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:6px 10px;background:var(--surface);min-height:52px}
 .lrow .lmain{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;min-width:0;color:var(--ink);font:inherit}
@@ -1855,16 +1879,17 @@ function todayItems(focus){
 }
 
 // ---------- Heute: Tagesablauf mit Uhrzeiten, nächster Termin und Vorbereitungen ----------
+const MEAL_SHORT = {fr: "Frühstück", mi: "Mittag", sn: "Snack", ab: "Abendbrot", ex: "Extra"};
 const hmDiff = m => m < 1 ? "jetzt" : m < 60 ? `in ${m} min` : `in ${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}`;
 function dayEvents(d){
   const ev = [], st = trainState(), pl = planFor(d);
-  ev.push({k: "mob", t: "07:30", icon: "🧘", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
+  ev.push({k: "mob", t: "07:30", icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
-    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
-  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", title: m.info.name, sub: `${m.label} · <span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, done: m.ate, meal: m});
+    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
+  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, done: m.ate, meal: m});
   const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
-    ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
-  ev.push({k: "pain", t: "21:45", icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
+    ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
+  ev.push({k: "pain", t: "21:45", icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
   return ev.sort((a, b) => a.t.localeCompare(b.t));
 }
 // Vorbereitungen: wann man womit anfangen sollte
@@ -1889,13 +1914,17 @@ function nextBlock(d){
   const win = e => e.meal ? 30 : e.train ? 120 : e.k === "mob" ? 240 : 24 * 60;
   const nx = ev.find(e => !e.done && hm(e.t) + win(e) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
   const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
-  const line = `<div class="tline">${ev.map(e => { const past = hm(e.t) < nm; const act = e.meal ? (recipeByName(e.meal.name) ? `data-recipe="${esc(e.meal.name)}" data-rctx="${d}|${e.meal.k}"` : `data-sheet="meal" data-v="${d}|${e.meal.k}"`) : e.act;
-    return `<button type="button" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${!e.done && past && e !== nx ? "miss" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}"><b>${e.t}</b>${e.done ? "✓" : e.icon}</button>`; }).join("")}</div>`;
-  let h = `<div class="lab sec">Als Nächstes</div>` + line;
+  // Tagesablauf: jeder Punkt mit Uhrzeit, Symbol, Kurzname und eindeutigem Status; „jetzt“-Strich an der aktuellen Uhrzeit
+  const nowAt = ev.findIndex(e => hm(e.t) > nm);
+  const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? (recipeByName(e.meal.name) ? `data-recipe="${esc(e.meal.name)}" data-rctx="${d}|${e.meal.k}"` : `data-sheet="meal" data-v="${d}|${e.meal.k}"`) : e.act;
+    const stat = e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
+    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">jetzt</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
+    <div class="tleg small muted"><span><i class="lg next"></i>jetzt dran</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
+  let h = `<div class="lab sec">Tagesablauf</div>` + line;
   const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>`).join("")}</div>` : "";
   if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
-  h += `<div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
+  h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
     <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
   h += odHtml;
@@ -2001,7 +2030,7 @@ function renderToday(){
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
-  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["alles","Alles"],["training","🏋 Training"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
+  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
   h += gapBanner();
   {
     const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus), open = its.filter(i => !i.done), done = its.filter(i => i.done);
@@ -2011,7 +2040,7 @@ function renderToday(){
       h += `<div class="card diary"><div class="small muted nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div><div class="mrows">${ms.map(m => diaryRow(selDate, m)).join("")}</div><a class="btn ghost small" href="#t=essen">Wochenplan ›</a></div>`;
       view.innerHTML = h + `</div>`; return; }
     let nbOk = false; if (isToday && todayFocus === "alles") try { const nb = nextBlock(selDate); h += nb.h; nxKey = nb.key; nbOk = true; } catch (e) { console.error(e); }
-    if (isToday && !nbOk) h += open.length ? nowCard(open[0]) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
+    if (isToday && !nbOk) h += open.length ? (todayFocus === "training" ? `<div class="nowbig">${nowCard(open[0])}</div>` : nowCard(open[0])) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
     const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
     if (later.length && !nbOk) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
     if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
@@ -2019,7 +2048,9 @@ function renderToday(){
       ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
     if (done.length && !nbOk) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
     if (todayFocus !== "essen") h += weekStrip();
-    view.innerHTML = h + `</div>`; return;
+    view.innerHTML = h + `</div>`;
+    const tl = view.querySelector(".tline"), tn = tl?.querySelector(".next, .tnow"); if (tn && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = tn.offsetLeft - tl.offsetLeft - tl.clientWidth / 2 + tn.offsetWidth / 2;
+    return;
   }
 }
 // Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
@@ -3057,7 +3088,7 @@ function mealBarsOld(t){
   const T = foodTarget(), bar = (lab, e, pl, tg, unit) => `<div class="mbar"><div class="small"><b>${lab}</b> ${e} / ${tg} ${unit}${unit === "g" ? " (mind.)" : ""} <span class="muted">· Plan ${pl}</span></div><div class="track"><div class="plan" style="width:${Math.min(pl / tg * 100, 100)}%"></div><div class="fill" style="width:${Math.min(e / tg * 100, 100)}%"></div></div></div>`;
   return bar("Energie", t.eKcal, t.kcal, T.kcal, "kcal") + bar("Protein", t.eProtein, t.protein, T.protein, "g");
 }
-let showMore = false, mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus3") || "alles";
+let showMore = false, mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus4") || "training";
 function mealCard(d, forceOpen){
   if (!mealPlan || !recipes) { ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {}); return `<div class="card"><h2>Essen</h2><div class="small muted">Lade Ernährungsplan …</div></div>`; }
   const ms = mealsFor(d), t = mealTotals(ms), T = foodTarget(), gap = T.kcal - t.kcal, eaten = ms.filter(m => m.ate).length;
@@ -3893,7 +3924,7 @@ async function onClick(e){
   const cm2 = t.closest("[data-catm]"); if (cm2) { catF.m = cm2.dataset.catm; renderMore(); return; }
   if (t.closest("[data-catp]")) { catF.plan = !catF.plan; renderMore(); return; }
   if (t.closest('[data-act="toggleMore"]')) { showMore = !showMore; renderToday(); return; }
-  const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus3", todayFocus); renderToday(); return; }
+  const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus4", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }
   if (t.id === "shopReset") { lsSet(shopCtx().key, []); renderMore(); return; }
