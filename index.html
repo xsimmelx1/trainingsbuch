@@ -615,6 +615,9 @@ body.wo .exbody{gap:10px}
 .pfi .pfc{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--good)}
 .pfi.on .pfc{border-color:var(--good);background:var(--good-soft)}.pfi:not(.on) .pfn{color:var(--muted)}
 .pfi .pfn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sugg{display:flex;flex-direction:column;gap:4px;margin-top:4px}.sugg:empty{display:none}
+.sugi{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 10px;color:var(--ink);font:inherit;min-height:44px}
+#ownIngSug{flex-direction:row;flex-wrap:wrap}#ownIngSug .sugi{min-height:36px;padding:5px 10px;border-radius:999px}
 .nowbig .nowc{padding:22px 18px;gap:16px}
 .nowbig .nowh b{font-size:24px;line-height:1.2}
 .nowbig .nowh .small{font-size:15px}
@@ -3554,13 +3557,31 @@ function mealSheet(arg){
     ${ownForm("slot")}
     ${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}`;
 }
+let ownSugList = [];
+// kurze Eingaben nur am Wortanfang (sonst findet „dö“ auch „Avocado“), längere irgendwo im Wort
+const sugHit = (t, q) => q.length < 4 ? fold(t).split(/[^a-z0-9ß]+/).some(w => w.startsWith(q)) : fold(t).includes(q);
+function ownHistory(){ const m = new Map();
+  const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
+  for (const d of Object.keys(store.days).sort().reverse()) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) add(o); for (const v of Object.values(day?.meals || {})) if (v && typeof v === "object") add(v); }
+  return [...m.values()]; }
+function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
+  const hit = t => sugHit(t, q), first = a => a.sort((x, y) => fold(y.name).startsWith(q) - fold(x.name).startsWith(q));
+  const hist = first(ownHistory().filter(x => hit(x.name)));
+  const rec = first((recipes || []).filter(r => hit(r.name)).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})));
+  const nw = first((NW || []).filter(x => [x.n, ...x.a].some(hit)).map(x => ({name: x.n, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})));
+  const seen = new Set(); return [...hist, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
+const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${x.protein || 0} g P</span>` : ""}</span></button>`).join("");
+// Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
+let ownIngSug = [];
+function ownIngParts(text){ const i = Math.max(text.lastIndexOf(","), text.lastIndexOf("\n")), head = text.slice(0, i + 1), tail = text.slice(i + 1), m = tail.match(/^(\s*(?:ca\.\s*)?[\d½¼¾.,\/–-]*\s*(?:g|kg|ml|l|el|tl|stück|stk|scheiben?|portionen?|becher|dosen?|handvoll|x)?\s+)?(.*)$/i);
+  return {head, amt: m?.[1] || (tail.match(/^\s*/)[0]), word: (m?.[2] || tail).trim()}; }
 function otherSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k), close = `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>`;
   return `<div class="sh"><h2>Was anderes gegessen</h2>${close}</div>
     <div class="small muted">${m ? `Statt <b>${esc(m.info.name)}</b> (${esc(MEAL_SHORT[k] || m.label)}, ${fmt(d)}). ` : ""}Wird als gegessen gezählt.</div>
-    <div class="card ownf"><div class="field"><label for="ownName">Was war's?</label><input type="text" id="ownName" placeholder="z. B. Pizza Margherita, Mensa-Curry, Döner" autocomplete="off"></div>
+    <div class="card ownf"><div class="field"><label for="ownName">Was war's?</label><input type="text" id="ownName" placeholder="z. B. Pizza Margherita, Mensa-Curry, Döner" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
     <details class="otherdet"><summary>Zutaten grob angeben <span class="small muted">(optional, für kcal und Eiweiß)</span></summary>
-      <div class="field"><label for="ownText">Zutaten und Mengen, so grob wie du magst</label><textarea id="ownText" rows="3" placeholder="z. B. 200 g Nudeln, Tomatensoße, 50 g Käse"></textarea></div>
+      <div class="field"><label for="ownText">Zutaten und Mengen, so grob wie du magst</label><textarea id="ownText" rows="3" placeholder="z. B. 200 g Nudeln, Tomatensoße, 50 g Käse"></textarea><div class="sugg" id="ownIngSug"></div></div>
       <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
       <div class="grid2"><div class="field nutri"><label for="ownKcal">kcal</label><input type="text" inputmode="numeric" id="ownKcal"></div><div class="field nutri"><label for="ownProt">Eiweiß g</label><input type="text" inputmode="numeric" id="ownProt"></div></div>
     </details>
@@ -3569,10 +3590,10 @@ function otherSheet(arg){
 function ownForm(mode){
   const tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="card ownf"><div class="lab">${mode === "slot" ? "Oder eigenes Essen eintragen" : "Was hast du gegessen?"}</div>
-    <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea></div>
+    <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea><div class="sugg" id="ownIngSug"></div></div>
     <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
     <button class="btn small" type="button" data-scanstart="own">📷 Barcode scannen</button><div id="scanSlot"></div>
-    <div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" placeholder="z. B. Mensa-Curry, Brezel, Pizza"></div>
+    <div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" placeholder="z. B. Mensa-Curry, Brezel, Pizza" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
     <div class="grid2">${mode === "slot" || mode === "past" ? "" : `<div class="field"><label for="ownTime">Uhrzeit</label><input type="time" id="ownTime" value="${tm}"></div>`}
     <div class="field nutri"><label for="ownKcal">kcal (optional)</label><input type="text" inputmode="numeric" id="ownKcal"></div><div class="field nutri"><label for="ownProt">Protein g (optional)</label><input type="text" inputmode="numeric" id="ownProt"></div></div>
     <button class="btn primary" type="button" id="ownSave" data-mode="${mode}">Eintragen</button></div>`;
@@ -4233,6 +4254,13 @@ sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
 sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
+  const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
+    q("#ownName").value = x.name; if (q("#ownKcal")) q("#ownKcal").value = x.kcal || ""; if (q("#ownProt")) q("#ownProt").value = x.protein || "";
+    if (x.ing && q("#ownText")) q("#ownText").value = x.ing; const det = q(".otherdet"); if (det && (x.kcal || x.protein)) det.open = true;
+    q("#ownSug").innerHTML = ""; ownSugList = []; return; }
+  const isg = t.closest("[data-ingsug]"); if (isg) { const x = ownIngSug[+isg.dataset.ingsug], ta = sheet.querySelector("#ownText"); if (!x || !ta) return;
+    const {head, amt} = ownIngParts(ta.value); ta.value = head + (head && !/\s$/.test(head) ? " " : "") + (amt.trim() ? amt.trim() + " " : "") + x.n + ", "; ta.focus();
+    sheet.querySelector("#ownIngSug").innerHTML = ""; ownIngSug = []; return; }
   const cb = t.closest("[data-coach]"); if (cb) { const k = cb.dataset.coach; ensureCur(); if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
   const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
@@ -4451,6 +4479,9 @@ async function onClick(e){
 }
 function onInput(e){
   const t = e.target;
+  if (t.id === "ownName") { const show = () => { ownSugList = ownSuggest(t.value); const box = sheet.querySelector("#ownSug"); if (box) box.innerHTML = ownSugHtml(ownSugList); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
+  if (t.id === "ownText") { const show = () => { const {word} = ownIngParts(t.value), q = fold(word); ownIngSug = q.length < 2 ? [] : (NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).slice(0, 6);
+      const box = sheet.querySelector("#ownIngSug"); if (box) box.innerHTML = ownIngSug.map((x, i) => `<button type="button" class="sugi chip" data-ingsug="${i}">${esc(x.n)}</button>`).join(""); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
   if (t.dataset.ex) { const id = t.dataset.ex, i = Number(t.dataset.i), so = setsObj(); so[id] = so[id] || []; while (so[id].length <= i) so[id].push({}); so[id][i][t.dataset.f] = t.value.trim(); touch(); return; }
   if (t.id === "wIn") { cur.weight = num(t.value); if (cur.weight != null && (cur.weight < 30 || cur.weight > 250)) { cur.weight = null; toast("Gewicht bitte in kg (30–250)"); } if (cur.weight == null) clr("weight"); touch(); return; }
   if (t.id === "slIn") { cur.sleep = num(t.value); if (cur.sleep != null && (cur.sleep < 0 || cur.sleep > 16)) { cur.sleep = null; toast("Schlaf bitte in Stunden (0–16)"); } if (cur.sleep == null) clr("sleep"); touch(); return; }
