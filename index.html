@@ -3207,13 +3207,13 @@ function catalogHtml(){
       <div class="small muted">${list.length} Übungen · antippen für Technik, Hinweise und Video</div></div>
     <div class="catgrid">${list.map(([id, e]) => `<button type="button" class="catc" data-sheet="tech" data-v="${id}">${exThumb(id, e.img) ? `<img src="${exThumb(id, e.img)}" alt="" loading="lazy" decoding="async"${e.img ? "" : ' class="vthumbimg"'}>` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.name)}</b><span class="small muted">${esc(Object.keys(e.m || {}).filter(k => (e.m[k] || 0) >= 1).map(k => (MUSCLES.find(m => m[0] === k) || [, k])[1]).join(", ") || "Mobilität")}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${inPlan.has(id) ? " · im Plan" : ""}</span></span></button>`).join("")}</div>`;
 }
-const MORE = [["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Alle Zutaten mit Preisen, Märkten und Rezepten"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"],
+const MORE = [["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Alle Zutaten mit Preisen, Märkten und Rezepten"], ["bon", "🧾", "Kassenbon einlesen", "Gekauftes als Vorrat und deine Preise übernehmen"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"],
   ["essenset", "🍽", "Essen-Einstellungen", "Nährwerte, Budget, Allergien, Ersatz, Zeiten"], ["setup", "⚙", "Einrichtung", "Verbindung, Push, Kalender-Abo, Plan"]];
 function renderMore(){
   if (tab === "essen") return renderEssen();
   if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
   const s = sub.mehr || "menu";
-  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" data-sub="${k}"><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" ${k === "bon" ? 'data-sheet="receipt"' : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
   const title = (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
   view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
@@ -3826,7 +3826,8 @@ function parseReceipt(text){
 // Typische Bon-Abkürzungen vor den normalen Suchmustern
 const RC_ALIAS = [[/linsen\s*rot|rote\s*lins/, "roteLinsen"], [/soja\s*-?dr|sojadrink|soja\s*milch/, "sojadrink"], [/hafer\s*-?dr|haferdrink|oat/, "haferdrink"], [/h-?milch|vollmilch|fettarme\s*milch|frischmilch/, "milch"], [/speisequark|magerquark|quark\s*mager/, "magerquark"], [/kichererb/, "kichererbsen"], [/hafer\s*fl|haferfl|bl[äa]tterfl/, "haferflocken"], [/freiland|bodenhalt|\beier\b/, "eier"], [/k[öo]rniger\s*fr|h[üu]ttenk/, "huettenkaese"]];
 function matchItem(it){
-  const nm = it.name.toLowerCase(), al = RC_ALIAS.find(([re]) => re.test(nm)), pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm));
+  const nm0 = it.name.toLowerCase(), nm = nm0.replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü"); // Bons schreiben Umlaute teils als ae/oe/ue
+  const al = RC_ALIAS.find(([re]) => re.test(nm) || re.test(nm0)), pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm) || x.re.test(nm0));
   const sm = it.name.match(/(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i); let size = null;
   if (sm) { const v = Number(sm[1].replace(",", ".")), u = sm[2].toLowerCase(); size = u === "kg" || u === "l" ? v * 1000 : v; }
   const unitPrice = it.unit || it.price;
@@ -3869,7 +3870,8 @@ function receiptHtml(){
   const idx = rcpt.items.map((it, i) => [it, i]), hit = idx.filter(([it]) => it.pid), miss = idx.filter(([it]) => !it.pid);
   h += hit.map(([it, i]) => rcRow(it, i)).join("");
   if (miss.length) h += `<details class="rcmore" open><summary class="small">Nicht zugeordnet (${miss.length}) · werden als eigene Produkte gemerkt</summary><div class="small muted">Haken weg, wenn etwas nicht in deine Zutatenliste soll. Oder oben ein passendes Produkt wählen.</div><div class="rcl">${miss.map(([it, i]) => `<div class="rci ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "off" : ""}"><label class="check small"><input type="checkbox" data-rckeep="${i}" ${it.keep === false || (it.keep == null && RC_JUNK.test(it.name)) ? "" : "checked"}><span><b>${esc(rcClean(it.name) || it.name)}</b> · ${eur(it.unit || it.price)}</span></label><select data-rcpid="${i}" aria-label="Produkt">${opts(it.pid)}</select></div>`).join("")}</div></details>`;
-  return h + `</div><button class="btn primary big" type="button" data-act="rcSave">Preise übernehmen</button><button class="btn ghost" type="button" data-act="rcReset">Anderen Bon wählen</button>`;
+  return h + `</div><label class="check"><input type="checkbox" id="rcStock" ${lsGet("rcStock") === false ? "" : "checked"}><span>Gekauftes als Vorrat markieren (🏠 habe ich zuhause)</span></label>
+    <button class="btn primary big" type="button" data-act="rcSave">Übernehmen</button><button class="btn ghost" type="button" data-act="rcReset">Anderen Bon wählen</button>`;
 }
 // Kleine Info-Schaltfläche statt langer Erklärtexte
 const info = t => `<details class="info"><summary aria-label="Info">ⓘ</summary><div class="small muted">${t}</div></details>`;
@@ -4450,7 +4452,11 @@ async function onClick(e){
       const my = Object.assign({}, FOOD().myProds || {}); let nm = 0;
       for (const it of rcpt.items) { if (it.pid) continue; const keep = it.keep ?? !RC_JUNK.test(it.name), name = rcClean(it.name); if (!keep || name.length < 3) continue;
         const key = fold(name).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); if (!key) continue; my[key] = {name, price: it.unit || it.price, store: rcpt.store, date: d}; nm++; }
-      saveFood(nm ? {ownPrices: own, myProds: my} : {ownPrices: own}); rcpt = null; sheetKind = null; sheet.close(); toast(`${n} Preise übernommen${nm ? ` · ${nm} neue Produkte gemerkt` : ""}`); render(); return; }
+      // Gekauftes zugeordnetes als Vorrat
+      const toStock = !!sheet.querySelector("#rcStock")?.checked; lsSet("rcStock", toStock); let ns = 0, stock = null;
+      if (toStock) { stock = STOCK(); for (const it of rcpt.items) if (it.use && it.pid && !stock.has(it.pid)) { stock.add(it.pid); ns++; } }
+      saveFood(Object.assign({ownPrices: own}, nm ? {myProds: my} : {}, stock ? {stock: [...stock], stockOn: true} : {})); rcpt = null; sheetKind = null; sheet.close();
+      toast(`${n} Preise übernommen${ns ? ` · ${ns} als Vorrat` : ""}${nm ? ` · ${nm} ${nm === 1 ? "neues Produkt" : "neue Produkte"} gemerkt` : ""}`); render(); return; }
     if (a === "ownDel") { const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), [pid, st] = v.split("|"); if (own[pid]) { delete own[pid][st]; if (!Object.keys(own[pid]).length) delete own[pid]; } saveFood({ownPrices: own}); render(); if (sheet.open) renderSheet(); return; }
     if (a === "toggleDone") { showDone = !showDone; renderToday(); return; }
     if (a === "retrySync") { Object.keys(pending).forEach(flushDay); loadAll().then(() => render()); return; }
