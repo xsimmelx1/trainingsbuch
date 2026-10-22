@@ -538,7 +538,28 @@ body.gcon .restbar{display:none}
 .gclog input{width:110px;font-size:28px;text-align:center;padding:8px}
 .gcstep{display:flex;align-items:center;gap:14px}.gcstep b{font-family:var(--f-num);font-size:44px;min-width:64px}
 .gcstep .btn{min-width:56px;min-height:56px;font-size:26px}
-.gcgo{margin-bottom:4px}
+.gcgo{margin-bottom:0}
+.exsum2{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:stretch}
+.exthumb{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;padding:0;min-height:78px}
+.exthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.exthumb span{position:absolute;right:4px;bottom:4px;font-size:11px;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;padding:1px 6px}
+.dosebox.mini{padding:6px 10px;gap:2px;justify-content:center}
+.dosebox.mini .dz{font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.exacts{display:flex;gap:8px}.exacts .gcgo{flex:1;min-height:48px;font-size:16px}.exacts .btn:not(.gcgo){min-width:52px;min-height:48px}
+.target .sug{min-height:32px;padding:3px 10px}
+body.wo .fxname{font-size:22px}
+body.wo .exbody{gap:10px}
+/* Coach: Kopfzeile einzeilig, Umschalter im Bild, kleinere Höhen auf kleinen Handys */
+.gch{align-items:center}
+.gch > div{min-width:0}
+.gch b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gch .actions{flex:none;display:flex;gap:2px}
+.gch .btn{min-width:40px;min-height:40px;padding:0 8px}
+.gcmedia{max-height:32vh}
+.gcview{position:relative;margin-top:-46px;margin-bottom:6px;justify-content:flex-end;padding-right:8px;z-index:2}
+.gcview button{background:rgba(0,0,0,.55);color:#fff;border-color:transparent;min-height:32px;font-size:13px}
+.gcview button[aria-pressed="true"]{background:#fff;color:#111}
+@media (max-height:720px){.gcin{gap:8px}.gcin:has(.gcmedia) .gcnum{font-size:52px}.gcin:has(.gcmedia) .gcrepbig b{font-size:60px}.gcbtns .btn.big{min-height:50px;font-size:17px}.gcsub{font-size:15px}.gcbig .small{display:none}.gcmedia{max-height:28vh}}
 .gch .gcskip{font-size:15px;min-width:auto;padding:0 12px;white-space:nowrap}
 .ic{width:1.15em;height:1.15em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none;display:inline-block}
 .ic-train{color:var(--c-train)}
@@ -1737,6 +1758,7 @@ function doseHtml(key, small){
   if (ph.c <= 2 || ph.deload) d.dose = d.dose.replace(/[;,]? ?(letzter Satz )?(mit )?Myo-Reps[^;]*/i, "");  // Myo-Reps erst ab RIR ≤ 1
   if (EX[key] && /^\d+ ×/.test(d.dose)) d.dose = d.dose.replace(/^\d+ ×/, setsFor(key, weekNo(selDate) ?? 0) + " ×");
   const meta = [d.tempo ? `Tempo ${esc(d.tempo)}` : "", d.rest ? `Pause ${d.rest >= 120 && d.rest % 60 === 0 ? d.rest / 60 + " min" : d.rest + " s"}` : ""].filter(Boolean).join(" · ");
+  if (small === "mini") return `<div class="dosebox mini"><div class="dz">${esc(d.dose)}</div><div class="small muted">${[d.tempo ? "Tempo " + esc(d.tempo.replace(/\s*\(.*$/, "")) : "", d.rest ? "Pause " + (d.rest >= 120 && d.rest % 60 === 0 ? d.rest / 60 + " min" : d.rest + " s") : ""].filter(Boolean).join(" · ")}</div></div>`;
   return `<div class="dosebox${small ? " sm" : ""}"><div class="dz">🎯 ${esc(d.dose)}</div>${meta ? `<div class="small muted">${meta}</div>` : ""}${!small && d.breath ? `<div class="small">🌬 ${esc(d.breath)}</div>` : ""}${!small && d.why ? `<div class="small muted">${esc(d.why)}</div>` : ""}</div>`;
 }
 let restEnd = 0, restTimer = null, clockTimer = null, wakeLock = null;
@@ -2260,13 +2282,12 @@ function exBody(base, n, w){
   const rows = Math.max(n, lastMeaningful(mine));
   const gsw = atHome() && eff0(base) !== id ? missingGear(eff0(base)) : [];
   const dn0 = (setsObj()[id] || []).filter(doneSet).length;
-  let h = `<div class="exbody">${dn0 < n ? `<button type="button" class="btn primary big gcgo" data-gc="open" data-v="${base}">▶ Mit Coach: Satz ${dn0 + 1} von ${n}</button>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}${doseHtml(id, true)}${atHome() ? gearHtml(id, true) : ""}${DOSE[id]?.hold ? `<div class="tmrslot"></div><button type="button" class="btn small" data-tmrin="${id}">⏱ Halte-Timer</button>` : ""}`;
-  const nAlt = altOptions(base).length - 1;
-  if (nAlt > 0) h += `<div class="actions"><button class="btn small" type="button" data-sheet="alt" data-v="${base}">⇄ Alternativen (${nAlt})</button></div>`;
-  if (e.img) h += `<button type="button" style="border:0;padding:0;background:none" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${animHtml(e.img, e.name, "Technik ›")}</button>`;
-  else h += `<button type="button" class="btn" data-sheet="tech" data-v="${id}">Technik & Video</button>`;
-  h += `<div class="target"><span>Ziel <b>${n} × ${esc(e.reps)}</b>${rir ? ` · RIR <b>${rir}</b>` : ""}</span>${e.gate && !cleared ? `<span class="tag gate">SC-Ampel${e.alt ? ` · Ersatz: ${esc(e.alt)}` : ""}</span>` : ""}</div>`;
-  if (e.type !== "k") h += `<button type="button" class="sug ${sg.up ? "" : "hold"}" data-sheet="why" data-v="${id}">${esc(sg.short)} <span class="muted">· warum?</span></button>`;
+  const nAlt = altOptions(base).length - 1, th = e.img ? isrc(e.img, 0) : exThumb(id, null);
+  let h = `<div class="exbody">${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}
+    <div class="exsum2"><button type="button" class="exthumb" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : ""}<span>Technik ›</span></button>${doseHtml(id, "mini")}</div>
+    <div class="exacts">${dn0 < n ? `<button type="button" class="btn primary gcgo" data-gc="open" data-v="${base}">▶ Coach · Satz ${dn0 + 1}/${n}</button>` : ""}${nAlt > 0 ? `<button class="btn" type="button" data-sheet="alt" data-v="${base}" aria-label="Alternativen (${nAlt})">⇄ ${nAlt}</button>` : ""}${DOSE[id]?.hold ? `<button type="button" class="btn" data-tmrin="${id}" aria-label="Halte-Timer">⏱</button>` : ""}</div>
+    ${DOSE[id]?.hold ? `<div class="tmrslot"></div>` : ""}${atHome() ? gearHtml(id, true) : ""}`;
+  h += `<div class="target"><span>Ziel <b>${n} × ${esc(e.reps)}</b>${rir ? ` · RIR <b>${rir}</b>` : ""}</span>${e.type !== "k" ? `<button type="button" class="sug ${sg.up ? "" : "hold"}" data-sheet="why" data-v="${id}">${esc(sg.short)} <span class="muted">· warum?</span></button>` : ""}${e.gate && !cleared ? `<span class="tag gate">SC-Ampel${e.alt ? ` · Ersatz: ${esc(e.alt)}` : ""}</span>` : ""}</div>`;
   const showKg = !!e.load, prev = lastPerf(id, selDate)?.sets || [];
   h += `<div class="sethead ${showKg ? "" : "nokg"}"><span>Satz</span><span>Zuletzt</span>${showKg ? "<span>kg</span><span></span>" : ""}<span>Wdh</span><span>✓</span></div>`;
   for (let i = 0; i < rows; i++) {
