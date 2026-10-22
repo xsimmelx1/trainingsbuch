@@ -275,7 +275,7 @@ body.wo main{padding-bottom:110px}
 .pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
 .pps .pp > span:first-child{flex:none;width:42px;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
 .pps .pp.due > span:first-child{color:var(--warn)}
-.nextc .actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px}.nextc .actions .btn{white-space:nowrap}
+.nextc .actions{display:flex;flex-wrap:nowrap;gap:6px}.nextc .actions .btn{flex:1;white-space:nowrap;padding:9px 6px;font-size:14px;min-width:0}.nextc .actions .btn[data-sheet="meal"]{flex:none;min-width:44px}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.quick .qcard.wide{grid-column:span 2}.quick .qcard b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .odit{display:inline-flex;gap:2px;align-items:center}.odx{min-width:36px;padding:0 8px;color:var(--muted)}
@@ -1985,7 +1985,7 @@ function todayItems(focus){
   }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
     const tm = m.time ? hm(m.time) : 20 * 60;
-    out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, meal: m});
+    out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
   }
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   out.push({k: "pain", prio: hm0 >= 19 * 60 ? 1 : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
@@ -2003,7 +2003,7 @@ function dayEvents(d){
   ev.push({k: "mob", t: "07:30", icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
-  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${m.info.kcal} kcal · ${m.info.protein} g P</span>`, done: m.ate, meal: m});
+  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
   const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
     ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
   ev.push({k: "pain", t: "21:45", icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
@@ -2043,7 +2043,7 @@ function nextBlock(d){
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? `<button type="button" class="linkbtn otherbtn" data-sheet="other" data-v="${d}|${m.k}">✎ Was anderes gegessen</button>` : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Anderes</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
   h += odHtml;
   const other = [];
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
@@ -2084,7 +2084,7 @@ function zinfoHtml(id){
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${id}" aria-pressed="${home}">${home ? "🏠 Habe ich zuhause" : "🏠 Als Vorrat markieren"}</button>
     <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span>Bio</span></div>${rows}</div>
     <div class="small muted">* geschätzt (Discounter-Eigenmarken sind meist preisgleich). Eigene Preise kommen vom Kassenbon oder Scan.</div>
-    <div class="lab sec">In ${recs.length} Rezept${recs.length === 1 ? "" : "en"}</div><div class="lrows">${recs.slice(0, 40).map(r => `<button type="button" class="lrow menu" data-recipe="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted nutri">${r.kcal} kcal · ${r.protein} g P</span></span><span class="go">›</span></button>`).join("") || `<div class="small muted">In keinem Rezept.</div>`}</div>`;
+    <div class="lab sec">In ${recs.length} Rezept${recs.length === 1 ? "" : "en"}</div><div class="lrows">${recs.slice(0, 40).map(r => `<button type="button" class="lrow menu" data-recipe="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted nutri">${nutTxt(r)}</span></span><span class="go">›</span></button>`).join("") || `<div class="small muted">In keinem Rezept.</div>`}</div>`;
 }
 // Übersicht aller Zutaten: Preis, günstigster Markt, wie oft in Rezepten
 let zSort = lsGet("zSort") || "laden", zQ = "", zGrp = "";
@@ -2130,8 +2130,8 @@ function zutatenHtml(){
 function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
-    return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh">${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${r.kcal} kcal · ${r.protein} g Protein</div></div></div>
-      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${m.own ? "" : `<button type="button" class="linkbtn otherbtn" data-sheet="other" data-v="${selDate}|${m.k}">✎ Was anderes gegessen</button>`}</div>`; }
+    return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh">${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}rotein</div></div></div>
+      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div></div>`; }
   return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh"><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
 function laterRow(it){
@@ -3067,7 +3067,7 @@ let sheetQuiz = null;
 let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
   const qq = srQ.trim().toLowerCase(), wr = Object.keys(weekRecipes(shopWeek())), hit = r => !qq || recipeText(r).includes(qq);
-  const row = r => `<button type="button" class="lrow menu ${r.name === shopRec ? "sel" : ""}" data-shoprec="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal · ${r.protein} g P · </span>${r.activeMin ?? r.timeMin} min${r.mealPrep ? " · Meal Prep" : ""}</span></span><span class="go">${r.name === shopRec ? "✓" : "›"}</span></button>`;
+  const row = r => `<button type="button" class="lrow menu ${r.name === shopRec ? "sel" : ""}" data-shoprec="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)} · </span>${r.activeMin ?? r.timeMin} min${r.mealPrep ? " · Meal Prep" : ""}</span></span><span class="go">${r.name === shopRec ? "✓" : "›"}</span></button>`;
   const byName = (a, b) => a.name.localeCompare(b.name, "de");
   const G = [["📅 Diese Woche im Plan", wr.map(recipeByName).filter(Boolean)], ["★ Favoriten", recipes.filter(r => isFav(r.name) && !wr.includes(r.name)).sort(byName)], ["Alle Rezepte", recipes.filter(r => !wr.includes(r.name) && !isFav(r.name)).sort(byName)]];
   let h = ""; for (const [g, a] of G) { const v = a.filter(hit); if (v.length) h += `<div class="lab sec">${g} (${v.length})</div><div class="lrows">${v.map(row).join("")}</div>`; }
@@ -3339,6 +3339,8 @@ function mealInfo(n){
   if (n === "skip") return {name: "ausgelassen", kcal: 0, protein: 0};
   const r = recipeNutri(recipeByName(n)); return r ? {name: r.name, kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
 }
+// Nährwerte als Text; eigene Einträge ohne Angaben zeigen keine 0-Werte
+const nutTxt = i => i?.own && !i.kcal && !i.protein ? "ohne Werte" : `${i?.kcal ?? 0} kcal · ${i?.protein ?? 0} g P`;
 const dayObj = d => cur && cur.date === d ? cur : store.days[d];
 // Bouldern zählt fürs Essen nicht als Trainingstag (meist spontan abends): Snacks bleiben, der Shake kommt als Extra danach
 const isTrainDay = d => isStrength(dayObj(d)) || !!planFor(d) || (store.plan.past || []).some(p => p.date === d);
@@ -3481,7 +3483,7 @@ function mealThumb(n){
 function mealRow(d, m){
   const r = m.info;
   return `<div class="meal mc ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
-    <button type="button" class="mname" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
+    <button type="button" class="mname" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<span class="go">›</span>`}</div>`;
 }
 
@@ -4093,8 +4095,8 @@ let openDays = null, essenDay = null;
 // Kompakte Zeile: Bild, Zeit · Art, Name, Werte; ✓ rechts; Tippen öffnet das Rezept (dort Tauschen)
 function diaryRow(d, m){
   const r = m.info, rec = recipeByName(m.name);
-  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}">
-    <button type="button" class="mrmain" ${m.own ? "disabled" : rec ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal · ${r.protein} g P</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
+  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : m.own ? "✓ Gegessen" : "✎ Anderes gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}">
+    <button type="button" class="mrmain" ${m.own ? "disabled" : rec ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small ghost ic" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Entfernen">✕</button>` : ""}<button type="button" class="mcheck" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button></div>`;
 }
 
@@ -4488,6 +4490,8 @@ for (const el of [document.querySelector("header.top"), document.getElementById(
 function onSwipe(s0, dx){
   const z = s0.z;
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
+    // nach rechts: noch nicht gegessen → „Was anderes gegessen“ öffnen; schon abgehakt → wieder auf nicht gegessen
+    if (dx > 0 && !k.startsWith("o") && !(dayObj(d)?.ate || {})[k]) { ensureCur(); openSheet("other", `${d}|${k}`); return; }
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
       const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
       const row = view.querySelector(`.mrow[data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
