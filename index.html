@@ -2042,7 +2042,7 @@ function nextBlock(d){
   const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
   if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
-  h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc"><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
+  h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
     <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Anderes</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div></div>`;
   h += odHtml;
@@ -2131,12 +2131,13 @@ function zutatenHtml(){
 function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
-    return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh">${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}rotein</div></div></div>
+    return `<div class="lab sec">Jetzt</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh">${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}rotein</div></div></div>
       <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div></div>`; }
   return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh"><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
+const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : m.own ? "✓ Gegessen" : "✎ Anderes gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}"`;
 function laterRow(it){
-  if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${selDate}|${m.k}"` : `data-sheet="meal" data-v="${selDate}|${m.k}"`}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
+  if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}" ${mealSw(selDate, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${selDate}|${m.k}"` : `data-sheet="meal" data-v="${selDate}|${m.k}"`}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
   return `<div class="lrow ${it.done ? "done" : ""}"><span class="mdot static">${it.done ? "✓" : it.icon}</span><button type="button" class="lmain" ${it.act}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button><span class="go">›</span></div>`;
 }
 let showDone = false;
@@ -3483,7 +3484,7 @@ function mealThumb(n){
 }
 function mealRow(d, m){
   const r = m.info;
-  return `<div class="meal mc ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}"><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
+  return `<div class="meal mc ${m.ate ? "done" : ""}" ${mealSw(d, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button>
     <button type="button" class="mname" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><b>${esc(r.name)}</b><span class="mk">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : m.budget ? " · Budget" : ""}<span class="nutri"> · ${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? `<span class="price"> · ${eur(mealCost(m.name))}</span>` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small mswap" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag löschen">✕</button>` : `<span class="go">›</span>`}</div>`;
 }
@@ -4495,7 +4496,7 @@ function onSwipe(s0, dx){
     if (dx > 0 && !k.startsWith("o") && !(dayObj(d)?.ate || {})[k]) { ensureCur(); openSheet("other", `${d}|${k}`); return; }
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
       const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
-      const row = view.querySelector(`.mrow[data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
+      const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
     else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
   if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
   if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); toast(`${dx < 0 ? "→" : "←"} ${selDate === todayIso() ? "Heute" : fmt(selDate)}`); }
