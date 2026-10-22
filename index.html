@@ -2417,7 +2417,7 @@ window.addEventListener("message", ev => { if (!/youtube/.test(ev.origin)) retur
   if (ct == null || !gc) return; p.t = ct; p.at = Date.now(); const fo = gcFollow(gc.pl.id); if (!fo) return;
   // Halten/frei: Ausschnitt auf dem sichtbaren Player in Schleife
   if (id === gcAct && gc.stage === "work" && gc.pl.mode !== "tempo" && ct >= fo.t1 - 0.05) gcVx(id, "seekTo", [fo.t0, true]); });
-function gcMediaHook(){ for (const id of ["gcV", "gcV2"]) { const f = document.getElementById(id); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id, channel: "widget"}), "*"); } catch {} GCP[id] = {t: null, at: 0, st: -1, rate: 1}; gcVx(id, "mute"); gcNoCC(id); if (id === gcAct) gcMediaRest(); }); } } }
+function gcMediaHook(){ for (const id of ["gcV", "gcV2"]) { const f = document.getElementById(id); if (f && !f._hooked) { f._hooked = true; f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({event: "listening", id, channel: "widget"}), "*"); } catch {} GCP[id] = {t: null, at: 0, st: -1, rate: 1}; gcVx(id, "mute"); gcNoCC(id); if (id === gcAct && gc?.stage !== "work") gcVx(id, "pauseVideo"); if (id === gcAct) gcMediaRest(); }); } } }
 // Sichtbar ist immer nur der aktive Player
 const gcVShow = () => { for (const id of ["gcV", "gcV2"]) document.getElementById(id)?.classList.toggle("hide", id !== gcAct); };
 // Verdeckten Player beim ersten Einsatz laden (src erst dann setzen, vorher lädt er nichts)
@@ -2450,7 +2450,12 @@ function gcMediaRep(){ if (gcClipEl()) return; const fo = gcFollow(gc.pl.id); if
     else gcRateFor((vrep - err) / len, len);
     gcPlay(); gcVShow(); }
   // Ist die nächste Wiederholung im Video nicht mehr sauber, rechtzeitig den anderen Player vorbereiten (~2,5 s Vorlauf)
-  if (gc.vk + 1 > maxK && gc.rep + 1 < gc.pl.target) { const lead = Math.min(2.5, Math.max(1, len - 0.5)); gcPrepTm = setTimeout(() => { if (gc?.stage === "work") gcPrep(lead); }, Math.max(0, len - lead) * 1000); } }
+  gc.prepNeeded = gc.vk + 1 > maxK && gc.rep + 1 < gc.pl.target;
+  if (gc.prepNeeded) { const lead = Math.min(2.5, Math.max(1, len - 0.5)); gcPrepTm = setTimeout(() => { if (gc?.stage === "work") gcPrep(lead); }, Math.max(0, len - lead) * 1000); } }
+// Nach dem Weiter: restliche Zeit dieser Wiederholung bestimmen und den zweiten Player rechtzeitig vorbereiten
+function gcReplanPrep(){ if (!gc?.prepNeeded || gc.pl.mode !== "tempo" || gc.stage !== "work") return; clearTimeout(gcPrepTm);
+  const rem = Math.max(0, (gc.end - Date.now()) / 1000) + gc.pl.ph.slice(gc.pi + 1).reduce((a, p) => a + p[1], 0), lead = Math.min(2.5, Math.max(1, rem - 0.3));
+  gcPrepTm = setTimeout(() => { if (gc?.stage === "work" && !gc.paused) gcPrep(lead); }, Math.max(0, rem - lead) * 1000); }
 function gcMediaHold(){ gcFig(false, .4); const cv = gcClipEl(); if (cv) { cv.loop = true; cv.playbackRate = 1; cv.currentTime = 0; cv.play().catch(() => {}); return; } const fo = gcFollow(gc.pl.id); if (fo) { clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcRate(1); gcV("seekTo", [fo.t0, true]); gcPlay(); gcVShow(); } }
 // Bewegungsphase? (Haltephasen ändern die Position nicht)
 const gcMoves = lab => !GC_HOLD.test(lab);
@@ -2465,10 +2470,12 @@ async function clipUrl(id){
   try { c = await caches.open("tb-clips"); const hit = await c.match(key); if (hit) return URL.createObjectURL(await hit.blob()); } catch {}
   const r = await gh(`contents/data/clips/${id}.mp4?ref=${CFG.branch}`, {headers: {Accept: "application/vnd.github.raw+json"}}); if (!r.ok) return null;
   const b = new Blob([await r.arrayBuffer()], {type: "video/mp4"});
-  try { await c?.put(key, new Response(b, {headers: {"Content-Type": "video/mp4"}})); } catch {}
+  try { await c?.put(key, new Response(b, {headers: {"Content-Type": "video/mp4"}})); for (const k of await c.keys()) if (k.url.startsWith(`https://clips.local/${id}-`) && k.url !== key) await c.delete(k); } catch {}
   return URL.createObjectURL(b);
 }
 const gcClipEl = () => document.getElementById("gcClip");
+let gcClipObjUrl = null, gcMountN = 0;
+function gcClipFree(){ if (gcClipObjUrl) { try { URL.revokeObjectURL(gcClipObjUrl); } catch {} gcClipObjUrl = null; } }
 const gcHasClip = id => !!CLIPS?.[id];
 function gcClipHtml(pl, sw){ const f = gcFollow(pl.id) || {};
   return `<div class="gcmedia vid clip">${gcFigImgs(pl)}<video id="gcClip" muted playsinline preload="auto" disablepictureinpicture></video><span class="gcvtag">${esc(f.variant || "")}</span></div>${sw}`; }
@@ -2482,11 +2489,12 @@ function gcClipPhase(){ const v = gcClipEl(); if (!v || !v.src || !gc || gc.pl.m
   if (!gc.clipMap) { if (gc.pi === 0) { v.currentTime = 0; v.playbackRate = Math.max(0.1, Math.min(4, (v.duration || 1) / gcRepLen())); v.play().catch(() => {}); } return; }
   const seg = gc.clipMap[gc.pi]; if (!seg || seg.freeze) { v.pause(); return; }
   try { v.currentTime = seg.s; } catch {} v.playbackRate = Math.max(0.1, Math.min(4, seg.d / sec)); v.play().catch(() => {}); }
-function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; gcAct = "gcV"; clearTimeout(gcPrepTm);
-  const pl = gc.pl, me = gc, html = gcMediaHtml(pl), sw = (html.match(/<div class="chips sm gcview">[\s\S]*$/) || [""])[0];
-  const after = () => { if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else gcMediaRest(); };
+function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (!box || !gc) return; gcAct = "gcV"; clearTimeout(gcPrepTm); clearTimeout(gcVtm); gcVdur = 0; gc.prep = false; gcClipFree();
+  const pl = gc.pl, me = gc, n = ++gcMountN, html = gcMediaHtml(pl), sw = (html.match(/<div class="chips sm gcview">[\s\S]*$/) || [""])[0];
+  // nach dem Laden passend zur aktuellen Stufe weitermachen (angehalten bleibt angehalten, laufende Phase läuft weiter)
+  const after = () => { if (gc !== me || n !== gcMountN || gc.paused) return; if (gc.stage === "work" && gc.pl.mode !== "tempo") gcMediaHold(); else if (gc.stage === "work") gcClipPhase(); else gcMediaRest(); };
   if (gcView !== "figur" && gcHasClip(pl.id)) { box.innerHTML = gcClipHtml(pl, sw); gc.clipMap = gcClipMap(pl);
-    clipUrl(pl.id).then(u => { const v = gcClipEl(); if (gc !== me || !v) return; if (!u) { box.innerHTML = html; gcMediaHook(); return after(); } v.src = u; v.addEventListener("loadeddata", after, {once: true}); }).catch(() => {}); return; }
+    clipUrl(pl.id).then(u => { const v = gcClipEl(); if (gc !== me || n !== gcMountN || !v) { if (u) URL.revokeObjectURL(u); return; } if (!u) { box.innerHTML = html; gcMediaHook(); return after(); } gcClipObjUrl = u; v.src = u; v.addEventListener("loadeddata", after, {once: true}); }).catch(() => {}); return; }
   box.innerHTML = html; gcMediaHook(); after(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
 function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.95; u.pitch = 1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
@@ -2495,15 +2503,15 @@ function gcBeep(f = 660, len = .5, vol = .05){ try { const a = audioCtx; if (!a)
   g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + len); o.start(t); o2.start(t); o.stop(t + len); o2.stop(t + len); } catch {} }
 function gcOpen(base){
   audioReady(); requestWake(); try { speechSynthesis.getVoices(); } catch {}
-  const pl = gcPlan(base); gc = {pl, i: gcSetIdx(pl.id), side: 0, rep: 0, pi: 0, stage: "ready", end: 0, t0: 0, paused: 0, said: {}};
+  const pl = gcPlan(base); gc = {pl, i: doneSetsOf(base).length, side: 0, rep: 0, pi: 0, stage: "ready", end: 0, t0: 0, paused: 0, said: {}};
   if (gc.i >= pl.n) gc.stage = "done";
   const el = document.getElementById("gc"); el.hidden = false; document.body.classList.add("gcon");
   el.innerHTML = `<div class="gcin"><div id="gcHead"></div><div id="gcMediaBox"></div><div id="gcMid" class="gcmid"></div><div class="gcbtns" id="gcBtns"></div></div>`; gcPaint();
   const me = gc; ensureCoachData().then(() => { if (gc !== me) return; if (gc.stage === "ready") { const keep = {i: gc.i}; gc.pl = gcPlan(base); Object.assign(gc, keep); gcPaint(); } gcMediaMount(); });
 }
-function gcClose(){ clearInterval(gcInt); gcInt = null; try { speechSynthesis.cancel(); } catch {} gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
+function gcClose(){ clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcVdur = 0; gcClipFree(); try { speechSynthesis.cancel(); } catch {} if (!cur?.startedAt || cur.finishedAt) releaseWake(); gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
 // Abschnitt starten: sec = Länge (null = Stoppuhr); countdown = Zahl zählt sichtbar bis 0 und bleibt dort 1 s
-function gcSeg(stage, sec, countdown){ gc.stage = stage; gc.t0 = Date.now(); gc.len = sec; gc.end = sec == null ? 0 : gc.t0 + (sec + (countdown ? 1 : 0)) * 1000; gc.cd = !!countdown; gc.said = {}; gc.paused = 0; gcPaint(); clearInterval(gcInt); gcInt = setInterval(gcTick, 100); }
+function gcSeg(stage, sec, countdown, at){ gc.stage = stage; gc.t0 = at && Date.now() - at < 400 ? at : Date.now(); gc.len = sec; gc.end = sec == null ? 0 : gc.t0 + (sec + (countdown ? 1 : 0)) * 1000; gc.cd = !!countdown; gc.said = {}; gc.paused = 0; gcPaint(); clearInterval(gcInt); gcInt = setInterval(gcTick, 100); }
 function gcGo(){ // nach dem 3-2-1: Satz beginnt
   const pl = gc.pl; gc.rep = 0; gc.pi = 0;
   if (pl.mode === "tempo") { gcSay(pl.ph[0][0]); gcSeg("work", pl.ph[0][1]); gc.moved = false; gcMediaRep(); gcPhaseFig(); }
@@ -2516,8 +2524,9 @@ function gcCountIn(){ if (gc) gc.clipMap = gcClipMap(gc.pl); gcMediaRest(); gcMe
 function gcAfterWork(){
   const pl = gc.pl;
   gcMediaRest();
-  if (pl.side && !gc.side) { gc.side = 1; gcBeep(587, .6, .045); gcSay("Seite wechseln"); gcSeg("switch", 5, true); return; }
-  gcBeep(784, .9, .05); gcSay("Sehr gut. Satz geschafft."); gc.logReps = pl.mode === "tempo" ? gc.rep : pl.target;
+  const got = pl.mode === "tempo" ? gc.rep : pl.target;
+  if (pl.side && !gc.side) { gc.side = 1; gc.side0 = got; gcBeep(587, .6, .045); gcSay("Seite wechseln"); gcSeg("switch", 5, true); return; }
+  gcBeep(784, .9, .05); gcSay("Sehr gut. Satz geschafft."); gc.logReps = gc.side0 != null ? Math.min(gc.side0, got) : got;
   gc.stage = "log"; clearInterval(gcInt); gcPaint();
 }
 function gcTick(){
@@ -2542,7 +2551,7 @@ function gcTick(){
     const [lab, sec] = pl.ph[gc.pi], left = pl.target - gc.rep;
     if (gc.pi === 0) { gcBeep(523, .4, .03); gcSay(left === 1 ? "Letzte" : left === 2 && pl.target > 4 ? "Noch zwei" : String(gc.rep + 1)); }
     else if (gc.rep === 0) gcSay(lab);
-    gcSeg("work", sec);
+    gcSeg("work", sec, false, gc.end);
     if (gc.pi === 0) { if (gc.moved) gcFig(false, 0); gc.moved = false; gcMediaRep(); }
     gcPhaseFig();
   }
@@ -2557,11 +2566,11 @@ function gcNextEx(base){ const sk = woSession || cur.session, w = weekNo(selDate
   return ids.slice(i + 1).find(open) || ids.slice(0, Math.max(0, i)).find(open) || null; }
 function gcSave(){
   const pl = gc.pl, id = pl.id, kgIn = document.getElementById("gcKg");
-  setsObj()[id] = setsObj()[id] || []; while (setsObj()[id].length <= gc.i) setsObj()[id].push({});
-  const s = setsObj()[id][gc.i];
+  const wi = gcSetIdx(id); setsObj()[id] = setsObj()[id] || []; while (setsObj()[id].length <= wi) setsObj()[id].push({});
+  const s = setsObj()[id][wi];
   if (pl.load) { const v = (kgIn?.value || "").trim(); if (!v) { kgIn?.focus(); toast("Gewicht eintragen (0 = Körpergewicht)"); return; } s.kg = v; }
-  s.reps = String(gc.logReps); s.done = false; checkSet(id, pl.base, gc.i); stopRest();
-  gc.i = gcSetIdx(id); gc.side = 0;
+  s.reps = String(gc.logReps); s.done = false; checkSet(id, pl.base, wi); stopRest();
+  gc.lastIdx = wi; gc.i = doneSetsOf(pl.base).length; gc.side = 0; gc.side0 = null;
   if (gc.i < pl.n) { gcSay(`Satz gespeichert. ${pl.rest >= 60 ? String(Math.round(pl.rest / 30) / 2).replace(".", ",") + " Minuten" : pl.rest + " Sekunden"} Pause`); gcSeg("rest", pl.rest, true); return; }
   const sk = woSession || cur.session, w = weekNo(selDate), nx = exList(sk).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk));
   gc.next = nx || null; gcSay(nx ? `Übung geschafft. Als Nächstes ${EX[eff(nx)].name}` : "Alle Übungen geschafft. Stark!");
@@ -2570,7 +2579,7 @@ function gcSave(){
 function gcPaint(){
   const el = document.getElementById("gc"); if (!el || !gc) return; const pl = gc.pl, st = gc.stage;
   const setTxt = `Satz ${Math.min(gc.i + 1, pl.n)} von ${pl.n}${pl.side ? (gc.side ? " · rechts" : " · links") : ""}`;
-  const head = `<div class="gch"><div><div class="lab">${esc(setTxt)}</div><b>${esc(pl.name)}</b></div><span class="actions">${gcNextEx(pl.base) ? `<button type="button" class="btn ghost gcskip" data-gc="skipex" aria-label="Weiter zur nächsten Übung">Nächste ›</button>` : ""}<button type="button" class="btn ghost" data-gc="voice" aria-label="Stimme ${gcVoice ? "aus" : "an"}">${gcVoice ? "🔊" : "🔇"}</button><button type="button" class="btn ghost" data-gc="close" aria-label="Coach schließen">✕</button></span></div>`;
+  const head = `<div class="gch"><div><div class="lab">${esc(setTxt)}</div><b>${esc(pl.name)}</b></div><span class="actions">${st !== "log" && gcNextEx(pl.base) ? `<button type="button" class="btn ghost gcskip" data-gc="skipex" aria-label="Weiter zur nächsten Übung">Nächste ›</button>` : ""}<button type="button" class="btn ghost" data-gc="voice" aria-label="Stimme ${gcVoice ? "aus" : "an"}">${gcVoice ? "🔊" : "🔇"}</button><button type="button" class="btn ghost" data-gc="close" aria-label="Coach schließen">✕</button></span></div>`;
   const what = pl.mode === "hold" ? `${pl.target} s halten${pl.side ? " je Seite" : ""}` : `${pl.target} Wdh.${pl.side ? " je Seite" : ""}`;
   const tempoTxt = pl.mode === "tempo" ? pl.ph.map(([l, x]) => `${x} s ${l}`).join(" · ") : "";
   const kgTxt = pl.load && pl.sg.kg != null ? ` · ${dec(pl.sg.kg)} kg` : "";
@@ -2618,19 +2627,20 @@ function gcCmd(c, v){
   if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
   if (c === "pause") { const b = document.getElementById("gcFigB");
-    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { const cv = gcClipEl(); if (cv && (gc.pl.mode !== "tempo" || !gc.clipMap?.[gc.pi]?.freeze)) cv.play().catch(() => {}); if (!cv) { gcPlay(); gcVShow(); } if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
-    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); gc.prep = false; gcClipEl()?.pause(); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { const cv = gcClipEl(); if (cv && (gc.pl.mode !== "tempo" || !gc.clipMap?.[gc.pi]?.freeze)) cv.play().catch(() => {}); if (!cv) { gcPlay(); gcVShow(); gcReplanPrep(); } if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
+    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); clearTimeout(gcVtm); gc.prep = false; gcClipEl()?.pause(); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
     return gcPaint(); }
   if (c === "tempo") { gcTempo = v; lsSet("coachTempo", v); const keep = {i: gc.i, side: gc.side}; gc.pl = gcPlan(pl.base); Object.assign(gc, keep); return gcPaint(); }
   if (c === "view") { gcView = v; lsSet("coachView", v); return gcMediaMount(); }
   if (c === "finish") { clearInterval(gcInt); gcInt = null; gcMediaRest();
-    gc.logReps = pl.mode === "free" ? pl.target : pl.mode === "hold" ? Math.max(1, Math.min(pl.target, Math.round((Date.now() - gc.t0) / 1000))) : gc.rep + (gc.pi > 0 ? 1 : 0);
-    if (pl.side && !gc.side && pl.mode !== "free") { gc.side = 1; gcSay("Seite wechseln"); return gcSeg("switch", 5, true); }
+    const got = pl.mode === "free" ? pl.target : pl.mode === "hold" ? Math.max(1, Math.min(pl.target, Math.round(((gc.paused || Date.now()) - gc.t0) / 1000))) : gc.rep + (gc.pi > 0 ? 1 : 0); gc.paused = 0;
+    if (pl.side && !gc.side && pl.mode !== "free") { gc.side = 1; gc.side0 = got; gcSay("Seite wechseln"); return gcSeg("switch", 5, true); }
+    gc.logReps = gc.side0 != null ? Math.min(gc.side0, got) : got;
     gc.stage = "log"; return gcPaint(); }
   if (c === "plus" || c === "minus") { gc.logReps = Math.max(0, gc.logReps + (c === "plus" ? 1 : -1)); const r = document.getElementById("gcReps"); if (r) r.textContent = gc.logReps; return; }
   if (c === "save") return gcSave();
   if (c === "rest15" || c === "rest-15") { gc.end = Math.max(Date.now() + 2000, gc.end + (c === "rest15" ? 15000 : -15000)); gc.len = Math.round((gc.end - gc.t0) / 1000) - 1; gc.said = {}; return gcTick(); }
-  if (c === "rir") { gc.rir = v; const a = setsObj()[pl.id] || [], last = a[Math.max(a.filter(doneSet).length, 1) - 1]; if (last) { last.rir = v.replace("+", ""); touch(); } return gcPaint(); }
+  if (c === "rir") { gc.rir = v; const a = setsObj()[pl.id] || [], last = a[gc.lastIdx ?? Math.max(a.filter(doneSet).length, 1) - 1]; if (last) { last.rir = v.replace("+", ""); touch(); } return gcPaint(); }
   if (c === "skipex") { const nx = gcNextEx(pl.base); clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); try { speechSynthesis.cancel(); } catch {} if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcSay(`Weiter mit ${EX[eff(nx)].name}`); return gcOpen(nx); }
   if (c === "nextex") { const nx = gc.next; clearInterval(gcInt); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcOpen(nx); }
 }
@@ -2654,7 +2664,7 @@ function updateRestBar(){
   if (left < -90) stopRest();
 }
 function startClock(){ clearInterval(clockTimer); clockTimer = setInterval(() => { const c = document.getElementById("woClock"); if (!c || !cur?.startedAt || cur.finishedAt || woSession) return clearInterval(clockTimer); c.textContent = fmtDur((Date.now() - Date.parse(cur.startedAt))/1000); }, 1000); }
-async function requestWake(){ try { wakeLock = await navigator.wakeLock?.request("screen"); } catch {} }
+async function requestWake(){ if (wakeLock && !wakeLock.released) return; try { wakeLock = await navigator.wakeLock?.request("screen"); } catch {} }
 function releaseWake(){ try { wakeLock && wakeLock.release(); } catch {} wakeLock = null; }
 
 // ---------- SHEETS ----------
