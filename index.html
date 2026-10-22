@@ -559,7 +559,10 @@ body.wo .exbody{gap:10px}
 .gcview{position:relative;margin-top:-46px;margin-bottom:6px;justify-content:flex-end;padding-right:8px;z-index:2}
 .gcview button{background:rgba(0,0,0,.55);color:#fff;border-color:transparent;min-height:32px;font-size:13px}
 .gcview button[aria-pressed="true"]{background:#fff;color:#111}
-@media (max-height:720px){.gcin{gap:8px}.gcin:has(.gcmedia) .gcnum{font-size:52px}.gcin:has(.gcmedia) .gcrepbig b{font-size:60px}.gcbtns .btn.big{min-height:50px;font-size:17px}.gcsub{font-size:15px}.gcbig .small{display:none}.gcmedia{max-height:28vh}}
+@media (max-height:720px){.gccues li:nth-child(n+3){display:none}.gcin{gap:8px}.gcin:has(.gcmedia) .gcnum{font-size:52px}.gcin:has(.gcmedia) .gcrepbig b{font-size:60px}.gcbtns .btn.big{min-height:50px;font-size:17px}.gcsub{font-size:15px}.gcbig .small{display:none}.gcmedia{max-height:28vh}}
+.gccue{font-size:15px;color:var(--warm);font-weight:600;min-height:1.3em;text-align:center}
+.gccues{font-size:14px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;max-width:100%}
+.gccues ul{margin:4px 0 0;padding-left:18px}.gccues li{margin:2px 0}
 .gch .gcskip{font-size:15px;min-width:auto;padding:0 12px;white-space:nowrap}
 .ic{width:1.15em;height:1.15em;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none;display:inline-block}
 .ic-train{color:var(--c-train)}
@@ -2468,6 +2471,7 @@ function gcTick(){
   const el = document.getElementById("gcT"); if (el) el.textContent = gc.stage === "rest" || gc.stage === "next" || gc.len >= 60 ? fmtDur(show) : show;
   const bar = document.getElementById("gcBar"); if (bar && !bar.dataset.css) bar.style.width = Math.min(100, (now - gc.t0) / ((gc.len || 1) * 1000) * 100) + "%";
   if (gc.cd && show <= 3 && show >= 1 && !gc.said[show]) { gc.said[show] = 1; if (gc.stage === "count") { if (show < 3) gcSay(["", "Eins", "Zwei"][show]); } else gcBeep(show === 1 ? 587 : 523, .35, .035); }
+  if (gc.stage === "rest" && gc.len >= 40 && show === Math.round(gc.len / 2) && !gc.said.tip) { gc.said.tip = 1; const t = gcCue(pl, "", gc.i + 1); if (t) gcSay("Tipp für den nächsten Satz: " + t); }
   if (gc.stage === "rest" && show === 10 && gc.len > 15 && !gc.said.t10) { gc.said.t10 = 1; gcSay(`Noch zehn Sekunden. Gleich Satz ${gc.i + 1}`); }
   if (gc.stage === "work" && pl.mode === "hold" && gc.len >= 20 && show === Math.round(gc.len / 2) && !gc.said.half) { gc.said.half = 1; gcSay("Halbzeit"); }
   if (gc.stage === "work" && pl.mode === "hold" && gc.len >= 20 && show === 10 && !gc.said.t10) { gc.said.t10 = 1; gcSay("Noch zehn"); }
@@ -2487,6 +2491,12 @@ function gcTick(){
     gcPhaseFig();
   }
 }
+const GC_UP = /drück|hoch|streck|heb|zieh|beug|raus|schieb|anspann/i, GC_DOWN = /ablass|runter|zurück|senk|nach vorn|lös/i;
+function gcCue(pl, lab, k){ const cs = EX[pl.id]?.cue || []; if (!cs.length) return "";
+  const pick = re => cs.find(c => re.test(c));
+  const c = lab && GC_UP.test(lab) && !GC_DOWN.test(lab) ? pick(/oben|durchstreck|Ende|hinten|außen|fest|halten|Schulterblätter|nicht ganz/i)
+    : lab && GC_DOWN.test(lab) ? pick(/unten|Tiefe|langsam|kontroll|Dehnung|ablass|tief/i) : null;
+  return c || cs[k % cs.length]; }
 function gcNextEx(base){ const sk = woSession || cur.session, w = weekNo(selDate), ids = exList(sk), i = ids.indexOf(base), open = x => x !== base && eff(x) && doneCount(x, w, sk) < nSets(x, w, sk);
   return ids.slice(i + 1).find(open) || ids.slice(0, Math.max(0, i)).find(open) || null; }
 function gcSave(){
@@ -2511,16 +2521,16 @@ function gcPaint(){
   const pauseBtn = `<button type="button" class="btn big" data-gc="pause">${gc.paused ? "▶ Weiter" : "⏸ Anhalten"}</button>`;
   let mid = "", btns = "";
   if (st === "ready") {
-    mid = `<div class="gcbig"><div class="gcph">Bereit?</div><div class="gcsub">${esc(what)}${kgTxt}</div>${tempoTxt ? `<div class="gctempo">Takt je Wdh.: ${esc(tempoTxt)}</div>` : ""}${pl.breath ? `<div class="small muted">${esc(pl.breath)}</div>` : ""}${pl.mode === "tempo" ? `<div class="chips sm">${(pl.hasVph ? [["video", "Wie im Video"], ["locker", "Plan locker"]] : []).map(([v, l]) => `<button type="button" data-gc="tempo" data-v="${v}" aria-pressed="${(pl.byVideo ? "video" : "locker") === v}">${l}</button>`).join("")}</div>` : ""}</div>`;
+    mid = `<div class="gcbig"><div class="gcph">Bereit?</div><div class="gcsub">${esc(what)}${kgTxt}</div>${tempoTxt ? `<div class="gctempo">Takt je Wdh.: ${esc(tempoTxt)}</div>` : ""}${(EX[pl.id]?.cue || []).length ? `<div class="gccues"><b>Worauf achten</b><ul>${EX[pl.id].cue.slice(0, 3).map(c => `<li>${esc(c)}</li>`).join("")}</ul></div>` : ""}${pl.breath ? `<div class="small muted">${esc(pl.breath)}</div>` : ""}${pl.mode === "tempo" ? `<div class="chips sm">${(pl.hasVph ? [["video", "Wie im Video"], ["locker", "Plan locker"]] : []).map(([v, l]) => `<button type="button" data-gc="tempo" data-v="${v}" aria-pressed="${(pl.byVideo ? "video" : "locker") === v}">${l}</button>`).join("")}</div>` : ""}</div>`;
     btns = `<button type="button" class="btn primary big" data-gc="start">▶ Los – 3, 2, 1</button>`;
   } else if (st === "count" || st === "switch") {
     mid = `<div class="gcbig"><div class="gcph">${st === "switch" ? "Seite wechseln" : "Gleich geht’s los"}</div><div class="gcnum" id="gcT">${gc.len}</div><div class="gcsub">${esc(what)}</div></div>`;
     btns = pauseBtn;
   } else if (st === "work") {
     const big = pl.mode === "tempo" ? pl.ph[gc.pi][0] : pl.mode === "hold" ? "Halten" : "Los!";
-    const nxt = pl.mode === "tempo" && pl.ph.length > 1 ? pl.ph[(gc.pi + 1) % pl.ph.length] : null;
+    const nxt = pl.mode === "tempo" && pl.ph.length > 1 ? pl.ph[(gc.pi + 1) % pl.ph.length] : null, cue = gcCue(pl, pl.mode === "tempo" ? pl.ph[gc.pi][0] : "", gc.rep + gc.i);
     mid = pl.mode === "tempo"
-      ? `<div class="gcbig work tempo"><div class="gcrepbig"><b>${gc.rep + 1}</b><span>von ${pl.target}</span></div><div class="gcph">${esc(big)}</div><div class="gcbarw"><div class="gcbar" id="gcBar" data-css="1"></div></div>${nxt ? `<div class="small muted">danach ${esc(nxt[0])}</div>` : ""}</div>`
+      ? `<div class="gcbig work tempo"><div class="gcrepbig"><b>${gc.rep + 1}</b><span>von ${pl.target}</span></div><div class="gcph">${esc(big)}</div><div class="gcbarw"><div class="gcbar" id="gcBar" data-css="1"></div></div>${cue ? `<div class="gccue">${esc(cue)}</div>` : ""}${nxt ? `<div class="small muted">danach ${esc(nxt[0])}</div>` : ""}</div>`
       : `<div class="gcbig work"><div class="gcph">${esc(big)}</div><div class="gcnum" id="gcT">${pl.mode === "free" ? "0:00" : gc.len}</div>${pl.mode === "free" ? "" : `<div class="gcbarw"><div class="gcbar" id="gcBar"></div></div>`}<div class="gcsub">${esc(what)}${kgTxt}</div></div>`;
     btns = pl.mode === "free" ? `<button type="button" class="btn primary big" data-gc="finish">✓ Satz fertig</button>` : `<div class="actions">${pauseBtn}<button type="button" class="btn big" data-gc="finish">Satz beenden</button></div>`;
   } else if (st === "log") {
@@ -2530,7 +2540,7 @@ function gcPaint(){
       <div><span class="lab">${pl.mode === "hold" ? "Sekunden" : "Wdh."}</span><div class="gcstep"><button type="button" class="btn" data-gc="minus" aria-label="weniger">−</button><b id="gcReps">${gc.logReps}</b><button type="button" class="btn" data-gc="plus" aria-label="mehr">+</button></div></div></div></div>`;
     btns = `<button type="button" class="btn primary big" data-gc="save">✓ Satz speichern</button>`;
   } else if (st === "rest") {
-    mid = `<div class="gcbig rest"><div class="gcph">Pause</div><div class="gcnum" id="gcT">${fmtDur(gc.len)}</div><div class="gcbarw"><div class="gcbar" id="gcBar"></div></div><div class="gcsub">Danach: Satz ${gc.i + 1} von ${pl.n} · ${esc(what)}</div><div class="small muted">Locker atmen, Arme ausschütteln.</div></div>`;
+    mid = `<div class="gcbig rest"><div class="gcph">Pause</div><div class="gcnum" id="gcT">${fmtDur(gc.len)}</div><div class="gcbarw"><div class="gcbar" id="gcBar"></div></div><div class="gcsub">Danach: Satz ${gc.i + 1} von ${pl.n} · ${esc(what)}</div>${(EX[pl.id]?.cue || []).length ? `<div class="gccues"><b>Nächster Satz:</b> ${esc(gcCue(pl, "", gc.i + 1))}</div>` : `<div class="small muted">Locker atmen, Arme ausschütteln.</div>`}</div>`;
     btns = `<div class="actions"><button type="button" class="btn big" data-gc="rest-15">−15 s</button><button type="button" class="btn big" data-gc="rest15">+15 s</button></div><button type="button" class="btn primary big" data-gc="skip">Pause überspringen ›</button>`;
   } else if (st === "next" || st === "nextready") {
     const nn = gc.next ? EX[eff(gc.next)].name : "";
