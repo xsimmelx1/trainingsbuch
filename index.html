@@ -335,6 +335,7 @@ h3.sub3{margin:14px 0 4px;font-size:14px;text-transform:uppercase;letter-spacing
 [data-swipe=meal]::before{content:attr(data-swr);right:100%;width:calc(var(--dx, 0) * 1px);overflow:hidden;justify-content:center;background:var(--good-soft);color:var(--good)}
 [data-swipe=meal]::after{content:attr(data-swl);left:100%;width:calc(var(--dx, 0) * -1px);overflow:hidden;justify-content:center;background:var(--warn-soft);color:var(--warn)}
 [data-swipe=meal].sw-r::before,[data-swipe=meal].sw-l::after{opacity:1}
+[data-swipe=meal]:not(.swiping)::before,[data-swipe=meal]:not(.swiping)::after{display:none}
 [data-swipe=meal].swiping.sw-r{background:var(--good-soft);box-shadow:inset 4px 0 0 var(--good)}
 [data-swipe=meal].swiping.sw-l{background:var(--warn-soft);box-shadow:inset -4px 0 0 var(--warn)}
 [data-swipe=meal].sw-go::before{background:var(--good);color:#fff}
@@ -672,6 +673,10 @@ body.wo .exbody{gap:10px}
 .shopi input{width:24px;height:24px;margin-top:0}
 .shopi.done b,.shopi.done .shopp{text-decoration:line-through;color:var(--muted)}
 .shopt{display:flex;flex-direction:column;min-width:0;line-height:1.3}.shopt .small{font-size:12px}.shopt .tag{white-space:nowrap;padding:1px 6px}
+.shopi.pi{grid-template-columns:24px 40px minmax(0,1fr) auto}
+.pthumb,.pbig,.pmini{border-radius:8px;object-fit:cover;background:var(--sunk);display:grid;place-items:center;flex:none;color:var(--muted)}
+.pthumb{width:40px;height:40px;font-size:18px}.pbig{width:64px;height:64px;border-radius:12px;font-size:26px}.pmini{width:22px;height:22px;border-radius:5px;font-size:12px;display:inline-grid;vertical-align:-6px;margin-right:6px}
+.zhead{display:flex;align-items:center;gap:12px;min-width:0}.zhead h2{margin:0}.shopi.done .pthumb{opacity:.45}
 .shopp{font-family:var(--f-num);font-weight:600;font-size:14px;white-space:nowrap}.shopbasis .shopp{font-weight:400;color:var(--muted)}
 .shopnav{margin:8px 0 0}.chips.center{justify-content:center;margin-top:6px}
 .shophead{position:sticky;top:0;z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:8px 0 2px}
@@ -682,7 +687,7 @@ body.wo .exbody{gap:10px}
 .shopopt{margin:2px 0 6px}.shopopt > .card{gap:10px}
 .shopsec{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:12px 2px 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .shopsec .n{font-weight:500;text-transform:none;letter-spacing:0;font-family:var(--f-num)}
-summary.shopsec{list-style:none;cursor:pointer}summary.shopsec::-webkit-details-marker{display:none}.shopbasis > .small{margin:0 2px 6px}
+summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);text-transform:none;letter-spacing:0;font-size:14px}summary.shopsec::-webkit-details-marker{display:none}summary.shopsec > span:first-child::before{content:"▸ ";color:var(--accent)}.shopbasis[open] > summary.shopsec > span:first-child::before{content:"▾ "}summary.shopsec .n{color:var(--muted)}.shopbasis > .small{margin:0 2px 6px}
 .center{text-align:center;margin-top:10px}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .mhead h2{margin:0}
@@ -2131,8 +2136,8 @@ function zinfoHtml(id){
   const own = ownOf(pr), sel = FOOD().store || "aldi", home = STOCK().has(id);
   const recs = (recipes || []).filter(r => r.ingredients.some(l => { const x = parseIng(l); return (x.parts || [x]).some(pt => pt.pr?.id === id); })).sort((a, b) => a.name.localeCompare(b.name, "de"));
   const rows = prices.stores.map(st => { const v = priceOf(pr, st), b = pr.bio?.[st]; return `<div class="ir ${st === sel ? "sel" : ""}"><span>${STORES[st]}${own[st] ? ` <span class="tag">dein Preis</span>` : ""}</span><span class="num">${v != null ? eur(v) + (isEst(pr, st) ? "*" : "") : "–"}</span><span class="num">${b != null ? eur(b) : "–"}</span></div>`; }).join("");
-  return `<div class="sh"><h2>${esc(prodLabel(pr))}</h2>${close}</div>
-    <div class="small muted">${esc(pr.group || "Vorrat & Gewürze")} · Packung ${fmtAmt(pr.pack, pr.unit)}${pr.pantry ? " · hält lange (Vorrat)" : ""}</div>
+  return `<div class="sh"><div class="zhead">${prodImg(pr, "pbig")}<h2>${esc(prodLabel(pr))}</h2></div>${close}</div>
+    <div class="small muted">${esc(pr.group || "Vorrat & Gewürze")} · Packung ${fmtAmt(pr.pack, pr.unit)}${pr.pantry ? " · hält lange (Vorrat)" : ""}</div>${prodCredit(pr)}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
     <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span>Bio</span></div>${rows}</div>
     <div class="small muted">* geschätzt (Discounter-Eigenmarken sind meist preisgleich). Eigene Preise kommen vom Kassenbon oder Scan.</div>
@@ -2173,7 +2178,7 @@ function zutatenHtml(){
     <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
     <div class="ingg zg" style="--zc:${cols}"><div class="ih"><span>Zutat</span>${cmp ? SS.map(st => `<span class="num">${STORES[st]}</span>`).join("") : `<span class="num">${STORES[SS[0]]}</span><span class="num">Rez.</span>`}</div>
     ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${fmtAmt(x.pr.pack, x.pr.unit)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`).join("")}
+      + `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${fmtAmt(x.pr.pack, x.pr.unit)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`).join("")}
     ${cmp && rows.length ? `<div class="ir sum"><span>Summe · ${full.length} Zutaten mit Preis in allen, je 1 Packung</span>${sums.map((v, i) => `<span class="num ${v === Math.min(...sums) ? "cheap" : ""}">${eur(v)}</span>`).join("")}</div>
       <div class="ir"><span class="small muted">am günstigsten</span>${wins.map(w => `<span class="num small">${w}×</span>`).join("")}</div>` : ""}
     ${mine.length ? `<div class="ig">🧾 Vom Kassenbon</div>` + mine.map(mp => `<div class="ir"><span>${esc(mp.name)}<br><span class="small muted">${STORES[mp.store] || ""}</span></span>${cmp ? SS.map(st => `<span class="num">${st === mp.store ? eur(mp.price) : "–"}</span>`).join("") : `<span class="num">${eur(mp.price)}</span><span class="num">–</span>`}</div>`).join("") : ""}</div>
@@ -3702,6 +3707,12 @@ function trainLine(d){
 }
 // ---------- Preise: recherchierte Richtpreise je Markt (prices.json), keine Live-Daten ----------
 let prices = null, pricesReady = null;
+// Produktbilder (img/produkte/<id>.jpg, Nachweise in prodimg.json) – Schalter food.prodImg, Standard an
+let prodCred = null; fetch("prodimg.json").then(r => r.json()).then(j => { prodCred = j; if (tab === "essen" && essenView === "einkauf") renderMore(); }).catch(() => {});
+const prodImgOn = () => FOOD().prodImg !== false && !!prodCred;
+const GROUP_ICON = {"Milchprodukte & Eier": "🥛", "Tofu & Soja": "🫘", "Hülsenfrüchte": "🥫", "Getreide & Brot": "🍞", "Obst & Gemüse": "🥦", "Vorrat & Gewürze": "🧂"};
+const prodImg = (pr, cls = "pthumb") => !prodImgOn() ? "" : pr && prodCred[pr.id] ? `<img class="${cls}" src="img/produkte/${pr.id}.jpg" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:this.className+' ph',textContent:'🛒'}))">` : `<span class="${cls} ph">${GROUP_ICON[pr?.group] || "🧂"}</span>`;
+const prodCredit = pr => { const c = pr && prodCred?.[pr.id]; return c ? `<div class="small muted">Foto: ${esc(c.artist || "unbekannt")}${c.license ? ", " + esc(c.license) : ""}, <a href="${esc(c.url)}" target="_blank" rel="noopener">Wikimedia Commons</a></div>` : ""; };
 const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny", edeka: "Edeka"};
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
@@ -4191,7 +4202,7 @@ function shopHtml(){
     <details class="small"><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} in dieser Liste · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${r.cnt} Portion${r.cnt > 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div></details>`;
   // Eine Zeile je Artikel: Name, darunter Kaufmenge und Bedarf, Preis rechts
   const row = i => { const p = P && i.pr && priceOf(i.pr) != null ? i.share * priceOf(i.pr) : null, dn = done.has(i.key);
-    return `<label class="shopi ${dn ? "done" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${dn ? "checked" : ""}><span class="shopt"><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<span class="small muted"><span class="buy">${esc(i.buy)}</span> · Bedarf ${esc(i.need)}${ownOf(i.pr)[st0] ? ` · <span class="tag">dein Preis</span>` : ""}${P && bio ? bioAlt(i.pr, i.share) : ""}</span>` : ""}${src && shopScope !== "gericht" ? `<span class="small muted">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>` : ""}</span>${p != null ? `<span class="shopp">${eur(p)}${isEst(i.pr, st0) ? `<span class="muted">*</span>` : ""}</span>` : ""}</label>`; };
+    return `<label class="shopi ${dn ? "done" : ""} ${prodImgOn() ? "pi" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${dn ? "checked" : ""}>${prodImg(i.pr)}<span class="shopt"><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<span class="small muted"><span class="buy">${esc(i.buy)}</span> · Bedarf ${esc(i.need)}${ownOf(i.pr)[st0] ? ` · <span class="tag">dein Preis</span>` : ""}${P && bio ? bioAlt(i.pr, i.share) : ""}</span>` : ""}${src && shopScope !== "gericht" ? `<span class="small muted">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>` : ""}</span>${p != null ? `<span class="shopp">${eur(p)}${isEst(i.pr, st0) ? `<span class="muted">*</span>` : ""}</span>` : ""}</label>`; };
   const sec = (t, a) => `<span>${esc(t)} <span class="n">· ${a.filter(i => !done.has(i.key)).length}</span></span>${P ? `<span class="n">${eur(shopSum(a, done))}</span>` : ""}`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
     h += `<div class="shopsec">${sec(g, a)}</div><div class="shopg">${vis.map(row).join("")}</div>`; }
@@ -4210,6 +4221,7 @@ function foodSettingsHtml(){
   const f = FOOD(), T = foodTarget(), url = S().icsUrl;
   return `<div class="card"><h2>Anzeige</h2>
       <label class="check"><input type="checkbox" id="foodNutri" ${f.showNutri !== false ? "checked" : ""}><span>Kalorien und Nährwerte anzeigen<br><span class="small muted">Aus: Plan, Abhaken und Einkauf bleiben, nur Zahlen zu kcal und Protein verschwinden.</span></span></label>
+      <label class="check"><input type="checkbox" id="foodProdImg" ${f.prodImg !== false ? "checked" : ""}><span>Produktbilder in Einkauf und Zutaten<br><span class="small muted">Fotos von Wikipedia/Wikimedia Commons, Nachweis im Zutaten-Blatt.</span></span></label>
       <label class="check"><input type="checkbox" id="calMeals" ${calMeals ? "checked" : ""}><span>Essen im App-Kalender einblenden</span></label></div>
     ${ownCount() ? `<button type="button" class="lrow menu card" data-sheet="ownprices"><span class="mdot static">🧾</span><span class="lmain"><b>Meine Preise</b><span class="small muted">${ownCount()} Preise aus Kassenbons</span></span><span class="go">›</span></button>` : ""}
     <div class="card"><h2>Küchengeräte</h2><div class="small muted">Antippen, was du hast – hervorgehoben heißt vorhanden.</div>
@@ -4642,6 +4654,7 @@ async function onChange(e){
   if (t.dataset.warm) { warmOpen = true; cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
+  if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
   if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(ingSuggest(t.value, 1, reste.have)[0] || t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
   if (t.id === "rsStock") { reste.stock = t.checked; renderSheetPart(["#rsList"]); return; }
