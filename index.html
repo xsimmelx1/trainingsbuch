@@ -256,6 +256,8 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .nowh.tap{cursor:pointer}.nowh.tap .go{margin-left:auto;color:var(--muted);font-size:20px}.nowc > .btn.ghost.small{align-self:flex-start}
 .pfrow{display:flex;align-items:center;gap:4px}.pfrow .pfi{flex:1;min-width:0}.pfi.skipped .pfn{text-decoration:line-through;color:var(--muted)}
 .ftpick{display:flex;align-items:center;gap:6px}.ftpick select{flex:1;width:auto;min-width:0;min-height:44px;font-family:var(--f-num);font-size:16px}
+.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
+.cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
@@ -3374,6 +3376,10 @@ function cookHtml(name){
       ${tm ? `<div class="gtimer" id="cookTm"><div class="gt" id="cookT">${fmtDur(cook.left || Number(tm[2] || tm[1]) * 60)}</div><div class="tmrbtns"><button type="button" class="btn" data-cookt="-60">−1 min</button><button type="button" class="btn primary" data-cookt="go" data-v="${Number(tm[2] || tm[1]) * 60}">${cook.run ? "Pause" : "⏱ Start"}</button><button type="button" class="btn" data-cookt="60">+1 min</button></div></div>` : ""}`;
   }
   h += `<div class="actions"><button class="btn big" type="button" data-cookstep="-1" ${cook.step < 0 ? "disabled" : ""}>‹ Zurück</button>${cook.step < n - 1 ? `<button class="btn primary big" type="button" data-cookstep="1">${cook.step < 0 ? "Los geht's ›" : "Weiter ›"}</button>` : `<button class="btn primary big" type="button" data-act="closeSheet">Fertig ✓</button>`}</div>`;
+  // Ganzes Rezept jederzeit aufklappbar: Zutaten (für die gewählten Portionen) und alle Schritte, aktueller markiert, antippen springt hin
+  h += `<details class="slim cookall" data-keep="cookall" ${shopOpen.has("cookall") ? "open" : ""}><summary><span>📖 Ganzes Rezept</span><span class="muted">${r.ingredients.length} Zutaten · ${n} Schritte</span></summary><div class="card">
+    <div class="lab">Zutaten${cook.serv !== (r.servings || 1) ? ` für ${cook.serv} Portionen` : ""}</div><ul class="cookings">${r.ingredients.map(l => `<li>${esc(scaleLine(l, f))}</li>`).join("")}</ul>
+    <div class="lab">Schritte</div><ol class="cooklist">${r.steps.map((x, i) => `<li><button type="button" class="${i === cook.step ? "cur" : i < cook.step ? "done" : ""}" data-cookgo="${i}">${esc(x)}</button></li>`).join("")}</ol></div></details>`;
   return h;
 }
 function cookTick(){ if (!cook?.run) { clearInterval(cookInt); return; } cook.left = Math.max(0, cook.left - 1); const el = document.getElementById("cookT"); if (el) el.textContent = fmtDur(cook.left);
@@ -4872,6 +4878,7 @@ async function onClick(e){
   if (t.closest("[data-recall]")) { recShelves = false; renderRecipes(); return; }
   if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: ""}); recShelves = true; renderRecipes(); return; }
   const ck = t.closest("[data-cook]"); if (ck) { cook = null; openSheet("cook", ck.dataset.cook); requestWake(); return; }
+  const ckg = t.closest("[data-cookgo]"); if (ckg) { cook.step = Number(ckg.dataset.cookgo); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }
   const cks = t.closest("[data-cookstep]"); if (cks) { cook.step = Math.max(-1, cook.step + Number(cks.dataset.cookstep)); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }
   const ckv = t.closest("[data-cookserv]"); if (ckv) { cook.serv = Math.max(1, cook.serv + Number(ckv.dataset.cookserv)); renderSheet(); return; }
   const ckt = t.closest("[data-cookt]"); if (ckt) { const c = ckt.dataset.cookt; audioReady();
