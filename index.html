@@ -246,6 +246,8 @@ body.wo main{padding-bottom:110px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
 .nickl{display:flex;flex-direction:column;gap:6px}.nickr{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center}.nickr input{min-width:0}
 .recentrec{align-items:center;margin-top:6px}.recentrec button{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.snackbtn{margin-left:auto;border-color:var(--accent)!important;color:var(--accent)}.subhead .snackbtn{margin-left:auto;margin-right:6px}
+.snackchips button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
@@ -2375,7 +2377,7 @@ function renderToday(){
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
-  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}</div>`;
+  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}<button type="button" class="snackbtn" data-sheet="snack" data-v="${selDate}">＋ Snack</button></div>`;
   h += gapBanner();
   {
     const pastD = selDate < todayIso(); // vergangene Tage: Essen nur als Übersicht mit „Nachtragen“
@@ -3030,7 +3032,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3253,6 +3255,7 @@ function journeySheet(kind, arg){
   if (kind === "cook") return cookHtml(arg);
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
+  if (kind === "snack") return snackHtml(arg || todayIso());
   if (kind === "resteeat") { if (!recipes || !mealPlan) { ensureMeals().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; } setTimeout(resteEatCalc, 0); return resteEatHtml(arg || ""); }
   if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
   if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
@@ -3821,6 +3824,26 @@ function sugScore(t, q){ const words = fold(t).split(/[^a-z0-9ß]+/).filter(Bool
   for (const w of qs) { if (sugHit(t, w)) continue; if (w.length < 4) return 0; const tol = w.length >= 7 ? 2 : 1;
     if (!words.some(x => lev(w, x.slice(0, w.length)) <= tol || lev(w, x) <= tol)) return 0; fuzzy++; }
   return fuzzy ? 1 : 2; }
+const SNACK_DEF = ["Banane", "150 g Skyr", "Handvoll Nüsse", "Proteinriegel", "2 Reiswaffeln", "Joghurt", "Studentenfutter", "Karotte", "Käsebrot", "Proteinshake"];
+function snackPicks(){ const c = new Map(), are = avoidRe();
+  for (const d of Object.keys(store.days).sort().reverse().slice(0, 60)) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) { const k = fold(o.name || ""); if (!k) continue; const x = c.get(k) || {name: o.name, kcal: num(o.kcal), protein: num(o.protein), n: 0}; x.n++; c.set(k, x); } }
+  const mine = [...c.values()].sort((a, b) => b.n - a.n).slice(0, 8);
+  for (const n of SNACK_DEF) { if (mine.length >= 10) break; if (c.has(fold(n)) || (are && are.test(n))) continue; mine.push({name: n, def: true}); }
+  return mine; }
+function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
+  return `<div class="sh"><h2>Snack · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
+    <div class="lab">Antippen = sofort eingetragen</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
+    <div class="card ownf"><div class="field"><label for="ownText">Oder eintippen</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, Cola, 30 g Mandeln" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
+    <div id="ownEst" class="small muted">Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
+    <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button></div>`; }
+// Snack speichern: Text → Werte (frühere Einträge, Bon-Produkte, Nährwerttabelle), Uhrzeit jetzt
+async function snackSave(d, tx){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
+  const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
+  const kcal = ok.length ? ok.reduce((a, i) => a + i.kcal, 0) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0)) : null;
+  const id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
+  editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
+  lastSnack = {d, id}; toast(`✓ ${name}${kcal ? ` · ${kcal} kcal` : ""}${ok.length < items.length ? " (Werte teils unbekannt)" : ""}`); }
+let lastSnack = null;
 function ownHistory(){ const m = new Map();
   const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
   for (const d of Object.keys(store.days).sort().reverse()) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) add(o); for (const v of Object.values(day?.meals || {})) if (v && typeof v === "object") add(v); }
@@ -4513,7 +4536,7 @@ function diaryRow(d, m){
 }
 
 function essenHtml(b){
-  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
+  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn small snackbtn" data-sheet="snack" data-v="${todayIso()}">＋ Snack</button><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
   if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (!mealPlan || !recipes) { b.innerHTML = h + `<p class="muted">Lade Ernährungsplan …</p>`; ensureMeals().then(() => { if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = h + `<p>Plan konnte nicht geladen werden.</p>`; }); return; }
   if (essenView === "einkauf") { b.innerHTML = h + shopHtml(); return; }
@@ -4658,6 +4681,9 @@ async function onClick(e){
     const days = [d]; if (all) { const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === def) days.push(dd); } }
     for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); });
     sheetKind = null; sheet.close(); render(); return; }
+  if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
+    t.disabled = true; await snackSave(sheetArg || todayIso(), tx); sheetKind = null; sheet.close(); render(); return; }
+  const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; await snackSave(sheetArg || todayIso(), snp.dataset.snackpick); sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "past") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
     const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
