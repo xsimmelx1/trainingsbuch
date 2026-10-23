@@ -2075,7 +2075,7 @@ function clipOf(key){
 }
 function clipHtml(key){
   const c = clipOf(key); if (!c) return "";
-  return `<div class="vclip" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(c.id)}/hqdefault.jpg) center/cover"><span class="vhint">Zum Abspielen antippen</span><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${c.s}${c.e ? "&end=" + c.e : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
+  return `<div class="vclip" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(c.id)}/hqdefault.jpg) center/cover"><span class="vhint">Zum Abspielen antippen</span><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${Math.floor(c.s)}${c.e ? "&end=" + Math.ceil(c.e) : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
 }
 let techTab = "anl", techFor = null;
 let realOpen = null; // Schlüssel der Übung, deren echter Clip gerade gezeigt wird
