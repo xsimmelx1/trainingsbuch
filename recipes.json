@@ -235,7 +235,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Öl oder Butter in der Pfanne erhitzen.",
+     "do": "Zuerst: Spinat waschen und gut abtropfen lassen. Öl oder Butter in der Pfanne erhitzen.",
      "meanwhile": "Eier und Eiklar verquirlen und salzen."
     },
     {
@@ -298,7 +298,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Zucchini klein schneiden, Öl in der Pfanne erhitzen."
+     "do": "Zuerst: Spinat waschen und gut abtropfen lassen. Zwiebel und Zucchini klein schneiden, Öl in der Pfanne erhitzen."
     },
     {
      "do": "Zwiebel und Zucchini 4 Min. anbraten.",
@@ -632,7 +632,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Quinoa kochen.",
+     "do": "Zuerst: Quinoa heiß abspülen, damit sie nicht bitter schmeckt; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen; Spinat und Rucola waschen und gut abtropfen lassen. Quinoa kochen.",
      "passive": true,
      "meanwhile": "In einem zweiten Topf Wasser aufkochen, Edamame kurz blanchieren und abschrecken. Kichererbsen abgießen."
     },
@@ -702,7 +702,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebel und Möhren würfeln."
@@ -771,7 +771,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin einweichen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Brühe erhitzen und das Sojagranulat darin einweichen.",
      "passive": true,
      "meanwhile": "Zwiebel und Paprika würfeln."
     },
@@ -843,7 +843,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Knoblauch hacken und in Öl 3 Min. anschwitzen.",
+     "do": "Zuerst: Kichererbsen und weiße Bohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Zwiebel und Knoblauch hacken und in Öl 3 Min. anschwitzen.",
      "min": 3
     },
     {
@@ -978,7 +978,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen (oder Airfryer nutzen) und den Tofu pressen."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Ofen auf 200 °C vorheizen (oder Airfryer nutzen) und den Tofu pressen."
     },
     {
      "do": "Tofu würfeln, in Stärke wenden, mit Öl beträufeln und im Ofen 25 Min. bei 200 °C (oder im Airfryer) knusprig backen.",
@@ -1043,7 +1043,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Gemüsebrühe aufkochen.",
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Gemüsebrühe aufkochen.",
      "meanwhile": "Zucchini, Paprika und rote Zwiebel würfeln, Kichererbsen abgießen."
     },
     {
@@ -1114,7 +1114,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Räuchertofu in feine Streifen hobeln, Öl in der Pfanne erhitzen.",
+     "do": "Zuerst: Salat waschen und gut abtropfen lassen. Räuchertofu in feine Streifen hobeln, Öl in der Pfanne erhitzen.",
      "meanwhile": "Skyr mit Knoblauch, Zitrone, Dill und Salz verrühren."
     },
     {
@@ -1176,7 +1176,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Falls du Reis dazu willst, ihn zuerst aufsetzen. Knoblauch hacken, Linsen abgießen, Räuchertofu bröseln."
+     "do": "Zuerst: Linsen aus der Dose in einem Sieb abspülen und abtropfen lassen; Spinat waschen und gut abtropfen lassen. Falls du Reis dazu willst, ihn zuerst aufsetzen. Knoblauch hacken, Linsen abgießen, Räuchertofu bröseln."
     },
     {
      "do": "Tofubrösel in Öl mit Knoblauch, Oregano, Paprikapulver und Chiliflocken 4 Min. anbraten.",
@@ -1245,7 +1245,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen. Wenn du den Tofu im Ofen oder Airfryer bräunen willst, jetzt vorheizen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Reis aufsetzen. Wenn du den Tofu im Ofen oder Airfryer bräunen willst, jetzt vorheizen.",
      "meanwhile": "Tofu würfeln, Zwiebel, Knoblauch und Ingwer hacken, Kichererbsen abgießen."
     },
     {
@@ -1453,7 +1453,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Salzwasser für die Pasta aufsetzen, zusätzlich Wasser im Wasserkocher erhitzen."
+     "do": "Zuerst: Spinat waschen und gut abtropfen lassen. Salzwasser für die Pasta aufsetzen, zusätzlich Wasser im Wasserkocher erhitzen."
     },
     {
      "do": "Pasta 12 Min. kochen.",
@@ -1518,7 +1518,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel, Knoblauch und Ingwer hacken."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebel, Knoblauch und Ingwer hacken."
     },
     {
      "do": "Zwiebel, Knoblauch und Ingwer in Öl anbraten, Curry, Kreuzkümmel und Kurkuma kurz mitrösten."
@@ -1586,7 +1586,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Paprika schneiden, Kichererbsen abgießen."
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Zwiebel und Paprika schneiden, Kichererbsen abgießen."
     },
     {
      "do": "Zwiebel und Paprika in Öl 5 Min. braten, Kreuzkümmel, Paprika und Chili dazugeben.",
@@ -1657,7 +1657,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 220 °C vorheizen.",
+     "do": "Zuerst: Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 220 °C vorheizen.",
      "meanwhile": "Paprika und Zwiebel in Streifen schneiden, Räuchertofu in Streifen schneiden."
     },
     {
@@ -2431,7 +2431,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kichererbsenmehl, Sojadrink, Hefeflocken, Backpulver und Gewürze klümpchenfrei verquirlen und 10 Min. ruhen lassen.",
+     "do": "Zuerst: Spinat waschen und gut abtropfen lassen. Kichererbsenmehl, Sojadrink, Hefeflocken, Backpulver und Gewürze klümpchenfrei verquirlen und 10 Min. ruhen lassen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Räuchertofu würfeln, Pilze in Scheiben schneiden und in 1 TL Öl ca. 5 Min. kräftig anbraten. Spinat kurz zusammenfallen lassen, alles herausnehmen."
@@ -2499,7 +2499,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Champignons in Scheiben schneiden, Hartkäse reiben falls nötig."
+     "do": "Zuerst: Spinat waschen und gut abtropfen lassen. Champignons in Scheiben schneiden, Hartkäse reiben falls nötig."
     },
     {
      "do": "Haferflocken mit Milch und Brühe aufkochen und unter Rühren 4–5 Min. sämig köcheln.",
@@ -2646,7 +2646,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Knoblauch hacken und in der Hälfte des Öls glasig dünsten, Kreuzkümmel kurz mitrösten."
+     "do": "Zuerst: schwarze Bohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Zwiebel und Knoblauch hacken und in der Hälfte des Öls glasig dünsten, Kreuzkümmel kurz mitrösten."
     },
     {
      "do": "Tomaten und Bohnen zugeben und dicklich einköcheln, mit Salz und Chili abschmecken.",
@@ -3458,7 +3458,7 @@
    ],
    "steps": [
     {
-     "do": "Möhren und Paprika würfeln, Knoblauch und Ingwer hacken, Frühlingszwiebeln in Ringe schneiden."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Möhren und Paprika würfeln, Knoblauch und Ingwer hacken, Frühlingszwiebeln in Ringe schneiden."
     },
     {
      "do": "Tofu zerbröseln und in 1 EL Öl goldbraun braten.",
@@ -3591,7 +3591,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen. Brühe erhitzen und das Sojagranulat darin einweichen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen. Brühe erhitzen und das Sojagranulat darin einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Tofu würfeln, Knoblauch und Ingwer hacken, Frühlingszwiebeln in Ringe schneiden, Stärke mit etwas kaltem Wasser anrühren."
@@ -3735,7 +3735,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen. Brühe erhitzen und die Sojaschnetzel darin einweichen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen. Brühe erhitzen und die Sojaschnetzel darin einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Paprika und Zwiebel in Streifen schneiden. Halbe Gurke raspeln und ausdrücken, mit Quark, Knoblauch, Zitronensaft und Salz zu Tzatziki rühren."
@@ -3811,7 +3811,7 @@
    ],
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin einweichen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Brühe erhitzen und das Sojagranulat darin einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebel und Möhren fein würfeln."
@@ -3892,7 +3892,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen mit der Brühe aufsetzen. Kartoffeln schälen und in einem zweiten Topf in Salzwasser aufsetzen."
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen mit der Brühe aufsetzen. Kartoffeln schälen und in einem zweiten Topf in Salzwasser aufsetzen."
     },
     {
      "do": "Linsen weich kochen, Kartoffeln parallel garen.",
@@ -3966,7 +3966,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Wasser für die Eier und den Reis aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Wasser für die Eier und den Reis aufsetzen.",
      "meanwhile": "Zwiebeln fein würfeln, Knoblauch und Ingwer hacken."
     },
     {
@@ -4041,7 +4041,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Paprika würfeln, Bohnen und Mais abtropfen lassen."
+     "do": "Zuerst: schwarze Bohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Zwiebel und Paprika würfeln, Bohnen und Mais abtropfen lassen."
     },
     {
      "do": "Zwiebel und Paprika im Öl anbraten, Bohnen und Mais zugeben, mit Kreuzkümmel, Paprikapulver, Chili und Salz würzen und grob zerdrücken."
@@ -4111,7 +4111,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen. Reis aufsetzen und Brühe erhitzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen. Reis aufsetzen und Brühe erhitzen.",
      "meanwhile": "Paprika längs halbieren und entkernen."
     },
     {
@@ -4256,7 +4256,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen. Tomaten und Knoblauch in eine Auflaufform geben, Feta als Block in die Mitte legen und mit Öl, Oregano und Chili würzen."
+     "do": "Zuerst: weiße Bohnen aus der Dose in einem Sieb abspülen und abtropfen lassen; Spinat waschen und gut abtropfen lassen. Ofen auf 200 °C vorheizen. Tomaten und Knoblauch in eine Auflaufform geben, Feta als Block in die Mitte legen und mit Öl, Oregano und Chili würzen."
     },
     {
      "do": "Form in den Ofen schieben und backen, bis die Tomaten platzen.",
@@ -4323,7 +4323,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen. Tofu würfeln und mit 1 EL Sojasauce marinieren.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen. Tofu würfeln und mit 1 EL Sojasauce marinieren.",
      "meanwhile": "Möhre und Gurke in Streifen schneiden und mit etwas Reisessig marinieren."
     },
     {
@@ -4599,7 +4599,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zucchini, Paprika und Aubergine klein würfeln, Pilze in Scheiben schneiden.",
+     "do": "Zuerst: Rucola waschen und gut abtropfen lassen. Zucchini, Paprika und Aubergine klein würfeln, Pilze in Scheiben schneiden.",
      "meanwhile": "Pfanne mit dem Öl erhitzen."
     },
     {
@@ -4664,7 +4664,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Wasser für die Nudeln aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist; Rucola waschen und gut abtropfen lassen. Wasser für die Nudeln aufsetzen.",
      "meanwhile": "Pinienkerne in einer Pfanne ohne Fett rösten und herausnehmen."
     },
     {
@@ -4729,7 +4729,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 180 °C vorheizen. Einen großen Topf Salzwasser aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Ofen auf 180 °C vorheizen. Einen großen Topf Salzwasser aufsetzen.",
      "meanwhile": "Brokkoli in Röschen teilen, Cherrytomaten halbieren, Knoblauch hacken."
     },
     {
@@ -4808,7 +4808,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packungsangabe aufsetzen und Salzwasser für die Edamame zum Kochen bringen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis nach Packungsangabe aufsetzen und Salzwasser für die Edamame zum Kochen bringen.",
      "meanwhile": "Tofu würfeln."
     },
     {
@@ -4881,7 +4881,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kürbis würfeln (Schale kann dranbleiben), Lauch in Ringe schneiden, Zwiebel und Ingwer fein hacken, Tofu würfeln."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Kürbis würfeln (Schale kann dranbleiben), Lauch in Ringe schneiden, Zwiebel und Ingwer fein hacken, Tofu würfeln."
     },
     {
      "do": "Tofu, Linsen, Zwiebel, Ingwer und Currypaste im Öl anschwitzen.",
@@ -4955,7 +4955,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Möhren, Sellerie, Zwiebel und Knoblauch fein würfeln, Lauch in Ringe schneiden."
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Möhren, Sellerie, Zwiebel und Knoblauch fein würfeln, Lauch in Ringe schneiden."
     },
     {
      "do": "Zwiebel und Knoblauch im Öl andünsten, Gemüse und Tomatenmark kurz mitbraten."
@@ -5024,7 +5024,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packungsangabe aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis nach Packungsangabe aufsetzen.",
      "meanwhile": "Kürbis schälen und mit Tofu, Zwiebel und Knoblauch würfeln."
     },
     {
@@ -5196,7 +5196,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen und garen.",
      "meanwhile": "Tofublöcke diagonal in 8 Ecken schneiden."
     },
     {
@@ -5492,7 +5492,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen und kochen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Reis aufsetzen und kochen.",
      "passive": true,
      "meanwhile": "Knoblauch hacken, Feldsalat waschen und die Jalapeños abtropfen lassen."
     },
@@ -5711,7 +5711,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen. Tofu gut ausdrücken, in Stücke zupfen und mit Stärke, Knoblauchgranulat, Salz, Pfeffer und 1 EL Öl mischen."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist; Quinoa heiß abspülen, damit sie nicht bitter schmeckt. Ofen auf 200 °C vorheizen. Tofu gut ausdrücken, in Stücke zupfen und mit Stärke, Knoblauchgranulat, Salz, Pfeffer und 1 EL Öl mischen."
     },
     {
      "do": "Tofu aufs Blech geben und ca. 25 Min. knusprig backen.",
@@ -5788,7 +5788,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Einen Topf Salzwasser aufsetzen.",
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Einen Topf Salzwasser aufsetzen.",
      "meanwhile": "Kartoffeln schälen und würfeln."
     },
     {
@@ -5935,7 +5935,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis mit 700 ml Salzwasser und Kurkuma aufsetzen und insgesamt ca. 15 Min. garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis mit 700 ml Salzwasser und Kurkuma aufsetzen und insgesamt ca. 15 Min. garen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Möhre würfeln. Tofu würfeln und mit 3 EL Stärke und Joghurt vermengen. Zitronen abreiben und auspressen, Peperoni in Ringe schneiden."
@@ -6153,7 +6153,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel, Knoblauch und Ingwer fein hacken, Tofu würfeln und Pak Choi achteln."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebel, Knoblauch und Ingwer fein hacken, Tofu würfeln und Pak Choi achteln."
     },
     {
      "do": "Zwiebel, Knoblauch, Ingwer und Tofu im Öl kräftig anbraten und mit Curry, Zimt, Salz und Pfeffer würzen."
@@ -6224,7 +6224,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Einen Topf Salzwasser aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Einen Topf Salzwasser aufsetzen.",
      "meanwhile": "Gurke und Mango würfeln, Frühlingszwiebeln in Ringe schneiden."
     },
     {
@@ -6292,7 +6292,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Einen breiten Topf Wasser zum Sieden bringen.",
+     "do": "Zuerst: Salat waschen und gut abtropfen lassen. Einen breiten Topf Wasser zum Sieden bringen.",
      "meanwhile": "Zwei Eier trennen. Quark mit den Eigelben und dem dritten Ei verrühren und mit Salz, Pfeffer und Muskat würzen."
     },
     {
@@ -6437,7 +6437,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 180 °C vorheizen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Ofen auf 180 °C vorheizen.",
      "meanwhile": "Zwiebeln und Knoblauch hacken."
     },
     {
@@ -6583,7 +6583,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Knoblauch würfeln."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebel und Knoblauch würfeln."
     },
     {
      "do": "Zwiebel und Knoblauch im Öl andünsten, Ras el Hanout und Kreuzkümmel kurz mitrösten."
@@ -6658,7 +6658,7 @@
    ],
    "steps": [
     {
-     "do": "Zucchini und Aubergine in Scheiben, Paprika in Streifen schneiden und mit Kräutern der Provence und Salz würzen."
+     "do": "Zuerst: Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Zucchini und Aubergine in Scheiben, Paprika in Streifen schneiden und mit Kräutern der Provence und Salz würzen."
     },
     {
      "do": "Gemüse im Öl portionsweise anbraten.",
@@ -7118,7 +7118,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen.",
      "meanwhile": "Zucchini und Möhren in Scheiben schneiden, Brokkoli in Röschen teilen, Kichererbsen abtropfen lassen und Knoblauch hacken."
     },
     {
@@ -7333,7 +7333,7 @@
    ],
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen.",
+     "do": "Zuerst: Salat waschen und gut abtropfen lassen. Ofen auf 200 °C vorheizen.",
      "meanwhile": "Tofu würfeln und mit 1 EL Öl, Sesam, Curry, Kreuzkümmel und etwas Zitronenabrieb marinieren. Blumenkohl in kleine Röschen teilen."
     },
     {
@@ -7401,7 +7401,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Süßkartoffeln in ca. 1-cm-Würfel und Zwiebeln in Streifen schneiden."
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Süßkartoffeln in ca. 1-cm-Würfel und Zwiebeln in Streifen schneiden."
     },
     {
      "do": "Süßkartoffeln und Zwiebeln im Öl ca. 3 Min. anbraten, dann zugedeckt einige Minuten weich garen.",
@@ -7476,7 +7476,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packungsangabe garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Salat waschen und gut abtropfen lassen. Reis nach Packungsangabe garen.",
      "passive": true,
      "meanwhile": "Quark mit 100 ml Buttermilch und den Kräutern glatt rühren und würzen. Kohlrabi und Möhre schälen und grob raspeln."
     },
@@ -7553,7 +7553,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 180 °C vorheizen.",
+     "do": "Zuerst: weiße Bohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 180 °C vorheizen.",
      "meanwhile": "Bohnen gut abtropfen lassen, Chili hacken, Rotkohl in feine Streifen schneiden."
     },
     {
@@ -7625,7 +7625,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in Wasser aufsetzen und 20–25 Min. bissfest garen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in Wasser aufsetzen und 20–25 Min. bissfest garen.",
      "min": 25,
      "passive": true,
      "meanwhile": "Salzwasser für den Brokkoli aufsetzen und den Brokkoli in Röschen teilen. Aprikosen fein würfeln und mit Öl, Balsamico, Senf, Honig, Nelke, Zimt, Curry, Salz und Pfeffer zu einem Dressing verrühren."
@@ -7770,7 +7770,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen mit dem Lorbeerblatt in der Brühe ca. 10 Min. garen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Linsen mit dem Lorbeerblatt in der Brühe ca. 10 Min. garen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Möhren und Zwiebeln fein reiben. Für den Dip Quark und Joghurt mit 2 EL Schnittlauch, Petersilie, Salz und Pfeffer verrühren."
@@ -8106,7 +8106,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Tofu würfeln und mit Curry, Sojasauce und ca. 100 ml Kokosmilch ca. 30 Min. marinieren.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Tofu würfeln und mit Curry, Sojasauce und ca. 100 ml Kokosmilch ca. 30 Min. marinieren.",
      "min": 30,
      "passive": true,
      "meanwhile": "Reis kochen. Lauch in Ringe, Möhren in feine Streifen und Paprika in Würfel schneiden, Zwiebel hacken."
@@ -8455,7 +8455,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen mit dem Lorbeerblatt in Wasser aufsetzen und nach Packungsangabe bissfest garen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen mit dem Lorbeerblatt in Wasser aufsetzen und nach Packungsangabe bissfest garen.",
      "passive": true,
      "meanwhile": "Möhren, Zwiebel und Sellerie klein würfeln. Kräuter hacken und mit Quark, Joghurt, Zitronensaft und Zucker zum Kräuterquark verrühren."
     },
@@ -8526,7 +8526,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packungsangabe aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis nach Packungsangabe aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Zwiebel und Knoblauch hacken, Pilze vierteln."
     },
@@ -8603,7 +8603,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Gemüse in mundgerechte Stücke schneiden, Knoblauch und Ingwer fein hacken, Tofu würfeln."
     },
@@ -8681,7 +8681,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 180 °C vorheizen. Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Ofen auf 180 °C vorheizen. Reis aufsetzen und garen.",
      "meanwhile": "Pilze in Scheiben, Tofu in Würfel schneiden; Zwiebel, Knoblauch und Frühlingszwiebeln hacken."
     },
     {
@@ -8892,7 +8892,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 180 °C vorheizen. Linsen in der Brühe 10–12 Min. garen (nicht zerfallen lassen), parallel 3 Eier hart kochen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Ofen auf 180 °C vorheizen. Linsen in der Brühe 10–12 Min. garen (nicht zerfallen lassen), parallel 3 Eier hart kochen.",
      "min": 12,
      "passive": true,
      "meanwhile": "Kartoffeln reiben und ausdrücken; Zwiebeln, Knoblauch, Frühlingszwiebeln und Möhre fein schneiden."
@@ -8966,7 +8966,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebeln würfeln und in 1 EL Öl glasig dünsten, Curry und Linsen kurz mitdünsten."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebeln würfeln und in 1 EL Öl glasig dünsten, Curry und Linsen kurz mitdünsten."
     },
     {
      "do": "Passierte Tomaten und Brühe zugeben, mit Salz und Zucker würzen und zugedeckt 10–15 Min. köcheln, bis die Linsen weich sind.",
@@ -9102,7 +9102,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen.",
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen.",
      "meanwhile": "Süßkartoffel würfeln, Zucchini in Scheiben und Zwiebel in Spalten schneiden, Kichererbsen abtropfen lassen."
     },
     {
@@ -9689,7 +9689,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kürbis mit Schale in ca. 1-cm-Würfel schneiden, Schalotten und Knoblauch würfeln."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Kürbis mit Schale in ca. 1-cm-Würfel schneiden, Schalotten und Knoblauch würfeln."
     },
     {
      "do": "Alles im Öl anschwitzen, mit Curry bestäuben, Linsen kurz mitrösten und mit Brühe ablöschen."
@@ -9757,7 +9757,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Quinoa abspülen und in ca. 900 ml Salzwasser ca. 12 Min. garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Quinoa abspülen und in ca. 900 ml Salzwasser ca. 12 Min. garen.",
      "min": 12,
      "passive": true,
      "meanwhile": "Zwiebel, Knoblauch und Ingwer hacken, Frühlingszwiebel in Ringe schneiden, Tofu würfeln."
@@ -9904,7 +9904,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in der Brühe ca. 10–12 Min. bissfest garen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Linsen in der Brühe ca. 10–12 Min. bissfest garen.",
      "min": 12,
      "passive": true,
      "meanwhile": "Schalotte fein hacken und mit Essig, Öl, Salz und Pfeffer zu einem Dressing verrühren."
@@ -10040,7 +10040,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen lassen; Schalotte, Knoblauch und Ingwer hacken."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen lassen; Schalotte, Knoblauch und Ingwer hacken."
     },
     {
      "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
@@ -10113,7 +10113,7 @@
    ],
    "steps": [
     {
-     "do": "Linsen in Salzwasser bissfest garen (Beluga ca. 25–40 Min.).",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in Salzwasser bissfest garen (Beluga ca. 25–40 Min.).",
      "min": 40,
      "passive": true,
      "meanwhile": "Mango und Zwiebel fein würfeln, Koriander hacken."
@@ -10182,7 +10182,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Spinat waschen und gut abtropfen lassen. Reis aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Tofu würfeln, Zwiebel und Knoblauch hacken, Tomaten würfeln."
     },
@@ -10324,7 +10324,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 200 °C vorheizen.",
+     "do": "Zuerst: Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen.",
      "meanwhile": "Paprika und Zucchini grob würfeln, Zwiebel und Knoblauch hacken."
     },
     {
@@ -10397,7 +10397,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis kochen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis kochen.",
      "passive": true,
      "meanwhile": "Möhren in Streifen hobeln, Radieschen in Scheiben und Gurke in Stifte schneiden. Knoblauch, Ingwer und Chili hacken und mit Sojasauce, Agavendicksaft und Limettensaft verrühren."
     },
@@ -10465,7 +10465,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Gurken schälen, längs halbieren, entkernen und in Stücke schneiden; Zwiebel würfeln, Paprika in Streifen schneiden, Tomaten halbieren."
+     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Gurken schälen, längs halbieren, entkernen und in Stücke schneiden; Zwiebel würfeln, Paprika in Streifen schneiden, Tomaten halbieren."
     },
     {
      "do": "Zwiebel, Gurken und Paprika im Öl 2 Min. andünsten, mit Wein ablöschen und Brühe einstreuen.",
@@ -10544,7 +10544,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis in der Brühe aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Reis in der Brühe aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken. Gurke, Paprika und Möhre schneiden, Tomaten halbieren."
     },
@@ -10614,7 +10614,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Tofu in Stücke schneiden, Möhren in Scheiben und Paprika in Streifen schneiden, Zwiebeln und Knoblauch würfeln, Frühlingszwiebeln in Ringe schneiden."
     },
@@ -10686,7 +10686,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Frühlingszwiebeln in Ringe schneiden, Knoblauch hacken, beides in 3 EL Öl anbraten und den Reis kurz mitdünsten."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Frühlingszwiebeln in Ringe schneiden, Knoblauch hacken, beides in 3 EL Öl anbraten und den Reis kurz mitdünsten."
     },
     {
      "do": "Spinat und Brühe zugeben, aufkochen und bei kleiner Hitze ca. 25 Min. garen.",
@@ -10834,7 +10834,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kartoffeln in Salzwasser aufsetzen und garen. Aubergine in Scheiben schneiden, salzen und 15 Min. ziehen lassen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Kartoffeln in Salzwasser aufsetzen und garen. Aubergine in Scheiben schneiden, salzen und 15 Min. ziehen lassen.",
      "min": 15,
      "passive": true,
      "meanwhile": "Zwiebel und Knoblauch hacken, Zucchini in Scheiben schneiden."
@@ -10913,7 +10913,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packungsangabe aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis nach Packungsangabe aufsetzen und garen.",
      "passive": true,
      "meanwhile": "Zwiebel, Knoblauch und Ingwer fein hacken, Paprika würfeln."
     },
@@ -11053,7 +11053,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen mit Lorbeer in der kalten Brühe aufsetzen und ca. 30 Min. fast weich köcheln.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen mit Lorbeer in der kalten Brühe aufsetzen und ca. 30 Min. fast weich köcheln.",
      "min": 30,
      "passive": true,
      "meanwhile": "Kartoffeln, Paprika und Zwiebel klein würfeln, Knoblauch hacken."
@@ -11122,7 +11122,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin 10 Min. quellen lassen. Reis nach Packungsangabe aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Brühe erhitzen und das Sojagranulat darin 10 Min. quellen lassen. Reis nach Packungsangabe aufsetzen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebel, Knoblauch und Ingwer hacken."
@@ -11196,7 +11196,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin mit der Sojasauce 10 Min. einweichen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Brühe erhitzen und das Sojagranulat darin mit der Sojasauce 10 Min. einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebeln, Knoblauch und Möhren würfeln."
@@ -11267,7 +11267,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Salzwasser für die Nudeln aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Salzwasser für die Nudeln aufsetzen.",
      "meanwhile": "Zwiebeln und Knoblauch hacken."
     },
     {
@@ -11412,7 +11412,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und die Sojaschnetzel in 700 ml davon 10 Min. einweichen. Reis aufsetzen und garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Brühe erhitzen und die Sojaschnetzel in 700 ml davon 10 Min. einweichen. Reis aufsetzen und garen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebel, Knoblauch und Ingwer hacken, Möhren und Zucchini in Stücke schneiden."
@@ -11489,7 +11489,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in der Brühe aufsetzen und ca. 25 Min. bissfest garen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in der Brühe aufsetzen und ca. 25 Min. bissfest garen.",
      "min": 25,
      "passive": true,
      "meanwhile": "Eier 9 Min. hart kochen."
@@ -11557,7 +11557,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in wenig Wasser ca. 10 Min. dick einkochen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Linsen in wenig Wasser ca. 10 Min. dick einkochen.",
      "min": 10,
      "meanwhile": "Kartoffeln schälen und als Salzkartoffeln aufsetzen."
     },
@@ -11631,7 +11631,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce 10 Min. einweichen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce 10 Min. einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Lauch, Zwiebel, Möhren und Kartoffeln klein schneiden."
@@ -11707,7 +11707,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packung aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis nach Packung aufsetzen.",
      "passive": true,
      "meanwhile": "Brokkoli in Röschen teilen, Kichererbsen abgießen, Knoblauch pressen."
     },
@@ -11779,7 +11779,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel und Knoblauch würfeln und im Öl glasig dünsten, Tomatenmark kurz mitrösten."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebel und Knoblauch würfeln und im Öl glasig dünsten, Tomatenmark kurz mitrösten."
     },
     {
      "do": "Tomaten, Linsen, Paprikapulver, Oregano, Salz, Pfeffer und 250 ml Wasser zugeben und 12 Min. köcheln.",
@@ -11925,7 +11925,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Reis nach Packung aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis nach Packung aufsetzen.",
      "passive": true,
      "meanwhile": "Zwiebeln und Ingwer fein würfeln."
     },
@@ -12138,7 +12138,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Kartoffeln als Pellkartoffeln aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Kartoffeln als Pellkartoffeln aufsetzen.",
      "meanwhile": "Wasser für die Eier aufsetzen, Knoblauch hacken."
     },
     {
@@ -12358,7 +12358,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Salzwasser für die Nudeln aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Salzwasser für die Nudeln aufsetzen.",
      "meanwhile": "Zwiebeln, Möhren und Knoblauch fein würfeln."
     },
     {
@@ -12434,7 +12434,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebel, Möhren und Knoblauch würfeln und im Öl anbraten, Tomatenmark kurz mitrösten."
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Zwiebel, Möhren und Knoblauch würfeln und im Öl anbraten, Tomatenmark kurz mitrösten."
     },
     {
      "do": "Linsen, Tomaten und Brühe zugeben und ca. 25 Min. köcheln, bis die Linsen weich sind.",
@@ -12505,7 +12505,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen. Reis nach Packung aufsetzen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen. Reis nach Packung aufsetzen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Zwiebel würfeln, Bohnen abspülen."
@@ -12575,7 +12575,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce 10 Min. einweichen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce 10 Min. einweichen.",
      "min": 10,
      "passive": true,
      "meanwhile": "Möhren würfeln, Brokkoli in Röschen teilen."
@@ -12647,7 +12647,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe aufkochen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Brühe aufkochen.",
      "meanwhile": "Lauch in Ringe schneiden, Möhren würfeln."
     },
     {
@@ -12789,7 +12789,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zwiebeln und Knoblauch würfeln."
+     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebeln und Knoblauch würfeln."
     },
     {
      "do": "Zwiebeln und Knoblauch im Öl andünsten.",
@@ -13074,7 +13074,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in der Brühe aufsetzen und ca. 25 Min. bissfest garen. Salzwasser für die Kartoffeln aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in der Brühe aufsetzen und ca. 25 Min. bissfest garen. Salzwasser für die Kartoffeln aufsetzen.",
      "meanwhile": "Kartoffeln und Zwiebeln würfeln."
     },
     {
@@ -13146,7 +13146,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Linsen in Salzwasser aufsetzen und ca. 25 Min. bissfest garen. Wasser für die Spätzle aufsetzen.",
+     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in Salzwasser aufsetzen und ca. 25 Min. bissfest garen. Wasser für die Spätzle aufsetzen.",
      "meanwhile": "Wasser für die Eier aufsetzen."
     },
     {
