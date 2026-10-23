@@ -2362,9 +2362,9 @@ function nowCard(it){
       <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${skipBtn(selDate, m, "btn ghost small")}</div>`; }
   return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
-const mealOpenAttr = (d, m) => m.own ? "" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`;
+const mealOpenAttr = (d, m) => recOf(m.name) ? `data-recipe="${esc(recOf(m.name).name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`;
 const skipBtn = (d, m, cls = "btn ghost") => m.own ? "" : `<button class="${cls}" type="button" data-skipmeal="${d}|${m.k}">${m.name === "skip" ? "↺ Doch geplant" : "✕ Ausgelassen"}</button>`;
-const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : m.own ? "✓ Gegessen" : "✎ Anderes gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}"`;
+const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}"`;
 // Rückblick Essen: Summe, geplante Gerichte zum Abhaken, eigene Einträge; Nachtragen ohne Uhrzeit oder Slot
 function pastFoodCard(d){
   if (!mealPlan || !recipes) return "";
@@ -3045,7 +3045,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3269,6 +3269,12 @@ function journeySheet(kind, arg){
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
+  if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
+    const o = typeof m.name === "object" ? m.name : null, r = m.info;
+    return `<div class="sh"><div><div class="lab">${esc(m.label)}${m.time ? " · " + esc(m.time) : ""} · ${fmt(d)}</div><h2>${esc(r.name)}</h2></div>${cl}</div>
+      <div class="small nutri">${m.name === "skip" ? "Ausgelassen – zählt nicht zu kcal und Einkauf." : m.name === "away" ? "Mensa, Kantine oder unterwegs – Richtwerte." : `${r.kcal || 0} kcal · ${r.protein || 0} g Protein${o && !o.kcal ? " (ohne Werte)" : ""}`}</div>
+      ${o?.ing ? `<div class="small muted">Zutaten: ${esc(o.ing)}</div>` : ""}${m.own ? `<div class="small muted">Eigener Eintrag${o?.time ? " um " + esc(o.time) : ""}</div>` : ""}
+      <div class="actions">${m.name === "skip" ? "" : `<button class="btn ${m.ate ? "primary" : ""}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "✓ Gegessen" : "Gegessen?"}</button>`}${m.own ? `<button class="btn ghost" type="button" data-owndel="${m.k.slice(1)}" data-d="${d}">✕ Entfernen</button>` : `<button class="btn" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄ Ersetzen</button>`}</div>${m.own ? "" : skipBtn(d, m, "btn ghost small")}`; }
   if (kind === "resteeat") { if (!recipes || !mealPlan) { ensureMeals().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; } setTimeout(resteEatCalc, 0); return resteEatHtml(arg || ""); }
   if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
   if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
@@ -3387,6 +3393,7 @@ function shelfHtml(){
   return `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><a class="btn" href="#t=zutaten">🥕 Alle Zutaten</a><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
     + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
 }
+const recGrid = list => `<div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>`;
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
@@ -3398,8 +3405,8 @@ function renderRecipes(b){
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
     <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
-    <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · ${list.length} Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
-    <div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>
+    <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · <span id="recCount">${list.length}</span> Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
+    <div id="recRes">${recGrid(list)}</div>
     ${info("Fotos sind Symbolbilder mit freien Lizenzen (Wikimedia Commons, Flickr), Quelle im Rezept.")}`;
 }
 
@@ -3780,8 +3787,9 @@ function editDay(d, fn){
 }
 // Rezeptbild: Original der Quellseite (nur verlinkt, nicht kopiert); lädt es nicht, das freie Ersatzfoto
 const recImgTag = (r, cls, lazy = true) => r?.imgOrig || r?.img ? `<img${cls ? ` class="${cls}"` : ""} src="${esc(r.imgOrig || r.img)}" alt="" ${lazy ? 'loading="lazy" ' : ""}decoding="async"${r.imgOrig && r.img ? ` onerror="this.onerror=null;this.src='${esc(r.img)}'"` : ""}>` : "";
+const recOf = n => recipeByName(n && typeof n === "object" ? n.name : n);
 function mealThumb(n){
-  const r = recipeByName(n);
+  const r = recOf(n);
   return r?.img || r?.imgOrig ? recImgTag(r, "mthumb") : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : ({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r?.category] || "🍴"}</span>`;
 }
 function mealRow(d, m){
@@ -4616,9 +4624,9 @@ let openDays = null, essenDay = null;
 
 // Kompakte Zeile: Bild, Zeit · Art, Name, Werte; ✓ rechts; Tippen öffnet das Rezept (dort Tauschen)
 function diaryRow(d, m){
-  const r = m.info, rec = recipeByName(m.name);
-  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : m.own ? "✓ Gegessen" : "✎ Anderes gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}">
-    <button type="button" class="mrmain" ${m.own ? "disabled" : rec ? `data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="meal" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
+  const r = m.info, rec = recOf(m.name);
+  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}">
+    <button type="button" class="mrmain" ${rec ? `data-recipe="${esc(rec.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small ghost ic" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Entfernen">✕</button>` : ""}<button type="button" class="mcheck" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button></div>`;
 }
 
@@ -4780,12 +4788,13 @@ async function onClick(e){
     toast(ok.length < items.length ? "Eingetragen – nicht alles erkannt, Werte sind ein Teilwert" : "Eingetragen"); sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave") { if (t.disabled) return; const name = sheet.querySelector("#ownName")?.value.trim(); if (!name) { sheet.querySelector("#ownName").focus(); return; }
     t.disabled = true; const kcal = num(sheet.querySelector("#ownKcal")?.value), protein = num(sheet.querySelector("#ownProt")?.value);
-    if (t.dataset.mode === "slot") { const [d, k] = sheetArg.split("|"); editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: {name, kcal, protein}}); }); }
+    const recN = recipeByName(name);
+    if (t.dataset.mode === "slot") { const [d, k] = sheetArg.split("|"); editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN ? recN.name : {name, kcal, protein}}); }); }
     else if (t.dataset.mode === "other") { const [d, k] = sheetArg.split("|"), ing = sheet.querySelector("#ownText")?.value.trim() || "";
-      editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); }); toast("Eingetragen"); }
+      editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN && !ing ? recN.name : Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); }); toast("Eingetragen"); }
     else { const d = sheetArg, id = Date.now().toString(36), time = sheet.querySelector("#ownTime")?.value || ""; editDay(d, day => { day.own = [...(day.own || []), {id, name, kcal, protein, time}]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); }); }
     sheetKind = null; sheet.close(); render(); return; }
-  const od = t.closest("[data-owndel]"); if (od) { const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
+  const od = t.closest("[data-owndel]"); if (od) { if (sheetKind === "mealinfo") { sheetKind = null; sheet.close(); } const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
   const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
   const za = t.closest("[data-zall]"); if (za) { const on = za.dataset.zall === "1"; for (const d of document.querySelectorAll("details.zgd")) { d.open = on; on ? shopOpen.add(d.dataset.keep) : shopOpen.delete(d.dataset.keep); } lsSet("shopOpen", [...shopOpen]); return; }
   const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"), was = mealsFor(d).find(x => x.k === k)?.name === "skip";
@@ -5007,7 +5016,7 @@ function onInput(e){
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
   if (t.id === "catQ") { catF.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { renderMore(); const q = document.getElementById("catQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
-  if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { renderRecipes(); const q = document.getElementById("recQ"); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
+  if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; const pos = t.selectionStart; renderRecipes(); const q = document.getElementById("recQ"); if (q && q !== t) { q.replaceWith(t); t.focus(); try { t.setSelectionRange(pos, pos); } catch {} } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const res = document.getElementById("recRes"); if (!res) return renderRecipes(); const list = recipesFiltered(); res.innerHTML = recGrid(list); const c = document.getElementById("recCount"); if (c) c.textContent = list.length; }, 150); return; }
   if (t.id === "mDate" || /^m_/.test(t.id)) measDraft[t.id] = t.value;
   if (t.id === "m_waist" || t.id === "m_neck") { const bf = navy(num(document.getElementById("m_waist").value), num(document.getElementById("m_neck").value), S().height || 175); document.getElementById("navyLive").textContent = bf ? `Körperfett (Navy): ${bf.toFixed(1)} %` : "Körperfett (Navy) erscheint nach Taille + Hals."; }
 }
@@ -5077,8 +5086,7 @@ for (const el of [document.querySelector("header.top"), document.getElementById(
 function onSwipe(s0, dx){
   const z = s0.z;
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
-    // nach rechts: noch nicht gegessen → „Was anderes gegessen“ öffnen; schon abgehakt → wieder auf nicht gegessen
-    if (dx > 0 && !k.startsWith("o") && !(dayObj(d)?.ate || {})[k]) { ensureCur(); openSheet("other", `${d}|${k}`); return; }
+    // nach rechts: gegessen ↔ nicht gegessen; nach links: ersetzen
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
       const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
       const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
