@@ -32,7 +32,8 @@
 html{background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);-webkit-tap-highlight-color:transparent;
   padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(var(--nav-h) + 76px + env(safe-area-inset-bottom,0px))}
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px))}
+body.resting{padding-bottom:calc(var(--nav-h) + 76px + env(safe-area-inset-bottom,0px))}
 img{max-width:100%}
 [hidden]{display:none!important}
 .wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
@@ -243,6 +244,7 @@ body.wo main{padding-bottom:110px}
 .prs{display:flex;flex-direction:column;gap:6px;text-align:left}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
+.hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1134,26 +1136,112 @@ function guideTick(){
 let tmr = null, tmrInt = null;
 function timerCfg(key){
   const k = key.startsWith("mob:") ? key.slice(4) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
-  if (g) return g.stop ? {mode: "stop"} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
+  if (g) return g.stop ? {mode: "stop", rounds: g.rounds || 1, side: false, rest: d.rest || 30} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
   if (d.hold >= 10) return {mode: "count", sec: d.hold, rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
   if (d.hold > 0 && m) return {mode: "reps", hold: d.hold, reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
-  return {mode: "stop"};
+  return {mode: "stop", rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 30};
 }
 // Durchgetaktet: die ganze Routine läuft in einem Timer – Vorbereitung, Halten/Lösen, Seitenwechsel, Übergang zur nächsten Übung.
 // Übungen ohne feste Zeit (Stoppuhr) bekommen hier eine Vorgabe.
 let autoFlow = false;
-const AUTO_CFG = {knietest: {mode: "reps", hold: 3, reps: 5, rounds: 2, side: true, rest: 0}, rkc: {mode: "count", sec: 20, rounds: 2, side: false, rest: 30}};
+const AUTO_CFG = {knietest: {mode: "reps", hold: 3, reps: 5, rounds: 2, side: true, rest: 0}};
+const STOP_EST = 20; // Annahme je Stoppuhr-Satz („so lange sauber möglich“) für die Restzeit
 const PREP_SEC = 8, SWITCH_SEC = 6, NEXT_SEC = 12;
-function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null, c = (k && AUTO_CFG[k]) || timerCfg(key); return c.mode === "stop" ? {mode: "count", sec: 20, rounds: 1, side: false, rest: 0} : c; }
+function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null; return (k && AUTO_CFG[k]) || timerCfg(key); }
 // Dauer einer Übung im Durchlauf (ohne Vorbereitung) und Rest der Routine ab Übung i
-function autoSecs(key){ const c = autoCfg(key), per = c.mode === "reps" ? c.reps * (c.hold + 2) : c.sec; return c.rounds * per + (c.rounds - 1) * (c.side ? SWITCH_SEC : (c.rest || 10)); }
+function autoSecs(key){ const c = autoCfg(key), per = c.mode === "reps" ? c.reps * (c.hold + 2) : c.mode === "stop" ? STOP_EST : c.sec; return c.rounds * per + (c.rounds - 1) * (c.side ? SWITCH_SEC : (c.rest || 10)); }
 function autoLeft(i){ let t = 0; for (let j = Math.max(0, i); j < MOBILITY.length; j++) { const k = MOBILITY[j][0]; if (cur.mobility[k] && j !== i) continue; t += PREP_SEC + autoSecs("mob:" + k) + NEXT_SEC; } return t; }
 // Nächste offene Übung ab Blatt-Index – als Kurzname
-const mobShort = t => t.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(" 3 ×")[0].split(",")[0];
-function tmrRemain(t){ if (!t || t.mode === "stop") return 0; const per = t.mode === "reps" ? t.reps * (t.hold + 2) : t.sec, gap = t.side ? SWITCH_SEC : (t.rest || 10), left = Math.max(0, t.left);
+const mobShort = t => t.split(":")[0].split(/\s\d+(?:–\d+)?\s*×/)[0].split(" (")[0].split(",")[0].trim();
+function tmrRemain(t){ if (!t) return 0; const per = t.mode === "reps" ? t.reps * (t.hold + 2) : t.mode === "stop" ? STOP_EST : t.sec, gap = t.side ? SWITCH_SEC : (t.rest || 10), left = Math.max(0, t.left);
   if (t.phase === "next") return left; if (t.phase === "prep") return left + t.rounds * per + (t.rounds - 1) * gap + NEXT_SEC;
-  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + (t.phase === "hold" ? 2 : 0) + Math.max(0, t.reps - t.rep - 1) * (t.hold + 2) : left;
+  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + (t.phase === "hold" ? 2 : 0) + Math.max(0, t.reps - t.rep - 1) * (t.hold + 2) : t.mode === "stop" ? Math.max(0, STOP_EST - t.acc) : left;
   return inRound + left * (t.phase === "switch" ? 1 : 0) + roundsAfter * (per + gap) + NEXT_SEC; }
+// Hinweise je Schmerzstelle: zuerst die Regel aus dem Plan, dann typische Ursachen – allgemein und je Bewegungsmuster
+const HURT = {
+  knie: {label: "Knie", stop: "Stechen, Blockieren oder Schwellung: Satz beenden. Über 2/10 im Knie-Test an mehreren Tagen → Knie-Phase 1 unter Mehr → Einrichtung.", tips: {
+    _: ["Schmerz vorn an der Kniescheibe kommt meist von zu viel Beugung unter Last: Bewegungsumfang verkleinern (bis 45–60°), Gewicht runter, Tempo langsam (3 s ablassen).", "Knie zeigt über den Mittelfuß, nicht nach innen. Ganzer Fuß am Boden, Ferse belastet.", "Dumpfes Brennen im Muskel ist in Ordnung, Schmerz im Gelenk nicht."],
+    squat: ["Tiefe reduzieren und Oberkörper etwas aufrechter; beim Ausfallschritt den Schritt größer machen, damit das Schienbein senkrechter bleibt.", "Beinpresse: Füße höher auf der Platte, nicht tiefer als 90°."],
+    legiso: ["Beinstrecker: nur die oberen 45° bewegen, 2 s oben halten, kein Schwung. Beincurl ist meist knieschonend – Fußspitze locker lassen."],
+    hinge: ["Hüfte nach hinten schieben statt Knie beugen; Schienbein bleibt fast senkrecht."],
+    stretch: ["Dehnung des vorderen Oberschenkels: Knie nicht maximal beugen, Ferse nur so weit ran, dass das Knie ruhig bleibt."],
+    core: ["Dead Bug / Plank: Das Knie sollte hier nichts spüren – Beine weniger weit strecken, Bein höher halten."]}},
+  sc: {label: "Schlüsselbein / SC", stop: "Ab 3/10 Übung sofort beenden und die Alternative nehmen; über 3 ist rot. Bis zur Arztfreigabe keine Dips, kein Überkopfdrücken, keine Last mit Ellbogen über Schulterhöhe.", tips: {
+    _: ["Ellbogen bleiben unter Schulterhöhe, Griff eher eng bis schulterbreit.", "Schulterblätter leicht nach hinten-unten setzen, Brustbein hoch, Schultern nicht hochziehen.", "Bewegungsumfang verkürzen: oben nicht voll durchstrecken, unten nicht tief dehnen."],
+    press: ["Drücken mit neutralem Griff und Ellbogen etwa 45° zum Körper; Liegestütz erhöht (Hände auf Bank) statt flach, kein Defizit.", "Ziept es beim Zusammenführen der Hände: Griff etwas breiter, Bewegung oben nicht abschließen."],
+    pull: ["Ziehen zur unteren Brust, nicht zum Hals; am Ende nicht nach hinten reißen."],
+    overhead: ["Seitheben nur bis Schulterhöhe, Daumen leicht nach oben; Shrugs ohne Rollen, nur hoch und runter.", "Überkopf-Varianten sind bis zur Freigabe tabu – Alternative wählen."],
+    core: ["Plank: Hände unter den Schultern, Ellbogen leicht gebeugt, Schulterblätter aktiv auseinanderdrücken. Bei ≥ 3/10 weglassen, so steht es im Plan."],
+    arm: ["Curls/Trizeps: Oberarm am Körper, Schulter nicht nach vorn fallen lassen."]}},
+  schulter: {label: "Schulter", stop: "Stechen vorn oder oben in der Schulter: Satz beenden. Dumpfes Muskelziehen ist in Ordnung.", tips: {
+    _: ["Schulterblatt setzen: leicht nach hinten-unten, Brust raus, bevor die Bewegung beginnt.", "Ellbogen nicht hinter die Körperlinie bringen, Dehnung unten begrenzen.", "Gewicht runter, Tempo langsam, kein Schwung."],
+    press: ["Ellbogen 45° zum Körper, nicht 90° abgespreizt. Unten stoppen, sobald der Oberarm auf Bankhöhe ist.", "Liegestütz: Hände leicht nach außen drehen, Körper gerade, nicht durchhängen."],
+    pull: ["Mit den Ellbogen ziehen, nicht mit den Händen; Schultern unten lassen. Latzug nur bis Kinnhöhe."],
+    overhead: ["Seitheben: Daumen leicht nach oben, nur bis Schulterhöhe, Arme etwas vor dem Körper (30°).", "Außenrotation: Oberarm am Körper, kleines Gewicht, langsam."],
+    core: ["Plank/Ab-Roller: Schulterblätter aktiv auseinanderdrücken, Hände direkt unter den Schultern."],
+    arm: ["Curls: Schulter nicht nach vorn schieben, Oberarm bleibt senkrecht."]}},
+  ruecken: {label: "Unterer Rücken", stop: "Ausstrahlen ins Bein, Kribbeln oder stechender Schmerz: sofort beenden. Muskelkater am nächsten Tag ist normal.", tips: {
+    _: ["Becken leicht einrollen und Bauch fest, bevor die Bewegung startet – bei deinem Beckenkipp die häufigste Ursache.", "Kein Hohlkreuz am Ende der Bewegung (Glute Bridge oben, RDL oben, Überkopf).", "Gewicht runter und Bewegungsumfang verkleinern; Spiegel oder Video zur Kontrolle."],
+    hinge: ["RDL/Hip Thrust: Rücken neutral, Bewegung aus der Hüfte; oben mit dem Po abschließen, nicht überstrecken. Nur so tief, wie der Rücken gerade bleibt."],
+    squat: ["Beinpresse/Kniebeuge: Po nicht von der Lehne lösen, Tiefe reduzieren. Ausfallschritt: Oberkörper aufrecht, Becken eingerollt."],
+    core: ["Dead Bug: Lendenwirbelsäule bleibt am Boden – Beine weniger weit strecken. Plank: Po fest, Hüfte nicht durchhängen lassen.", "Ab-Roller: Weg verkürzen, Becken eingerollt halten."],
+    pull: ["Rudern: Oberkörper fest, nicht mit dem Rücken schwingen; brustgestützte Variante nehmen."],
+    overhead: ["Beim Drücken/Heben nicht ins Hohlkreuz ausweichen: Rippen runter, Po fest."],
+    stretch: ["Hüftbeuger-Dehnung: Becken erst einrollen, dann vorschieben – sonst zieht es im Rücken statt in der Hüfte."]}},
+  nacken: {label: "Nacken", stop: "Kopfschmerz, Schwindel oder Ausstrahlen in den Arm: beenden.", tips: {
+    _: ["Kinn leicht nach hinten (Doppelkinn), Blick geradeaus, Nacken lang.", "Schultern aktiv unten lassen; der Nacken hilft gern mit, wenn die Last zu hoch ist.", "Gewicht runter, erst Technik, dann Steigerung."],
+    overhead: ["Seitheben/Shrugs: Schultern nicht zu den Ohren ziehen; der 30°-Shrug ist eine kleine Bewegung, kein Rollen."],
+    pull: ["Rudern/Latzug: Kopf in Verlängerung der Wirbelsäule, nicht nach vorn schieben."],
+    core: ["Dead Bug: Kopf ablegen, nicht mit dem Nacken ziehen. Plank: Blick auf den Boden."],
+    press: ["Liegestütz: Kopf nicht hängen lassen, Blick etwas vor die Hände."]}},
+  ellbogen: {label: "Ellbogen", stop: "Schmerz außen oder innen, der beim Greifen zunimmt: Volumen für Arme und Zugübungen senken; nach dem Bouldern die Pause einhalten.", tips: {
+    _: ["Handgelenk neutral, Griff nicht verkrampfen, eher offen.", "Unten nicht voll durchstrecken (Curls, Trizeps), oben nicht reißen.", "Langsamer, weniger Gewicht, mehr Pause – Sehnen brauchen länger als Muskeln."],
+    pull: ["Klimmzug/Latzug: neutraler Griff statt Untergriff, Ellbogen nicht ganz aushängen."],
+    arm: ["Curls: nur drei Viertel des Weges; Hammer-Griff probieren. Trizeps: Seil statt Stange, Ellbogen ruhig."],
+    press: ["Drücken: Griff etwas breiter, Ellbogen nicht einklemmen."]}},
+  hand: {label: "Handgelenk", stop: "Stechen bei Last auf der Handfläche: Position ändern oder Übung tauschen.", tips: {
+    _: ["Handgelenk gerade, Last über die Handwurzel, nicht über die Finger.", "Liegestütz auf Fäusten, Griffen oder mit Händen auf einer Kante; Finger leicht nach außen drehen.", "Hantel tiefer in der Hand (auf dem Handballen) greifen."],
+    press: ["Erhöhte Liegestütze (Hände auf Bank) entlasten das Handgelenk; Ab-Roller mit neutralen Griffen."],
+    arm: ["Reverse-Wrist-Curls sehr leicht und langsam; bei Schmerz weglassen."]}},
+  huefte: {label: "Hüfte / Leiste", stop: "Stechen in der Leiste beim tiefen Beugen oder Abspreizen: Tiefe und Winkel verkleinern.", tips: {
+    _: ["Bewegungsumfang verkleinern: weniger tief, weniger weit abspreizen.", "Füße etwas mehr nach außen drehen und breiter stellen, Knie folgen den Zehen.", "Vorher 2–3 min Glute Bridges und Beckenkippen als Aufwärmen."],
+    squat: ["Ausfallschritt/BSS: kürzere Schrittlänge, Oberkörper aufrecht. Beinpresse: nicht unter 90°."],
+    hinge: ["Hip Thrust: Füße näher an den Po, oben nicht überstrecken."],
+    legiso: ["Abduktion: kleinerer Winkel, langsam; Oberkörper nicht mitkippen."],
+    stretch: ["Hüftbeuger-Dehnung: Becken einrollen statt weiter vorschieben; Leistenziehen heißt zu weit."]}},
+  oschenkel: {label: "Oberschenkel vorn", stop: "Brennen ist normal, ein Ziehen nahe der Kniescheibe oder in der Leiste nicht.", tips: {
+    _: ["Dehnung weniger intensiv, Becken dabei eingerollt.", "Bei Kraftübungen weniger tief, langsamer, Pausen einhalten."],
+    stretch: ["Vorderer Oberschenkel: Knie zeigt nach unten, nicht nach außen; 20–30 s reichen."],
+    squat: ["Beinpresse/Kniebeuge: Füße etwas höher bzw. Tiefe reduzieren."]}},
+  sonst: {label: "Sonstiges", stop: "Bei scharfem oder zunehmendem Schmerz: beenden, Alternative wählen und abends im Abendcheck notieren.", tips: {
+    _: ["Gewicht und Bewegungsumfang verkleinern, Tempo langsam.", "Technik-Checkliste unten durchgehen und einen Satz filmen.", "Tritt es beim nächsten Mal wieder auf: Übung tauschen und im Verlauf notieren."]}}};
+// Bewegungsmuster aus Schlüssel und Name
+function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || MOBILITY.find(([m]) => "mob:" + m === key)?.[1] || "")).toLowerCase();
+  if (/hipflexor|rectfem|k2c|dehn|stretch/.test(s)) return "stretch";
+  if (/plank|deadbug|dead bug|pallof|abroller|ab-roller|rkc|suitcase|tilt|becken/.test(s)) return "core";
+  if (/curl|skull|pushdown|kickback|hammer|wrist|trizeps|bizeps/.test(s)) return "arm";
+  if (/legext|beinstreck|seatedcurl|lyingcurl|slidecurl|beincurl|calf|wade|abduction|abduktion|adduction/.test(s)) return "legiso";
+  if (/squat|kniebeuge|legpress|beinpresse|bss|lunge|ausfall|split|goblet|wallsit|stepdown|knietest/.test(s)) return "squat";
+  if (/shrug|lateral|latraise|seitheben|ytw|extrot|außenrot|serratus|pushupplus|overhead|ohp|überkopf|revfly|facepull|reverse/.test(s)) return "overhead";
+  if (/row|ruder|pull|chin|lat|klimm/.test(s)) return "pull";
+  if (/press|push|liegest|dip|bench|drück|landmine/.test(s)) return "press";
+  if (/rdl|hinge|deadlift|kreuz|hip|bridge|glute|thrust|backext|rückenstreck|pullthrough|nordic/.test(s)) return "hinge";
+  return "_"; }
+let hurtOpen = null, hurtWhere = null;
+const exName = key => EX[key]?.name || (key?.startsWith("mob:") ? mobShort(MOBILITY.find(([m]) => m === key.slice(4))?.[1] || key) : key);
+function hurtHtml(key){
+  const e = EX[key], mb = key.startsWith("mob:") ? MOBILITY.find(([m]) => m === key.slice(4)) : null, pat = hurtPattern(key);
+  let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>
+    <div class="lab">Wo?</div><div class="chips">${Object.entries(HURT).map(([k, r]) => `<button type="button" data-hwhere="${k}" aria-pressed="${hurtWhere === k}">${esc(r.label)}</button>`).join("")}</div>`;
+  if (!hurtWhere) return h + `<div class="small muted">Stelle antippen – dann siehst du, was oft dahintersteckt und worauf du achten solltest.</div>`;
+  const r = HURT[hurtWhere], tips = [...(r.tips[pat] || []), ...r.tips._], cues = e?.cue || [], d = DOSE[key];
+  h += `<div class="warnb"><b>Zuerst:</b> ${esc(r.stop)}</div><div class="lab">Woran es oft liegt · worauf achten</div><ul class="hurtl">${tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
+  if (cues.length || d?.breath || d?.tempo) h += `<div class="lab">Technik-Checkliste für diese Übung</div><ul class="hurtl">${cues.map(c => `<li>${esc(c)}</li>`).join("")}${d?.tempo ? `<li>Tempo: ${esc(d.tempo)}</li>` : ""}${d?.breath ? `<li>Atmung: ${esc(d.breath)}</li>` : ""}</ul>`;
+  const logged = (cur.hurt || []).some(x => x.ex === key && x.where === hurtWhere);
+  h += `${mb && mobAlt(key.slice(4)) ? `<div class="small muted">Alternative laut Plan: ${esc(mobAlt(key.slice(4)))}</div>` : ""}
+    <div class="actions">${e && altOptions(key).length ? `<button type="button" class="btn" data-sheet="alt" data-v="${esc(key)}">⇄ Alternative wählen</button>` : ""}<button type="button" class="btn ${logged ? "" : "primary"}" data-hlog="${esc(key)}" ${logged ? "disabled" : ""}>${logged ? "✓ Notiert" : "📝 Für den Abendcheck notieren"}</button></div>
+    <div class="small muted">Notiert werden Übung und Stelle für heute. Abends im Abendcheck dazu die Skala ausfüllen.</div>`;
+  return h; }
 function autoNextName(){ const nx = MOBILITY.slice(sheetArg + 1).find(([k]) => !cur.mobility[k]); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
   if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && key.startsWith("mob:") && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
@@ -1165,9 +1253,11 @@ function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
   const pause = ["prep", "switch", "next"].includes(t.phase);
   const head = t.phase === "prep" ? "Bereit machen · Position einnehmen" : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
-    t.mode === "stop" ? "Stoppuhr" : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
-  const val = t.mode === "stop" ? t.acc : t.left;
-  return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, t.mode === "stop" ? val : Math.ceil(val)))}</div>
+    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
+  const stopRun = t.mode === "stop" && !pause, val = stopRun ? t.acc : t.left;
+  return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, stopRun ? val : Math.ceil(val)))}</div>
+    ${t.times?.length ? `<div class="small muted">Bisher: ${t.times.map((x, i) => `Satz ${i + 1} ${fmtDur(x)}`).join(" · ")}</div>` : ""}
+    ${stopRun && !t.done ? `<button type="button" class="btn primary big wide" data-tm="set">✓ Satz fertig${t.rounds > 1 ? ` (${Math.min(t.round + 1, t.rounds)}/${t.rounds})` : ""}</button>` : ""}
     <div class="tmrbtns"><button type="button" class="btn" data-tm="minus" aria-label="10 Sekunden weniger">−10</button><button type="button" class="btn primary" data-tm="toggle">${t.run ? "Pause" : t.mode === "stop" && t.acc ? "Weiter" : "Start"}</button><button type="button" class="btn" data-tm="plus" aria-label="10 Sekunden mehr">+10</button></div>
     ${t.auto ? `<div class="row2"><button type="button" class="btn ghost small" data-tm="reset">Übung neu</button>${pause ? `<button type="button" class="btn ghost small" data-tm="skip">Weiter ›</button>` : ""}</div><div class="small muted">Durchgetaktet · Routine noch ≈ ${Math.ceil((autoLeft(sheetArg + 1) + tmrRemain(t)) / 60)} min</div>` : `<button type="button" class="btn ghost small" data-tm="reset">Zurücksetzen</button>`}`;
 }
@@ -1185,13 +1275,13 @@ function chime(){ audioReady(); try { const t0 = audioCtx.currentTime; tone(880,
 function tmrTick(){
   const t = tmr; if (!t || !t.run || !document.getElementById("tmr")) { clearInterval(tmrInt); if (t) t.run = false; syncFigure(t); return; }
   const now = Date.now(), dt = (now - t.last) / 1000; t.last = now;
-  if (t.mode === "stop") { t.acc += dt; const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(t.acc); return; }
+  if (t.mode === "stop" && t.phase === "hold") { t.acc += dt; const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(t.acc); return; }
   t.left -= dt;
   if (t.left > 0) { const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(Math.max(0, Math.ceil(t.left)));
     if (t.auto && ["prep", "switch", "next"].includes(t.phase)) { const c = Math.ceil(t.left); if (c <= 3 && c !== t.lastBeep) { t.lastBeep = c; beep(); } }
     syncFigure(t); return; }
   t.lastBeep = null;
-  if (t.phase === "prep" || t.phase === "switch") { t.phase = "hold"; t.rep = 0; t.left = t.mode === "reps" ? t.hold : t.sec; beep(); tmrPaint(); return; }
+  if (t.phase === "prep" || t.phase === "switch") { t.phase = "hold"; t.rep = 0; t.acc = 0; t.done = false; t.left = t.mode === "reps" ? t.hold : t.sec || 0; beep(); tmrPaint(); return; }
   if (t.phase === "next") { t.run = false; clearInterval(tmrInt); guideNext(true); return; }
   // Rundenende: geführt → anhalten, Durchlauf → Seitenwechsel/Pause bzw. Übergang zur nächsten Übung
   const roundEnd = () => { const more = t.round < t.rounds; if (!more) t.round = t.rounds - 1;
@@ -1211,6 +1301,12 @@ function tmrCmd(c){
   if (c === "toggle") { audioReady(); t.run = !t.run; t.last = Date.now(); clearInterval(tmrInt); if (t.run) tmrInt = setInterval(tmrTick, 250); }
   else if (c === "plus" || c === "minus") { const d = c === "plus" ? 10 : -10; if (t.mode === "stop") t.acc = Math.max(0, t.acc + d); else t.left = Math.max(1, t.left + d); }
   else if (c === "skip") { if (["prep", "switch", "next"].includes(t.phase)) t.left = 0; }
+  else if (c === "set") { if (t.mode !== "stop" || t.done) return; const sec = Math.round(t.acc); (t.times = t.times || []).push(sec); t.acc = 0; t.round++;
+    if (t.key.startsWith("mob:")) { cur.mobSec = Object.assign({}, cur.mobSec, {[t.key.slice(4)]: t.times.slice()}); touch(); }
+    const more = t.round < t.rounds; if (!more) { t.round = t.rounds - 1; t.done = true; }
+    if (t.auto) { t.phase = more ? "switch" : "next"; t.left = more ? (t.rest || 30) : NEXT_SEC; t.run = true; t.last = Date.now(); clearInterval(tmrInt); tmrInt = setInterval(tmrTick, 250); }
+    else { t.run = false; clearInterval(tmrInt); }
+    chime(); toast(more ? `Satz ${t.round}: ${fmtDur(sec)} – kurze Pause` : `Geschafft: ${t.times.map(fmtDur).join(" · ")}`); }
   else if (c === "reset") { clearInterval(tmrInt); tmr = null; const el = document.getElementById("tmr"); if (el) el.outerHTML = timerHtml(t.key); syncFigure(tmr); return; }
   tmrPaint();
 }
@@ -2413,7 +2509,7 @@ function previewRow(id, w, sk, i){
   const e = EX[e_], nAlt = altOptions(id).length - 1, isAlt = e_ !== (atHome() ? homeDefault(id) : id);
   return `<div class="pv"><button type="button" class="pvimg" data-sheet="tech" data-v="${e_}" aria-label="Technik zu ${esc(e.name)}">${exThumb(e_, e.img) ? `<img src="${exThumb(e_, e.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${i + 1}</span>`}</button>
     <span class="pvt"><b>${esc(e.name)}</b>${isAlt ? ` <span class="tag">Alternative</span>` : ""}<br><span class="small muted"><span class="num">${nSets(id, w, sk)} × ${esc(e.reps)}</span>${e.gate && !S().scCleared ? " · SC-Ampel" : ""}</span></span>
-    ${nAlt > 0 ? `<button class="btn small pvalt" type="button" data-sheet="alt" data-v="${id}" aria-label="Alternativen zu ${esc(e.name)}">⇄ ${nAlt}</button>` : `<span></span>`}</div>`;
+    ${nAlt > 0 ? `<button class="btn small pvalt" type="button" data-sheet="alt" data-v="${id}" aria-label="Alternativen zu ${esc(e.name)}">⇄ ${nAlt}</button>` : `<span></span>`}<button class="btn small ghost" type="button" data-hurt="${id}" aria-label="Tut weh bei ${esc(e.name)}">😣</button></div>`;
 }
 function exBody(base, n, w){
   const id = eff(base), e = EX[id], rir = rirFor(id, w), sg = suggestion(id), mine = setsObj()[id] || [], cleared = !!S().scCleared;
@@ -2796,7 +2892,8 @@ function stopRest(){ restEnd = 0; clearInterval(restTimer); clearTimeout(restNot
 // Bei gesperrtem Bildschirm: Benachrichtigung mit Vibration (braucht die Push-Erlaubnis)
 function notifyRest(){ try { if (Notification.permission === "granted") navigator.serviceWorker?.ready.then(r => r.showNotification("Pause vorbei", {body: "Weiter mit dem nächsten Satz.", tag: "rest", renotify: true, vibrate: [200, 100, 200], data: {url: location.href}})); } catch {} }
 function updateRestBar(){
-  const bar = document.getElementById("restBar"); if (!restEnd || tab !== "training") { bar.hidden = true; return; }
+  const bar = document.getElementById("restBar"); if (!restEnd || tab !== "training") { bar.hidden = true; document.body.classList.remove("resting"); return; }
+  document.body.classList.add("resting");
   const left = (restEnd - Date.now())/1000; bar.hidden = false;
   const rtxt = left > -1 ? fmtDur(Math.max(0, Math.ceil(left))) : "+" + fmtDur(Math.floor(-left));
   document.getElementById("restT").textContent = rtxt;
@@ -2847,9 +2944,10 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
         ${videoHtml("mob:" + k, "")}
         ${MOB_INFO[k] ? `<div class="whyb"><div class="lab">Wofür gut</div><div>${esc(MOB_INFO[k].why)}</div></div>${muscleMap(MOB_INFO[k].m, "mob:" + k)}` : ""}
         ${k === "knietest" ? `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}` : ""}
-        <div class="actions"><button type="button" class="btn big" data-tmrin="mob:${k}">⏱ Timer</button><button type="button" class="btn primary big" data-mobdone="${k}">${cur.mobility[k] ? "✓ Erledigt" : "Erledigt"}</button></div>
+        <div class="actions"><button type="button" class="btn big" data-tmrin="mob:${k}">⏱ Timer</button><button type="button" class="btn primary big" data-mobdone="${k}">${cur.mobility[k] ? "✓ Erledigt" : "Erledigt"}</button></div><button type="button" class="btn ghost small" data-hurt="mob:${k}">😣 Tut was weh?</button>
         <div class="zn"><button type="button" class="btn ghost small" data-mobzoom="${Math.max(0, mobZoom - 1)}" ${mobZoom === 0 ? "disabled" : ""}>‹ Vorherige</button><button type="button" class="btn ghost small" data-mobzoom="${Math.min(MOBILITY.length - 1, mobZoom + 1)}" ${mobZoom === MOBILITY.length - 1 ? "disabled" : ""}>Nächste ›</button></div></div></div>`; }
     h += `<div class="lab">Knie-Test: Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}<div class="small muted">Über 2/10 mehrere Tage: Knie-Phase 1 unter Mehr → Einrichtung aktivieren.</div><div class="small muted">Bilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>; Fotos: free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0, Wikimedia Commons.</div>`;
+  } else if (sheetKind === "hurt") { h += `<div class="hurtcard">${hurtHtml(sheetArg)}</div>`;
   } else if (sheetKind === "mobguide") {
     const i = sheetArg, N = MOBILITY.length;
     if (i >= N) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">🧘</div><div>${mobCount(cur, selDate)}/${mobTotal(selDate)} Übungen erledigt. Guter Start in den Tag.</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>`; }
@@ -2860,13 +2958,14 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       if (k === "knietest") h += `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}`;
       if (mobAlt(k)) h += `<div class="warnb small">${esc(mobAlt(k))}</div>`;
       h += doseHtml("mob:" + k) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml("mob:" + k, "")}</details>`;
-      h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div>`; }
+      h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div><button type="button" class="btn ghost small" data-hurt="mob:${k}">😣 Tut was weh?</button>`; }
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
       <div class="lab">Knie</div>${scaleHtml("knee","knee",cur.pain.knee)}
       ${climbed(selDate) || climbed(addDays(selDate, -1)) || cur.pain.finger != null ? `<div class="lab">Finger / Ellbogen <span class="small muted">(nach dem Bouldern)</span></div>${scaleHtml("knee","finger",cur.pain.finger)}` : ""}
       ${info("SC: 0–2 grün · 3 Übung tauschen · über 3 rot. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.")}
+      ${(cur.hurt || []).length ? `<div class="lab">Heute gemeldet</div><ul class="hurtl small">${cur.hurt.map(x => `<li>${esc(exName(x.ex))}: ${esc(HURT[x.where]?.label || x.where)} <span class="muted">(${esc(x.t)})</span></li>`).join("")}</ul>` : ""}
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div><div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
@@ -2879,7 +2978,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
     const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
     h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
-      <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}</div>
+      <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}<button type="button" class="xc hurtbtn" data-hurt="${esc(sheetArg)}">😣 Tut weh?</button></div>
       ${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
       ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && realOpen !== sheetArg ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
       <div class="tabs3 ${["", "", "", "", "n4", "n5"][3 + (alts.length ? 1 : 0) + (hasHist ? 1 : 0)] || ""}" role="tablist" id="ttabs">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(hasHist ? [["ver", "Verlauf"]] : []), ...(alts.length ? [["alt", `Alt. (${alts.length})`]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
@@ -2910,7 +3009,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -2922,6 +3021,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="lab">Modus nächste Woche</div><div class="seg" id="ciMode">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(ci.nextMode || S().mode || "normal") === m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div>
       <button class="btn primary big" type="button" data-act="ciSave" data-v="${mo}">Check-in speichern</button>`;
   }
+  if (hurtOpen && sheetKind !== "hurt") h += `<div class="zoomov" data-hclose><div class="zoomcard hurtcard" role="dialog" aria-label="Tut weh">${hurtHtml(hurtOpen)}</div></div>`;
   (sheetTarget || sheetBody).innerHTML = h;
 }
 function checkinStats(mo){
@@ -4428,7 +4528,7 @@ document.querySelector("nav.bottom").addEventListener("click", e => { const b = 
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
@@ -4518,7 +4618,7 @@ async function onClick(e){
   const rl = t.closest("[data-real]"); if (rl) { realOpen = rl.dataset.real || null; renderSheet(); return; }
   const an = t.closest(".exvis .anim"); if (an) { an.classList.toggle("paused"); return; }
   const pv = t.closest("[data-play]"); if (pv) { playVideo(pv.dataset.play, pv.dataset.t != null ? Number(pv.dataset.t) : undefined); return; }
-  const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") ? t : null;
+  const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") && !t.hasAttribute("data-hclose") ? t : null;
   if (mzb || mzo) { const v = (mzb || mzo).dataset.mobzoom; mobZoom = v === "close" ? null : Number(v); renderSheet(); return; }
   const md = t.closest("[data-mobdone]"); if (md) { const k = md.dataset.mobdone; cur.mobility[k] = !cur.mobility[k]; touch(); try { navigator.vibrate && navigator.vibrate(20); } catch {} if (cur.mobility[k] && mobZoom < MOBILITY.length - 1) mobZoom++; else if (cur.mobility[k]) mobZoom = null; renderSheet(); return; }
   const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
@@ -4579,7 +4679,11 @@ async function onClick(e){
   const gd = t.closest("[data-goday]"); if (gd) { if (sheet.open) { sheetKind = null; sheet.close(); } if (dirty) saveCur(); selDate = gd.dataset.goday; cur = null; go("heute"); return; }
   const stg = t.closest("[data-stage]"); if (stg) { const cid = phaseIdOf(weekNo(todayIso())); openStage = (openStage || cid) === stg.dataset.stage ? "none" : stg.dataset.stage; renderJourney(); return; }
   const dd = t.closest("[data-day]"); if (dd) { if (dirty) saveCur(); const v = Number(dd.dataset.day); selDate = v === 0 ? todayIso() : addDays(selDate, v); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); return; }
-  const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); openSheet(sh.dataset.sheet, sh.dataset.v); return; }
+  const hb = t.closest("[data-hurt]"); if (hb) { ensureCur(); hurtWhere = null; if (sheet.open) { hurtOpen = hb.dataset.hurt; renderSheet(); } else openSheet("hurt", hb.dataset.hurt); return; }
+  const hw = t.closest("[data-hwhere]"); if (hw) { hurtWhere = hw.dataset.hwhere; renderSheet(); return; }
+  const hl = t.closest("[data-hlog]"); if (hl) { cur.hurt = [...(cur.hurt || []), {ex: hl.dataset.hlog, where: hurtWhere, t: new Date().toTimeString().slice(0, 5)}]; touch(); toast("Notiert – abends im Abendcheck die Skala ausfüllen"); renderSheet(); return; }
+  if (t.closest("[data-hclose]") && (t.hasAttribute("data-hclose") || !t.closest(".hurtcard"))) { if (sheetKind === "hurt") closeSheet(); else { hurtOpen = null; renderSheet(); } return; }
+  const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); hurtOpen = null; openSheet(sh.dataset.sheet, sh.dataset.v); return; }
   const op = t.closest("[data-open]"); if (op) { openEx = document.body.classList.contains("wo") ? op.dataset.open : openEx === op.dataset.open ? null : op.dataset.open; renderTraining(); scrollTo(0, 0); return; }
   const xn = t.closest("[data-exnav]"); if (xn) { exNav(Number(xn.dataset.exnav)); return; }
   const ok = t.closest("[data-ok]"); if (ok) { checkSet(ok.dataset.ok, ok.dataset.base, Number(ok.dataset.i)); return; }
