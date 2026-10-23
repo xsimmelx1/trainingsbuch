@@ -247,7 +247,12 @@ body.wo main{padding-bottom:110px}
 .nickl{display:flex;flex-direction:column;gap:6px}.nickr{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center}.nickr input{min-width:0}
 .recentrec{align-items:center;margin-top:6px}.recentrec button{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .snackbtn{margin-left:auto;border-color:var(--accent)!important;color:var(--accent)}.subhead .snackbtn{margin-left:auto;margin-right:6px}
+.snackamt .chips{flex-wrap:nowrap;align-items:center}.snackamt input{width:64px;min-height:34px;padding:5px 8px}
 .snackchips button{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+details.zgd{border-bottom:1px solid var(--line)}details.zgd > summary.zsum{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 2px;cursor:pointer;list-style:none;font-weight:600}
+details.zgd > summary.zsum::-webkit-details-marker{display:none}details.zgd > summary.zsum span:first-child::after{content:" ▸";color:var(--accent)}details.zgd[open] > summary.zsum span:first-child::after{content:" ▾"}
+details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--muted);font-weight:500}details.zgd[open]{padding-bottom:6px}
+.zall{margin:2px 0 0;text-align:right;color:var(--muted)}.linkbtn{background:none;border:0;padding:4px 2px;color:var(--accent);font:inherit;cursor:pointer}.zset{margin:6px 0}.zset > .card{gap:8px}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
@@ -2271,9 +2276,10 @@ function ingTable(r){
     ${pz ? `<div class="ir sum"><span></span><span>Gesamt · ${eur(recipeCost(r).portion)} pro Portion</span><span class="num">${eur(recipeCost(r).total)}</span></div><div class="small muted">Preise: ${st0}, anteilig gerechnet.</div>` : ""}</div>`;
 }
 function zutatenPage(){
-  const G = SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze", ...(myProdList().length ? ["🧾 Vom Kassenbon"] : []));
+  zGrp = "";
   return `<input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off">
-    <div class="chips sm zgrp">${[["", "Alle"], ...G.map(g => [g, g.replace(/^🧾 /, "🧾 ")])].map(([k, l]) => `<button type="button" data-zgrp="${esc(k)}" aria-pressed="${zGrp === k}">${esc(l)}</button>`).join("")}</div>
+    <div class="btnrow"><button class="btn small" type="button" data-sheet="scan">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button></div>
+    <div class="zall small"><button type="button" class="linkbtn" data-zall="1">Alle aufklappen</button> · <button type="button" class="linkbtn" data-zall="0">Alle zuklappen</button></div>
     <div id="zBody">${zutatenHtml()}</div>`;
 }
 function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = x && (NW || []).find(y => y.n === x.n);
@@ -2302,6 +2308,9 @@ function zinfoHtml(id){
 // Übersicht aller Zutaten: Preis, günstigster Markt, wie oft in Rezepten
 let zSort = lsGet("zSort") || "laden", zQ = "", zGrp = "";
 let zStores = lsGet("zStores") || null;
+// Rubriken aufklappbar (Zustand bleibt gemerkt); beim Suchen alles offen; andere Sortierungen ohne Rubriken
+function zGroups(rows, fn){ if (zSort !== "laden") return rows.map(fn).join(""); const by = new Map(); for (const x of rows) { if (!by.has(x.grp)) by.set(x.grp, []); by.get(x.grp).push(x); }
+  return [...by].map(([g, a]) => `<details class="zgd" data-keep="z:${esc(g)}" ${zQ.trim() || shopOpen.has("z:" + g) ? "open" : ""}><summary class="zsum"><span>${GROUP_ICON[g] || "🧾"} ${esc(g)}</span><span class="n">${a.length}${a.some(x => x.home) ? ` · 🏠 ${a.filter(x => x.home).length}` : ""}</span></summary>${a.map(fn).join("")}</details>`).join(""); }
 function zutatenHtml(){
   if (!prices) { ensurePrices().then(() => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); else renderSheet(); }).catch(() => {}); return `<p class="muted">Lade Preise …</p>`; }
   const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi";
@@ -2326,19 +2335,17 @@ function zutatenHtml(){
   const full = rows.filter(x => !x.my && x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
   const cell = (x, i) => { const v = x.pp[i]; return `<span class="num ${cmp && v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? eur(v) + (isEst(x.pr, SS[i]) ? "*" : "") : "–"}</span>`; };
   const AB = {kaufland: "Kaufl.", edeka: "Edeka", penny: "Penny", netto: "Netto"}, ab = st => AB[st] || STORES[st];
-  if (wide) return `<div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
-    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
+  if (wide) return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
     <div class="zw" style="--zn:${SS.length}"><div class="zwh">${SS.map(st => `<span>${ab(st)}</span>`).join("")}</div>
-    ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${sub(x)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`).join("")}
+    ${zGroups(rows, x => `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${sub(x)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`)}
     ${rows.length ? `<div class="zwr sum"><span class="zwn">Summe · ${full.length} Zutaten mit Preis überall</span><span class="zwp">${sums.map(v => `<span class="${v === Math.min(...sums) ? "cheap" : ""}">${Math.round(v)}</span>`).join("")}</span></div>
       <div class="zwr"><span class="zwn small muted">wie oft am günstigsten</span><span class="zwp">${wins.map(w => `<span class="small">${w}×</span>`).join("")}</span></div>` : ""}</div>
     <div class="small muted">Preise in € je Packung · * geschätzt · grün = am günstigsten · Antippen für Details.</div>`;
-  return `<div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="false">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
-    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
+  return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="false">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
     <div class="ingg zg" style="--zc:${cols}"><div class="ih"><span>Zutat</span>${cmp ? SS.map(st => `<span class="num">${STORES[st]}</span>`).join("") : `<span class="num">${STORES[SS[0]]}</span><span class="num">Rez.</span>`}</div>
-    ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${sub(x)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`).join("")}
+    ${zGroups(rows, x => `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${sub(x)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`)}
     ${cmp && rows.length ? `<div class="ir sum"><span>Summe · ${full.length} Zutaten mit Preis in allen, je 1 Packung</span>${sums.map((v, i) => `<span class="num ${v === Math.min(...sums) ? "cheap" : ""}">${eur(v)}</span>`).join("")}</div>
       <div class="ir"><span class="small muted">am günstigsten</span>${wins.map(w => `<span class="num small">${w}×</span>`).join("")}</div>` : ""}
     </div>
@@ -3438,13 +3445,13 @@ function catalogHtml(){
       <div class="small muted">${list.length} Übungen · antippen für Technik, Hinweise und Video</div></div>
     <div class="catgrid">${list.map(([id, e]) => `<button type="button" class="catc" data-sheet="tech" data-v="${id}">${exThumb(id, e.img) ? `<img src="${exThumb(id, e.img)}" alt="" loading="lazy" decoding="async"${e.img ? "" : ' class="vthumbimg"'}>` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.name)}</b><span class="small muted">${esc(Object.keys(e.m || {}).filter(k => (e.m[k] || 0) >= 1).map(k => (MUSCLES.find(m => m[0] === k) || [, k])[1]).join(", ") || "Mobilität")}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${inPlan.has(id) ? " · im Plan" : ""}</span></span></button>`).join("")}</div>`;
 }
-const MORE = [["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Alle Zutaten mit Preisen, Märkten und Rezepten"], ["bon", "🧾", "Kassenbon einlesen", "Gekauftes als Vorrat und deine Preise übernehmen"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"],
+const MORE = [["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Alle Zutaten mit Preisen, Märkten und Rezepten"], ["bon", "🧾", "Kassenbon einlesen", "Gekauftes als Vorrat und deine Preise übernehmen"], ["scan", "📷", "Barcode scannen", "Preis merken oder Lebensmittel mit Nährwerten anlegen"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"],
   ["essenset", "🍽", "Essen-Einstellungen", "Nährwerte, Budget, Allergien, Ersatz, Zeiten"], ["setup", "⚙", "Einrichtung", "Verbindung, Push, Kalender-Abo, Plan"]];
 function renderMore(){
   if (tab === "essen") return renderEssen();
   if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
   const s = sub.mehr || "menu";
-  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" ${k === "bon" ? 'data-sheet="receipt"' : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => `<button type="button" class="lrow menu" ${k === "bon" ? 'data-sheet="receipt"' : k === "scan" ? 'data-sheet="scan"' : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
   const title = (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
   view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
@@ -3837,19 +3844,26 @@ function snackPicks(){ const c = new Map(), are = avoidRe();
   return mine; }
 function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="sh"><h2>Snack · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
-    <div class="lab">Antippen = sofort eingetragen</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
+    <div class="mhead snackamt"><span class="lab">Wie viel?</span><div class="chips sm">${[[0.5, "½"], [1, "1"], [2, "2"], [3, "3"]].map(([v, l]) => `<button type="button" data-snackmul="${v}" aria-pressed="${snackMul === v && !snackG}">${l}×</button>`).join("")}<input type="text" id="snackG" inputmode="decimal" value="${esc(snackG)}" placeholder="g" aria-label="oder Gramm"></div></div>
+    <div class="lab">Antippen = sofort eingetragen${snackG ? ` · ${esc(snackG)} g` : snackMul !== 1 ? ` · ${snackMul === 0.5 ? "½" : snackMul}×` : ""}</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
     <div class="card ownf"><div class="field"><label for="ownText">Oder eintippen</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, Cola, 30 g Mandeln" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
     <div id="ownEst" class="small muted">Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
     <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>
     <button class="btn" type="button" data-scanstart="snack">📷 Barcode scannen</button><div id="scanSlot"></div></div>`; }
 // Snack speichern: Text → Werte (frühere Einträge, Bon-Produkte, Nährwerttabelle), Uhrzeit jetzt
-async function snackSave(d, tx){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
-  const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
-  const kcal = ok.length ? ok.reduce((a, i) => a + i.kcal, 0) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0)) : null;
+async function snackSave(d, tx, amt){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
+  amt = amt || {mul: 1, g: null};
+  const base = tx.replace(/^\s*(\d+(?:[.,]\d+)?\s*(g|ml)?|½|halbe?|ganze?)\s+/i, "").trim();
+  // Gramm: über Nährwerte je 100 g (Tabelle, Bon/Scan); sonst Portionswert × Faktor
+  let items = NW ? nwParse(amt.g ? `${amt.g} g ${base}` : tx) : [], f = amt.g ? 1 : amt.mul;
+  if (amt.g && !items.every(i => i.ok && i.g)) { items = NW ? nwParse(tx) : []; f = 1; }
+  const ok = items.filter(i => i.ok), nm0 = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 110);
+  const name = amt.g ? `${nm0}, ${fmtQ(amt.g)} g` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
+  const kcal = ok.length ? Math.round(ok.reduce((a, i) => a + i.kcal, 0) * f) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0) * f) : null;
   const id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
   editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
   lastSnack = {d, id}; toast(`✓ ${name}${kcal ? ` · ${kcal} kcal` : ""}${ok.length < items.length ? " (Werte teils unbekannt)" : ""}`); }
-let lastSnack = null;
+let lastSnack = null, snackMul = 1, snackG = "";
 function ownHistory(){ const m = new Map();
   const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
   for (const d of Object.keys(store.days).sort().reverse()) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) add(o); for (const v of Object.values(day?.meals || {})) if (v && typeof v === "object") add(v); }
@@ -4703,8 +4717,9 @@ async function onClick(e){
     for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); });
     sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
-    t.disabled = true; await snackSave(sheetArg || todayIso(), tx); sheetKind = null; sheet.close(); render(); return; }
-  const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; await snackSave(sheetArg || todayIso(), snp.dataset.snackpick); sheetKind = null; sheet.close(); render(); return; }
+    t.disabled = true; await snackSave(sheetArg || todayIso(), tx, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
+  const snm = t.closest("[data-snackmul]"); if (snm) { snackMul = Number(snm.dataset.snackmul); snackG = ""; renderSheet(); return; }
+  const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; await snackSave(sheetArg || todayIso(), snp.dataset.snackpick, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "past") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
     const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
@@ -4720,6 +4735,7 @@ async function onClick(e){
     sheetKind = null; sheet.close(); render(); return; }
   const od = t.closest("[data-owndel]"); if (od) { const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
   const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
+  const za = t.closest("[data-zall]"); if (za) { const on = za.dataset.zall === "1"; for (const d of document.querySelectorAll("details.zgd")) { d.open = on; on ? shopOpen.add(d.dataset.keep) : shopOpen.delete(d.dataset.keep); } lsSet("shopOpen", [...shopOpen]); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }
@@ -4930,6 +4946,7 @@ function onInput(e){
   if (t.id === "srQ") { srQ = t.value; renderSheetPart(["#srList"]); return; }
   if (t.id === "mealQ") { mealQ = t.value; renderSheetPart(["#mealRes"]); const alt = sheet.querySelector("#mealAlt"); if (alt) alt.hidden = mealQ.trim().length >= 2; return; }
   if (t.dataset.ftime && t.value) { saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
+  if (t.id === "snackG") { snackG = t.value.trim(); const l = sheet.querySelector(".snackamt + .lab"); if (l) l.textContent = "Antippen = sofort eingetragen" + (snackG ? ` · ${snackG} g` : snackMul !== 1 ? ` · ${snackMul}×` : ""); sheet.querySelectorAll("[data-snackmul]").forEach(b => b.setAttribute("aria-pressed", !snackG && Number(b.dataset.snackmul) === snackMul)); return; }
   if (t.id === "nickQ") { nickQ = t.value; const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
