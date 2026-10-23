@@ -3948,6 +3948,7 @@ function parseIng(line){
   else if (pr.unit === "Stück") amt = q;
   else amt = q * (pr.piece || 100);
   if (pr.unit === "Stück" && (unit === "g" || unit === "ml")) amt = q / (pr.piece || 60);
+  else if (pr.unit === "Stück" && /^(EL|TL|Handvoll|Prisen?)$/.test(unit)) amt = (unit === "EL" ? q * 15 : unit === "TL" ? q * 5 : unit === "Handvoll" ? q * 30 : q) / (pr.piece || 60);  // 2 EL Petersilie ≈ 1 Bund, nicht 30
   const sub = FOOD().subst?.[pr.id], opt = sub && SUBST[pr.id]?.opts[sub];
   if (opt) { const ids = opt[3] || [sub], ps = ids.map(id => prices.products.find(x => x.id === id)).filter(Boolean);
     if (ps.length) return {name, q, unit, pr: ps[0], orig: pr, subKey: sub, amt, parts: ps.map(x => ({pr: x, amt: amt / ps.length}))}; }
