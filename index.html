@@ -1215,13 +1215,17 @@ async function updateFile(p, mutate, msg){
   }
   throw new Error("Konflikt beim Speichern, bitte erneut versuchen");
 }
-let chain = Promise.resolve();
+let chain = Promise.resolve(); const flushedAt = {};
 const pending = lsGet("pending") || {};
 const pendingN = () => Object.keys(pending).length + (Object.keys(lsGet("pendSet") || {}).length ? 1 : 0) + Object.keys(lsGet("pendMap") || {}).length;
 function queue(fn){ chain = chain.then(fn).then(() => setSync(pendingN() ? `${pendingN()} Tag(e) warten auf Sync …` : "Gespeichert ✓"), e => setSync(`Nicht gespeichert (${e.message}). ${pendingN() ? pendingN() + " Tag(e) bleiben vorgemerkt und werden automatisch erneut gesendet." : ""}`, true)); return chain; }
 // Lokale Änderungen eines Tages mit dem Serverstand zusammenführen, ohne fremde Einträge zu verlieren
 function mergeDay(srv, loc){
   if (!srv) return loc;
+  // Server wurde zurückgesetzt, nachdem dieses Gerät den Tag geladen hat: lokale Trainingsdaten sind veraltet
+  if (srv.resetAt && loc._seenReset !== undefined && loc._seenReset !== srv.resetAt && !(loc.resetAt && loc.resetAt >= srv.resetAt)) {
+    loc = Object.assign({}, loc); for (const k of ["sets", "antag", "startedAt", "finishedAt", "where", "swap", "swapHome"]) delete loc[k];
+    if (!(loc.sessAt > Date.parse(srv.resetAt))) { delete loc.session; delete loc.sessAt; } }
   // Zurücksetzen verwirft nur die Trainingsdaten des Servers, alles andere wird normal zusammengeführt
   if (loc.resetAt && (!srv.resetAt || loc.resetAt > srv.resetAt)) srv = Object.assign({}, srv, {sets: {}, antag: {}, startedAt: null, finishedAt: null, where: null, swap: null, swapHome: null});
   const out = Object.assign({}, srv, loc);
@@ -1246,6 +1250,7 @@ function mergeDay(srv, loc){
   // Was auf diesem Gerät bewusst geleert wurde, bleibt leer (sonst käme der Serverstand zurück)
   for (const path of loc._clr || []) { const [a, b] = path.split("."); if (b) { if (out[a] && typeof out[a] === "object") { out[a] = Array.isArray(out[a]) ? out[a] : Object.assign({}, out[a]); delete out[a][b]; } } else delete out[a]; }
   if (loc._clr) out._clr = loc._clr; else if (srv._clr) out._clr = srv._clr;
+  delete out._seenReset;
   return out;
 }
 function flushDay(date){
@@ -1253,7 +1258,7 @@ function flushDay(date){
     const mine = pending[date]; if (!mine) return;
     const next = await updateFile(`data/days/${date.slice(0,7)}.json`, d => { const o = d || {}; o[date] = mergeDay(o[date], mine); return o; }, `log ${date}`);
     if (pending[date] === mine) { delete pending[date]; lsSet("pending", pending); }
-    store.days[date] = pending[date] ? mergeDay(next[date], pending[date]) : next[date]; cacheAll();
+    store.days[date] = pending[date] ? mergeDay(next[date], pending[date]) : next[date]; flushedAt[date] = Date.now(); cacheAll();
   });
 }
 addEventListener("online", () => { Object.keys(pending).forEach(flushDay); flushSettings(); flushMaps(); });
@@ -1270,7 +1275,7 @@ function setSync(t, bad){
   btn.dataset.state = state; btn.textContent = state === "bad" ? "⚠" : state === "busy" ? "⟳" : "✓";
   btn.setAttribute("aria-label", bad ? "Nicht synchronisiert, Details" : busy ? "Wird gespeichert" : "Alles gespeichert");
   if (!bad) { line.hidden = true; line.innerHTML = ""; return; }
-  const auth = /401|Token/.test(t), off = /Offline|Failed to fetch|NetworkError/.test(t);
+  const auth = /401|Token/.test(t), off = !navigator.onLine || /Offline|Failed to fetch|NetworkError|Load failed/.test(t);
   line.hidden = false;
   line.innerHTML = `<span>${auth ? "Nicht synchronisiert: Anmeldung prüfen." : off ? "Offline: Änderungen bleiben gespeichert und werden später gesendet." : "Nicht synchronisiert: wird automatisch erneut versucht."}</span>${auth ? `<button type="button" class="btn small" data-go="setup">Einrichtung</button>` : `<button type="button" class="btn small ghost" data-act="retrySync">Erneut</button>`}`;
 }
@@ -1280,7 +1285,7 @@ let dataVer = 0;
 function cacheAll(){ dataVer++; lsSet("cache", store); }
 
 async function loadAll(){
-  const c = lsGet("cache"); if (c) Object.assign(store, c);
+  const c = lsGet("cache"); if (c) Object.assign(store, c); const t0 = Date.now();
   if (!token) return;
   setSync("Synchronisiere …");
   try {
@@ -1294,7 +1299,8 @@ async function loadAll(){
       one("data/plan.json","plan",{days:[]}), one("data/push.json","push",{subs:[]}),
       ...list.filter(f => f.name.endsWith(".json")).map(async f => { const {data, sha} = await getFile(`data/days/${f.name}`); months[f.name] = data || {}; shas[`data/days/${f.name}`] = sha; })
     ]);
-    store.days = {}; for (const m of Object.values(months)) Object.assign(store.days, m);
+    const fresh = Object.fromEntries(Object.entries(store.days).filter(([d]) => flushedAt[d] > t0)); // während des Ladens gesendet: neuer als der gelesene Stand
+    store.days = {}; for (const m of Object.values(months)) Object.assign(store.days, m); Object.assign(store.days, fresh);
     for (const d of Object.keys(pending)) store.days[d] = mergeDay(store.days[d], pending[d]);
     if (Object.keys(pendSet).length) store.settings = applySet(store.settings, pendSet);
     for (const [file, vals] of Object.entries(pendMap)) { const key = {"measures.json": "measures", "checkins.json": "checkins"}[file]; if (key) store[key] = Object.assign({}, store[key], vals); }
@@ -1367,7 +1373,7 @@ function setsFor(id, w, sess, base){
   return n;
 }
 function rirFor(id, w){ const e = EX[id]; if (e.type === "k") return null; const r = RIR[cycleWeek(w ?? 0)]; return e.type === "c" ? r[0] : r[1]; }
-const planFor = d => (store.plan.days || []).find(x => x.date === d);
+const planFor = d => (store.plan.days || []).find(x => x.date === d) || (store.plan.past || []).find(x => x.date === d);
 function loggedSets(day){ let n = 0; const s = day && day.sets || {}; for (const id in s) for (const x of s[id] || []) if (num(x.reps) != null || num(x.kg) != null) n++; return n; }
 const isStrength = day => !!day && loggedSets(day) >= 3 && day.session && day.session !== "frei";
 const isDone = day => !!day && ((day.boulder && day.boulder.done) || isStrength(day));
@@ -1446,9 +1452,10 @@ function nwItem(p){
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
   const key = fold((rest || p).trim()), hist = key.length >= 3 && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
-  let r = recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest)));
-  const x = r ? null : nwFind(rest || p);
-  if (!r && !x && key.length >= 4 && typeof sugScore === "function") r = (recipes || []).map(rc => ({rc, sc: sugScore(rc.name, key)})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || a.rc.name.length - b.rc.name.length)[0]?.rc;
+  const wUnit = /^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit), x0 = NW ? nwFind(rest || p) : null, exact = !!x0 && x0.keys.includes(nwNorm(rest || p));
+  let r = !wUnit && !exact ? recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest))) : null;
+  const x = r ? null : x0;
+  if (!r && !x && !wUnit && key.length >= 4 && typeof sugScore === "function") r = (recipes || []).map(rc => ({rc, sc: sugScore(rc.name, key)})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || a.rc.name.length - b.rc.name.length)[0]?.rc;
   if (r) { const nu = recipeNutri(r); return {text: p, ok: true, name: r.name, g: null, kcal: Math.round(q * nu.kcal), protein: Math.round(q * nu.protein)}; }
   if (!x) return {text: p, ok: false};
   const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
@@ -1582,7 +1589,7 @@ const PHASE_CHANGES = {
   einstieg:["Ab jetzt legt der Planer Krafteinheiten in deine freien Slots.","Pro Übung 2 Sätze, Ziel RIR 3: aufhören, wenn noch etwa 3 Wdh. gingen.","Gewicht so wählen, dass die Technik sauber bleibt. Lieber zu leicht als zu schwer.","SC-Ampel beachten: keine Dips, kein Überkopf."],
   aufbau:["Volle Satzzahl, meist 3 pro Übung.","RIR sinkt: Woche 3 RIR 2, Woche 4 RIR 1–2, Woche 5 RIR 1. Isolationsübungen bis 0.","Folge den ↑-Vorschlägen: erst mehr Wdh., dann mehr Gewicht."],
   deload1:["Sätze halbieren, RIR 3–4, bewusst locker.","Messtag: Taille, Hals, Umfänge, Fotos, Klimmzug- und Beinpresse-Test.","Arztbefund da? Dann in der Einrichtung „SC freigegeben“ setzen."],
-  block2:["+1 Satz für Rücken, seitliche Schulter, oberen Trapez, Quadrizeps und Gesäß.","RIR 2 → 1, Isolation bis 0.","Mit Arztfreigabe: Überkopf in Stufen, dann Dips (siehe Plan & Regeln)."],
+  block2:["+1 Satz für Rücken, seitliche Schulter, oberen Trapez, Quadrizeps und Gesäß.","RIR 2 → 1, Isolation bis 0.","Mit Arztfreigabe: Überkopf in Stufen, dann Dips (siehe Regeln & Wissen)."],
   deload2:["Letzte Woche des Blocks: halbe Sätze, RIR 3–4.","Abschlusstest: Messen, Fotos, Tests, Vergleich mit Woche 0.","Danach neuer 12-Wochen-Block, Kalorien +200–250 (Lean Bulk)."],
 };
 
@@ -1791,8 +1798,8 @@ let restEnd = 0, restTimer = null, clockTimer = null, wakeLock = null;
 let deep = null;
 function applyDeep(){
   if (!deep) return;
-  const [k, a] = deep; deep = null; ensureCur(); openSheet(k, a);
-  history.replaceState(null, "", `#d=${selDate}`);
+  const [k, a] = deep; deep = null; ensureCur();
+  history.replaceState(null, "", `#d=${selDate}`); openSheet(k, a);
 }
 function readHash(){
   const k = location.hash.match(/[#&]([wmpc])=(\d{4}-\d{2}-\d{2})/);
@@ -1813,7 +1820,7 @@ function readHash(){
 // Finger/Ellbogen sind nur nach dem Bouldern relevant (Überlastung von Ringbändern und Ellbogen)
 const climbed = d => { const day = d === cur?.date ? cur : store.days[d]; return !!(day?.boulder?.done || (day?.cardio || []).some(c => c.type === "boulder")); };
 function blankDay(d){ return {date:d, session:defaultSession(d), sets:{}, boulder:{done:false,min:null}, mobility:{}, pain:{sc:null,knee:null,finger:null,kneeTest:null}, weight:null, sleep:null, note:""}; }
-function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false};
+function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur._seenReset = d?.resetAt || null; cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false};
   if (d?.session && !d.sessAt && !d.startedAt && !loggedSets(d)) cur.session = defaultSession(selDate);  // alte, nur abgeleitete Einheit folgt dem aktuellen Plan
   dirty = false; }
 function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveTimer); saveTimer = setTimeout(saveCur, 1200); }
@@ -1821,17 +1828,17 @@ function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveT
 // Training zurücksetzen (Sätze, Zeiten); mit drop zusätzlich die Einheit verwerfen = zurück zum Plan, auch auf dem Server
 function trainClear(drop){
   stopRest(); releaseWake(); clearInterval(clockTimer);
-  cur.sets = {}; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null; woSession = null;
-  if (drop) { const pl = planFor(selDate); cur.session = pl ? variantOf(pl.session, selDate) : "frei"; delete cur.sessAt; clr("sessAt"); clr("session"); }
+  cur.sets = {}; cur.antag = {}; delete cur.warm; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null; woSession = null;
+  // Entfernen = Tag bewusst trainingsfrei (auch an Plantagen); der Planer legt die Einheit beim nächsten Lauf neu. Zurück geht es über „Trotzdem trainieren“
+  if (drop) { cur.session = "frei"; cur.sessAt = Date.now(); if (cur._clr) cur._clr = cur._clr.filter(x => x !== "session" && x !== "sessAt"); }
   dirty = true; saveCur(); }
-function trainDrop(){}
 function clr(path){ cur._clr = [...new Set([...(cur._clr || []), path])]; }
 const pathVal = (o, path) => { const [a, b] = path.split("."); const v = b ? o?.[a]?.[b] : o?.[a]; return Array.isArray(v) ? (v.length ? v : null) : v === "" || v === false ? null : v; };
 function saveCur(){ clearTimeout(saveTimer); if (!dirty) return; dirty = false;
   for (const [o, nm] of [[cur.sets, "sets"], [cur.antag || {}, "antag"]]) for (const id of Object.keys(o)) { const a = o[id]; a.length = lastMeaningful(a); if (!a.length) { delete o[id]; clr(nm + "." + id); } }
   // wieder gesetzte Felder sind nicht mehr „geleert“
   // Ausnahme: die Einheit gilt ohne bewusste Wahl (sessAt) als abgeleitet und bleibt auf dem Server gelöscht
-  if (cur._clr) { cur._clr = cur._clr.filter(p => pathVal(cur, p) == null || (p === "session" && !cur.sessAt && !cur.startedAt)); if (!cur._clr.length) delete cur._clr; }
+  if (cur._clr) { cur._clr = cur._clr.filter(p => pathVal(cur, p) == null); if (!cur._clr.length) delete cur._clr; }
   const out = JSON.parse(JSON.stringify(cur));
   // Abgeleitete Werte nicht festschreiben: Einheit nur, wenn bewusst gewählt oder trainiert; Bouldern nur, wenn umgeschaltet
   if (!out.sessAt && !out.startedAt && !loggedSets(out)) delete out.session;
@@ -1859,15 +1866,17 @@ function suggestion(id){
   const minRir = tr == null ? null : num(String(tr).split("–")[0]);
   const rirOk = lastRir == null || minRir == null || lastRir >= (e.type === "c" ? Math.max(1, minRir) : minRir);
   const nSets = setsFor(id, w), allTop = e.hi && reps.length >= Math.min(nSets, 2) && reps.every(r => r >= e.hi) && (lastRir != null || reps.at(-1) > e.hi);
-  // Verlauf: Abfall oder Stillstand über die letzten Einheiten
-  const hist = lastPerfN(id, selDate, 3), sum = h => h.sets.reduce((a, x) => a + (num(x.reps) || 0), 0), top = h => Math.max(0, ...h.sets.map(x => num(x.kg) || 0));
   if (lo(e) && Math.min(...reps) < lo(e) - 1 && e.load && lkg) { const nk = +(lkg * 0.92).toFixed(1); return {kg:nk, reps:lo(e), up:false, short:`↓ ${dec(nk)} kg`, text:`↓ etwa ${dec(nk)} kg: letztes Mal lagen Sätze unter ${lo(e)} Wdh. (${list}). Mit weniger Gewicht wieder sauber in den Zielbereich.`}; }
-  if (hist.length >= 3 && sum(hist[0]) < sum(hist[1]) * 0.9 && sum(hist[1]) < sum(hist[2]) * 0.9) return {kg:lkg, reps:Math.max(...reps), up:false, short:"⚠ Leistung fällt – Volumen runter", text:`Zweimal in Folge weniger Wiederholungen (${hist.map(sum).reverse().join(" → ")}). Heute einen Satz weniger, auf Schlaf und Essen achten; hält das an, Deload vorziehen.`};
-  if (hist.length >= 3 && hist.every(h => top(h) === top(hist[0]) && sum(h) === sum(hist[0]))) return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Stillstand: Technik/Variante prüfen", text:`Dreimal gleich (${list}). Tempo prüfen (langsam absenken), Pausen einhalten – oder über ⇄ eine Variante wählen.`};
   if (allTop && rirOk) {
     if (e.load && lkg != null) { const ms = /kurzhantel|KH/i.test(e.name) ? 1 : /kabel/i.test(e.name) ? 1.25 : 2.5, step = Math.max(ms, Math.round(lkg * 0.05 / ms) * ms), nk = +(lkg + step).toFixed(2); return {kg:nk, reps:lo(e), up:true, short:`↑ ${dec(nk)} kg`, text:`↑ ${dec(nk)} kg (oder die nächste Stufe, die es gibt), weil letztes Mal alle Sätze ≥ ${e.hi} Wdh. mit genug Reserve (${list}). Wieder bei ${lo(e)} Wdh. anfangen.`}; }
     return {kg:null, reps:lo(e), up:true, short:"↑ Schwerer machen", text:`↑ ${e.prog || "Schwerer machen: langsamer absenken (4 s), Pause unten und oben, mehr Wiederholungen. Keine Defizit-, Ring- oder Zusatzgewicht-Varianten bis zur Arztfreigabe."} Grund: letztes Mal alle Sätze ≥ ${e.hi} Wdh. (${list}).`};
   }
+  if (e.hi && reps.length >= Math.min(nSets, 2) && reps.every(r => r >= e.hi) && lastRir == null) return {kg:lkg, reps:e.hi, up:false, short:"Alle Sätze oben – RIR angeben, dann ↑", text:`Letztes Mal alle Sätze ≥ ${e.hi} Wdh. (${list}). Trag nach dem letzten Satz ein, wie viele noch gegangen wären (RIR) – dann schlägt die App die nächste Stufe vor.`};
+  // Verlauf: Abfall oder Stillstand über die letzten Einheiten
+  const hist = lastPerfN(id, selDate, 3), sum = h => h.sets.reduce((a, x) => a + (num(x.reps) || 0), 0), top = h => Math.max(0, ...h.sets.map(x => num(x.kg) || 0));
+  if (hist.length >= 3 && sum(hist[0]) < sum(hist[1]) * 0.9 && sum(hist[1]) < sum(hist[2]) * 0.9) return {kg:lkg, reps:Math.max(...reps), up:false, short:"⚠ Leistung fällt – Volumen runter", text:`Zweimal in Folge weniger Wiederholungen (${hist.map(sum).reverse().join(" → ")}). Heute einen Satz weniger, auf Schlaf und Essen achten; hält das an, Deload vorziehen.`};
+  if (hist.length >= 3 && hist.every(h => top(h) === top(hist[0]) && sum(h) === sum(hist[0]))) return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Stillstand: Technik/Variante prüfen", text:`Dreimal gleich (${list}). Tempo prüfen (langsam absenken), Pausen einhalten – oder über ⇄ eine Variante wählen.`};
+
   if (allTop) return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Halten: letzter Satz war zu nah am Versagen", text:`Alle Sätze ≥ ${e.hi} Wdh., aber der letzte Satz lag unter dem Ziel-RIR ${tr}. Erst steigern, wenn die Wiederholungen mit genug Reserve gehen.`};
   return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Gewicht halten, +1 Wdh. anpeilen", text:`= Gewicht halten, Ziel: in einem Satz +1 Wdh. Letztes Mal: ${list}.`};
 }
@@ -2004,7 +2013,7 @@ function todayItems(focus){
     out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
   }
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
-  out.push({k: "pain", prio: hm0 >= 19 * 60 ? 1 : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
+  out.push({k: "pain", prio: hm0 >= 19 * 60 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
   const wd = parse(selDate).getDay();
   if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate, -7))])) { const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate, -7));
     out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
@@ -2044,7 +2053,7 @@ function dayPreps(d, ev){
 function nextBlock(d){
   const ev = dayEvents(d), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
   // Mahlzeiten sind keine Aufgaben: nur kommende zählen. Aufgaben bleiben offen, bis sie erledigt sind.
-  const win = e => e.meal ? 30 : e.train ? 120 : e.k === "mob" ? 240 : 24 * 60;
+  const win = e => e.meal ? 30 : e.train ? (trainState() === "läuft" ? 24 * 60 : 120) : e.k === "mob" ? 240 : 24 * 60;
   const nx = ev.find(e => !e.done && hm(e.t) + win(e) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
   const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
   // Tagesablauf: jeder Punkt mit Uhrzeit, Symbol, Kurzname und eindeutigem Status; „jetzt“-Strich an der aktuellen Uhrzeit
@@ -2054,7 +2063,7 @@ function nextBlock(d){
     return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">jetzt</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
     <div class="tleg small muted"><span><i class="lg next"></i>jetzt dran</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
-  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
+  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
   if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh"><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
@@ -2165,7 +2174,9 @@ function laterRow(it){
   if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}" ${mealSw(selDate, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${selDate}|${m.k}"` : `data-sheet="meal" data-v="${selDate}|${m.k}"`}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
   return `<div class="lrow ${it.done ? "done" : ""}"><span class="mdot static">${it.done ? "✓" : it.icon}</span><button type="button" class="lmain" ${it.act}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button><span class="go">›</span></div>`;
 }
-let showDone = false;
+let showDone = false, warmOpen = false, clearArmed = 0;
+const dropArm = {armed: null, t: null}; // Doppeltipp-Zustand für „Heute nicht trainieren“
+view.addEventListener("toggle", e => { if (e.target?.classList?.contains("warm")) warmOpen = e.target.open; }, true);
 function renderToday(){
   ensureCur();
   if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {});
@@ -2316,7 +2327,7 @@ function renderTraining(){
 function warmHtml(title){
   const legs = /Beine/.test(title), wm = cur.warm || {}, items = [["w1", "4–5 min locker warm: Ergometer/Rudergerät, zuhause marschieren oder Treppe (ohne Sprünge, Arme unter Schulterhöhe)"],
     ["w2", legs ? "Korrektiv: Dead Bug und Glute Bridge" : "Korrektiv: 30°-Shrug und Push-up Plus"], ["w3", "Erste Übung: ein leichter Aufwärmsatz"]], n = items.filter(([k]) => wm[k]).length;
-  return `<details class="warm"><summary>🔥 Aufwärmen · ${n}/${items.length}${n < items.length ? ` <span class="small muted">· antippen</span>` : " ✓"}</summary>${items.map(([k, t]) => `<label class="check small"><input type="checkbox" data-warm="${k}" ${wm[k] ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</details>`;
+  return `<details class="warm" ${warmOpen ? "open" : ""}><summary>🔥 Aufwärmen · ${n}/${items.length}${n < items.length ? ` <span class="small muted">· antippen</span>` : " ✓"}</summary>${items.map(([k, t]) => `<label class="check small"><input type="checkbox" data-warm="${k}" ${wm[k] ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</details>`;
 }
 function previewRow(id, w, sk, i){
   const e_ = eff(id);
@@ -2351,7 +2362,7 @@ function exBody(base, n, w){
     const lr = mine[Math.max(n, mine.filter(doneSet).length) - 1]?.rir;
     h += `<div><div class="lab">Wie viele Wdh. wären im letzten Satz noch gegangen? (RIR)</div><div class="chips" style="margin-top:6px">${["0","1","2","3","4+"].map(r => `<button type="button" data-rir="${id}" data-base="${base}" data-v="${r}" aria-pressed="${String(lr) === r.replace("+","")}">${r}</button>`).join("")}</div></div>`;
   }
-  h += `<div class="actions"><button class="btn small" type="button" data-act="addset" data-v="${id}" data-base="${base}">+ Satz</button>${rows > n ? `<button class="btn ghost small" type="button" data-act="delset" data-v="${id}" data-base="${base}">− letzten Satz</button>` : ""}${allDone ? `<button class="btn small" type="button" data-act="nextex" data-v="${base}">Nächste Übung ›</button>` : ""}</div></div>`;
+  h += `<div class="actions"><button class="btn small" type="button" data-act="addset" data-v="${id}" data-base="${base}">+ Satz</button>${rows > n ? `<button class="btn ghost small" type="button" data-act="delset" data-v="${id}" data-base="${base}">− letzten Satz</button>` : ""}${allDone ? (exList(woSession || cur.session).indexOf(base) < exList(woSession || cur.session).length - 1 ? `<button class="btn small" type="button" data-act="nextex" data-v="${base}">Nächste Übung ›</button>` : `<button class="btn small primary" type="button" data-act="finish">Training beenden</button>`) : ""}</div></div>`;
   return h;
 }
 function exNav(d){ const ids = exList(woSession || cur.session), i = ids.indexOf(openEx), j = Math.max(0, Math.min(ids.length - 1, i + d)); if (j !== i) { openEx = ids[j]; renderTraining(); scrollTo(0, 0); } }
@@ -2908,7 +2919,7 @@ function measureHtml(){
   return h;
 }
 function checkinHistory(){
-  const mo = monday(todayIso()), ks = Object.keys(store.checkins).sort().reverse();
+  const wd0 = parse(todayIso()).getDay(), mo = wd0 === 1 && !store.checkins[monday(addDays(todayIso(), -7))] ? monday(addDays(todayIso(), -7)) : monday(todayIso()), ks = Object.keys(store.checkins).sort().reverse();
   let h = ks.length ? "" : `<div class="card empty"><div class="trophy">🗓</div><b>Dein Wochen-Check-in</b>${info("Jeden Sonntag 10 Minuten: Wie lief die Woche, wie ist der Stress, welcher Modus kommt nächste Woche? Daraus passt der Planer Umfang und Termine an.")}</div>`;
   h += `<button class="btn primary big" type="button" data-act="checkin" data-v="${mo}">Check-in für diese Woche</button>`;
   h += ks.length ? `<div class="card"><h2>Bisherige Check-ins</h2>${ks.map(k => { const c = store.checkins[k]; return `<button type="button" class="task" data-act="checkin" data-v="${k}"><span class="dot">✓</span><span><span class="t">Woche ab ${fmt(k).slice(3)}</span><br><span class="s">Stress ${c.stress ?? "–"} · Modus ${esc(c.nextMode || "normal")}${c.ifthen ? " · " + esc(c.ifthen).slice(0,40) : ""}</span></span><span class="go">›</span></button>`; }).join("")}</div>` : `<p class="muted small">Noch keine Check-ins.</p>`;
@@ -2931,7 +2942,7 @@ function w0Steps(){
     {k:"knie", t:"Knie-Test an 3 Morgen notieren (Morgenroutine)", auto:kt >= 3, sheet:"mob"},
     {k:"arzt", t:"Arzttermin Schulter buchen (Orthopädie oder Sportmedizin)", sheet:"arzt"},
     {k:"lesson", t:"Lektion 0 lesen: Warum zuerst messen?", auto:lessonRead("l0"), lesson:"l0"},
-    {k:"einkauf", t:"Einkaufen und ersten Meal Prep machen", go:"rezepte"},
+    {k:"einkauf", t:"Einkaufen und ersten Meal Prep machen", go:"einkauf"},
   ].map(x => Object.assign(x, {done: !!x.auto || !!ob[x.k]}));
 }
 function coach(){
@@ -2982,7 +2993,7 @@ function journeyWay(){
     if (p.id === "einstieg") ms += msHtml(kneeOk ? "done" : "open", `Knie ruhig: Morgentest an 7 Tagen ≤ 2/10${kneeVals.length ? ` (zuletzt ${kneeVals[0]})` : ""}`, kneeOk ? "" : `<button class="btn ghost small" type="button" data-sheet="mob">testen</button>`);
     if (p.id === "aufbau") ms += msHtml(S().scCleared ? "done" : ob.arzt ? "now" : "open", S().scCleared ? "Arzt: Schulter freigegeben" : ob.arzt ? "Arzttermin gebucht, Freigabe ausstehend" : "Arzttermin Schulter buchen", S().scCleared ? "" : `<button class="btn ghost small" type="button" data-sheet="arzt">vorbereiten</button><button class="btn ghost small" type="button" data-act="${ob.arzt ? "clear" : "booked"}">${ob.arzt ? "Freigabe erhalten" : "gebucht"}</button>`);
     if (p.id === "deload1") ms += msHtml(measIn(addDays(base, 35), addDays(base, 44)) ? "done" : "open", "Re-Test: Maße, Fotos, Kraft-Test", `<button class="btn ghost small" type="button" data-go="messen">messen</button><button class="btn ghost small" type="button" data-go="fotos">Fotos</button>`);
-    if (p.id === "block2") { ms += msHtml(S().scCleared ? "open" : "lock", S().scCleared ? "Wiedereinstieg Überkopf, dann Dips (Plan & Regeln)" : "Wiedereinstieg Überkopf und Dips nach Arztfreigabe", S().scCleared ? `<button class="btn ghost small" type="button" data-go="plan">Regeln</button>` : "");
+    if (p.id === "block2") { ms += msHtml(S().scCleared ? "open" : "lock", S().scCleared ? "Wiedereinstieg Überkopf, dann Dips (Regeln & Wissen)" : "Wiedereinstieg Überkopf und Dips nach Arztfreigabe", S().scCleared ? `<button class="btn ghost small" type="button" data-go="plan">Regeln</button>` : "");
       ms += msHtml(kneeOk && w >= 8 ? "open" : "lock", "Return-to-Run ab Woche 8–10, wenn das Knie ruhig ist"); }
     if (p.id === "deload2") ms += msHtml(measIn(addDays(base, 77), addDays(base, 90)) ? "done" : "open", "Abschlusstest und Vergleich mit Woche 0", `<button class="btn ghost small" type="button" data-go="messen">messen</button><button class="btn ghost small" type="button" data-go="fotos">Fotos</button>`);
     const lw = lessonOfWeek(w);
@@ -3066,7 +3077,7 @@ function journeySheet(kind, arg){
     return `<div class="sh"><h2>${esc((SESS[cur.session] || SESS.frei).title)} · ${fmt(selDate)}</h2>${close}</div>
       <button class="btn big" type="button" data-sheet="session">Einheit wechseln</button>
       <button class="btn big ${cf === "resetTraining" ? "danger" : ""}" type="button" data-act="resetTraining">${cf === "resetTraining" ? "Wirklich zurücksetzen? Nochmal tippen" : "Training zurücksetzen (Sätze und Zeit löschen)"}</button>
-      <button class="btn big ${cf === "delTraining" ? "danger" : ""}" type="button" data-act="delTraining">${cf === "delTraining" ? "Wirklich löschen? Nochmal tippen" : "Training löschen"}</button>
+      <button class="btn big ${cf === "delTraining" ? "danger" : ""}" type="button" data-act="delTraining">${cf === "delTraining" ? "Wirklich? Nochmal tippen" : "Heute nicht trainieren (Einheit entfernen)"}</button>
       <div class="small muted">Gewicht, Schlaf, Routine und Schmerz-Log dieses Tages bleiben erhalten.</div>`;
   }
   if (kind === "alt") {
@@ -3243,7 +3254,7 @@ function calEntries(d, noMeals){
   const sess = day?.session && day.session !== "frei" ? SESS[day.session] : null;
   if (isStrength(day)) out.push({tm: p?.start || "", en: p?.end || "", title: `Training: ${sess ? sess.title : "Einheit"}`, kind:"train", done:true, go:`#w=${d}`});
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
-  if (day?.boulder?.done) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
+  if (day?.boulder?.done && !(day.cardio || []).some(c => c.type === "boulder")) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
   for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${c.min} min${c.km ? " · " + fmtQ(c.km) + " km" : ""}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
@@ -3388,8 +3399,8 @@ const RC_KINDS = [
   ["Zahlung", /summe|zu zahlen|gesamt|gegeben|r[üu]ckgeld|\bbar\b|\bec\b|ec-|girocard|maestro|visa|mastercard|kredit|kartenzahl|trinkgeld|wechselgeld|terminal|beleg|trace|genehmig|kundenbeleg|posten|artikel\s*\d/i],
   ["Pfand", /pfand|leergut|einweg|mehrweg/i],
   ["Rabatt", /rabatt|nachlass|preisvorteil|coupon|gutschein|bonus|payback|aktion\s*-|ersparnis|sie sparen/i],
-  ["Tüte", /tüte|tuete|tragetasche|tasche|beutel(?!.*(tee|reis))/i],
-  ["kein Lebensmittel", /sp[üu]l|toilettenp|klopapier|k[üu]chenrolle|taschent|waschmittel|weichsp|duschgel|shampoo|zahnp|zahnb[üu]r|deo\b|deodor|seife|m[üu]llbeutel|alufolie|frischhaltef|backpapier|kerze|blume|zigarett|tabak|zeitung|zeitschr|pflaster|tablette|rasier|windel|katzenf|hundef|tierf|reiniger|schwamm|lappen|batterie|feuerzeug|creme(?!.*(fra|fraiche|käse|kaese))|lotion|wc-|wc\s|kosmetik|haarg|tampon|binden/i]];
+  ["Tüte", /\btüte|\btuete|tragetasche|\btasche|\bbeutel(?!.*(tee|reis))/i],
+  ["kein Lebensmittel", /sp[üu]l|toilettenp|klopapier|k[üu]chenrolle|taschent|waschmittel|weichsp|duschgel|shampoo|zahnp|zahnb[üu]r|deo\b|deodor|seife|m[üu]llbeutel|alufolie|frischhaltef|backpapier|kerze|blume(?!nkohl)|zigarett|tabak|zeitung|zeitschr|pflaster|tablette|rasier|windel|katzenf|hundef|tierf|reiniger|schwamm|lappen|batterie|feuerzeug|(?<!nougat.{0,3}|schoko.{0,3}|eis)creme(?!.*(fra|fraiche|käse|kaese))|lotion|wc-|wc\s|kosmetik|haarg|tampon|binden/i]];
 const rcKind = n => (RC_KINDS.find(([, re]) => re.test(n)) || ["Lebensmittel"])[0];
 const RC_ABBR = [[/\btom\.?\s*pass\.?/gi, "passierte tomaten"], [/\bpass\.?\s*tom\.?/gi, "passierte tomaten"], [/\btom\.?\b/gi, "tomaten"], [/\bkart\.?\b/gi, "kartoffeln"], [/\bzwieb\.?\b/gi, "zwiebeln"], [/\bknobl\.?\b/gi, "knoblauch"], [/\bschlagsa\.?\b/gi, "schlagsahne"], [/\bfrischk\.?\b/gi, "frischkäse"], [/\bvollk\.?\b/gi, "vollkorn"], [/\bspagh\.?\b/gi, "spaghetti"], [/\bnud\.?\b/gi, "nudeln"], [/\bkichererbs\.?\b/gi, "kichererbsen"], [/\bnat\.?\b/gi, "natur"], [/\bgriech\.?/gi, "griechischer "], [/\bjogh\.?/gi, "joghurt"], [/\bvollm\.?\b/gi, "vollmilch"], [/\bfettarme?\.?\b/gi, "fettarm"], [/\bh-?milch\b/gi, "H-Milch"], [/\bscheib\.?\b/gi, "scheiben"], [/\bkaese\b/gi, "käse"], [/\btk\b/gi, "TK"]];
 const RC_BRAND = /^(gg|g&g|gut\s*&\s*günstig|ja!?|k-?classic|k-?bio|milbona|rewe( beste wahl| bio)?|edeka|penny|netto|aldi|lidl|bio|gut bio|enjoy free|vemondo|harvest basket|freshona|lose)\s+/i;
@@ -3510,7 +3521,7 @@ function mealsFor(d){
   const day = dayObj(d), def = mealDefaults(d), ov = day?.meals || {}, ate = day?.ate || {};
   const out = mealPlan.slots.map(sl => { const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
-    return {k: sl.k, label: sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
+    return {k: sl.k, label: sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, info: mealInfo(o)});
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
@@ -3568,18 +3579,18 @@ function mealSheet(arg){
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
   const opt = (n, why) => { const r = mealInfo(n), dk = r.kcal - ref.kcal, dp = r.protein - ref.protein;
     return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${isFav(n) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
-  const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
+  const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (m.def && dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
   setTimeout(() => sheet.classList.add("swapmode"), 0);
-  return `<div class="swapbar">⇄ Du tauschst: <b>${esc(ref.name)}</b></div><div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${k}">✎ Was anderes gegessen</button><div class="lab">Tauschen</div><div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
-    <button class="btn small" type="button" data-random="meal" data-v="${d}|${k}" data-cur="${esc(m.name)}">🎲 Zufällig vorschlagen</button>
+  return `<div class="swapbar">⇄ Du tauschst: <b>${esc(ref.name)}</b></div><div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${k}">✎ Was anderes gegessen</button><div class="lab">Tauschen</div>${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}<div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
+    <button class="btn small" type="button" data-random="meal" data-v="${d}|${k}" data-cur="${esc(typeof m.name === "object" ? m.def || "" : m.name)}">🎲 Zufällig vorschlagen</button>
     ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
     ${(() => { const sl = mealPlan.slots.find(x => x.k === k), are = avoidRe(), fv = recipes.filter(r => isFav(r.name) && r.name !== m.name && sl.cats.includes(r.category) && recipeOk(r, are));
       return `<div class="lab sec">★ Deine Favoriten</div>${fv.length ? fv.map(r => opt(r.name, "Favorit")).join("") : `<div class="small muted">Noch keine passenden Favoriten – im Rezept mit ☆ markieren.</div>`}<div class="lab sec">Ähnliche Gerichte</div>`; })()}
-    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
+    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}
     ${ownForm("slot")}
-    ${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}`;
+`;
 }
 let ownSugList = [];
 // kurze Eingaben nur am Wortanfang (sonst findet „dö“ auch „Avocado“), längere irgendwo im Wort
@@ -3605,7 +3616,7 @@ function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
 const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${x.protein || 0} g P</span>` : ""}</span></button>`).join("");
 // Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
 let ownIngSug = [];
-function ownIngParts(text){ const i = Math.max(text.lastIndexOf(","), text.lastIndexOf("\n")), head = text.slice(0, i + 1), tail = text.slice(i + 1), m = tail.match(/^(\s*(?:ca\.\s*)?[\d½¼¾.,\/–-]*\s*(?:g|kg|ml|l|el|tl|stück|stk|scheiben?|portionen?|becher|dosen?|handvoll|x)?\s+)?(.*)$/i);
+function ownIngParts(text){ const i = Math.max(text.lastIndexOf(","), text.lastIndexOf("\n")), head = text.slice(0, i + 1), tail = text.slice(i + 1), m = tail.match(/^(\s*(?:ca\.\s*)?(?:[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|el|tl|stück|stk|scheiben?|portionen?|becher|dosen?|handvoll|x)?\s*)?)(.*)$/i);
   return {head, amt: m?.[1] || (tail.match(/^\s*/)[0]), word: (m?.[2] || tail).trim()}; }
 function otherSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k), close = `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>`;
@@ -3836,6 +3847,7 @@ function parseReceipt(text){
     if (w && items.length) { items[items.length - 1].perKg = Number(w[2].replace(",", ".")); continue; }
     if (q && items.length) { items[items.length - 1].unit = Number(q[3].replace(",", ".")); continue; }
     const m = l.match(/^(.*?[A-Za-zÄÖÜäöüß].*?)\s+(-?\d{1,3}[,.]\d{2})\s*[A-Z*]?\s*$/);
+    if (m && m[2].startsWith("-") && items.length && /rabatt|nachlass|coupon|gutschein|aktion|sparen|preisvorteil|%/i.test(m[1])) { const last = items[items.length - 1], v = Number(m[2].replace(",", ".")); last.price = Math.max(0, Math.round((last.price + v) * 100) / 100); last.discount = (last.discount || 0) - v; continue; }
     if (!m || skip.test(m[1]) || m[2].startsWith("-")) continue;
     items.push({name: m[1].replace(/^\d{5,}\s*/, "").trim(), price: Number(m[2].replace(",", "."))});
   }
@@ -3845,7 +3857,7 @@ function parseReceipt(text){
 const RC_ALIAS = [[/linsen\s*rot|rote\s*lins/, "roteLinsen"], [/soja\s*-?dr|sojadrink|soja\s*milch/, "sojadrink"], [/hafer\s*-?dr|haferdrink|oat/, "haferdrink"], [/h-?milch|vollmilch|fettarme\s*milch|frischmilch/, "milch"], [/speisequark|magerquark|quark\s*mager/, "magerquark"], [/kichererb/, "kichererbsen"], [/hafer\s*fl|haferfl|bl[äa]tterfl/, "haferflocken"], [/freiland|bodenhalt|\beier\b/, "eier"], [/k[öo]rniger\s*fr|h[üu]ttenk/, "huettenkaese"]];
 function matchItem(it){
   const nm0 = it.name.toLowerCase(), nm = nm0.replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü"); // Bons schreiben Umlaute teils als ae/oe/ue
-  const kind = rcKind(nm) !== "Lebensmittel" ? rcKind(nm) : rcKind(nm0); if (kind !== "Lebensmittel") return Object.assign(it, {kind, pid: "", use: false, keep: false, ref: null});
+  const known = prices.products.some(x => x.re.test(nm) || x.re.test(nm0)), kind = known ? "Lebensmittel" : rcKind(nm) !== "Lebensmittel" ? rcKind(nm) : rcKind(nm0); if (kind !== "Lebensmittel") return Object.assign(it, {kind, pid: "", use: false, keep: false, ref: null});
   const al = RC_ALIAS.find(([re]) => re.test(nm) || re.test(nm0)), cl = fold(rcClean(it.name));
   let pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm) || x.re.test(nm0) || x.re.test(cl));
   if (!pr && cl.length >= 4) { // tippfehlertolerant: Kernwörter des Produktnamens müssen im Bontext vorkommen
@@ -3854,14 +3866,16 @@ function matchItem(it){
       const sc = ws.filter(hitw).length / ws.length; if (sc >= 0.99 && (!best || ws.length > best.n)) best = {x, n: ws.length}; }
     pr = best?.x || null; }
   if (!pr && typeof nwFind === "function" && NW) { const cn = rcClean(it.name), x = nwFind(cn) || (/pinot|grigio|riesling|merlot|chardonnay|sauvignon|primitivo|chianti|rioja|rosé|rose\b|grauburgunder|weißburgunder|dornfelder|tempranillo/i.test(cn) ? nwFind("wein") : null); if (x) it.nw = {n: x.n, k: x.k, p: x.p}; }
-  const sm = it.name.match(/(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i); let size = null;
+  const mp = it.name.match(/(\d+)\s*[x×]\s*(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i), sm = mp ? null : it.name.match(/(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i), cnt = it.name.match(/\b(\d+)\s*(er|st|stk)\b/i); let size = null;
+  if (mp) { const v = Number(mp[2].replace(",", ".")) * Number(mp[1]), u = mp[3].toLowerCase(); size = u === "kg" || u === "l" ? v * 1000 : v; }
   if (sm) { const v = Number(sm[1].replace(",", ".")), u = sm[2].toLowerCase(); size = u === "kg" || u === "l" ? v * 1000 : v; }
   const unitPrice = it.unit || it.price;
-  return Object.assign(it, {kind, pid: pr?.id || "", size, use: !!pr, ref: pr ? refPrice(pr, unitPrice, size, it.perKg) : null});
+  return Object.assign(it, {kind, pid: pr?.id || "", size, use: !!pr, ref: pr ? refPrice(pr, unitPrice, size, it.perKg, cnt ? Number(cnt[1]) : null) : null});
 }
 // Preis auf die Referenzpackung des Produkts umrechnen
-function refPrice(pr, price, size, perKg){
+function refPrice(pr, price, size, perKg, count){
   if (perKg && pr.unit !== "Stück") return Math.round(perKg * pr.pack / 1000 * 100) / 100;
+  if (pr.unit === "Stück" && count > 0 && pr.pack > 1) return Math.round(price * pr.pack / count * 100) / 100; // z. B. Eier 6er → Preis für die 10er-Referenz
   if (size && pr.unit !== "Stück" && !pr.dose) return Math.round(price * pr.pack / size * 100) / 100;
   return Math.round(price * 100) / 100;
 }
@@ -4093,7 +4107,7 @@ function shopHtml(){
   const home = new Set([...(stockOn() ? STOCK() : []), ...(shopScope === "gericht" && shopFromReste ? resteIds() : [])]), homeItems = [];
   const groups = sl.groups.map(([g, a]) => [g, a.filter(i => i.pr && home.has(i.pr.id) ? (homeItems.push(i), false) : true)]).filter(([, a]) => a.length);
   const total = groups.reduce((n, [, a]) => n + a.length, 0), got = groups.reduce((n, [, a]) => n + a.filter(i => done.has(i.key)).length, 0);
-  let h = `<div class="lab">Einkaufen für</div><div class="seg" role="group" aria-label="Einkaufen für">${[["tage","Tage"],["woche","Woche"],["tag","Tag"],["gericht","Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
+  let h = `<div class="lab">Einkaufen für</div><div class="seg" role="group" aria-label="Einkaufen für">${[["tag","Tag"],["tage","Tage"],["woche","Woche"],["gericht","Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const r = recipeByName(cx.n);
     h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(cx.n)}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept${shopFromReste ? " · ohne deine Reste" : ""}</span></span><span class="go">›</span></button>
       <div class="actions"><button class="btn small" type="button" data-recipe="${esc(cx.n)}">📖 Rezept ansehen</button><button class="btn small ghost" type="button" data-sheet="shoprec">Anderes Gericht</button><button class="btn small ghost" type="button" data-shoprandom aria-label="Zufälliges Gericht">🎲</button></div>
@@ -4113,7 +4127,7 @@ function shopHtml(){
   const src = !!lsGet("shopSrc");
   h += `<div class="card shopsticky"><div class="mhead"><b>${got}/${total} im Korb</b>${got ? `<button class="btn ghost small" type="button" id="shopReset">Zurücksetzen</button>` : ""}</div>
     <div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div>
-    <div class="btnrow"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>
+    <div class="btnrow"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Preis scannen</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>
     <details class="shopview"><summary class="small">⚙ Ansicht & Vorrat</summary>
     <div class="mhead stockrow"><label class="check small"><input type="checkbox" id="stockOnCb" ${stockOn() ? "checked" : ""} ${(FOOD().stock || []).length ? "" : "disabled"}><span>Vorrat zuhause abziehen${homeItems.length ? ` (${homeItems.length})` : ""}</span></label><button class="btn small ghost" type="button" data-sheet="stock">🏠 Vorrat</button></div>
     <div class="lab">Sortieren</div><div class="seg">${[["gang", "Nach Gang"], ["lager", "Frisch/Basis"]].map(([k, l]) => `<button type="button" data-shopkind="${k}" aria-pressed="${shopKind === k}">${l}</button>`).join("")}</div>
@@ -4216,7 +4230,7 @@ function essenHtml(b){
     <div class="pbars nutri">${bar(tt.eKcal, tg.kcal, "kcal")}${bar(tt.eProtein, tg.protein, "g Protein")}</div>
     ${tg.kcal - tt.kcal >= 150 ? `<div class="small gaphint nutri">Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder" : ""} 30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).</div>` : ""}
     <div class="mrows">${ms.map(m => diaryRow(d, m)).join("")}</div>
-    <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button><button class="btn ghost small" type="button" data-ownscan="${d}">📷 Scannen</button></div></div>`;
+    <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button>${d < todayIso() ? "" : `<button class="btn ghost small" type="button" data-ownscan="${d}">📷 Produkt scannen</button>`}</div></div>`;
   h += `<div class="lab sec">Die Woche</div>` + prep + budgetSlim(mo);
   b.innerHTML = h;
 }
@@ -4236,7 +4250,7 @@ function planHtml(){
   return `<div class="card"><h2>So plant der Planer</h2><ul class="small">
     <li>Reihenfolge Beine A → Oberkörper A → Beine B → Oberkörper B, in freie Slots von Google- und Uni-Kalender.</li>
     <li>Max. 4 Krafteinheiten pro Woche, max. 2 Tage am Stück, Sonntag frei. Ausgefallenes rutscht automatisch weiter.</li>
-    <li>Bouldern ist spontan: unter „Heute“ umschalten. Am Tag danach plant der Planer kein schweres Ziehen.</li>
+    <li>Bouldern ist spontan: unter Heute → Aktivität eintragen. Am Tag danach plant der Planer kein schweres Ziehen.</li>
     <li>Doppelte Progression: alle Sätze am oberen Ende mit genug Reserve (Ziel-RIR) → nächste Gewichtsstufe. Deload in Woche 6 und 12.</li>
     <li>Modus „reduziert“ (Prüfungen): 2 kurze Ganzkörper-Einheiten. „Notfall“: 30-Minuten-Einheit.</li></ul></div>
   <div class="card"><h2>Bis zur Arztfreigabe verboten</h2><ul class="small">
@@ -4452,8 +4466,8 @@ async function onClick(e){
   const op = t.closest("[data-open]"); if (op) { openEx = document.body.classList.contains("wo") ? op.dataset.open : openEx === op.dataset.open ? null : op.dataset.open; renderTraining(); scrollTo(0, 0); return; }
   const xn = t.closest("[data-exnav]"); if (xn) { exNav(Number(xn.dataset.exnav)); return; }
   const ok = t.closest("[data-ok]"); if (ok) { checkSet(ok.dataset.ok, ok.dataset.base, Number(ok.dataset.i)); return; }
-  const rr = t.closest("[data-rir]"); if (rr) { const id = rr.dataset.rir, base = rr.dataset.base, sk = woSession || cur.session, w = weekNo(selDate); const arr = setsObj()[id] || [], dc = arr.filter(doneSet).length; const last = arr[Math.max(dc, 1) - 1]; if (last) { last.rir = rr.dataset.v.replace("+", ""); touch(); } const nx = exList(sk), ix = nx.indexOf(base); openEx = nx.slice(ix + 1).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)) || null; renderTraining(); return; }
-  const pb = t.closest("[data-pain]"); if (pb) { const k = pb.dataset.pain, v = Number(pb.dataset.v); cur.pain[k] = cur.pain[k] === v ? null : v; if (cur.pain[k] == null) clr("pain." + k); pb.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur.pain[k]))); touch(); return; }
+  const rr = t.closest("[data-rir]"); if (rr) { const id = rr.dataset.rir, base = rr.dataset.base, sk = woSession || cur.session, w = weekNo(selDate); const arr = setsObj()[id] || [], dc = arr.filter(doneSet).length; const last = arr[Math.max(dc, 1) - 1]; if (last) { last.rir = rr.dataset.v.replace("+", ""); touch(); } const nx = exList(sk), ix = nx.indexOf(base); openEx = nx.slice(ix + 1).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)) || base; renderTraining(); return; }
+  const pb = t.closest("[data-pain]"); if (pb) { const k = pb.dataset.pain, v = Number(pb.dataset.v); cur.pain[k] = cur.pain[k] === v ? null : v; if (cur.pain[k] == null) clr("pain." + k); document.querySelectorAll(`[data-pain="${k}"]`).forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur.pain[k]))); touch(); return; }
   const s2 = t.closest("[data-sub2]"); if (s2) { sub.mehr = s2.dataset.sub2; go("mehr"); history.replaceState(null, "", `#t=${s2.dataset.sub2}`); return; }
   const rs = t.closest("[data-rsub]"); if (rs) { sub.reise = rs.dataset.rsub; renderProgress(); return; }
   const sb = t.closest("[data-sub]"); if (sb) { sub[tab] = sb.dataset.sub; history.pushState(null, "", `#t=${sb.dataset.sub}`); render(); scrollTo(0, 0); return; }
@@ -4464,7 +4478,7 @@ async function onClick(e){
       if (!(min > 0)) { toast("Bitte die Dauer in Minuten eintragen"); sheet.querySelector("#caMin")?.focus(); return; }
       const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min, km: km > 0 && KM_TYPES.has(cardioType) ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
-      cardioFeel = ""; toast(`Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
+      const nxt = planFor(addDays(d, 1)); cardioFeel = ""; toast(cardioType === "boulder" && nxt && /^ok/.test(nxt.session) ? `Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf` : `Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
     if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
     if (a === "mobFinish") { cur.mobility = Object.assign({}, cur.mobility); if (mobFinished(cur, selDate) && cur.mobility._done) { delete cur.mobility._done; clr("mobility._done"); } else cur.mobility._done = true; touch(); renderSheet(); render(); return; }
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "alt"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
@@ -4489,7 +4503,7 @@ async function onClick(e){
     if (a === "toggleDone") { showDone = !showDone; renderToday(); return; }
     if (a === "retrySync") { Object.keys(pending).forEach(flushDay); loadAll().then(() => render()); return; }
     if (a === "booked") { saveSettings({onboard:Object.assign({}, S().onboard, {arzt:true})}); render(); if (sheet.open) renderSheet(); return; }
-    if (a === "clear") { saveSettings({scCleared:true}); render(); return; }
+    if (a === "clear") { if (clearArmed !== 1) { clearArmed = 1; setTimeout(() => { clearArmed = 0; }, 4000); toast("Nochmal tippen: Arztfreigabe bestätigen – das ändert den ganzen Plan"); return; } clearArmed = 0; saveSettings({scCleared:true}); toast("Freigabe gesetzt"); if (sheet.open) renderSheet(); render(); return; }
     if (a === "delset") { const arr = setsObj()[v]; if (arr) { arr.length = lastMeaningful(arr); arr.pop(); } touch(); renderTraining(); return; }
     if (a === "begin") { cur.where = cur.where || "gym"; cur.startedAt = new Date().toISOString(); if (cur.finishedAt) clr("finishedAt"); delete cur.finishedAt; openEx = null; requestWake(); touch(); saveCur(); renderTraining(); return; }
     if (a === "resume") { delete cur.finishedAt; clr("finishedAt"); touch(); saveCur(); woSession = null; go("training"); return; }
@@ -4498,8 +4512,8 @@ async function onClick(e){
       pendingConfirm = null; trainClear(a === "delTraining"); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
     if (a === "ateAll") { const ks = mealsFor(v).filter(m => !m.own).map(m => m.k); editDay(v, day => { day.ate = Object.assign({}, day.ate, Object.fromEntries(ks.map(k => [k, true]))); }); toast("Alle geplanten Mahlzeiten als gegessen eingetragen"); render(); return; }
     if (a === "trainDrop") { // ✕ unter „Noch offen“ bzw. „Heute nicht trainieren“: zweimal tippen
-      if (trainDrop.armed !== selDate) { trainDrop.armed = selDate; clearTimeout(trainDrop.t); trainDrop.t = setTimeout(() => { trainDrop.armed = null; }, 4000); toast("Nochmal tippen, um das Training für heute zu entfernen"); return; }
-      trainDrop.armed = null; trainClear(true); toast("Training für heute entfernt"); render(); return; }
+      if (dropArm.armed !== selDate) { dropArm.armed = selDate; clearTimeout(dropArm.t); dropArm.t = setTimeout(() => { dropArm.armed = null; }, 4000); toast("Nochmal tippen, um das Training für heute zu entfernen"); return; }
+      dropArm.armed = null; trainClear(true); toast("Training für heute entfernt"); render(); return; }
     if (a === "resetWhere") { delete cur.where; clr("where"); cur.swap = {}; openEx = null; touch(); renderTraining(); return; }
     if (a === "toHeute") { go("heute"); return; }
     if (a === "summaryDone") { if (sheet.open) { sheetKind = null; sheet.close(); } go("heute"); return; }
@@ -4509,15 +4523,12 @@ async function onClick(e){
         const nm = sheet.querySelector("#ownName"), kc = sheet.querySelector("#ownKcal"), pr = sheet.querySelector("#ownProt");
         if (nm && !nm.value.trim()) nm.value = tx.slice(0, 60); if (kc) kc.value = ok.reduce((x, i) => x + i.kcal, 0); if (pr) pr.value = Math.round(ok.reduce((x, i) => x + i.protein, 0)); }).catch(() => { box.innerHTML = `<div class="small muted">Tabelle nicht ladbar – bitte Werte selbst eintragen.</div>`; }); return; }
     if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = setsFor(v, weekNo(selDate), SESS[woSession || cur.session], ac.dataset.base || v), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
-    if (a === "nextex") { const ids = exList(woSession || cur.session); openEx = ids[ids.indexOf(v)+1] || null; renderTraining(); return; }
+    if (a === "nextex") { const ids = exList(woSession || cur.session); openEx = ids[ids.indexOf(v)+1] || v; renderTraining(); return; }
     if (a === "checkin") { openSheet("checkin", v); return; }
     if (a === "ciSave") { const sel = sheet.querySelector("#ciMode [aria-pressed=true]")?.dataset.mode || "normal";
       saveMap("checkins.json", "checkins", v, {week:v, stress:num(sheet.querySelector("#ci_stress").value), hurdle:sheet.querySelector("#ci_hurdle").value, ifthen:sheet.querySelector("#ci_ifthen").value, good:sheet.querySelector("#ci_good").value, nextMode:sel});
       if (sel !== (S().mode || "normal")) saveSettings({mode:sel}); closeSheet(); return; } }
   const cm = t.closest("#ciMode [data-mode]"); if (cm) { cm.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === cm))); return; }
-  if (t.closest("#bDone")) { cur.boulder.done = !cur.boulder.done; cur.boulder.at = Date.now(); touch(); saveCur(); renderToday();
-    if (cur.boulder.done && /^ok/.test(cur.session || "") && !loggedSets(cur)) toast("Heute gebouldert: Oberkörper lieber auslassen – der Planer verschiebt ihn.");
-    return; }
   const rc = t.closest("#recCat [data-cat]"); if (rc) { recFilter.cat = rc.dataset.cat; renderRecipes(); return; }
   const ms = t.closest("#modeSeg [data-mode]"); if (ms) { saveSettings({mode:ms.dataset.mode}); renderMore(); return; }
   if (t.id === "mSave") { const d = document.getElementById("mDate").value || todayIso(), m = Object.assign({}, store.measures[d] || {}, {date:d}); let any = false;
@@ -4564,7 +4575,7 @@ async function onChange(e){
   if (t.id === "wIn" || t.id === "slIn") { saveCur(); renderToday(); return; }
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]); renderMore(); return; }
   if (t.id === "shopRec") { shopRec = t.value; shopMul = 1; renderMore(); return; }
-  if (t.dataset.warm) { cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
+  if (t.dataset.warm) { warmOpen = true; cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }

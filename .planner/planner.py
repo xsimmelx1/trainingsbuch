@@ -914,7 +914,9 @@ def main():
     busy, cal_ok, cal_total = fetch_busy(dt.datetime.combine(today, dt.time(0), TZ), dt.datetime.combine(today + dt.timedelta(days=HORIZON + 1), dt.time(0), TZ))
     # Heute: bereits erledigte oder laufende Einheit behalten statt umzuplanen
     old_today = next((p for p in old_plan.get("days", []) if p["date"] == today.isoformat()), None)
-    keep = old_today if old_today and (is_strength(days.get(today.isoformat())) or now.strftime("%H:%M") >= old_today.get("start", "99")) else None
+    # behalten nur, wenn heute wirklich trainiert wurde oder das Training läuft – eine verpasste Einheit rutscht sonst nicht nach
+    td = days.get(today.isoformat()) or {}
+    keep = old_today if old_today and (is_strength(td) or td.get("startedAt")) else None
     plan, extras = build_plan(now, settings, days, busy, keep)
     cal_failed = cal_ok < cal_total
     if cal_failed and old_plan.get("days"):
