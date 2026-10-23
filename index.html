@@ -1617,6 +1617,9 @@ function nwItem(p){
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
   const key = fold((rest || p).trim()), hist = key.length >= 3 && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
+  const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
+  if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
+  if (mine?.mynw || (mine && /^(g|gramm|kg|ml|l|liter)$/.test(unit))) { const src = mine.mynw || nwFind(mine.al?.[0] || mine.name); if (src) { const gr = unit === "kg" || unit === "l" || unit === "liter" ? q * 1000 : q; return {text: p, ok: true, name: mine.name, g: Math.round(gr), kcal: Math.round(src.k * gr / 100), protein: Math.round(src.p * gr / 10) / 10}; } }
   const wUnit = /^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit), x0 = NW ? nwFind(rest || p) : null, exact = !!x0 && x0.keys.includes(nwNorm(rest || p));
   let r = !wUnit && !exact ? recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest))) : null;
   const x = r ? null : x0;
@@ -2269,8 +2272,18 @@ function zutatenPage(){
     <div class="chips sm zgrp">${[["", "Alle"], ...G.map(g => [g, g.replace(/^🧾 /, "🧾 ")])].map(([k, l]) => `<button type="button" data-zgrp="${esc(k)}" aria-pressed="${zGrp === k}">${esc(l)}</button>`).join("")}</div>
     <div id="zBody">${zutatenHtml()}</div>`;
 }
+function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = x && (NW || []).find(y => y.n === x.n);
+  return `<div class="sh"><div class="zhead">${prodImg(pr, "pbig")}<div><h2>${esc(pr.name)}</h2><div class="small muted">🧾 vom Kassenbon · ${STORES[pr.store] || ""} · ${pr.date ? fmt(pr.date) : ""}</div></div></div>${close}</div>
+    <div class="field"><label for="myName">Name</label><input type="text" id="myName" data-myname="${esc(pr.key)}" value="${esc(pr.name)}" autocomplete="off" enterkeyhint="done"></div>
+    <div class="field"><label for="myGrp">Gruppe</label><select id="myGrp" data-mygrp="${esc(pr.key)}">${SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze").map(g => `<option ${g === pr.group ? "selected" : ""}>${esc(g)}</option>`).join("")}</select></div>
+    <div class="field"><label for="myNw">Nährwerte wie</label><input type="text" id="myNw" data-mynw="${esc(pr.key)}" value="${esc(x?.n || "")}" placeholder="z. B. Mozzarella, Toastbrot" autocomplete="off" enterkeyhint="done"></div>
+    <div class="small muted">${x ? `${Math.round(x.k)} kcal · ${x.p} g Protein je 100 g${b ? ` · 1 ${b.u} ≈ ${b.g} g` : ""} – gilt beim Nachtragen.` : "Ohne Nährwerte: beim Nachtragen ergänzt du die Werte selbst."}</div>
+    <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span></span></div><div class="ir sel"><span>${STORES[pr.store] || "–"} <span class="tag">vom Bon</span></span><span class="num">${eur(pr.price)}</span><span></span></div></div>
+    <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${pr.id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
+    <button type="button" class="btn ghost small" data-act="myDel" data-v="${esc(pr.key)}">Vom Bon-Produkt entfernen</button>`; }
 function zinfoHtml(id){
   const pr = prodById(id), close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!pr) return `<div class="sh"><h2>Zutat</h2>${close}</div>`;
+  if (pr.my) return myInfoHtml(myProdList().find(m => m.id === id) || pr, close);
   const own = ownOf(pr), sel = FOOD().store || "aldi", home = STOCK().has(id);
   const recs = (recipes || []).filter(r => r.ingredients.some(l => { const x = parseIng(l); return (x.parts || [x]).some(pt => pt.pr?.id === id); })).sort((a, b) => a.name.localeCompare(b.name, "de"));
   const rows = prices.stores.map(st => { const v = priceOf(pr, st), b = pr.bio?.[st]; return `<div class="ir ${st === sel ? "sel" : ""}"><span>${STORES[st]}${own[st] ? ` <span class="tag">dein Preis</span>` : ""}</span><span class="num">${v != null ? eur(v) + (isEst(pr, st) ? "*" : "") : "–"}</span><span class="num">${b != null ? eur(b) : "–"}</span></div>`; }).join("");
@@ -2299,17 +2312,21 @@ function zutatenHtml(){
   else if (zSort === "spar") rows.sort((x, y) => y.diff - x.diff || x.name.localeCompare(y.name, "de"));
   else if (zSort === "haeufig") rows.sort((x, y) => y.n - x.n || x.name.localeCompare(y.name, "de"));
   else rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
-  const mine = myProdList().filter(mp => (!qq || fold(mp.name).includes(fold(qq))) && (!zGrp || zGrp === "🧾 Vom Kassenbon") && (!cmp || SS.includes(mp.store)));
-  if (zGrp === "🧾 Vom Kassenbon") rows = [];
+  // Bon-Produkte wie andere Zutaten: eigene Gruppe, antippbar, Preis beim Markt des Bons
+  const mine = myProdList().map(mp => ({pr: mp, my: true, name: mp.name, grp: mp.group, pp: SS.map(st => st === mp.store ? mp.price : null), lo: mp.price, diff: 0, best: null, n: 0, home: home.has(mp.id)}))
+    .filter(x => (!qq || fold(x.name).includes(fold(qq))) && (!zGrp || zGrp === x.grp || zGrp === "🧾 Vom Kassenbon"));
+  if (zGrp === "🧾 Vom Kassenbon") rows = []; rows = rows.concat(mine);
+  if (zSort === "laden") rows.sort((x, y) => GO.indexOf(x.grp) - GO.indexOf(y.grp) || x.name.localeCompare(y.name, "de")); else if (zSort === "az") rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
+  const sub = x => x.my ? `🧾 vom Bon · ${STORES[x.pr.store] || ""}${x.pr.nw ? "" : " · ohne Nährwerte"}` : fmtAmt(x.pr.pack, x.pr.unit);
   const cols = cmp ? `minmax(0,1fr) repeat(${SS.length},58px)` : `minmax(0,1fr) 64px 52px`;
-  const full = rows.filter(x => x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
+  const full = rows.filter(x => !x.my && x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
   const cell = (x, i) => { const v = x.pp[i]; return `<span class="num ${cmp && v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? eur(v) + (isEst(x.pr, SS[i]) ? "*" : "") : "–"}</span>`; };
   const AB = {kaufland: "Kaufl.", edeka: "Edeka", penny: "Penny", netto: "Netto"}, ab = st => AB[st] || STORES[st];
   if (wide) return `<div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
     <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
     <div class="zw" style="--zn:${SS.length}"><div class="zwh">${SS.map(st => `<span>${ab(st)}</span>`).join("")}</div>
     ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${fmtAmt(x.pr.pack, x.pr.unit)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`).join("")}
+      + `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${sub(x)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`).join("")}
     ${rows.length ? `<div class="zwr sum"><span class="zwn">Summe · ${full.length} Zutaten mit Preis überall</span><span class="zwp">${sums.map(v => `<span class="${v === Math.min(...sums) ? "cheap" : ""}">${Math.round(v)}</span>`).join("")}</span></div>
       <div class="zwr"><span class="zwn small muted">wie oft am günstigsten</span><span class="zwp">${wins.map(w => `<span class="small">${w}×</span>`).join("")}</span></div>` : ""}</div>
     <div class="small muted">Preise in € je Packung · * geschätzt · grün = am günstigsten · Antippen für Details.</div>`;
@@ -2317,10 +2334,10 @@ function zutatenHtml(){
     <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div>
     <div class="ingg zg" style="--zc:${cols}"><div class="ih"><span>Zutat</span>${cmp ? SS.map(st => `<span class="num">${STORES[st]}</span>`).join("") : `<span class="num">${STORES[SS[0]]}</span><span class="num">Rez.</span>`}</div>
     ${rows.map((x, j) => (zSort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${fmtAmt(x.pr.pack, x.pr.unit)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`).join("")}
+      + `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${sub(x)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`).join("")}
     ${cmp && rows.length ? `<div class="ir sum"><span>Summe · ${full.length} Zutaten mit Preis in allen, je 1 Packung</span>${sums.map((v, i) => `<span class="num ${v === Math.min(...sums) ? "cheap" : ""}">${eur(v)}</span>`).join("")}</div>
       <div class="ir"><span class="small muted">am günstigsten</span>${wins.map(w => `<span class="num small">${w}×</span>`).join("")}</div>` : ""}
-    ${mine.length ? `<div class="ig">🧾 Vom Kassenbon</div>` + mine.map(mp => `<div class="ir"><span>${esc(mp.name)}<br><span class="small muted">${STORES[mp.store] || ""}</span></span>${cmp ? SS.map(st => `<span class="num">${st === mp.store ? eur(mp.price) : "–"}</span>`).join("") : `<span class="num">${eur(mp.price)}</span><span class="num">–</span>`}</div>`).join("") : ""}</div>
+    </div>
     <div class="small muted">Preis je Packung · * geschätzt · grün = günstigster der gewählten Märkte · Antippen für Details.</div>`;
 }
 function nowCard(it){
@@ -3587,7 +3604,8 @@ const isTrainDay = d => isStrength(dayObj(d)) || !!planFor(d) || (store.plan.pas
 const mealWeek = w => mealPlan.weeks[w > 0 ? (w - 1) % mealPlan.weeks.length : mealPlan.weeks.length - 1];
 // Mengen je Produkt für ein ganzes Rezept (einmal berechnet), Packungsanteil und Wocheneinkauf in €
 const recVec = new Map();
-const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => ({id: "my:" + k, name: v.name, price: v.price, store: v.store, date: v.date, my: true}));
+const myGroup = n => (SHOP_GROUPS.find(([, re]) => re.test(n)) || ["Vorrat & Gewürze"])[0];
+const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => ({id: "my:" + k, key: k, name: v.name, price: v.price, store: v.store, date: v.date, my: true, nw: v.nw || null, group: v.group || myGroup(v.name)}));
 const prodById = id => id && id.startsWith("my:") ? myProdList().find(x => x.id === id) : prices?.products.find(x => x.id === id);
 // Bonzeile → lesbarer Name: Mengen/Preise weg, Großbuchstaben normalisieren
 const RC_JUNK = /pfand|leergut|tüte|tasche|beutel|rabatt|nachlass|summe|zwischensumme|gutschein|coupon|payback|bonus|karte|mwst|kasse/i;
@@ -3803,13 +3821,21 @@ function ownHistory(){ const m = new Map();
   const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
   for (const d of Object.keys(store.days).sort().reverse()) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) add(o); for (const v of Object.values(day?.meals || {})) if (v && typeof v === "object") add(v); }
   return [...m.values()]; }
+// Eigene Lebensmittel: vom Kassenbon (mit Nährwerten, falls zugeordnet) und Produkte mit eigenem Namen
+function myFoodList(){ const out = [], nwBase = n => (NW || []).find(y => y.n === n);
+  for (const mp of Object.values(FOOD().myProds || {})) { const b = mp.nw && nwBase(mp.nw.n), g = b?.g || 100;
+    out.push({name: mp.name, kcal: mp.nw ? Math.round(mp.nw.k * g / 100) : 0, protein: mp.nw ? Math.round(mp.nw.p * g / 10) / 10 : 0, src: `🧾 Vom Bon${mp.nw ? ` · 1 ${b?.u || "Portion"} ≈ ${g} g wie ${mp.nw.n}` : " · ohne Werte"}`, mynw: mp.nw || null}); }
+  for (const [id, nk] of Object.entries(FOOD().nick || {})) { const pr = prodById(id); if (!pr) continue; const x = NW ? nwFind(prodLabel0(pr)) : null;
+    out.push({name: nk, al: [prodLabel0(pr)], kcal: x ? Math.round(x.k * x.g / 100) : 0, protein: x ? Math.round(x.p * x.g / 10) / 10 : 0, src: `Dein Name für ${prodLabel0(pr)}${x ? ` · 1 ${x.u} ≈ ${x.g} g` : ""}`}); }
+  return out; }
 function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
   // Treffer je Quelle: exakte vor tippfehlertoleranten, dann die mit passendem Anfang
   const pick = (arr, names) => arr.map(x => ({x, sc: Math.max(...names(x).map(n => sugScore(n, q)))})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || fold(b.x.name).startsWith(q) - fold(a.x.name).startsWith(q)).map(o => o.x);
   const hist = pick(ownHistory(), x => [x.name]);
   const rec = pick((recipes || []).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})), x => [x.name]);
   const nw = pick((NW || []).map(x => ({name: x.n, al: x.a, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})), x => [x.name, ...x.al]);
-  const seen = new Set(); return [...hist, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
+  const mine = pick(myFoodList(), x => [x.name, ...(x.al || [])]);
+  const seen = new Set(); return [...hist, ...mine, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
 const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${x.protein || 0} g P</span>` : ""}</span></button>`).join("");
 // Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
 let ownIngSug = [];
@@ -4071,6 +4097,7 @@ function matchItem(it){
     let best = null; for (const x of prices.products) { const ws = fold(x.name.replace(/\([^)]*\)/g, "")).split(/[^a-z0-9ß]+/).filter(w => w.length >= 4); if (!ws.length) continue;
       const sc = ws.filter(hitw).length / ws.length; if (sc >= 0.99 && (!best || ws.length > best.n)) best = {x, n: ws.length}; }
     pr = best?.x || null; }
+  if (pr && /\blight\b/i.test(pr.name) && !/light|leicht|fettarm|reduz/i.test(nm)) pr = null;
   if (!pr && typeof nwFind === "function" && NW) { const cn = rcClean(it.name), x = nwFind(cn) || (/pinot|grigio|riesling|merlot|chardonnay|sauvignon|primitivo|chianti|rioja|rosé|rose\b|grauburgunder|weißburgunder|dornfelder|tempranillo/i.test(cn) ? nwFind("wein") : null); if (x) it.nw = {n: x.n, k: x.k, p: x.p}; }
   const mp = it.name.match(/(\d+)\s*[x×]\s*(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i), sm = mp ? null : it.name.match(/(\d+[,.]?\d*)\s*(KG|G|ML|L)\b/i), cnt = it.name.match(/\b(\d+)\s*(er|st|stk)\b/i); let size = null;
   if (mp) { const v = Number(mp[2].replace(",", ".")) * Number(mp[1]), u = mp[3].toLowerCase(); size = u === "kg" || u === "l" ? v * 1000 : v; }
@@ -4722,7 +4749,7 @@ async function onClick(e){
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
     if (a === "rcReset") { rcpt = null; renderSheet(); return; }
-    if (a === "myDel") { const my = Object.assign({}, FOOD().myProds || {}); delete my[v]; saveFood({myProds: my}); renderSheet(); return; }
+    if (a === "myDel") { const my = Object.assign({}, FOOD().myProds || {}); delete my[v]; saveFood({myProds: my}); if (sheetKind === "zinfo") { closeSheet(); renderMore(); toast("Entfernt"); } else renderSheet(); return; }
     if (a === "rcSave") { if (!rcpt?.items) return; const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), d = todayIso(); let n = 0;
       for (const it of rcpt.items) if (it.use && it.pid && it.ref > 0) { own[it.pid] = Object.assign(own[it.pid] || {}, {[rcpt.store]: {price: it.ref, date: d, src: it.name.slice(0, 40)}}); n++; }
       const my = Object.assign({}, FOOD().myProds || {}); let nm = 0;
@@ -4785,7 +4812,7 @@ function onInput(e){
   if (t.id === "ownName") { const show = () => { ownSugList = ownSuggest(t.value); const box = sheet.querySelector("#ownSug"); if (box) box.innerHTML = ownSugHtml(ownSugList); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
   if (t.id === "ownText") { const one = !sheet.querySelector("#ownName"); // Nachtragen: Vorschläge auch aus Rezepten und früheren Einträgen, Erkennung live
     const show = () => { const {word} = ownIngParts(t.value), q = fold(word);
-      ownIngSug = q.length < 2 ? [] : one ? ownSuggest(word).slice(0, 5) : (NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).slice(0, 6).map(x => ({name: x.n}));
+      ownIngSug = q.length < 2 ? [] : one ? ownSuggest(word).slice(0, 5) : [...myFoodList().filter(x => [x.name, ...(x.al || [])].some(a => sugHit(a, q))).map(x => ({name: x.name})), ...(NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).map(x => ({name: x.n}))].filter((x, i, a) => a.findIndex(y => fold(y.name) === fold(x.name)) === i).slice(0, 6);
       const box = sheet.querySelector("#ownIngSug"); if (box) box.innerHTML = one ? ownSugHtml(ownIngSug).replace(/data-ownsug=/g, "data-ingsug=") : ownIngSug.map((x, i) => `<button type="button" class="sugi chip" data-ingsug="${i}">${esc(x.name)}</button>`).join("");
       if (one) { const est = sheet.querySelector("#ownEst"), items = t.value.trim() && NW ? nwParse(t.value) : []; if (est) est.innerHTML = items.length ? nwHtml(items).replace(/<div class="small muted">Richtwerte[^<]*<\/div>/, "") : ""; } };
     show(); Promise.all([NW ? null : ensureNW(), recipes ? null : ensureMeals().catch(() => {})]).then(show).catch(() => {}); return; }
@@ -4816,6 +4843,11 @@ async function onChange(e){
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
+  if (t.dataset.myname || t.dataset.mygrp || t.dataset.mynw) { const k = t.dataset.myname || t.dataset.mygrp || t.dataset.mynw, my = Object.assign({}, FOOD().myProds || {}), o = Object.assign({}, my[k]); if (!my[k]) return;
+    if (t.dataset.myname) { const v = t.value.trim().slice(0, 40); if (!v) return; o.name = v; }
+    if (t.dataset.mygrp) o.group = t.value;
+    if (t.dataset.mynw) { const v = t.value.trim(); if (!v) delete o.nw; else { const x = (NW ? nwFind(v) : null); if (!x) { toast("Nicht in der Nährwerttabelle gefunden"); if (!NW) ensureNW().catch(() => {}); return; } o.nw = {n: x.n, k: x.k, p: x.p}; } }
+    my[k] = o; saveFood({myProds: my}); renderSheet(); return; }
   if (t.dataset.nick) { const v = t.value.trim().slice(0, 40), nk = Object.assign({}, FOOD().nick); if (v) nk[t.dataset.nick] = v; else delete nk[t.dataset.nick]; saveFood({nick: nk}); toast(v ? `Heißt jetzt „${v}“` : "Originalname wieder aktiv"); if (sheetKind === "zinfo") renderSheet(); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
   if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(ingSuggest(t.value, 1, reste.have)[0] || t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
