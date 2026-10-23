@@ -244,6 +244,7 @@ body.wo main{padding-bottom:110px}
 .prs{display:flex;flex-direction:column;gap:6px;text-align:left}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
+.nickl{display:flex;flex-direction:column;gap:6px}.nickr{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center}.nickr input{min-width:0}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
@@ -2273,7 +2274,8 @@ function zinfoHtml(id){
   const own = ownOf(pr), sel = FOOD().store || "aldi", home = STOCK().has(id);
   const recs = (recipes || []).filter(r => r.ingredients.some(l => { const x = parseIng(l); return (x.parts || [x]).some(pt => pt.pr?.id === id); })).sort((a, b) => a.name.localeCompare(b.name, "de"));
   const rows = prices.stores.map(st => { const v = priceOf(pr, st), b = pr.bio?.[st]; return `<div class="ir ${st === sel ? "sel" : ""}"><span>${STORES[st]}${own[st] ? ` <span class="tag">dein Preis</span>` : ""}</span><span class="num">${v != null ? eur(v) + (isEst(pr, st) ? "*" : "") : "–"}</span><span class="num">${b != null ? eur(b) : "–"}</span></div>`; }).join("");
-  return `<div class="sh"><div class="zhead">${prodImg(pr, "pbig")}<h2>${esc(prodLabel(pr))}</h2></div>${close}</div>
+  return `<div class="sh"><div class="zhead">${prodImg(pr, "pbig")}<div><h2>${esc(prodLabel(pr))}</h2>${nickOf(pr) ? `<div class="small muted">${esc(prodLabel0(pr))}</div>` : ""}</div></div>${close}</div>
+    <div class="field"><label for="nickIn">Eigener Name</label><input type="text" id="nickIn" data-nick="${esc(id)}" value="${esc(nickOf(pr))}" placeholder="${esc(prodLabel0(pr))}" autocomplete="off" enterkeyhint="done"></div>
     <div class="small muted">${esc(pr.group || "Vorrat & Gewürze")} · Packung ${fmtAmt(pr.pack, pr.unit)}${pr.pantry ? " · hält lange (Vorrat)" : ""}</div>${prodCredit(pr)}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
     <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span>Bio</span></div>${rows}</div>
@@ -3560,7 +3562,7 @@ const SUBST = {
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
 const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
   for (const k of ["favs", "stock", "bioItems"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
-  for (const k of ["ownPrices", "myProds"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
+  for (const k of ["ownPrices", "myProds", "nick"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
   saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
@@ -4139,7 +4141,7 @@ function shopList(entries){
     const r = recipeByName(n); if (!r) continue; recs.push({n, cnt, f, serv: r.servings || 1});
     for (const line of r.ingredients || []) {
       const x = prices ? parseIng(line) : null;
-      if (x && x.pr) for (const pt of x.parts || [x]) { const k = "p|" + pt.pr.id, it = items[k] || (items[k] = {name: pt.pr.name.replace(/\s*\(.*?\)\s*/g, " ").replace(/,\s+\d.*$/, "").replace(/\s+\d+\s*(g|Stück)$/, "").trim(), pr: pt.pr, amt: 0, recipes: new Set(), key: k});
+      if (x && x.pr) for (const pt of x.parts || [x]) { const k = "p|" + pt.pr.id, it = items[k] || (items[k] = {name: nickOf(pt.pr) || pt.pr.name.replace(/\s*\(.*?\)\s*/g, " ").replace(/,\s+\d.*$/, "").replace(/\s+\d+\s*(g|Stück)$/, "").trim(), pr: pt.pr, amt: 0, recipes: new Set(), key: k});
         it.amt += (pt.amt || (pt.pr.unit === "Stück" ? 0.5 : pt.pr.piece ? pt.pr.piece / 2 : 20)) * f; it.recipes.add(n); }
       if (x && x.pr) continue;
       const mm = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Bund|Handvoll|Pck\.?|Becher|Scheiben?)?\s+(.+)$/);
@@ -4184,7 +4186,10 @@ let prodUse = null, ingVocab = null;
 // Vorrat zuhause: Produkt-IDs in food.stock; Schalter food.stockOn (Standard an)
 const STOCK = () => new Set(FOOD().stock || []);
 const stockOn = () => FOOD().stockOn !== false && (FOOD().stock || []).length > 0;
-const prodLabel = pr => pr.name.replace(/\s*\(.*?\)/g, "").replace(/,\s+\d.*$/, "").trim();
+const prodLabel0 = pr => pr.name.replace(/\s*\(.*?\)/g, "").replace(/,\s+\d.*$/, "").trim();
+// Spitznamen je Produkt (food.nick) – gelten in Einkauf, Vorrat, Zutaten und beim Teilen
+const nickOf = pr => (pr && (FOOD().nick || {})[pr.id]) || "";
+const prodLabel = pr => nickOf(pr) || prodLabel0(pr);
 let stQ = "", reste = {have: lsGet("resteHave") || [], mode: lsGet("resteMode") || "nur", stock: true}, shopFromReste = false;
 const resteTerm = t => { const w = t.toLowerCase().trim().replace(/(en|n|e|s)$/, ""); return w.length >= 3 ? w : t.toLowerCase().trim(); };
 const resteHit = (text, term) => new RegExp("(^|[^a-zäöüß])" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
@@ -4361,6 +4366,12 @@ function shopText(){
   const cx = shopCtx(), done = new Set(lsGet(cx.key) || []), {groups} = shopList(cx.entries);
   return `Einkauf ${cx.title}\n` + groups.map(([g, a]) => `\n${g}\n` + a.filter(i => !done.has(i.key)).map(i => `- ${i.pr ? `${i.buy} ${i.name}` : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + i.unit : "") + " " : "") + i.name}`).join("\n")).join("\n");
 }
+let nickQ = "";
+function nickListHtml(){ if (!prices) { ensurePrices().then(() => { const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); }).catch(() => {}); return `<div class="small muted">Lade Lebensmittel …</div>`; }
+  const nk = FOOD().nick || {}, q = fold(nickQ.trim().toLowerCase());
+  const L = prices.products.filter(pr => q ? fold((prodLabel0(pr) + " " + (nk[pr.id] || "")).toLowerCase()).includes(q) : nk[pr.id]).sort((a, b) => prodLabel(a).localeCompare(prodLabel(b), "de")).slice(0, 30);
+  if (!L.length) return `<div class="small muted">${q ? "Nichts gefunden." : "Noch keine eigenen Namen. Oben suchen und Namen eintragen."}</div>`;
+  return `<div class="nickl">${L.map(pr => `<label class="nickr">${prodImg(pr, "pmini")}<span class="small">${esc(prodLabel0(pr))}</span><input type="text" data-nick="${pr.id}" value="${esc(nk[pr.id] || "")}" placeholder="eigener Name" autocomplete="off" aria-label="Eigener Name für ${esc(prodLabel0(pr))}"></label>`).join("")}</div>`; }
 function foodSettingsHtml(){
   const f = FOOD(), T = foodTarget(), url = S().icsUrl;
   return `<div class="card"><h2>Anzeige</h2>
@@ -4368,6 +4379,8 @@ function foodSettingsHtml(){
       <label class="check"><input type="checkbox" id="foodProdImg" ${f.prodImg !== false ? "checked" : ""}><span>Produktbilder in Einkauf und Zutaten<br><span class="small muted">Fotos von Wikipedia/Wikimedia Commons, Nachweis im Zutaten-Blatt.</span></span></label>
       <label class="check"><input type="checkbox" id="calMeals" ${calMeals ? "checked" : ""}><span>Essen im App-Kalender einblenden</span></label></div>
     ${ownCount() ? `<button type="button" class="lrow menu card" data-sheet="ownprices"><span class="mdot static">🧾</span><span class="lmain"><b>Meine Preise</b><span class="small muted">${ownCount()} Preise aus Kassenbons</span></span><span class="go">›</span></button>` : ""}
+    <div class="card"><h2>Eigene Namen</h2><div class="small muted">Gib Lebensmitteln deine Namen, z. B. „Haferdrink“ → „Hafermilch“. Sie gelten in Einkaufsliste, Vorrat und Zutaten.</div>
+      <input type="text" id="nickQ" value="${esc(nickQ)}" placeholder="🔎 Lebensmittel suchen" autocomplete="off" aria-label="Lebensmittel suchen"><div id="nickList">${nickListHtml()}</div></div>
     <div class="card"><h2>Küchengeräte</h2><div class="small muted">Antippen, was du hast – hervorgehoben heißt vorhanden.</div>
       <div class="chips devs">${Object.entries(KITCHEN).map(([k, l]) => `<button type="button" data-kitchen="${k}" aria-pressed="${kitchenHas().has(k)}">${l}</button>`).join("")}</div>
       <div class="small muted">${(() => { const dp = devParts(), n = dp.length ? recipes.filter(r => (r.dev || []).some(d => dp.includes("§" + d + "§"))).length : 0; return n ? `${n} Rezepte brauchen ein Gerät, das dir fehlt – der Plan tauscht sie gegen ähnliche.` : "Alle Rezepte sind mit deiner Küche machbar."; })()}</div>
@@ -4782,6 +4795,7 @@ function onInput(e){
   if (t.id === "noteIn") { cur.note = t.value; if (!t.value) clr("note"); touch(); return; }
   if (t.id === "effAct") { const v = Number(t.value), el = document.getElementById("effVal"); if (el) el.textContent = v ? `max. ${v} min` : "egal"; return; }
   if (t.id === "srQ") { srQ = t.value; renderSheetPart(["#srList"]); return; }
+  if (t.id === "nickQ") { nickQ = t.value; const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
@@ -4802,6 +4816,7 @@ async function onChange(e){
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
   if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
+  if (t.dataset.nick) { const v = t.value.trim().slice(0, 40), nk = Object.assign({}, FOOD().nick); if (v) nk[t.dataset.nick] = v; else delete nk[t.dataset.nick]; saveFood({nick: nk}); toast(v ? `Heißt jetzt „${v}“` : "Originalname wieder aktiv"); if (sheetKind === "zinfo") renderSheet(); return; }
   if (t.id === "foodPrices") { saveFood({prices: t.checked}); if (t.checked) ensurePrices().then(() => render()).catch(() => {}); return; }
   if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(ingSuggest(t.value, 1, reste.have)[0] || t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
   if (t.id === "rsStock") { reste.stock = t.checked; renderSheetPart(["#rsList"]); return; }
