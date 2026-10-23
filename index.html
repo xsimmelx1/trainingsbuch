@@ -2377,7 +2377,7 @@ function renderToday(){
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
-  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}<button type="button" class="snackbtn" data-sheet="snack" data-v="${selDate}">＋ Snack</button></div>`;
+  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}${todayFocus === "training" ? "" : `<button type="button" class="snackbtn" data-sheet="snack" data-v="${selDate}">＋ Snack</button>`}</div>`;
   h += gapBanner();
   {
     const pastD = selDate < todayIso(); // vergangene Tage: Essen nur als Übersicht mit „Nachtragen“
@@ -2946,7 +2946,7 @@ addEventListener("popstate", () => { if (sheetHist && sheet.open) { sheetHist = 
 function openSheet(kind, arg){
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
   if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
-  sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); renderSheet(); if (!sheet.open) sheet.showModal(); else sheet.scrollTop = 0; }
+  if (kind === "meal" && (sheetKind !== "meal" || sheetArg !== arg)) mealQ = ""; sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); renderSheet(); if (!sheet.open) sheet.showModal(); else sheet.scrollTop = 0; }
 function closeSheet(fromPop){ sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); }
 let sheetTarget = null;
 // Nur einen Teil des Blatts neu zeichnen (z. B. Reiter), damit laufende Videos nicht neu laden
@@ -3796,6 +3796,7 @@ function altMeals(k, curName){
   const nu = r => recipeNutri(r), score = r => Math.abs(nu(r).kcal - ref.kcal) / 8 + Math.abs(nu(r).protein - ref.protein);
   return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && nu(r).protein >= minP && recipeOk(r, re)).sort((a, b) => score(a) - score(b)).slice(0, 8);
 }
+let mealQ = "";
 function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
@@ -3804,13 +3805,17 @@ function mealSheet(arg){
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (m.def && dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
   setTimeout(() => sheet.classList.add("swapmode"), 0);
   return `<div class="swapbar">⇄ Du tauschst: <b>${esc(ref.name)}</b></div><div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${k}">✎ Was anderes gegessen</button><div class="lab">Tauschen</div>${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}<div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
+    <input type="text" id="mealQ" value="${esc(mealQ)}" placeholder="🔎 Gericht oder Zutat suchen" aria-label="Gericht suchen" autocomplete="off">
+    <div id="mealRes">${mealQ.trim().length >= 2 ? (() => { const q = fold(mealQ.trim()), are = avoidRe(), hits = recipes.filter(r => r.name !== m.name && recipeOk(r, are)).map(r => [r, Math.max(sugScore(r.name, q) * 2, sugScore((r.ingredients || []).join(" "), q))]).filter(x => x[1]).sort((a, b) => b[1] - a[1] || a[0].name.localeCompare(b[0].name, "de")).slice(0, 25);
+      return hits.length ? `<div class="lab sec">${hits.length} Treffer</div>` + hits.map(([r]) => opt(r.name, "")).join("") : `<div class="small muted">Kein Rezept gefunden – unten kannst du eigenes Essen eintragen.</div>`; })() : ""}</div>
+    <div id="mealAlt" ${mealQ.trim().length >= 2 ? "hidden" : ""}>
     <button class="btn small" type="button" data-random="meal" data-v="${d}|${k}" data-cur="${esc(typeof m.name === "object" ? m.def || "" : m.name)}">🎲 Zufällig vorschlagen</button>
     ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
     ${(() => { const sl = mealPlan.slots.find(x => x.k === k), are = avoidRe(), fv = recipes.filter(r => isFav(r.name) && r.name !== m.name && sl.cats.includes(r.category) && recipeOk(r, are));
       return `<div class="lab sec">★ Deine Favoriten</div>${fv.length ? fv.map(r => opt(r.name, "Favorit")).join("") : `<div class="small muted">Noch keine passenden Favoriten – im Rezept mit ☆ markieren.</div>`}<div class="lab sec">Ähnliche Gerichte</div>`; })()}
     ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
-    ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}
+    ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}</div>
     ${ownForm("slot")}
 `;
 }
@@ -4907,6 +4912,7 @@ function onInput(e){
   if (t.id === "noteIn") { cur.note = t.value; if (!t.value) clr("note"); touch(); return; }
   if (t.id === "effAct") { const v = Number(t.value), el = document.getElementById("effVal"); if (el) el.textContent = v ? `max. ${v} min` : "egal"; return; }
   if (t.id === "srQ") { srQ = t.value; renderSheetPart(["#srList"]); return; }
+  if (t.id === "mealQ") { mealQ = t.value; renderSheetPart(["#mealRes"]); const alt = sheet.querySelector("#mealAlt"); if (alt) alt.hidden = mealQ.trim().length >= 2; return; }
   if (t.id === "nickQ") { nickQ = t.value; const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
