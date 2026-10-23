@@ -11,21 +11,27 @@
   "url": "https://commons.wikimedia.org/wiki/File:Skyr.is_me%C3%B0_vanillu.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Schnee (talk)",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/2458768/35110961_digital-image.png?imwidth=240",
+  "rewe": "Arla Skyr Natur 450g"
  },
  "eier": {
   "title": "File:White chicken egg square.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:White_chicken_egg_square.jpg",
   "license": "CC BY 2.0",
   "artist": "Ren West, square crop by uploader",
-  "via": "de:Hühnerei"
+  "via": "de:Hühnerei",
+  "src": "https://img.rewe-static.de/8470640/31525372_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Eier Freilandhaltung 10 Stück"
  },
  "getrTomaten": {
   "title": "File:Sun-dried tomatoes.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Sun-dried_tomatoes.jpg",
   "license": "CC BY 2.0",
   "artist": "Andrew Deacon",
-  "via": "en:Sun-dried tomato"
+  "via": "en:Sun-dried tomato",
+  "src": "https://img.rewe-static.de/8470738/32512093_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio getrocknete Tomaten 180g"
  },
  "mangochutney": {
   "title": "File:Chutneykarnataka.jpg",
@@ -53,35 +59,45 @@
   "url": "https://commons.wikimedia.org/wiki/File:Roasted_Peanuts_with_shell.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Sanjay Acharya",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7780066/36335512_digital-image.png?imwidth=240",
+  "rewe": "Ültje Erdnüsse geröstet ungesalzen 180g"
  },
  "haselnuesse": {
   "title": "File:Hazelnuts (Corylus avellana) - whole with kernels.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Hazelnuts_(Corylus_avellana)_-_whole_with_kernels.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Ivar Leidus",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/4744659/975570_digital-image.png?imwidth=240",
+  "rewe": "Seeberger Haselnusskerne 200g"
  },
  "studentenfutter": {
   "title": "File:Studentenfutter 01.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Studentenfutter_01.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "Thogru",
-  "via": "de:Studentenfutter"
+  "via": "de:Studentenfutter",
+  "src": "https://img.rewe-static.de/0892441/9374090_digital-image.png?imwidth=240",
+  "rewe": "Maryland Studentenfutter 300g"
  },
  "osaft": {
   "title": "File:Orangejuice.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Orangejuice.jpg",
   "license": "CC0",
   "artist": "rawpixel.com",
-  "via": "de:Orangensaft"
+  "via": "de:Orangensaft",
+  "src": "https://img.rewe-static.de/0989114/7608960_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Orangensaft 1l"
  },
  "griess": {
   "title": "File:Sa semolina far.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Sa_semolina_far.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Sanjay ach",
-  "via": "de:Grieß"
+  "via": "de:Grieß",
+  "src": "https://img.rewe-static.de/7848384/35163918_digital-image.png?imwidth=240",
+  "rewe": "ja! Weichweizengriess 500g"
  },
  "cremefraiche": {
   "title": "File:Strawberries and crème fraîche.jpg",
@@ -95,21 +111,27 @@
   "url": "https://commons.wikimedia.org/wiki/File:Red_Curry_with_Chicken_-_Little_Thai,_Brighton_2024-03-01.jpg",
   "license": "CC0",
   "artist": "Andy Li",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/1423303/22629316_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Rote Curry-Paste 110g"
  },
  "currypulver": {
   "title": "File:Nahrungsmittel 2012-07-08-9517.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Nahrungsmittel_2012-07-08-9517.jpg",
   "license": "CC0",
   "artist": "Slick",
-  "via": "de:Currypulver"
+  "via": "de:Currypulver",
+  "src": "https://img.rewe-static.de/0577458/7236080_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Currypulver 50g"
  },
  "kerne": {
   "title": "File:Pepita de calabaza.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Pepita_de_calabaza.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Dmitry Makeev",
-  "via": "en:Pumpkin seed"
+  "via": "en:Pumpkin seed",
+  "src": "https://img.rewe-static.de/8820911/36891829_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Kürbiskerne 200g"
  },
  "kuerbis": {
   "title": "File:Squash (1351012634).jpg",
@@ -130,7 +152,9 @@
   "url": "https://commons.wikimedia.org/wiki/File:2019-11-28_14_33_54_A_bowl_of_olives_laid_out_for_Thanksgiving_Dinner_in_the_Parkway_Village_section_of_Ewing_Township,_Mercer_County,_New_Jersey.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Famartin",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/9850159/50310823_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Kalamata Oliven 350g"
  },
  "seidentofu": {
   "title": "File:Japanese SilkyTofu (Kinugoshi Tofu).JPG",
@@ -144,14 +168,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Spinach_catalan_style_-_Espinacas_a_la_catalana_(4645147728).jpg",
   "license": "CC BY 2.0",
   "artist": "Lablascovegmenu from London",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/0871215/5878790_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Blattspinat 600g"
  },
  "schwarzeBohnen": {
   "title": "File:Black beans (1126927794).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Black_beans_(1126927794).jpg",
   "license": "CC BY 2.0",
   "artist": "Father.Jack from Coventry, UK",
-  "via": "en:Black turtle bean"
+  "via": "en:Black turtle bean",
+  "src": "https://img.rewe-static.de/9518278/53787186_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Schwarze Bohnen 400g"
  },
  "linsenBraun": {
   "title": "File:Brown lentils.JPG",
@@ -165,56 +193,72 @@
   "url": "https://commons.wikimedia.org/wiki/File:Brown_Flax_Seeds.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Sanjay Acharya",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7595609/42980928_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Leinsamen geschrotet 400g"
  },
  "kichererbsen": {
   "title": "File:Ordinary chickpeas in a ceramic bowl.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Ordinary_chickpeas_in_a_ceramic_bowl.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "AlixSaz",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8382114/30803543_digital-image.png?imwidth=240",
+  "rewe": "Delikatessa Kichererbsen 400g"
  },
  "magermilchpulver": {
   "title": "File:PowderedMilk.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:PowderedMilk.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "",
-  "via": "de:Milchpulver"
+  "via": "de:Milchpulver",
+  "src": "https://img.rewe-static.de/0525071/50000295_digital-image.png?imwidth=240",
+  "rewe": "Sucofin Magermilchpulver 250g"
  },
  "kokosmilch": {
   "title": "File:Coconut milk melting.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Coconut_milk_melting.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "S Sepp",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7018956/26754027_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Kokosmilch fettreduziert 400ml"
  },
  "sojadrink": {
   "title": "File:002-soymilk.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:002-soymilk.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Kjokkenutstyr",
-  "via": "de:Sojamilch"
+  "via": "de:Sojamilch",
+  "src": "https://img.rewe-static.de/7164869/28526431_digital-image.png?imwidth=240",
+  "rewe": "Berief Bio Soja Drink Naturell 1l"
  },
  "raeuchertofu": {
   "title": "File:Japanese SilkyTofu (Kinugoshi Tofu).JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Japanese_SilkyTofu_(Kinugoshi_Tofu).JPG",
   "license": "CC BY-SA 3.0",
   "artist": "DryPot",
-  "via": "de:Räuchertofu"
+  "via": "de:Räuchertofu",
+  "src": "https://img.rewe-static.de/9886986/49880556_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Räuchertofu Mandel-Sesam 200g"
  },
  "veghack": {
   "title": "File:Pflanzlicher Fleischersatz.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Pflanzlicher_Fleischersatz.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Tischbeinahe",
-  "via": "de:Fleischersatz"
+  "via": "de:Fleischersatz",
+  "src": "https://img.rewe-static.de/9986077/45083180_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Veganes Hack 270g"
  },
  "sojagranulat": {
   "title": "File:Soja texturiert.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Soja_texturiert.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Elke Wetzig (Elya)",
-  "via": "de:Texturiertes Soja"
+  "via": "de:Texturiertes Soja",
+  "src": "https://img.rewe-static.de/3436747/28527597_digital-image.png?imwidth=240",
+  "rewe": "Vantastic foods Soja-Granulat 300g"
  },
  "eiklar": {
   "title": "File:Chicken egg01 monovular.jpg",
@@ -228,42 +272,54 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cottage_Cheese.jpg",
   "license": "CC BY-SA 2.0",
   "artist": "Stu Spivack - flickr.com",
-  "via": "de:Hüttenkäse"
+  "via": "de:Hüttenkäse",
+  "src": "https://img.rewe-static.de/1906432/21232282_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Körniger Frischkäse 200g"
  },
  "frischkaese": {
   "title": "File:B Frischkaese mit lauch und Manderinen 2016-01-25 11-04-22 - 0011.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:B_Frischkaese_mit_lauch_und_Manderinen_2016-01-25_11-04-22_-_0011.JPG",
   "license": "CC0",
   "artist": "Usien",
-  "via": "de:Frischkäse"
+  "via": "de:Frischkäse",
+  "src": "https://img.rewe-static.de/2384477/9981810_digital-image.png?imwidth=240",
+  "rewe": "Exquisa Frischkäse Fitline Natur 200g"
  },
  "hartkaese": {
   "title": "File:Grana Padano-Carved-1.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Grana_Padano-Carved-1.jpg",
   "license": "CC BY 3.0",
   "artist": "Tamorlan",
-  "via": "de:Grana Padano"
+  "via": "de:Grana Padano",
+  "src": "https://img.rewe-static.de/8249232/28775648_digital-image.png?imwidth=240",
+  "rewe": "Marca Italia Grana Padano 200g"
  },
  "reibekaese": {
   "title": "File:Flickr - cyclonebill - Parmesan.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Flickr_-_cyclonebill_-_Parmesan.jpg",
   "license": "CC BY-SA 2.0",
   "artist": "cyclonebill",
-  "via": "en:Grated cheese"
+  "via": "en:Grated cheese",
+  "src": "https://img.rewe-static.de/8426184/31369024_digital-image.png?imwidth=240",
+  "rewe": "ja! Geriebener Gouda 250g"
  },
  "magerquark": {
   "title": "File:Skimmed milk quark on spoon.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Skimmed_milk_quark_on_spoon.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "SKopp",
-  "via": "de:Quark (Lebensmittel)"
+  "via": "de:Quark (Lebensmittel)",
+  "src": "https://img.rewe-static.de/3068788/26055835_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Speisequark Magerstufe 250g"
  },
  "linsennudeln": {
   "title": "File:(Pasta) by David Adam Kess (pic.2).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:(Pasta)_by_David_Adam_Kess_(pic.2).jpg",
   "license": "CC BY-SA 4.0",
   "artist": "David Adam Kess",
-  "via": "en:Pasta"
+  "via": "en:Pasta",
+  "src": "https://img.rewe-static.de/9899469/49590180_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Fusilli Rote Linse 250g"
  },
  "roteLinsen": {
   "title": "File:Split Red Lentil.jpg",
@@ -277,35 +333,45 @@
   "url": "https://commons.wikimedia.org/wiki/File:Four_Different_Varieties_of_Green_Beans_(Phaseolus_vulgaris).jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Christopher Franz",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/0371368/23162727_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Grüne Bohnen 280g"
  },
  "kidney": {
   "title": "File:Kidney beans.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Kidney_beans.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Sanjay Acharya",
-  "via": "de:Kidneybohne"
+  "via": "de:Kidneybohne",
+  "src": "https://img.rewe-static.de/0920127/22615412_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Kidney-Bohnen 285g"
  },
  "tomatenGehackt": {
   "title": "File:Pomidor turshusu e-citizen.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Pomidor_turshusu_e-citizen.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Moonsun1981",
-  "via": "en:Canned tomato"
+  "via": "en:Canned tomato",
+  "src": "https://img.rewe-static.de/7211940/27781052_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl stückige Tomaten 400g"
  },
  "tomatenPassiert": {
   "title": "File:Tomato passata.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Tomato_passata.jpg",
   "license": "CC0",
   "artist": "Tabby",
-  "via": "en:Tomato purée"
+  "via": "en:Tomato purée",
+  "src": "https://img.rewe-static.de/9503708/53865206_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Passierte Tomaten 500g"
  },
  "tomatenmark": {
   "title": "File:Tomato paste on spoon.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Tomato_paste_on_spoon.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "SKopp",
-  "via": "de:Tomatenmark"
+  "via": "de:Tomatenmark",
+  "src": "https://img.rewe-static.de/7317315/54083823_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Tomatenmark 200g"
  },
  "cherrytomaten": {
   "title": "File:Tomatoes-on-the-bush.jpg",
@@ -326,168 +392,216 @@
   "url": "https://commons.wikimedia.org/wiki/File:Korb_mit_Br%C3%B6tchen.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "3268zauber",
-  "via": "en:Bread"
+  "via": "en:Bread",
+  "src": "https://img.rewe-static.de/1449058/20517793_digital-image.png?imwidth=240",
+  "rewe": "Mestemacher Eiweißbrot 250g"
  },
  "knaeckebrot": {
   "title": "File:Knaeckebroed.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Knaeckebroed.jpg",
   "license": "Public domain",
   "artist": "Cymydog Naakka",
-  "via": "de:Knäckebrot"
+  "via": "de:Knäckebrot",
+  "src": "https://img.rewe-static.de/1994794/6072800_digital-image.png?imwidth=240",
+  "rewe": "Wasa Knäckebrot Vollkorn Roggen 260g"
  },
  "erdnussmus": {
   "title": "File:PeanutButter.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:PeanutButter.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "PiccoloNamek at English Wikipedia",
-  "via": "de:Erdnussbutter"
+  "via": "de:Erdnussbutter",
+  "src": "https://img.rewe-static.de/0946608/6439830_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Creamy Erdnussbutter 250g"
  },
  "erbsen": {
   "title": "File:Frozen peas.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Frozen_peas.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "Photo by and (c) 2007 Jina Lee",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/2277758/23422035_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Junge Erbsen 450g"
  },
  "milch": {
   "title": "File:Milk glass.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Milk_glass.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Stefan Kühn",
-  "via": "de:Milch"
+  "via": "de:Milch",
+  "src": "https://img.rewe-static.de/0197877/1163210_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Fettarme H-Milch 1,5% 1l"
  },
  "feta": {
   "title": "File:Feta Cheese.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Feta_Cheese.jpg",
   "license": "CC BY-SA 2.5",
   "artist": "JJ Harrison (https://www.jjharrison.com.au/)",
-  "via": "de:Feta"
+  "via": "de:Feta",
+  "src": "https://img.rewe-static.de/7827840/34863522_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Hirtenkäse 45% 200g"
  },
  "harzer": {
   "title": "File:Harzer Käse 13 WikiCheese Lokal K.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Harzer_K%C3%A4se_13_WikiCheese_Lokal_K.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Elke Wetzig",
-  "via": "de:Harzer Käse"
+  "via": "de:Harzer Käse",
+  "src": "https://img.rewe-static.de/1921270/22778075_digital-image.png?imwidth=240",
+  "rewe": "Kleehof Harzer Käse 200g"
  },
  "mozzarella": {
   "title": "File:Mozzarella di bufala3.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Mozzarella_di_bufala3.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Popo le Chien",
-  "via": "de:Mozzarella"
+  "via": "de:Mozzarella",
+  "src": "https://img.rewe-static.de/7801213/36351444_digital-image.png?imwidth=240",
+  "rewe": "ja! Mozzarella light 125g"
  },
  "kochsahne": {
   "title": "File:01 Mmm... Apple Crisp with Whipped Cream.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:01_Mmm..._Apple_Crisp_with_Whipped_Cream.jpg",
   "license": "CC BY 2.0",
   "artist": "jeffreyw",
-  "via": "en:Cream"
+  "via": "en:Cream",
+  "src": "https://img.rewe-static.de/0191145/26233048_digital-image.png?imwidth=240",
+  "rewe": "Weihenstephan Sahne zum Kochen 250g"
  },
  "butter": {
   "title": "File:NCI butter.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:NCI_butter.jpg",
   "license": "Public domain",
   "artist": "Renee Comet (National Cancer Institute)",
-  "via": "de:Butter"
+  "via": "de:Butter",
+  "src": "https://img.rewe-static.de/9558571/51597118_digital-image.png?imwidth=240",
+  "rewe": "Deutsche Markenbutter 250g"
  },
  "tofu": {
   "title": "File:Japanese SilkyTofu (Kinugoshi Tofu).JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Japanese_SilkyTofu_(Kinugoshi_Tofu).JPG",
   "license": "CC BY-SA 3.0",
   "artist": "DryPot",
-  "via": "de:Tofu"
+  "via": "de:Tofu",
+  "src": "https://img.rewe-static.de/8889635/48593230_digital-image.png?imwidth=240",
+  "rewe": "Taifun Bio Tofu natur 200g"
  },
  "edamame": {
   "title": "File:Edamame by Zesmerelda in Chicago.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Edamame_by_Zesmerelda_in_Chicago.jpg",
   "license": "CC BY-SA 2.0",
   "artist": "Tammy Green (aka Zesmerelda) from Chicago Upscale Dining + L",
-  "via": "de:Edamame"
+  "via": "de:Edamame",
+  "src": "https://img.rewe-static.de/7633686/41413830_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Edamame 130g"
  },
  "linsendose": {
   "title": "File:Brown lentils.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Brown_lentils.JPG",
   "license": "CC BY-SA 4.0",
   "artist": "Illustratedjc",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8372258/30373988_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Braune Linsen 265g"
  },
  "mais": {
   "title": "File:VegCorn.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:VegCorn.jpg",
   "license": "Public domain",
   "artist": "The original Uploader was wstoakLL at English Wikipedia",
-  "via": "de:Zuckermais"
+  "via": "de:Zuckermais",
+  "src": "https://img.rewe-static.de/7254451/29124007_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Sonnenmais 285g"
  },
  "haferflocken": {
   "title": "File:Haferflocken2.png",
   "url": "https://commons.wikimedia.org/wiki/File:Haferflocken2.png",
   "license": "CC BY-SA 4.0",
   "artist": "Florian Schäffer",
-  "via": "de:Haferflocken"
+  "via": "de:Haferflocken",
+  "src": "https://img.rewe-static.de/3011204/26376356_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio zarte Haferflocken 500g"
  },
  "reis": {
   "title": "File:Basmati Rice India, raw.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Basmati_Rice_India,_raw.jpg",
   "license": "CC BY 2.0",
   "artist": "cookbookman17",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8886901/38596158_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Basmati Reis 500g"
  },
  "nudeln": {
   "title": "File:Spaghettoni.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Spaghettoni.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Nnaluci",
-  "via": "de:Spaghetti"
+  "via": "de:Spaghetti",
+  "src": "https://img.rewe-static.de/1483021/20428098_digital-image.png?imwidth=240",
+  "rewe": "Barilla Spaghetti Nr.5 500g"
  },
  "couscous": {
   "title": "File:Moroccan cuscus, from Casablanca, September 2018.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Moroccan_cuscus,_from_Casablanca,_September_2018.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Lmmima",
-  "via": "de:Couscous"
+  "via": "de:Couscous",
+  "src": "https://img.rewe-static.de/0294337/4775630_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Couscous 500g"
  },
  "quinoa": {
   "title": "File:Bolivian quinoa (1).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Bolivian_quinoa_(1).jpg",
   "license": "CC0",
   "artist": "Fumikas Sagisavas",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/9029547/42309344_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Quinoa Weiß 500g"
  },
  "vollkornbrot": {
   "title": "File:Vollkornbrot z01.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Vollkornbrot_z01.JPG",
   "license": "CC BY-SA 2.5",
   "artist": "Zyance",
-  "via": "de:Vollkornbrot"
+  "via": "de:Vollkornbrot",
+  "src": "https://img.rewe-static.de/0881434/27231603_digital-image.png?imwidth=240",
+  "rewe": "Harry Vollkornbrot geschnitten 1kg"
  },
  "tortillas": {
   "title": "File:NCI flour tortillas.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:NCI_flour_tortillas.jpg",
   "license": "Public domain",
   "artist": "",
-  "via": "en:Wheat tortilla"
+  "via": "en:Wheat tortilla",
+  "src": "https://img.rewe-static.de/8229827/29387632_digital-image.png?imwidth=240",
+  "rewe": "Old El Paso 6 Tortillas"
  },
  "loeffelbiskuits": {
   "title": "File:Biskotten-02.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Biskotten-02.jpg",
   "license": "Public domain",
   "artist": "Priwo",
-  "via": "de:Löffelbiskuit"
+  "via": "de:Löffelbiskuit",
+  "src": "https://img.rewe-static.de/2223785/24632554_digital-image.png?imwidth=240",
+  "rewe": "ja! Löffelbiskuit 400g"
  },
  "mehl": {
   "title": "File:Flours.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Flours.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Mudd1",
-  "via": "de:Mehl"
+  "via": "de:Mehl",
+  "src": "https://img.rewe-static.de/1211124/15934640_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Weizenmehl Type 405 1kg"
  },
  "tkbeeren": {
   "title": "File:Berries (USDA ARS).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Berries_(USDA_ARS).jpg",
   "license": "Public domain",
   "artist": "Scott Bauer, USDA ARS",
-  "via": "de:Beerenobst"
+  "via": "de:Beerenobst",
+  "src": "https://img.rewe-static.de/2317794/25991636_digital-image.png?imwidth=240",
+  "rewe": "ja! Beeren-Mischung 750g"
  },
  "banane": {
   "title": "File:Bananas on black background 02.jpg",
@@ -522,7 +636,9 @@
   "url": "https://commons.wikimedia.org/wiki/File:0.2014_Cucurbita_pepo_subsp._pepo_convar._giromontiina_-_Sanok.JPG",
   "license": "CC BY-SA 4.0",
   "artist": "Silar",
-  "via": "de:Zucchini"
+  "via": "de:Zucchini",
+  "src": "https://img.rewe-static.de/0482161/24570156_digital-image.png?imwidth=240",
+  "rewe": "Zucchini grün ca. 350g"
  },
  "tomaten": {
   "title": "File:Tomatoes-on-the-bush.jpg",
@@ -599,105 +715,135 @@
   "url": "https://commons.wikimedia.org/wiki/File:Tahina.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "Gilabrand",
-  "via": "en:Tahini"
+  "via": "en:Tahini",
+  "src": "https://img.rewe-static.de/8961375/40729112_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Tahini Sesammus 300g"
  },
  "chia": {
   "title": "File:Seed of chia (Salvia hispanica)Salvia hispanica group.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Seed_of_chia_(Salvia_hispanica)Salvia_hispanica_group.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Keegan Fields",
-  "via": "en:Chia seed"
+  "via": "en:Chia seed",
+  "src": "https://img.rewe-static.de/8185452/28936661_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Chia-Samen 300g"
  },
  "walnuesse": {
   "title": "File:Walnuts - whole and open with halved kernel.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Walnuts_-_whole_and_open_with_halved_kernel.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Ivar Leidus",
-  "via": "en:Walnut"
+  "via": "en:Walnut",
+  "src": "https://img.rewe-static.de/4745019/7360380_digital-image.png?imwidth=240",
+  "rewe": "Seeberger Walnusskerne 150g"
  },
  "cashews": {
   "title": "File:Cashew nuts with skin.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Cashew_nuts_with_skin.jpg",
   "license": "CC0",
   "artist": "Fumikas Sagisavas",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/0039464/3951970_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Cashewkerne 250g"
  },
  "oel": {
   "title": "File:02015 1201 Rapsöl in Polen.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:02015_1201_Raps%C3%B6l_in_Polen.JPG",
   "license": "CC BY-SA 4.0",
   "artist": "Silar",
-  "via": "de:Rapsöl"
+  "via": "de:Rapsöl",
+  "src": "https://img.rewe-static.de/9508003/56809209_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Reines Rapsöl 0,75l"
  },
  "sojasauce": {
   "title": "File:Soja Sauce zum Sushi (25966205154).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Soja_Sauce_zum_Sushi_(25966205154).jpg",
   "license": "CC BY 2.0",
   "artist": "Tim Reckmann from Hamm, Deutschland",
-  "via": "de:Sojasauce"
+  "via": "de:Sojasauce",
+  "src": "https://img.rewe-static.de/3005291/9248970_digital-image.png?imwidth=240",
+  "rewe": "Kikkoman Soja Sauce 150ml"
  },
  "bruehe": {
   "title": "File:Hühnerbrühe-1.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:H%C3%BChnerbr%C3%BChe-1.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Rainer Z ...",
-  "via": "de:Brühe"
+  "via": "de:Brühe",
+  "src": "https://img.rewe-static.de/7973498/31914285_digital-image.png?imwidth=240",
+  "rewe": "Maggi Gemüse Brühe"
  },
  "honig": {
   "title": "File:Runny hunny.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Runny_hunny.jpg",
   "license": "Public domain",
   "artist": "Scott Bauer, USDA ARS",
-  "via": "de:Honig"
+  "via": "de:Honig",
+  "src": "https://img.rewe-static.de/1374516/20811206_digital-image.png?imwidth=240",
+  "rewe": "Langnese Wildblüten-Honig 500g"
  },
  "kakao": {
   "title": "File:Cocoa-powder-1883108.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Cocoa-powder-1883108.jpg",
   "license": "CC0",
   "artist": "thecakeschool",
-  "via": "de:Kakaopulver"
+  "via": "de:Kakaopulver",
+  "src": "https://img.rewe-static.de/0960141/20425677_digital-image.png?imwidth=240",
+  "rewe": "Dr. Oetker Kakao zum Backen 100g"
  },
  "staerke": {
   "title": "File:Cornstarch mixed with water.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Cornstarch_mixed_with_water.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Picasa author kalaya",
-  "via": "en:Corn starch"
+  "via": "en:Corn starch",
+  "src": "https://img.rewe-static.de/8245234/28972880_digital-image.png?imwidth=240",
+  "rewe": "ja! Feine Speisestärke 400g"
  },
  "haferdrink": {
   "title": "File:Oat milk glass and bottles.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Oat_milk_glass_and_bottles.jpg",
   "license": "CC BY 4.0",
   "artist": "Shisma",
-  "via": "de:Haferdrink"
+  "via": "de:Haferdrink",
+  "src": "https://img.rewe-static.de/9515783/53617764_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Barista Hafer 1l"
  },
  "cuisine": {
   "title": "File:Oat milk glass and bottles.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Oat_milk_glass_and_bottles.jpg",
   "license": "CC BY 4.0",
   "artist": "Shisma",
-  "via": "de:Haferdrink"
+  "via": "de:Haferdrink",
+  "src": "https://img.rewe-static.de/9909212/47268867_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio pflanzlich Hafercreme Cuisine 200ml"
  },
  "margarine": {
   "title": "File:FD 2a.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:FD_2a.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Helge Höpfner",
-  "via": "de:Margarine"
+  "via": "de:Margarine",
+  "src": "https://img.rewe-static.de/7877846/2088350_digital-image.png?imwidth=240",
+  "rewe": "Othüna Pflanzenmargarine 250g"
  },
  "pflanzendrink": {
   "title": "File:Cononut milk.JPG",
   "url": "https://commons.wikimedia.org/wiki/File:Cononut_milk.JPG",
   "license": "CC BY-SA 3.0",
   "artist": "S Sepp",
-  "via": "en:Plant milk"
+  "via": "en:Plant milk",
+  "src": "https://img.rewe-static.de/9515783/53617764_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Barista Hafer 1l"
  },
  "zucker": {
   "title": "File:Sucre blanc cassonade complet rapadura.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Sucre_blanc_cassonade_complet_rapadura.jpg",
   "license": "Public domain",
   "artist": "Romain Behar",
-  "via": "de:Zucker"
+  "via": "de:Zucker",
+  "src": "https://img.rewe-static.de/4958179/1698280_digital-image.png?imwidth=240",
+  "rewe": "Sweet Family Feiner Zucker 1kg"
  },
  "lauch": {
   "title": "File:Leek on white background - 0947.jpg",
@@ -711,14 +857,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Sesame_seed_hamburger_buns.jpg",
   "license": "CC BY 2.0",
   "artist": "jeffreyw",
-  "via": "de:Hamburgerbrötchen"
+  "via": "de:Hamburgerbrötchen",
+  "src": "https://img.rewe-static.de/7219821/32510789_digital-image.png?imwidth=240",
+  "rewe": "Butcher's Sesam Burger Buns 4 Stück"
  },
  "schokolade": {
   "title": "File:Schokolade-schwarz.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Schokolade-schwarz.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Simon A. Eugster",
-  "via": "de:Zartbitterschokolade"
+  "via": "de:Zartbitterschokolade",
+  "src": "https://img.rewe-static.de/7626003/42944523_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Zartbitterschokolade 50% 100g"
  },
  "avocado": {
   "title": "File:Avocado Hass - single and halved.jpg",
@@ -732,14 +882,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Halloumi-1.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Rainer Zenz",
-  "via": "de:Halloumi"
+  "via": "de:Halloumi",
+  "src": "https://img.rewe-static.de/9507625/52727939_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Halloumi 200g"
  },
  "joghurt": {
   "title": "File:Joghurt.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Joghurt.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
-  "via": "de:Joghurt"
+  "via": "de:Joghurt",
+  "src": "https://img.rewe-static.de/0754434/6006570_digital-image.png?imwidth=240",
+  "rewe": "ja! Fettarmer Joghurt 1,5% 500g"
  },
  "mango": {
   "title": "File:Mangos - single and halved.jpg",
@@ -795,35 +949,45 @@
   "url": "https://commons.wikimedia.org/wiki/File:Pita_From_Greece.jpg",
   "license": "CC BY 2.0",
   "artist": "",
-  "via": "de:Pita"
+  "via": "de:Pita",
+  "src": "https://img.rewe-static.de/8568062/33589596_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Fladenbrot 500g"
  },
  "falafel": {
   "title": "File:Falafels 2.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Falafels_2.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Popo le Chien",
-  "via": "de:Falafel"
+  "via": "de:Falafel",
+  "src": "https://img.rewe-static.de/7250357/28506455_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio pflanzlich Falafel Trockenmischung 175g"
  },
  "senf": {
   "title": "File:Senf-1.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Senf-1.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
-  "via": "de:Senf"
+  "via": "de:Senf",
+  "src": "https://img.rewe-static.de/6685234/2898580_digital-image.png?imwidth=240",
+  "rewe": "Bautz'ner Senf mittelscharf 200ml"
  },
  "essig": {
   "title": "File:Balsamico-1.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Balsamico-1.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
-  "via": "de:Aceto Balsamico"
+  "via": "de:Aceto Balsamico",
+  "src": "https://img.rewe-static.de/2502157/28029214_digital-image.png?imwidth=240",
+  "rewe": "Mazzetti Aceto Balsamico di Modena"
  },
  "pinienkerne": {
   "title": "File:Pinoli.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Pinoli.jpg",
   "license": "CC BY-SA 2.0 de",
   "artist": "Quellenangabe und Beleg an burgkirsch(at)web.de erbeten.",
-  "via": "de:Pinienkerne"
+  "via": "de:Pinienkerne",
+  "src": "https://img.rewe-static.de/1460408/21422907_digital-image.png?imwidth=240",
+  "rewe": "Seeberger Pinienkerne 50g"
  },
  "sellerie": {
   "title": "File:Celery-Root 43456-480x360 (4811468362).jpg",
@@ -837,14 +1001,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Concentrado_de_Agave.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Niclas113",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/0940075/8106430_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Agavendicksaft 250ml"
  },
  "jalapenos": {
   "title": "File:Immature jalapeno capsicum annuum var annuum.jpeg",
   "url": "https://commons.wikimedia.org/wiki/File:Immature_jalapeno_capsicum_annuum_var_annuum.jpeg",
   "license": "CC BY-SA 3.0",
   "artist": "",
-  "via": "de:Jalapeño"
+  "via": "de:Jalapeño",
+  "src": "https://img.rewe-static.de/2286314/23565652_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Jalapeños in Scheiben 160g"
  },
  "tempeh": {
   "title": "File:Tempeh (8681605421).jpg",
@@ -858,7 +1026,9 @@
   "url": "https://commons.wikimedia.org/wiki/File:Bulgur.JPG",
   "license": "Public domain",
   "artist": "Maduixa at Serbian Wikipedia",
-  "via": "de:Bulgur"
+  "via": "de:Bulgur",
+  "src": "https://img.rewe-static.de/6050395/22248014_digital-image.png?imwidth=240",
+  "rewe": "Suntat Bulgur grob 500g"
  },
  "suesskartoffel": {
   "title": "File:Sweet potato sprouting slips.jpg",
@@ -872,14 +1042,18 @@
   "url": "https://commons.wikimedia.org/wiki/File:Siracha_sauce.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Takeaway",
-  "via": "en:Sriracha"
+  "via": "en:Sriracha",
+  "src": "https://img.rewe-static.de/3253918/26552447_digital-image.png?imwidth=240",
+  "rewe": "Flying Goose Sriracha 200ml"
  },
  "peperoni": {
   "title": "File:Capsicum -Chili - Peperoncino - Il Viagra Calabrese - Calabria - Italy - July 17th 2013 - 02.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Capsicum_-Chili_-_Peperoncino_-_Il_Viagra_Calabrese_-_Calabria_-_Italy_-_July_17th_2013_-_02.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Norbert Nagel",
-  "via": "en:Peperoncino"
+  "via": "en:Peperoncino",
+  "src": "https://img.rewe-static.de/0710573/21100233_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Peperoni 130g"
  },
  "blumenkohl": {
   "title": "File:Bloemkool.jpg",
@@ -907,7 +1081,9 @@
   "url": "https://commons.wikimedia.org/wiki/File:Peultjes_peultjes_Pisum_sativum_mange-tout.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Rasbak",
-  "via": "de:Zuckererbse"
+  "via": "de:Zuckererbse",
+  "src": "https://img.rewe-static.de/8088224/29613863_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Kaiserschoten 200g"
  },
  "birne": {
   "title": "File:Bowl of fruit reflection.jpg",
@@ -942,28 +1118,36 @@
   "url": "https://commons.wikimedia.org/wiki/File:Camembert_(Cheese).jpg",
   "license": "CC BY-SA 3.0",
   "artist": "",
-  "via": "de:Camembert"
+  "via": "de:Camembert",
+  "src": "https://img.rewe-static.de/7671989/2827980_digital-image.png?imwidth=240",
+  "rewe": "Le Rustique Camembert 250g"
  },
  "miso": {
   "title": "File:Miso 001.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Miso_001.jpg",
   "license": "CC0",
   "artist": "https://publicdomainq.net/miso-0018849/",
-  "via": "de:Miso"
+  "via": "de:Miso",
+  "src": "https://img.rewe-static.de/1964150/27036480_digital-image.png?imwidth=240",
+  "rewe": "Miyako Miso Paste hell 150g"
  },
  "hummus": {
   "title": "File:Houmous.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Houmous.jpg",
   "license": "CC0",
   "artist": "Popo le Chien",
-  "via": "de:Hummus"
+  "via": "de:Hummus",
+  "src": "https://img.rewe-static.de/9458118/56544976_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Hummus High Protein 200g"
  },
  "rosinen": {
   "title": "File:Trocknung Rosinen.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Trocknung_Rosinen.jpg",
   "license": "Public domain",
   "artist": "Martin Budweg",
-  "via": "de:Rosine"
+  "via": "de:Rosine",
+  "src": "https://img.rewe-static.de/4905385/857890_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Sultaninen 200g"
  },
  "shiitake": {
   "title": "File:Shiitakegrowing.jpg",
@@ -977,21 +1161,27 @@
   "url": "https://commons.wikimedia.org/wiki/File:Ajvar_(10844189665).jpg",
   "license": "CC BY 2.0",
   "artist": "Ivana Sokolović",
-  "via": "de:Ajvar"
+  "via": "de:Ajvar",
+  "src": "https://img.rewe-static.de/0710560/22756089_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Ajvar mild 195g"
  },
  "espresso": {
   "title": "File:Espresso hb.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Espresso_hb.jpg",
   "license": "Public domain",
   "artist": "Nonami2 at German Wikipedia",
-  "via": "de:Espresso"
+  "via": "de:Espresso",
+  "src": "https://img.rewe-static.de/8764704/36758572_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Espresso ganze Bohnen 1kg"
  },
  "nori": {
   "title": "File:Nori.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Nori.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Alice Wiegand, (Lyzzy)",
-  "via": "de:Nori"
+  "via": "de:Nori",
+  "src": "https://img.rewe-static.de/7577447/44133447_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Nori Blätter"
  },
  "cornflakes": {
   "title": "File:Cornflakes natur 2.jpg",
@@ -1005,21 +1195,27 @@
   "url": "https://commons.wikimedia.org/wiki/File:Mung_bean_sprouts,_close-up.jpg",
   "license": "CC0",
   "artist": "pics_pd",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7167047/28600277_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Sprossen Trio 100g"
  },
  "aprikosenTr": {
   "title": "File:Dry fruit.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Dry_fruit.jpg",
   "license": "CC BY-SA 2.5",
   "artist": "André Karwath aka Aka",
-  "via": "de:Trockenobst"
+  "via": "de:Trockenobst",
+  "src": "https://img.rewe-static.de/9104248/47737673_digital-image.png?imwidth=240",
+  "rewe": "ja! Aprikosen getrocknet 200g"
  },
  "mayo": {
   "title": "File:Zaanse mayonaise.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Zaanse_mayonaise.jpg",
   "license": "CC BY-SA 3.0",
   "artist": "Kliek",
-  "via": "de:Mayonnaise"
+  "via": "de:Mayonnaise",
+  "src": "https://img.rewe-static.de/9884185/49401603_digital-image.png?imwidth=240",
+  "rewe": "Heinz Mayonnaise 400ml"
  },
  "chili": {
   "title": "File:Madame Jeanette and other chillies.jpg",
@@ -1033,21 +1229,27 @@
   "url": "https://commons.wikimedia.org/wiki/File:White_Wine_Glas.jpg",
   "license": "CC BY-SA 2.5",
   "artist": "André Karwath aka Aka",
-  "via": "de:Weißwein"
+  "via": "de:Weißwein",
+  "src": "https://img.rewe-static.de/7206719/28035741_digital-image.png?imwidth=240",
+  "rewe": "1112 Weißwein Grauburgunder trocken"
  },
  "vollkornnudeln": {
   "title": "File:(Pasta) by David Adam Kess (pic.2).jpg",
   "url": "https://commons.wikimedia.org/wiki/File:(Pasta)_by_David_Adam_Kess_(pic.2).jpg",
   "license": "CC BY-SA 4.0",
   "artist": "David Adam Kess",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8822896/37261414_digital-image.png?imwidth=240",
+  "rewe": "REWE Bio Spaghetti Vollkorn 500g"
  },
  "weissebohnen": {
   "title": "File:Cannellini beans.jpg",
   "url": "https://commons.wikimedia.org/wiki/File:Cannellini_beans.jpg",
   "license": "CC0",
   "artist": "Bean appreciator",
-  "via": "pick"
+  "via": "pick",
+  "src": "https://img.rewe-static.de/0116832/22179101_digital-image.png?imwidth=240",
+  "rewe": "REWE Beste Wahl Weiße Bohnen 420g"
  },
  "seitan": {
   "title": "File:Seitan 20210219 ubt.jpg",

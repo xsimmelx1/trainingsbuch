@@ -243,7 +243,7 @@ body.wo main{padding-bottom:110px}
 .prs{display:flex;flex-direction:column;gap:6px;text-align:left}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
-.gt{font-family:var(--f-num);font-size:44px;font-weight:700}
+.gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
@@ -675,7 +675,7 @@ body.wo .exbody{gap:10px}
 .shopt{display:flex;flex-direction:column;min-width:0;line-height:1.3}.shopt .small{font-size:12px}.shopt .tag{white-space:nowrap;padding:1px 6px}
 .shopi.pi{grid-template-columns:24px 40px minmax(0,1fr) auto}
 .pthumb,.pbig,.pmini{border-radius:8px;object-fit:cover;background:var(--sunk);display:grid;place-items:center;flex:none;color:var(--muted)}
-.pthumb{width:40px;height:40px;font-size:18px}.pbig{width:64px;height:64px;border-radius:12px;font-size:26px}.pmini{width:22px;height:22px;border-radius:5px;font-size:12px;display:inline-grid;vertical-align:-6px;margin-right:6px}
+.pthumb{width:40px;height:40px;font-size:18px}.pthumb.rw,.pbig.rw,.pmini.rw{object-fit:contain;background:#fff;padding:2px;box-sizing:border-box}.pmini.rw{padding:1px}.pbig{width:64px;height:64px;border-radius:12px;font-size:26px}.pmini{width:22px;height:22px;border-radius:5px;font-size:12px;display:inline-grid;vertical-align:-6px;margin-right:6px}
 .zhead{display:flex;align-items:center;gap:12px;min-width:0}.zhead h2{margin:0}.shopi.done .pthumb{opacity:.45}
 .shopp{font-family:var(--f-num);font-weight:600;font-size:14px;white-space:nowrap}.shopbasis .shopp{font-weight:400;color:var(--muted)}
 .shopnav{margin:8px 0 0}.chips.center{justify-content:center;margin-top:6px}
@@ -758,6 +758,7 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .anim:has(img[src*="/r/"]){background:#dcf0fa}
 .anim img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .anim img.b{animation:flip 3s steps(1,end) infinite}
+.anim.sync img.b{animation:none;opacity:0;transition:opacity .25s}.anim.sync[data-f="1"] img.b{opacity:1}
 .anim.still .ph,.anim.still img.b{display:none}
 .anim .ph{position:absolute;left:8px;top:8px;z-index:2;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px}
 .anim .ph.a{animation:flipA 3s steps(1,end) infinite}
@@ -849,6 +850,7 @@ td.n{font-family:var(--f-num);text-align:right}
 .mobimg .anim{aspect-ratio:3/2}
 dialog.sheet{border:0;padding:0;margin:auto auto 0;width:100%;max-width:640px;max-height:88vh;border-radius:18px 18px 0 0;background:var(--surface);color:var(--ink)}
 dialog.sheet::backdrop{background:rgba(0,0,0,.5)}
+dialog.sheet.full{max-height:100dvh;height:100dvh;border-radius:0;margin:0 auto}dialog.sheet.full .sb{min-height:100%;padding-top:max(14px,env(safe-area-inset-top,0px))}
 dialog.sheet .sb{padding:14px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 dialog.sheet .grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto}
 dialog.sheet .sh{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -1125,53 +1127,91 @@ function guideTick(){
   if (!el || !g || sheetKind !== "mobguide") { clearInterval(guideTimer); guide.end = 0; return; }
   if (g.stop) { el.textContent = fmtDur(guide.acc + (guide.end ? (Date.now() - guide.start) / 1000 : 0)); return; }
   const left = (guide.end - Date.now()) / 1000; el.textContent = fmtDur(Math.max(0, Math.ceil(left)));
-  if (guide.end && left <= -1) { guide.end = 0; guide.round++; clearInterval(guideTimer); try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} toast(guide.round < g.rounds ? (g.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); renderSheet(); }
+  if (guide.end && left <= -1) { guide.end = 0; guide.round++; clearInterval(guideTimer); chime(); toast(guide.round < g.rounds ? (g.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); renderSheet(); }
 }
 
 // ---------- Halte-/Satz-Timer: läuft im Blatt, ohne neu zu zeichnen (Video läuft weiter), ±10 s ----------
 let tmr = null, tmrInt = null;
 function timerCfg(key){
   const k = key.startsWith("mob:") ? key.slice(4) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
-  if (g) return g.stop ? {mode: "stop"} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side};
-  if (d.hold >= 10) return {mode: "count", sec: d.hold, rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide};
-  if (d.hold > 0 && m) return {mode: "reps", hold: d.hold, reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide};
+  if (g) return g.stop ? {mode: "stop"} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
+  if (d.hold >= 10) return {mode: "count", sec: d.hold, rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
+  if (d.hold > 0 && m) return {mode: "reps", hold: d.hold, reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
   return {mode: "stop"};
 }
+// Durchgetaktet: die ganze Routine läuft in einem Timer – Vorbereitung, Halten/Lösen, Seitenwechsel, Übergang zur nächsten Übung.
+// Übungen ohne feste Zeit (Stoppuhr) bekommen hier eine Vorgabe.
+let autoFlow = false;
+const AUTO_CFG = {knietest: {mode: "reps", hold: 3, reps: 5, rounds: 2, side: true, rest: 0}, rkc: {mode: "count", sec: 20, rounds: 2, side: false, rest: 30}};
+const PREP_SEC = 8, SWITCH_SEC = 6, NEXT_SEC = 12;
+function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null, c = (k && AUTO_CFG[k]) || timerCfg(key); return c.mode === "stop" ? {mode: "count", sec: 20, rounds: 1, side: false, rest: 0} : c; }
+// Dauer einer Übung im Durchlauf (ohne Vorbereitung) und Rest der Routine ab Übung i
+function autoSecs(key){ const c = autoCfg(key), per = c.mode === "reps" ? c.reps * (c.hold + 2) : c.sec; return c.rounds * per + (c.rounds - 1) * (c.side ? SWITCH_SEC : (c.rest || 10)); }
+function autoLeft(i){ let t = 0; for (let j = Math.max(0, i); j < MOBILITY.length; j++) { const k = MOBILITY[j][0]; if (cur.mobility[k] && j !== i) continue; t += PREP_SEC + autoSecs("mob:" + k) + NEXT_SEC; } return t; }
+// Nächste offene Übung ab Blatt-Index – als Kurzname
+const mobShort = t => t.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(" 3 ×")[0].split(",")[0];
+function tmrRemain(t){ if (!t || t.mode === "stop") return 0; const per = t.mode === "reps" ? t.reps * (t.hold + 2) : t.sec, gap = t.side ? SWITCH_SEC : (t.rest || 10), left = Math.max(0, t.left);
+  if (t.phase === "next") return left; if (t.phase === "prep") return left + t.rounds * per + (t.rounds - 1) * gap + NEXT_SEC;
+  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + (t.phase === "hold" ? 2 : 0) + Math.max(0, t.reps - t.rep - 1) * (t.hold + 2) : left;
+  return inRound + left * (t.phase === "switch" ? 1 : 0) + roundsAfter * (per + gap) + NEXT_SEC; }
+function autoNextName(){ const nx = MOBILITY.slice(sheetArg + 1).find(([k]) => !cur.mobility[k]); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
-  if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const c = timerCfg(key); tmr = Object.assign({key, round: 0, rep: 0, run: false, left: c.mode === "count" ? c.sec : c.mode === "reps" ? c.hold : 0, acc: 0, phase: "hold"}, c); }
+  if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && key.startsWith("mob:") && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
+    tmr = Object.assign({key, round: 0, rep: 0, run: false, left: c.mode === "count" ? c.sec : c.mode === "reps" ? c.hold : 0, acc: 0, phase: "hold"}, c);
+    if (auto) { Object.assign(tmr, {auto: true, phase: "prep", left: PREP_SEC, run: true, last: Date.now()}); tmrInt = setInterval(tmrTick, 250); } }
   return `<div class="gtimer" id="tmr">${tmrInner()}</div>`;
 }
 function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
-  const head = t.mode === "stop" ? "Stoppuhr" : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
+  const pause = ["prep", "switch", "next"].includes(t.phase);
+  const head = t.phase === "prep" ? "Bereit machen · Position einnehmen" : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
+    t.mode === "stop" ? "Stoppuhr" : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
   const val = t.mode === "stop" ? t.acc : t.left;
-  return `<div class="lab">${head}</div><div class="gt" id="tmrT">${fmtDur(Math.max(0, t.mode === "stop" ? val : Math.ceil(val)))}</div>
+  return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, t.mode === "stop" ? val : Math.ceil(val)))}</div>
     <div class="tmrbtns"><button type="button" class="btn" data-tm="minus" aria-label="10 Sekunden weniger">−10</button><button type="button" class="btn primary" data-tm="toggle">${t.run ? "Pause" : t.mode === "stop" && t.acc ? "Weiter" : "Start"}</button><button type="button" class="btn" data-tm="plus" aria-label="10 Sekunden mehr">+10</button></div>
-    <button type="button" class="btn ghost small" data-tm="reset">Zurücksetzen</button>`;
+    ${t.auto ? `<div class="row2"><button type="button" class="btn ghost small" data-tm="reset">Übung neu</button>${pause ? `<button type="button" class="btn ghost small" data-tm="skip">Weiter ›</button>` : ""}</div><div class="small muted">Durchgetaktet · Routine noch ≈ ${Math.ceil((autoLeft(sheetArg + 1) + tmrRemain(t)) / 60)} min</div>` : `<button type="button" class="btn ghost small" data-tm="reset">Zurücksetzen</button>`}`;
 }
-const tmrPaint = () => { const el = document.getElementById("tmr"); if (el) el.innerHTML = tmrInner(); };
+const tmrPaint = () => { const el = document.getElementById("tmr"); if (el) el.innerHTML = tmrInner(); syncFigure(tmr); };
+function syncFigure(t){ const a = document.querySelector("#sheet .exhero .anim"); if (!a) return;
+  if (!t || !t.run || t.mode === "stop") { a.classList.remove("sync"); return; }
+  const m = (a.querySelector("img")?.getAttribute("src") || "").match(/img\/(?:r\/)?([^/]+)-0\.(?:jpg|webp)$/), st = (typeof GCM !== "undefined" && GCM?.frames?.[m?.[1]]) ? 1 : 0, hold = t.phase === "hold";
+  a.classList.add("sync"); a.dataset.f = String(hold ? 1 - st : st); }
 let audioCtx = null;
 const audioReady = () => { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === "suspended") audioCtx.resume(); } catch {} };
-function beep(){ try { const a = audioCtx; if (!a) throw 0; const o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; o.connect(g); g.connect(a.destination); g.gain.value = 0.08; o.start(); o.stop(a.currentTime + 0.18); } catch {} try { navigator.vibrate && navigator.vibrate(200); } catch {} }
+function tone(f, at, dur, vol){ const a = audioCtx, o = a.createOscillator(), g = a.createGain(); o.type = "sine"; o.frequency.value = f; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(0.0001, at); g.gain.exponentialRampToValueAtTime(vol, at + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, at + dur); o.start(at); o.stop(at + dur + 0.05); }
+function beep(){ audioReady(); try { tone(880, audioCtx.currentTime, 0.18, 0.2); } catch {} try { navigator.vibrate && navigator.vibrate(200); } catch {} }
+// Satz/Runde/Pause vorbei: drei aufsteigende Töne, gut hörbar
+function chime(){ audioReady(); try { const t0 = audioCtx.currentTime; tone(880, t0, 0.16, 0.3); tone(1175, t0 + 0.2, 0.16, 0.3); tone(1568, t0 + 0.4, 0.32, 0.3); } catch {} try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} }
 function tmrTick(){
-  const t = tmr; if (!t || !t.run || !document.getElementById("tmr")) { clearInterval(tmrInt); if (t) t.run = false; return; }
+  const t = tmr; if (!t || !t.run || !document.getElementById("tmr")) { clearInterval(tmrInt); if (t) t.run = false; syncFigure(t); return; }
   const now = Date.now(), dt = (now - t.last) / 1000; t.last = now;
   if (t.mode === "stop") { t.acc += dt; const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(t.acc); return; }
   t.left -= dt;
-  if (t.left > -1) { const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(Math.max(0, Math.ceil(t.left))); return; }
-  beep();
+  if (t.left > 0) { const el = document.getElementById("tmrT"); if (el) el.textContent = fmtDur(Math.max(0, Math.ceil(t.left)));
+    if (t.auto && ["prep", "switch", "next"].includes(t.phase)) { const c = Math.ceil(t.left); if (c <= 3 && c !== t.lastBeep) { t.lastBeep = c; beep(); } }
+    syncFigure(t); return; }
+  t.lastBeep = null;
+  if (t.phase === "prep" || t.phase === "switch") { t.phase = "hold"; t.rep = 0; t.left = t.mode === "reps" ? t.hold : t.sec; beep(); tmrPaint(); return; }
+  if (t.phase === "next") { t.run = false; clearInterval(tmrInt); guideNext(true); return; }
+  // Rundenende: geführt → anhalten, Durchlauf → Seitenwechsel/Pause bzw. Übergang zur nächsten Übung
+  const roundEnd = () => { const more = t.round < t.rounds; if (!more) t.round = t.rounds - 1;
+    if (t.auto) { t.phase = more ? "switch" : "next"; t.left = more ? (t.side ? SWITCH_SEC : (t.rest || 10)) : NEXT_SEC; }
+    else { t.run = false; t.phase = "hold"; t.left = t.mode === "reps" ? t.hold : t.sec; }
+    toast(more ? (t.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); };
   if (t.mode === "reps") {
-    if (t.phase === "hold") { t.phase = "rest"; t.left = 2; }
-    else { t.phase = "hold"; t.rep++; t.left = t.hold; if (t.rep >= t.reps) { t.rep = 0; t.round++; t.run = false; toast(t.round < t.rounds ? (t.side ? "Seite wechseln" : "Satz fertig – kurze Pause") : "Geschafft"); } }
-  } else { t.round++; t.left = t.sec; t.run = false; try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} toast(t.round < t.rounds ? (t.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); }
-  if (t.round >= t.rounds && t.mode !== "stop") { t.round = t.rounds - 1; t.run = false; }
+    if (t.phase === "hold") { t.phase = "rest"; t.left = 2; beep(); }
+    else { t.rep++; if (t.rep < t.reps) { t.phase = "hold"; t.left = t.hold; beep(); } else { t.rep = 0; t.round++; chime(); roundEnd(); } }
+  } else { t.round++; chime(); roundEnd(); }
   tmrPaint();
 }
+function guideNext(done){ const [k] = MOBILITY[sheetArg] || []; if (!k) return; if (done) { cur.mobility[k] = true; touch(); }
+  let j = sheetArg + 1; while (j < MOBILITY.length && cur.mobility[MOBILITY[j][0]]) j++; sheetArg = j; if (j >= MOBILITY.length && autoFlow) { autoFlow = false; if (tab !== "training") releaseWake(); } renderSheet(); sheet.scrollTop = 0; }
 function tmrCmd(c){
   const t = tmr; if (!t) return;
   if (c === "toggle") { audioReady(); t.run = !t.run; t.last = Date.now(); clearInterval(tmrInt); if (t.run) tmrInt = setInterval(tmrTick, 250); }
   else if (c === "plus" || c === "minus") { const d = c === "plus" ? 10 : -10; if (t.mode === "stop") t.acc = Math.max(0, t.acc + d); else t.left = Math.max(1, t.left + d); }
-  else if (c === "reset") { clearInterval(tmrInt); tmr = null; const el = document.getElementById("tmr"); if (el) el.outerHTML = timerHtml(t.key); return; }
+  else if (c === "skip") { if (["prep", "switch", "next"].includes(t.phase)) t.left = 0; }
+  else if (c === "reset") { clearInterval(tmrInt); tmr = null; const el = document.getElementById("tmr"); if (el) el.outerHTML = timerHtml(t.key); syncFigure(tmr); return; }
   tmrPaint();
 }
 // Morgenroutine inkl. Anti-Beckenkipp-Routine (nach Built With Science, angepasst an SC-Gelenk und Knie)
@@ -1934,7 +1974,8 @@ function clipOf(key){
   const mk = (v.markers || []).find(x => /Ausführung|Demo/i.test(x.label)), short = v.dur && v.dur <= 75;
   // geprüfte Clip-Sekunde (Transkript + Einzelbilder) hat Vorrang
   const st = v.clip != null ? v.clip : short ? 0 : mk ? mk.t : (v.start || 0);
-  return {id: v.video, s: st, e: v.clip != null ? st + 10 : short ? 0 : st + 10};
+  // clipVideo/clipEnd: Loop aus einem anderen Video als dem Erklärvideo (z. B. geprüfter Wiederholungsausschnitt)
+  return {id: v.clipVideo || v.video, s: st, e: v.clipEnd || (v.clip != null ? st + 10 : short ? 0 : st + 10)};
 }
 function clipHtml(key){
   const c = clipOf(key); if (!c) return "";
@@ -2750,7 +2791,7 @@ addEventListener("click", e => { const b = e.target.closest("[data-gc]"); if (!b
 // Pausen-Timer & Stoppuhr
 let restNote = null;
 function scheduleNote(){ clearTimeout(restNote); if (restEnd) restNote = setTimeout(() => { if (document.hidden && restEnd) notifyRest(); }, Math.max(0, restEnd - Date.now())); }
-function startRest(sec){ restEnd = Date.now() + sec*1000; clearInterval(restTimer); restTimer = setInterval(updateRestBar, 500); updateRestBar(); scheduleNote(); }
+function startRest(sec){ audioReady(); restEnd = Date.now() + sec*1000; clearInterval(restTimer); restTimer = setInterval(updateRestBar, 500); updateRestBar(); scheduleNote(); }
 function stopRest(){ restEnd = 0; clearInterval(restTimer); clearTimeout(restNote); updateRestBar(); }
 // Bei gesperrtem Bildschirm: Benachrichtigung mit Vibration (braucht die Push-Erlaubnis)
 function notifyRest(){ try { if (Notification.permission === "granted") navigator.serviceWorker?.ready.then(r => r.showNotification("Pause vorbei", {body: "Weiter mit dem nächsten Satz.", tag: "rest", renotify: true, vibrate: [200, 100, 200], data: {url: location.href}})); } catch {} }
@@ -2759,7 +2800,7 @@ function updateRestBar(){
   const left = (restEnd - Date.now())/1000; bar.hidden = false;
   const rtxt = left > -1 ? fmtDur(Math.max(0, Math.ceil(left))) : "+" + fmtDur(Math.floor(-left));
   document.getElementById("restT").textContent = rtxt;
-  if (left <= -1 && !bar.classList.contains("over")) { bar.classList.add("over"); try { navigator.vibrate && navigator.vibrate([200,100,200]); } catch {} }
+  if (left <= -1 && !bar.classList.contains("over")) { bar.classList.add("over"); chime(); }
   if (left > -1) bar.classList.remove("over");
   const mini = document.getElementById("restMiniT"); if (mini) { mini.textContent = rtxt; mini.parentElement.classList.toggle("over", left <= -1); }
   if (left < -90) stopRest();
@@ -2793,11 +2834,11 @@ function renderSheetPart(sel){
   const tmp = document.createElement("div"); sheetTarget = tmp; try { renderSheet(); } finally { sheetTarget = null; }
   for (const s0 of sel) { const a = sheetBody.querySelector(s0), b = tmp.querySelector(s0); if (a && b) a.innerHTML = b.innerHTML; else if (!a || !b) return renderSheet(); }
 }
-function renderSheet(){ setTimeout(hookClips, 0);
+function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full", ["mob", "mobguide"].includes(sheetKind)); if (sheetKind === "mobguide" && typeof GCM === "undefined" || sheetKind === "mobguide" && !GCM) ensureCoachData();
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
-    h += `<div class="sh"><h2>Morgenroutine · 12 min</h2>${close}</div><button class="btn primary big" type="button" data-guide="start">▶ Geführt durch die Routine</button>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}`;
+    h += `<div class="sh"><h2>Morgenroutine · 12 min</h2>${close}</div><div class="btnrow two"><button class="btn primary big" type="button" data-guide="auto">⏱ Durchgetaktet<br><span class="small">≈ ${Math.ceil(autoLeft(MOBILITY.findIndex(([k]) => !cur.mobility[k])) / 60)} min, läuft von selbst</span></button><button class="btn big" type="button" data-guide="start">▶ Geführt<br><span class="small">Timer je Übung selbst starten</span></button></div>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}`;
     MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb("mob:" + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb("mob:" + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${mobAlt(k) ? `<br><span class="small muted">${esc(mobAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
     h += `<button class="btn ${mobFinished(cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${mobFinished(cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
     if (mobZoom != null) { const [k, t, img] = MOBILITY[mobZoom], g = GUIDE[k];
@@ -2813,12 +2854,12 @@ function renderSheet(){ setTimeout(hookClips, 0);
     const i = sheetArg, N = MOBILITY.length;
     if (i >= N) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">🧘</div><div>${mobCount(cur, selDate)}/${mobTotal(selDate)} Übungen erledigt. Guter Start in den Tag.</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>`; }
     else { const [k, txt, img] = MOBILITY[i], g = GUIDE[k];
-      h += `<div class="sh"><div><div class="lab">Morgenroutine · ${i + 1}/${N}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
+      h += `<div class="sh"><div><div class="lab">Morgenroutine · ${i + 1}/${N}${autoFlow ? " · durchgetaktet" : ""}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
         <div class="shopbar"><div class="fill" style="width:${i / N * 100}%"></div></div>${motionHtml("mob:" + k, img, txt, false)}<div>${esc(txt)}</div>`;
+      h += timerHtml("mob:" + k);
       if (k === "knietest") h += `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}`;
-      h += `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml("mob:" + k, "")}</details>`;
       if (mobAlt(k)) h += `<div class="warnb small">${esc(mobAlt(k))}</div>`;
-      h += doseHtml("mob:" + k) + timerHtml("mob:" + k);
+      h += doseHtml("mob:" + k) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml("mob:" + k, "")}</details>`;
       h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div>`; }
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
@@ -3711,8 +3752,11 @@ let prices = null, pricesReady = null;
 let prodCred = null; fetch("prodimg.json").then(r => r.json()).then(j => { prodCred = j; if (tab === "essen" && essenView === "einkauf") renderMore(); }).catch(() => {});
 const prodImgOn = () => FOOD().prodImg !== false && !!prodCred;
 const GROUP_ICON = {"Milchprodukte & Eier": "🥛", "Tofu & Soja": "🫘", "Hülsenfrüchte": "🥫", "Getreide & Brot": "🍞", "Obst & Gemüse": "🥦", "Vorrat & Gewürze": "🧂"};
-const prodImg = (pr, cls = "pthumb") => !prodImgOn() ? "" : pr && prodCred[pr.id] ? `<img class="${cls}" src="img/produkte/${pr.id}.jpg" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:this.className+' ph',textContent:'🛒'}))">` : `<span class="${cls} ph">${GROUP_ICON[pr?.group] || "🧂"}</span>`;
-const prodCredit = pr => { const c = pr && prodCred?.[pr.id]; return c ? `<div class="small muted">Foto: ${esc(c.artist || "unbekannt")}${c.license ? ", " + esc(c.license) : ""}, <a href="${esc(c.url)}" target="_blank" rel="noopener">Wikimedia Commons</a></div>` : ""; };
+// REWE-Produktfoto (src) zuerst, bei Fehler oder offline das lokale Commons-Bild, zuletzt ein Platzhalter
+const prodImg = (pr, cls = "pthumb") => { if (!prodImgOn()) return ""; const c = pr && prodCred[pr.id]; if (!c) return `<span class="${cls} ph">${GROUP_ICON[pr?.group] || "🧂"}</span>`; const loc = `img/produkte/${pr.id}.jpg`;
+  return `<img class="${cls}${c.src ? " rw" : ""}" src="${esc(c.src || loc)}" ${c.src && c.license ? `data-fb="${loc}"` : ""} alt="" loading="lazy" decoding="async" onerror="if(this.dataset.fb){this.src=this.dataset.fb;delete this.dataset.fb}else this.replaceWith(Object.assign(document.createElement('span'),{className:this.className+' ph',textContent:'🛒'}))">`; };
+const prodCredit = pr => { const c = pr && prodCred?.[pr.id]; if (!c) return ""; const cm = c.license ? `Foto: ${esc(c.artist || "unbekannt")}, ${esc(c.license)}, <a href="${esc(c.url)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : "";
+  return `<div class="small muted">${c.src ? `Produktfoto: REWE Onlineshop (${esc(c.rewe || "")})${cm ? " · offline: " + cm : ""}` : cm}</div>`; };
 const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny", edeka: "Edeka"};
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
@@ -4384,7 +4428,7 @@ document.querySelector("nav.bottom").addEventListener("click", e => { const b = 
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
@@ -4488,10 +4532,9 @@ async function onClick(e){
   const tin = t.closest("[data-tmrin]"); if (tin) { const slot = document.getElementById("tmrSlot") || tin.closest(".exbody")?.querySelector(".tmrslot"); if (slot && !slot.innerHTML) { slot.innerHTML = timerHtml(tin.dataset.tmrin); tin.remove(); slot.scrollIntoView({block: "center", behavior: "smooth"}); } return; }
   const gd0 = t.closest("[data-guide]"); if (gd0) { const a = gd0.dataset.guide; clearInterval(guideTimer); guide = {end: 0, start: 0, acc: 0, round: 0};
     if (a === "at") { mobZoom = null; openSheet("mobguide", Number(gd0.dataset.v)); return; }
-    if (a === "start") { const i = MOBILITY.findIndex(([k]) => !cur.mobility[k]); openSheet("mobguide", i < 0 ? 0 : i); return; }
+    if (a === "start" || a === "auto") { autoFlow = a === "auto"; if (autoFlow) { audioReady(); requestWake(); } tmr = null; const i = MOBILITY.findIndex(([k]) => !cur.mobility[k]); openSheet("mobguide", i < 0 ? 0 : i); return; }
     if (a === "back") { sheetArg = Math.max(0, sheetArg - 1); renderSheet(); return; }
-    const [k] = MOBILITY[sheetArg]; if (a === "done") { cur.mobility[k] = true; touch(); }
-    let j = sheetArg + 1; while (j < MOBILITY.length && cur.mobility[MOBILITY[j][0]]) j++; sheetArg = j; renderSheet(); return; }
+    guideNext(a === "done"); return; }
   const gt = t.closest("[data-gt]"); if (gt) { const g = GUIDE[MOBILITY[sheetArg][0]];
     if (guide.end) { if (g.stop) guide.acc += (Date.now() - guide.start) / 1000; guide.end = 0; clearInterval(guideTimer); }
     else { guide.start = Date.now(); guide.end = g.stop ? 1 : Date.now() + g.sec * 1000; clearInterval(guideTimer); guideTimer = setInterval(guideTick, 250); }
