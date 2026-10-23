@@ -2290,7 +2290,8 @@ function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = 
     <div class="field"><label for="myGrp">Gruppe</label><select id="myGrp" data-mygrp="${esc(pr.key)}">${SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze").map(g => `<option ${g === pr.group ? "selected" : ""}>${esc(g)}</option>`).join("")}</select></div>
     <div class="field"><label for="myNw">Nährwerte wie</label><input type="text" id="myNw" data-mynw="${esc(pr.key)}" value="${esc(x?.n || "")}" placeholder="z. B. Mozzarella, Toastbrot" autocomplete="off" enterkeyhint="done"></div>
     <div class="small muted">${x ? `${Math.round(x.k)} kcal · ${x.p} g Protein je 100 g${b ? ` · 1 ${b.u} ≈ ${b.g} g` : ""} – gilt beim Nachtragen.` : "Ohne Nährwerte: beim Nachtragen ergänzt du die Werte selbst."}</div>
-    <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span></span></div><div class="ir sel"><span>${STORES[pr.store] || "–"} <span class="tag">vom Bon</span></span><span class="num">${eur(pr.price)}</span><span></span></div></div>
+    <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span></span></div><div class="ir sel"><span>${STORES[pr.store] || "–"} <span class="tag">${pr.priceEst ? "geschätzt" : pr.ean ? "gescannt" : "vom Bon"}</span></span><span class="num">${pr.price != null ? eur(pr.price) + (pr.priceEst ? "*" : "") : "–"}</span><span></span></div></div>
+    ${pr.priceEst ? `<div class="small muted">* Geschätzt aus ${pr.size ? `${fmtQ(pr.size)} g` : "250 g (Packung unbekannt)"} und dem üblichen Preis vergleichbarer Produkte der Rubrik. Eigenen Preis per Barcode-Scan oder Kassenbon eintragen.</div>` : ""}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${pr.id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
     <button type="button" class="btn ghost small" data-act="myDel" data-v="${esc(pr.key)}">Vom Bon-Produkt entfernen</button>`; }
 function zinfoHtml(id){
@@ -2328,11 +2329,11 @@ function zutatenHtml(){
   else if (zSort === "haeufig") rows.sort((x, y) => y.n - x.n || x.name.localeCompare(y.name, "de"));
   else rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
   // Bon-Produkte wie andere Zutaten: eigene Gruppe, antippbar, Preis beim Markt des Bons
-  const mine = myProdList().map(mp => ({pr: mp, my: true, name: mp.name, grp: mp.group, pp: SS.map(st => st === mp.store ? mp.price : null), lo: mp.price, diff: 0, best: null, n: 0, home: home.has(mp.id)}))
+  const mine = myProdList().map(mp => ({pr: mp, my: true, name: mp.name, grp: mp.group, pp: SS.map(st => st === mp.store || (mp.priceEst && st === SS[0]) ? mp.price : null), lo: mp.price, diff: 0, best: null, n: 0, home: home.has(mp.id)}))
     .filter(x => (!qq || fold(x.name).includes(fold(qq))) && (!zGrp || zGrp === x.grp || zGrp === "🧾 Vom Kassenbon"));
   if (zGrp === "🧾 Vom Kassenbon") rows = []; rows = rows.concat(mine);
   if (zSort === "laden") rows.sort((x, y) => GO.indexOf(x.grp) - GO.indexOf(y.grp) || x.name.localeCompare(y.name, "de")); else if (zSort === "az") rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
-  const sub = x => x.my ? `${x.pr.ean ? "📷 gescannt" : "🧾 vom Bon"} · ${STORES[x.pr.store] || ""}${x.pr.nw ? "" : " · ohne Nährwerte"}` : fmtAmt(x.pr.pack, x.pr.unit);
+  const sub = x => x.my ? `${x.pr.ean ? "📷 gescannt" : "🧾 vom Bon"} · ${STORES[x.pr.store] || ""}${x.pr.priceEst ? " · Preis geschätzt" : ""}${x.pr.nw ? "" : " · ohne Nährwerte"}` : fmtAmt(x.pr.pack, x.pr.unit);
   const cols = cmp ? `minmax(0,1fr) repeat(${SS.length},58px)` : `minmax(0,1fr) 64px 52px`;
   const full = rows.filter(x => !x.my && x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
   const cell = (x, i) => { const v = x.pp[i]; return `<span class="num ${cmp && v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? eur(v) + (isEst(x.pr, SS[i]) ? "*" : "") : "–"}</span>`; };
@@ -3278,7 +3279,7 @@ function journeySheet(kind, arg){
   if (kind === "shoprec") return `<div class="sh"><h2>Gericht wählen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="srQ" value="${esc(srQ)}" placeholder="🔎 Name oder Zutat" aria-label="Gericht suchen" autocomplete="off"><div id="srList">${shopRecList()}</div>`;
   if (kind === "cardio") return cardioSheet(arg || selDate);
   if (kind === "scan") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } setTimeout(() => { if (!scanSlot()?.innerHTML) startScan("price"); }, 50);
-    return `<div class="sh"><h2>Preis scannen</h2>${close}</div>${info("Im Laden den Barcode scannen und den Preis vom Regal eintragen. Er gilt dann vor dem Richtpreis, wie beim Kassenbon.")}<div id="scanSlot"></div>${ownCount() ? `<button class="btn ghost" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`; }
+    return `<div class="sh"><h2>📷 Barcode scannen</h2>${close}</div>${info("Barcode scannen (live oder per Foto): Produkt mit Nährwerten speichern, optional mit Preis vom Regal. Unbekannte Produkte trägst du einmal selbst ein, die Nährwerttabelle kannst du abfotografieren. Beim nächsten Scan erkennt die App das Produkt sofort.")}<div id="scanSlot"></div>${ownCount() ? `<button class="btn ghost" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`; }
   if (kind === "ownprices") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } return ownPricesHtml(); }
   if (kind === "receipt") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } return receiptHtml(); }
   if (kind === "meal") return mealPlan && recipes ? mealSheet(arg) : close;
@@ -3622,7 +3623,15 @@ const mealWeek = w => mealPlan.weeks[w > 0 ? (w - 1) % mealPlan.weeks.length : m
 // Mengen je Produkt für ein ganzes Rezept (einmal berechnet), Packungsanteil und Wocheneinkauf in €
 const recVec = new Map();
 const myGroup = n => (SHOP_GROUPS.find(([, re]) => re.test(n)) || ["Vorrat & Gewürze"])[0];
-const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => ({id: "my:" + k, key: k, name: v.name, price: v.price, store: v.store, date: v.date, my: true, nw: v.nw || null, ean: v.ean || null, group: v.group || myGroup(v.name)}));
+// Eigene Produkte ohne Preis: passendes Produkt der Preisliste über die Packungsgröße, sonst üblicher Kilopreis der Rubrik
+function myPriceEst(v){ if (!prices) return null; const size = num(v.size) || 250, nm = (v.name || "").toLowerCase(), grp = v.group || myGroup(v.name || "");
+  const st = prices.stores.includes(v.store) ? v.store : (FOOD().store !== "min" && prices.stores.includes(FOOD().store) ? FOOD().store : "rewe");
+  const per = pr => { const pp = priceOf(pr, st) ?? priceOf(pr, "min"); return pp == null ? null : pr.unit === "Stück" ? null : pp / pr.pack; };
+  const hit = prices.products.find(x => x.re.test(nm)); if (hit) { const g = per(hit); if (g != null) return Math.round(g * size * 100) / 100; const pp = priceOf(hit, st); if (pp != null) return pp; }
+  const L = prices.products.filter(x => (x.group || "Vorrat & Gewürze") === grp && x.unit !== "Stück" && !x.pantry).map(per).filter(x => x != null).sort((a, b) => a - b);
+  return L.length ? Math.round(L[Math.floor(L.length / 2)] * size * 100) / 100 : null; }
+const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => { const est = v.price == null ? myPriceEst(v) : null;
+  return {id: "my:" + k, key: k, name: v.name, price: v.price ?? est, priceEst: v.price == null && est != null, store: v.store, date: v.date, my: true, nw: v.nw || null, ean: v.ean || null, size: v.size || null, group: v.group || myGroup(v.name)}; });
 const prodById = id => id && id.startsWith("my:") ? myProdList().find(x => x.id === id) : prices?.products.find(x => x.id === id);
 // Bonzeile → lesbarer Name: Mengen/Preise weg, Großbuchstaben normalisieren
 const RC_JUNK = /pfand|leergut|tüte|tasche|beutel|rabatt|nachlass|summe|zwischensumme|gutschein|coupon|payback|bonus|karte|mwst|kasse/i;
@@ -3936,7 +3945,7 @@ const prodImg = (pr, cls = "pthumb") => { if (!prodImgOn()) return ""; const c =
   return `<img class="${cls}${c.src ? " rw" : ""}" src="${esc(c.src || loc)}" ${c.src && c.license ? `data-fb="${loc}"` : ""} alt="" loading="lazy" decoding="async" onerror="if(this.dataset.fb){this.src=this.dataset.fb;delete this.dataset.fb}else this.replaceWith(Object.assign(document.createElement('span'),{className:this.className+' ph',textContent:'🛒'}))">`; };
 const prodCredit = pr => { const c = pr && prodCred?.[pr.id]; if (!c) return ""; const cm = c.license ? `Foto: ${esc(c.artist || "unbekannt")}, ${esc(c.license)}, <a href="${esc(c.url)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : "";
   return `<div class="small muted">${c.src ? `Produktfoto: REWE Onlineshop (${esc(c.rewe || "")})${cm ? " · offline: " + cm : ""}` : cm}</div>`; };
-const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny", edeka: "Edeka"};
+const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", netto: "Netto", penny: "Penny", edeka: "Edeka", dm: "dm", rossmann: "Rossmann"};
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
   if (prices) return Promise.resolve();
@@ -3962,7 +3971,7 @@ function bioAlt(pr, share){
   const st = FOOD().store || "aldi"; if (st === "min" || ownOf(pr)[st] || pr.bio?.[st] == null || pr.prices?.[st] == null) return "";
   return bioUse(pr) ? ` <button type="button" class="biob on" data-biotoggle="${pr.id}">Bio ✓ · konv. ${eur(share * pr.prices[st])}</button>` : ` <button type="button" class="biob" data-biotoggle="${pr.id}">Bio ${eur(share * pr.bio[st])}</button>`;
 }
-const isEst = (pr, st) => { if (st === "min") { const ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}), own = ownOf(pr); for (const [k, o] of Object.entries(own)) if (o?.price != null) ps[k] = o.price;
+const isEst = (pr, st) => { if (pr.my) return !!pr.priceEst; if (st === "min") { const ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}), own = ownOf(pr); for (const [k, o] of Object.entries(own)) if (o?.price != null) ps[k] = o.price;
     const best = Object.entries(ps).filter(([, v]) => v != null).sort((a, b) => a[1] - b[1])[0]; return !!best && !own[best[0]] && !(bioUse(pr) && pr.bio?.[best[0]] != null) && (pr.est || []).includes(best[0]); }
   return !ownOf(pr)[st] && !(bioUse(pr) && pr.bio?.[st] != null) && (pr.est || []).includes(st); };
 // Reihenfolge: eigener Preis (Kassenbon/Scan) > Bio-Preis (wenn „Bio bevorzugen“) > Richtpreis
@@ -4038,16 +4047,29 @@ function stopScan(){
 const scanSlot = () => document.getElementById("scanSlot");
 function scanMsg(t){ const el = document.getElementById("scanMsg"); if (el) el.textContent = t; }
 let scanRun = 0;
+// Lebensmittel tragen EAN/UPC: nur diese Formate suchen, gründlich, in hoher Auflösung mit Dauerfokus
+const SCAN_VIDEO = {facingMode: "environment", width: {ideal: 1920}, height: {ideal: 1080}, advanced: [{focusMode: "continuous"}]};
+const zxHints = () => { const h = new Map(); h.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.UPC_A, ZXing.BarcodeFormat.UPC_E]); h.set(ZXing.DecodeHintType.TRY_HARDER, true); return h; };
+// Barcode aus einem Foto lesen (schärfer als das Live-Video)
+async function scanPhoto(file){ stopScan(); scanMsg("Lese Barcode aus dem Foto …");
+  try { let code = null;
+    if ("BarcodeDetector" in window) { const bm = await createImageBitmap(file), r = await new BarcodeDetector({formats: ["ean_13", "ean_8", "upc_a", "upc_e"]}).detect(bm); code = r[0]?.rawValue || null; }
+    if (!code) { await loadScript("https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"); const url = URL.createObjectURL(file);
+      try { code = (await new ZXing.BrowserMultiFormatReader(zxHints()).decodeFromImageUrl(url)).getText(); } catch {} URL.revokeObjectURL(url); }
+    if (code) return lookupEan(code);
+    scanMsg("Im Foto kein Barcode erkannt – näher ran, flach halten, oder die Nummer darunter eintippen.");
+  } catch { scanMsg("Foto konnte nicht gelesen werden – Nummer eintippen."); } }
 async function startScan(mode){
   stopScan(); const run = ++scanRun;
   scanMode = mode; scanProd = null; const slot = scanSlot(); if (!slot) return;
   slot.innerHTML = `<div class="scanbox"><video id="scanV" playsinline muted autoplay></video><div class="scanframe"></div></div><div class="small muted" id="scanMsg">Barcode in den Rahmen halten …</div>
     <div class="grid2"><div class="field"><label for="scanEan">oder Nummer eintippen</label><input id="scanEan" type="text" inputmode="numeric" placeholder="EAN, z. B. 4001234567890"></div><div class="field"><label>&nbsp;</label><button class="btn" type="button" data-scan="manual">Suchen</button></div></div>
-    <button class="btn ghost small" type="button" data-scan="stop">Abbrechen</button>`;
+    <div class="btnrow two"><label class="btn small">📸 Foto vom Barcode<input type="file" accept="image/*" capture="environment" id="scanPhoto" hidden></label><button class="btn ghost small" type="button" data-scan="stop">Abbrechen</button></div>
+    <div class="small muted">Tipp: Klappt die Live-Erkennung nicht (gewölbte Gläser, schwaches Licht), ist ein Foto meist zuverlässiger. Barcode möglichst flach und bildfüllend.</div>`;
   const v = document.getElementById("scanV");
   try {
     if ("BarcodeDetector" in window) {
-      const st = await navigator.mediaDevices.getUserMedia({video: {facingMode: "environment"}, audio: false});
+      const st = await navigator.mediaDevices.getUserMedia({video: SCAN_VIDEO, audio: false});
       if (run !== scanRun || !document.getElementById("scanV")) { st.getTracks().forEach(t => t.stop()); return; }
       scanStream = st; v.srcObject = scanStream; await v.play();
       const det = new BarcodeDetector({formats: ["ean_13", "ean_8", "upc_a", "upc_e"]});
@@ -4057,52 +4079,76 @@ async function startScan(mode){
       scanMsg("Scanner wird geladen …");
       await loadScript("https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js");
       if (run !== scanRun || !document.getElementById("scanV")) return;
-      scanReader = new ZXing.BrowserMultiFormatReader(); scanMsg("Barcode in den Rahmen halten …");
-      await scanReader.decodeFromVideoDevice(undefined, "scanV", res => { if (res) { const c = res.getText(); stopScan(); lookupEan(c); } });
+      scanReader = new ZXing.BrowserMultiFormatReader(zxHints(), 150); scanMsg("Barcode in den Rahmen halten …");
+      await scanReader.decodeFromConstraints({video: SCAN_VIDEO, audio: false}, "scanV", res => { if (res) { const c = res.getText(); stopScan(); lookupEan(c); } });
     }
   } catch (e) { stopScan(); scanMsg("Kamera nicht verfügbar oder nicht erlaubt – Nummer eintippen."); }
 }
 async function lookupEan(ean){
   ean = String(ean).replace(/\D/g, ""); if (ean.length < 8) { scanMsg("Ungültige Nummer."); return; }
-  const slot = scanSlot(); if (slot) slot.innerHTML = `<div class="small muted">Suche ${esc(ean)} in Open Food Facts …</div>`;
+  const slot = scanSlot();
+  const mine = Object.values(FOOD().myProds || {}).find(v => v.ean === ean);
+  if (mine) { scanProd = {ean, name: mine.name, brand: "", qty: mine.size ? `${mine.size} g` : "", size: mine.size || null, kcal: mine.nw?.k ?? null, protein: mine.nw?.p ?? null, img: "", local: true, group: mine.group}; renderScanResult(); return; }
+  if (slot) slot.innerHTML = `<div class="small muted">Suche ${esc(ean)} in Open Food Facts …</div>`;
   try {
     const j = await fetch(`https://world.openfoodfacts.org/api/v2/product/${ean}.json?fields=product_name,product_name_de,brands,quantity,nutriments,image_front_small_url`).then(r => r.json());
-    if ((j.status !== 1 || !j.product) && scanMode === "price") { scanProd = {ean, name: "Unbekanntes Produkt " + ean, brand: "", qty: "", size: null, kcal: null, protein: null, img: ""}; renderScanResult(); return; }
-    if (j.status !== 1 || !j.product) { if (slot) slot.innerHTML = `<div class="warnb small">Produkt ${esc(ean)} nicht in Open Food Facts gefunden. Bitte Name und Werte von der Packung eintragen.</div><button class="btn small" type="button" data-scan="again">Nochmal scannen</button>`; return; }
+    if (j.status !== 1 || !j.product) { scanProd = {ean, name: "", brand: "", qty: "", size: null, kcal: null, protein: null, img: "", unknown: true}; renderScanResult(); return; }
     const pr = j.product, n = pr.nutriments || {}, qm = (pr.quantity || "").match(/(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l)\b/i);
     scanProd = {ean, name: (pr.product_name_de || pr.product_name || "Produkt").trim(), brand: (pr.brands || "").split(",")[0].trim(), qty: pr.quantity || "", size: qm ? Number(qm[1].replace(",", ".")) * (/^(kg|l)$/i.test(qm[2]) ? 1000 : 1) : null,
       kcal: num(n["energy-kcal_100g"]), protein: num(n.proteins_100g), img: pr.image_front_small_url || ""};
     renderScanResult();
-  } catch { if (slot) slot.innerHTML = `<div class="warnb small">Keine Verbindung zu Open Food Facts.</div><button class="btn small" type="button" data-scan="again">Nochmal</button>`; }
+  } catch { scanProd = {ean, name: "", brand: "", qty: "", size: null, kcal: null, protein: null, img: "", unknown: true, offline: true}; renderScanResult(); }
 }
 function renderScanResult(){
   const p = scanProd, slot = scanSlot(); if (!p || !slot) return;
-  const head = `<div class="scanres">${p.img ? `<img src="${esc(p.img)}" alt="">` : ""}<div><b>${esc(p.name)}</b><div class="small muted">${esc([p.brand, p.qty].filter(Boolean).join(" · "))}</div><div class="small">${p.kcal != null ? `${Math.round(p.kcal)} kcal` : "kcal ?"} · ${p.protein != null ? `${fmtQ(p.protein)} g Protein` : "Protein ?"} pro 100 g</div></div></div>`;
-  if (scanMode === "snack") slot.innerHTML = head + `<div class="grid2"><div class="field"><label for="scanG">Menge (g/ml)</label><input id="scanG" type="text" inputmode="decimal" value="${p.size && p.size <= 250 ? p.size : 100}"></div><div class="field"><label>&nbsp;</label><button class="btn primary" type="button" data-scan="usesnack">✓ Eintragen</button></div></div><div class="small muted">Wird auch als eigenes Lebensmittel gespeichert – beim nächsten Mal findest du es in den Vorschlägen.</div><button class="btn ghost small" type="button" data-scan="again">Anderes Produkt scannen</button>`;
-  else if (scanMode === "own") slot.innerHTML = head + `<div class="grid2"><div class="field"><label for="scanG">Menge (g/ml)</label><input id="scanG" type="text" inputmode="decimal" value="${p.size && p.size <= 250 ? p.size : 100}"></div><div class="field"><label>&nbsp;</label><button class="btn primary" type="button" data-scan="useown">Übernehmen</button></div></div><button class="btn ghost small" type="button" data-scan="again">Anderes Produkt scannen</button>`;
-  else {
-    const guess = prices?.products.find(x => x.re.test(p.name.toLowerCase())), st = FOOD().store !== "min" && FOOD().store || "aldi";
-    slot.innerHTML = head + `<div class="field"><label for="scanPid">Gehört zu</label><select id="scanPid"><option value="">– Produkt wählen –</option>${(prices?.products || []).map(x => `<option value="${x.id}" ${x.id === guess?.id ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select></div>
-      <div class="grid2"><div class="field"><label for="scanPrice">Preis im Laden (€)</label><input id="scanPrice" type="text" inputmode="decimal" placeholder="z. B. 1,29"></div><div class="field"><label for="scanStore">Markt</label><select id="scanStore">${Object.entries(STORES).map(([k, l]) => `<option value="${k}" ${k === st ? "selected" : ""}>${l}</option>`).join("")}</select></div></div>
-      <div class="btnrow two"><button class="btn primary" type="button" data-scan="saveprice">Preis merken</button><button class="btn" type="button" data-scan="savefood">＋ Als Lebensmittel</button></div><div class="small muted">„Als Lebensmittel“ speichert Name und Nährwerte (und den Preis, falls eingetragen) für Vorschläge, Snacks und Zutaten.</div><button class="btn ghost small" type="button" data-scan="again">Nächstes Produkt scannen</button>`;
-  }
+  const G = SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze"), grp = p.group || myGroup(p.name || ""), need = p.unknown || p.kcal == null;
+  const head = p.unknown ? `<div class="warnb small">${p.offline ? "Keine Verbindung zu Open Food Facts." : `Barcode ${esc(p.ean)} ist in Open Food Facts nicht bekannt.`} Trag es einmal selbst ein – beim nächsten Scan erkennt die App es sofort.</div>`
+    : `<div class="scanres">${p.img ? `<img src="${esc(p.img)}" alt="">` : ""}<div><b>${esc(p.name)}</b><div class="small muted">${esc([p.brand, p.qty, p.local ? "von dir angelegt" : ""].filter(Boolean).join(" · "))}</div><div class="small">${p.kcal != null ? `${Math.round(p.kcal)} kcal` : "kcal ?"} · ${p.protein != null ? `${fmtQ(p.protein)} g Eiweiß` : "Eiweiß ?"} je 100 g</div></div></div>`;
+  const form = `<div class="field"><label for="scanName">Was ist es?</label><input type="text" id="scanName" value="${esc(p.unknown ? "" : p.name)}" placeholder="z. B. Bio-Mandelmus" autocomplete="off"></div>
+    <div class="field"><label for="scanGrp">Rubrik</label><select id="scanGrp">${G.map(g => `<option ${g === grp ? "selected" : ""}>${esc(g)}</option>`).join("")}</select></div>
+    ${need ? `<div class="grid2"><div class="field"><label for="scanKcal">kcal je 100 g</label><input type="text" inputmode="decimal" id="scanKcal" value="${p.kcal ?? ""}"></div><div class="field"><label for="scanProt">Eiweiß g je 100 g</label><input type="text" inputmode="decimal" id="scanProt" value="${p.protein ?? ""}"></div></div>
+    <div class="grid2"><div class="field"><label for="scanSize">Packung (g/ml)</label><input type="text" inputmode="decimal" id="scanSize" value="${p.size ?? ""}" placeholder="z. B. 250"></div><div class="field"><label>&nbsp;</label><label class="btn small">📷 Nährwerttabelle<input type="file" accept="image/*" capture="environment" id="scanNutri" hidden></label></div></div><div class="small muted" id="nutriMsg">Foto der Nährwerttabelle: kcal und Eiweiß werden automatisch ausgelesen.</div>` : ""}`;
+  const amount = `<div class="field"><label for="scanG">Gegessen (g/ml)</label><input id="scanG" type="text" inputmode="decimal" value="${p.size && p.size <= 250 ? p.size : 100}"></div>`;
+  const again = `<button class="btn ghost small" type="button" data-scan="again">Anderes Produkt scannen</button>`;
+  if (scanMode === "snack") slot.innerHTML = head + form + amount + `<button class="btn primary big" type="button" data-scan="usesnack">✓ Eintragen</button>` + again;
+  else if (scanMode === "own") slot.innerHTML = head + form + amount + `<button class="btn primary" type="button" data-scan="useown">Übernehmen</button>` + again;
+  else { const guess = prices?.products.find(x => x.re.test((p.name || "").toLowerCase())), st = FOOD().store !== "min" && FOOD().store || "rewe";
+    slot.innerHTML = head + form + `<div class="grid2"><div class="field"><label for="scanPrice">Preis im Laden (€)</label><input id="scanPrice" type="text" inputmode="decimal" placeholder="z. B. 1,29"></div><div class="field"><label for="scanStore">Markt</label><select id="scanStore">${Object.entries(STORES).map(([k, l]) => `<option value="${k}" ${k === st ? "selected" : ""}>${l}</option>`).join("")}</select></div></div>
+      ${guess ? `<label class="check small"><input type="checkbox" id="scanAlso" data-pid="${guess.id}" checked><span>Preis auch für „${esc(prodLabel(guess))}“ in Plan und Einkauf nutzen</span></label>` : ""}
+      <button class="btn primary big" type="button" data-scan="savefood">✓ Speichern</button><div class="small muted">Speichert das Produkt mit Nährwerten und Preis – es erscheint in Vorschlägen, Snacks, Zutaten und Vorrat.</div>` + again; }
 }
+// Eingaben ins Scan-Ergebnis übernehmen
+function scanRead(){ const p = scanProd; if (!p) return false; const v = id => document.getElementById(id)?.value?.trim();
+  const nm = v("scanName"); if (!nm && !p.name) { toast("Bitte eintragen, was es ist"); document.getElementById("scanName")?.focus(); return false; }
+  if (nm) p.name = nm; p.group = v("scanGrp") || p.group; const kc = num(v("scanKcal")), pr = num(v("scanProt")), sz = num(v("scanSize"));
+  if (kc != null) p.kcal = kc; if (pr != null) p.protein = pr; if (sz) p.size = sz; return true; }
+// Nährwerttabelle per Foto: Texterkennung, dann kcal und Eiweiß je 100 g heraussuchen
+async function scanNutriPhoto(file){ const msg = document.getElementById("nutriMsg"); if (msg) msg.textContent = "Lese die Nährwerttabelle … (kann 10–20 s dauern)";
+  try { const tx = (await receiptText(file)).replace(/,/g, "."), flat = tx.replace(/\s+/g, " ");
+    const kc = flat.match(/(\d{1,4}(?:\.\d)?)\s*kcal/i) || flat.match(/kcal\D{0,12}(\d{1,4}(?:\.\d)?)/i), pr = flat.match(/(?:eiwei(?:ß|ss|b)|protein)\D{0,25}?(\d{1,3}(?:\.\d{1,2})?)\s*g/i);
+    const set = (id, x) => { const el = document.getElementById(id); if (el && x != null) el.value = x; };
+    if (kc) set("scanKcal", Number(kc[1])); if (pr) set("scanProt", Number(pr[1]));
+    if (msg) msg.textContent = kc || pr ? `Erkannt: ${kc ? kc[1] + " kcal" : "kcal ?"} · ${pr ? pr[1] + " g Eiweiß" : "Eiweiß ?"} je 100 g – bitte kurz prüfen.` : "Nichts Eindeutiges erkannt – Foto gerade und nah von der Tabelle, oder Werte eintippen.";
+  } catch { if (msg) msg.textContent = "Texterkennung nicht möglich – Werte bitte eintippen."; } }
+
 // Scan → eigenes Lebensmittel (food.myProds): Nährwerte je 100 g von Open Food Facts, Portion = Packung bis 250 g, sonst 100 g
 function scanToMy(price, store){ const p = scanProd; if (!p) return null; const name = `${p.name}${p.brand && !p.name.toLowerCase().includes(p.brand.toLowerCase()) ? " (" + p.brand + ")" : ""}`.slice(0, 60);
   const my = Object.assign({}, FOOD().myProds || {}), old = Object.entries(my).find(([, v]) => v.ean === p.ean), key = old ? old[0] : ("ean-" + p.ean);
-  my[key] = Object.assign({}, old?.[1], {name: old?.[1]?.name || name, ean: p.ean, store: store || old?.[1]?.store || (FOOD().store !== "min" && FOOD().store) || "rewe", date: todayIso(), portion: p.size && p.size <= 250 ? p.size : 100, size: p.size || null, group: old?.[1]?.group || myGroup(name)},
+  my[key] = Object.assign({}, old?.[1], {name: p.unknown || p.local ? name : old?.[1]?.name || name, ean: p.ean, store: store || old?.[1]?.store || (FOOD().store !== "min" && FOOD().store) || "rewe", date: todayIso(), portion: p.size && p.size <= 250 ? p.size : 100, size: p.size || null, group: p.group || old?.[1]?.group || myGroup(name)},
     price > 0 ? {price} : old?.[1]?.price ? {} : {price: null}, p.kcal != null ? {nw: {n: name, k: p.kcal, p: p.protein ?? 0}} : {});
   saveFood({myProds: my}); return my[key]; }
 function scanCmd(c){
   if (c === "stop") { stopScan(); const sl = scanSlot(); if (sl) sl.innerHTML = ""; return; }
   if (c === "again") return startScan(scanMode);
   if (c === "manual") { const v = document.getElementById("scanEan")?.value; stopScan(); return lookupEan(v || ""); }
-  if (c === "useown" && scanProd) { const g = num(document.getElementById("scanG")?.value) || 100, f = g / 100, set = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+  if (c === "useown" && scanProd) { if (!scanRead()) return; scanToMy(null, null); const g = num(document.getElementById("scanG")?.value) || 100, f = g / 100, set = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
     set("ownName", `${scanProd.name}${scanProd.brand && !scanProd.name.toLowerCase().includes(scanProd.brand.toLowerCase()) ? " (" + scanProd.brand + ")" : ""}, ${fmtQ(g)} g`); set("ownKcal", scanProd.kcal != null ? Math.round(scanProd.kcal * f) : ""); set("ownProt", scanProd.protein != null ? Math.round(scanProd.protein * f) : "");
     scanSlot().innerHTML = `<div class="small good">✓ Übernommen – unten prüfen und „Eintragen“.</div>`; return; }
-  if (c === "savefood" && scanProd) { const price = num(document.getElementById("scanPrice")?.value), st = document.getElementById("scanStore")?.value, m = scanToMy(price, st);
+  if (c === "savefood" && scanProd) { if (!scanRead()) return; const price = num(document.getElementById("scanPrice")?.value), st = document.getElementById("scanStore")?.value, m = scanToMy(price, st);
+    const also = document.getElementById("scanAlso"), pr0 = also?.checked && prodById(also.dataset.pid);
+    if (pr0 && price > 0 && prices.stores.includes(st)) { const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})); own[pr0.id] = Object.assign(own[pr0.id] || {}, {[st]: {price: refPrice(pr0, price, scanProd.size, null), date: todayIso(), src: (scanProd.name || "").slice(0, 40)}}); saveFood({ownPrices: own}); }
     toast(`Gespeichert: ${m.name}${scanProd.kcal != null ? ` · ${Math.round(scanProd.kcal)} kcal/100 g` : " (ohne Nährwerte)"}`); startScan(scanMode); return; }
-  if (c === "usesnack" && scanProd) { const g = num(document.getElementById("scanG")?.value) || 100, f = g / 100, m = scanToMy(null, null), d = sheetArg || todayIso();
+  if (c === "usesnack" && scanProd) { if (!scanRead()) return; const g = num(document.getElementById("scanG")?.value) || 100, f = g / 100, m = scanToMy(null, null), d = sheetArg || todayIso();
     const kcal = scanProd.kcal != null ? Math.round(scanProd.kcal * f) : null, protein = scanProd.protein != null ? Math.round(scanProd.protein * f) : null, id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
     editDay(d, day => { day.own = [...(day.own || []), {id, name: `${m.name}, ${fmtQ(g)} g`, kcal, protein, time}]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
     stopScan(); toast(`✓ ${m.name}${kcal != null ? ` · ${kcal} kcal` : ""}`); sheetKind = null; sheet.close(); render(); return; }
@@ -4977,6 +5023,8 @@ async function onChange(e){
   if (t.dataset.rsing != null && rsEat) { rsEat.lines[+t.dataset.rsing].on = t.checked; resteEatCalc(); return; }
   if (t.id === "rsSlot" && rsEat) { rsEat.slot = t.value; return; }
   if ((t.id === "ownKcal" || t.id === "ownProt") && sheetKind === "resteeat") { t.dataset.touched = "1"; return; }
+  if (t.id === "scanPhoto" && t.files?.[0]) { scanPhoto(t.files[0]); return; }
+  if (t.id === "scanNutri" && t.files?.[0]) { scanNutriPhoto(t.files[0]); return; }
   if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
   if (t.dataset.myname || t.dataset.mygrp || t.dataset.mynw) { const k = t.dataset.myname || t.dataset.mygrp || t.dataset.mynw, my = Object.assign({}, FOOD().myProds || {}), o = Object.assign({}, my[k]); if (!my[k]) return;
     if (t.dataset.myname) { const v = t.value.trim().slice(0, 40); if (!v) return; o.name = v; }
