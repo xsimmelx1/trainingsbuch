@@ -2275,8 +2275,10 @@ const nSets = (base, w, sk) => { const e = eff(base); if (!e) return 0; return s
 // Erledigte Sätze einer Planübung, auch wenn sie unterwegs getauscht wurde (Sätze unter der ursprünglichen Übung zählen mit)
 // Sätze zählen über alle Varianten der Übung (Original, Ersatz, Zuhause-Variante, heute geloggte Alternativen)
 const doneSetsOf = base => { const e = eff(base), so = setsObj(), ids = new Set([e, base, eff0(base)]);
+  // Alternativen zählen mit (Zurücktauschen), aber nicht, wenn sie in dieser Einheit selbst eine Planübung sind
+  const plan = new Set(exList(woSession || cur.session).filter(x => x !== base));
   for (const [i] of (ALTS[base] || [])) ids.add(i); for (const [i] of (ALTS[e] || [])) ids.add(i); const hd = typeof homeDefault === "function" ? homeDefault(base) : null; if (hd) ids.add(hd);
-  return [...ids].filter(Boolean).flatMap(id => (so[id] || []).filter(doneSet)); };
+  return [...ids].filter(id => id && !plan.has(id)).flatMap(id => (so[id] || []).filter(doneSet)); };
 const doneCount = (base, w, sk) => { const e = eff(base); if (!e) return 0; return Math.min(nSets(base, w, sk), doneSetsOf(base).length); };
 function renderTraining(){
   ensureCur();
@@ -2995,7 +2997,7 @@ function coach(){
     const kneeHi = kv.filter(v => v > 2).length >= 3, kneeCalm = kv.length >= 5 && kv.every(v => v <= 2);
     if (painHi && !S().scCleared) { c.title = "Die Schulter meldet sich"; c.body = "Heute Übungen mit SC-Ampel durch den Ersatz tauschen. Hält das länger als 1–2 Wochen an, den Arzttermin vorziehen."; }
     else if (kneeHi && !S().knee1) { c.title = `Knie: ${kv.filter(v => v > 2).length} von ${kv.length} Morgentests über 2/10`; c.body = "Knie-Phase 1 schont mit kürzerem Bewegungsweg: Beinpresse nur bis 60°, Beinstrecker 90→45°, Wandsitz statt Kniebeuge. Du kannst jederzeit zurück."; c.btns.push(["knee1on", "Knie-Phase 1 aktivieren"]); }
-    else if (kneeCalm && S().knee1) { c.title = "Knie ruhig: 7 Morgentests ≤ 2/10"; c.body = "Du kannst zu den normalen Beineinheiten zurück. Erst die Wiederholungen steigern, dann das Gewicht."; c.btns.push(["knee1off", "Zurück zu normalen Beineinheiten"]); }
+    else if (kneeCalm && S().knee1) { c.title = "Knie ruhig: " + kv.length + " Morgentests ≤ 2/10"; c.body = "Du kannst zu den normalen Beineinheiten zurück. Erst die Wiederholungen steigern, dann das Gewicht."; c.btns.push(["knee1off", "Zurück zu normalen Beineinheiten"]); }
     else if (isStrength(cur)) { c.title = "Einheit erledigt"; c.body = "Stark. Jetzt machen Essen, Schlaf und Erholung den Fortschritt. Heute Abend noch das Schmerz-Log."; }
     else if (p) { c.title = `Heute: ${SESS[variantOf(p.session, t)].title}${p.start ? ` um ${p.start}` : ""}`; c.body = ph.focus; }
     else { c.title = "Ruhetag"; c.body = "Erholung gehört zum Plan: 12 min Routine, Rad, genug Protein. Lust auf Bouldern? Dann locker."; }
