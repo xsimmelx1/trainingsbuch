@@ -245,6 +245,7 @@ body.wo main{padding-bottom:110px}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
 .nickl{display:flex;flex-direction:column;gap:6px}.nickr{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center}.nickr input{min-width:0}
+.recentrec{align-items:center;margin-top:6px}.recentrec button{max-width:48%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
@@ -4209,7 +4210,10 @@ function shopCosts(groups, done){
   for (const [, a] of groups) for (const it of a) { if (!it.pr || done.has(it.key)) continue; for (const st of Object.keys(STORES)) { const v = priceOf(it.pr, st); if (v == null) out[st].miss++; else { out[st].sum += it.share * v; out[st].n = (out[st].n || 0) + 1; if ((it.pr.est || []).includes(st)) out[st].est = (out[st].est || 0) + 1; } } }
   return out;
 }
-let shopScope = lsGet("shopScope") || "woche", shopDay = null, shopRec = null, shopMul = 1, shopDays = lsGet("shopDays") || 3, shopKind = lsGet("shopKind") || "gang";
+// Gewähltes Gericht (auch Zufall) überlebt Neuladen und Verklicken; die letzten bleiben als Schnellwahl
+const shopRecSaved = lsGet("shopRecState") || {};
+let shopRecent = lsGet("shopRecent") || [];
+let shopScope = lsGet("shopScope") || "woche", shopDay = null, shopRec = shopRecSaved.rec || null, shopMul = shopRecSaved.mul || 1, shopDays = lsGet("shopDays") || 3, shopKind = lsGet("shopKind") || "gang";
 // Lagerart je Produkt: Basis = lange haltbar (Trocken, Dose, TK, H-Milch, Zwiebeln/Kartoffeln), sonst frisch; Spezial = kommt nur in wenigen Rezepten vor
 const BASIS = new Set(["haferflocken","reis","nudeln","vollkornnudeln","linsennudeln","couscous","quinoa","bulgur","roteLinsen","linsenBraun","kichererbsen","kidney","weissebohnen","schwarzeBohnen","linsendose","mais","tomatenGehackt","tomatenPassiert","tomatenmark","kokosmilch","sojagranulat","tkSpinat","erbsen","bohnenGruen","edamame","tkbeeren","mehl","zucker","staerke","oel","sojasauce","bruehe","honig","kakao","chia","leinsamen","kerne","walnuesse","cashews","mandeln","pinienkerne","erdnussmus","tahin","knaeckebrot","magermilchpulver","milch","sojadrink","haferdrink","pflanzendrink","currypaste","currypulver","senf","essig","agave","oliven","jalapenos","loeffelbiskuits","schokolade","kartoffeln","zwiebeln","knoblauch","margarine","eiweissbrot","tortillas"]);
 let prodUse = null, ingVocab = null;
@@ -4220,7 +4224,7 @@ const prodLabel0 = pr => pr.name.replace(/\s*\(.*?\)/g, "").replace(/,\s+\d.*$/,
 // Spitznamen je Produkt (food.nick) – gelten in Einkauf, Vorrat, Zutaten und beim Teilen
 const nickOf = pr => (pr && (FOOD().nick || {})[pr.id]) || "";
 const prodLabel = pr => nickOf(pr) || prodLabel0(pr);
-let stQ = "", reste = {have: lsGet("resteHave") || [], mode: lsGet("resteMode") || "nur", stock: true}, shopFromReste = false;
+let stQ = "", reste = {have: lsGet("resteHave") || [], mode: lsGet("resteMode") || "nur", stock: true}, shopFromReste = !!shopRecSaved.reste;
 const resteTerm = t => { const w = t.toLowerCase().trim().replace(/(en|n|e|s)$/, ""); return w.length >= 3 ? w : t.toLowerCase().trim(); };
 const resteHit = (text, term) => new RegExp("(^|[^a-zäöüß])" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
 // Produkt-IDs zu den eingegebenen Resten (für „habe ich“ beim Einkauf)
@@ -4388,6 +4392,10 @@ function shopHtml(){
   const buyItems = groups.flatMap(([, a]) => a), total = buyItems.length, got = buyItems.filter(i => done.has(i.key)).length, pGot = pantry.filter(i => done.has(i.key)).length;
   let h = `<div class="seg" role="group" aria-label="Einkaufen für">${[["tag","Tag"],["tage","Tage"],["woche","Woche"],["gericht","Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const r = recipeByName(cx.n);
+    lsSet("shopScope", "gericht"); lsSet("shopRecState", {rec: cx.n, mul: shopMul, reste: shopFromReste});
+    if (shopRecent[0] !== cx.n) { shopRecent = [cx.n, ...shopRecent.filter(n => n !== cx.n)].slice(0, 6); lsSet("shopRecent", shopRecent); }
+    const recent = shopRecent.filter(n => n !== cx.n && recipeByName(n));
+    if (recent.length) h += `<div class="chips sm recentrec"><span class="small muted">Zuletzt:</span>${recent.map(n => `<button type="button" data-shoprec="${esc(n)}">${esc(n.split(/ mit | & |,/)[0])}</button>`).join("")}</div>`;
     h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(cx.n)}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept${shopFromReste ? " · ohne deine Reste" : ""}</span></span><span class="go">›</span></button>
       <div class="actions"><button class="btn small" type="button" data-recipe="${esc(cx.n)}">📖 Rezept ansehen</button><button class="btn small ghost" type="button" data-sheet="shoprec">Anderes Gericht</button><button class="btn small ghost" type="button" data-shoprandom aria-label="Zufälliges Gericht">🎲</button></div>
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b> <span class="small muted">· ergibt ${shopMul * (r.servings || 1)} Portion${shopMul * (r.servings || 1) > 1 ? "en" : ""}</span></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
@@ -4400,10 +4408,9 @@ function shopHtml(){
   const selSt = st0 !== "min" && stores.includes(st0) ? st0 : best, open = c && selSt ? c[selSt].sum : 0;
   const bud = num(FOOD().budget), wc = P && shopScope === "woche" && bud ? weekShopCost(shopWeek()) : null, bs = wc != null && budgetOn() ? budgetSubs(shopWeek()) : null, nSub = bs ? Object.keys(bs.subs).length : 0;
   h += `<details class="shophead shopsticky" ${keepOpen("head")}><summary><div class="shoprow"><span><b>${got}/${total}</b> im Korb</span><span>${P ? `noch ≈ <b>${eur(open)}</b> · ${st0 === "min" ? "günstigster" : STORES[selSt]}${wc != null ? (wc > bud ? ` · <span class="warnt">Budget ⚠</span>` : " · Budget ✓") : ""}` : "Preise laden …"} <span class="muted">⌄</span></span></div><div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div></summary>
-    ${P ? `<div class="card"><div class="lab">Noch offen kostet ungefähr</div><div class="storecmp">${Object.entries(c).filter(([st]) => stores.includes(st)).map(([st, v]) => `<button type="button" class="${st === best ? "best" : ""} ${st === st0 ? "sel" : ""}" data-shopstore="${st}" aria-pressed="${st === st0}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b><span class="muted">${v.miss ? `${v.miss} ohne Preis` : `${v.n ? Math.round((v.est || 0) / v.n * 100) : 0} % geschätzt`}</span></button>`).join("")}</div>
-      <div class="small muted">Antippen wechselt den Markt für Liste und Plan.${st0 === "min" ? " Aktuell: je Produkt der günstigste." : ""}</div>
+    ${P ? `<div class="card"><div class="mhead"><span class="lab">Noch offen kostet ungefähr</span>${info(`Antippen wechselt den Markt für Liste und Plan.${st0 === "min" ? " Aktuell: je Produkt der günstigste." : ""} Liste: ganze Packungen bzw. Stück, Vorrat anteilig. Budget: Haltbares (Reis, Dosen, TK) anteilig, deshalb niedriger. * = geschätzt. ${priceNote()}`)}</div><div class="storecmp">${Object.entries(c).filter(([st]) => stores.includes(st)).map(([st, v]) => `<button type="button" class="${st === best ? "best" : ""} ${st === st0 ? "sel" : ""}" data-shopstore="${st}" aria-pressed="${st === st0}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b>${v.n && v.est ? `<span class="muted">${Math.round(v.est / v.n * 100)} % geschätzt</span>` : ""}</button>`).join("")}</div>
       ${wc != null ? `<div class="mhead"><span class="${wc > bud ? "warnt" : "okt"}">Budget ${eur(bud)}: Plan der Woche <b>${eur(wc)}</b>${FOOD().budgetIgnore ? " (Grenze aus)" : wc > bud ? (bs && !bs.ok ? " · günstigere Rezepte reichen nicht ganz" : " · darüber") : " · passt ✓"}${nSub ? ` · ${nSub} getauscht` : ""}</span><button type="button" class="btn ghost small" data-sub2="essenset">Einstellen ›</button></div>` : bud ? "" : `<div class="mhead"><span class="small muted">Kein Wochenbudget gesetzt.</span><button type="button" class="btn ghost small" data-sub2="essenset">Einstellen ›</button></div>`}
-      <div class="small muted">Liste: ganze Packungen bzw. Stück, Vorrat anteilig. Budget: Haltbares (Reis, Dosen, TK) anteilig, deshalb niedriger. * = geschätzt. ${priceNote()}</div></div>` : ""}</details>`;
+</div>` : ""}</details>`;
   h += `<div class="btnrow four"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>`;
   // Alle Einstellungen der Liste in einem Aufklapper
   const mealsTxt = shopScope === "gericht" ? "" : (shopMeals.length === SHOPM.length ? "Alle Mahlzeiten" : SHOPM.filter(([k]) => shopMeals.includes(k)).map(([, l]) => l.replace(/^\S+\s/, "")).join(", ")) + " · ";
@@ -4673,7 +4680,7 @@ async function onClick(e){
   const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else if (shopScope === "tage") shopDay = addDays(shopDay || todayIso(), v * shopDays); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
   if (t.closest("[data-shoprandom]")) { const are = avoidRe(), pool = recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt" && r.name !== shopRec); const pick = pool[Math.floor(Math.random() * pool.length)]; if (pick) { shopRec = pick.name; shopMul = 1; shopFromReste = false; renderMore(); toast("🎲 " + pick.name); } return; }
   if (t.closest("[data-recshop]")) { shopScope = "gericht"; shopRec = t.closest("[data-recshop]").dataset.recshop; shopMul = 1; shopFromReste = false; closeSheet(); essenView = "einkauf"; go("essen"); return; }
-  const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; closeSheet(); renderMore(); return; }
+  const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
