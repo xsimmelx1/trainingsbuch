@@ -3580,7 +3580,7 @@ const SUBST = {
 };
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
 const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
-  for (const k of ["favs", "stock", "bioItems"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
+  for (const k of ["favs", "stock", "bioItems", "slotsOff"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
   for (const k of ["ownPrices", "myProds", "nick"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
   saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
@@ -3736,7 +3736,8 @@ function mealTime(d, slot){
 }
 function mealsFor(d){
   const day = dayObj(d), def = mealDefaults(d), ov = day?.meals || {}, ate = day?.ate || {};
-  const out = mealPlan.slots.map(sl => { const name = ov[sl.k] || def[sl.k]; if (!name) return null;
+  const off = new Set(FOOD().slotsOff || []);
+  const out = mealPlan.slots.map(sl => { if (off.has(sl.k) && !ov[sl.k] && !ate[sl.k]) return null; const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
     return {k: sl.k, label: sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, info: mealInfo(o)});
@@ -4433,12 +4434,16 @@ function nickListHtml(){ if (!prices) { ensurePrices().then(() => { const b = do
   const L = prices.products.filter(pr => q ? fold((prodLabel0(pr) + " " + (nk[pr.id] || "")).toLowerCase()).includes(q) : nk[pr.id]).sort((a, b) => prodLabel(a).localeCompare(prodLabel(b), "de")).slice(0, 30);
   if (!L.length) return `<div class="small muted">${q ? "Nichts gefunden." : "Noch keine eigenen Namen. Oben suchen und Namen eintragen."}</div>`;
   return `<div class="nickl">${L.map(pr => `<label class="nickr">${prodImg(pr, "pmini")}<span class="small">${esc(prodLabel0(pr))}</span><input type="text" data-nick="${pr.id}" value="${esc(nk[pr.id] || "")}" placeholder="eigener Name" autocomplete="off" aria-label="Eigener Name für ${esc(prodLabel0(pr))}"></label>`).join("")}</div>`; }
+const SLOT_NAME = {fr: "🥣 Frühstück", mi: "🍲 1. Hauptgericht", sn: "🥕 Snack / Shake", ab: "🍲 2. Hauptgericht", ex: "🍫 Extra / Dessert"};
 function foodSettingsHtml(){
   const f = FOOD(), T = foodTarget(), url = S().icsUrl;
   return `<div class="card"><h2>Anzeige</h2>
       <label class="check"><input type="checkbox" id="foodNutri" ${f.showNutri !== false ? "checked" : ""}><span>Kalorien und Nährwerte anzeigen<br><span class="small muted">Aus: Plan, Abhaken und Einkauf bleiben, nur Zahlen zu kcal und Protein verschwinden.</span></span></label>
       <label class="check"><input type="checkbox" id="foodProdImg" ${f.prodImg !== false ? "checked" : ""}><span>Produktbilder in Einkauf und Zutaten<br><span class="small muted">Fotos von Wikipedia/Wikimedia Commons, Nachweis im Zutaten-Blatt.</span></span></label>
       <label class="check"><input type="checkbox" id="calMeals" ${calMeals ? "checked" : ""}><span>Essen im App-Kalender einblenden</span></label></div>
+    <div class="card"><h2>Mahlzeiten planen</h2><div class="small muted">Antippen, was der Plan vorsehen soll – hervorgehoben heißt geplant.</div>
+      <div class="chips">${mealPlan.slots.map(sl => `<button type="button" data-slotoff="${sl.k}" aria-pressed="${!(f.slotsOff || []).includes(sl.k)}">${esc(SLOT_NAME[sl.k] || sl.label)}</button>`).join("")}</div>
+      ${info("Ausgeschaltete Mahlzeiten verschwinden aus Plan, Einkaufsliste, Budget und Essens-Kalender. Das Tagesziel bleibt gleich – die geplanten kcal und das Protein sinken entsprechend. Eigene Einträge kannst du trotzdem jederzeit nachtragen.")}</div>
     ${ownCount() ? `<button type="button" class="lrow menu card" data-sheet="ownprices"><span class="mdot static">🧾</span><span class="lmain"><b>Meine Preise</b><span class="small muted">${ownCount()} Preise aus Kassenbons</span></span><span class="go">›</span></button>` : ""}
     <div class="card"><h2>Eigene Namen</h2><div class="small muted">Gib Lebensmitteln deine Namen, z. B. „Haferdrink“ → „Hafermilch“. Sie gelten in Einkaufsliste, Vorrat und Zutaten.</div>
       <input type="text" id="nickQ" value="${esc(nickQ)}" placeholder="🔎 Lebensmittel suchen" autocomplete="off" aria-label="Lebensmittel suchen"><div id="nickList">${nickListHtml()}</div></div>
@@ -4467,7 +4472,7 @@ function foodSettingsHtml(){
       <div class="chips">${Object.entries(ALLERGENS).map(([k, [l]]) => `<button type="button" data-allergen="${k}" aria-pressed="${(f.allergens || []).includes(k)}">${esc(l)}</button>`).join("")}</div>
       <div class="field"><label for="foodAvoid">Weitere Zutaten meiden (mit Komma trennen)</label><input type="text" id="foodAvoid" data-ac="avoid" autocomplete="off" value="${esc(f.avoid || "")}" placeholder="z. B. Äpfel, Pilze, Koriander"></div>
       <div class="small muted">${avoidRe() ? `${recipes.filter(r => !recipeOk(r)).length} Rezepte werden gemieden. Im Plan rückt automatisch das ähnlichste erlaubte Gericht nach, in Einkauf und Kalender ebenso.` : "Gerichte mit diesen Zutaten ersetzt der Plan automatisch durch ähnliche."} Bei echten Allergien zusätzlich die Zutatenliste der Produkte prüfen.</div></div>
-    <div class="card"><h2>Essenszeiten</h2><div class="grid2">${mealPlan.slots.filter(sl => sl.time).map(sl => `<div class="field"><label for="ft_${sl.k}">${esc(sl.label)}</label><input type="time" id="ft_${sl.k}" data-ftime="${sl.k}" value="${esc(f.times[sl.k] || sl.time)}"></div>`).join("")}</div>
+    <div class="card"><h2>Essenszeiten</h2><div class="grid2">${mealPlan.slots.filter(sl => sl.time && !(f.slotsOff || []).includes(sl.k)).map(sl => `<div class="field"><label for="ft_${sl.k}">${esc(sl.label)}</label><input type="time" id="ft_${sl.k}" data-ftime="${sl.k}" value="${esc(f.times[sl.k] || sl.time)}"></div>`).join("")}</div>
       ${info("An Trainingstagen kommt der Snack (Shake) direkt nach dem Training, und das Abendessen rückt nach hinten, wenn das Training spät endet. Die Zeiten gelten auch für den Essens-Kalender.")}
       <button class="btn ghost small" type="button" id="ftReset">Standardzeiten</button></div>
     <div class="card nutri"><h2>Tagesziel</h2><div class="grid2"><div class="field"><label for="fkcal">kcal</label><input type="text" inputmode="numeric" id="fkcal" value="${T.kcal}"></div><div class="field"><label for="fprot">Protein (g)</label><input type="text" inputmode="numeric" id="fprot" value="${T.protein}"></div></div>
@@ -4655,6 +4660,7 @@ async function onClick(e){
     else { const d = sheetArg, id = Date.now().toString(36), time = sheet.querySelector("#ownTime")?.value || ""; editDay(d, day => { day.own = [...(day.own || []), {id, name, kcal, protein, time}]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); }); }
     sheetKind = null; sheet.close(); render(); return; }
   const od = t.closest("[data-owndel]"); if (od) { const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
+  const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }

@@ -801,8 +801,11 @@ def build_meal_ics(now, settings, plan, days, past=None):
         names = {k: bs.get(v, v) for k, v in names.items()}
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
         times = (settings.get("food") or {}).get("times") or {}
+        off = set((settings.get("food") or {}).get("slotsOff") or [])
         for slot in mp["slots"]:
             k, name = slot["k"], names.get(slot["k"])
+            if k in off and not (day.get("meals") or {}).get(k):  # in den Einstellungen ausgeschaltet
+                continue
             t = times.get(k) or slot["time"]
             if t and not re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", t):  # ungültige eigene Zeit → Standard
                 t = slot["time"]
