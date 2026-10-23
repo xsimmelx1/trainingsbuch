@@ -245,6 +245,7 @@ body.wo main{padding-bottom:110px}
 .pr{display:flex;flex-direction:column;border:1px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:8px 10px}
 .gtimer{display:flex;flex-direction:column;align-items:center;gap:8px;border:1px solid var(--line);border-radius:14px;padding:12px}
 .nickl{display:flex;flex-direction:column;gap:6px}.nickr{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1.1fr);gap:8px;align-items:center}.nickr input{min-width:0}
+.rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
@@ -3028,7 +3029,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3251,6 +3252,7 @@ function journeySheet(kind, arg){
   if (kind === "cook") return cookHtml(arg);
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
+  if (kind === "resteeat") { if (!recipes || !mealPlan) { ensureMeals().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; } setTimeout(resteEatCalc, 0); return resteEatHtml(arg || ""); }
   if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
   if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
     return `<div class="sh"><h2>🏠 Vorrat zuhause</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
@@ -4234,6 +4236,38 @@ function resteRank(){
     .sort((a, b) => b.used.length - a.used.length || a.miss.length - b.miss.length || b.hit - a.hit).slice(0, 30);
 }
 // Baukasten: aus den Resten ein schnelles Gericht ohne Rezept
+// Aus dem Resteverwerter eintragen: welche Zutaten wirklich drin waren, was dazukam
+let rsEat = null;
+function resteEatLines(name){ const r = name ? recipeByName(name) : null, terms = reste.have.map(resteTerm), st = reste.stock && stockOn() ? STOCK() : new Set();
+  if (!r) return reste.have.map(t => ({l: t, on: true}));
+  return (r.ingredients || []).filter(l => !/^(warmes |kaltes |heißes )?wasser\b/i.test(l)).map(l => { const ll = l.toLowerCase(), x = prices ? parseIng(l) : null, ids = x?.pr ? (x.parts || [x]).map(pt => pt.pr.id) : [];
+    const on = reste.have.some((t, i) => resteHit(ll, terms[i])) || ids.some(id => st.has(id)) || SPICE_RE.test(l) || !!x?.pr?.pantry; return {l, on}; }); }
+function resteEatHtml(name){
+  const r = name ? recipeByName(name) : null, close = `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>`;
+  if (!rsEat || rsEat.name !== name) rsEat = {name, lines: resteEatLines(name), por: 1, slot: ""};
+  const d = todayIso(), open = mealsFor(d).filter(m => !m.ate && !m.own);
+  return `<div class="sh"><h2>Eintragen</h2>${close}</div>
+    <div class="card ownf"><div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" value="${esc(rsEat.title ?? (r ? r.name : "Resteessen"))}" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
+    <div><div class="lab">Was war drin? <span class="small muted">(abwählen, was du weggelassen hast)</span></div><div class="rsing">${rsEat.lines.map((x, i) => `<label class="check small"><input type="checkbox" data-rsing="${i}" ${x.on ? "checked" : ""}><span>${esc(x.l)}</span></label>`).join("")}</div></div>
+    <div class="field"><label for="ownText">Anderes dazu</label><textarea id="ownText" rows="2" placeholder="z. B. 50 g Feta, Paprika, Reis von gestern" autocomplete="off">${esc(rsEat.extra || "")}</textarea><div class="sugg" id="ownIngSug"></div></div>
+    ${r ? `<div class="mhead"><span>Portionen: <b>${rsEat.por}</b> <span class="small muted">von ${r.servings || 1} laut Rezept</span></span><div class="actions"><button class="btn small" type="button" data-rspor="-0.5" aria-label="Weniger">−</button><button class="btn small" type="button" data-rspor="0.5" aria-label="Mehr">+</button></div></div>` : ""}
+    <div class="field"><label for="rsSlot">Als</label><select id="rsSlot"><option value="">Zusätzlich (jetzt)</option>${open.map(m => `<option value="${m.k}" ${rsEat.slot === m.k ? "selected" : ""}>statt ${esc(MEAL_SHORT[m.k] || m.label)}: ${esc(m.info.name)}</option>`).join("")}</select></div>
+    <div id="rsEst" class="small muted">Werte werden berechnet …</div>
+    <div class="grid2"><div class="field nutri"><label for="ownKcal">kcal</label><input type="text" inputmode="numeric" id="ownKcal"></div><div class="field nutri"><label for="ownProt">Protein g</label><input type="text" inputmode="numeric" id="ownProt"></div></div>
+    <button class="btn primary big" type="button" data-act="resteSave">✓ Gegessen eintragen</button></div>`; }
+// Werte: Rezeptwerte anteilig nach dem, was drin war (Schätzung über die Nährwerttabelle), plus Ergänztes
+function resteEatCalc(){ if (!rsEat || sheetKind !== "resteeat") return; const box = sheet.querySelector("#rsEst"); if (!NW) { ensureNW().then(resteEatCalc).catch(() => {}); return; }
+  const r = rsEat.name ? recipeByName(rsEat.name) : null, sum = arr => arr.reduce((a, l) => { for (const it of nwParse(l)) if (it.ok) { a.k += it.kcal; a.p += it.protein; } return a; }, {k: 0, p: 0});
+  const sel = rsEat.lines.filter(x => x.on).map(x => x.l), extra = sheet.querySelector("#ownText")?.value.trim(), ex = extra ? sum([extra]) : {k: 0, p: 0};
+  let k, p, how;
+  if (r) { const all = sum(r.ingredients || []), part = sum(sel), f = rsEat.por / (r.servings || 1), share = all.k > 0 ? part.k / all.k : sel.length / Math.max(1, rsEat.lines.length), shareP = all.p > 0 ? part.p / all.p : share;
+    k = (r.kcal || 0) * (r.servings || 1) * f * share; p = (r.protein || 0) * (r.servings || 1) * f * shareP; how = sel.length === rsEat.lines.length ? `${rsEat.por} Portion${rsEat.por === 1 ? "" : "en"} laut Rezept` : `Rezeptwerte anteilig (${Math.round(share * 100)} % der Zutaten)`; }
+  else { const s0 = sum(sel); k = s0.k; p = s0.p; how = "geschätzt aus den Zutaten"; }
+  k += ex.k; p += ex.p; if (extra) how += " + Ergänztes";
+  rsEat.k = Math.round(k); rsEat.p = Math.round(p);
+  const ki = sheet.querySelector("#ownKcal"), pi = sheet.querySelector("#ownProt");
+  if (ki && !ki.dataset.touched) ki.value = rsEat.k || ""; if (pi && !pi.dataset.touched) pi.value = rsEat.p || "";
+  if (box) box.innerHTML = `≈ <b>${rsEat.k} kcal · ${rsEat.p} g Protein</b> · ${esc(how)}. Zahlen unten bei Bedarf anpassen.`; }
 function resteFreestyle(){
   const h = reste.have, has = re => h.filter(t => re.test(t)), base = has(/reis|nudel|pasta|spaghetti|penne|kartoffel|couscous|quinoa|bulgur|brot|tortilla|wrap|gnocchi/i),
     prot = has(/tofu|\beier?\b|linse|kichererbse|bohne|feta|halloumi|quark|skyr|hüttenkäse|tempeh|seitan|soja(?!soße|sauce)|edamame|käse|mozzarella|erbse/i),
@@ -4252,7 +4286,7 @@ function resteFreestyle(){
     ...(leafy.length ? [`${leafy.join(", ")} zum Schluss unterheben und kurz zusammenfallen lassen.`] : []),
     "Mit Salz, Pfeffer, Paprika/Curry oder Sojasoße abschmecken, etwas Zitrone oder Kräuter drüber.",
     ...(sweet.length ? [`${sweet.join(", ")} ${sweet.length > 1 ? "passen" : "passt"} nicht in die Pfanne – lieber als Frühstück oder Nachtisch (z. B. mit Skyr).`] : [])];
-  return `<div class="card fsbox"><div class="mhead"><b>🧩 Freestyle: ${kind}</b><span class="small muted">ohne Rezept</span></div><ol class="small">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${prot.length ? "" : `<div class="pill warn">Kein Protein dabei</div>`}</div>`;
+  return `<div class="card fsbox"><div class="mhead"><b>🧩 Freestyle: ${kind}</b><span class="small muted">ohne Rezept</span></div><ol class="small">${steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>${prot.length ? "" : `<div class="pill warn">Kein Protein dabei</div>`}<button class="btn small" type="button" data-sheet="resteeat" data-v="">✎ Gegessen eintragen</button></div>`;
 }
 const RESTE_COMMON = ["Reis", "Nudeln", "Kartoffeln", "Eier", "Tofu", "Feta", "Quark", "Skyr", "Käse", "Zucchini", "Paprika", "Tomaten", "Spinat", "Brokkoli", "Champignons", "Möhren", "Zwiebeln", "Kichererbsen", "Linsen", "Bohnen", "Haferflocken", "Banane", "Brot", "Joghurt"];
 function resteQuickHtml(){ const has = new Set(reste.have.map(fold));
@@ -4277,7 +4311,7 @@ function resteListHtml(){
   let h = L.length ? `<div class="lab sec">${L.length} passende Rezepte</div>` : `<p class="muted small">${reste.mode === "nur" ? "Kein Rezept geht nur mit dem, was da ist – „Darf einkaufen“ zeigt mehr." : "Kein Rezept mit diesen Zutaten."}</p>`;
   const rows = L.map(o => `<div class="card rsrow"><button type="button" class="lrow menu" data-recipe="${esc(o.r.name)}">${mealThumb(o.r.name)}<span class="lmain"><b>${esc(o.r.name)}</b><span class="small muted"><span class="nutri">${o.r.protein} g P · </span>${o.r.activeMin ?? o.r.timeMin} min</span></span><span class="go">›</span></button>
     <div class="small"><span class="okt">✓ ${o.used.map(esc).join(", ")}</span>${o.miss.length ? ` · <span class="muted">fehlt: ${o.miss.slice(0, 5).map(esc).join(", ")}${o.miss.length > 5 ? ` +${o.miss.length - 5}` : ""}</span>` : ` · <b>alles da</b>`}</div>
-    ${o.miss.length ? `<button class="btn small ghost" type="button" data-resteshop="${esc(o.r.name)}">🛒 Fehlendes einkaufen</button>` : ""}</div>`);
+    <div class="actions"><button class="btn small" type="button" data-sheet="resteeat" data-v="${esc(o.r.name)}">✎ Gegessen eintragen</button>${o.miss.length ? `<button class="btn small ghost" type="button" data-resteshop="${esc(o.r.name)}">🛒 Fehlendes einkaufen</button>` : ""}</div></div>`);
   rows.splice(Math.min(3, rows.length), 0, resteFreestyle());  // Freestyle nach den besten Treffern, nicht ganz unten
   return h + rows.join("");
 }
@@ -4649,6 +4683,7 @@ async function onClick(e){
   const rsa = t.closest("[data-rsadd]"); if (rsa) { resteAdd(rsa.dataset.rsadd); return; }
   const rsd = t.closest("[data-rsdel]"); if (rsd) { reste.have.splice(Number(rsd.dataset.rsdel), 1); lsSet("resteHave", reste.have); renderSheetPart(["#rsHave", "#rsQuick", "#rsList"]); return; }
   if (t.closest("[data-rsclear]")) { reste.have = []; lsSet("resteHave", []); renderSheetPart(["#rsHave", "#rsQuick", "#rsList"]); return; }
+  const rsp = t.closest("[data-rspor]"); if (rsp && rsEat) { rsEat.title = sheet.querySelector("#ownName")?.value; rsEat.por = Math.max(0.5, Math.min(8, rsEat.por + Number(rsp.dataset.rspor))); renderSheet(); return; }
   const rss = t.closest("[data-resteshop]"); if (rss) { shopScope = "gericht"; shopRec = rss.dataset.resteshop; shopMul = 1; shopFromReste = true; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const kt = t.closest("[data-kitchen]"); if (kt) { const h = kitchenHas(), k = kt.dataset.kitchen; h.has(k) ? h.delete(k) : h.add(k); saveFood({devices: Object.keys(KITCHEN).filter(x => h.has(x))}); renderEssen(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
@@ -4779,6 +4814,11 @@ async function onClick(e){
     if (a === "toHeute") { go("heute"); return; }
     if (a === "summaryDone") { if (sheet.open) { sheetKind = null; sheet.close(); } go("heute"); return; }
     if (a === "finish") { finishWorkout(); return; }
+    if (a === "resteSave") { if (!rsEat) return; const name = sheet.querySelector("#ownName")?.value.trim() || "Resteessen", kcal = num(sheet.querySelector("#ownKcal")?.value), protein = num(sheet.querySelector("#ownProt")?.value), extra = sheet.querySelector("#ownText")?.value.trim();
+      const ing = [...rsEat.lines.filter(x => x.on).map(x => x.l), ...(extra ? [extra] : [])].join(", ").slice(0, 600), d = todayIso(), k = sheet.querySelector("#rsSlot")?.value || "";
+      if (k) editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); });
+      else { const id = Date.now().toString(36), time = hmStr(new Date().getHours() * 60 + new Date().getMinutes()); editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, ing ? {ing} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); }); }
+      rsEat = null; toast("Eingetragen"); sheetKind = null; sheet.close(); render(); return; }
     if (a === "ownEstimate") { const tx = sheet.querySelector("#ownText")?.value.trim(), box = sheet.querySelector("#ownEst"); if (!tx) { sheet.querySelector("#ownText")?.focus(); return; }
       Promise.all([ensureNW(), recipes ? null : ensureMeals().catch(() => {})]).then(() => { const items = nwParse(tx); box.innerHTML = nwHtml(items); const ok = items.filter(i => i.ok); if (!ok.length) return;
         const nm = sheet.querySelector("#ownName"), kc = sheet.querySelector("#ownKcal"), pr = sheet.querySelector("#ownProt");
@@ -4810,6 +4850,7 @@ async function onClick(e){
 function onInput(e){
   const t = e.target;
   if (t.id === "ownName") { const show = () => { ownSugList = ownSuggest(t.value); const box = sheet.querySelector("#ownSug"); if (box) box.innerHTML = ownSugHtml(ownSugList); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
+  if (t.id === "ownText" && sheetKind === "resteeat" && rsEat) { rsEat.extra = t.value; clearTimeout(rsEat._t); rsEat._t = setTimeout(resteEatCalc, 400); }
   if (t.id === "ownText") { const one = !sheet.querySelector("#ownName"); // Nachtragen: Vorschläge auch aus Rezepten und früheren Einträgen, Erkennung live
     const show = () => { const {word} = ownIngParts(t.value), q = fold(word);
       ownIngSug = q.length < 2 ? [] : one ? ownSuggest(word).slice(0, 5) : [...myFoodList().filter(x => [x.name, ...(x.al || [])].some(a => sugHit(a, q))).map(x => ({name: x.name})), ...(NW || []).filter(x => [x.n, ...x.a].some(a => sugHit(a, q))).sort((x, y) => fold(y.n).startsWith(q) - fold(x.n).startsWith(q)).map(x => ({name: x.n}))].filter((x, i, a) => a.findIndex(y => fold(y.name) === fold(x.name)) === i).slice(0, 6);
@@ -4842,6 +4883,9 @@ async function onChange(e){
   if (t.dataset.warm) { warmOpen = true; cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
   if (t.dataset.pushpref) { saveSettings({pushPrefs: Object.assign({}, S().pushPrefs, {[t.dataset.pushpref]: t.checked})}); toast("Gespeichert, gilt ab dem nächsten Planer-Lauf"); return; }
   if (t.id === "foodNutri") { saveFood({showNutri: t.checked}); return; }
+  if (t.dataset.rsing != null && rsEat) { rsEat.lines[+t.dataset.rsing].on = t.checked; resteEatCalc(); return; }
+  if (t.id === "rsSlot" && rsEat) { rsEat.slot = t.value; return; }
+  if ((t.id === "ownKcal" || t.id === "ownProt") && sheetKind === "resteeat") { t.dataset.touched = "1"; return; }
   if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
   if (t.dataset.myname || t.dataset.mygrp || t.dataset.mynw) { const k = t.dataset.myname || t.dataset.mygrp || t.dataset.mynw, my = Object.assign({}, FOOD().myProds || {}), o = Object.assign({}, my[k]); if (!my[k]) return;
     if (t.dataset.myname) { const v = t.value.trim().slice(0, 40); if (!v) return; o.name = v; }
