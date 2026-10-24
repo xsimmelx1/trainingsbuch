@@ -2263,7 +2263,7 @@ function todayItems(focus){
     const startM = plan?.start ? hm(plan.start) : 18 * 60;
     out.push({k: "train", t: st === "läuft" ? "" : plan?.start || "", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : selDate === todayIso() ? "heute" : selDate < todayIso() ? "nicht gemacht" : "geplant", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
   }
-  if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
+  if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) { if (m.name === "skip") continue;
     const tm = m.time ? hm(m.time) : 20 * 60;
     out.push({k: "meal:" + m.k, t: m.time || "", prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
   }
@@ -2283,7 +2283,7 @@ function dayEvents(d){
   ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
-  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
+  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time && m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
   const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
     ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
   ev.push({k: "pain", t: routineAt("pain"), icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
@@ -3587,7 +3587,7 @@ function calMarkers(d){
 function calEntries(d, noMeals){
   const t = todayIso(), day = store.days[d], p = planFor(d), out = [];
   for (const m of calMarkers(d)) out.push({tm:"", title:m, kind:"marker", go: m.startsWith("Messtag") ? "#t=messen" : ""});
-  if (!noMeals && calMeals && mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) out.push({tm: m.time, en: hmStr(hm(m.time) + (m.k === "sn" ? 15 : 30)), title: `${m.label}: ${m.info.name}`, kind:"food", done: m.ate, go:`#e=${d}`});
+  if (!noMeals && calMeals && mealPlan && recipes) for (const m of mealsFor(d)) if (m.time && m.name !== "skip") out.push({tm: m.time, en: hmStr(hm(m.time) + (m.k === "sn" ? 15 : 30)), title: `${m.label}: ${m.info.name}`, kind:"food", done: m.ate, go:`#e=${d}`});
   const sess = day?.session && day.session !== "frei" ? SESS[day.session] : null;
   if (isStrength(day)) out.push({tm: p?.start || "", en: p?.end || "", title: `Training: ${sess ? sess.title : "Einheit"}`, kind:"train", done:true, go:`#w=${d}`});
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
@@ -3872,7 +3872,7 @@ function mealsFor(d){
   const por = day?.por || {}, scaleI = (inf, f) => !f || f === 1 ? inf : Object.assign({}, inf, {kcal: Math.round((inf.kcal || 0) * f), protein: Math.round((inf.protein || 0) * f)});
   const out = mealPlan.slots.map(sl => { if (off.has(sl.k) && !ov[sl.k] && !ate[sl.k]) return null; const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
-    return {k: sl.k, label: (sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec)) + (day?.rest?.[sl.k] && ov[sl.k] ? " · 🧊 Rest" : ""), rest: !!(day?.rest?.[sl.k] && ov[sl.k]), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], f: por[sl.k] || 1, info: scaleI(mealInfo(name), por[sl.k]), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
+    return {k: sl.k, label: (sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec)) + (day?.rest?.[sl.k] && ov[sl.k] ? " · 🧊 Rest" : ""), rest: !!(day?.rest?.[sl.k] && ov[sl.k]), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k] && ov[sl.k] !== "skip", budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], f: por[sl.k] || 1, info: scaleI(mealInfo(name), por[sl.k]), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, f: o.f || 1, info: scaleI(mealInfo(o), o.f)});
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
