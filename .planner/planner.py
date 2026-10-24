@@ -73,6 +73,12 @@ def routine_at(settings, k):
     return v if isinstance(v, str) and re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", v) else ROUTINE_DEF[k]
 
 
+def mob_min(settings):
+    """Dauer der Morgenroutine; die App rechnet sie aus den Übungen und schreibt sie nach settings.mobMin."""
+    v = settings.get("mobMin")
+    return int(v) if isinstance(v, (int, float)) and 5 <= v <= 60 else 15
+
+
 def hm_add(hm, minutes):
     h, m = map(int, hm.split(":"))
     t = max(0, min(h * 60 + m + minutes, 23 * 60 + 59))
@@ -341,8 +347,8 @@ def build_ics(now, settings, plan, extras, past):
     mob, pain = routine_at(settings, "mob"), routine_at(settings, "pain")
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
-        ev(f"morning-{d}", "Morgenroutine 12 min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
-           f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, 15)), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
+        ev(f"morning-{d}", f"Morgenroutine {mob_min(settings)} min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
+           f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, mob_min(settings))), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
         ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=0 if (settings.get("pushPrefs") or {}).get("pain") is not False else None)
     for x in extras:
         d = dt.date.fromisoformat(x["date"])
@@ -943,7 +949,7 @@ def main():
     mh, mm = map(int, routine_at(settings, "mob").split(":"))
     for i in range(HORIZON + 1):
         a = dt.datetime.combine(today + dt.timedelta(days=i), dt.time(mh, mm), TZ)
-        busy.append((a, a + dt.timedelta(minutes=15)))
+        busy.append((a, a + dt.timedelta(minutes=mob_min(settings))))
     # Heute: bereits erledigte oder laufende Einheit behalten statt umzuplanen
     old_today = next((p for p in old_plan.get("days", []) if p["date"] == today.isoformat()), None)
     # behalten nur, wenn heute wirklich trainiert wurde oder das Training läuft – eine verpasste Einheit rutscht sonst nicht nach
@@ -1006,7 +1012,7 @@ def main():
             body = "Heute keine Krafteinheit geplant."
             if missed_yday:
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
-        once(f"morning-{tday}", {"title": "Guten Morgen: 12 min Routine", "body": body + " " + coaching(settings, today),
+        once(f"morning-{tday}", {"title": f"Guten Morgen: {mob_min(settings)} min Routine", "body": body + " " + coaching(settings, today),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
     p_eve = p_today or next((p for p in past if p["date"] == tday), None)  # auch eine heute herausgefallene Einheit nachfragen
     if "20:15" <= hm < "23:30" and p_eve and hm >= p_eve.get("end", "00:00") and not is_strength(day):
