@@ -260,7 +260,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mwbox{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:8px 12px}.mwbox b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
-.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
+.restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
@@ -2259,7 +2259,7 @@ function nextBlock(d){
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Anderes</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? skipBtn(d, m, "btn ghost small") : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Anderes</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
   h += odHtml;
   const other = [];
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
@@ -2365,7 +2365,7 @@ function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
     return `<div class="lab sec">Jetzt</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh tap" ${mealOpenAttr(selDate, m)}>${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}</div></div><span class="go">›</span></div>
-      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${skipBtn(selDate, m, "btn ghost small")}</div>`; }
+      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${restPick(selDate, m)}${skipBtn(selDate, m, "btn ghost small")}</div>`; }
   return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
 const mealOpenAttr = (d, m) => recOf(m.name) ? `data-recipe="${esc(recOf(m.name).name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`;
@@ -3281,7 +3281,7 @@ function journeySheet(kind, arg){
     return `<div class="sh"><div><div class="lab">${esc(m.label)}${m.time ? " · " + esc(m.time) : ""} · ${fmt(d)}</div><h2>${esc(r.name)}</h2></div>${cl}</div>
       <div class="small nutri">${m.name === "skip" ? "Ausgelassen – zählt nicht zu kcal und Einkauf." : m.name === "away" ? "Mensa, Kantine oder unterwegs – Richtwerte." : `${r.kcal || 0} kcal · ${r.protein || 0} g Protein${o && !o.kcal ? " (ohne Werte)" : ""}`}</div>
       ${o?.ing ? `<div class="small muted">Zutaten: ${esc(o.ing)}</div>` : ""}${m.own ? `<div class="small muted">Eigener Eintrag${o?.time ? " um " + esc(o.time) : ""}</div>` : ""}
-      <div class="actions">${m.name === "skip" ? "" : `<button class="btn ${m.ate ? "primary" : ""}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "✓ Gegessen" : "Gegessen?"}</button>`}${m.own ? `<button class="btn ghost" type="button" data-owndel="${m.k.slice(1)}" data-d="${d}">✕ Entfernen</button>` : `<button class="btn" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄ Ersetzen</button>`}</div>${m.own ? "" : skipBtn(d, m, "btn ghost small")}`; }
+      <div class="actions">${m.name === "skip" ? "" : `<button class="btn ${m.ate ? "primary" : ""}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "✓ Gegessen" : "Gegessen?"}</button>`}${m.own ? `<button class="btn ghost" type="button" data-owndel="${m.k.slice(1)}" data-d="${d}">✕ Entfernen</button>` : `<button class="btn" type="button" data-sheet="meal" data-v="${d}|${m.k}">⇄ Ersetzen</button>`}</div>${m.own ? "" : restPick(d, m) + skipBtn(d, m, "btn ghost small")}`; }
   if (kind === "resteeat") { if (!recipes || !mealPlan) { ensureMeals().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; } setTimeout(resteEatCalc, 0); return resteEatHtml(arg || ""); }
   if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
   if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
@@ -3336,7 +3336,7 @@ function journeySheet(kind, arg){
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
-      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Anderes</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
+      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Anderes</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
@@ -3858,7 +3858,7 @@ function mealSheet(arg){
     ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
     ${(() => { const sl = mealPlan.slots.find(x => x.k === k), are = avoidRe(), fv = recipes.filter(r => isFav(r.name) && r.name !== m.name && sl.cats.includes(r.category) && recipeOk(r, are));
       return `<div class="lab sec">★ Deine Favoriten</div>${fv.length ? fv.map(r => opt(r.name, "Favorit")).join("") : `<div class="small muted">Noch keine passenden Favoriten – im Rezept mit ☆ markieren.</div>`}<div class="lab sec">Ähnliche Gerichte</div>`; })()}
-    ${FRIDGE().length ? `<div class="lab sec">🧊 Aus dem Kühlschrank</div>` + FRIDGE().map(x => opt(x.name, `Rest · ${x.por}× · ${x.frozen ? "eingefroren" : "bis " + fmt(x.until)}`).replace('data-meal=', `data-fridge="${x.id}" data-meal=`)).join("") : ""}
+    ${FRIDGE().length ? `<div class="lab sec">🧊 Aus der Restebox (gegessen)</div>` + FRIDGE().map(x => opt(x.name, `Rest · ${x.por}× · bis ${fmt(x.until)}`).replace('data-meal=', `data-fridge="${x.id}" data-meal=`)).join("") : ""}
     ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}</div>
@@ -4522,23 +4522,27 @@ function fridgeAdd(name, por, frozen){ const r = recipeByName(name), f = [...FRI
   saveFood({fridge: f}); }
 function fridgeTake(id, n = 1){ const f = FRIDGE().map(x => Object.assign({}, x)), x = f.find(y => y.id === id); if (x) x.por -= n; saveFood({fridge: f.filter(y => y.por > 0)}); }
 let restState = null;
-function leftoverHtml(arg){ const [src, a, b, c] = String(arg).split("|"); let name, n, d, k, fid = null;
-  if (src === "fridge") { const x = FRIDGE().find(y => y.id === a); if (!x) return `<div class="sh"><h2>Reste</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`; name = x.name; n = x.por; d = todayIso(); k = null; fid = x.id; }
-  else { d = a; k = b; n = Number(c); name = mealsFor(d).find(x => x.k === k)?.name; }
-  const slots = restSlots(name, d, k, src === "fridge" ? 4 : 3);
-  if (!restState || restState.arg !== arg) restState = {arg, n, pick: new Set(slots.slice(0, n).map(x => x.d + "|" + x.k))}; n = restState.n;
-  const r = recipeByName(name), close = `<button class="btn ghost" type="button" data-act="closeSheet">Später</button>`;
-  return `<div class="sh"><div><div class="lab">${src === "fridge" ? "Aus dem Kühlschrank" : "Gekocht"}</div><h2>Wie viel ist übrig?</h2></div>${close}</div>
+function leftoverHtml(arg){ const [src, d, k, c] = String(arg).split("|"), name = mealsFor(d).find(x => x.k === k)?.name, r = recipeByName(name);
+  if (!restState || restState.arg !== arg) restState = {arg, n: Number(c)}; const n = restState.n, close = `<button class="btn ghost" type="button" data-act="closeSheet">Später</button>`;
+  return `<div class="sh"><div><div class="lab">Gekocht</div><h2>Wie viel ist übrig?</h2></div>${close}</div>
     <div class="scanres">${mealThumb(name)}<div><b>${esc(r?.name || name)}</b><div class="small muted">${r ? `Rezept ergibt ${r.servings} Portionen · hält ca. ${shelfDays(r)} Tage im Kühlschrank` : ""}</div></div></div>
-    <div class="mhead"><span>Übrig: <b>${n} ${n === 1 ? "Portion" : "Portionen"}</b>${src === "fridge" ? "" : ' <span class="small muted">(Vorschlag – anpassen)</span>'}</span><span class="stepper"><button type="button" class="btn small" data-restn="-1" aria-label="Weniger">−</button><button type="button" class="btn small" data-restn="1" aria-label="Mehr">＋</button></span></div>
-    ${slots.length ? `<div class="lab">In diese Mahlzeiten einplanen</div><div class="rsing">${slots.slice(0, 10).map(x => `<label class="check small"><input type="checkbox" data-restpick="${x.d}|${x.k}" ${restState.pick.has(x.d + "|" + x.k) ? "checked" : ""}><span><b>${fmt(x.d)} · ${esc(x.label)}</b><br><span class="muted">statt ${esc(x.cur)}</span></span></label>`).join("")}</div>
-      <button class="btn primary big" type="button" data-rest="plan" data-v="${esc(arg)}">✓ Einplanen</button>` : `<div class="small muted">Keine freie passende Mahlzeit in den nächsten Tagen.</div>`}
-    ${fid ? "" : `<button class="btn" type="button" data-rest="fridge" data-v="${esc(arg)}">🧊 Erst mal in den Kühlschrank</button>`}
-    ${fid ? `<button class="btn ghost small" type="button" data-rest="gone" data-v="${esc(arg)}">Ist weg / weggeworfen</button>` : `<button class="btn ghost small" type="button" data-rest="none" data-v="${esc(arg)}">Nichts übrig</button>`}
-    <div class="small muted">Eingeplante Reste zählen nicht zum Einkauf. Nicht eingeplante Portionen merkt sich die App unter „Reste“ im Essensplan.</div>`; }
+    <div class="mhead"><span>Übrig: <b>${n} ${n === 1 ? "Portion" : "Portionen"}</b> <span class="small muted">(Vorschlag – anpassen)</span></span><span class="stepper"><button type="button" class="btn small" data-restn="-1" aria-label="Weniger">−</button><button type="button" class="btn small" data-restn="1" aria-label="Mehr">＋</button></span></div>
+    <button class="btn primary big" type="button" data-rest="fridge" data-v="${esc(arg)}">🧊 In die Restebox</button>
+    <button class="btn ghost small" type="button" data-rest="none" data-v="${esc(arg)}">Nichts übrig</button>
+    <div class="small muted">Nichts wird fest eingeplant. Wenn du einen Rest isst, wählst du ihn auf der Essenskarte („🧊 Stattdessen Rest gegessen“) oder in der Restebox aus.</div>`; }
+// Rest essen: ersetzt die gewählte (oder nächste passende offene) Mahlzeit von heute und hakt sie ab; sonst als eigener Eintrag
+function eatRest(id, d, k){ const x = FRIDGE().find(y => y.id === id); if (!x) return; d = d || todayIso(); const r = recipeByName(x.name);
+  if (!k) { const fit = r?.category === "fruehstueck" ? ["fr"] : r?.category === "snack" || r?.category === "shake" ? ["sn", "ex"] : ["mi", "ab"], now = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
+    const open = mealsFor(d).filter(m => !m.own && !m.ate && fit.includes(m.k)); k = (open.find(m => (m.time || "99") >= now) || open[open.length - 1])?.k; }
+  if (k) { const prev = mealsFor(d).find(m => m.k === k)?.info.name; editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: x.name}); day.rest = Object.assign({}, day.rest, {[k]: true}); day.ate = Object.assign({}, day.ate, {[k]: true}); }); toast(`🧊 Rest gegessen${prev && prev !== mealInfo(x.name).name ? ` (statt ${prev})` : ""}`); }
+  else { const info = mealInfo(x.name), oid = Date.now().toString(36); editDay(d, day => { day.own = [...(day.own || []), {id: oid, name: info.name + " (Rest)", kcal: info.kcal, protein: info.protein, time: hmStr(new Date().getHours() * 60 + new Date().getMinutes())}]; day.ate = Object.assign({}, day.ate, {["o" + oid]: true}); }); toast("🧊 Rest gegessen (zusätzlich)"); }
+  fridgeTake(id, 1); }
+// Knöpfe „Stattdessen Rest gegessen“ für eine Mahlzeit
+const restPick = (d, m) => { const f = FRIDGE(); if (!f.length || m.own || m.ate || d > todayIso()) return ""; return `<div class="restpick"><span class="small muted">🧊 Stattdessen Rest gegessen:</span>${f.map(x => `<button type="button" class="btn small" data-resteat="${x.id}|${d}|${m.k}">${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}${x.por > 1 ? ` (${x.por})` : ""}</button>`).join("")}</div>`; };
 function fridgeCard(){ const f = FRIDGE(); if (!f.length) return "";
-  return `<details class="slim fridge" data-keep="fridge" ${shopOpen.has("fridge") || f.some(x => x.until <= addDays(todayIso(), 1) && !x.frozen) ? "open" : ""}><summary><span>🧊 Reste</span><span class="muted">${f.map(x => `${x.por}× ${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}`).join(" · ")}</span></summary><div class="card">
-    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${x.por}× ${esc(mealInfo(x.name).name)}</b><span class="small ${!x.frozen && x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">🧊 Kühlschrank · ${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><button class="btn small" type="button" data-sheet="leftover" data-v="fridge|${x.id}">Einplanen</button></div>`).join("")}</div></details>`; }
+  return `<details class="slim fridge" data-keep="fridge" ${shopOpen.has("fridge") || f.some(x => x.until <= addDays(todayIso(), 1)) ? "open" : ""}><summary><span>🧊 Restebox</span><span class="muted">${f.map(x => `${x.por}× ${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}`).join(" · ")}</span></summary><div class="card">
+    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${x.por}× ${esc(mealInfo(x.name).name)}</b><span class="small ${x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><span class="actions"><button class="btn small primary" type="button" data-resteat="${x.id}">✓ Gegessen</button><button class="btn small ghost" type="button" data-restgone="${x.id}" aria-label="Weg">✕</button></span></div>`).join("")}
+    <div class="small muted">„Gegessen“ ersetzt die nächste passende offene Mahlzeit von heute.</div></div></details>`; }
 function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && !m.rest && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
 function shopCtx(){
@@ -4845,7 +4849,7 @@ async function onClick(e){
   const ml0 = t.closest("[data-meal][data-swapctx]"); if (ml0 && sheetKind === "recipe") { sheetKind = "meal"; sheetArg = ml0.dataset.swapctx; swapCand = null; }
   const ml = t.closest("[data-meal]"); if (ml && sheetKind === "meal") { const [d, k] = sheetArg.split("|"), n = ml.dataset.meal, def = mealDefaults(d)[k], all = !!sheet.querySelector("#mealWeek")?.checked;
     const days = [d]; if (all) { const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === def) days.push(dd); } }
-    const fr = ml.dataset.fridge; if (fr) { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: n}); day.rest = Object.assign({}, day.rest, {[k]: true}); }); fridgeTake(fr, 1); sheetKind = null; sheet.close(); render(); toast("🧊 Rest eingeplant"); return; }
+    const fr = ml.dataset.fridge; if (fr) { eatRest(fr, d, k); sheetKind = null; sheet.close(); render(); return; }
     for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); const rs = Object.assign({}, day.rest); delete rs[k]; day.rest = rs; });
     sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
@@ -4874,15 +4878,16 @@ async function onClick(e){
     toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf"); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
   const rsb = t.closest("[data-rest]"); if (rsb) { const a = rsb.dataset.rest, arg = rsb.dataset.v, [src, x1, x2, x3] = arg.split("|");
     const name = src === "fridge" ? FRIDGE().find(y => y.id === x1)?.name : mealsFor(x1).find(y => y.k === x2)?.name, total = restState?.n ?? (src === "fridge" ? (FRIDGE().find(y => y.id === x1)?.por || 0) : Number(x3));
-    if (a === "plan") { const picks = [...sheet.querySelectorAll("[data-restpick]:checked")].map(c => { const [d, k] = c.dataset.restpick.split("|"); return {d, k}; }).slice(0, total);
-      if (!picks.length) return toast("Mindestens eine Mahlzeit wählen"); planRest(name, picks); const rest = total - picks.length;
+    if (a === "plan") { const picks = [], rest = 0;
       if (src === "fridge") { const left = (FRIDGE().find(y => y.id === x1)?.por || 0) - picks.length; fridgeTake(x1, picks.length + (restState && left > 0 && total < left + picks.length ? 0 : 0)); } else if (rest > 0) fridgeAdd(name, rest, false);
       toast(`${picks.length}× eingeplant${src !== "fridge" && rest > 0 ? `, ${rest}× in den Kühlschrank` : ""}`); }
-    else if (a === "fridge" || a === "freeze") { fridgeAdd(name, total, a === "freeze"); toast(a === "freeze" ? `❄️ ${total}× eingefroren` : `🧊 ${total}× im Kühlschrank`); }
+    else if (a === "fridge") { if (total > 0) { fridgeAdd(name, total, false); toast(`🧊 ${total}× in der Restebox`); } }
     else if (a === "gone" && src === "fridge") fridgeTake(x1, 999);
     restState = null; sheetKind = null; sheet.close(); render(); return; }
   const rsn = t.closest("[data-restn]"); if (rsn && restState) { restState.n = Math.max(0, Math.min(12, restState.n + Number(rsn.dataset.restn))); if (restState.n === 0) { toast("Nichts übrig"); restState = null; sheetKind = null; sheet.close(); return; }
-    const boxes = [...sheet.querySelectorAll("[data-restpick]")]; restState.pick = new Set(boxes.slice(0, restState.n).map(b => b.dataset.restpick)); renderSheet(); return; }
+    renderSheet(); return; }
+  const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
+  const rsg = t.closest("[data-restgone]"); if (rsg) { fridgeTake(rsg.dataset.restgone, 999); toast("Aus der Restebox entfernt"); render(); return; }
   const rpk = t.closest("[data-restpick]"); if (rpk && restState) { const k = rpk.dataset.restpick; rpk.checked ? restState.pick.add(k) : restState.pick.delete(k); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
