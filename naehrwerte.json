@@ -69,6 +69,149 @@
 "u": "Stück (¼)"
 },
 {
+"n": "Röggelchen",
+"a": [
+"roggenbrötchen",
+"roggen-brötchen"
+],
+"k": 240,
+"p": 7.5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Brioche-Brötchen",
+"a": [
+"brioche"
+],
+"k": 350,
+"p": 8.5,
+"g": 60,
+"u": "Stück"
+},
+{
+"n": "Butter-Laugengebäck",
+"a": [
+"laugenecke mit butter",
+"laugenbogen mit butter",
+"butterlaugenstange"
+],
+"k": 330,
+"p": 8,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Käse-Laugenstange",
+"a": [
+"käselaugenstange",
+"käse-laugen"
+],
+"k": 310,
+"p": 12,
+"g": 90,
+"u": "Stück"
+},
+{
+"n": "Nuss-Nougat-Croissant",
+"a": [
+"nougat-croissant",
+"pistazien-croissant",
+"marmor-croissant",
+"gefülltes croissant"
+],
+"k": 440,
+"p": 7,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Schinken-Käse-Croissant",
+"a": [
+"käse-croissant",
+"schinkencroissant"
+],
+"k": 360,
+"p": 13,
+"g": 90,
+"u": "Stück"
+},
+{
+"n": "Pain au Chocolat",
+"a": [
+"pain de chocolat",
+"schokobrötchen",
+"schokocroissant",
+"schoko-croissant"
+],
+"k": 420,
+"p": 7.5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Plunderschnecke",
+"a": [
+"mohnschnecke",
+"rosinenschnecke",
+"nussschnecke",
+"plunder",
+"süßer knoten"
+],
+"k": 360,
+"p": 6,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Apfeltasche",
+"a": [
+"apfeldreieck",
+"kirschtasche",
+"quarktasche"
+],
+"k": 300,
+"p": 4,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Quarkbällchen",
+"a": [
+"quarkini"
+],
+"k": 380,
+"p": 8,
+"g": 25,
+"u": "Stück"
+},
+{
+"n": "Pizzasnack",
+"a": [
+"pizzastange",
+"pizzaschnecke",
+"pizzabrötchen",
+"pizzadonut"
+],
+"k": 260,
+"p": 10,
+"g": 150,
+"u": "Stück"
+},
+{
+"n": "Börek",
+"a": [
+"börek-stange",
+"spinatbörek",
+"käsebörek",
+"strudelteigrolle"
+],
+"k": 300,
+"p": 10,
+"g": 120,
+"u": "Stück"
+},
+{
 "n": "Butterbrezel",
 "a": [],
 "k": 340,

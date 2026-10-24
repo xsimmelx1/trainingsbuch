@@ -3,6 +3,583 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "burgerbroetchen",
+"name": "Vollkorn-Burgerbrötchen, 4 Stück",
+"pack": 4,
+"unit": "Stück",
+"match": "burgerbrötchen|burger-brötchen",
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 0.66,
+"lidl": 0.66,
+"aldi": 0.66,
+"kaufland": 0.66,
+"netto": 0.99,
+"penny": 1.29,
+"edeka": 1.29
+},
+"est": [
+"lidl",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backLaugenButter",
+"name": "Laugenecke / Laugenbogen mit Butter (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 100,
+"match": "laugen(ecke|bogen|brezel|stange|knoten|brötchen)? ?mit butter|butter[ -]?laugen|butterbrezel|butterbreze",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.95,
+"lidl": 0.9,
+"aldi": 0.9,
+"kaufland": 0.95,
+"netto": 0.9,
+"penny": 0.9,
+"edeka": 0.95
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backKaeseLaugen",
+"name": "Käse-Laugenstange (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 90,
+"match": "käse-?laugen",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"lidl": 0.49,
+"rewe": 0.55,
+"aldi": 0.5,
+"kaufland": 0.49,
+"netto": 0.5,
+"penny": 0.5,
+"edeka": 0.55
+},
+"est": [
+"rewe",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backCroissantHerz",
+"name": "Schinken-Käse-Croissant (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 90,
+"match": "schinken[a-zäöü -]*croissant|croissant[a-zäöü -]*schinken|käse-?croissant",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.09,
+"lidl": 1.04,
+"aldi": 1.04,
+"kaufland": 1.09,
+"netto": 1.04,
+"penny": 1.04,
+"edeka": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backCroissantFull",
+"name": "Croissant gefüllt (Nuss-Nougat, Pistazie, Marmor) (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 80,
+"match": "(nuss-?nougat|nougat|pistazie|marmor|vanille|kirsch)[a-zäöü-]*\\s*-?croissant|croissant mit [a-zäöü-]*(nuss|nougat|pistazie|füllung|vanille|kirsch)|marmor-?croissant",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.09,
+"lidl": 1.04,
+"aldi": 1.04,
+"kaufland": 1.09,
+"netto": 1.04,
+"penny": 1.04,
+"edeka": 1.09
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backPainChoc",
+"name": "Pain au Chocolat / Schokobrötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 70,
+"match": "pain (au|de) chocolat|schoko-?croissant|schoko(laden)?brötchen",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.49,
+"lidl": 1.42,
+"aldi": 1.42,
+"kaufland": 1.49,
+"netto": 1.42,
+"penny": 1.42,
+"edeka": 1.49
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backFranz",
+"name": "Franzbrötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 90,
+"match": "franzbrötchen",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.99,
+"lidl": 0.94,
+"aldi": 0.94,
+"kaufland": 0.99,
+"netto": 0.94,
+"penny": 0.94,
+"edeka": 0.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backPizza",
+"name": "Pizzasnack / Pizzastange (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 150,
+"match": "pizza-?(snack|stange|schnecke|brötchen|donut|rolle)|flammkuchen-?snack|pizzadonut",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.59,
+"lidl": 1.51,
+"aldi": 1.51,
+"kaufland": 1.59,
+"netto": 1.51,
+"penny": 1.51,
+"edeka": 1.59
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backBoerek",
+"name": "Börek / Blätterteigstange (Käse, Spinat) (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 120,
+"match": "börek|strudelteigrolle|blätterteig-?stange|mozzarella-?fächer|käse-?fächer",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.99,
+"lidl": 0.94,
+"aldi": 0.94,
+"kaufland": 0.99,
+"netto": 0.94,
+"penny": 0.94,
+"edeka": 0.99
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backRoggen",
+"name": "Röggelchen / Roggenbrötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 70,
+"match": "röggelchen|roggenbrötchen|roggen-?brötchen",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.69,
+"lidl": 0.66,
+"aldi": 0.66,
+"kaufland": 0.69,
+"netto": 0.66,
+"penny": 0.66,
+"edeka": 0.69
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backBrioche",
+"name": "Brioche-Brötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 60,
+"match": "brioche",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.69,
+"lidl": 0.66,
+"aldi": 0.66,
+"kaufland": 0.69,
+"netto": 0.66,
+"penny": 0.66,
+"edeka": 0.69
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backQuark",
+"name": "Quarkbällchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 25,
+"match": "quarkbällchen|quarkini",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.39,
+"lidl": 0.37,
+"aldi": 0.37,
+"kaufland": 0.39,
+"netto": 0.37,
+"penny": 0.37,
+"edeka": 0.39
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backTasche",
+"name": "Apfeltasche / Apfeldreieck (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 100,
+"match": "apfel-?(tasche|dreieck)|kirsch-?tasche|quark-?tasche|blätterteig-?tasche",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.99,
+"lidl": 0.69,
+"aldi": 0.7,
+"kaufland": 0.84,
+"netto": 0.7,
+"penny": 0.7,
+"edeka": 0.99
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backBerliner",
+"name": "Berliner / Krapfen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 80,
+"match": "berliner|krapfen|kreppel",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.99,
+"lidl": 0.35,
+"aldi": 0.36,
+"kaufland": 0.67,
+"netto": 0.36,
+"penny": 0.36,
+"edeka": 0.99
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backDonut",
+"name": "Donut (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 65,
+"match": "donut",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.0,
+"lidl": 0.49,
+"aldi": 0.5,
+"kaufland": 0.74,
+"netto": 0.5,
+"penny": 0.5,
+"edeka": 1.0
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backSchnecke",
+"name": "Plunderschnecke (Zimt, Mohn, Rosinen, Nuss) (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 110,
+"match": "schnecke|plunder|süßer knoten|süsser knoten|süße biene",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 1.59,
+"lidl": 1.51,
+"aldi": 1.51,
+"kaufland": 1.59,
+"netto": 1.51,
+"penny": 1.51,
+"edeka": 1.59
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backKaese",
+"name": "Käsebrötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 80,
+"match": "käse-?(zwiebel)?[- ]?brötchen|käsestange",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.59,
+"lidl": 0.35,
+"aldi": 0.36,
+"kaufland": 0.47,
+"netto": 0.36,
+"penny": 0.36,
+"edeka": 0.59
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backLaugen",
+"name": "Laugenbrötchen / Laugenstange (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 70,
+"match": "laugenbrötchen|laugenstange|laugenecke|laugenbogen|laugenknoten|laugeneck",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.39,
+"lidl": 0.39,
+"aldi": 0.4,
+"kaufland": 0.39,
+"netto": 0.4,
+"penny": 0.4,
+"edeka": 0.39
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backKoerner",
+"name": "Körner- / Vollkornbrötchen (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 70,
+"match": "körnerbrötchen|kürbiskern-?brötchen|mehrkorn-?brötchen|vollkornbrötchen|dinkelbrötchen|fitnessbrötchen|weltmeister|kornspitz|krusti|chia.*brötchen",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.49,
+"lidl": 0.29,
+"aldi": 0.39,
+"kaufland": 0.39,
+"netto": 0.3,
+"penny": 0.3,
+"edeka": 0.49
+},
+"est": [
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backBrezel",
+"name": "Laugenbrezel (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 90,
+"match": "brezel|\bbreze\b|brezn",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.49,
+"lidl": 0.39,
+"aldi": 0.4,
+"kaufland": 0.44,
+"netto": 0.4,
+"penny": 0.4,
+"edeka": 0.49
+},
+"est": [
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backCroissant",
+"name": "Butter-Croissant (Backtheke)",
+"pack": 1,
+"unit": "Stück",
+"piece": 60,
+"match": "croissant",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"rewe": 0.79,
+"lidl": 0.49,
+"aldi": 0.49,
+"kaufland": 0.49,
+"netto": 0.5,
+"penny": 0.5,
+"edeka": 0.79
+},
+"est": [
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "backBaguette",
+"name": "Baguette (Backtheke, ca. 250–300 g)",
+"pack": 1,
+"unit": "Stück",
+"piece": 280,
+"match": "baguette|rustigette|ciabatta",
+"group": "Brot & Backwaren",
+"fresh": true,
+"prices": {
+"lidl": 0.79,
+"kaufland": 0.65,
+"netto": 0.65,
+"rewe": 0.73,
+"aldi": 0.66,
+"penny": 0.66,
+"edeka": 0.73
+},
+"est": [
+"rewe",
+"aldi",
+"penny",
+"edeka"
+]
+},
+{
 "id": "sambal",
 "name": "Sambal Oelek / Chilipaste",
 "pack": 200,
@@ -1360,181 +1937,6 @@
 "est": [
 "kaufland",
 "penny"
-]
-},
-{
-"id": "burgerbroetchen",
-"name": "Vollkorn-Burgerbrötchen, 4 Stück",
-"pack": 4,
-"unit": "Stück",
-"match": "burgerbrötchen|burger-brötchen",
-"group": "Brot & Backwaren",
-"prices": {
-"rewe": 0.66,
-"lidl": 0.66,
-"aldi": 0.66,
-"kaufland": 0.66,
-"netto": 0.99,
-"penny": 1.29,
-"edeka": 1.29
-},
-"est": [
-"lidl",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backKaese",
-"name": "Käsebrötchen (Backtheke)",
-"pack": 1,
-"unit": "Stück",
-"piece": 80,
-"match": "käse-?(zwiebel-?)?brötchen|käsestange|käse-?laugen",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"rewe": 0.59,
-"lidl": 0.35,
-"aldi": 0.36,
-"kaufland": 0.47,
-"netto": 0.36,
-"penny": 0.36,
-"edeka": 0.59
-},
-"est": [
-"aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backLaugen",
-"name": "Laugenbrötchen / Laugenstange (Backtheke)",
-"pack": 1,
-"unit": "Stück",
-"piece": 70,
-"match": "laugenbrötchen|laugenstange|laugenecke|laugenbogen|laugenknoten|laugeneck",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"rewe": 0.39,
-"lidl": 0.39,
-"aldi": 0.4,
-"kaufland": 0.39,
-"netto": 0.4,
-"penny": 0.4,
-"edeka": 0.39
-},
-"est": [
-"aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backKoerner",
-"name": "Körner- / Vollkornbrötchen (Backtheke)",
-"pack": 1,
-"unit": "Stück",
-"piece": 70,
-"match": "körnerbrötchen|kürbiskern-?brötchen|mehrkorn-?brötchen|vollkornbrötchen|dinkelbrötchen|fitnessbrötchen|weltmeister|kornspitz|krusti|chia.*brötchen",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"rewe": 0.49,
-"lidl": 0.29,
-"aldi": 0.39,
-"kaufland": 0.39,
-"netto": 0.3,
-"penny": 0.3,
-"edeka": 0.49
-},
-"est": [
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backBrezel",
-"name": "Laugenbrezel (Backtheke)",
-"pack": 1,
-"unit": "Stück",
-"piece": 90,
-"match": "brezel|\bbreze\b|brezn",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"rewe": 0.49,
-"lidl": 0.39,
-"aldi": 0.4,
-"kaufland": 0.44,
-"netto": 0.4,
-"penny": 0.4,
-"edeka": 0.49
-},
-"est": [
-"aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backCroissant",
-"name": "Butter-Croissant (Backtheke)",
-"pack": 1,
-"unit": "Stück",
-"piece": 60,
-"match": "croissant",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"rewe": 0.79,
-"lidl": 0.49,
-"aldi": 0.49,
-"kaufland": 0.49,
-"netto": 0.5,
-"penny": 0.5,
-"edeka": 0.79
-},
-"est": [
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
-},
-{
-"id": "backBaguette",
-"name": "Baguette (Backtheke, ca. 250–300 g)",
-"pack": 1,
-"unit": "Stück",
-"piece": 280,
-"match": "baguette|rustigette|ciabatta",
-"group": "Brot & Backwaren",
-"fresh": true,
-"prices": {
-"lidl": 0.79,
-"kaufland": 0.65,
-"netto": 0.65,
-"rewe": 0.73,
-"aldi": 0.66,
-"penny": 0.66,
-"edeka": 0.73
-},
-"est": [
-"rewe",
-"aldi",
-"penny",
-"edeka"
 ]
 },
 {
@@ -4587,7 +4989,7 @@
 "pack": 1,
 "unit": "Stück",
 "piece": 55,
-"match": "brötchen|semmel|schrippe|\bweck(le|erl)?\b",
+"match": "brötchen|semmel(?!brösel)|schrippe|\bweck(le|erl)?\b",
 "group": "Brot & Backwaren",
 "fresh": true,
 "prices": {

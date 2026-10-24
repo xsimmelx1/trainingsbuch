@@ -2389,7 +2389,7 @@ function zutatenHtml(){
   if (!prices) { ensurePrices().then(() => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); else renderSheet(); }).catch(() => {}); return `<p class="muted">Lade Preise …</p>`; }
   const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi";
   const SS = prices.stores.filter(x => (zStores || [def]).includes(x)), cmp = SS.length > 1, wide = SS.length > 3, use = prodUseCount(), home = STOCK(), qq = zQ.trim().toLowerCase();
-  let rows = prices.products.map(pr => { const pp = SS.map(st => priceOf(pr, st)), all = Object.entries(pr.prices || {}).filter(([k, v]) => v != null && prices.stores.includes(k)).sort((x, y) => x[1] - y[1]);
+  let rows = prices.products.map(pr => { const pp = SS.map(st => priceOf(pr, st)), all = Object.entries(pr.prices || {}).filter(([k, v]) => v != null && prices.stores.includes(k) && !(pr.est || []).includes(k)).sort((x, y) => x[1] - y[1]); // „günstiger bei …“ nur aus belegten Preisen
     const vals = pp.filter(v => v != null), lo = vals.length ? Math.min(...vals) : null, hi = vals.length ? Math.max(...vals) : null;
     return {pr, name: prodLabel(pr), grp: pr.group || "Vorrat & Gewürze", pp, lo, diff: lo != null ? hi - lo : 0, best: all[0], n: use[pr.id] || 0, home: home.has(pr.id)}; })
     .filter(x => (!qq || fold(x.name).includes(fold(qq))) && (!zGrp || zGrp === x.grp));
