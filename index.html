@@ -260,6 +260,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mwbox{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:8px 12px}.mwbox b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
+.nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwq .btn{min-height:28px;padding:2px 9px}
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
@@ -1654,9 +1655,15 @@ function nwParse(text){
     for (const sp of part.split(/\bmit\b/i).map(s => s.trim()).filter(Boolean)) out.push(nwItem(sp)); }
   return out;
 }
+let nwLast = [];
+// Menge eines Postens im Text ändern: „2 Kekse“ → „3 Kekse“, „100 g Skyr“ → „125 g Skyr“, ohne Zahl = 1
+function nwStep(text, d){ const m = text.match(/^\s*(\d+(?:[.,]\d+)?|½|halbe?|eine?n?)\s*(g|ml)?\b\s*/i), rest = m ? text.slice(m[0].length) : text.trim();
+  const v = m ? (/^½|halb/i.test(m[1]) ? 0.5 : /^ein/i.test(m[1]) ? 1 : Number(m[1].replace(",", "."))) : 1, unit = m?.[2]?.toLowerCase();
+  if (unit) { const q = Math.max(25, Math.round((v + d * 25) / 5) * 5); return `${q} ${unit} ${rest}`; }
+  const q = d > 0 ? (v < 1 ? 1 : v + 1) : (v <= 1 ? 0.5 : v - 1); return `${q === 0.5 ? "½" : fmtQ(q)} ${rest}`; }
 function nwHtml(items){
-  const ok = items.filter(i => i.ok), sk = ok.reduce((a, i) => a + i.kcal, 0), sp = ok.reduce((a, i) => a + i.protein, 0);
-  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map(i => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} g</span>` : ""}</span><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
+  const ok = items.filter(i => i.ok), sk = ok.reduce((a, i) => a + i.kcal, 0), sp = ok.reduce((a, i) => a + i.protein, 0); nwLast = items;
+  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map((i, ix) => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} g</span>` : ""}</span><span class="nwq"><button type="button" class="btn small ghost" data-nwq="${ix}|-1" aria-label="Weniger">−</button><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span><button type="button" class="btn small ghost" data-nwq="${ix}|1" aria-label="Mehr">＋</button></span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
     <div class="nwrow sum"><b>Summe</b><b>${sk} kcal · ${Math.round(sp)} g P</b></div><div class="small muted">Richtwerte – Zahlen unten bei Bedarf anpassen.</div></div>`;
 }
 
@@ -4889,6 +4896,8 @@ async function onClick(e){
   const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
   const rsg = t.closest("[data-restgone]"); if (rsg) { fridgeTake(rsg.dataset.restgone, 999); toast("Aus der Restebox entfernt"); render(); return; }
   const rpk = t.closest("[data-restpick]"); if (rpk && restState) { const k = rpk.dataset.restpick; rpk.checked ? restState.pick.add(k) : restState.pick.delete(k); return; }
+  const nwq = t.closest("[data-nwq]"); if (nwq) { const [ix, d] = nwq.dataset.nwq.split("|").map(Number), it = nwLast[ix], ta = sheet.querySelector("#ownText"); if (!it || !ta) return;
+    const old = it.text, at = ta.value.indexOf(old); if (at < 0) return; ta.value = ta.value.slice(0, at) + nwStep(old, d) + ta.value.slice(at + old.length); ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }
