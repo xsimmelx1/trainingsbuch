@@ -4827,6 +4827,7 @@ async function enablePush(){
 // „Heute“ antippen, während Heute schon offen ist (also auch Doppeltipp): zurück zum heutigen Tag
 document.querySelector("nav.bottom").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return;
   if (b.dataset.tab === "heute" && tab === "heute" && selDate !== todayIso()) { if (dirty) saveCur(); selDate = todayIso(); history.replaceState(null, "", "#t=heute"); loadCur(); renderToday(); scrollTo(0, 0); toast("Heute"); return; }
+  if (b.dataset.tab === "mehr" && tab === "mehr" && sub.mehr !== "menu") { sub.mehr = "menu"; history.replaceState(null, "", "#t=mehr"); render(); scrollTo(0, 0); return; }  // erneut „Mehr“ → zurück zum Menü
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
