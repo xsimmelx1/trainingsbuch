@@ -718,13 +718,19 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
     return subs
 
 
-def meal_defaults(mp, settings, d, train, is_train=None, boulder=False):
+def meal_defaults(mp, settings, d, train, is_train=None, boulder=False, rec=None, rx=None):
     w = week_no(settings, d)
     W = mp["weeks"][(w - 1) % len(mp["weeks"]) if w > 0 else len(mp["weeks"]) - 1]
     i = d.weekday()
     o = {"fr": W["fr"][i]}
     if i <= 3:
         o["mi"], o["ab"] = (W["batchA"], W["batchB"]) if i % 2 == 0 else (W["batchB"], W["batchA"])
+        if rec is not None and (settings.get("food") or {}).get("mealPrep") is False:  # Meal Prep aus: frische, ähnliche Gerichte (wie in der App)
+            for k in ("mi", "ab"):
+                al = alt_meals(mp, rec, k, o[k], rx)
+                sm = [r for r in al if (r.get("servings") or 1) <= 2] + [r for r in al if (r.get("servings") or 1) > 2]
+                if sm:
+                    o[k] = sm[(i * 2 + (1 if k == "ab" else 0)) % len(sm)]["name"]
     elif i == 4:
         o["mi"], o["ab"] = W["frMittag"], W["frAbend"]
     elif i == 5:
@@ -784,7 +790,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
         if mo not in week_subs:
             w0 = week_no(settings, mo)
             W0 = mp["weeks"][(w0 - 1) % len(mp["weeks"]) if w0 > 0 else len(mp["weeks"]) - 1]
-            raws = [effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train), rx), rx, W0) for i in range(7)]
+            raws = [effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train, rec=rec, rx=rx), rx), rx, W0) for i in range(7)]
             week_subs[mo] = budget_subs(mp, rec, settings, raws, rx, P, W0)
         return week_subs[mo]
     stamp = now.strftime("%Y%m%dT000000Z")
@@ -796,7 +802,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
         day = days.get(iso) or {}
         pl = by_date.get(iso)
         wd = week_no(settings, d)
-        names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d)), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
+        names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d), rec=rec, rx=rx), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})

@@ -260,6 +260,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mwbox{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:8px 12px}.mwbox b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
+.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
 .hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
@@ -2236,7 +2237,7 @@ function dayPreps(d, ev){
       else if (tot >= 10 && tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
   // für morgen: Gerichte, die über Nacht ziehen
   if (mealPlan && recipes) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
-  if (wd === 0) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
+  if (wd === 0 && FOOD().mealPrep !== false) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
   return out.sort((a, b) => a.t - b.t);
 }
 function nextBlock(d){
@@ -3049,7 +3050,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3273,6 +3274,7 @@ function journeySheet(kind, arg){
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
+  if (kind === "leftover") return mealPlan && recipes ? leftoverHtml(arg) : `<p class="muted">Lade …</p>`;
   if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
     const o = typeof m.name === "object" ? m.name : null, r = m.info;
     return `<div class="sh"><div><div class="lab">${esc(m.label)}${m.time ? " · " + esc(m.time) : ""} · ${fmt(d)}</div><h2>${esc(r.name)}</h2></div>${cl}</div>
@@ -3696,7 +3698,7 @@ function shopCostCounts(counts, store){
   for (const [pid, amt] of Object.entries(tot)) { const pr = prodById(pid), v = pr && priceOf(pr, store); if (v != null) c += budgetShare(pr, amt) * v; }
   return c;
 }
-function weekShopCost(mo){ const counts = {}; let extra = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) { if (recipeByName(m.name)) counts[m.name] = (counts[m.name] || 0) + 1; else if (m.name === "away") extra += 4.5; } return shopCostCounts(counts) + extra; }
+function weekShopCost(mo){ const counts = {}; let extra = 0; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) { if (m.rest) continue; if (recipeByName(m.name)) counts[m.name] = (counts[m.name] || 0) + 1; else if (m.name === "away") extra += 4.5; } return shopCostCounts(counts) + extra; }
 // Aufwand: lvl 0 = egal, 1 = höchstens mittel, 2 = nur leicht; active = max. aktive Minuten (0 = egal)
 const DIFF_RANK = {leicht: 0, mittel: 1, aufwendig: 2};
 const effortCfg = () => FOOD().effort || {};
@@ -3753,6 +3755,7 @@ function budgetSubs0(mo){
 function mealDefaults(d, raw){
   const w = weekNo(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
   if (i <= 3) [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
+  if (i <= 3 && FOOD().mealPrep === false) for (const k of ["mi", "ab"]) { const al = altMeals(k, o[k]), sm = [...al.filter(r => (r.servings || 1) <= 2), ...al.filter(r => (r.servings || 1) > 2)]; if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; }
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
   else if (i === 5) [o.mi, o.ab] = [W.frAbend, W.saAbend];
   else [o.mi, o.ab] = [W.saAbend, W.soAbend];
@@ -3783,14 +3786,14 @@ function mealsFor(d){
   const off = new Set(FOOD().slotsOff || []);
   const out = mealPlan.slots.map(sl => { if (off.has(sl.k) && !ov[sl.k] && !ate[sl.k]) return null; const name = ov[sl.k] || def[sl.k]; if (!name) return null;
     const rec = recipeByName(name);
-    return {k: sl.k, label: sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
+    return {k: sl.k, label: (sl.k === "ex" && day?.boulder?.done && !ov.ex ? "🧗 Nach dem Bouldern" : mainLabel(sl, rec)) + (day?.rest?.[sl.k] && ov[sl.k] ? " · 🧊 Rest" : ""), rest: !!(day?.rest?.[sl.k] && ov[sl.k]), time: mealTime(d, sl), name, def: def[sl.k], swapped: !!ov[sl.k] && !!def[sl.k] && ov[sl.k] !== def[sl.k], budget: !ov[sl.k] && !!def._budget?.has(sl.k), ate: !!ate[sl.k], info: mealInfo(name), warn: rec ? avoidHit(rec) : null}; }).filter(Boolean);
   for (const o of day?.own || []) out.push({k: "o" + o.id, label: "Eigenes", time: o.time || "", name: o, own: true, ate: ate["o" + o.id] !== false, info: mealInfo(o)});
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
 function mealTotals(ms){ const t = {kcal:0, protein:0, eKcal:0, eProtein:0}; for (const m of ms) { t.kcal += m.info.kcal; t.protein += m.info.protein; if (m.ate) { t.eKcal += m.info.kcal; t.eProtein += m.info.protein; } } return t; }
 function editDay(d, fn){
   if (cur && cur.date === d) { fn(cur); touch(); return; }
-  const base = store.days[d] || {}, patch = {date: d, meals: Object.assign({}, base.meals), ate: Object.assign({}, base.ate)};
+  const base = store.days[d] || {}, patch = {date: d, meals: Object.assign({}, base.meals), ate: Object.assign({}, base.ate)}; if (base.rest) patch.rest = Object.assign({}, base.rest);
   if (base.own) patch.own = base.own.map(o => Object.assign({}, o)); if (base.ownDel) patch.ownDel = [...base.ownDel];
   if (base.cardio) patch.cardio = base.cardio.map(o => Object.assign({}, o)); if (base.cardioDel) patch.cardioDel = [...base.cardioDel];
   fn(patch);
@@ -3854,6 +3857,7 @@ function mealSheet(arg){
     ${k === "mi" || k === "ab" ? `<div class="chips">${[["", "Alle"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-mealtemp="${v}" aria-pressed="${mealTempF === v}">${l}</button>`).join("")}</div>` : ""}
     ${(() => { const sl = mealPlan.slots.find(x => x.k === k), are = avoidRe(), fv = recipes.filter(r => isFav(r.name) && r.name !== m.name && sl.cats.includes(r.category) && recipeOk(r, are));
       return `<div class="lab sec">★ Deine Favoriten</div>${fv.length ? fv.map(r => opt(r.name, "Favorit")).join("") : `<div class="small muted">Noch keine passenden Favoriten – im Rezept mit ☆ markieren.</div>`}<div class="lab sec">Ähnliche Gerichte</div>`; })()}
+    ${FRIDGE().length ? `<div class="lab sec">🧊 Aus dem Kühlschrank</div>` + FRIDGE().map(x => opt(x.name, `Rest · ${x.por}× · ${x.frozen ? "eingefroren" : "bis " + fmt(x.until)}`).replace('data-meal=', `data-fridge="${x.id}" data-meal=`)).join("") : ""}
     ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}</div>
@@ -4488,15 +4492,61 @@ const SHOPM = [["fr", "🥣 Frühstück"], ["warm", "🔥 Warm"], ["kalt", "❄�
 let shopMeals = lsGet("shopMeals") || SHOPM.map(x => x[0]);
 const mealKind = m => m.k === "fr" ? "fr" : m.k === "sn" || m.k === "ex" ? "snack" : recipeByName(m.name)?.temp === "kalt" ? "kalt" : "warm";
 const shopOk = m => shopMeals.includes(mealKind(m));
-function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
+// ---------- Reste: gekocht wird nie nur eine Portion ----------
+// Frisch gekocht = in den 4 Tagen davor nicht gegessen. Übrig = Rezeptportionen − 1 − bereits geplante Portionen der nächsten Tage.
+const FRIDGE = () => (FOOD().fridge || []).filter(x => x && x.por > 0 && x.until >= todayIso());
+const shelfDays = r => { const m = String(r?.shelfLife || "").match(/(\d+)\s*(?:–\s*\d+\s*)?Tag/i); return m ? Math.min(5, Number(m[1])) : 3; };
+const SLOT_FIT = {fr: ["fr"], mi: ["mi", "ab"], ab: ["mi", "ab"], sn: ["sn", "ex"], ex: ["sn", "ex"]};
+function mealCountAround(name, d, k, back){ let n = 0;
+  for (let i = back ? -4 : 0; i <= (back ? 0 : 4); i++) { const dd = addDays(d, i), day = dayObj(dd) || {};
+    for (const m of mealsFor(dd)) { if (m.own || m.name !== name || (dd === d && m.k === k)) continue;
+      const slotIdx = mealPlan.slots.findIndex(x => x.k === m.k), myIdx = mealPlan.slots.findIndex(x => x.k === k);
+      if (back ? (i < 0 || slotIdx < myIdx) && (day.ate || {})[m.k] : (i > 0 || slotIdx > myIdx) && !(day.ate || {})[m.k]) n++; } }
+  return n; }
+function leftoverCount(d, k){ const m = mealsFor(d).find(x => x.k === k), r = m && !m.own && recipeByName(m.name); if (!r || (r.servings || 1) <= 1 || m.rest) return 0;
+  if (mealCountAround(m.name, d, k, true)) return 0;  // schon vorher gegessen → das hier ist ein Rest
+  const made = cook && cook.name === m.name ? cook.serv : (r.servings || 1);
+  return Math.max(0, Math.round(made - 1 - mealCountAround(m.name, d, k, false))); }
+// Freie, passende Mahlzeiten der nächsten Tage für Reste
+function restSlots(name, d, k, days){ const r = recipeByName(name), fit = (k && SLOT_FIT[k]) || (r?.category === "fruehstueck" ? ["fr"] : r?.category === "snack" || r?.category === "shake" ? ["sn", "ex"] : ["mi", "ab"]), out = [];
+  const myIdx = k ? mealPlan.slots.findIndex(x => x.k === k) : -1;
+  for (let i = 0; i <= days; i++) { const dd = addDays(d, i), day = dayObj(dd) || {};
+    for (const m of mealsFor(dd)) { if (m.own || !fit.includes(m.k) || (day.ate || {})[m.k] || m.rest || m.name === name || m.name === "skip") continue;
+      if (i === 0 && mealPlan.slots.findIndex(x => x.k === m.k) <= myIdx) continue;
+      if (dd < todayIso()) continue; out.push({d: dd, k: m.k, label: m.label, cur: m.info.name}); } }
+  return out; }
+function planRest(name, picks){ for (const p of picks) editDay(p.d, day => { day.meals = Object.assign({}, day.meals, {[p.k]: name}); day.rest = Object.assign({}, day.rest, {[p.k]: true}); }); }
+function fridgeAdd(name, por, frozen){ const r = recipeByName(name), f = [...FRIDGE()], ex = f.find(x => x.name === name && !!x.frozen === !!frozen);
+  if (ex) { ex.por += por; ex.until = addDays(todayIso(), frozen ? 60 : shelfDays(r)); } else f.push({id: Date.now().toString(36), name, por, date: todayIso(), until: addDays(todayIso(), frozen ? 60 : shelfDays(r)), frozen: !!frozen});
+  saveFood({fridge: f}); }
+function fridgeTake(id, n = 1){ const f = FRIDGE().map(x => Object.assign({}, x)), x = f.find(y => y.id === id); if (x) x.por -= n; saveFood({fridge: f.filter(y => y.por > 0)}); }
+let restState = null;
+function leftoverHtml(arg){ const [src, a, b, c] = String(arg).split("|"); let name, n, d, k, fid = null;
+  if (src === "fridge") { const x = FRIDGE().find(y => y.id === a); if (!x) return `<div class="sh"><h2>Reste</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`; name = x.name; n = x.por; d = todayIso(); k = null; fid = x.id; }
+  else { d = a; k = b; n = Number(c); name = mealsFor(d).find(x => x.k === k)?.name; }
+  const slots = restSlots(name, d, k, src === "fridge" ? 4 : 3);
+  if (!restState || restState.arg !== arg) restState = {arg, n, pick: new Set(slots.slice(0, n).map(x => x.d + "|" + x.k))}; n = restState.n;
+  const r = recipeByName(name), close = `<button class="btn ghost" type="button" data-act="closeSheet">Später</button>`;
+  return `<div class="sh"><div><div class="lab">${src === "fridge" ? "Aus dem Kühlschrank" : "Gekocht"}</div><h2>Wie viel ist übrig?</h2></div>${close}</div>
+    <div class="scanres">${mealThumb(name)}<div><b>${esc(r?.name || name)}</b><div class="small muted">${r ? `Rezept ergibt ${r.servings} Portionen · hält ca. ${shelfDays(r)} Tage im Kühlschrank` : ""}</div></div></div>
+    <div class="mhead"><span>Übrig: <b>${n} ${n === 1 ? "Portion" : "Portionen"}</b>${src === "fridge" ? "" : ' <span class="small muted">(Vorschlag – anpassen)</span>'}</span><span class="stepper"><button type="button" class="btn small" data-restn="-1" aria-label="Weniger">−</button><button type="button" class="btn small" data-restn="1" aria-label="Mehr">＋</button></span></div>
+    ${slots.length ? `<div class="lab">In diese Mahlzeiten einplanen</div><div class="rsing">${slots.slice(0, 10).map(x => `<label class="check small"><input type="checkbox" data-restpick="${x.d}|${x.k}" ${restState.pick.has(x.d + "|" + x.k) ? "checked" : ""}><span><b>${fmt(x.d)} · ${esc(x.label)}</b><br><span class="muted">statt ${esc(x.cur)}</span></span></label>`).join("")}</div>
+      <button class="btn primary big" type="button" data-rest="plan" data-v="${esc(arg)}">✓ Einplanen</button>` : `<div class="small muted">Keine freie passende Mahlzeit in den nächsten Tagen.</div>`}
+    ${fid ? "" : `<button class="btn" type="button" data-rest="fridge" data-v="${esc(arg)}">🧊 Erst mal in den Kühlschrank</button>`}
+    ${fid ? `<button class="btn ghost small" type="button" data-rest="gone" data-v="${esc(arg)}">Ist weg / weggeworfen</button>` : `<button class="btn ghost small" type="button" data-rest="none" data-v="${esc(arg)}">Nichts übrig</button>`}
+    <div class="small muted">Eingeplante Reste zählen nicht zum Einkauf. Nicht eingeplante Portionen merkt sich die App unter „Reste“ im Essensplan.</div>`; }
+function fridgeCard(){ const f = FRIDGE(); if (!f.length) return "";
+  return `<details class="slim fridge" data-keep="fridge" ${shopOpen.has("fridge") || f.some(x => x.until <= addDays(todayIso(), 1) && !x.frozen) ? "open" : ""}><summary><span>🧊 Reste</span><span class="muted">${f.map(x => `${x.por}× ${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}`).join(" · ")}</span></summary><div class="card">
+    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${x.por}× ${esc(mealInfo(x.name).name)}</b><span class="small ${!x.frozen && x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">🧊 Kühlschrank · ${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><button class="btn small" type="button" data-sheet="leftover" data-v="fridge|${x.id}">Einplanen</button></div>`).join("")}</div></details>`; }
+function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && !m.rest && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
 function shopCtx(){
   const mo = shopWeek();
   if (shopScope === "tag") { const d = shopDay || todayIso(), c = {};
-    for (const m of mealsFor(d)) if (recipeByName(m.name) && shopOk(m)) c[m.name] = (c[m.name] || 0) + 1;
+    for (const m of mealsFor(d)) if (recipeByName(m.name) && !m.rest && shopOk(m)) c[m.name] = (c[m.name] || 0) + 1;
     return {key: "shop:d:" + d, title: fmt(d), entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: cnt / (recipeByName(n).servings || 1)})), note: "Mengen für genau diese Portionen. Meal-Prep-Gerichte kaufst du meist für die ganze Woche."}; }
   if (shopScope === "tage") { const d0 = shopDay || todayIso(), c = {};
-    for (let i = 0; i < shopDays; i++) for (const m of mealsFor(addDays(d0, i))) if (recipeByName(m.name) && shopOk(m)) c[m.name] = (c[m.name] || 0) + 1;
+    for (let i = 0; i < shopDays; i++) for (const m of mealsFor(addDays(d0, i))) if (recipeByName(m.name) && !m.rest && shopOk(m)) c[m.name] = (c[m.name] || 0) + 1;
     return {key: `shop:t:${d0}:${shopDays}`, title: `${fmt(d0)} – ${fmt(addDays(d0, shopDays - 1))}`, entries: Object.entries(c).map(([n, cnt]) => ({n, cnt, f: cnt / (recipeByName(n).servings || 1)})), note: `Genau die Portionen der nächsten ${shopDays} Tage. Meal-Prep-Gerichte kochst du meist für die ganze Woche – dann lieber „die Woche“ wählen.`}; }
   if (shopScope === "gericht") { const wr = Object.keys(weekRecipes(mo)), n = shopRec && recipeByName(shopRec) ? shopRec : wr[0] || recipes[0].name, r = recipeByName(n);
     return {key: `shop:r:${n}:${shopMul}`, title: n, entries: [{n, cnt: shopMul * (r.servings || 1), f: shopMul}], note: `${shopMul}× Rezept ergibt ${shopMul * (r.servings || 1)} Portion${shopMul * (r.servings || 1) > 1 ? "en" : ""}.`, n}; }
@@ -4592,6 +4642,7 @@ function foodSettingsHtml(){
       <div class="chips devs">${Object.entries(KITCHEN).map(([k, l]) => `<button type="button" data-kitchen="${k}" aria-pressed="${kitchenHas().has(k)}">${l}</button>`).join("")}</div>
       <div class="small muted">${(() => { const dp = devParts(), n = dp.length ? recipes.filter(r => (r.dev || []).some(d => dp.includes("§" + d + "§"))).length : 0; return n ? `${n} Rezepte brauchen ein Gerät, das dir fehlt – der Plan tauscht sie gegen ähnliche.` : "Alle Rezepte sind mit deiner Küche machbar."; })()}</div>
       ${info("Ohne Backofen gehen kleine Ofengerichte (Tofu-Würfel, Ofengemüse, Ofenkartoffeln) auch in der Heißluftfritteuse, Aufläufe und Blechgerichte nicht. Mikrowelle ist nie Pflicht. Jedes Rezept zeigt, welche Geräte es braucht.")}</div>
+    <div class="card"><h2>Meal Prep</h2><label class="check"><input type="checkbox" id="foodMealPrep" ${f.mealPrep !== false ? "checked" : ""}><span>Sonntags vorkochen für Mo–Do<br><span class="small muted">An: 2 Gerichte à 4 Portionen wechseln sich Mo–Do ab. Aus: jeden Tag frische, ähnliche Gerichte (vergleichbare kcal und Protein); was übrig bleibt, plant die App beim Abhaken als Rest ein.</span></span></label></div>
     <div class="card"><h2>Aufwand beim Kochen</h2>
       <div class="chips">${[[0, "Egal"], [1, "Höchstens mittel"], [2, "Nur leicht"]].map(([v, l]) => `<button type="button" data-efflvl="${v}" aria-pressed="${(f.effort?.lvl || 0) === v}">${l}</button>`).join("")}</div>
       <div class="field"><label for="effAct">Aktive Zeit pro Gericht: <b id="effVal">${num(f.effort?.active) ? "max. " + num(f.effort.active) + " min" : "egal"}</b></label><input type="range" id="effAct" min="0" max="60" step="5" value="${num(f.effort?.active) || 0}"></div>
@@ -4652,6 +4703,7 @@ function essenHtml(b){
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
   if (mo !== monday(t)) h += `<button class="btn ghost small" type="button" data-ew="0">Diese Woche</button>`;
+  h += fridgeCard();
   if (!essenDay || monday(essenDay) !== mo) essenDay = mo === monday(t) ? t : mo;
   // B: Wochenleiste (Tag wählen) und Meal-Prep-Karte
   h += `<div class="daychips" role="tablist">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(mo, i), ms = mealsFor(d), n = ms.filter(m => m.ate).length;
@@ -4668,7 +4720,7 @@ function essenHtml(b){
     ${tg.kcal - tt.kcal >= 150 ? `<div class="small gaphint nutri">Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder" : ""} 30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).</div>` : ""}
     <div class="mrows">${ms.map(m => diaryRow(d, m)).join("")}</div>
     <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button>${d < todayIso() ? "" : `<button class="btn ghost small" type="button" data-ownscan="${d}">📷 Produkt scannen</button>`}</div></div>`;
-  h += `<div class="lab sec">Die Woche</div>` + prep + budgetSlim(mo);
+  h += `<div class="lab sec">Die Woche</div>` + (FOOD().mealPrep !== false ? prep : "") + budgetSlim(mo);
   b.innerHTML = h;
 }
 
@@ -4782,11 +4834,13 @@ async function onClick(e){
     else if (calView === "woche") calDate = addDays(d, v * 7);
     else { const x = parse(d); calDate = iso(new Date(x.getFullYear(), x.getMonth() + v, 1)); }
     renderMore(); return; }
-  const at = t.closest("[data-ate]"); if (at) { const d = at.dataset.d, k = at.dataset.ate; editDay(d, day => { day.ate = Object.assign({}, day.ate, {[k]: !(day.ate || {})[k]}); }); render(); if (sheet.open) renderSheet(); return; }
+  const at = t.closest("[data-ate]"); if (at) { const d = at.dataset.d, k = at.dataset.ate; let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); render(); if (sheet.open) renderSheet();
+    if (now && !k.startsWith("o") && d >= addDays(todayIso(), -1)) { const n = leftoverCount(d, k); if (n > 0) { restState = null; openSheet("leftover", `meal|${d}|${k}|${n}`); } } return; }
   const ml0 = t.closest("[data-meal][data-swapctx]"); if (ml0 && sheetKind === "recipe") { sheetKind = "meal"; sheetArg = ml0.dataset.swapctx; swapCand = null; }
   const ml = t.closest("[data-meal]"); if (ml && sheetKind === "meal") { const [d, k] = sheetArg.split("|"), n = ml.dataset.meal, def = mealDefaults(d)[k], all = !!sheet.querySelector("#mealWeek")?.checked;
     const days = [d]; if (all) { const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === def) days.push(dd); } }
-    for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); });
+    const fr = ml.dataset.fridge; if (fr) { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: n}); day.rest = Object.assign({}, day.rest, {[k]: true}); }); fridgeTake(fr, 1); sheetKind = null; sheet.close(); render(); toast("🧊 Rest eingeplant"); return; }
+    for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); const rs = Object.assign({}, day.rest); delete rs[k]; day.rest = rs; });
     sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await snackSave(sheetArg || todayIso(), tx, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
@@ -4812,6 +4866,18 @@ async function onClick(e){
   const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"), was = mealsFor(d).find(x => x.k === k)?.name === "skip";
     editDay(d, day => { const ml = Object.assign({}, day.meals); if (was) delete ml[k]; else ml[k] = "skip"; day.meals = ml; const at = Object.assign({}, day.ate); delete at[k]; day.ate = at; });
     toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf"); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
+  const rsb = t.closest("[data-rest]"); if (rsb) { const a = rsb.dataset.rest, arg = rsb.dataset.v, [src, x1, x2, x3] = arg.split("|");
+    const name = src === "fridge" ? FRIDGE().find(y => y.id === x1)?.name : mealsFor(x1).find(y => y.k === x2)?.name, total = restState?.n ?? (src === "fridge" ? (FRIDGE().find(y => y.id === x1)?.por || 0) : Number(x3));
+    if (a === "plan") { const picks = [...sheet.querySelectorAll("[data-restpick]:checked")].map(c => { const [d, k] = c.dataset.restpick.split("|"); return {d, k}; }).slice(0, total);
+      if (!picks.length) return toast("Mindestens eine Mahlzeit wählen"); planRest(name, picks); const rest = total - picks.length;
+      if (src === "fridge") { const left = (FRIDGE().find(y => y.id === x1)?.por || 0) - picks.length; fridgeTake(x1, picks.length + (restState && left > 0 && total < left + picks.length ? 0 : 0)); } else if (rest > 0) fridgeAdd(name, rest, false);
+      toast(`${picks.length}× eingeplant${src !== "fridge" && rest > 0 ? `, ${rest}× in den Kühlschrank` : ""}`); }
+    else if (a === "fridge" || a === "freeze") { fridgeAdd(name, total, a === "freeze"); toast(a === "freeze" ? `❄️ ${total}× eingefroren` : `🧊 ${total}× im Kühlschrank`); }
+    else if (a === "gone" && src === "fridge") fridgeTake(x1, 999);
+    restState = null; sheetKind = null; sheet.close(); render(); return; }
+  const rsn = t.closest("[data-restn]"); if (rsn && restState) { restState.n = Math.max(0, Math.min(12, restState.n + Number(rsn.dataset.restn))); if (restState.n === 0) { toast("Nichts übrig"); restState = null; sheetKind = null; sheet.close(); return; }
+    const boxes = [...sheet.querySelectorAll("[data-restpick]")]; restState.pick = new Set(boxes.slice(0, restState.n).map(b => b.dataset.restpick)); renderSheet(); return; }
+  const rpk = t.closest("[data-restpick]"); if (rpk && restState) { const k = rpk.dataset.restpick; rpk.checked ? restState.pick.add(k) : restState.pick.delete(k); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }
@@ -5049,6 +5115,7 @@ async function onChange(e){
   if ((t.id === "ownKcal" || t.id === "ownProt") && sheetKind === "resteeat") { t.dataset.touched = "1"; return; }
   if (t.id === "scanPhoto" && t.files?.[0]) { scanPhoto(t.files[0]); return; }
   if (t.id === "scanNutri" && t.files?.[0]) { scanNutriPhoto(t.files[0]); return; }
+  if (t.id === "foodMealPrep") { saveFood({mealPrep: t.checked}); toast(t.checked ? "Meal Prep an" : "Meal Prep aus – frische Gerichte Mo–Do"); return; }
   if (t.id === "foodProdImg") { saveFood({prodImg: t.checked}); return; }
   if (t.dataset.myname || t.dataset.mygrp || t.dataset.mynw) { const k = t.dataset.myname || t.dataset.mygrp || t.dataset.mynw, my = Object.assign({}, FOOD().myProds || {}), o = Object.assign({}, my[k]); if (!my[k]) return;
     if (t.dataset.myname) { const v = t.value.trim().slice(0, 40); if (!v) return; o.name = v; }
@@ -5101,6 +5168,7 @@ function onSwipe(s0, dx){
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
     // nach rechts: gegessen ↔ nicht gegessen; nach links: ersetzen
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
+      if (now && !k.startsWith("o")) { const n = leftoverCount(d, k); if (n > 0) setTimeout(() => { restState = null; openSheet("leftover", `meal|${d}|${k}|${n}`); }, 350); }
       const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
       const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
     else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
