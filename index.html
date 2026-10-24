@@ -261,7 +261,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
 .nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwq .btn{min-height:28px;padding:2px 9px}
-.slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}
+.slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}.slotrow.rtrow{grid-template-columns:minmax(0,1fr) auto}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .gapinfo{display:flex;align-items:center;gap:6px}.addfood{align-self:flex-start;margin-top:4px}
 .toastbtn{background:none;border:0;color:var(--accent);font:inherit;font-weight:700;padding:4px 2px;cursor:pointer;white-space:nowrap}
@@ -1539,15 +1539,21 @@ function saveSettings(patch){
   cacheAll(); renderHeader(); flushSettings();
 }
 function saveMap(file, key, id, val){ store[key][id] = val; pendMap[file] = Object.assign({}, pendMap[file], {[id]: val}); lsSet("pendMap", pendMap); cacheAll(); flushMaps(); }
-let lastDispatch = 0;
+let lastDispatch = 0, replanTimer = 0;
+const dispatchPlanner = () => token && fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.siteRepo}/actions/workflows/${CFG.workflow}/dispatches`, {method:"POST", headers:{Authorization:`Bearer ${token}`, Accept:"application/vnd.github+json", "Content-Type":"application/json"}, body:JSON.stringify({ref:CFG.branch})}).catch(() => {});
+// Nach geänderten Zeiten: kurz sammeln (Stunde, dann Minute), dann hinter dem Speichern in die Warteschlange
+function replanSoon(){ clearTimeout(replanTimer); replanTimer = setTimeout(() => queue(async () => { lastDispatch = Date.now(); await dispatchPlanner(); }), 5000); }
 function maybeReplan(day){
   if (!isDone(day) || Date.now() - lastDispatch < 10*60e3) return;
   lastDispatch = Date.now();
-  fetch(`https://api.github.com/repos/${CFG.owner}/${CFG.siteRepo}/actions/workflows/${CFG.workflow}/dispatches`, {method:"POST", headers:{Authorization:`Bearer ${token}`, Accept:"application/vnd.github+json", "Content-Type":"application/json"}, body:JSON.stringify({ref:CFG.branch})}).catch(() => {});
+  dispatchPlanner();
 }
 
 // ---------- Ableitungen ----------
 const S = () => store.settings || {};
+// Feste Zeiten der Routinen (Einstellungen › Training & Plan); der Planer liest dieselben Werte
+const ROUTINE_DEF = {mob: "07:30", pain: "21:45"};
+const routineAt = k => (S().routineTimes || {})[k] || ROUTINE_DEF[k];
 function weekNo(dateStr){ const st = S().startDate; if (!st) return null; const d = diffDays(monday(dateStr), monday(st)); return d < 0 ? 0 : Math.floor(d/7) + 1; }
 const cycleWeek = w => w <= 0 ? 0 : ((w-1) % 12) + 1;
 function phaseOf(w){
@@ -2209,7 +2215,7 @@ function heroCard(noCoach){
 function todayItems(focus){
   const t = todayIso(), now = new Date(), hm0 = now.getHours() * 60 + now.getMinutes(), out = [];
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate), st = trainState(), plan = planFor(selDate);
-  out.push({k: "mob", prio: hm0 < 11 * 60 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `12 min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
+  out.push({k: "mob", prio: hm0 < hm(routineAt("mob")) + 210 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `${routineAt("mob")} · 12 min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
   if (focus !== "essen") { const ca = cur.cardio || [];
     out.push({k: "cardio", prio: ca.length ? 9 : 9.5, done: ca.length > 0, icon: "🏅", title: "Aktivität", sub: ca.length ? ca.map(cardioTxt).join(" · ") : "optional · Bouldern, Laufen, Rad … nur Dauer", act: `data-sheet="cardio" data-v="${selDate}"`, cta: ca.length ? "Noch eins" : "Eintragen"}); }
   if (focus !== "essen" && st !== "frei") {
@@ -2221,7 +2227,7 @@ function todayItems(focus){
     out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
   }
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
-  out.push({k: "pain", prio: hm0 >= 19 * 60 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: "30 s · Schmerz-Log", act: `data-sheet="pain"`, cta: "Eintragen"});
+  out.push({k: "pain", prio: hm0 >= hm(routineAt("pain")) - 165 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: `${routineAt("pain")} · 30 s · Schmerz-Log`, act: `data-sheet="pain"`, cta: "Eintragen"});
   const wd = parse(selDate).getDay();
   if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate, -7))])) { const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate, -7));
     out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
@@ -2233,13 +2239,13 @@ const MEAL_SHORT = {fr: "Frühstück", mi: "Mittag", sn: "Snack", ab: "Abendbrot
 const hmDiff = m => m < 1 ? "jetzt" : m < 60 ? `in ${m} min` : `in ${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}`;
 function dayEvents(d){
   const ev = [], st = trainState(), pl = planFor(d);
-  ev.push({k: "mob", t: "07:30", icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
+  ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
   if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time) ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
   const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
     ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
-  ev.push({k: "pain", t: "21:45", icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
+  ev.push({k: "pain", t: routineAt("pain"), icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
   return ev.sort((a, b) => a.t.localeCompare(b.t));
 }
 // Vorbereitungen: wann man womit anfangen sollte
@@ -3496,7 +3502,7 @@ function catalogHtml(){
 }
 const MORE = [["Nachschlagen"], ["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Preise, Märkte, Rezepte, Vorrat"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"],
   ["Erfassen"], ["bon", "🧾", "Kassenbon einlesen", "Gekauftes als Vorrat und deine Preise übernehmen"], ["scan", "📷", "Barcode scannen", "Preis merken oder Lebensmittel mit Nährwerten anlegen"],
-  ["Einstellungen"], ["setup:training", "🏋", "Training & Plan", "Start, Modus, Freigaben, Ausstattung zuhause"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
+  ["Einstellungen"], ["setup:training", "🏋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
 function renderMore(){
   if (tab === "essen") return renderEssen();
   if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
@@ -3535,8 +3541,8 @@ function calEntries(d, noMeals){
   for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${c.min} min${c.km ? " · " + fmtQ(c.km) + " km" : ""}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
-  if (d >= t || mob) out.push({tm:"07:30", en:"07:45", title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
-  if (d >= t || pain) out.push({tm:"21:45", en:"21:50", title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
+  if (d >= t || mob) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + 15), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
+  if (d >= t || pain) out.push({tm: routineAt("pain"), en: hmStr(hm(routineAt("pain")) + 5), title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
 }
 const evState = e => e.done ? "✓" : e.part ? e.part : e.miss ? "verpasst" : "";
@@ -4798,18 +4804,28 @@ function planHtml(){
     <li>B12 und Vitamin D beim Arzt messen lassen (Oktober–März bildet die Haut kaum Vitamin D). Wird ein Mangel festgestellt, geht die ärztliche Behandlung als Therapie der No-Supplement-Regel vor.</li></ul></div>`;
 }
 async function pushState(){ if (!("serviceWorker" in navigator) || !("PushManager" in window)) return "unsupported"; const reg = await navigator.serviceWorker.ready; const s = await reg.pushManager.getSubscription(); return s && (store.push.subs || []).some(x => x.endpoint === s.endpoint) ? "on" : "off"; }
+// Stunde/Minute als zwei Auswahllisten (Android-Zeitauswahl ist unzuverlässig, siehe Essenszeiten)
+function rtPick(k, label, h0, h1){
+  const [hh, mm] = routineAt(k).split(":").map(Number), hours = Array.from({length: h1 - h0 + 1}, (_, i) => i + h0);
+  if (!hours.includes(hh)) hours.push(hh), hours.sort((a, b) => a - b);
+  return `<div class="ftpick"><select data-rth="${k}" aria-label="${esc(label)} Stunde">${hours.map(h => `<option value="${h}" ${h === hh ? "selected" : ""}>${String(h).padStart(2, "0")}</option>`).join("")}</select><span>:</span><select data-rtm="${k}" aria-label="${esc(label)} Minute">${Array.from({length: 12}, (_, i) => i * 5).concat(mm % 5 ? [mm] : []).sort((a, b) => a - b).map(m => `<option value="${m}" ${m === mm ? "selected" : ""}>${String(m).padStart(2, "0")}</option>`).join("")}</select></div>`;
+}
 function setupHtml(){
   const s = S(), standalone = matchMedia("(display-mode: standalone)").matches;
-  return `<details class="slim setgrp" data-keep="set:training" ${shopOpen.has("set:training") ? "open" : ""}><summary><span>🏋 Training & Plan</span><span class="muted">Start ${s.startDate ? fmt(s.startDate) : "–"} · Modus ${(s.mode || "normal")[0].toUpperCase() + (s.mode || "normal").slice(1)}${s.scCleared ? "" : " · SC-Ampel aktiv"}${s.knee1 ? " · Knie-Phase 1" : ""}</span></summary><div class="setbody">
+  return `<details class="slim setgrp" data-keep="set:training" ${shopOpen.has("set:training") ? "open" : ""}><summary><span>🏋 Training & Plan</span><span class="muted">Start ${s.startDate ? fmt(s.startDate) : "–"} · Modus ${(s.mode || "normal")[0].toUpperCase() + (s.mode || "normal").slice(1)}${s.scCleared ? "" : " · SC-Ampel aktiv"}${s.knee1 ? " · Knie-Phase 1" : ""} · Zeiten ${routineAt("mob")}/${routineAt("pain")}</span></summary><div class="setbody">
     <div class="card"><h2>Plan</h2>
     <div class="grid2"><div class="field"><label for="stDate">Start Woche 1</label><input type="date" id="stDate" value="${esc(s.startDate || "")}"></div><div class="field"><label for="htIn">Größe (cm)</label><input type="text" inputmode="numeric" id="htIn" value="${esc(s.height ?? 175)}"></div></div>
     <label class="check"><input type="checkbox" id="scClr" ${s.scCleared?"checked":""}><span><b>SC-Gelenk ärztlich freigegeben</b></span></label>
     <label class="check"><input type="checkbox" id="kn1" ${s.knee1?"checked":""}><span><b>Knie-Phase 1 aktiv</b> (Morgentest über 2/10)</span></label>
     <div class="lab">Modus</div><div class="seg" id="modeSeg">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
+    <div class="card"><h2>Feste Zeiten</h2><div class="small muted">Wann du die Routinen machst. Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen.</div>
+      <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 23]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
+      ${info("Der Planer legt kein Training über die Morgenroutine. Der Abendcheck dauert 30 s und blockiert nichts; die Erinnerung kommt kurz nach der eingestellten Zeit.")}
+      ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Standardzeiten (${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain})</button>` : ""}</div>
     <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME)}</div></div></details>
   <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
     <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten und Kalender-Wecker du bekommst.</div>
-    ${[["morning","Morgen: Routine und Tagesplan"],["evening","Abend: Training noch nicht eingetragen"],["pain","Abendcheck (Schmerz-Log)"],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
+    ${[["morning",`Morgen: Routine und Tagesplan (${routineAt("mob")})`],["evening","Abend: Training noch nicht eingetragen"],["pain",`Abendcheck (${routineAt("pain")})`],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
     <div class="card"><h2>App & Push</h2>${standalone ? `<div class="small">Läuft als installierte App ✓</div>` : `<div class="small">Chrome-Menü ⋮ → <b>App installieren</b>, dann vom Startbildschirm öffnen.</div>`}
     <div class="actions"><button class="btn primary" id="pushOn" type="button" ${token ? "" : "disabled"}>Push aktivieren</button><button class="btn" id="pushTest" type="button">Test</button><span class="small muted" id="pushMsg"></span></div></div></div></details>
   <details class="slim setgrp" data-keep="set:cal" ${shopOpen.has("set:cal") ? "open" : ""}><summary><span>📅 Kalender-Abo</span><span class="muted">Training und Essen in deinem Kalender</span></summary><div class="setbody">
@@ -4943,6 +4959,7 @@ async function onClick(e){
   const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
+  if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
   const rtb = t.closest("[data-rtab]"); if (rtb) { recTab = rtb.dataset.rtab; renderSheetPart(["#rTabs", "#rTab"]); return; }
   const zUpd = () => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); };
@@ -5214,6 +5231,9 @@ async function onChange(e){
   if (t.id === "htIn") { const v = num(t.value); if (v) saveSettings({height:v}); return; }
   if (t.id === "scClr") { saveSettings({scCleared:t.checked}); return; }
   if (t.id === "kn1") { saveSettings({knee1:t.checked}); return; }
+  if (t.dataset.rth || t.dataset.rtm) { const k = t.dataset.rth || t.dataset.rtm, box = t.closest(".ftpick"), v = `${String(box.querySelector("[data-rth]").value).padStart(2, "0")}:${String(box.querySelector("[data-rtm]").value).padStart(2, "0")}`;
+    const rt = Object.assign({}, S().routineTimes, {[k]: v}); saveSettings({routineTimes: rt}); replanSoon();
+    toast(`${k === "mob" ? "Morgenroutine" : "Abendcheck"}: ${v} Uhr${token ? " · Kalender und Plan folgen in ein paar Minuten" : ""}`); render(); return; }
 }
 for (const el of [document.querySelector("header.top"), document.getElementById("syncLine")]) el.addEventListener("click", onClick);
 // Wischgesten: Mahlzeit rechts = gegessen, links = tauschen; Einkauf = abhaken; Heute = Tag wechseln

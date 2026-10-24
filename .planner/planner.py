@@ -64,6 +64,19 @@ BUFFER = 20             # Puffer vor/nach Terminen (Weg zum Gym)
 # Bevorzugte Fenster: abends, mittags, spätabends, morgens, sonst irgendwann tagsüber
 WINDOWS = [(17, 0, 20, 45), (12, 0, 14, 30), (19, 0, 21, 15), (7, 0, 9, 30), (9, 30, 17, 0)]
 HORIZON = 14
+# Feste Zeiten der Routinen (in der App unter Einstellungen › Training & Plan einstellbar)
+ROUTINE_DEF = {"mob": "07:30", "pain": "21:45"}
+
+
+def routine_at(settings, k):
+    v = (settings.get("routineTimes") or {}).get(k)
+    return v if isinstance(v, str) and re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", v) else ROUTINE_DEF[k]
+
+
+def hm_add(hm, minutes):
+    h, m = map(int, hm.split(":"))
+    t = max(0, min(h * 60 + m + minutes, 23 * 60 + 59))
+    return f"{t // 60:02d}:{t % 60:02d}"
 
 
 def load(name, default):
@@ -324,11 +337,12 @@ def build_ics(now, settings, plan, extras, past):
         ev(f"train-{p['date']}", f"Training: {title}", desc, f"{SITE}#w={p['date']}",
            utc(d, p["start"]), utc(d, p["end"]), alarm=None if past_day else 30)
     today = now.date()
+    mob, pain = routine_at(settings, "mob"), routine_at(settings, "pain")
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
         ev(f"morning-{d}", "Morgenroutine 12 min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
-           f"{SITE}#m={d}", utc(d, "07:30"), utc(d, "07:45"), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
-        ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, "21:45"), utc(d, "21:50"), alarm=0 if (settings.get("pushPrefs") or {}).get("pain") is not False else None)
+           f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, 15)), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
+        ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=0 if (settings.get("pushPrefs") or {}).get("pain") is not False else None)
     for x in extras:
         d = dt.date.fromisoformat(x["date"])
         ev(f"checkin-{x['date']}", "Check-in & Meal Prep", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser).",
@@ -921,6 +935,11 @@ def main():
     old_plan = load("plan.json", {"days": []})
 
     busy, cal_ok, cal_total = fetch_busy(dt.datetime.combine(today, dt.time(0), TZ), dt.datetime.combine(today + dt.timedelta(days=HORIZON + 1), dt.time(0), TZ))
+    # Morgenroutine als feste Zeit: kein Training darüber legen (Abendcheck dauert 30 s und blockiert nichts)
+    mh, mm = map(int, routine_at(settings, "mob").split(":"))
+    for i in range(HORIZON + 1):
+        a = dt.datetime.combine(today + dt.timedelta(days=i), dt.time(mh, mm), TZ)
+        busy.append((a, a + dt.timedelta(minutes=15)))
     # Heute: bereits erledigte oder laufende Einheit behalten statt umzuplanen
     old_today = next((p for p in old_plan.get("days", []) if p["date"] == today.isoformat()), None)
     # behalten nur, wenn heute wirklich trainiert wurde oder das Training läuft – eine verpasste Einheit rutscht sonst nicht nach
@@ -970,7 +989,8 @@ def main():
         if not state["sent"].get(key):
             msgs.append((key, payload))
 
-    if "07:00" <= hm < "10:30":
+    mob, pain = routine_at(settings, "mob"), routine_at(settings, "pain")
+    if hm_add(mob, -30) <= hm < hm_add(mob, 180):
         if p_today:
             s = variant(p_today["session"], settings, today) if p_today["session"] != "notfall" else "notfall"
             body = f"{TITLE.get(s, s)} · freier Slot {p_today['start']}–{p_today['end']}." if not cal_failed else f"{TITLE.get(s, s)} um {p_today['start']} (Kalender gerade nicht erreichbar, Plan unverändert)."
@@ -986,7 +1006,7 @@ def main():
         once(f"evening-{tday}", {"title": "Noch keine Einheit eingetragen",
                                  "body": "Hast du trainiert? Dann jetzt eintragen. Sonst rutscht die Einheit automatisch auf den nächsten freien Tag.",
                                  "url": f"{SITE}#w={tday}", "tag": f"e-{tday}", "action": "Eintragen"})
-    if "21:40" <= hm <= "23:59" and not has_pain_log(day):
+    if hm_add(pain, -5) <= hm <= "23:59" and not has_pain_log(day):
         once(f"pain-{tday}", {"title": "Abendcheck fehlt (30 s)", "body": "Schmerz-Log in der App eintragen.",
                               "url": f"{SITE}#p={tday}", "tag": f"p-{tday}", "action": "Eintragen"})
     mon = (today - dt.timedelta(days=today.weekday())).isoformat()
