@@ -1257,5 +1257,66 @@
   "license": "CC BY 4.0",
   "artist": "Tomasz Sienicki [user: tsca, mail: tomasz.sienicki at gmail.",
   "via": "pick"
+ },
+ "backBrezel": {
+  "title": "File:Kampsbrezel.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kampsbrezel.jpg",
+  "license": "Public domain",
+  "artist": "--Xocolatl 19:08, 4 August 2007 (UTC)",
+  "via": "de:Brezel",
+  "src": "https://img.rewe-static.de/0909484/26364270_digital-image.png?imwidth=240",
+  "rewe": "Schwäbische Laugenbrezel"
+ },
+ "backLaugen": {
+  "title": "File:Laugenbroetchen und Laugenbrezel.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Laugenbroetchen_und_Laugenbrezel.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "RudolfSimon",
+  "via": "de:Laugengebäck",
+  "src": "https://img.rewe-static.de/2920149/25760692_digital-image.png?imwidth=240",
+  "rewe": "Laugenbrötchen"
+ },
+ "backCroissant": {
+  "title": "File:Croissant-newspaper-and-tea.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Croissant-newspaper-and-tea.jpg",
+  "license": "CC0",
+  "artist": "Petr Kratochvil",
+  "via": "de:Croissant",
+  "src": "https://img.rewe-static.de/7886505/33392539_digital-image.png?imwidth=240",
+  "rewe": "Butter Croissant"
+ },
+ "backBaguette": {
+  "title": "File:Baguettes, Paris, France - panoramio.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Baguettes,_Paris,_France_-_panoramio.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Nick Thweatt",
+  "via": "de:Baguette"
+ },
+ "backBroetchen": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/4147324/26363384_digital-image.png?imwidth=240",
+  "rewe": "Weizenbrötchen"
+ },
+ "backKoerner": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8901803/39216023_digital-image.png?imwidth=240",
+  "rewe": "Harry Kürbiskernbrötchen"
+ },
+ "backKaese": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/2306370/23629924_digital-image.png?imwidth=240",
+  "rewe": "Käse-Zwiebel Brötchen"
  }
 }

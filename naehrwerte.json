@@ -48,11 +48,25 @@
 },
 {
 "n": "Croissant",
-"a": [],
+"a": [
+"buttercroissant"
+],
 "k": 410,
 "p": 8,
 "g": 60,
 "u": "Stück"
+},
+{
+"n": "Baguette",
+"a": [
+"baguettebrötchen",
+"ciabatta",
+"rustigette"
+],
+"k": 260,
+"p": 8.5,
+"g": 70,
+"u": "Stück (¼)"
 },
 {
 "n": "Butterbrezel",
