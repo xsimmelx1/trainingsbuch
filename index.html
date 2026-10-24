@@ -4051,7 +4051,7 @@ let prices = null, pricesReady = null;
 // Produktbilder (img/produkte/<id>.jpg, Nachweise in prodimg.json) – Schalter food.prodImg, Standard an
 let prodCred = null; fetch("prodimg.json").then(r => r.json()).then(j => { prodCred = j; if (tab === "essen" && essenView === "einkauf") renderMore(); }).catch(() => {});
 const prodImgOn = () => FOOD().prodImg !== false && !!prodCred;
-const GROUP_ICON = {"Milchprodukte & Eier": "🥛", "Tofu & Soja": "🫘", "Hülsenfrüchte": "🥫", "Getreide & Brot": "🍞", "Obst & Gemüse": "🥦", "Vorrat & Gewürze": "🧂"};
+const GROUP_ICON = {"Milchprodukte & Eier": "🥛", "Tofu & Soja": "🫘", "Hülsenfrüchte": "🥫", "Brot & Backwaren": "🥖", "Getreide & Nudeln": "🌾", "Obst & Gemüse": "🥦", "Vorrat & Gewürze": "🧂"};
 // REWE-Produktfoto (src) zuerst, bei Fehler oder offline das lokale Commons-Bild, zuletzt ein Platzhalter
 const prodImg = (pr, cls = "pthumb") => { if (!prodImgOn()) return ""; const c = pr && prodCred[pr.id]; if (!c) return `<span class="${cls} ph">${GROUP_ICON[pr?.group] || "🧂"}</span>`; const loc = `img/produkte/${pr.id}.jpg`;
   return `<img class="${cls}${c.src ? " rw" : ""}" src="${esc(c.src || loc)}" ${c.src && c.license ? `data-fb="${loc}"` : ""} alt="" loading="lazy" decoding="async" onerror="if(this.dataset.fb){this.src=this.dataset.fb;delete this.dataset.fb}else this.replaceWith(Object.assign(document.createElement('span'),{className:this.className+' ph',textContent:'🛒'}))">`; };
@@ -4381,7 +4381,8 @@ const SHOP_GROUPS = [
   ["Milchprodukte & Eier", /skyr|quark|hüttenkäse|käse|feta|harzer|milch|joghurt|\beier?\b|sahne|butter|frischkäse/i],
   ["Tofu & Soja", /tofu|soja|edamame|tempeh/i],
   ["Hülsenfrüchte", /linsen|kichererbsen|bohnen|erbsen/i],
-  ["Getreide & Brot", /hafer|reis|nudel|pasta|spaghetti|brot|tortilla|wrap|couscous|quinoa|knäcke|mehl|bulgur|toast|brötchen/i],
+  ["Brot & Backwaren", /brot|brötchen|toast|tortilla|wrap|knäcke|baguette|brezel|laugen|croissant|semmel|pita|fladen|zwieback|bagel|ciabatta/i],
+  ["Getreide & Nudeln", /hafer|reis|nudel|pasta|spaghetti|couscous|quinoa|mehl|bulgur|grieß|cornflakes|müsli/i],
   ["Obst & Gemüse", /apfel|banane|beere|spinat|zucchini|paprika|tomate|zwiebel|knoblauch|gurke|möhre|karotte|brokkoli|pilz|champignon|kartoffel|zitrone|limette|salat|rucola|avocado|mais|petersilie|koriander|basilikum|ingwer|jalape|lauch|kohl|frühlingszwiebel|aubergine|orange|obst|gemüse/i],
 ];
 const shopWeek = () => essenMon || (parse(todayIso()).getDay() === 0 || parse(todayIso()).getDay() === 6 ? addDays(monday(todayIso()), 7) : monday(todayIso()));
@@ -4420,7 +4421,7 @@ function shopList(entries){
     return {recs: recs.sort((a, b) => b.cnt - a.cnt), groups: G.filter(([, a]) => a.length)};
   }
   const groups = SHOP_GROUPS.map(([g]) => [g, []]); groups.push(["Vorrat & Gewürze", []]);
-  for (const it of Object.values(items)) { if (it.pr?.group) { const gx = SHOP_GROUPS.findIndex(([g]) => g === it.pr.group); groups[gx < 0 ? groups.length - 1 : gx][1].push(it); continue; } const gi = SPICE_RE.test(it.name) || /(^|[^a-zäöü])öl\b|salz|pfeffer|zimt|gewürz|backpulver|sirup|essig|sojasoße|sojasauce|brühe|kakao|honig|stärke/i.test(it.name) ? -1 : SHOP_GROUPS.findIndex(([, re]) => re.test(it.name)); groups[gi < 0 ? groups.length - 1 : gi][1].push(it); }
+  for (const it of Object.values(items)) { if (it.pr?.group && (it.pr.group === "Vorrat & Gewürze" || SHOP_GROUPS.some(([g]) => g === it.pr.group))) { const gx = SHOP_GROUPS.findIndex(([g]) => g === it.pr.group); groups[gx < 0 ? groups.length - 1 : gx][1].push(it); continue; } const gi = SPICE_RE.test(it.name) || /(^|[^a-zäöü])öl\b|salz|pfeffer|zimt|gewürz|backpulver|sirup|essig|sojasoße|sojasauce|brühe|kakao|honig|stärke/i.test(it.name) ? -1 : SHOP_GROUPS.findIndex(([, re]) => re.test(it.name)); groups[gi < 0 ? groups.length - 1 : gi][1].push(it); }
   for (const [, a] of groups) a.sort((x, y) => x.name.localeCompare(y.name, "de"));
   return {recs: recs.sort((a, b) => b.cnt - a.cnt), groups: groups.filter(([, a]) => a.length)};
 }
