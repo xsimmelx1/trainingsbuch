@@ -267,7 +267,8 @@ def build_plan(now, settings, days, busy, keep=None):
         base = SEQ[nxt]
         plan.append({"date": d.isoformat(), "session": "notfall" if short else base,
                      "start": slot[0].strftime("%H:%M"), "end": slot[1].strftime("%H:%M"), "short": short})
-        nxt = (nxt + 1) % 4
+        if not short:  # Kurz-Einheit zählt im Rückblick nicht für die Reihenfolge (BASE), also auch hier nicht weiterrücken
+            nxt = (nxt + 1) % 4
         consec += 1
         last = d
         count[wk] = count.get(wk, 0) + 1
@@ -929,6 +930,9 @@ def main():
     except (ValueError, TypeError):
         settings.pop("startDate", None)
         print("Startdatum ungültig – ignoriert")
+    for k in ("routineTimes", "pushPrefs", "lessons", "food"):  # falscher Typ soll nicht den ganzen Lauf stoppen
+        if k in settings and not isinstance(settings[k], dict):
+            settings.pop(k)
     days = load_days()
     state = load("state.json", {"sent": {}})
     push = load("push.json", {"subs": []})
@@ -955,8 +959,10 @@ def main():
 
     if keep and not any(p["date"] == today.isoformat() for p in plan):
         plan.insert(0, keep)
+    # Vergangenes plus heutige Einheiten, die jetzt nicht mehr unterzubringen sind (sonst fehlen sie im Feed, im Abend-Push und morgen als „ausgefallen“)
+    in_plan = {p["date"] for p in plan}
     past = [dict(p, done=is_strength(days.get(p["date"]))) for p in old_plan.get("past", []) + old_plan.get("days", [])
-            if p["date"] < today.isoformat() and p["date"] >= (today - dt.timedelta(days=21)).isoformat()]
+            if p["date"] <= today.isoformat() and p["date"] not in in_plan and p["date"] >= (today - dt.timedelta(days=21)).isoformat()]
     past = list({p["date"]: p for p in past}.values())
     # ausgefallene Einheiten zählen (für die Morgen-Nachricht)
     missed_yday = next((p for p in past if p["date"] == (today - dt.timedelta(days=1)).isoformat() and not p["done"]), None)
@@ -1002,7 +1008,8 @@ def main():
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
         once(f"morning-{tday}", {"title": "Guten Morgen: 12 min Routine", "body": body + " " + coaching(settings, today),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
-    if "20:15" <= hm < "23:30" and p_today and hm >= p_today.get("end", "00:00") and not is_strength(day):
+    p_eve = p_today or next((p for p in past if p["date"] == tday), None)  # auch eine heute herausgefallene Einheit nachfragen
+    if "20:15" <= hm < "23:30" and p_eve and hm >= p_eve.get("end", "00:00") and not is_strength(day):
         once(f"evening-{tday}", {"title": "Noch keine Einheit eingetragen",
                                  "body": "Hast du trainiert? Dann jetzt eintragen. Sonst rutscht die Einheit automatisch auf den nächsten freien Tag.",
                                  "url": f"{SITE}#w={tday}", "tag": f"e-{tday}", "action": "Eintragen"})

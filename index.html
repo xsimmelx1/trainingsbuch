@@ -1553,7 +1553,7 @@ function maybeReplan(day){
 const S = () => store.settings || {};
 // Feste Zeiten der Routinen (Einstellungen › Training & Plan); der Planer liest dieselben Werte
 const ROUTINE_DEF = {mob: "07:30", pain: "21:45"};
-const routineAt = k => (S().routineTimes || {})[k] || ROUTINE_DEF[k];
+const routineAt = k => { const v = (S().routineTimes || {})[k]; return /^([01]\d|2[0-3]):[0-5]\d$/.test(v || "") ? v : ROUTINE_DEF[k]; };
 function weekNo(dateStr){ const st = S().startDate; if (!st) return null; const d = diffDays(monday(dateStr), monday(st)); return d < 0 ? 0 : Math.floor(d/7) + 1; }
 const cycleWeek = w => w <= 0 ? 0 : ((w-1) % 12) + 1;
 function phaseOf(w){
@@ -4819,7 +4819,7 @@ function setupHtml(){
     <label class="check"><input type="checkbox" id="kn1" ${s.knee1?"checked":""}><span><b>Knie-Phase 1 aktiv</b> (Morgentest über 2/10)</span></label>
     <div class="lab">Modus</div><div class="seg" id="modeSeg">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
     <div class="card"><h2>Feste Zeiten</h2><div class="small muted">Wann du die Routinen machst. Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen.</div>
-      <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 23]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
+      <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
       ${info("Der Planer legt kein Training über die Morgenroutine. Der Abendcheck dauert 30 s und blockiert nichts; die Erinnerung kommt kurz nach der eingestellten Zeit.")}
       ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Standardzeiten (${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain})</button>` : ""}</div>
     <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME)}</div></div></details>
