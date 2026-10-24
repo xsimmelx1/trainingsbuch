@@ -263,7 +263,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwq .btn{min-height:28px;padding:2px 9px}
 .slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.addfood{align-self:flex-start;margin-top:4px}
+.gapinfo{display:flex;align-items:center;gap:6px}.addfood{align-self:flex-start;margin-top:4px}
 .toastbtn{background:none;border:0;color:var(--accent);font:inherit;font-weight:700;padding:4px 2px;cursor:pointer;white-space:nowrap}
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
@@ -4751,12 +4751,12 @@ function essenHtml(b){
   // A: Tagebuch des gewählten Tags
   const d = essenDay, ms = mealsFor(d), tt = mealTotals(ms), tg = foodTarget();
   const bar = (v, g, l) => `<div class="pbar"><span><b>${Math.round(v)}</b> / ${g} ${l}</span><div class="track"><div class="fill" style="width:${Math.min(v / g * 100, 100)}%"></div></div></div>`;
+  h += fridgeCard();
   h += `<div class="card diary"><div class="mhead"><span><b>${fmt(d)}</b>${d === t ? ` <span class="pill">heute</span>` : ""}</span><span class="small muted">${esc(trainLine(d).replace(/<[^>]+>/g, ""))}</span></div>
     <div class="pbars nutri">${bar(tt.eKcal, tg.kcal, "kcal")}${bar(tt.eProtein, tg.protein, "g Protein")}</div>
-    ${tg.kcal - tt.kcal >= 150 ? `<div class="small gaphint nutri">Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder" : ""} 30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).</div>` : ""}
+    ${tg.kcal - tt.kcal >= 150 ? `<div class="nutri gapinfo">${info(`Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder " : ""}30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).`)}<span class="small muted">Plan ${tg.kcal - tt.kcal} kcal unter Ziel</span></div>` : ""}
     <div class="mrows">${ms.filter(m => !(m.name === "skip" && d < todayIso())).map(m => diaryRow(d, m)).join("")}</div>
     <button class="btn small addfood" type="button" data-sheet="snack" data-v="${d}">＋ Essen oder Snack eintragen</button></div>`;
-  h += fridgeCard();
   h += `<div class="lab sec">Die Woche</div>` + (FOOD().mealPrep !== false ? prep : "") + budgetSlim(mo);
   b.innerHTML = h;
 }
