@@ -263,6 +263,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwq .btn{min-height:28px;padding:2px 9px}
 .slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.addfood{align-self:flex-start;margin-top:4px}
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
@@ -3063,7 +3064,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover","restleft"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3287,6 +3288,9 @@ function journeySheet(kind, arg){
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
+  if (kind === "restleft") { const x = FRIDGE().find(y => y.id === arg); if (!x) return `<div class="sh"><h2>Restebox</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
+    return `<div class="sh"><h2>Ist noch was übrig?</h2></div><div class="scanres">${mealThumb(x.name)}<div><b>${esc(mealInfo(x.name).name)}</b><div class="small muted">Rest gegessen ✓</div></div></div>
+      <div class="btnrow two"><button class="btn primary big" type="button" data-restleft="${x.id}|1">Ja, bleibt in der Box</button><button class="btn big" type="button" data-restleft="${x.id}|0">Nein, alles weg</button></div>`; }
   if (kind === "leftover") return mealPlan && recipes ? leftoverHtml(arg) : `<p class="muted">Lade …</p>`;
   if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
     const o = typeof m.name === "object" ? m.name : null, r = m.info;
@@ -3896,7 +3900,7 @@ function snackPicks(){ const c = new Map(), are = avoidRe();
   for (const n of SNACK_DEF) { if (mine.length >= 10) break; if (c.has(fold(n)) || (are && are.test(n))) continue; mine.push({name: n, def: true}); }
   return mine; }
 function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
-  return `<div class="sh"><h2>Snack · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
+  return `<div class="sh"><h2>Essen eintragen · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
     <div class="mhead snackamt"><span class="lab">Wie viel?</span><div class="chips sm">${[[0.5, "½"], [1, "1"], [2, "2"], [3, "3"]].map(([v, l]) => `<button type="button" data-snackmul="${v}" aria-pressed="${snackMul === v && !snackG}">${l}×</button>`).join("")}<input type="text" id="snackG" inputmode="decimal" value="${esc(snackG)}" placeholder="g" aria-label="oder Gramm"></div></div>
     <div class="lab">Antippen = sofort eingetragen${snackG ? ` · ${esc(snackG)} g` : snackMul !== 1 ? ` · ${snackMul === 0.5 ? "½" : snackMul}×` : ""}</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
     <div class="card ownf"><div class="field"><label for="ownText">Oder eintippen</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, Cola, 30 g Mandeln" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
@@ -4550,7 +4554,8 @@ function eatRest(id, d, k){ const x = FRIDGE().find(y => y.id === id); if (!x) r
     const open = mealsFor(d).filter(m => !m.own && !m.ate && fit.includes(m.k)); k = (open.find(m => (m.time || "99") >= now) || open[open.length - 1])?.k; }
   if (k) { const prev = mealsFor(d).find(m => m.k === k)?.info.name; editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: x.name}); day.rest = Object.assign({}, day.rest, {[k]: true}); day.ate = Object.assign({}, day.ate, {[k]: true}); }); toast(`🧊 Rest gegessen${prev && prev !== mealInfo(x.name).name ? ` (statt ${prev})` : ""}`); }
   else { const info = mealInfo(x.name), oid = Date.now().toString(36); editDay(d, day => { day.own = [...(day.own || []), {id: oid, name: info.name + " (Rest)", kcal: info.kcal, protein: info.protein, time: hmStr(new Date().getHours() * 60 + new Date().getMinutes())}]; day.ate = Object.assign({}, day.ate, {["o" + oid]: true}); }); toast("🧊 Rest gegessen (zusätzlich)"); }
-  fridgeTake(id, 999); }
+  restAsk = id; }
+let restAsk = null;
 // Knöpfe „Stattdessen Rest gegessen“ für eine Mahlzeit
 const restBtn = (d, m) => { const r = recOf(m.name); if (!r || (r.servings || 1) <= 1 || m.name === "skip") return ""; const inBox = FRIDGE().some(x => x.name === r.name);
   return `<button type="button" class="btn small ${inBox ? "" : "ghost"} restbtn" data-restadd="${esc(r.name)}" ${inBox ? "disabled" : ""}>${inBox ? "🧊 In der Restebox ✓" : "🧊 Reste übrig"}</button>`; };
@@ -4719,7 +4724,7 @@ function diaryRow(d, m){
 }
 
 function essenHtml(b){
-  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn small snackbtn" data-sheet="snack" data-v="${todayIso()}">＋ Snack</button><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
+  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
   if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (!mealPlan || !recipes) { b.innerHTML = h + `<p class="muted">Lade Ernährungsplan …</p>`; ensureMeals().then(() => { if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = h + `<p>Plan konnte nicht geladen werden.</p>`; }); return; }
   if (essenView === "einkauf") { b.innerHTML = h + shopHtml(); return; }
@@ -4728,7 +4733,6 @@ function essenHtml(b){
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
   h += `<div class="calnav"><button type="button" data-ew="-1" aria-label="Vorherige Woche">‹</button><div class="ttl">${w > 0 ? `Woche ${w} · ` : ""}${fmt(mo).slice(3)}–${fmt(addDays(mo, 6)).slice(3)}</div><button type="button" data-ew="1" aria-label="Nächste Woche">›</button></div>`;
   if (mo !== monday(t)) h += `<button class="btn ghost small" type="button" data-ew="0">Diese Woche</button>`;
-  h += fridgeCard();
   if (!essenDay || monday(essenDay) !== mo) essenDay = mo === monday(t) ? t : mo;
   // B: Wochenleiste (Tag wählen) und Meal-Prep-Karte
   h += `<div class="daychips" role="tablist">${[0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(mo, i), ms = mealsFor(d), n = ms.filter(m => m.ate).length;
@@ -4744,7 +4748,8 @@ function essenHtml(b){
     <div class="pbars nutri">${bar(tt.eKcal, tg.kcal, "kcal")}${bar(tt.eProtein, tg.protein, "g Protein")}</div>
     ${tg.kcal - tt.kcal >= 150 ? `<div class="small gaphint nutri">Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder" : ""} 30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).</div>` : ""}
     <div class="mrows">${ms.filter(m => !(m.name === "skip" && d < todayIso())).map(m => diaryRow(d, m)).join("")}</div>
-    <div class="actions"><button class="btn ghost small" type="button" data-sheet="ownfood" data-v="${d}">＋ Eigenes Essen</button>${d < todayIso() ? "" : `<button class="btn ghost small" type="button" data-ownscan="${d}">📷 Produkt scannen</button>`}</div></div>`;
+    <button class="btn small addfood" type="button" data-sheet="snack" data-v="${d}">＋ Essen oder Snack eintragen</button></div>`;
+  h += fridgeCard();
   h += `<div class="lab sec">Die Woche</div>` + (FOOD().mealPrep !== false ? prep : "") + budgetSlim(mo);
   b.innerHTML = h;
 }
@@ -4909,7 +4914,8 @@ async function onClick(e){
   const rsn = t.closest("[data-restn]"); if (rsn && restState) { restState.n = Math.max(0, Math.min(12, restState.n + Number(rsn.dataset.restn))); if (restState.n === 0) { toast("Nichts übrig"); restState = null; sheetKind = null; sheet.close(); return; }
     renderSheet(); return; }
   const rad = t.closest("[data-restadd]"); if (rad) { if (rad.disabled) return; fridgeAdd(rad.dataset.restadd, 1, false); toast("🧊 In der Restebox"); render(); if (sheet.open) renderSheet(); return; }
-  const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
+  const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); if (restAsk) setTimeout(() => openSheet("restleft", restAsk), 120); return; }
+  const rlf = t.closest("[data-restleft]"); if (rlf) { const [id, v] = rlf.dataset.restleft.split("|"); if (v === "0") { fridgeTake(id, 999); toast("Restebox: aufgegessen"); } else toast("🧊 Bleibt in der Restebox"); restAsk = null; sheetKind = null; sheet.close(); render(); return; }
   const rsg = t.closest("[data-restgone]"); if (rsg) { fridgeTake(rsg.dataset.restgone, 999); toast("Aus der Restebox entfernt"); render(); return; }
   const rpk = t.closest("[data-restpick]"); if (rpk && restState) { const k = rpk.dataset.restpick; rpk.checked ? restState.pick.add(k) : restState.pick.delete(k); return; }
   const mpo = t.closest("[data-mealpor]"); if (mpo) { const [d, k, fs] = mpo.dataset.mealpor.split("|"), f = Number(fs);
