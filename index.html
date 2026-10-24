@@ -56,7 +56,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:10p
 .syncb{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:15px;color:var(--good);padding:0}
 .syncb[data-state="busy"]{color:var(--muted)}
 .syncb[data-state="bad"]{color:var(--bad);border-color:var(--bad)}
-.toast{position:fixed;left:16px;right:16px;bottom:calc(var(--nav-h) + 16px);z-index:60;max-width:600px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.toast{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;left:16px;right:16px;bottom:calc(var(--nav-h) + 16px);z-index:60;max-width:600px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .toast[hidden]{display:none}
 
 nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
@@ -264,6 +264,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .addfood{align-self:flex-start;margin-top:4px}
+.toastbtn{background:none;border:0;color:var(--accent);font:inherit;font-weight:700;padding:4px 2px;cursor:pointer;white-space:nowrap}
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
@@ -1452,7 +1453,13 @@ addEventListener("online", () => { Object.keys(pending).forEach(flushDay); flush
 
 // Speicherstatus: ruhiges Symbol im Kopf; Probleme verständlich, Details auf Antippen; Hinweise als Toast
 let syncDetail = "", toastTimer = null;
-function toast(t){ const el = document.getElementById("toast"); if (!el) return; el.textContent = t; el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 3200); }
+let toastAct = null;
+function toast(t, act){ const el = document.getElementById("toast"); if (!el) return; toastAct = act || null;
+  if (act) { el.innerHTML = `<span>${esc(t)}</span><button type="button" class="toastbtn" data-toastact="1">${esc(act.label)}</button>`; } else el.textContent = t;
+  el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; toastAct = null; }, act ? 6500 : 3200); }
+document.addEventListener("click", e => { if (!e.target.closest("[data-toastact]") || !toastAct) return; const a = toastAct; toastAct = null; document.getElementById("toast").hidden = true; a.fn(); });
+// Abhaken rückgängig machen
+const ateUndo = (d, k) => ({label: "Rückgängig", fn: () => { editDay(d, day => { day.ate = Object.assign({}, day.ate, {[k]: !(day.ate || {})[k]}); }); render(); if (sheet.open) renderSheet(); toast("Zurückgenommen"); }});
 function setSync(t, bad){
   const btn = document.getElementById("syncBtn"), line = document.getElementById("syncLine"); if (!btn) return;
   const busy = /Ungespeichert|Synchronisiere|warten auf Sync/.test(t), ok = /Gespeichert|Synchronisiert/.test(t);
@@ -2259,7 +2266,7 @@ function nextBlock(d){
   const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
   // Tagesablauf: jeder Punkt mit Uhrzeit, Symbol, Kurzname und eindeutigem Status; „jetzt“-Strich an der aktuellen Uhrzeit
   const nowAt = ev.findIndex(e => hm(e.t) > nm);
-  const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? (recipeByName(e.meal.name) ? `data-recipe="${esc(e.meal.name)}" data-rctx="${d}|${e.meal.k}"` : `data-sheet="meal" data-v="${d}|${e.meal.k}"`) : e.act;
+  const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? mealOpenAttr(d, e.meal) : e.act;
     const stat = e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
     return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">jetzt</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
     <div class="tleg small muted"><span><i class="lg next"></i>jetzt dran</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
@@ -3288,9 +3295,9 @@ function journeySheet(kind, arg){
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
-  if (kind === "restleft") { const x = FRIDGE().find(y => y.id === arg); if (!x) return `<div class="sh"><h2>Restebox</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
-    return `<div class="sh"><h2>Ist noch was übrig?</h2></div><div class="scanres">${mealThumb(x.name)}<div><b>${esc(mealInfo(x.name).name)}</b><div class="small muted">Rest gegessen ✓</div></div></div>
-      <div class="btnrow two"><button class="btn primary big" type="button" data-restleft="${x.id}|1">Ja, bleibt in der Box</button><button class="btn big" type="button" data-restleft="${x.id}|0">Nein, alles weg</button></div>`; }
+  if (kind === "restleft") { const ask = String(arg).startsWith("ask|"), x = FRIDGE().find(y => y.id === String(arg).replace(/^ask\|/, "")); if (!x) return `<div class="sh"><h2>Restebox</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
+    return `<div class="sh"><h2>${ask ? "Ist danach noch was übrig?" : "Ist noch was übrig?"}</h2>${ask ? `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>` : ""}</div><div class="scanres">${mealThumb(x.name)}<div><b>${esc(mealInfo(x.name).name)}</b><div class="small muted">${ask ? "Wird als gegessen eingetragen (nächste passende Mahlzeit von heute)" : "Rest gegessen ✓"}</div></div></div>
+      <div class="btnrow two"><button class="btn primary big" type="button" data-restleft="${x.id}|1${ask ? "|eat" : ""}">Ja, noch was da</button><button class="btn big" type="button" data-restleft="${x.id}|0${ask ? "|eat" : ""}">Nein, war alles</button></div>`; }
   if (kind === "leftover") return mealPlan && recipes ? leftoverHtml(arg) : `<p class="muted">Lade …</p>`;
   if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
     const o = typeof m.name === "object" ? m.name : null, r = m.info;
@@ -4562,7 +4569,7 @@ const restBtn = (d, m) => { const r = recOf(m.name); if (!r || (r.servings || 1)
 const restPick = (d, m) => { const f = FRIDGE(); if (!f.length || m.own || m.ate || d > todayIso()) return ""; return `<div class="restpick"><span class="small muted">🧊 Stattdessen Rest gegessen:</span>${f.map(x => `<button type="button" class="btn small" data-resteat="${x.id}|${d}|${m.k}">${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}</button>`).join("")}</div>`; };
 function fridgeCard(){ const f = FRIDGE(); if (!f.length) return "";
   return `<details class="slim fridge" data-keep="fridge" ${shopOpen.has("fridge") || f.some(x => x.until <= addDays(todayIso(), 1)) ? "open" : ""}><summary><span>🧊 Restebox</span><span class="muted">${f.map(x => esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])).join(" · ")}</span></summary><div class="card">
-    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${esc(mealInfo(x.name).name)}</b><span class="small ${x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><span class="actions"><button class="btn small primary" type="button" data-resteat="${x.id}">✓ Gegessen</button><button class="btn small ghost" type="button" data-restgone="${x.id}" aria-label="Weg">✕</button></span></div>`).join("")}
+    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${esc(mealInfo(x.name).name)}</b><span class="small ${x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><span class="actions"><button class="btn small primary" type="button" data-sheet="restleft" data-v="ask|${x.id}">✓ Gegessen</button><button class="btn small ghost" type="button" data-restgone="${x.id}" aria-label="Weg">✕</button></span></div>`).join("")}
     <div class="small muted">„Gegessen“ ersetzt die nächste passende offene Mahlzeit von heute.</div></div></details>`; }
 function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && !m.rest && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
@@ -4872,6 +4879,7 @@ async function onClick(e){
     else { const x = parse(d); calDate = iso(new Date(x.getFullYear(), x.getMonth() + v, 1)); }
     renderMore(); return; }
   const at = t.closest("[data-ate]"); if (at) { const d = at.dataset.d, k = at.dataset.ate; let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); render(); if (sheet.open) renderSheet();
+    { const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? (m.own ? m.info.name : m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "").replace(/ · .*$/, "")) : "Mahlzeit"} gegessen` : "Wieder offen", ateUndo(d, k)); }
     return; }
   const ml0 = t.closest("[data-meal][data-swapctx]"); if (ml0 && sheetKind === "recipe") { sheetKind = "meal"; sheetArg = ml0.dataset.swapctx; swapCand = null; }
   const ml = t.closest("[data-meal]"); if (ml && sheetKind === "meal") { const [d, k] = sheetArg.split("|"), n = ml.dataset.meal, def = mealDefaults(d)[k], all = !!sheet.querySelector("#mealWeek")?.checked;
@@ -4915,7 +4923,7 @@ async function onClick(e){
     renderSheet(); return; }
   const rad = t.closest("[data-restadd]"); if (rad) { if (rad.disabled) return; fridgeAdd(rad.dataset.restadd, 1, false); toast("🧊 In der Restebox"); render(); if (sheet.open) renderSheet(); return; }
   const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); if (restAsk) setTimeout(() => openSheet("restleft", restAsk), 120); return; }
-  const rlf = t.closest("[data-restleft]"); if (rlf) { const [id, v] = rlf.dataset.restleft.split("|"); if (v === "0") { fridgeTake(id, 999); toast("Restebox: aufgegessen"); } else toast("🧊 Bleibt in der Restebox"); restAsk = null; sheetKind = null; sheet.close(); render(); return; }
+  const rlf = t.closest("[data-restleft]"); if (rlf) { const [id, v, eat] = rlf.dataset.restleft.split("|"); if (eat) eatRest(id); if (v === "0") { fridgeTake(id, 999); toast("Restebox: aufgegessen"); } else toast("🧊 Bleibt in der Restebox"); restAsk = null; sheetKind = null; sheet.close(); render(); return; }
   const rsg = t.closest("[data-restgone]"); if (rsg) { fridgeTake(rsg.dataset.restgone, 999); toast("Aus der Restebox entfernt"); render(); return; }
   const rpk = t.closest("[data-restpick]"); if (rpk && restState) { const k = rpk.dataset.restpick; rpk.checked ? restState.pick.add(k) : restState.pick.delete(k); return; }
   const mpo = t.closest("[data-mealpor]"); if (mpo) { const [d, k, fs] = mpo.dataset.mealpor.split("|"), f = Number(fs);
@@ -5214,7 +5222,7 @@ function onSwipe(s0, dx){
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
     // nach rechts: gegessen ↔ nicht gegessen; nach links: ersetzen
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
-      const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert");
+      const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "").replace(/ · .*$/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert", ateUndo(d, k));
       const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
     else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
   if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
