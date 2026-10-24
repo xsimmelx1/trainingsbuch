@@ -287,7 +287,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .tline button.miss .ts{color:var(--warn)}
 .tline button.next .ts{color:var(--accent)}
 .tnow{flex:none;width:2px;margin:0 1px;border-radius:2px;background:var(--bad,#e5534b);position:relative}
-.tnow i{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9.5px;font-weight:700;color:var(--bad,#e5534b);white-space:nowrap}
+.tnow i{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9.5px;font-weight:700;color:var(--bad,#e5534b);white-space:nowrap}.tnow:first-child i{left:0;transform:none}.tnow:last-child i{left:auto;right:0;transform:none}
 .tleg{display:flex;gap:12px;flex-wrap:wrap;margin:2px 0 4px}
 .tleg span{display:inline-flex;align-items:center;gap:5px}
 .lg{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:4px;border:1px solid var(--line);font-style:normal;font-size:9px}
@@ -407,8 +407,11 @@ h3.sub3{margin:14px 0 4px;font-size:14px;text-transform:uppercase;letter-spacing
 .vframe{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#000}
 .vframe iframe{width:100%;height:100%;border:0}
 details.info{display:inline-block}
-details.info>summary{list-style:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:14px;cursor:pointer}
+details.info>summary{list-style:none;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;position:relative;border:1px solid var(--line);color:var(--muted);font-size:14px;cursor:pointer}
 details.info>summary::-webkit-details-marker{display:none}
+details.info>summary::after{content:"";position:absolute;inset:-8px}
+.zall .linkbtn{padding:12px 4px}
+.card details>summary.small{padding:12px 0}
 details.info[open]{display:block}
 details.info[open]>summary{margin-bottom:6px}
 .budgetbar input[type=range]{width:100%;accent-color:var(--accent);min-height:36px}
@@ -1455,6 +1458,7 @@ addEventListener("online", () => { Object.keys(pending).forEach(flushDay); flush
 let syncDetail = "", toastTimer = null;
 let toastAct = null;
 function toast(t, act){ const el = document.getElementById("toast"); if (!el) return; toastAct = act || null;
+  const host = document.getElementById("sheet")?.open ? document.getElementById("sheet") : document.body; if (el.parentNode !== host) host.appendChild(el);
   if (act) { el.innerHTML = `<span>${esc(t)}</span><button type="button" class="toastbtn" data-toastact="1">${esc(act.label)}</button>`; } else el.textContent = t;
   el.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; toastAct = null; }, act ? 6500 : 3200); }
 document.addEventListener("click", e => { if (!e.target.closest("[data-toastact]") || !toastAct) return; const a = toastAct; toastAct = null; document.getElementById("toast").hidden = true; a.fn(); });
@@ -1650,7 +1654,8 @@ function nwItem(p){
   const m = rest.match(/^(\d+(?:[.,]\d+)?|½|[a-zäöü]+)\s*(g|gramm|kg|ml|l|liter|stück|stk\.?|scheiben?|portionen?|teller|tassen?|becher|gläser|glas|el|tl|handvoll|kugeln?|riegel|schalen?|dosen?|flaschen?)?(?:\s+|$)(.*)$/i);
   if (m) { const v = m[1].toLowerCase(), n0 = /^\d/.test(v) ? Number(v.replace(",", ".")) : v === "½" ? .5 : NUMW[v]; if (n0 != null) { q = n0; unit = (m[2] || "").toLowerCase(); rest = m[3] || m[2] || ""; } }
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
-  const key = fold((rest || p).trim()), hist = key.length >= 3 && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
+  // frühere Einträge sind Portionen: bei Mengen in g/ml/EL … nicht damit malnehmen (sonst 250 g Skyr = 250 Portionen)
+  const key = fold((rest || p).trim()), hist = key.length >= 3 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
   const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
   if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
@@ -2174,7 +2179,9 @@ function render(){
   ({heute:renderToday, training:renderTraining, essen:renderEssen, fortschritt:renderProgress, mehr:renderMore})[tab]();
   updateRestBar();
 }
-function go(t){ if (dirty) saveCur(); if (t !== "training") woSession = null; tab = t; const h = t === "heute" ? `#d=${selDate}` : `#t=${t}`; if (location.hash !== h) history.pushState(null, "", h); render(); scrollTo(0,0); }
+// Seitenwechsel: Toast mit Rückgängig-Knopf gehört zur alten Seite
+function hideActToast(){ const el = document.getElementById("toast"); if (el && !el.hidden && toastAct) { el.hidden = true; toastAct = null; } }
+function go(t){ if (dirty) saveCur(); hideActToast(); if (t !== "training") woSession = null; tab = t; const h = t === "heute" ? `#d=${selDate}` : `#t=${t}`; if (location.hash !== h) history.pushState(null, "", h); render(); scrollTo(0,0); }
 
 // ---------- HEUTE ----------
 function trainState(){
@@ -2215,19 +2222,17 @@ function heroCard(noCoach){
 function todayItems(focus){
   const t = todayIso(), now = new Date(), hm0 = now.getHours() * 60 + now.getMinutes(), out = [];
   const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate), st = trainState(), plan = planFor(selDate);
-  out.push({k: "mob", prio: hm0 < hm(routineAt("mob")) + 210 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `${routineAt("mob")} · 12 min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
-  if (focus !== "essen") { const ca = cur.cardio || [];
-    out.push({k: "cardio", prio: ca.length ? 9 : 9.5, done: ca.length > 0, icon: "🏅", title: "Aktivität", sub: ca.length ? ca.map(cardioTxt).join(" · ") : "optional · Bouldern, Laufen, Rad … nur Dauer", act: `data-sheet="cardio" data-v="${selDate}"`, cta: ca.length ? "Noch eins" : "Eintragen"}); }
+  out.push({k: "mob", t: routineAt("mob"), prio: hm0 < hm(routineAt("mob")) + 210 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `${routineAt("mob")} · 12 min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
   if (focus !== "essen" && st !== "frei") {
     const startM = plan?.start ? hm(plan.start) : 18 * 60;
-    out.push({k: "train", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : selDate === todayIso() ? "heute" : selDate < todayIso() ? "nicht gemacht" : "geplant", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
+    out.push({k: "train", t: st === "läuft" ? "" : plan?.start || "", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : selDate === todayIso() ? "heute" : selDate < todayIso() ? "nicht gemacht" : "geplant", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
   }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) {
     const tm = m.time ? hm(m.time) : 20 * 60;
-    out.push({k: "meal:" + m.k, prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
+    out.push({k: "meal:" + m.k, t: m.time || "", prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
   }
   const painDone = cur.pain.sc != null && cur.pain.knee != null;
-  out.push({k: "pain", prio: hm0 >= hm(routineAt("pain")) - 165 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: `${routineAt("pain")} · 30 s · Schmerz-Log`, act: `data-sheet="pain"`, cta: "Eintragen"});
+  out.push({k: "pain", t: routineAt("pain"), prio: hm0 >= hm(routineAt("pain")) - 165 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: `${routineAt("pain")} · 30 s · Schmerz-Log`, act: `data-sheet="pain"`, cta: "Eintragen"});
   const wd = parse(selDate).getDay();
   if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate, -7))])) { const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate, -7));
     out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
@@ -2274,8 +2279,8 @@ function nextBlock(d){
   const nowAt = ev.findIndex(e => hm(e.t) > nm);
   const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? mealOpenAttr(d, e.meal) : e.act;
     const stat = e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
-    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">jetzt</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
-    <div class="tleg small muted"><span><i class="lg next"></i>jetzt dran</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
+    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
+    <div class="tleg small muted"><span><i class="lg next"></i>als Nächstes</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
   const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
   if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
@@ -2384,12 +2389,18 @@ function zutatenHtml(){
     </div>
     <div class="small muted">Preis je Packung · * geschätzt · grün = günstigster der gewählten Märkte · Antippen für Details.</div>`;
 }
+// „Jetzt“ nur, wenn die Aufgabe wirklich dran ist (ab 30 min vorher); sonst „Als Nächstes · 07:30 · in 3 h“
+function nowLab(it){
+  if (!it.t) return "Jetzt";
+  const n = new Date(), d = hm(it.t) - (n.getHours() * 60 + n.getMinutes());
+  return d > 30 ? `Als Nächstes · ${it.t} · ${hmDiff(d)}` : "Jetzt";
+}
 function nowCard(it){
-  if (it.hero === "train") return `<div class="lab sec">Jetzt</div>` + heroCard(true);
+  if (it.hero === "train") return `<div class="lab sec">${nowLab(it)}</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
-    return `<div class="lab sec">Jetzt</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh tap" ${mealOpenAttr(selDate, m)}>${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}</div></div><span class="go">›</span></div>
+    return `<div class="lab sec">${nowLab(it)}</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh tap" ${mealOpenAttr(selDate, m)}>${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}</div></div><span class="go">›</span></div>
       <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${restPick(selDate, m)}${m.ate ? restBtn(selDate, m) : skipBtn(selDate, m, "btn ghost small")}</div>`; }
-  return `<div class="lab sec">Jetzt</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
+  return `<div class="lab sec">${nowLab(it)}</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
 const mealOpenAttr = (d, m) => m.own ? `data-sheet="mealinfo" data-v="${d}|${m.k}"` : recOf(m.name) ? `data-recipe="${esc(recOf(m.name).name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`;
 const POR = [[0.25, "¼"], [0.5, "½"], [1, "1"], [1.5, "1½"], [2, "2"]];
@@ -3156,7 +3167,7 @@ function progressOverview(){
   const wPts = dates.map(d => ({v: num(store.days[d]?.weight)}));
   const avg = dates.map((d,i) => { const win = wPts.slice(Math.max(0,i-13), i+1).map(p => p.v).filter(v => v != null); return {v: win.length >= 1 ? win.reduce((a,b)=>a+b,0)/win.length : null}; });
   const la = [...avg].reverse().find(p => p.v != null)?.v;
-  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toFixed(1)+" kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Kurz notieren ein."})}${info("Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.")}</div>`;
+  h += `<div class="card"><div class="dayhead"><h2>Gewicht</h2><span class="num small">${la ? la.toLocaleString("de-DE", {minimumFractionDigits: 1, maximumFractionDigits: 1}) + " kg Trend" : ""}</span></div>${lineChart([{pts:wPts,color:"var(--muted)",dots:1},{pts:avg,color:"var(--accent)",line:1}], {dates, label:"Gewicht 8 Wochen", empty:"Noch keine Gewichtsdaten. Wieg dich beim nächsten Gym-Besuch und trag es unter Heute → Kurz notieren ein."})}${info("Ohne Waage zuhause: 1× pro Woche im Gym wiegen, immer vor dem Training und mit ähnlicher Kleidung. Wichtiger als das Gewicht ist der Bauchumfang unter „Messen“.")}</div>`;
   const d28 = dates.slice(-28);
   h += `<div class="card"><h2>Schmerz-Trend</h2>${lineChart([{pts:d28.map(d => ({v:store.days[d]?.pain?.sc ?? null})),color:"var(--bad)",line:1,dots:1},{pts:d28.map(d => ({v:store.days[d]?.pain?.knee ?? null})),color:"var(--warn)",line:1,dots:1}], {dates:d28, min:0, max:10, ticks:[0,2,5,10], label:"Schmerz SC und Knie", empty:"Noch keine Schmerzwerte."})}
     <div class="small"><span style="color:var(--bad)">●</span> SC-Gelenk &nbsp; <span style="color:var(--warn)">●</span> Knie</div></div>`;
@@ -3480,9 +3491,9 @@ function gearHtml(key, home){
   const g = EQUIP[key] || []; if (!g.length) return `<div class="gear small muted">🧰 Keine Ausrüstung nötig</div>`;
   return `<div class="gear small">🧰 ${g.map(k => `<span class="gk ${home ? (hasGear(k) ? "ok" : "no") : ""}">${home ? (hasGear(k) ? "✓ " : "✗ ") : ""}${esc(GEAR[k] || k)}</span>`).join("")}</div>`;
 }
-function gearPicker(keys){
+function gearPicker(keys, q = "Was hast du heute da?"){
   const hg = gearHome();
-  return `<div class="gearpick"><div class="lab">Was hast du heute da?</div><div class="chips">${keys.map(k => `<button type="button" data-gear="${k}" aria-pressed="${!!hg[k]}">${esc(GEAR[k])}</button>`).join("")}</div><div class="small muted">Fehlt etwas, tauscht die App die Übung gegen eine passende Alternative.</div></div>`;
+  return `<div class="gearpick"><div class="lab">${q}</div><div class="chips">${keys.map(k => `<button type="button" data-gear="${k}" aria-pressed="${!!hg[k]}">${hg[k] ? "✓ " : ""}${esc(GEAR[k])}</button>`).join("")}</div><div class="small muted">Fehlt etwas, tauscht die App die Übung gegen eine passende Alternative.</div></div>`;
 }
 // ---------- Übungskatalog ----------
 const catF = {q: "", m: "", where: "", plan: false};
@@ -3502,7 +3513,7 @@ function catalogHtml(){
 }
 const MORE = [["Nachschlagen"], ["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Preise, Märkte, Rezepte, Vorrat"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"],
   ["Erfassen"], ["bon", "🧾", "Kassenbon einlesen", "Gekauftes als Vorrat und deine Preise übernehmen"], ["scan", "📷", "Barcode scannen", "Preis merken oder Lebensmittel mit Nährwerten anlegen"],
-  ["Einstellungen"], ["setup:training", "🏋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
+  ["Einstellungen"], ["setup:training", "📋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
 function renderMore(){
   if (tab === "essen") return renderEssen();
   if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
@@ -3574,7 +3585,7 @@ function calMonth(d){
 }
 function calExportHtml(){
   const url = S().icsUrl;
-  return `<div class="card"><h2>Kalender exportieren & abonnieren</h2>${url ? `${info("Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.")}
+  return `<div class="card"><h2>Kalender-Abo</h2>${url ? `${info("Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.")}
     <code class="copy" id="icsUrl">${esc(url)}</code>
     <div class="btnrow two"><button class="btn" id="icsCopy" type="button">Link kopieren</button>
     <a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:"))}" target="_blank" rel="noopener">Google Kalender ↗</a>
@@ -3668,7 +3679,7 @@ function mealInfo(n){
   const r = recipeNutri(recipeByName(n)); return r ? {name: r.name, kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
 }
 // Nährwerte als Text; eigene Einträge ohne Angaben zeigen keine 0-Werte
-const nutTxt = i => i?.own && !i.kcal && !i.protein ? "ohne Werte" : `${i?.kcal ?? 0} kcal · ${i?.protein ?? 0} g P`;
+const nutTxt = i => i?.own && !i.kcal && !i.protein ? "ohne Werte" : `${i?.kcal ?? 0} kcal · ${fmtQ(i?.protein ?? 0)} g P`;
 const dayObj = d => cur && cur.date === d ? cur : store.days[d];
 // Bouldern zählt fürs Essen nicht als Trainingstag (meist spontan abends): Snacks bleiben, der Shake kommt als Extra danach
 const isTrainDay = d => isStrength(dayObj(d)) || !!planFor(d) || (store.plan.past || []).some(p => p.date === d);
@@ -3921,18 +3932,19 @@ function snackHtml(d){ const close = `<button class="btn ghost" type="button" da
     <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>
     <button class="btn" type="button" data-scanstart="snack">📷 Barcode scannen</button><div id="scanSlot"></div></div>`; }
 // Snack speichern: Text → Werte (frühere Einträge, Bon-Produkte, Nährwerttabelle), Uhrzeit jetzt
-async function snackSave(d, tx, amt){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
+async function snackSave(d, tx, amt, known){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
   amt = amt || {mul: 1, g: null};
   const base = tx.replace(/^\s*(\d+(?:[.,]\d+)?\s*(g|ml)?|½|halbe?|ganze?)\s+/i, "").trim();
   // Gramm: über Nährwerte je 100 g (Tabelle, Bon/Scan); sonst Portionswert × Faktor
   let items = NW ? nwParse(amt.g ? `${amt.g} g ${base}` : tx) : [], f = amt.g ? 1 : amt.mul;
-  if (amt.g && !items.every(i => i.ok && i.g)) { items = NW ? nwParse(tx) : []; f = 1; }
+  let byG = !!amt.g; if (amt.g && !items.every(i => i.ok && i.g)) { items = NW ? nwParse(tx) : []; f = 1; byG = false; }
+  if (known && !byG) items = [{ok: true, name: tx, kcal: known.kcal || 0, protein: known.protein || 0}];
   const ok = items.filter(i => i.ok), nm0 = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 110);
-  const name = amt.g ? `${nm0}, ${fmtQ(amt.g)} g` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
+  const name = byG ? `${nm0}, ${fmtQ(amt.g)} g` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
   const kcal = ok.length ? Math.round(ok.reduce((a, i) => a + i.kcal, 0) * f) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0) * f) : null;
   const id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
   editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
-  lastSnack = {d, id}; toast(`✓ ${name}${kcal ? ` · ${kcal} kcal` : ""}${ok.length < items.length ? " (Werte teils unbekannt)" : ""}`); }
+  lastSnack = {d, id}; toast(`✓ ${name}${kcal ? ` · ${kcal} kcal` : ""}${ok.length < items.length ? " (Werte teils unbekannt)" : ""}${amt.g && !byG ? " · Gramm nicht verrechnet" : ""}`); }
 let lastSnack = null, snackMul = 1, snackG = "";
 function ownHistory(){ const m = new Map();
   const add = o => { const k = fold(o?.name || ""); if (k && !m.has(k)) m.set(k, {name: o.name, kcal: num(o.kcal), protein: num(o.protein), ing: o.ing || "", src: "früher eingetragen"}); };
@@ -3953,7 +3965,7 @@ function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
   const nw = pick((NW || []).map(x => ({name: x.n, al: x.a, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})), x => [x.name, ...x.al]);
   const mine = pick(myFoodList(), x => [x.name, ...(x.al || [])]);
   const seen = new Set(); return [...hist, ...mine, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
-const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${x.protein || 0} g P</span>` : ""}</span></button>`).join("");
+const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${fmtQ(x.protein || 0)} g P</span>` : ""}</span></button>`).join("");
 // Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
 let ownIngSug = [];
 function ownIngParts(text){ const i = Math.max(text.lastIndexOf(","), text.lastIndexOf("\n")), head = text.slice(0, i + 1), tail = text.slice(i + 1), m = tail.match(/^(\s*(?:ca\.\s*)?(?:[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|el|tl|stück|stk|scheiben?|portionen?|becher|dosen?|handvoll|x)?\s*)?)(.*)$/i);
@@ -4182,7 +4194,7 @@ function scanRead(){ const p = scanProd; if (!p) return false; const v = id => d
 // Nährwerttabelle per Foto: Texterkennung, dann kcal und Eiweiß je 100 g heraussuchen
 async function scanNutriPhoto(file){ const msg = document.getElementById("nutriMsg"); if (msg) msg.textContent = "Lese die Nährwerttabelle … (kann 10–20 s dauern)";
   try { const tx = (await receiptText(file)).replace(/,/g, "."), flat = tx.replace(/\s+/g, " ");
-    const kc = flat.match(/(\d{1,4}(?:\.\d)?)\s*kcal/i) || flat.match(/kcal\D{0,12}(\d{1,4}(?:\.\d)?)/i), pr = flat.match(/(?:eiwei(?:ß|ss|b)|protein)\D{0,25}?(\d{1,3}(?:\.\d{1,2})?)\s*g/i);
+    const kj = flat.match(/kj\s*\/\s*kcal\D{0,12}?\d{1,4}(?:\.\d)?\s*(?:kj)?\s*\/\s*(\d{1,4}(?:\.\d)?)/i), kc = kj || flat.match(/(\d{1,4}(?:\.\d)?)\s*kcal/i) || flat.match(/kcal\D{0,12}(\d{1,4}(?:\.\d)?)/i), pr = flat.match(/(?:eiwei(?:ß|ss|b)|protein)\D{0,25}?(\d{1,3}(?:\.\d{1,2})?)\s*g/i);
     const set = (id, x) => { const el = document.getElementById(id); if (el && x != null) el.value = x; };
     if (kc) set("scanKcal", Number(kc[1])); if (pr) set("scanProt", Number(pr[1]));
     if (msg) msg.textContent = kc || pr ? `Erkannt: ${kc ? kc[1] + " kcal" : "kcal ?"} · ${pr ? pr[1] + " g Eiweiß" : "Eiweiß ?"} je 100 g – bitte kurz prüfen.` : "Nichts Eindeutiges erkannt – Foto gerade und nah von der Tabelle, oder Werte eintippen.";
@@ -4357,7 +4369,7 @@ function shopList(entries){
     else if (pr.loose && pr.piece) { it.packs = Math.max(1, Math.ceil(it.amt / pr.piece - 0.1)); it.buy = `${it.packs} Stück`; it.share = it.packs * pr.piece / pr.pack; }
     else { it.packs = Math.max(1, Math.ceil(it.amt / pr.pack - 0.05)); it.share = it.packs;
       it.buy = pr.dose ? `${it.packs} ${it.packs > 1 ? "Dosen" : "Dose"}` : pr.unit === "Stück" && pr.pack === 1 ? `${it.packs} Stück` : pr.unit === "Stück" ? `${it.packs}× ${pr.pack}er-Packung` : `${it.packs}× ${fmtAmt(pr.pack, pr.unit)}`; }
-    it.need = pr.unit === "Stück" ? `${Math.round(it.amt * 10) / 10} Stück` : fmtAmt(it.amt, pr.unit); }
+    it.need = pr.unit === "Stück" ? `${fmtQ(it.amt)} Stück` : fmtAmt(it.amt, pr.unit); }
   if (shopKind === "lager") {
     const G = [["🥬 Frisch – zeitnah kaufen", []], ["⭐ Spezial – nur für bestimmte Gerichte", []], ["🗄 Basis – Vorrat prüfen", []]], ix = {frisch: 0, spezial: 1, basis: 2};
     for (const it of Object.values(items)) G[ix[shelfOf(it)]][1].push(it);
@@ -4562,6 +4574,8 @@ function leftoverHtml(arg){ const [src, d, k, c] = String(arg).split("|"), name 
     <button class="btn ghost small" type="button" data-rest="none" data-v="${esc(arg)}">Nichts übrig</button>
     <div class="small muted">Nichts wird fest eingeplant. Wenn du einen Rest isst, wählst du ihn auf der Essenskarte („🧊 Stattdessen Rest gegessen“) oder in der Restebox aus.</div>`; }
 // Rest essen: ersetzt die gewählte (oder nächste passende offene) Mahlzeit von heute und hakt sie ab; sonst als eigener Eintrag
+// Neues Gericht in einem Slot: alte Rest-Markierung und Portionsfaktor gelten nicht mehr
+function slotReset(day, k){ for (const f of ["rest", "por"]) if (day[f] && k in day[f]) { const o = Object.assign({}, day[f]); delete o[k]; day[f] = o; } }
 function eatRest(id, d, k){ const x = FRIDGE().find(y => y.id === id); if (!x) return; d = d || todayIso(); const r = recipeByName(x.name);
   if (!k) { const fit = r?.category === "fruehstueck" ? ["fr"] : r?.category === "snack" || r?.category === "shake" ? ["sn", "ex"] : ["mi", "ab"], now = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
     const open = mealsFor(d).filter(m => !m.own && !m.ate && fit.includes(m.k)); k = (open.find(m => (m.time || "99") >= now) || open[open.length - 1])?.k; }
@@ -4628,7 +4642,7 @@ function shopHtml(){
     ${P ? `<div class="card"><div class="mhead"><span class="lab">Noch offen kostet ungefähr</span>${info(`Antippen wechselt den Markt für Liste und Plan.${st0 === "min" ? " Aktuell: je Produkt der günstigste." : ""} Liste: ganze Packungen bzw. Stück, Vorrat anteilig. Budget: Haltbares (Reis, Dosen, TK) anteilig, deshalb niedriger. * = geschätzt. ${priceNote()}`)}</div><div class="storecmp">${Object.entries(c).filter(([st]) => stores.includes(st)).map(([st, v]) => `<button type="button" class="${st === best ? "best" : ""} ${st === st0 ? "sel" : ""}" data-shopstore="${st}" aria-pressed="${st === st0}"><span>${STORES[st]}</span><b>${eur(v.sum)}</b>${v.n && v.est ? `<span class="muted">${Math.round(v.est / v.n * 100)} % geschätzt</span>` : ""}</button>`).join("")}</div>
       ${wc != null ? `<div class="mhead"><span class="${wc > bud ? "warnt" : "okt"}">Budget ${eur(bud)}: Plan der Woche <b>${eur(wc)}</b>${FOOD().budgetIgnore ? " (Grenze aus)" : wc > bud ? (bs && !bs.ok ? " · günstigere Rezepte reichen nicht ganz" : " · darüber") : " · passt ✓"}${nSub ? ` · ${nSub} getauscht` : ""}</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div>` : bud ? "" : `<div class="mhead"><span class="small muted">Kein Wochenbudget gesetzt.</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div>`}
 </div>` : ""}</details>`;
-  h += `<div class="btnrow four"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Scan</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>`;
+  h += `<div class="btnrow four"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>`;
   // Alle Einstellungen der Liste in einem Aufklapper
   const mealsTxt = shopScope === "gericht" ? "" : (shopMeals.length === SHOPM.length ? "Alle Mahlzeiten" : SHOPM.filter(([k]) => shopMeals.includes(k)).map(([, l]) => l.replace(/^\S+\s/, "")).join(", ")) + " · ";
   h += `<details class="slim shopopt" ${keepOpen("opt")}><summary><span>⚙ Filter & Ansicht</span><span class="muted">${mealsTxt}${shopKind === "gang" ? "nach Gang" : "Frisch/Basis"}${hide ? " · ohne Erledigtes" : ""}</span></summary><div class="card">
@@ -4752,7 +4766,7 @@ function essenHtml(b){
     return `<button type="button" role="tab" data-eday="${d}" aria-selected="${d === essenDay}" class="${d === t ? "today" : ""}"><span>${WD[parse(d).getDay()]}</span><b>${parse(d).getDate()}</b><i>${n ? "●".repeat(Math.min(n, 3)) : "&nbsp;"}</i></button>`; }).join("")}</div>`;
   const batch = [W.batchA, W.batchB].map(n => (budgetOn() && budgetSubs(mo).subs[n]) || n);
   const prep = `<details class="slim"><summary><span>🍳 Meal Prep</span><span class="muted">${batch.map(n => esc(mealInfo(n).name.split(/ mit | & |,/)[0])).join(" · ")}</span></summary><div class="card prepcard"><div class="small muted">Sonntag davor: 2 Gerichte, je 4 Portionen für Mo–Do ${W.prepNote ? info(esc(W.prepNote)) : ""}</div>
-    <div class="preprow">${batch.map(n => `<button type="button" class="prepi" data-recipe="${esc(n)}">${mealThumb(n)}<span><b>${esc(mealInfo(n).name)}</b><span class="small muted">${mealInfo(n).kcal} kcal · ${mealInfo(n).protein} g P</span></span></button>`).join("")}</div>
+    <div class="preprow">${batch.map(n => `<button type="button" class="prepi" data-recipe="${esc(n)}">${mealThumb(n)}<span><b>${esc(mealInfo(n).name)}</b><span class="small muted">${mealInfo(n).kcal} kcal · ${fmtQ(mealInfo(n).protein)} g P</span></span></button>`).join("")}</div>
     <button class="btn small" type="button" data-prepshop>🛒 Einkauf für die Woche ›</button></div></details>`;
   // A: Tagebuch des gewählten Tags
   const d = essenDay, ms = mealsFor(d), tt = mealTotals(ms), tg = foodTarget();
@@ -4818,19 +4832,20 @@ function setupHtml(){
     <label class="check"><input type="checkbox" id="scClr" ${s.scCleared?"checked":""}><span><b>SC-Gelenk ärztlich freigegeben</b></span></label>
     <label class="check"><input type="checkbox" id="kn1" ${s.knee1?"checked":""}><span><b>Knie-Phase 1 aktiv</b> (Morgentest über 2/10)</span></label>
     <div class="lab">Modus</div><div class="seg" id="modeSeg">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
-    <div class="card"><h2>Feste Zeiten</h2><div class="small muted">Wann du die Routinen machst. Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen.</div>
+    <div class="card"><h2>Routine-Zeiten</h2><div class="small muted">Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen. Training wird nicht über die Morgenroutine gelegt.</div>
       <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
-      ${info("Der Planer legt kein Training über die Morgenroutine. Der Abendcheck dauert 30 s und blockiert nichts; die Erinnerung kommt kurz nach der eingestellten Zeit.")}
-      ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Standardzeiten (${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain})</button>` : ""}</div>
-    <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME)}</div></div></details>
-  <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
+      <div class="small muted">Essenszeiten: <button type="button" class="linkbtn" data-sub2="essenset" data-setopen="ziel">Essen › Ziel & Mahlzeiten</button></div>
+      ${info("Der Abendcheck dauert 30 s und blockiert nichts. Push-Erinnerungen kommen über GitHub-Zeitpläne und können sich um bis zu eine Stunde verspäten; der Wecker im Kalender-Abo kommt pünktlich. Spätester Abendcheck 22:55, damit die Erinnerung noch vor Mitternacht ankommt.")}
+      ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Auf ${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain} zurücksetzen</button>` : ""}</div>
+    <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME, "Was hast du zuhause?")}</div></div></details>
+  <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${(store.push.subs || []).length ? `${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an` : "Push noch nicht aktiviert"}${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
     <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten und Kalender-Wecker du bekommst.</div>
-    ${[["morning",`Morgen: Routine und Tagesplan (${routineAt("mob")})`],["evening","Abend: Training noch nicht eingetragen"],["pain",`Abendcheck (${routineAt("pain")})`],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
+    ${[["morning",`Morgen: Routine und Tagesplan (${routineAt("mob")})`],["evening","Abend: Training noch nicht eingetragen (ab 20:15)"],["pain",`Abendcheck (${routineAt("pain")})`],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
     <div class="card"><h2>App & Push</h2>${standalone ? `<div class="small">Läuft als installierte App ✓</div>` : `<div class="small">Chrome-Menü ⋮ → <b>App installieren</b>, dann vom Startbildschirm öffnen.</div>`}
     <div class="actions"><button class="btn primary" id="pushOn" type="button" ${token ? "" : "disabled"}>Push aktivieren</button><button class="btn" id="pushTest" type="button">Test</button><span class="small muted" id="pushMsg"></span></div></div></div></details>
   <details class="slim setgrp" data-keep="set:cal" ${shopOpen.has("set:cal") ? "open" : ""}><summary><span>📅 Kalender-Abo</span><span class="muted">Training und Essen in deinem Kalender</span></summary><div class="setbody">
     ${calExportHtml()}</div></details>
-  <details class="slim setgrp" data-keep="set:conn" ${shopOpen.has("set:conn") ? "open" : ""}><summary><span>🔗 Verbindung</span><span class="muted">${token ? "verbunden" : "nicht verbunden"}</span></summary><div class="setbody">
+  <details class="slim setgrp" data-keep="set:conn" ${shopOpen.has("set:conn") ? "open" : ""}><summary><span>🔗 Verbindung</span><span class="muted">${!token ? "nicht verbunden" : document.getElementById("syncBtn")?.dataset.state === "bad" ? (/401|Token/.test(syncDetail) ? "⚠ Token abgelehnt" : "offline") : "verbunden"}</span></summary><div class="setbody">
     <div class="card"><h2>Verbindung</h2>
     ${token ? (document.getElementById("syncBtn")?.dataset.state === "bad" ? (/401|Token/.test(syncDetail) ? `<div class="banner bad">Token gespeichert, aber GitHub lehnt es ab. Token prüfen oder neu eintragen.</div>` : `<div class="banner info">Verbunden mit <b>${CFG.owner}/${CFG.repo}</b>, gerade aber offline oder GitHub nicht erreichbar.</div>`) : `<div class="banner good">Verbunden mit <b>${CFG.owner}/${CFG.repo}</b> (privat).</div>`) : `<div class="banner info">Deine Logs liegen im privaten Repo <b>${CFG.owner}/${CFG.repo}</b>. Einmal pro Gerät ein Token eintragen.</div>
     <ol class="small"><li><a href="https://github.com/settings/personal-access-tokens/new?name=Trainingsbuch-App&description=Logs+speichern+und+Planer+anstossen&target_name=xsimmelx1&expires_in=366&contents=write&actions=write" target="_blank" rel="noopener">Token anlegen (vorausgefüllt) ↗</a></li><li>Repository access: <b>trainingsdaten</b> und <b>trainingsbuch</b></li><li>Generate token, kopieren, hier einfügen.</li></ol>`}
@@ -4861,7 +4876,7 @@ document.querySelector("nav.bottom").addEventListener("click", e => { const b = 
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
@@ -4900,13 +4915,13 @@ async function onClick(e){
   const ml0 = t.closest("[data-meal][data-swapctx]"); if (ml0 && sheetKind === "recipe") { sheetKind = "meal"; sheetArg = ml0.dataset.swapctx; swapCand = null; }
   const ml = t.closest("[data-meal]"); if (ml && sheetKind === "meal") { const [d, k] = sheetArg.split("|"), n = ml.dataset.meal, def = mealDefaults(d)[k], all = !!sheet.querySelector("#mealWeek")?.checked;
     const days = [d]; if (all) { const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === def) days.push(dd); } }
-    const fr = ml.dataset.fridge; if (fr) { eatRest(fr, d, k); sheetKind = null; sheet.close(); render(); return; }
-    for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); const rs = Object.assign({}, day.rest); delete rs[k]; day.rest = rs; });
+    const fr = ml.dataset.fridge; if (fr) { eatRest(fr, d, k); sheetKind = null; sheet.close(); render(); if (restAsk) setTimeout(() => openSheet("restleft", restAsk), 120); return; }
+    for (const dd of days) editDay(dd, day => { day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(dd)[k] ? null : n}); slotReset(day, k); });
     sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await snackSave(sheetArg || todayIso(), tx, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
   const snm = t.closest("[data-snackmul]"); if (snm) { snackMul = Number(snm.dataset.snackmul); snackG = ""; renderSheet(); return; }
-  const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; await snackSave(sheetArg || todayIso(), snp.dataset.snackpick, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
+  const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; const kn = snackPicks().find(x => x.name === snp.dataset.snackpick && !x.def && (x.kcal || x.protein)); await snackSave(sheetArg || todayIso(), snp.dataset.snackpick, {mul: snackMul, g: num(snackG)}, kn); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "past") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
     const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
@@ -4916,17 +4931,18 @@ async function onClick(e){
   if (t.id === "ownSave") { if (t.disabled) return; const name = sheet.querySelector("#ownName")?.value.trim(); if (!name) { sheet.querySelector("#ownName").focus(); return; }
     t.disabled = true; const kcal = num(sheet.querySelector("#ownKcal")?.value), protein = num(sheet.querySelector("#ownProt")?.value);
     const recN = recipeByName(name);
-    if (t.dataset.mode === "slot") { const [d, k] = sheetArg.split("|"); editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN ? recN.name : {name, kcal, protein}}); }); }
+    if (t.dataset.mode === "slot") { const [d, k] = sheetArg.split("|"); editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN ? recN.name : {name, kcal, protein}}); slotReset(day, k); }); }
     else if (t.dataset.mode === "other") { const [d, k] = sheetArg.split("|"), ing = sheet.querySelector("#ownText")?.value.trim() || "";
-      editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN && !ing ? recN.name : Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); }); toast("Eingetragen"); }
+      editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: recN && !ing ? recN.name : Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); slotReset(day, k); }); toast("Eingetragen"); }
     else { const d = sheetArg, id = Date.now().toString(36), time = sheet.querySelector("#ownTime")?.value || ""; editDay(d, day => { day.own = [...(day.own || []), {id, name, kcal, protein, time}]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); }); }
     sheetKind = null; sheet.close(); render(); return; }
   const od = t.closest("[data-owndel]"); if (od) { if (sheetKind === "mealinfo") { sheetKind = null; sheet.close(); } const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
   const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
   const za = t.closest("[data-zall]"); if (za) { const on = za.dataset.zall === "1"; for (const d of document.querySelectorAll("details.zgd")) { d.open = on; on ? shopOpen.add(d.dataset.keep) : shopOpen.delete(d.dataset.keep); } lsSet("shopOpen", [...shopOpen]); return; }
   const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"), was = mealsFor(d).find(x => x.k === k)?.name === "skip";
-    editDay(d, day => { const ml = Object.assign({}, day.meals); if (was) delete ml[k]; else ml[k] = "skip"; day.meals = ml; const at = Object.assign({}, day.ate); delete at[k]; day.ate = at; });
-    toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf"); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
+    let prev = null; editDay(d, day => { prev = {meal: day.meals?.[k] ?? null, ate: !!day.ate?.[k], rest: day.rest?.[k], por: day.por?.[k]}; day.meals = Object.assign({}, day.meals, {[k]: was ? null : "skip"}); day.ate = Object.assign({}, day.ate, {[k]: false}); if (!was) slotReset(day, k); });
+    toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf", was ? null : {label: "Rückgängig", fn: () => { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: prev.meal}); day.ate = Object.assign({}, day.ate, {[k]: prev.ate});
+      if (prev.rest != null) day.rest = Object.assign({}, day.rest, {[k]: prev.rest}); if (prev.por != null) day.por = Object.assign({}, day.por, {[k]: prev.por}); }); render(); }}); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
   const rsb = t.closest("[data-rest]"); if (rsb) { const a = rsb.dataset.rest, arg = rsb.dataset.v, [src, x1, x2, x3] = arg.split("|");
     const name = src === "fridge" ? FRIDGE().find(y => y.id === x1)?.name : mealsFor(x1).find(y => y.k === x2)?.name, total = restState?.n ?? (src === "fridge" ? (FRIDGE().find(y => y.id === x1)?.por || 0) : Number(x3));
     if (a === "plan") { const picks = [], rest = 0;
@@ -5111,7 +5127,7 @@ async function onClick(e){
     if (a === "finish") { finishWorkout(); return; }
     if (a === "resteSave") { if (!rsEat) return; const name = sheet.querySelector("#ownName")?.value.trim() || "Resteessen", kcal = num(sheet.querySelector("#ownKcal")?.value), protein = num(sheet.querySelector("#ownProt")?.value), extra = sheet.querySelector("#ownText")?.value.trim();
       const ing = [...rsEat.lines.filter(x => x.on).map(x => x.l), ...(extra ? [extra] : [])].join(", ").slice(0, 600), d = todayIso(), k = sheet.querySelector("#rsSlot")?.value || "";
-      if (k) editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); });
+      if (k) editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: Object.assign({name, kcal, protein}, ing ? {ing} : {})}); day.ate = Object.assign({}, day.ate, {[k]: true}); slotReset(day, k); });
       else { const id = Date.now().toString(36), time = hmStr(new Date().getHours() * 60 + new Date().getMinutes()); editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, ing ? {ing} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); }); }
       rsEat = null; toast("Eingetragen"); sheetKind = null; sheet.close(); render(); return; }
     if (a === "ownEstimate") { const tx = sheet.querySelector("#ownText")?.value.trim(), box = sheet.querySelector("#ownEst"); if (!tx) { sheet.querySelector("#ownText")?.focus(); return; }
@@ -5269,7 +5285,7 @@ sheet.addEventListener("pointerdown", e => { shd = e.target.closest(".grab") ? e
 sheet.addEventListener("pointerup", e => { if (shd != null && e.clientY - shd > 60) { clearInterval(guideTimer); closeSheet(); } shd = null; });
 sheet.addEventListener("pointercancel", () => { shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
-addEventListener("hashchange", () => { if (dirty) saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
+addEventListener("hashchange", () => { if (dirty) saveCur(); hideActToast(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
 let todayAtHide = todayIso();
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") todayAtHide = todayIso();
