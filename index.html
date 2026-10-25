@@ -260,7 +260,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mwbox{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:8px 12px}.mwbox b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
-.nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwq .btn{min-height:28px;padding:2px 9px}
+.nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwunit{margin:6px 0 2px}.nwunit button{min-height:36px}.nwq .btn{min-height:28px;padding:2px 9px}
 .slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}.slotrow.rtrow{grid-template-columns:minmax(0,1fr) auto}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .gapinfo{display:flex;align-items:center;gap:6px}.addfood{align-self:flex-start;margin-top:4px}
@@ -1668,6 +1668,10 @@ function nwFind(name){ const n = " " + nwNorm(name) + " ", stem = w => w.replace
   return best?.x || null; }
 // Getränke (ml in naehrwerte.json) in ml statt g; Portion „Glas (0,2 l)“ braucht keinen Zusatz
 const nwIsMl = n => !!(NW || []).find(e => e.n === n)?.ml;
+// Getränke: Glas/Tasse, Flasche, Dose in ml je Getränk (gl/fl/dose in naehrwerte.json)
+const nwFull = n => (NW || []).find(e => e.n === n) || null;
+const nwUnitMl = (x, unit, q) => /^(glas|gläser|tassen?|becher)$/.test(unit) ? q * (x.gl || x.g) : /^flaschen?$/.test(unit) ? q * (x.fl || x.g) : /^dosen?$/.test(unit) ? q * (x.dose || x.fl || x.g) : null;
+const nwKind = (x, unit) => /^(glas|gläser|tassen?|becher)$/.test(unit) ? "glas" : /^(flaschen?|dosen?)$/.test(unit) ? "flasche" : /^(ml|l|liter)$/.test(unit) ? "ml" : x.fl && x.g === x.fl ? "flasche" : "glas";
 const nwPortion = x => x.ml && /\d\s*m?l\)/.test(x.u) ? `1 ${x.u}` : `1 ${x.u} ≈ ${x.g} ${x.ml ? "ml" : "g"}`;
 function nwItem(p){
   let q = 1, unit = "", rest = p.trim();
@@ -1679,6 +1683,9 @@ function nwItem(p){
   const key = fold((rest || p).trim()), hist = key.length >= 3 && !exact0 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll|flaschen?)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
   const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
+  const mineLiq = mine && nwIsMl(mine.mynw?.n) ? nwFull(mine.mynw.n) : null;
+  if (mineLiq) { const ml = /^(ml)$/.test(unit) ? q : /^(l|liter)$/.test(unit) ? q * 1000 : nwUnitMl(mineLiq, unit, q) ?? q * mineLiq.g;
+    return {text: p, ok: true, name: mine.name, g: Math.round(ml), ml: true, gl: mineLiq.gl, fl: mineLiq.fl, uk: nwKind(mineLiq, unit), kcal: Math.round(mine.mynw.k * ml / 100), protein: Math.round((mine.mynw.p || 0) * ml / 10) / 10}; }
   if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
   if (mine?.mynw || (mine && /^(g|gramm|kg|ml|l|liter)$/.test(unit))) { const src = mine.mynw || nwFind(mine.al?.[0] || mine.name); if (src) { const gr = unit === "kg" || unit === "l" || unit === "liter" ? q * 1000 : q; return {text: p, ok: true, name: mine.name, g: Math.round(gr), ml: nwIsMl(src.n), kcal: Math.round(src.k * gr / 100), protein: Math.round(src.p * gr / 10) / 10}; } }
   const wUnit = /^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit), x0 = NW ? nwFind(rest || p) : null, exact = !!x0 && x0.keys.includes(nwNorm(rest || p));
@@ -1687,9 +1694,10 @@ function nwItem(p){
   if (!r && !x && !wUnit && key.length >= 4 && typeof sugScore === "function") r = (recipes || []).map(rc => ({rc, sc: sugScore(rc.name, key)})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || a.rc.name.length - b.rc.name.length)[0]?.rc;
   if (r) { const nu = recipeNutri(r); return {text: p, ok: true, name: r.name, g: null, kcal: Math.round(q * nu.kcal), protein: Math.round(q * nu.protein)}; }
   if (!x) return {text: p, ok: false};
-  // eine Flasche Wein/Sekt sind 0,75 l, nicht ein Glas
-  const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : /^flaschen?$/.test(unit) && /wein|sekt/i.test(x.n) && x.n !== "Weinschorle" ? q * 750 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
-  return {text: p, ok: true, name: x.n, g: Math.round(g), ml: !!x.ml, kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
+  // Getränke: Glas, Flasche, Dose in der Größe des jeweiligen Getränks (Flasche Wein 0,75 l, Bier 0,5 l …)
+  const lm = x.ml ? nwUnitMl(x, unit, q) : null;
+  const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : lm != null ? lm : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
+  return Object.assign({text: p, ok: true, name: x.n, g: Math.round(g), ml: !!x.ml, kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10}, x.ml && x.gl ? {gl: x.gl, fl: x.fl, uk: nwKind(x, unit)} : {});
 }
 function nwParse(text){
   const out = [];
@@ -1702,11 +1710,11 @@ let nwLast = [];
 // Menge eines Postens im Text ändern: „2 Kekse“ → „3 Kekse“, „100 g Skyr“ → „125 g Skyr“, ohne Zahl = 1
 function nwStep(text, d){ const m = text.match(/^\s*(\d+(?:[.,]\d+)?|½|halbe?|eine?n?)\s*(g|ml)?\b\s*/i), rest = m ? text.slice(m[0].length) : text.trim();
   const v = m ? (/^½|halb/i.test(m[1]) ? 0.5 : /^ein/i.test(m[1]) ? 1 : Number(m[1].replace(",", "."))) : 1, unit = m?.[2]?.toLowerCase();
-  if (unit) { const q = Math.max(25, Math.round((v + d * 25) / 5) * 5); return `${q} ${unit} ${rest}`; }
-  const q = d > 0 ? (v < 1 ? 1 : v + 1) : (v <= 1 ? 0.5 : v - 1); return `${q === 0.5 ? "½" : fmtQ(q)} ${rest}`; }
+  if (unit) { const st = unit === "ml" ? 50 : 25, q = Math.max(st, Math.round((v + d * st) / 5) * 5); return `${q} ${unit} ${rest}`; }
+  const q = d > 0 ? (v < 1 ? 1 : v + 1) : (v <= 1 ? 0.5 : v - 1), r2 = rest.replace(/^(glas|gläser)\b/i, q > 1 ? "Gläser" : "Glas").replace(/^flaschen?\b/i, q > 1 ? "Flaschen" : "Flasche"); return `${q === 0.5 ? "½" : fmtQ(q)} ${r2}`; }
 function nwHtml(items){
   const ok = items.filter(i => i.ok), sk = ok.reduce((a, i) => a + i.kcal, 0), sp = ok.reduce((a, i) => a + i.protein, 0); nwLast = items;
-  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map((i, ix) => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} ${i.ml ? "ml" : "g"}</span>` : ""}</span><span class="nwq"><button type="button" class="btn small ghost" data-nwq="${ix}|-1" aria-label="Weniger">−</button><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span><button type="button" class="btn small ghost" data-nwq="${ix}|1" aria-label="Mehr">＋</button></span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
+  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map((i, ix) => i.ok ? `${i.uk ? `<div class="nwunit chips sm" role="group" aria-label="Menge für ${esc(i.name)}">${[["glas", `Glas${i.gl ? ` (${(i.gl / 1000).toLocaleString("de-DE", {maximumFractionDigits: 2})} l)` : ""}`], ...(i.fl ? [["flasche", `Flasche (${(i.fl / 1000).toLocaleString("de-DE", {maximumFractionDigits: 2})} l)`]] : []), ["ml", "ml"]].map(([k, l]) => `<button type="button" data-nwu="${ix}|${k}" aria-pressed="${i.uk === k}">${l}</button>`).join("")}</div>` : ""}<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} ${i.ml ? "ml" : "g"}</span>` : ""}</span><span class="nwq"><button type="button" class="btn small ghost" data-nwq="${ix}|-1" aria-label="Weniger">−</button><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span><button type="button" class="btn small ghost" data-nwq="${ix}|1" aria-label="Mehr">＋</button></span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
     <div class="nwrow sum"><b>Summe</b><b>${sk} kcal · ${Math.round(sp)} g P</b></div><div class="small muted">Richtwerte – Zahlen unten bei Bedarf anpassen.</div></div>`;
 }
 
@@ -3967,7 +3975,7 @@ function sugScore(t, q){ const words = fold(t).split(/[^a-z0-9ß]+/).filter(Bool
   return fuzzy ? 1 : 2; }
 const SNACK_DEF = ["Banane", "150 g Skyr", "Handvoll Nüsse", "Proteinriegel", "2 Reiswaffeln", "Joghurt", "Studentenfutter", "Karotte", "Käsebrot", "Proteinshake"];
 function snackPicks(){ const c = new Map(), are = avoidRe();
-  for (const d of Object.keys(store.days).sort().reverse().slice(0, 60)) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) { const k = fold(o.name || ""); if (!k) continue; const x = c.get(k) || {name: o.name, kcal: num(o.kcal), protein: num(o.protein), n: 0}; x.n++; c.set(k, x); } }
+  for (const d of Object.keys(store.days).sort().reverse().slice(0, 60)) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) { const k = fold(o.name || "").replace(/[^a-z0-9ß]+$/, ""); if (!k) continue; const x = c.get(k) || {name: o.name, kcal: num(o.kcal), protein: num(o.protein), n: 0}; x.n++; c.set(k, x); } }
   const mine = [...c.values()].sort((a, b) => b.n - a.n).slice(0, 8);
   for (const n of SNACK_DEF) { if (mine.length >= 10) break; if (c.has(fold(n)) || (are && are.test(n))) continue; mine.push({name: n, def: true}); }
   return mine; }
@@ -5012,6 +5020,10 @@ async function onClick(e){
     if (k.startsWith("o")) editDay(d, day => { day.own = (day.own || []).map(o => o.id === k.slice(1) ? Object.assign({}, o, {f}) : o); });
     else editDay(d, day => { const pp = Object.assign({}, day.por); if (f === 1) delete pp[k]; else pp[k] = f; day.por = pp; });
     toast(`Menge: ${fTxt(f)}${k.startsWith("o") ? "×" : f === 1 ? " Portion" : " Portionen"}`); render(); if (sheet.open) renderSheet(); return; }
+  const nwu = t.closest("[data-nwu]"); if (nwu) { const [ix0, k] = nwu.dataset.nwu.split("|"), it = nwLast[+ix0], ta = sheet.querySelector("#ownText"); if (!it || !ta || !it.g) return;
+    // Menge umrechnen und den Posten im Text ersetzen: 400 ml → „2 Gläser“, „½ Flasche“, „400 ml“
+    const ml = it.g, nm = it.name, nx = k === "glas" ? (n => `${fmtQ(n)} ${n === 1 ? "Glas" : "Gläser"} ${nm}`)(Math.max(1, Math.round(ml / (it.gl || ml)))) : k === "flasche" ? (n => `${n === 0.5 ? "½" : fmtQ(n)} ${n <= 1 ? "Flasche" : "Flaschen"} ${nm}`)(Math.max(1, Math.round(ml / (it.fl || ml) * 2) / 2)) : `${Math.max(50, Math.round(ml / 10) * 10)} ml ${nm}`;
+    const old = it.text, at = ta.value.indexOf(old); if (at < 0) return; ta.value = ta.value.slice(0, at) + nx + ta.value.slice(at + old.length); ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
   const nwq = t.closest("[data-nwq]"); if (nwq) { const [ix, d] = nwq.dataset.nwq.split("|").map(Number), it = nwLast[ix], ta = sheet.querySelector("#ownText"); if (!it || !ta) return;
     const old = it.text, at = ta.value.indexOf(old); if (at < 0) return; ta.value = ta.value.slice(0, at) + nwStep(old, d) + ta.value.slice(at + old.length); ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }

@@ -947,7 +947,9 @@
 "p": 3.4,
 "g": 250,
 "u": "Glas",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 1000
 },
 {
 "n": "Sojadrink",
@@ -958,7 +960,9 @@
 "p": 3.4,
 "g": 250,
 "u": "Glas",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 1000
 },
 {
 "n": "Haferdrink",
@@ -969,7 +973,9 @@
 "p": 0.6,
 "g": 250,
 "u": "Glas",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 1000
 },
 {
 "n": "Joghurt",
@@ -1063,7 +1069,9 @@
 "p": 3.5,
 "g": 250,
 "u": "Becher",
-"ml": true
+"ml": true,
+"gl": 250,
+"fl": 500
 },
 {
 "n": "Milchkaffee",
@@ -1076,7 +1084,8 @@
 "p": 2.5,
 "g": 250,
 "u": "Tasse",
-"ml": true
+"ml": true,
+"gl": 250
 },
 {
 "n": "Proteinshake",
@@ -1088,7 +1097,9 @@
 "p": 10,
 "g": 330,
 "u": "Flasche",
-"ml": true
+"ml": true,
+"gl": 250,
+"fl": 330
 },
 {
 "n": "Proteinriegel",
@@ -1948,7 +1959,9 @@
 "p": 0.5,
 "g": 250,
 "u": "Glas",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 1000
 },
 {
 "n": "Cola",
@@ -1963,7 +1976,10 @@
 "p": 0,
 "g": 330,
 "u": "Dose/Glas",
-"ml": true
+"ml": true,
+"gl": 250,
+"fl": 500,
+"dose": 330
 },
 {
 "n": "Bier",
@@ -1975,7 +1991,10 @@
 "p": 0.5,
 "g": 500,
 "u": "Flasche",
-"ml": true
+"ml": true,
+"gl": 300,
+"fl": 500,
+"dose": 500
 },
 {
 "n": "Wein",
@@ -1986,7 +2005,9 @@
 "p": 0,
 "g": 200,
 "u": "Glas (0,2 l)",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 750
 },
 {
 "n": "Weißwein",
@@ -2010,7 +2031,9 @@
 "p": 0.1,
 "g": 200,
 "u": "Glas (0,2 l)",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 750
 },
 {
 "n": "Rotwein",
@@ -2038,7 +2061,9 @@
 "p": 0.1,
 "g": 200,
 "u": "Glas (0,2 l)",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 750
 },
 {
 "n": "Roséwein",
@@ -2053,7 +2078,9 @@
 "p": 0.1,
 "g": 200,
 "u": "Glas (0,2 l)",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 750
 },
 {
 "n": "Wein lieblich",
@@ -2071,7 +2098,9 @@
 "p": 0.1,
 "g": 200,
 "u": "Glas (0,2 l)",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 750
 },
 {
 "n": "Sekt",
@@ -2087,7 +2116,9 @@
 "p": 0.1,
 "g": 100,
 "u": "Glas (0,1 l)",
-"ml": true
+"ml": true,
+"gl": 100,
+"fl": 750
 },
 {
 "n": "Weinschorle",
@@ -2101,7 +2132,9 @@
 "p": 0,
 "g": 250,
 "u": "Glas (0,25 l)",
-"ml": true
+"ml": true,
+"gl": 250,
+"fl": 500
 },
 {
 "n": "Smoothie",
@@ -2110,7 +2143,9 @@
 "p": 0.7,
 "g": 250,
 "u": "Flasche",
-"ml": true
+"ml": true,
+"gl": 200,
+"fl": 250
 },
 {
 "n": "Kaffee",
@@ -2123,7 +2158,8 @@
 "p": 0.2,
 "g": 200,
 "u": "Tasse",
-"ml": true
+"ml": true,
+"gl": 200
 },
 {
 "n": "Energy Drink",
@@ -2135,7 +2171,10 @@
 "p": 0,
 "g": 250,
 "u": "Dose",
-"ml": true
+"ml": true,
+"gl": 250,
+"fl": 250,
+"dose": 250
 },
 {
 "n": "Öl",
