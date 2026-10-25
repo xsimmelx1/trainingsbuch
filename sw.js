@@ -1,5 +1,5 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v172";
+const CACHE = "tb-v175";
 const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
@@ -16,8 +16,15 @@ self.addEventListener("fetch", e => {
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { if (res.ok) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); } return res; })));
     return;
   }
-  // App-Hülle: erst Netz (damit Updates ankommen), offline aus dem Cache
-  e.respondWith(fetch(e.request, {cache: "no-cache"}).then(res => { if (res.ok) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); } return res; }).catch(() => caches.match(e.request).then(r => r || (e.request.mode === "navigate" ? caches.match("index.html") : Response.error()))));
+  // App-Hülle und Daten: sofort aus dem Cache (schneller Start), im Hintergrund frisch holen.
+  // Neue Versionen kommen über ein neues sw.js (neuer CACHE-Name): Installieren lädt alles neu, die Seite lädt sich dann selbst neu.
+  const nav = e.request.mode === "navigate", key = nav ? new Request(new URL("./", location.href).href) : e.request;
+  e.respondWith(caches.open(CACHE).then(async c => {
+    const hit = (await c.match(key, {ignoreSearch: nav})) || (nav ? (await c.match("index.html")) : null);
+    const net = fetch(nav ? key.url : e.request.url, {cache: "no-cache", credentials: "same-origin"}).then(res => { if (res.ok) c.put(key, res.clone()); return res; });
+    if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
+    return net.catch(() => Response.error());
+  }));
 });
 
 self.addEventListener("push", e => {

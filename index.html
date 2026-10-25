@@ -3730,12 +3730,14 @@ function calHtml(){
 let mealPlan = null, mealsReady = null, essenView = "plan", essenMon = null, calMeals = !!lsGet("calMeals");
 function ensureMeals(){
   if (mealPlan && recipes) return Promise.resolve();
+  const pr = ensurePrices().catch(() => {});  // gleichzeitig mit Plan und Rezepten
   return mealsReady = mealsReady || Promise.all([fetch("mealplan.json").then(r => r.json()), recipes ? Promise.resolve(recipes) : fetch("recipes.json").then(r => r.json())])
-    .then(([m, r]) => { mealPlan = m; recipes = r; return ensurePrices().catch(() => {}); }).catch(e => { mealsReady = null; throw e; });
+    .then(([m, r]) => { mealPlan = m; recipes = r; return pr; }).catch(e => { mealsReady = null; throw e; });
 }
 const cookSteps = r => r?.plan?.steps?.length ? r.plan.steps : (r?.steps || []).map(x => ({do: x}));
 const cookAhead = r => r?.plan?.ahead || [];
-const recipeByName = n => typeof n === "string" ? (recipes || []).find(x => x.name === n) : undefined;
+let recIdx = null, recIdxOf = null;
+const recipeByName = n => { if (typeof n !== "string" || !recipes) return undefined; if (recIdxOf !== recipes) { recIdx = new Map(); for (const x of recipes) if (!recIdx.has(x.name)) recIdx.set(x.name, x); recIdxOf = recipes; } return recIdx.get(n); };
 let foodMemo = null;
 const FOOD = () => { const f = S().food; if (!foodMemo || foodMemo.ref !== f || foodMemo.ver !== dataVer) foodMemo = {ref: f, ver: dataVer, val: Object.assign({showNutri: true, times: {}, kcal: null, protein: null}, f || {})}; return foodMemo.val; };
 const foodTarget = () => ({kcal: num(FOOD().kcal) || mealPlan.target.kcal, protein: num(FOOD().protein) || mealPlan.target.protein});
@@ -3759,7 +3761,9 @@ function devLine(r){ const d = (r.dev || []).map(k => k === "ofenk" ? "♨️ Of
 function avoidRe(){ const key = JSON.stringify([FOOD().allergens, FOOD().avoid, FOOD().devices]); if (avoidMemo.k === key) return avoidMemo.re; avoidMemo = {k: key, re: avoidRe0()}; return avoidMemo.re; }
 function avoidRe0(){ const f = FOOD(), parts = (f.allergens || []).map(k => ALLERGENS[k]?.[1]).filter(Boolean).concat((f.avoid || "").split(/[,;\n]/).map(avoidTerm).filter(Boolean)).concat(devParts());
   return parts.length ? new RegExp(parts.join("|"), "i") : null; }
-const recipeText = r => (r.name + " " + (r.ingredients || []).join(" ") + substNames(r)).toLowerCase() + (r.dev || []).map(d => " §" + d + "§").join("");
+const recTextMemo = new WeakMap();
+const recipeText = r => { const sb = FOOD().subst, m = recTextMemo.get(r); if (m && m.p === prices && m.s === sb) return m.t;
+  const t = (r.name + " " + (r.ingredients || []).join(" ") + substNames(r)).toLowerCase() + (r.dev || []).map(d => " §" + d + "§").join(""); recTextMemo.set(r, {p: prices, s: sb, t}); return t; };
 function substNames(r){ if (!prices || !Object.keys(FOOD().subst || {}).length) return ""; let t = ""; for (const l of r.ingredients || []) { const x = parseIng(l); if (x.orig) t += " " + (x.parts || [x]).map(p => p.pr.name).join(" "); } return t; }
 const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
@@ -3807,7 +3811,9 @@ function myPriceEst(v){ if (!prices) return null; const size = num(v.size) || 25
   return L.length ? Math.round(L[Math.floor(L.length / 2)] * size * 100) / 100 : null; }
 const myProdList = () => Object.entries(FOOD().myProds || {}).map(([k, v]) => { const est = v.price == null ? myPriceEst(v) : null;
   return {id: "my:" + k, key: k, name: v.name, price: v.price ?? est, priceEst: v.price == null && est != null, store: v.store, date: v.date, my: true, nw: v.nw || null, ean: v.ean || null, size: v.size || null, group: v.group || myGroup(v.name)}; });
-const prodById = id => id && id.startsWith("my:") ? myProdList().find(x => x.id === id) : prices?.products.find(x => x.id === id);
+let prodIdx = null, prodIdxOf = null;
+const prodById = id => { if (id && id.startsWith("my:")) return myProdList().find(x => x.id === id); if (!prices) return undefined;
+  if (prodIdxOf !== prices.products) { prodIdx = new Map(); for (const x of prices.products) if (!prodIdx.has(x.id)) prodIdx.set(x.id, x); prodIdxOf = prices.products; } return prodIdx.get(id); };
 // Bonzeile → lesbarer Name: Mengen/Preise weg, Großbuchstaben normalisieren
 const RC_JUNK = /pfand|leergut|tüte|tasche|beutel|rabatt|nachlass|summe|zwischensumme|gutschein|coupon|payback|bonus|karte|mwst|kasse/i;
 const RC_KINDS = [
@@ -3875,6 +3881,8 @@ function budgetCands(k, curName){
 }
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
 const budgetQuick = new Map();
+const BUDGET_V = 1; // erhöhen, wenn sich die Tausch-Logik ändert (verwirft gespeicherte Ergebnisse)
+const strHash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0; return h.toString(36) + t.length.toString(36); };
 function budgetSubs(mo){
   const qk = mo + "|" + dataVer; if (budgetQuick.has(qk)) return budgetQuick.get(qk);
   const res0 = budgetSubs0(mo); if (budgetQuick.size > 50) budgetQuick.clear(); budgetQuick.set(qk, res0); return res0;
@@ -3882,6 +3890,9 @@ function budgetSubs(mo){
 function budgetSubs0(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
   const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), !!FOOD().bio, FOOD().bioItems || []]); if (budgetMemo.has(key)) return budgetMemo.get(key);
+  // auf dem Gerät gespeichert: gleiches Ergebnis, solange Plan, Preise, Rezepte und Essens-Einstellungen gleich sind (spart beim Start ~0,5 s)
+  const pk = strHash([BUDGET_V, key, JSON.stringify(FOOD()), prices?.date || "", (prices?.products || []).length, (recipes || []).length, JSON.stringify(mealPlan?.target || {}), S().startDate || ""].join("|")), pm = lsGet("budgetMemo") || {};
+  if (pm[pk]) { budgetMemo.set(key, pm[pk]); return pm[pk]; }
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
   const W = mealWeek(weekNo(mo) ?? 0), batch = new Set([W.batchA, W.batchB]);
   // Bewertet wird der echte Wocheneinkauf (Packungen), nicht die Portionskosten
@@ -3903,7 +3914,9 @@ function budgetSubs0(mo){
         const sb = Object.assign({}, subs, {[x.n]: c.name}), save = cost - total(sb); if (save > 0.01 && (!best || save > best.save) && floorsOk(sb)) best = {n: x.n, c: c.name, save}; } }
     if (!best) break; subs[best.n] = best.c; cost = total(subs);
   }
-  const res = {subs, before, cost, budget, ok: cost <= budget}; budgetMemo.set(key, res); return res;
+  const res = {subs, before, cost, budget, ok: cost <= budget}; budgetMemo.set(key, res);
+  try { const keep = Object.entries(pm).slice(-7); lsSet("budgetMemo", Object.fromEntries([...keep, [pk, res]])); } catch {}
+  return res;
 }
 function mealDefaults(d, raw){
   const w = weekNo(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
@@ -4168,7 +4181,13 @@ const isEst = (pr, st) => { if (pr.my) return !!pr.priceEst; if (st === "min") {
     const best = Object.entries(ps).filter(([, v]) => v != null).sort((a, b) => a[1] - b[1])[0]; return !!best && !own[best[0]] && !(bioUse(pr) && pr.bio?.[best[0]] != null) && (pr.est || []).includes(best[0]); }
   return !ownOf(pr)[st] && !(bioUse(pr) && pr.bio?.[st] != null) && (pr.est || []).includes(st); };
 // Reihenfolge: eigener Preis (Kassenbon/Scan) > Bio-Preis (wenn „Bio bevorzugen“) > Richtpreis
+// Preis je Produkt und Markt zwischenspeichern, bis sich Daten oder Einstellungen ändern (dataVer)
+let priceMemo = new Map(), priceMemoV = -1, priceMemoP = null;
 function priceOf(pr, store){
+  if (priceMemoV !== dataVer || priceMemoP !== prices) { priceMemo = new Map(); priceMemoV = dataVer; priceMemoP = prices; }
+  const k = pr.id + "|" + (store || ""); if (priceMemo.has(k)) return priceMemo.get(k);
+  const v = priceOf0(pr, store); priceMemo.set(k, v); return v; }
+function priceOf0(pr, store){
   const own = ownOf(pr), ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}); for (const [st, o] of Object.entries(own)) if (o && o.price != null) ps[st] = o.price;
   store = store || FOOD().store || "aldi";
   if (store !== "min" && prices && !prices.stores.includes(store)) store = "min";
@@ -4176,7 +4195,12 @@ function priceOf(pr, store){
   return ps[store] ?? null;
 }
 // Zutatenzeile → {pr: Produkt, amt: Menge in der Basiseinheit des Produkts} oder null
+// Zwischenspeicher: dieselbe Zutatenzeile wird beim Budget-Tausch tausendfach geprüft. Hängt nur von Zeile, Preisdaten und Ersatzprodukten ab.
+let ingMemo = new Map(), ingMemoP = null, ingMemoS = null;
 function parseIng(line){
+  const sb = FOOD().subst; if (ingMemoP !== prices || ingMemoS !== sb) { ingMemo = new Map(); ingMemoP = prices; ingMemoS = sb; }
+  let r = ingMemo.get(line); if (!r) { r = parseIng0(line); ingMemo.set(line, r); } return r; }
+function parseIng0(line){
   line = line.replace(/^(ca\.|etwas|etwa|optional:?)\s+/i, "");
   const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$/);
   const q = m ? (m[1] === "½" ? .5 : m[1].includes("/") ? m[1].split("/").reduce((a, b) => a / b) : Number(m[1].replace(",", "."))) : null;
@@ -5446,7 +5470,11 @@ new MutationObserver(ms => { for (const m of ms) { if (m.type === "characterData
 iconize(document.body);
 
 // ---------- Start ----------
-if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js").catch(() => {}); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }
+if ("serviceWorker" in navigator) { const hadSW = !!navigator.serviceWorker.controller; let swNew = false;
+  // Neue Version aktiv: neu laden, wenn gerade nichts offen ist (kein Blatt, kein laufendes Training, nichts ungespeichert); sonst beim nächsten Wechsel in den Hintergrund
+  const swReload = () => { if (!swNew || sheet.open || dirty || (cur?.startedAt && !cur?.finishedAt) || document.getElementById("gc")?.hidden === false) return false; swNew = false; location.reload(); return true; };
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadSW) return; swNew = true; if (!swReload()) document.addEventListener("visibilitychange", () => { if (document.hidden) swReload(); }); });
+  navigator.serviceWorker.register("sw.js").catch(() => {}); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }
 readHash();
 const c0 = lsGet("cache"); if (c0) Object.assign(store, c0);
 render();
