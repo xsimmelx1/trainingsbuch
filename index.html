@@ -1171,33 +1171,46 @@ function guideTick(){
 
 // ---------- Halte-/Satz-Timer: läuft im Blatt, ohne neu zu zeichnen (Video läuft weiter), ±10 s ----------
 let tmr = null, tmrInt = null;
+// Ablauf einer Wiederholung: hin bewegen, halten, zurück (ggf. Pause). Sekunden = Countdown, danach zeigt jeder Schritt noch eine Sekunde 0.
+// Morgenroutine: von Hand auf ruhiges Tempo gesetzt (Bewegung nie unter 2 s); sonst aus dem Tempo im Plan (runter-Pause-hoch-halten).
+const REP_STEPS = {
+  "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
+  "mob:tiltlie": [["Einrollen", 1, "hin"], ["Halten", 5, "hold"], ["Lösen", 2, "back"]],
+  "mob:tilt": [["Einrollen", 1, "hin"], ["Halten", 3, "hold"], ["Lösen", 2, "back"]],
+  "mob:glutebr": [["Hoch", 1, "hin"], ["Halten", 3, "hold"], ["Runter", 2, "back"]],
+  "mob:deadbug": [["Strecken", 2, "hin"], ["Halten", 2, "hold"], ["Zurück", 2, "back"]],
+  "mob:shrug30": [["Hoch", 1, "hin"], ["Halten", 2, "hold"], ["Ablassen", 2, "back"]]};
+function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k]) => ({l, s, k}));
+  const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), st = [{l: "Bewegen", s: Math.max(1, tp ? +tp[3] : 1), k: "hin"}, {l: "Halten", s: d.hold, k: "hold"}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
+  if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
+const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
 function timerCfg(key){
   const k = key.startsWith("mob:") ? key.slice(4) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
+  if (k && AUTO_CFG[k]) return AUTO_CFG[k]; // geführter Ablauf auch beim Selbst-Starten (z. B. Knie-Test)
   if (g) return g.stop ? {mode: "stop", rounds: g.rounds || 1, side: false, rest: d.rest || 30} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
   if (d.hold >= 10) return {mode: "count", sec: d.hold, rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
-  const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), rel = tp ? Math.max(1, +tp[1] + +tp[2] + +tp[3]) : 2;
-  if (d.hold > 0 && m) return {mode: "reps", hold: d.hold, rel, reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
+  if (d.hold > 0 && m) return {mode: "reps", steps: repSteps(key, d), reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
   return {mode: "stop", rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 30};
 }
 // Durchgetaktet: die ganze Routine läuft in einem Timer – Vorbereitung, Halten/Lösen, Seitenwechsel, Übergang zur nächsten Übung.
 // Übungen ohne feste Zeit (Stoppuhr) bekommen hier eine Vorgabe.
 let autoFlow = false;
-const AUTO_CFG = {knietest: {mode: "reps", hold: 3, reps: 5, rounds: 2, side: true, rest: 0}};
+const AUTO_CFG = {knietest: {mode: "reps", steps: repSteps("mob:knietest", {}), reps: 5, rounds: 2, side: true, rest: 0}};
 const STOP_EST = 20; // Annahme je Stoppuhr-Satz („so lange sauber möglich“) für die Restzeit
-const PREP_SEC = 8, SWITCH_SEC = 6, NEXT_SEC = 12;
+const PREP_SEC = 10, SWITCH_SEC = 10, NEXT_SEC = 12; // genug Zeit zum Hinlegen, Aufstehen, Seite wechseln
 const ZERO_SEC = 1; // jede Phase zeigt am Ende eine volle Sekunde lang 0, erst dann kommt die nächste
 let autoCarry = 0; // Übergangszeit, die an den Vorlauf der nächsten Übung angehängt wird (deren Video ist dann schon zu sehen)
 function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null; return (k && AUTO_CFG[k]) || timerCfg(key); }
 // Dauer einer Übung im Durchlauf (ohne Vorbereitung) und Rest der Routine ab Übung i
-function autoSecs(key){ const c = autoCfg(key), Z = ZERO_SEC, per = c.mode === "reps" ? c.reps * (c.hold + (c.rel || 2) + 2 * Z) : c.mode === "stop" ? STOP_EST : c.sec + Z; return c.rounds * per + (c.rounds - 1) * ((c.side ? SWITCH_SEC : (c.rest || 10)) + Z); }
+function autoSecs(key){ const c = autoCfg(key), Z = ZERO_SEC, per = c.mode === "reps" ? c.reps * repSecs(c) : c.mode === "stop" ? STOP_EST : c.sec + Z; return c.rounds * per + (c.rounds - 1) * ((c.side ? SWITCH_SEC : (c.rest || 10)) + Z); }
 // Dauer der ganzen Morgenroutine in Minuten (wie durchgetaktet: Vorlauf, Übung, Wechsel); gilt für Texte, Kalender und Planer
 const mobMin = () => Math.round(MOBILITY.reduce((t, [k]) => t + PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC, 0) / 60);
 function autoLeft(i){ let t = 0; for (let j = Math.max(0, i); j < MOBILITY.length; j++) { const k = MOBILITY[j][0]; if (cur.mobility[k] && j !== i) continue; t += PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC; } return t; }
 // Nächste offene Übung ab Blatt-Index – als Kurzname
 const mobShort = t => t.split(":")[0].split(/\s\d+(?:–\d+)?\s*×/)[0].split(" (")[0].split(",")[0].trim();
-function tmrRemain(t){ if (!t) return 0; const Z = ZERO_SEC, rl = (t.rel || 2) + Z, hd = (t.hold || 0) + Z, per = t.mode === "reps" ? t.reps * (hd + rl) : t.mode === "stop" ? STOP_EST : t.sec + Z, gap = (t.side ? SWITCH_SEC : (t.rest || 10)) + Z, left = Math.max(0, t.left + Z);
+function tmrRemain(t){ if (!t) return 0; const Z = ZERO_SEC, per = t.mode === "reps" ? t.reps * repSecs(t) : t.mode === "stop" ? STOP_EST : t.sec + Z, gap = (t.side ? SWITCH_SEC : (t.rest || 10)) + Z, left = Math.max(0, t.left + Z);
   if (t.phase === "next") return left; if (t.phase === "prep") return left + t.rounds * per + (t.rounds - 1) * gap + NEXT_SEC;
-  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + (t.phase === "hold" ? rl : 0) + Math.max(0, t.reps - t.rep - 1) * (hd + rl) : t.mode === "stop" ? Math.max(0, STOP_EST - t.acc) : left;
+  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + t.steps.slice(t.step + 1).reduce((a, x) => a + x.s + Z, 0) + Math.max(0, t.reps - t.rep - 1) * repSecs(t) : t.mode === "stop" ? Math.max(0, STOP_EST - t.acc) : left;
   return inRound + left * (t.phase === "switch" ? 1 : 0) + roundsAfter * (per + gap) + NEXT_SEC; }
 // Hinweise je Schmerzstelle: zuerst die Regel aus dem Plan, dann typische Ursachen – allgemein und je Bewegungsmuster
 const HURT = {
@@ -1287,7 +1300,7 @@ function hurtHtml(key){
 function autoNextName(){ const nx = MOBILITY.slice(sheetArg + 1).find(([k]) => !cur.mobility[k]); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
   if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && key.startsWith("mob:") && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
-    tmr = Object.assign({key, round: 0, rep: 0, run: false, left: c.mode === "count" ? c.sec : c.mode === "reps" ? c.hold : 0, acc: 0, phase: "hold"}, c);
+    tmr = Object.assign({key, round: 0, rep: 0, step: 0, run: false, left: c.mode === "count" ? c.sec : c.mode === "reps" ? c.steps[0].s : 0, acc: 0, phase: "hold"}, c);
     if (auto) { Object.assign(tmr, {auto: true, phase: "prep", left: PREP_SEC + autoCarry, fresh: autoCarry > 0, run: true, last: Date.now()}); autoCarry = 0; tmrInt = setInterval(tmrTick, 250); } }
   return `<div class="gtimer" id="tmr">${tmrInner()}</div>`;
 }
@@ -1295,7 +1308,7 @@ function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
   const pause = ["prep", "switch", "next"].includes(t.phase);
   const head = t.phase === "prep" ? (t.fresh ? "✓ Geschafft · jetzt diese Übung – Position einnehmen" : "Bereit machen · Position einnehmen") : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
-    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.phase === "hold" ? "Halten" : "Lösen"}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
+    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.steps[t.step].l}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
   const stopRun = t.mode === "stop" && !pause, val = stopRun ? t.acc : t.left;
   return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, stopRun ? val : Math.ceil(val)))}</div>
     ${t.times?.length ? `<div class="small muted">Bisher: ${t.times.map((x, i) => `Satz ${i + 1} ${fmtDur(x)}`).join(" · ")}</div>` : ""}
@@ -1307,7 +1320,7 @@ const voiceBtn = () => `<button type="button" class="btn ghost small" data-tm="v
 const tmrPaint = () => { const el = document.getElementById("tmr"); if (el) el.innerHTML = tmrInner(); syncFigure(tmr); };
 function syncFigure(t){ syncClip(t); syncYt(t); const a = document.querySelector("#sheet .exhero .anim"); if (!a) return;
   if (!t || !t.run || t.mode === "stop") { a.classList.remove("sync"); return; }
-  const m = (a.querySelector("img")?.getAttribute("src") || "").match(/img\/(?:r\/)?([^/]+)-0\.(?:jpg|webp)$/), st = (typeof GCM !== "undefined" && GCM?.frames?.[m?.[1]]) ? 1 : 0, hold = t.phase === "hold";
+  const m = (a.querySelector("img")?.getAttribute("src") || "").match(/img\/(?:r\/)?([^/]+)-0\.(?:jpg|webp)$/), st = (typeof GCM !== "undefined" && GCM?.frames?.[m?.[1]]) ? 1 : 0, kd = t.mode === "reps" ? t.steps[t.step].k : "hold", hold = t.phase === "hold" && (kd === "hin" || kd === "hold");
   a.classList.add("sync"); a.dataset.f = String(hold ? 1 - st : st); }
 let audioCtx = null;
 const audioReady = () => { try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === "suspended") audioCtx.resume(); } catch {} };
@@ -1316,6 +1329,9 @@ function tone(f, at, dur, vol, type = "sine"){ const a = audioCtx, o = a.createO
 function goTone(){ audioReady(); try { const t0 = audioCtx.currentTime; tone(523, t0, 0.22, 0.35, "triangle"); tone(1047, t0 + 0.26, 0.5, 0.35, "triangle"); } catch {} try { navigator.vibrate && navigator.vibrate([600]); } catch {} }
 // Ansage „Halten“/„Lösen“ – dieselbe Stimm-Einstellung wie im Coach
 const say = t => gcSay(t);
+const voiceOk = () => gcVoice && "speechSynthesis" in window;
+function cue(label){ if (voiceOk()) { say(label); try { navigator.vibrate && navigator.vibrate(120); } catch {} } else beep(); }
+const firstLabel = t => t.mode === "reps" ? t.steps[0].l : t.mode === "stop" ? "Los" : "Halten";
 function beep(){ audioReady(); try { tone(880, audioCtx.currentTime, 0.18, 0.2); } catch {} try { navigator.vibrate && navigator.vibrate(200); } catch {} }
 // Satz/Runde/Pause vorbei: drei aufsteigende Töne, gut hörbar
 function chime(){ audioReady(); try { const t0 = audioCtx.currentTime; tone(880, t0, 0.16, 0.3); tone(1175, t0 + 0.2, 0.16, 0.3); tone(1568, t0 + 0.4, 0.32, 0.3); } catch {} try { navigator.vibrate && navigator.vibrate([300, 100, 300]); } catch {} }
@@ -1328,7 +1344,7 @@ function tmrTick(){
     if (t.auto && ["prep", "switch", "next"].includes(t.phase)) { const c = Math.ceil(t.left); if (c >= 1 && c <= 3 && c !== t.lastBeep) { t.lastBeep = c; beep(); } }
     syncFigure(t); return; }
   t.lastBeep = null;
-  if (t.phase === "prep" || t.phase === "switch") { t.phase = "hold"; t.rep = 0; t.acc = 0; t.done = false; t.left = t.mode === "reps" ? t.hold : t.sec || 0; goTone(); say("Halten"); tmrPaint(); return; }
+  if (t.phase === "prep" || t.phase === "switch") { t.phase = "hold"; t.rep = 0; t.step = 0; t.acc = 0; t.done = false; t.left = t.mode === "reps" ? t.steps[0].s : t.sec || 0; goTone(); const fl = firstLabel(t); setTimeout(() => say(fl), 700); tmrPaint(); return; }
   if (t.phase === "next") { t.run = false; clearInterval(tmrInt); guideNext(true); return; }
   // Rundenende: geführt → anhalten, Durchlauf → Seitenwechsel/Pause bzw. Übergang zur nächsten Übung
   const roundEnd = () => { const more = t.round < t.rounds; if (!more) t.round = t.rounds - 1;
@@ -1336,10 +1352,11 @@ function tmrTick(){
     if (t.auto && !more) { autoAdvance(); return true; }
     const rel = t.mode === "reps" ? "" : "Lösen. "; // bei Wiederholungen ist schon gelöst
     if (t.auto) { t.phase = "switch"; t.left = t.side ? SWITCH_SEC : (t.rest || 10); say(rel + (t.side ? "Seite wechseln" : "Kurze Pause")); }
-    else { t.run = false; t.phase = "hold"; t.left = t.mode === "reps" ? t.hold : t.sec; if (rel) say("Lösen"); } };
+    else { t.run = false; t.phase = "hold"; t.step = 0; t.left = t.mode === "reps" ? t.steps[0].s : t.sec; if (rel) say("Lösen"); } };
   if (t.mode === "reps") {
-    if (t.phase === "hold") { t.phase = "rest"; t.left = t.rel || 2; beep(); say("Lösen"); }
-    else { t.rep++; if (t.rep < t.reps) { t.phase = "hold"; t.left = t.hold; beep(); say("Halten"); } else { t.rep = 0; t.round++; chime(); if (roundEnd()) return; } }
+    t.step++; if (t.step >= t.steps.length) { t.step = 0; t.rep++; }
+    if (t.rep < t.reps) { t.left = t.steps[t.step].s; cue(t.steps[t.step].l); }
+    else { t.rep = 0; t.step = 0; t.round++; chime(); if (roundEnd()) return; }
   } else { t.round++; chime(); if (roundEnd()) return; }
   tmrPaint();
 }
@@ -1350,7 +1367,7 @@ function guideNext(done){ const [k] = MOBILITY[sheetArg] || []; if (!k) return; 
 function tmrCmd(c){
   const t = tmr; if (!t) return;
   if (c === "toggle") { audioReady(); try { speechSynthesis.getVoices(); } catch {} t.run = !t.run; t.started = true; t.last = Date.now(); clearInterval(tmrInt); if (t.run) tmrInt = setInterval(tmrTick, 250);
-    if (t.run && t.mode !== "stop" && (t.phase === "hold" || t.phase === "rest")) say(t.phase === "rest" ? "Lösen" : "Halten"); }
+    if (t.run && t.mode !== "stop" && t.phase === "hold") say(t.mode === "reps" ? t.steps[t.step].l : "Halten"); }
   else if (c === "plus" || c === "minus") { const d = c === "plus" ? 10 : -10; if (t.mode === "stop") t.acc = Math.max(0, t.acc + d); else t.left = Math.max(1, t.left + d); }
   else if (c === "skip") { if (["prep", "switch", "next"].includes(t.phase)) t.left = -ZERO_SEC; }
   else if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} }
@@ -2228,28 +2245,45 @@ let realOpen = null; // Schlüssel der Übung, deren echter Clip gerade gezeigt 
 const mobClipId = key => { if (!key.startsWith("mob:") || !GCM) return null; const id = MOB_ID[key.slice(4)]; const f = id && gcHasClip(id) && gcFollow(id); return f && (f.ph?.length || timerCfg(key).mode !== "reps") ? id : null; };
 let mobClipObj = null, mobDataReady = false; // Coach-Daten und Clip-Liste einmal laden, dann Blatt neu zeichnen
 // Zeitpunkte im Clip: Haltephase oben (bzw. gestreckt) ist das Standbild, der Rest ist die Bewegung zwischen zwei Halten
-function mobClipMap(id){ const fo = gcFollow(id), ph = fo?.ph || []; if (!ph.length) { const len = fo.t1 - fo.t0; return {hold: len / 2, relFrom: 0, relLen: len, len}; } let s = 0; const seg = ph.map(([l, d]) => { const x = {l, s, d: +d}; s += +d; return x; });
-  const h = seg.find(x => /(oben|gestreckt).*halten/i.test(x.l)) || [...seg].reverse().find(x => /halten/i.test(x.l)); if (!h) return null;
-  return {hold: h.s + h.d / 2, relFrom: h.s + h.d, relLen: Math.max(0.3, s - h.d), len: s}; }
+// Clip in Abschnitte teilen: Halteposition (Standbild), Hinweg dorthin, Rückweg und Ruheposition (Standbild vor dem Hinweg)
+function mobClipMap(id){ const fo = gcFollow(id), ph = fo?.ph || [];
+  if (!ph.length) { const len = fo.t1 - fo.t0; return {hold: len / 2, start: len / 2, hin: null, back: null, len}; }
+  let s = 0; const seg = ph.map(([l, d]) => { const x = {l, s, d: +d, e: s + +d}; s += +d; return x; }), n = seg.length, len = s;
+  const H = seg.find(x => /(oben|gestreckt|eingerollt).*halten/i.test(x.l)) || [...seg].reverse().find(x => /halten/i.test(x.l)); if (!H) return null;
+  const hi = seg.indexOf(H), isRest = x => x !== H && /halten|dehnung|hohlkreuz/i.test(x.l), ri = seg.findIndex(isRest);
+  let hin, back, start;
+  if (ri >= 0) { // Kreislauf: Halten → Rückweg → Ruhe → Hinweg → Halten
+    back = []; let i = (hi + 1) % n; while (i !== hi && !isRest(seg[i])) { back.push(seg[i]); i = (i + 1) % n; }
+    start = seg[i]; hin = []; i = (i + 1) % n; while (i !== hi) { hin.push(seg[i]); i = (i + 1) % n; }
+  } else { hin = seg.slice(0, hi); back = seg.slice(hi + 1); start = null; }
+  const rng = g => g.length ? [g[0].s, g[g.length - 1].e < g[0].s ? len : g[g.length - 1].e] : null;
+  return {hold: H.s + H.d / 2, start: start ? start.s + start.d / 2 : 0.04, hin: rng(hin), back: rng(back), len}; }
 function mobClipMount(){ const v = document.getElementById("mobClip"); if (!v || v._mounted) return; v._mounted = true; const id = v.dataset.clipid;
   clipUrl(id).then(u => { if (!u) return; if (!v.isConnected) { URL.revokeObjectURL(u); return; } if (mobClipObj) try { URL.revokeObjectURL(mobClipObj); } catch {} mobClipObj = u;
     v.addEventListener("loadedmetadata", () => { v._map = mobClipMap(id); v.classList.add("on"); syncClip(tmr, true); }, {once: true}); v.src = u; }).catch(() => {}); }
 // YouTube-Ersatz (Übungen ohne eigenen Clip): steht, solange der Timer pausiert ist
 function syncYt(t){ const f = document.querySelector("#sheet iframe[data-clip]"); if (!f || !t) return; const play = !t.started || t.run; if (f._run === play) return; f._run = play;
   try { f.contentWindow.postMessage(JSON.stringify({event: "command", func: play ? "playVideo" : "pauseVideo", args: []}), "*"); } catch {} }
+// Abschnitt genau über die Dauer des Timer-Schritts abspielen und am Ziel anhalten (nicht in die nächste Phase weiterlaufen)
+function clipWatch(v){ clearInterval(v._w); v._w = setInterval(() => { if (!v.isConnected || v._stopAt == null) return clearInterval(v._w); if (v.currentTime >= v._stopAt - 0.03) { v.pause(); v._stopAt = null; clearInterval(v._w); } }, 30); }
 function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!v || !v._map || !(v.duration > 0)) return; const mp = v._map, k = v.duration / mp.len;
-  const ph = !t || !t.run ? (t?.started && t.phase !== "prep" ? "freeze" : "still") : t.mode !== "reps" ? (["prep", "switch", "next"].includes(t.phase) ? "still" : "loop") : t.phase === "rest" ? "rel" : "still";
-  const tag = ph + ":" + (t ? t.round + "/" + t.rep + "/" + t.phase : ""); if (!force && v._tag === tag) return;
+  const reps = t?.mode === "reps", kind = !t || ["prep", "switch", "next"].includes(t.phase) ? "start" : reps ? t.steps[t.step].k : "loop";
+  const ph = !t || !t.run ? (t?.started && t.phase !== "prep" ? "freeze" : "still") : kind;
+  const tag = ph + ":" + (t ? t.round + "/" + t.rep + "/" + t.step + "/" + t.phase : ""); if (!force && v._tag === tag) return;
   if (ph === "freeze") { if (!(v._tag || "").startsWith("freeze")) v._frozen = v._tag; v._tag = tag; v.pause(); return; } // Pause: Bild bleibt genau da stehen, wo der Timer angehalten wurde
-  if (!force && v._frozen === tag) { v._tag = tag; v._frozen = null; if (ph !== "still") v.play().catch(() => {}); return; } // Weiter nach Pause: ab derselben Stelle
-  v._tag = tag; v._frozen = null;
-  if (ph === "still") { v.pause(); try { v.currentTime = mp.hold * k; } catch {} return; }
-  if (ph === "loop") { v.playbackRate = 1; v.loop = true; v.play().catch(() => {}); return; }
-  // Lösen: vom Ende der Haltephase einmal durch die Bewegung bis zur nächsten Haltephase, genau so lang wie der Timer
-  v.loop = mp.relFrom < mp.len - 0.01; v.playbackRate = Math.min(2.5, Math.max(0.3, mp.relLen / Math.max(0.5, t.left + ZERO_SEC))); try { v.currentTime = (mp.relFrom % mp.len) * k; } catch {} v.play().catch(() => {}); }
+  if (!force && v._frozen === tag) { v._tag = tag; v._frozen = null; if (v._stopAt != null || ph === "loop") v.play().catch(() => {}); return; } // Weiter nach Pause: ab derselben Stelle
+  v._tag = tag; v._frozen = null; v._stopAt = null;
+  const still = x => { v.pause(); v.loop = false; try { v.currentTime = x * k; } catch {} };
+  // Standbild: Halten → Halteposition; vor dem Start, in Pausen und Ruhe → Ausgangsposition (bei Halteübungen ohne Wiederholungen die Halteposition)
+  if (ph === "still" || ph === "start" || ph === "pause") return still(reps && (ph !== "still" || kind !== "hold") ? mp.start : mp.hold);
+  if (ph === "hold") return still(mp.hold);
+  if (ph === "loop") { if (!mp.hin) { v.playbackRate = 1; v.loop = true; v.play().catch(() => {}); } else still(mp.hold); return; }
+  const r = ph === "hin" ? mp.hin : mp.back; if (!r) return still(ph === "hin" ? mp.hold : mp.start);
+  v.loop = false; v.playbackRate = Math.min(3, Math.max(0.2, (r[1] - r[0]) / Math.max(0.5, t.left + ZERO_SEC)));
+  try { v.currentTime = r[0] * k; } catch {} v._stopAt = r[1] * k; v.play().catch(() => {}); clipWatch(v); }
 function motionHtml(key, img, alt, still){
   const own = mobClipId(key);
-  if (own && realOpen !== "fig:" + key) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(img)}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig:${esc(key)}">🖼 Illustration</button>` : ""}</div>`;
+  if (own && realOpen !== "fig:" + key) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig:${esc(key)}">🖼 Illustration</button>` : ""}</div>`;
   const c = clipOf(key);
   if (c && (realOpen === key || !img)) return `<div class="exhero">${clipHtml(key)}${img ? `<button type="button" class="herobtn" data-real="">🖼 Illustration</button>` : ""}</div>`;
   return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : ""}${own ? `<button type="button" class="herobtn" data-real="">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="${esc(key)}">▶ So sieht's echt aus</button>` : ""}</div>`;
@@ -2527,7 +2561,7 @@ const POR = [[0.25, "¼"], [0.5, "½"], [1, "1"], [1.5, "1½"], [2, "2"]];
 const fTxt = f => (POR.find(x => x[0] === f) || [, fmtQ(f)])[1];
 const porPick = (d, m) => m.name === "skip" || m.name === "away" || !(m.own || m.k === "sn" || m.k === "ex") ? "" : `<div class="porpick"><span class="small muted">Menge:</span><div class="chips sm">${POR.filter(([v]) => m.own || v >= 0.5).map(([v, l]) => `<button type="button" data-mealpor="${d}|${m.k}|${v}" aria-pressed="${(m.f || 1) === v}">${l}${m.own ? "×" : v === 1 ? " Portion" : ""}</button>`).join("")}</div>${(m.f || 1) !== 1 ? `<span class="small muted">= ${m.info.kcal} kcal · ${Math.round(m.info.protein)} g P</span>` : ""}</div>`;
 const skipBtn = (d, m, cls = "btn ghost") => m.own ? "" : `<button class="${cls}" type="button" data-skipmeal="${d}|${m.k}">${m.name === "skip" ? "↺ Doch geplant" : "✕ Ausgelassen"}</button>`;
-const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}"`;
+const mealSw = (d, m) => `data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : m.name === "skip" ? "↺ Wieder planen" : "✕ Ausgelassen"}"`;
 // Rückblick Essen: Summe, geplante Gerichte zum Abhaken, eigene Einträge; Nachtragen ohne Uhrzeit oder Slot
 function pastFoodCard(d){
   if (!mealPlan || !recipes) return "";
@@ -4919,7 +4953,7 @@ let openDays = null, essenDay = null;
 // Kompakte Zeile: Bild, Zeit · Art, Name, Werte; ✓ rechts; Tippen öffnet das Rezept (dort Tauschen)
 function diaryRow(d, m){
   const r = m.info, rec = recOf(m.name);
-  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : "★ Ersetzen"}">
+  return `<div class="mrow ${m.ate ? "done" : ""}" data-swipe="meal" data-d="${d}" data-k="${m.k}" data-swr="${m.ate ? "↺ Nicht gegessen" : "✓ Gegessen"}" data-swl="${m.own ? "" : m.name === "skip" ? "↺ Wieder planen" : "✕ Ausgelassen"}">
     <button type="button" class="mrmain" ${rec && !m.own ? `data-recipe="${esc(rec.name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`}>${mealThumb(m.name)}<span class="mtx"><span class="small muted">${m.time ? esc(m.time) + " · " : ""}${esc(m.label)}${m.swapped ? " · getauscht" : ""}${(m.f || 1) !== 1 ? ` · ${fTxt(m.f)}${m.own ? "×" : " Port."}` : ""}</span><b>${typeof m.name === "string" && isFav(m.name) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)}</span>${showPrices() && mealCost(m.name) != null ? ` · ${eur(mealCost(m.name))}` : ""}</span>${m.warn ? `<span class="mwarn">⚠ ${esc(warnTxt(m.warn))}</span>` : ""}</span></button>
     ${m.own ? `<button type="button" class="btn small ghost ic" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Entfernen">✕</button>` : ""}<button type="button" class="mcheck" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button></div>`;
 }
@@ -5114,10 +5148,7 @@ async function onClick(e){
   const od = t.closest("[data-owndel]"); if (od) { if (sheetKind === "mealinfo") { sheetKind = null; sheet.close(); } const id = od.dataset.owndel; editDay(od.dataset.d, day => { day.own = (day.own || []).filter(o => o.id !== id); day.ownDel = [...(day.ownDel || []), id]; }); render(); return; }
   const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
   const za = t.closest("[data-zall]"); if (za) { const on = za.dataset.zall === "1"; for (const d of document.querySelectorAll("details.zgd")) { d.open = on; on ? shopOpen.add(d.dataset.keep) : shopOpen.delete(d.dataset.keep); } lsSet("shopOpen", [...shopOpen]); return; }
-  const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"), was = mealsFor(d).find(x => x.k === k)?.name === "skip";
-    let prev = null; editDay(d, day => { prev = {meal: day.meals?.[k] ?? null, ate: !!day.ate?.[k], rest: day.rest?.[k], por: day.por?.[k]}; day.meals = Object.assign({}, day.meals, {[k]: was ? null : "skip"}); day.ate = Object.assign({}, day.ate, {[k]: false}); if (!was) slotReset(day, k); });
-    toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf", was ? null : {label: "Rückgängig", fn: () => { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: prev.meal}); day.ate = Object.assign({}, day.ate, {[k]: prev.ate});
-      if (prev.rest != null) day.rest = Object.assign({}, day.rest, {[k]: prev.rest}); if (prev.por != null) day.por = Object.assign({}, day.por, {[k]: prev.por}); }); render(); }}); if (sheet.open) { sheetKind = null; sheet.close(); } render(); return; }
+  const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"); skipMeal(d, k); return; }
   const rsb = t.closest("[data-rest]"); if (rsb) { const a = rsb.dataset.rest, arg = rsb.dataset.v, [src, x1, x2, x3] = arg.split("|");
     const name = src === "fridge" ? FRIDGE().find(y => y.id === x1)?.name : mealsFor(x1).find(y => y.k === x2)?.name, total = restState?.n ?? (src === "fridge" ? (FRIDGE().find(y => y.id === x1)?.por || 0) : Number(x3));
     if (a === "plan") { const picks = [], rest = 0;
@@ -5441,15 +5472,20 @@ async function onChange(e){
     toast(`${k === "mob" ? "Morgenroutine" : "Abendcheck"}: ${v} Uhr${token ? " · Kalender und Plan folgen in ein paar Minuten" : ""}`); render(); return; }
 }
 for (const el of [document.querySelector("header.top"), document.getElementById("syncLine")]) el.addEventListener("click", onClick);
-// Wischgesten: Mahlzeit rechts = gegessen, links = tauschen; Einkauf = abhaken; Heute = Tag wechseln
+// Wischgesten: Mahlzeit rechts = gegessen, links = ausgelassen; Einkauf = abhaken; Heute = Tag wechseln
+// Mahlzeit auslassen bzw. wieder planen (✕-Knopf und Wischen nach links)
+function skipMeal(d, k){ const was = mealsFor(d).find(x => x.k === k)?.name === "skip";
+    let prev = null; editDay(d, day => { prev = {meal: day.meals?.[k] ?? null, ate: !!day.ate?.[k], rest: day.rest?.[k], por: day.por?.[k]}; day.meals = Object.assign({}, day.meals, {[k]: was ? null : "skip"}); day.ate = Object.assign({}, day.ate, {[k]: false}); if (!was) slotReset(day, k); });
+    toast(was ? "Wieder geplant" : "Als ausgelassen markiert – zählt nicht mehr zu kcal und Einkauf", was ? null : {label: "Rückgängig", fn: () => { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: prev.meal}); day.ate = Object.assign({}, day.ate, {[k]: prev.ate});
+      if (prev.rest != null) day.rest = Object.assign({}, day.rest, {[k]: prev.rest}); if (prev.por != null) day.por = Object.assign({}, day.por, {[k]: prev.por}); }); render(); }}); if (sheet.open) { sheetKind = null; sheet.close(); } render(); }
 function onSwipe(s0, dx){
   const z = s0.z;
   if (s0.kind === "meal") { const d = z.dataset.d, k = z.dataset.k;
-    // nach rechts: gegessen ↔ nicht gegessen; nach links: ersetzen
+    // nach rechts: gegessen ↔ nicht gegessen; nach links: ausgelassen ↔ wieder geplant (Ersetzen geht über Antippen)
     if (dx > 0) { let now; editDay(d, day => { now = !(day.ate || {})[k]; day.ate = Object.assign({}, day.ate, {[k]: now}); }); try { navigator.vibrate && navigator.vibrate(20); } catch {} render();
       const m = mealsFor(d).find(x => x.k === k); toast(now ? `✓ ${m ? m.label.replace(/^[^A-Za-zÄÖÜ0-9]+/, "").replace(/ · .*$/, "") : "Mahlzeit"} gegessen` : "Wieder als nicht gegessen markiert", ateUndo(d, k));
       const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
-    else if (!k.startsWith("o")) { ensureCur(); openSheet("meal", `${d}|${k}`); } return; }
+    else if (!mealsFor(d).find(x => x.k === k)?.own) { try { navigator.vibrate && navigator.vibrate(20); } catch {} skipMeal(d, k); } return; }
   if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
   if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); toast(`${dx < 0 ? "→" : "←"} ${selDate === todayIso() ? "Heute" : fmt(selDate)}`); }
 }
