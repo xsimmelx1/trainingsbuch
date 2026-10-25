@@ -2423,6 +2423,29 @@
 "p": 8,
 "g": 8,
 "u": "Stück"
+},
+{
+"n": "Orzo",
+"a": [
+"risoni",
+"kritharaki",
+"nudelreis"
+],
+"k": 150,
+"p": 5,
+"g": 250,
+"u": "Portion (gekocht)"
+},
+{
+"n": "Windbeutel",
+"a": [
+"mini windbeutel",
+"profiteroles"
+],
+"k": 300,
+"p": 5,
+"g": 15,
+"u": "Stück"
 }
 ]
 }

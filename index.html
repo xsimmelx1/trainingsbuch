@@ -3890,14 +3890,20 @@ const RC_WORDS = "mehrkorn vollkorn dinkel roggen weizen toastbrot sandwich brö
 let RC_VOCAB = null;
 const rcVocab = () => RC_VOCAB || (RC_VOCAB = [...new Set([...RC_WORDS, ...(prices?.products || []).flatMap(x => x.name.toLowerCase().split(/[^a-zäöüß]+/)), ...(NW || []).flatMap(x => [x.n, ...x.a].join(" ").toLowerCase().split(/[^a-zäöüß]+/))].filter(w => w.length >= 4))]);
 // „mehrk.“ → mehrkorn, „pin.grig.“ → pinot grigio, „toastbroe“ → toastbrot (1 Lesefehler bei Wörtern ab 6 Buchstaben)
+const RC_SHORT = ["bio", "mini", "maxi", "zart", "natur", "light", "vegan", "frisch", "jung", "mild", "rot", "grün", "gelb"]; // kurze Bonwörter: 1 Lesefehler reicht (BIC → bio, MINZ → mini)
 function rcWords(n){ const V = rcVocab();
+  // Ziffern mitten im Wort sind Lesefehler: DRZ0 → DRZO, 5OJA → SOJA
+  n = n.replace(/[A-Za-zÄÖÜäöüß0158]{3,}/g, w => /[A-Za-zÄÖÜäöüß]{2}/.test(w) ? w.replace(/0/g, "O").replace(/1/g, "l").replace(/5/g, "S").replace(/8/g, "B") : w);
   return n.replace(/([A-Za-zÄÖÜäöüß]+)(\.)?/g, (all, w, dot) => { const lw = w.toLowerCase().replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü");
     if (V.includes(lw)) return lw + " ";
+    if (lw.length >= 3 && lw.length <= 6) { const c = RC_SHORT.find(v => v.length === lw.length && lev(lw, v) === 1); if (c) return c + " "; }
+    if (lw.length >= 4 && lw.length < 6) { const cs = V.filter(v => Math.abs(v.length - lw.length) <= 1 && lev(lw, v) === 1); if (cs.length === 1) return cs[0] + " "; } // nur eindeutig
     if (dot && lw.length >= 3) { const c = V.filter(v => v.startsWith(lw) && v.length > lw.length).sort((a, b) => a.length - b.length)[0]; if (c) return c + " "; }
     if (lw.length >= 6) { const raw = w.toLowerCase(), c = V.find(v => [lw, raw].some(x => Math.abs(v.length - x.length) <= 1 && lev(x, v) <= 1)); if (c) return c + " "; }
+    if (lw.length >= 8) { const cs = V.filter(v => Math.abs(v.length - lw.length) <= 2 && lev(lw, v) === 2); if (cs.length === 1) return cs[0] + " "; } // 2 Fehler nur bei langen Wörtern und eindeutig
     return w + (dot ? " " : ""); }).replace(/\s+/g, " ").trim(); }
 const rcClean0 = n => { n = rcWords(n); let x = n; for (const [re, w] of RC_ABBR) x = x.replace(re, w); for (let i = 0; i < 2; i++) x = x.replace(RC_BRAND, ""); return x.replace(/\s+lose$/i, ""); };
-const rcClean = n => rcClean0(n).replace(/\btk\b/gi, "TK").replace(/\b\d+[.,]?\d*\s*(g|kg|ml|l|st|stk|x|er)\b/gi, "").replace(/[*#%]+/g, " ").replace(/\s{2,}/g, " ").trim().toLowerCase().replace(/(^|[\s/-])([a-zäöü])/g, (m, a, b) => a + b.toUpperCase());
+const rcClean = n => rcClean0(n).replace(/\btk\b/gi, "TK").replace(/\b\d+[.,]?\d*\s*(g|kg|ml|l|st|stk|x|er)\b/gi, "").replace(/[*#%:;|[\]{}‚„"]+/g, " ").replace(/\s{2,}/g, " ").trim().toLowerCase().replace(/(^|[\s/-])([a-zäöü])/g, (m, a, b) => a + b.toUpperCase());
 const defAmt = pr => pr.unit === "Stück" ? 0.5 : pr.piece ? pr.piece / 2 : 20;
 function recipeVec(n){
   if (recVec.has(n)) return recVec.get(n);
@@ -4460,7 +4466,7 @@ const SRI = {"https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.j
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js": "sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e",
   "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js": "sha384-1zP4ZOtlk2FXAOiUArpMuWf7INJJKe/ROfYFAVSeUa11DEfXdKWGiPI3dVma2Gt0"};
 const loadScript = src => new Promise((ok, no) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const el = document.createElement("script"); el.src = src; if (SRI[src]) { el.integrity = SRI[src]; el.crossOrigin = "anonymous"; } el.onload = ok; el.onerror = () => no(new Error("Bibliothek nicht ladbar")); document.head.appendChild(el); });
-async function receiptText(file){
+async function receiptText(file, opt = {}){
   if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) {
     await loadScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -4471,9 +4477,69 @@ async function receiptText(file){
     return lines.join("\n");
   }
   await loadScript("https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js");
-  const img = await rcPrep(file).catch(() => file);
-  const w = await Tesseract.createWorker("deu", 1, {logger: m => { if (m.status === "recognizing text" && rcpt) { rcpt.status = `Texterkennung ${Math.round(m.progress * 100)} %`; const el = document.getElementById("rcStatus"); if (el) el.textContent = rcpt.status; } }});
-  try { await w.setParameters({tessedit_pageseg_mode: "6", preserve_interword_spaces: "1"}); return (await w.recognize(img)).data.text; } finally { w.terminate(); }
+  const img = opt.raw ? file : await rcPrep(file, opt).catch(() => file), say = t => { if (rcpt) { rcpt.status = t; const el = document.getElementById("rcStatus"); if (el) el.textContent = t; } };
+  const w = await Tesseract.createWorker("deu", 1, {logger: m => { if (m.status === "recognizing text" && !w.lines) say(`Texterkennung ${Math.round(m.progress * 100)} %`); }});
+  try {
+    // 1. Versuch: Zeile für Zeile (hält geknitterte, gebogene Bons aus); 2. Versuch: ganze Seite am Stück – genommen wird, was mehr Preise findet
+    let lines = "", page = "";
+    if (img instanceof HTMLCanvasElement && opt.mode !== "page") { w.lines = true; lines = await rcReadLines(img, w, say).catch(() => ""); w.lines = false; }
+    const nPrice = t => (t.match(/\d\s?[,.]\s?\d\d\b/g) || []).length, nItems = t => t.split("\n").filter(l => /[A-Za-zÄÖÜ]{3}.*\d\s?[,.]\s?\d\d/.test(l)).length;
+    if (opt.mode !== "lines" && (!lines || nItems(lines) < 2)) { await w.setParameters({tessedit_pageseg_mode: opt.psm || "6", preserve_interword_spaces: "1"}); page = (await w.recognize(img)).data.text; }
+    return nItems(lines) >= nItems(page) && nPrice(lines) >= nPrice(page) * 0.6 ? lines || page : page;
+  } finally { w.terminate(); }
+}
+// Zeilenweise lesen: Schriftzeichen finden (zusammenhängende dunkle Flecken passender Größe), zu Wortgruppen mit eigener Neigung verketten,
+// jede Gruppe gerade gedreht ausschneiden und einzeln erkennen, dann Gruppen derselben Bonzeile (auch über große Lücken, z. B. Name … Preis) zusammensetzen
+async function rcReadLines(cv, w, say){
+  const W = cv.width, H = cv.height, d = cv.getContext("2d", {willReadFrequently: true}).getImageData(0, 0, W, H).data, N = W * H, lab = new Int32Array(N), cc = [];
+  for (let i = 0; i < N; i++) { if (lab[i] || d[4 * i] >= 140) continue; let x0 = W, x1 = 0, y0 = H, y1 = 0, n = 0; const st = [i]; lab[i] = cc.length + 1;
+    while (st.length) { const j = st.pop(), x = j % W, y = (j - x) / W; n++; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+      for (const k of [j - 1, j + 1, j - W, j + W]) if (k >= 0 && k < N && !lab[k] && d[4 * k] < 140 && Math.abs((k % W) - x) <= 1) { lab[k] = cc.length + 1; st.push(k); } }
+    cc.push({x0, x1, y0, y1, n, w: x1 - x0 + 1, h: y1 - y0 + 1}); }
+  // typische Zeichenhöhe: Median der zeichenartigen Flecken
+  const cand = cc.filter(c => c.h >= 10 && c.h <= H / 15 && c.w / c.h > 0.15 && c.w / c.h < 1.6 && c.n / (c.w * c.h) > 0.12 && c.n / (c.w * c.h) < 0.9).map(c => c.h).sort((a, b) => a - b);
+  if (cand.length < 10) return ""; const hm = cand[Math.floor(cand.length / 2)];
+  const ch = cc.filter(c => c.h >= hm * 0.55 && c.h <= hm * 1.7 && c.w <= hm * 2.5 && c.n / (c.w * c.h) > 0.08).map(c => Object.assign(c, {xc: (c.x0 + c.x1) / 2, yc: (c.y0 + c.y1) / 2})).sort((a, b) => a.x0 - b.x0);
+  // Ketten: nächstes Zeichen rechts in höchstens 1,3 Zeichenhöhen Abstand und auf der verlängerten Linie
+  const chains = [];
+  const fit = c => { const m = c.m, n = m.length, mx = m.reduce((a, q) => a + q.xc, 0) / n, my = m.reduce((a, q) => a + q.yc, 0) / n; let sxy = 0, sxx = 0; for (const q of m) { sxy += (q.xc - mx) * (q.yc - my); sxx += (q.xc - mx) ** 2; }
+    c.s = n >= 3 && sxx > 0 ? Math.max(-0.35, Math.min(0.35, sxy / sxx)) : 0; c.mx = mx; c.my = my; };
+  const yAt = (c, x) => c.my + c.s * (x - c.mx);
+  for (const q of ch) { let best = null, bd = 1e9;
+    for (const c of chains) { const gap = q.x0 - c.x1; if (gap < -hm * 0.3 || gap > hm * 1.3) continue; const dy = Math.abs(yAt(c, q.xc) - q.yc); if (dy < hm * 0.45 && dy + gap * 0.1 < bd) { bd = dy + gap * 0.1; best = c; } }
+    if (best) { best.m.push(q); best.x1 = Math.max(best.x1, q.x1); fit(best); } else { const c = {m: [q], x0: q.x0, x1: q.x1}; fit(c); chains.push(c); } }
+  const good = chains.filter(c => c.m.length >= 2 || (c.m.length === 1 && c.m[0].w > hm * 0.4)).filter(c => c.m.length >= 3 || c.x1 - c.x0 > hm * 0.8);
+  if (!good.length) return "";
+  // Bonzeilen: Gruppen nach Höhe ordnen; Gruppe gehört zur Zeile, wenn sie auf deren verlängerter Linie liegt (Neigung der längsten Gruppe)
+  const rows = []; for (const c of good.sort((a, b) => a.x0 - b.x0)) { let best = null, bd = 1e9;
+    for (const r of rows) { const ref = r.ref, dy = Math.abs(yAt(ref, (c.x0 + c.x1) / 2) - yAt(c, (c.x0 + c.x1) / 2)); if (c.x0 > r.x1 - hm && dy < hm * 0.6 && dy < bd) { bd = dy; best = r; } }
+    if (best) { best.c.push(c); best.x1 = c.x1; if (c.m.length > best.ref.m.length) best.ref = c; } else rows.push({c: [c], x1: c.x1, ref: c}); }
+  rows.sort((a, b) => yAt(a.ref, W / 2) - yAt(b.ref, W / 2));
+  // jede Gruppe gerade gedreht und auf ~36 px Zeichenhöhe gebracht einzeln lesen
+  await w.setParameters({tessedit_pageseg_mode: "7", preserve_interword_spaces: "1"});
+  const k = Math.min(3, Math.max(0.5, 36 / hm)), read = []; let done = 0, total = good.length;
+  for (const r of rows) { const parts = [];
+    for (const c of r.c) { const a = Math.atan(c.s), x0 = c.x0 - hm * 0.4, x1 = c.x1 + hm * 0.4, xc = (x0 + x1) / 2, yc = yAt(c, xc), sw = (x1 - x0) / Math.cos(a), sh = hm * 2.1;
+      const sc = mkCanvas(sw * k, sh * k), sx = sc.getContext("2d"); sx.fillStyle = "#fff"; sx.fillRect(0, 0, sc.width, sc.height);
+      sx.translate(sc.width / 2, sc.height / 2); sx.scale(k, k); sx.rotate(-a); sx.drawImage(cv, -xc, -yc);
+      const t = (await w.recognize(sc)).data.text.replace(/\s+/g, " ").trim(); if (t) parts.push({t, x0: c.x0}); say(`Texterkennung ${Math.round(++done / total * 100)} %`); }
+    if (parts.length) read.push(Object.assign(parts, {y: yAt(r.ref, (r.ref.x0 + r.ref.x1) / 2)})); }
+  // Namen stehen links bündig, Preise rechts. Bei geknickten Bons liegen sie nicht auf einer Linie:
+  // dann Namen ohne Preis und Preise ohne Namen der Reihe nach zusammenführen (die Reihenfolge stimmt auf dem Bon immer).
+  const isPrice = t => /^-?\d{1,3}\s?[,.]\s?\d\d\s*[A-Z*]{0,2}\W{0,2}$/.test(rcNorm(t)), wordy = t => /[A-Za-zÄÖÜäöüß]{3}/.test(t);
+  const lefts = read.map(p => p.find(x => wordy(x.t))?.x0).filter(x => x != null).sort((a, b) => a - b), margin = lefts.length ? lefts[Math.floor(lefts.length * 0.25)] : 0;
+  const out = [], nameRows = [], priceRows = [], letters = t => (t.match(/[A-Za-zÄÖÜäöüß]/g) || []).length;
+  for (const parts of read) { const pr = parts.filter(x => isPrice(x.t)).pop(), nm = parts.filter(x => x !== pr && wordy(x.t) && x.x0 < margin + W * 0.12).map(x => x.t).join(" ");
+    const real = letters(nm) >= 5;
+    if (pr && real) { out.push(nm + "  " + pr.t); continue; }
+    if (real) { out.push(nm); nameRows.push({i: out.length - 1, y: parts.y}); continue; }
+    if (pr) { priceRows.push({y: parts.y, t: pr.t}); continue; }
+    out.push(parts.map(x => x.t).join("  ")); }
+  // Preise ohne Namen: in Reihenfolge dem nächstgelegenen freien Namen zuordnen (nie zurück, höchstens 4 Zeichenhöhen entfernt)
+  let last = -1; for (const pr of priceRows) { let best = -1, bd = hm * 4;
+    for (let j = last + 1; j < nameRows.length && j <= last + 4; j++) { const dy = Math.abs(nameRows[j].y - pr.y); if (dy < bd) { bd = dy; best = j; } }
+    if (best >= 0) { out[nameRows[best].i] += "  " + pr.t; last = best; } }
+  return out.join("\n");
 }
 // Foto für die Texterkennung aufbereiten: Drehung laut Kamera, Bon vom Hintergrund ausschneiden, gerade drehen,
 // ungleichmäßiges Licht ausgleichen und auf eine gut lesbare Schriftgröße bringen
@@ -4481,7 +4547,7 @@ const otsu = (g, from = 0, to = g.length) => { const h = new Array(256).fill(0);
   let sB = 0, wB = 0, best = 0, t = 127; for (let i = 0; i < 256; i++) { wB += h[i]; if (!wB) continue; const wF = n - wB; if (!wF) break; sB += i * h[i]; const mB = sB / wB, mF = (sum - sB) / wF, v = wB * wF * (mB - mF) ** 2; if (v > best) { best = v; t = i; } } return t; };
 function grayOf(cv){ const d = cv.getContext("2d", {willReadFrequently: true}).getImageData(0, 0, cv.width, cv.height).data, g = new Uint8ClampedArray(cv.width * cv.height); for (let i = 0; i < g.length; i++) g[i] = (d[4 * i] * 0.3 + d[4 * i + 1] * 0.59 + d[4 * i + 2] * 0.11); return g; }
 const mkCanvas = (w, h) => { const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; };
-async function rcPrep(file){
+async function rcPrep(file, opt = {}){
   const bmp = await createImageBitmap(file, {imageOrientation: "from-image"}), W = bmp.width, H = bmp.height;
   // 1) Übersicht (max. 900 px): Papier = helle Fläche, Ränder über Zeilen-/Spaltenanteile
   const S = Math.min(1, 900 / Math.max(W, H)), sw = Math.round(W * S), sh = Math.round(H * S), c1 = mkCanvas(sw, sh); c1.getContext("2d").drawImage(bmp, 0, 0, sw, sh);
@@ -4502,7 +4568,7 @@ async function rcPrep(file){
   const R = 7, mean = (x, y) => { const a0 = Math.max(0, x - R), b0 = Math.max(0, y - R), a1 = Math.min(sw, x + R + 1), b1 = Math.min(sh, y + R + 1); return (I[b1 * (sw + 1) + a1] - I[b0 * (sw + 1) + a1] - I[b1 * (sw + 1) + a0] + I[b0 * (sw + 1) + a0]) / ((a1 - a0) * (b1 - b0)); };
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (g[y * sw + x] < mean(x, y) * 0.86 && rL[y] >= 0 && x > rL[y] + m8 && x < rR[y] - m8 && cT[x] >= 0 && y > cT[x] + m8 && y < cB[x] - m8) pts.push(x, y);
   let ang = 0;
-  if (pts.length > 200) { const step = Math.max(1, Math.floor(pts.length / 2 / 15000)) * 2; let best = -1;
+  if (pts.length > 200 && !opt.noDeskew) { const step = Math.max(1, Math.floor(pts.length / 2 / 15000)) * 2; let best = -1;
     for (let a = -12; a <= 12; a += 0.25) { const r = a * Math.PI / 180, sn = Math.sin(r), cs = Math.cos(r), hist = new Map();
       for (let i = 0; i < pts.length; i += step) { const yy = Math.round(-pts[i] * sn + pts[i + 1] * cs); hist.set(yy, (hist.get(yy) || 0) + 1); }
       let sc = 0; for (const v of hist.values()) sc += v * v; if (sc > best) { best = sc; ang = a; } } }
@@ -5529,7 +5595,7 @@ async function onChange(e){
     saveFood({times: Object.assign({}, FOOD().times, {[k]: v})}); toast(`${mealPlan.slots.find(x => x.k === k)?.label || "Essen"}: ${v} Uhr`); return; }
   if (t.id === "fkcal" || t.id === "fprot") { const v = num(t.value); if (v) saveFood({[t.id === "fkcal" ? "kcal" : "protein"]: v}); return; }
   if (t.id === "rcFile" && t.files?.[0]) { const f = t.files[0]; rcpt = {status: "Lese Bon …"}; renderSheet(); await ensureNW().catch(() => {});
-    const run = rcpt; receiptText(f).then(txt => { if (rcpt !== run) return; const r = parseReceipt(txt); rcpt = r.items.length ? r : {status: "Keine Positionen erkannt. Besser ausgeleuchtetes, gerades Foto oder den eBon als PDF versuchen."}; }, e => { if (rcpt === run) rcpt = {status: "Fehler: " + e.message}; }).then(() => { if (sheet.open && sheetKind === "receipt") renderSheet(); }); return; }
+    const run = rcpt; ensureNW().catch(() => {}).then(() => receiptText(f)).then(txt => { if (rcpt !== run) return; const r = parseReceipt(txt); rcpt = r.items.length ? r : {status: "Keine Positionen erkannt. Besser ausgeleuchtetes, gerades Foto oder den eBon als PDF versuchen."}; }, e => { if (rcpt === run) rcpt = {status: "Fehler: " + e.message}; }).then(() => { if (sheet.open && sheetKind === "receipt") renderSheet(); }); return; }
   if (t.id === "rcStore") { rcpt.store = t.value; renderSheet(); return; }
   if (t.dataset.rckeep) { rcpt.items[t.dataset.rckeep].keep = t.checked; renderSheet(); return; }
   if (t.dataset.rcuse) { rcpt.items[t.dataset.rcuse].use = t.checked; renderSheet(); return; }
