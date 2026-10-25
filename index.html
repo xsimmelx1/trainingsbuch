@@ -1666,6 +1666,9 @@ const NUMW = {ein: 1, eine: 1, einen: 1, einer: 1, eins: 1, zwei: 2, drei: 3, vi
 function nwFind(name){ const n = " " + nwNorm(name) + " ", stem = w => w.replace(/(en|n|e|s)$/, ""), ns = " " + n.trim().split(" ").map(stem).join(" ") + " ";
   let best = null; for (const x of NW) for (const k of x.keys) if (n.includes(" " + k + " ") || ns.includes(" " + k.split(" ").map(stem).join(" ") + " ") || (k.length > 5 && n.includes(k))) { if (!best || k.length > best.len) best = {x, len: k.length}; }
   return best?.x || null; }
+// Getränke (ml in naehrwerte.json) in ml statt g; Portion „Glas (0,2 l)“ braucht keinen Zusatz
+const nwIsMl = n => !!(NW || []).find(e => e.n === n)?.ml;
+const nwPortion = x => x.ml && /\d\s*m?l\)/.test(x.u) ? `1 ${x.u}` : `1 ${x.u} ≈ ${x.g} ${x.ml ? "ml" : "g"}`;
 function nwItem(p){
   let q = 1, unit = "", rest = p.trim();
   const m = rest.match(/^(\d+(?:[.,]\d+)?|½|[a-zäöü]+)\s*(g|gramm|kg|ml|l|liter|stück|stk\.?|scheiben?|portionen?|teller|tassen?|becher|gläser|glas|el|tl|handvoll|kugeln?|riegel|schalen?|dosen?|flaschen?)?(?:\s+|$)(.*)$/i);
@@ -1677,7 +1680,7 @@ function nwItem(p){
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
   const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
   if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
-  if (mine?.mynw || (mine && /^(g|gramm|kg|ml|l|liter)$/.test(unit))) { const src = mine.mynw || nwFind(mine.al?.[0] || mine.name); if (src) { const gr = unit === "kg" || unit === "l" || unit === "liter" ? q * 1000 : q; return {text: p, ok: true, name: mine.name, g: Math.round(gr), kcal: Math.round(src.k * gr / 100), protein: Math.round(src.p * gr / 10) / 10}; } }
+  if (mine?.mynw || (mine && /^(g|gramm|kg|ml|l|liter)$/.test(unit))) { const src = mine.mynw || nwFind(mine.al?.[0] || mine.name); if (src) { const gr = unit === "kg" || unit === "l" || unit === "liter" ? q * 1000 : q; return {text: p, ok: true, name: mine.name, g: Math.round(gr), ml: nwIsMl(src.n), kcal: Math.round(src.k * gr / 100), protein: Math.round(src.p * gr / 10) / 10}; } }
   const wUnit = /^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit), x0 = NW ? nwFind(rest || p) : null, exact = !!x0 && x0.keys.includes(nwNorm(rest || p));
   let r = !wUnit && !exact ? recipes?.find(r => nwNorm(rest).length > 6 && nwNorm(r.name).startsWith(nwNorm(rest))) : null;
   const x = r ? null : x0;
@@ -1686,7 +1689,7 @@ function nwItem(p){
   if (!x) return {text: p, ok: false};
   // eine Flasche Wein/Sekt sind 0,75 l, nicht ein Glas
   const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : /^flaschen?$/.test(unit) && /wein|sekt/i.test(x.n) && x.n !== "Weinschorle" ? q * 750 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
-  return {text: p, ok: true, name: x.n, g: Math.round(g), kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
+  return {text: p, ok: true, name: x.n, g: Math.round(g), ml: !!x.ml, kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
 }
 function nwParse(text){
   const out = [];
@@ -1703,7 +1706,7 @@ function nwStep(text, d){ const m = text.match(/^\s*(\d+(?:[.,]\d+)?|½|halbe?|e
   const q = d > 0 ? (v < 1 ? 1 : v + 1) : (v <= 1 ? 0.5 : v - 1); return `${q === 0.5 ? "½" : fmtQ(q)} ${rest}`; }
 function nwHtml(items){
   const ok = items.filter(i => i.ok), sk = ok.reduce((a, i) => a + i.kcal, 0), sp = ok.reduce((a, i) => a + i.protein, 0); nwLast = items;
-  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map((i, ix) => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} g</span>` : ""}</span><span class="nwq"><button type="button" class="btn small ghost" data-nwq="${ix}|-1" aria-label="Weniger">−</button><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span><button type="button" class="btn small ghost" data-nwq="${ix}|1" aria-label="Mehr">＋</button></span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
+  return `<div class="nwest"><div class="lab">Geschätzt</div>${items.map((i, ix) => i.ok ? `<div class="nwrow"><span>${esc(i.name)}${i.g ? ` <span class="muted">· ${i.g} ${i.ml ? "ml" : "g"}</span>` : ""}</span><span class="nwq"><button type="button" class="btn small ghost" data-nwq="${ix}|-1" aria-label="Weniger">−</button><span>${i.kcal} kcal · ${Math.round(i.protein)} g P</span><button type="button" class="btn small ghost" data-nwq="${ix}|1" aria-label="Mehr">＋</button></span></div>` : `<div class="nwrow miss"><span>„${esc(i.text)}“</span><span class="muted">unbekannt – Werte selbst ergänzen</span></div>`).join("")}
     <div class="nwrow sum"><b>Summe</b><b>${sk} kcal · ${Math.round(sp)} g P</b></div><div class="small muted">Richtwerte – Zahlen unten bei Bedarf anpassen.</div></div>`;
 }
 
@@ -2362,7 +2365,7 @@ function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = 
     <div class="field"><label for="myName">Name</label><input type="text" id="myName" data-myname="${esc(pr.key)}" value="${esc(pr.name)}" autocomplete="off" enterkeyhint="done"></div>
     <div class="field"><label for="myGrp">Gruppe</label><select id="myGrp" data-mygrp="${esc(pr.key)}">${SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze").map(g => `<option ${g === pr.group ? "selected" : ""}>${esc(g)}</option>`).join("")}</select></div>
     <div class="field"><label for="myNw">Nährwerte wie</label><input type="text" id="myNw" data-mynw="${esc(pr.key)}" value="${esc(x?.n || "")}" placeholder="z. B. Mozzarella, Toastbrot" autocomplete="off" enterkeyhint="done"></div>
-    <div class="small muted">${x ? `${Math.round(x.k)} kcal · ${x.p} g Protein je 100 g${b ? ` · 1 ${b.u} ≈ ${b.g} g` : ""} – gilt beim Nachtragen.` : "Ohne Nährwerte: beim Nachtragen ergänzt du die Werte selbst."}</div>
+    <div class="small muted">${x ? `${Math.round(x.k)} kcal · ${x.p} g Protein je 100 g${b ? ` · ${nwPortion(b)}` : ""} – gilt beim Nachtragen.` : "Ohne Nährwerte: beim Nachtragen ergänzt du die Werte selbst."}</div>
     <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span></span></div><div class="ir sel"><span>${STORES[pr.store] || "–"} <span class="tag">${pr.priceEst ? "geschätzt" : pr.ean ? "gescannt" : "vom Bon"}</span></span><span class="num">${pr.price != null ? eur(pr.price) + (pr.priceEst ? "*" : "") : "–"}</span><span></span></div></div>
     ${pr.priceEst ? `<div class="small muted">* Geschätzt aus ${pr.size ? `${fmtQ(pr.size)} g` : "250 g (Packung unbekannt)"} und dem üblichen Preis vergleichbarer Produkte der Rubrik. Eigenen Preis per Barcode-Scan oder Kassenbon eintragen.</div>` : ""}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${pr.id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
@@ -3970,8 +3973,8 @@ function snackPicks(){ const c = new Map(), are = avoidRe();
   return mine; }
 function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="sh"><h2>Essen eintragen · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
-    <div class="mhead snackamt"><span class="lab">Wie viel?</span><div class="chips sm">${[[0.5, "½"], [1, "1"], [2, "2"], [3, "3"]].map(([v, l]) => `<button type="button" data-snackmul="${v}" aria-pressed="${snackMul === v && !snackG}">${l}×</button>`).join("")}<input type="text" id="snackG" inputmode="decimal" value="${esc(snackG)}" placeholder="g" aria-label="oder Gramm"></div></div>
-    <div class="lab">Antippen = sofort eingetragen${snackG ? ` · ${esc(snackG)} g` : snackMul !== 1 ? ` · ${snackMul === 0.5 ? "½" : snackMul}×` : ""}</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
+    <div class="mhead snackamt"><span class="lab">Wie viel?</span><div class="chips sm">${[[0.5, "½"], [1, "1"], [2, "2"], [3, "3"]].map(([v, l]) => `<button type="button" data-snackmul="${v}" aria-pressed="${snackMul === v && !snackG}">${l}×</button>`).join("")}<input type="text" id="snackG" inputmode="decimal" value="${esc(snackG)}" placeholder="g / ml" aria-label="oder Gramm bzw. Milliliter"></div></div>
+    <div class="lab">Antippen = sofort eingetragen${snackG ? ` · ${esc(snackG)} g/ml` : snackMul !== 1 ? ` · ${snackMul === 0.5 ? "½" : snackMul}×` : ""}</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
     <div class="card ownf"><div class="field"><label for="ownText">Oder eintippen</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, Cola, 30 g Mandeln" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
     <div id="ownEst" class="small muted">Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
     <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>
@@ -3985,7 +3988,7 @@ async function snackSave(d, tx, amt, known){ await Promise.all([NW ? null : ensu
   let byG = !!amt.g; if (amt.g && !items.every(i => i.ok && i.g)) { items = NW ? nwParse(tx) : []; f = 1; byG = false; }
   if (known && !byG) items = [{ok: true, name: tx, kcal: known.kcal || 0, protein: known.protein || 0}];
   const ok = items.filter(i => i.ok), nm0 = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 110);
-  const name = byG ? `${nm0}, ${fmtQ(amt.g)} g` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
+  const name = byG ? `${nm0}, ${fmtQ(amt.g)} ${items.every(i => i.ml) ? "ml" : "g"}` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
   const kcal = ok.length ? Math.round(ok.reduce((a, i) => a + i.kcal, 0) * f) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0) * f) : null;
   const id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
   editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
@@ -3998,18 +4001,19 @@ function ownHistory(){ const m = new Map();
 // Eigene Lebensmittel: vom Kassenbon (mit Nährwerten, falls zugeordnet) und Produkte mit eigenem Namen
 function myFoodList(){ const out = [], nwBase = n => (NW || []).find(y => y.n === n);
   for (const mp of Object.values(FOOD().myProds || {})) { const b = mp.nw && nwBase(mp.nw.n), g = mp.portion || b?.g || 100;
-    out.push({name: mp.name, kcal: mp.nw ? Math.round(mp.nw.k * g / 100) : 0, protein: mp.nw ? Math.round(mp.nw.p * g / 10) / 10 : 0, src: `${mp.ean ? "📷 Gescannt" : "🧾 Vom Bon"}${mp.nw ? (mp.ean ? ` · 1 Portion = ${g} g` : ` · 1 ${b?.u || "Portion"} ≈ ${g} g wie ${mp.nw.n}`) : " · ohne Werte"}`, mynw: mp.nw || null}); }
+    out.push({name: mp.name, kcal: mp.nw ? Math.round(mp.nw.k * g / 100) : 0, protein: mp.nw ? Math.round(mp.nw.p * g / 10) / 10 : 0, src: `${mp.ean ? "📷 Gescannt" : "🧾 Vom Bon"}${mp.nw ? (mp.ean ? ` · 1 Portion = ${g} g` : ` · 1 ${b?.u || "Portion"} ≈ ${g} ${b?.ml ? "ml" : "g"} wie ${mp.nw.n}`) : " · ohne Werte"}`, mynw: mp.nw || null}); }
   for (const [id, nk] of Object.entries(FOOD().nick || {})) { const pr = prodById(id); if (!pr) continue; const x = NW ? nwFind(prodLabel0(pr)) : null;
-    out.push({name: nk, al: [prodLabel0(pr)], kcal: x ? Math.round(x.k * x.g / 100) : 0, protein: x ? Math.round(x.p * x.g / 10) / 10 : 0, src: `Dein Name für ${prodLabel0(pr)}${x ? ` · 1 ${x.u} ≈ ${x.g} g` : ""}`}); }
+    out.push({name: nk, al: [prodLabel0(pr)], kcal: x ? Math.round(x.k * x.g / 100) : 0, protein: x ? Math.round(x.p * x.g / 10) / 10 : 0, src: `Dein Name für ${prodLabel0(pr)}${x ? ` · ${nwPortion(x)}` : ""}`}); }
   return out; }
 function ownSuggest(q){ q = fold(q.trim()); if (q.length < 2) return [];
-  // Treffer je Quelle: exakte vor tippfehlertoleranten, dann die mit passendem Anfang
-  const pick = (arr, names) => arr.map(x => ({x, sc: Math.max(...names(x).map(n => sugScore(n, q)))})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || fold(b.x.name).startsWith(q) - fold(a.x.name).startsWith(q)).map(o => o.x);
-  const hist = pick(ownHistory(), x => [x.name]);
-  const rec = pick((recipes || []).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})), x => [x.name]);
-  const nw = pick((NW || []).map(x => ({name: x.n, al: x.a, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: `1 ${x.u} ≈ ${x.g} g`})), x => [x.name, ...x.al]);
-  const mine = pick(myFoodList(), x => [x.name, ...(x.al || [])]);
-  const seen = new Set(); return [...hist, ...mine, ...rec, ...nw].filter(x => !seen.has(fold(x.name)) && seen.add(fold(x.name))).slice(0, 7); }
+  // Alle Quellen gemeinsam sortieren: exakte vor tippfehlertoleranten, passender Anfang (Name oder Alias) vor Wortmitte; bei Gleichstand frühere Einträge, eigene Produkte, Lebensmittel, Rezepte
+  const pick = (arr, names, src) => arr.map(x => { const ns = names(x).map(fold); return {x, src, sc: Math.max(...ns.map(n => sugScore(n, q))), pre: ns.some(n => n.startsWith(q)) ? 1 : 0}; }).filter(o => o.sc);
+  const all = [...pick(ownHistory(), x => [x.name], 0),
+    ...pick(myFoodList(), x => [x.name, ...(x.al || [])], 1),
+    ...pick((recipes || []).map(r => ({name: r.name, kcal: r.kcal, protein: r.protein, src: "Rezept, 1 Portion"})), x => [x.name], 3),
+    ...pick((NW || []).map(x => ({name: x.n, al: x.a, kcal: Math.round(x.k * x.g / 100), protein: Math.round(x.p * x.g / 10) / 10, src: nwPortion(x)})), x => [x.name, ...x.al], 2)]
+    .sort((a, b) => b.sc - a.sc || b.pre - a.pre || a.src - b.src).map(o => o.x);
+  const seen = new Set(), key = x => fold(x.name).replace(/[^a-z0-9ß]+$/, ""); return all.filter(x => !seen.has(key(x)) && seen.add(key(x))).slice(0, 7); }
 const ownSugHtml = list => list.map((x, i) => `<button type="button" class="sugi" data-ownsug="${i}"><span>${esc(x.name)}</span><span class="small muted">${esc(x.src)}${x.kcal || x.protein ? ` · <span class="nutri">${x.kcal || 0} kcal · ${fmtQ(x.protein || 0)} g P</span>` : ""}</span></button>`).join("");
 // Zutaten: Vorschläge für das gerade getippte Lebensmittel (nach dem letzten Komma), Mengenangabe davor bleibt
 let ownIngSug = [];
@@ -5225,7 +5229,7 @@ function onInput(e){
   if (t.id === "srQ") { srQ = t.value; renderSheetPart(["#srList"]); return; }
   if (t.id === "mealQ") { mealQ = t.value; renderSheetPart(["#mealRes"]); const alt = sheet.querySelector("#mealAlt"); if (alt) alt.hidden = mealQ.trim().length >= 2; return; }
   if (t.dataset.ftime && t.value) { saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
-  if (t.id === "snackG") { snackG = t.value.trim(); const l = sheet.querySelector(".snackamt + .lab"); if (l) l.textContent = "Antippen = sofort eingetragen" + (snackG ? ` · ${snackG} g` : snackMul !== 1 ? ` · ${snackMul}×` : ""); sheet.querySelectorAll("[data-snackmul]").forEach(b => b.setAttribute("aria-pressed", !snackG && Number(b.dataset.snackmul) === snackMul)); return; }
+  if (t.id === "snackG") { snackG = t.value.trim(); const l = sheet.querySelector(".snackamt + .lab"); if (l) l.textContent = "Antippen = sofort eingetragen" + (snackG ? ` · ${snackG} g/ml` : snackMul !== 1 ? ` · ${snackMul}×` : ""); sheet.querySelectorAll("[data-snackmul]").forEach(b => b.setAttribute("aria-pressed", !snackG && Number(b.dataset.snackmul) === snackMul)); return; }
   if (t.id === "nickQ") { nickQ = t.value; const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }

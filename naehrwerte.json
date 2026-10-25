@@ -946,7 +946,8 @@
 "k": 64,
 "p": 3.4,
 "g": 250,
-"u": "Glas"
+"u": "Glas",
+"ml": true
 },
 {
 "n": "Sojadrink",
@@ -956,7 +957,8 @@
 "k": 40,
 "p": 3.4,
 "g": 250,
-"u": "Glas"
+"u": "Glas",
+"ml": true
 },
 {
 "n": "Haferdrink",
@@ -966,7 +968,8 @@
 "k": 45,
 "p": 0.6,
 "g": 250,
-"u": "Glas"
+"u": "Glas",
+"ml": true
 },
 {
 "n": "Joghurt",
@@ -1059,7 +1062,8 @@
 "k": 80,
 "p": 3.5,
 "g": 250,
-"u": "Becher"
+"u": "Becher",
+"ml": true
 },
 {
 "n": "Milchkaffee",
@@ -1071,7 +1075,8 @@
 "k": 50,
 "p": 2.5,
 "g": 250,
-"u": "Tasse"
+"u": "Tasse",
+"ml": true
 },
 {
 "n": "Proteinshake",
@@ -1082,7 +1087,8 @@
 "k": 60,
 "p": 10,
 "g": 330,
-"u": "Flasche"
+"u": "Flasche",
+"ml": true
 },
 {
 "n": "Proteinriegel",
@@ -1941,7 +1947,8 @@
 "k": 45,
 "p": 0.5,
 "g": 250,
-"u": "Glas"
+"u": "Glas",
+"ml": true
 },
 {
 "n": "Cola",
@@ -1955,7 +1962,8 @@
 "k": 42,
 "p": 0,
 "g": 330,
-"u": "Dose/Glas"
+"u": "Dose/Glas",
+"ml": true
 },
 {
 "n": "Bier",
@@ -1966,7 +1974,8 @@
 "k": 43,
 "p": 0.5,
 "g": 500,
-"u": "Flasche"
+"u": "Flasche",
+"ml": true
 },
 {
 "n": "Wein",
@@ -1976,7 +1985,8 @@
 "k": 75,
 "p": 0,
 "g": 200,
-"u": "Glas (0,2 l)"
+"u": "Glas (0,2 l)",
+"ml": true
 },
 {
 "n": "Weißwein",
@@ -1999,7 +2009,8 @@
 "k": 72,
 "p": 0.1,
 "g": 200,
-"u": "Glas (0,2 l)"
+"u": "Glas (0,2 l)",
+"ml": true
 },
 {
 "n": "Rotwein",
@@ -2026,7 +2037,8 @@
 "k": 80,
 "p": 0.1,
 "g": 200,
-"u": "Glas (0,2 l)"
+"u": "Glas (0,2 l)",
+"ml": true
 },
 {
 "n": "Roséwein",
@@ -2040,7 +2052,8 @@
 "k": 72,
 "p": 0.1,
 "g": 200,
-"u": "Glas (0,2 l)"
+"u": "Glas (0,2 l)",
+"ml": true
 },
 {
 "n": "Wein lieblich",
@@ -2057,7 +2070,8 @@
 "k": 88,
 "p": 0.1,
 "g": 200,
-"u": "Glas (0,2 l)"
+"u": "Glas (0,2 l)",
+"ml": true
 },
 {
 "n": "Sekt",
@@ -2072,7 +2086,8 @@
 "k": 80,
 "p": 0.1,
 "g": 100,
-"u": "Glas (0,1 l)"
+"u": "Glas (0,1 l)",
+"ml": true
 },
 {
 "n": "Weinschorle",
@@ -2085,7 +2100,8 @@
 "k": 38,
 "p": 0,
 "g": 250,
-"u": "Glas (0,25 l)"
+"u": "Glas (0,25 l)",
+"ml": true
 },
 {
 "n": "Smoothie",
@@ -2093,7 +2109,8 @@
 "k": 55,
 "p": 0.7,
 "g": 250,
-"u": "Flasche"
+"u": "Flasche",
+"ml": true
 },
 {
 "n": "Kaffee",
@@ -2105,7 +2122,8 @@
 "k": 2,
 "p": 0.2,
 "g": 200,
-"u": "Tasse"
+"u": "Tasse",
+"ml": true
 },
 {
 "n": "Energy Drink",
@@ -2116,7 +2134,8 @@
 "k": 45,
 "p": 0,
 "g": 250,
-"u": "Dose"
+"u": "Dose",
+"ml": true
 },
 {
 "n": "Öl",
