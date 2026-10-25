@@ -4017,7 +4017,16 @@ function mealsFor(d){
   return out.sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
 }
 function mealTotals(ms){ const t = {kcal:0, protein:0, eKcal:0, eProtein:0}; for (const m of ms) { t.kcal += m.info.kcal; t.protein += m.info.protein; if (m.ate) { t.eKcal += m.info.kcal; t.eProtein += m.info.protein; } } return t; }
-function editDay(d, fn){
+// Rückgängig auf der Essen-Seite: merkt sich vor jeder Änderung Plan, gegessen, Reste und Portion des Tages (bis 30 Schritte)
+const UNDO_KEYS = ["meals", "ate", "rest", "por"]; let foodUndo = [], undoing = false;
+const foodSnap = d => { const day = cur && cur.date === d ? cur : store.days[d] || {}; return JSON.stringify(UNDO_KEYS.map(k => day[k] || {})); };
+function editDay(d, fn){ const b = !undoing && tab === "essen" ? foodSnap(d) : null; editDayRaw(d, fn);
+  if (b && foodSnap(d) !== b) { foodUndo.push({d, prev: JSON.parse(b)}); if (foodUndo.length > 30) foodUndo.shift(); } }
+function undoFood(){ const u = foodUndo.pop(); if (!u) return; undoing = true;
+  try { editDay(u.d, day => UNDO_KEYS.forEach((k, i) => { const p = u.prev[i], c = day[k] || {}, o = Object.assign({}, c);
+    for (const x of new Set([...Object.keys(c), ...Object.keys(p)])) o[x] = x in p ? p[x] : (k === "ate" ? false : null); day[k] = o; })); } finally { undoing = false; }
+  render(); toast(`Zurückgenommen${u.d !== selDate ? ` (${fmt(u.d)})` : ""}${foodUndo.length ? ` · noch ${foodUndo.length} Schritt${foodUndo.length > 1 ? "e" : ""}` : ""}`); }
+function editDayRaw(d, fn){
   if (cur && cur.date === d) { fn(cur); touch(); return; }
   const base = store.days[d] || {}, patch = {date: d, meals: Object.assign({}, base.meals), ate: Object.assign({}, base.ate)}; if (base.rest) patch.rest = Object.assign({}, base.rest); if (base.por) patch.por = Object.assign({}, base.por);
   if (base.own) patch.own = base.own.map(o => Object.assign({}, o)); if (base.ownDel) patch.ownDel = [...base.ownDel];
@@ -4959,7 +4968,7 @@ function diaryRow(d, m){
 }
 
 function essenHtml(b){
-  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
+  let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><span class="actions"><button type="button" class="btn ghost small" data-act="foodUndo" ${foodUndo.length ? "" : "disabled"} aria-label="Letzte Änderung zurücknehmen">↶ Rückgängig</button><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></span></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}" ${k === "einst" ? `aria-label="Einstellungen Essen"` : ""}>${l}</button>`).join("")}</div>`;
   if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (!mealPlan || !recipes) { b.innerHTML = h + `<p class="muted">Lade Ernährungsplan …</p>`; ensureMeals().then(() => { if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = h + `<p>Plan konnte nicht geladen werden.</p>`; }); return; }
   if (essenView === "einkauf") { b.innerHTML = h + shopHtml(); return; }
@@ -5295,6 +5304,7 @@ async function onClick(e){
   const ac = t.closest("[data-act]");
   if (ac) { const a = ac.dataset.act, v = ac.dataset.v;
     if (a === "closeSheet") { closeSheet(); return; }
+    if (a === "foodUndo") { undoFood(); return; }
     if (a === "cardioSave") { const min = num(sheet.querySelector("#caMin")?.value), km = num(sheet.querySelector("#caKm")?.value), note = sheet.querySelector("#caNote")?.value.trim() || "";
       if (!(min > 0)) { toast("Bitte die Dauer in Minuten eintragen"); sheet.querySelector("#caMin")?.focus(); return; }
       const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min, km: km > 0 && KM_TYPES.has(cardioType) ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min, at: Date.now()}; };
