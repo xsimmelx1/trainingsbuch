@@ -327,6 +327,7 @@ details.slim > summary::-webkit-details-marker{display:none}
 details.slim > summary span:last-child{font-weight:400;font-size:13px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 details.slim > .card{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
 .subhead{margin:4px 0 10px}
+.planrec{display:flex;flex-direction:column;gap:4px;margin:6px 0}
 [data-act=foodUndo],[data-act=foodRedo]{font-size:22px;line-height:1;min-width:44px;min-height:40px;padding:0 6px}
 .subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
 h2.ptitle{margin:6px 0 10px}
@@ -1780,7 +1781,11 @@ function micToggle(btn){
 }
 function nwParse(text){
   const out = [], at = (it, sg) => Object.assign(it, {at: sg.at, len: sg.t.length});
-  for (const sg of nwSegs(text, /(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/gi)) {
+  // „Langosch mit Käse und Knoblauch“ ist ein Gericht: über „und“ getrennte Teile wieder verbinden, wenn sie zusammen genau ein bekannter Name sind
+  const segs = nwSegs(text, /(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/gi), exact = t => (NW || []).some(x => x.keys.includes(nwNorm(t)));
+  for (let i = 0; i < segs.length - 1; i++) { const j = text.slice(segs[i].at, segs[i + 1].at + segs[i + 1].t.length).trim();
+    if (/^[^,;+\n]*$/.test(j) && exact(j.replace(/^\s*(\d+|eine?n?)\s+/i, ""))) { segs.splice(i, 2, {t: j, at: segs[i].at}); i--; } }
+  for (const sg of segs) {
     const it = nwItem(sg.t); if (!/\bmit\b/i.test(sg.t) || (it.ok && /\bmit\b/i.test(it.name))) { out.push(at(it, sg)); continue; }  // „Brot mit Frischkäse“ = zwei Posten, „Curry mit Reis“ = ein Gericht
     for (const sp of nwSegs(sg.t, /\bmit\b/gi, sg.at)) out.push(at(nwItem(sp.t), sp)); }
   return out;
@@ -3547,6 +3552,7 @@ function journeySheet(kind, arg){
           return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${STORES[st]}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
       </div>
       ${avoidHit(r) ? `<div class="pill warn">${avoidHit(r)[0] === "§" ? `Braucht ${esc(DEV_NEED[avoidHit(r)])} – fehlt in deiner Küche` : `Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)`}</div>` : ""}
+      ${!ctxM && !(swapCand && swapCand.name === r.name) ? planRecHtml(r) : ""}
       <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div>${cookAhead(r).length ? `<div class="aheadbox"><b>Vorher erledigen</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
@@ -3555,6 +3561,10 @@ function journeySheet(kind, arg){
   }
   return null;
 }
+// Rezept in den Plan legen: ersetzt die geplante Mahlzeit des Tages (Rückgängig über die Meldung)
+const PLAN_SLOT = {fruehstueck: ["fr"], mittag: ["mi", "ab"], abend: ["ab", "mi"], snack: ["sn"], shake: ["sn"]};
+function planRecHtml(r){ const ks = PLAN_SLOT[r.category] || ["mi", "ab"], t = todayIso(), days = [[t, "Heute"], [addDays(t, 1), "Morgen"]];
+  return `<div class="planrec"><span class="small muted">📅 Einplanen:</span><div class="chips">${days.flatMap(([d, l]) => ks.map(k => `<button type="button" data-planrec="${d}|${k}" data-v="${esc(r.name)}">${l} ${esc(MEAL_SHORT[k])}</button>`)).join("")}</div></div>`; }
 let sheetQuiz = null;
 let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
@@ -3564,7 +3574,9 @@ function shopRecList(){
   const G = [["📅 Diese Woche im Plan", wr.map(recipeByName).filter(Boolean)], ["★ Favoriten", recipes.filter(r => isFav(r.name) && !wr.includes(r.name)).sort(byName)], ["Alle Rezepte", recipes.filter(r => !wr.includes(r.name) && !isFav(r.name)).sort(byName)]];
   let h = ""; for (const [g, a] of G) { const v = a.filter(hit); if (v.length) h += `<div class="lab sec">${g} (${v.length})</div><div class="lrows">${v.map(row).join("")}</div>`; }
   return h || `<p class="muted">Kein Gericht gefunden.</p>`; }
-function recipesFiltered(){ const are = avoidRe(); return recipes.filter(r => recipeOk(r, are) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein); }
+// „Kochen mit …“: Rezepte, die eine Zutat enthalten (über das Suchmuster des Produkts)
+const usesProd = (r, pr) => !!pr && r.ingredients.some(l => pr.re.test(l));
+function recipesFiltered(){ const are = avoidRe(), ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null; return recipes.filter(r => recipeOk(r, are) && (!recFilter.ing || usesProd(r, ingP)) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein); }
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null;
 const scaleLine = (l, f) => f === 1 ? l : l.replace(/^(\d+(?:[.,]\d+)?|½|\d+\/\d+)/, m0 => { const v = m0 === "½" ? .5 : m0.includes("/") ? m0.split("/").reduce((a, b) => a / b) : Number(m0.replace(",", ".")); const y = v * f, x = y >= 10 ? Math.round(y) : Math.max(0.5, Math.round(y * 2) / 2); return x.toLocaleString("de-DE"); });
@@ -3605,18 +3617,30 @@ function shelfHtml(){
     ["🔥 Warm & sättigend", ok.filter(r => main(r) && r.temp === "warm").sort((a, b) => recipeNutri(b).protein - recipeNutri(a).protein), {temp: "warm", cat: "haupt"}],
     ["🥣 Frühstück", ok.filter(r => r.category === "fruehstueck"), {cat: "fruehstueck"}],
     ["🥤 Snacks & Shakes", ok.filter(r => r.category === "snack" || r.category === "shake"), {cat: "snack"}]];
-  return `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><a class="btn" href="#t=zutaten">🥕 Alle Zutaten</a><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
+  return cookWithHtml() + `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><a class="btn" href="#t=zutaten">🥕 Alle Zutaten</a><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
     + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
+}
+const COOK_WITH = ["gnocchi", "kichererbsen", "tofu", "roteLinsen", "feta", "halloumi", "eier", "huettenkaese", "nudeln", "reis", "kartoffeln", "brokkoli", "spinat", "zucchini", "paprika", "sojagranulat", "raeuchertofu"];
+// Kurzname für die Zutat-Knöpfe: „Kichererbsen Dose“ → „Kichererbsen“, „Feta / Hirtenkäse“ → „Feta“
+const cwLabel = pr => prodLabel(pr).split(/\s*[\/,]\s*/)[0].replace(/\s+(Dose|getrocknet|natur|frisch|festkochend|rot|Freiland.*|\(.*)$/i, "").replace(/^Hartweizen/, "").replace(/^Langkorn- oder Basmati/, "").replace(/^Baby/, "").replace(/^(\w)/, c => c.toUpperCase());
+function cookWithHtml(){
+  if (!prices) { ensurePrices().then(() => { if (tab === "essen" && recShelves) renderRecipes(); }); return ""; }
+  const are = avoidRe(), ok = recipes.filter(r => recipeOk(r, are)), cnt = id => { const pr = prodById(id); return pr ? ok.filter(r => usesProd(r, pr)).length : 0; };
+  const home = [...STOCK()].filter(id => prodById(id) && cnt(id) > 0).slice(0, 10), more = COOK_WITH.filter(id => !home.includes(id) && cnt(id) > 0);
+  const chip = id => `<button type="button" data-cookwith="${id}">${home.includes(id) ? "🏠 " : ""}${esc(cwLabel(prodById(id)))} <span class="muted">${cnt(id)}</span></button>`;
+  return `<div class="card"><div class="lab">🥘 Kochen mit …</div><div class="small muted">Zutat antippen: Rezepte damit, direkt einplanen.${home.length ? " 🏠 = hast du zuhause." : ""}</div><div class="chips sm">${[...home, ...more].map(chip).join("")}</div>
+    <div class="small muted">Andere Zutat? Einfach unten ins Suchfeld tippen.</div></div>`;
 }
 const recGrid = list => `<div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${r.protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>`;
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
-  const filt = recFilter.q || recFilter.cat !== "alle" || recFilter.prep || recFilter.diff || recFilter.fast || recFilter.temp || recFilter.fav;
+  const filt = recFilter.q || recFilter.ing || recFilter.cat !== "alle" || recFilter.prep || recFilter.diff || recFilter.fast || recFilter.temp || recFilter.fav;
   if (recShelves && !filt) { b.innerHTML = shelfHtml(); return; }
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
   const list = recipesFiltered();
-  b.innerHTML = `<button class="btn ghost small" type="button" data-recshelves>‹ Übersicht</button><div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
+  const ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null;
+  b.innerHTML = `<button class="btn ghost small" type="button" data-recshelves>‹ Übersicht</button>${ingP ? `<div class="mhead"><b>🥘 Kochen mit ${esc(cwLabel(ingP))} · ${list.length} Rezept${list.length === 1 ? "" : "e"}</b><button type="button" class="btn ghost small" data-cookwith="" aria-label="Zutat-Filter entfernen">✕</button></div>${list.length ? "" : `<div class="empty small">Noch kein Rezept mit dieser Zutat.</div>`}` : ""}<div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
     <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
@@ -5140,7 +5164,7 @@ function essenHtml(b){
   b.innerHTML = h;
 }
 
-let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false};
+let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false, ing:""};
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
 // Mittag und Abend sind austauschbar; unterschieden wird warm/kalt
 // Hauptmahlzeiten heißen nach dem Gericht: warm oder kalt
@@ -5400,7 +5424,11 @@ async function onClick(e){
   const osc = t.closest("[data-ownscan]"); if (osc) { openSheet("ownfood", osc.dataset.ownscan); setTimeout(() => startScan("own"), 80); return; }
   const shf = t.closest("[data-shelf]"); if (shf) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: ""}, JSON.parse(shf.dataset.shelf)); recShelves = false; renderRecipes(); scrollTo(0, 0); return; }
   if (t.closest("[data-recall]")) { recShelves = false; renderRecipes(); return; }
-  if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: ""}); recShelves = true; renderRecipes(); return; }
+  const plr = t.closest("[data-planrec]"); if (plr) { const [d, k] = plr.dataset.planrec.split("|"), n = plr.dataset.v; let prev = null;
+    editDay(d, day => { prev = day.meals?.[k] ?? null; day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(d)[k] ? null : n}); slotReset(day, k); });
+    toast(`Eingeplant: ${d === todayIso() ? "heute" : "morgen"} ${MEAL_SHORT[k]}`, {label: "Rückgängig", fn: () => { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: prev}); }); render(); toast("Zurückgenommen"); }}); render(); return; }
+  const cwi = t.closest("[data-cookwith]"); if (cwi) { recFilter.ing = cwi.dataset.cookwith; recShelves = false; renderRecipes(); window.scrollTo(0, 0); return; }
+  if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: "", ing: ""}); recShelves = true; renderRecipes(); return; }
   const ck = t.closest("[data-cook]"); if (ck) { cook = null; openSheet("cook", ck.dataset.cook); requestWake(); return; }
   const ckg = t.closest("[data-cookgo]"); if (ckg) { cook.step = Number(ckg.dataset.cookgo); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }
   const cks = t.closest("[data-cookstep]"); if (cks) { cook.step = Math.max(-1, cook.step + Number(cks.dataset.cookstep)); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }

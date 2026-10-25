@@ -1710,9 +1710,8 @@
 "n": "Döner",
 "a": [
 "veggie döner",
-"falafel dürüm",
-"dürüm",
-"yufka"
+"gemüsedöner",
+"döner kebab"
 ],
 "k": 220,
 "p": 9,
@@ -2445,6 +2444,154 @@
 "k": 300,
 "p": 5,
 "g": 15,
+"u": "Stück"
+},
+{
+"n": "Halloumi-Döner",
+"a": [
+"döner halloumi",
+"halloumi döner"
+],
+"k": 210,
+"p": 9,
+"g": 400,
+"u": "Stück"
+},
+{
+"n": "Falafel-Döner",
+"a": [
+"döner falafel",
+"falafel döner",
+"falafel im brot"
+],
+"k": 225,
+"p": 7.5,
+"g": 430,
+"u": "Stück"
+},
+{
+"n": "Halloumi-Falafel-Döner",
+"a": [
+"falafel-halloumi-döner",
+"halloumi falafel döner",
+"falafel halloumi döner"
+],
+"k": 230,
+"p": 9,
+"g": 440,
+"u": "Stück"
+},
+{
+"n": "Dürüm",
+"a": [
+"dürüm döner",
+"yufka",
+"dürüm kebab",
+"durum"
+],
+"k": 220,
+"p": 9,
+"g": 400,
+"u": "Rolle"
+},
+{
+"n": "Halloumi-Dürüm",
+"a": [
+"dürüm halloumi",
+"halloumi dürüm",
+"halloumi yufka"
+],
+"k": 215,
+"p": 9,
+"g": 400,
+"u": "Rolle"
+},
+{
+"n": "Falafel-Dürüm",
+"a": [
+"dürüm falafel",
+"falafel dürüm",
+"falafel yufka",
+"falafel wrap"
+],
+"k": 225,
+"p": 7.5,
+"g": 420,
+"u": "Rolle"
+},
+{
+"n": "Halloumi-Falafel-Dürüm",
+"a": [
+"falafel-halloumi-dürüm",
+"halloumi falafel dürüm"
+],
+"k": 230,
+"p": 9,
+"g": 440,
+"u": "Rolle"
+},
+{
+"n": "Pommes mit Mayo",
+"a": [
+"pommes mayo",
+"pommes rot-weiß",
+"pommes rot weiß",
+"pommes schranke",
+"pommes spezial"
+],
+"k": 350,
+"p": 3,
+"g": 180,
+"u": "Portion"
+},
+{
+"n": "Pommes mit Ketchup",
+"a": [
+"pommes ketchup",
+"pommes rot"
+],
+"k": 265,
+"p": 3.5,
+"g": 180,
+"u": "Portion"
+},
+{
+"n": "Langos",
+"a": [
+"langosch",
+"lángos",
+"langos natur"
+],
+"k": 330,
+"p": 7,
+"g": 200,
+"u": "Stück"
+},
+{
+"n": "Langos mit Knoblauch",
+"a": [
+"langosch mit knoblauch",
+"langos knoblauch",
+"langosch knoblauch"
+],
+"k": 355,
+"p": 6.7,
+"g": 210,
+"u": "Stück"
+},
+{
+"n": "Langos mit Käse",
+"a": [
+"langosch mit käse",
+"langos käse",
+"langosch käse",
+"langos mit käse und knoblauch",
+"langosch mit käse und knoblauch",
+"langos mit schmand und käse"
+],
+"k": 345,
+"p": 9.5,
+"g": 320,
 "u": "Stück"
 }
 ]

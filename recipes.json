@@ -13733,5 +13733,310 @@
     }
    ]
   }
+ },
+ {
+  "name": "Blech-Gnocchi mit Kichererbsen, Paprika & Feta",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 762,
+  "protein": 38,
+  "carbs": 96,
+  "fat": 20,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 10,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": false,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Gnocchi (Kühlregal)",
+   "1 Dose Kichererbsen",
+   "2 Paprika",
+   "1 rote Zwiebel",
+   "1 EL Olivenöl",
+   "1 TL Paprikapulver",
+   "100 g Feta",
+   "200 g Skyr natur",
+   "1 Knoblauchzehe"
+  ],
+  "steps": [
+   "Ofen auf 220 °C (Umluft 200 °C) vorheizen.",
+   "Kichererbsen abspülen, Paprika und Zwiebel in Stücke schneiden.",
+   "Gnocchi, Kichererbsen, Gemüse mit Öl, Paprikapulver und Salz auf einem Blech mischen, 20 Min. rösten.",
+   "Feta darüberbröseln und 5 Min. weiterbacken.",
+   "Skyr mit gepresstem Knoblauch und Salz verrühren und dazu servieren."
+  ],
+  "plan": {
+   "steps": [
+    {
+     "do": "Ofen auf 220 °C (Umluft 200 °C) vorheizen.",
+     "meanwhile": "Kichererbsen abspülen, Paprika und Zwiebel in Stücke schneiden."
+    },
+    {
+     "do": "Gnocchi, Kichererbsen und Gemüse mit Öl, Paprikapulver und Salz auf dem Blech mischen und rösten.",
+     "min": 20,
+     "passive": true,
+     "meanwhile": "Skyr mit gepresstem Knoblauch und Salz verrühren."
+    },
+    {
+     "do": "Feta darüberbröseln und weiterbacken.",
+     "min": 5,
+     "passive": true
+    },
+    {
+     "do": "Mit dem Knoblauch-Skyr servieren."
+    }
+   ]
+  },
+  "source": null,
+  "note": "Eigenes Rezept der App. Nährwerte aus den Zutaten geschätzt. Die Gnocchi werden auf dem Blech knusprig, ohne Vorkochen.",
+  "dev": [
+   "ofen"
+  ]
+ },
+ {
+  "name": "Gnocchi in Linsen-Tomaten-Sauce",
+  "category": "mittag",
+  "servings": 3,
+  "kcal": 640,
+  "protein": 34,
+  "carbs": 98,
+  "fat": 8,
+  "estimated": true,
+  "timeMin": 30,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": true,
+  "shelfLife": "3 Tage Kühlschrank, Sauce 3 Monate TK",
+  "ingredients": [
+   "500 g Gnocchi (Kühlregal)",
+   "150 g rote Linsen",
+   "500 g passierte Tomaten",
+   "1 Zwiebel",
+   "1 Karotte",
+   "2 Knoblauchzehen",
+   "1 EL Olivenöl",
+   "1 TL Oregano",
+   "30 g vegetarischer Hartkäse (Grana-Art)",
+   "250 g Skyr natur"
+  ],
+  "steps": [
+   "Zwiebel, Karotte und Knoblauch fein würfeln und in Öl 4 Min. anschwitzen.",
+   "Linsen, passierte Tomaten, 300 ml Wasser und Oregano dazugeben, 12–15 Min. köcheln, salzen und pfeffern.",
+   "Gnocchi nach Packung in Salzwasser garen (2–3 Min., bis sie oben schwimmen) und unter die Sauce heben.",
+   "Mit geriebenem Hartkäse und einem Klecks Skyr servieren."
+  ],
+  "plan": {
+   "steps": [
+    {
+     "do": "Zuerst: Zwiebel, Karotte und Knoblauch fein würfeln. Öl im Topf erhitzen."
+    },
+    {
+     "do": "Gemüse anschwitzen.",
+     "min": 4
+    },
+    {
+     "do": "Linsen, passierte Tomaten, 300 ml Wasser und Oregano dazugeben, köcheln, salzen und pfeffern.",
+     "min": 15,
+     "passive": true,
+     "meanwhile": "Wasser für die Gnocchi aufsetzen, Hartkäse reiben."
+    },
+    {
+     "do": "Gnocchi garen, bis sie oben schwimmen, und unter die Sauce heben.",
+     "min": 3
+    },
+    {
+     "do": "Mit Hartkäse und einem Klecks Skyr servieren."
+    }
+   ]
+  },
+  "source": null,
+  "note": "Eigenes Rezept der App. Nährwerte aus den Zutaten geschätzt. Für Meal Prep Sauce und Gnocchi getrennt lagern.",
+  "dev": [
+   "herd"
+  ]
+ },
+ {
+  "name": "Cremige Spinat-Gnocchi mit Mozzarella",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 634,
+  "protein": 43,
+  "carbs": 76,
+  "fat": 14,
+  "estimated": true,
+  "timeMin": 20,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "400 g Gnocchi (Kühlregal)",
+   "300 g TK-Spinat",
+   "1 Zwiebel",
+   "2 Knoblauchzehen",
+   "1 TL Olivenöl",
+   "200 g Hüttenkäse (körniger Frischkäse)",
+   "100 g Magerquark",
+   "125 g Mozzarella light",
+   "1 Prise Muskat"
+  ],
+  "steps": [
+   "Zwiebel und Knoblauch würfeln und in Öl in einer großen Pfanne 3 Min. anschwitzen.",
+   "Spinat dazugeben und 5 Min. auftauen und einkochen lassen.",
+   "Hüttenkäse und Quark einrühren, mit Salz, Pfeffer und Muskat abschmecken.",
+   "Gnocchi direkt in der Sauce 4–5 Min. mitgaren (bei Bedarf einen Schuss Wasser).",
+   "Mozzarella zerzupfen, darauf verteilen und mit Deckel schmelzen lassen."
+  ],
+  "plan": {
+   "steps": [
+    {
+     "do": "Zuerst: Zwiebel und Knoblauch würfeln, Öl in einer großen Pfanne erhitzen."
+    },
+    {
+     "do": "Zwiebel und Knoblauch anschwitzen.",
+     "min": 3
+    },
+    {
+     "do": "Spinat dazugeben und auftauen und einkochen lassen.",
+     "min": 5,
+     "meanwhile": "Mozzarella zerzupfen."
+    },
+    {
+     "do": "Hüttenkäse und Quark einrühren, mit Salz, Pfeffer und Muskat abschmecken."
+    },
+    {
+     "do": "Gnocchi in der Sauce mitgaren, bei Bedarf einen Schuss Wasser.",
+     "min": 5
+    },
+    {
+     "do": "Mozzarella darauf verteilen und mit Deckel schmelzen lassen.",
+     "min": 2
+    }
+   ]
+  },
+  "source": null,
+  "note": "Eigenes Rezept der App. Nährwerte aus den Zutaten geschätzt. Die Sauce aus Hüttenkäse und Quark ist leicht und eiweißreich.",
+  "dev": [
+   "herd"
+  ]
+ },
+ {
+  "name": "Gnocchi-Tofu-Pfanne mit Zucchini & Pesto",
+  "category": "abend",
+  "servings": 2,
+  "kcal": 698,
+  "protein": 32,
+  "carbs": 81,
+  "fat": 24,
+  "estimated": true,
+  "timeMin": 20,
+  "activeMin": 20,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": false,
+  "shelfLife": "1 Tag Kühlschrank",
+  "ingredients": [
+   "400 g Gnocchi (Kühlregal)",
+   "200 g Räuchertofu",
+   "1 Zucchini",
+   "150 g Kirschtomaten",
+   "150 g TK-Erbsen",
+   "2 EL Pesto (vegetarisch, ohne Parmesan)",
+   "1 EL Olivenöl"
+  ],
+  "steps": [
+   "Tofu würfeln, Zucchini in Halbmonde schneiden, Tomaten halbieren.",
+   "Öl erhitzen, Gnocchi und Tofu 6–8 Min. goldbraun braten.",
+   "Zucchini und Erbsen dazugeben und 4 Min. mitbraten.",
+   "Tomaten und Pesto unterheben, kurz erwärmen, salzen und pfeffern."
+  ],
+  "plan": {
+   "steps": [
+    {
+     "do": "Zuerst: Tofu würfeln, Zucchini in Halbmonde schneiden, Tomaten halbieren."
+    },
+    {
+     "do": "Öl erhitzen, Gnocchi und Tofu goldbraun braten.",
+     "min": 8
+    },
+    {
+     "do": "Zucchini und Erbsen dazugeben und mitbraten.",
+     "min": 4
+    },
+    {
+     "do": "Tomaten und Pesto unterheben, kurz erwärmen, salzen und pfeffern.",
+     "min": 1
+    }
+   ]
+  },
+  "source": null,
+  "note": "Eigenes Rezept der App. Nährwerte aus den Zutaten geschätzt. Gnocchi direkt aus der Packung in die Pfanne, ohne Kochen.",
+  "dev": [
+   "herd"
+  ]
+ },
+ {
+  "name": "Gnocchi mit Brokkoli in Käse-Quark-Sauce",
+  "category": "mittag",
+  "servings": 2,
+  "kcal": 586,
+  "protein": 37,
+  "carbs": 78,
+  "fat": 11,
+  "estimated": true,
+  "timeMin": 20,
+  "activeMin": 15,
+  "difficulty": "leicht",
+  "temp": "warm",
+  "mealPrep": true,
+  "shelfLife": "2 Tage Kühlschrank",
+  "ingredients": [
+   "400 g Gnocchi (Kühlregal)",
+   "300 g Brokkoli",
+   "250 g Magerquark",
+   "100 ml Milch",
+   "40 g vegetarischer Hartkäse (Grana-Art)",
+   "1 Knoblauchzehe",
+   "1 TL Olivenöl",
+   "1 Prise Muskat"
+  ],
+  "steps": [
+   "Brokkoli in Röschen teilen und 4 Min. in Salzwasser garen, dann die Gnocchi 2–3 Min. dazugeben, abgießen.",
+   "Knoblauch in Öl kurz anschwitzen, Quark, Milch und geriebenen Hartkäse einrühren und bei kleiner Hitze cremig rühren (nicht kochen).",
+   "Mit Salz, Pfeffer und Muskat abschmecken, Gnocchi und Brokkoli unterheben."
+  ],
+  "plan": {
+   "steps": [
+    {
+     "do": "Zuerst: Wasser aufsetzen, Brokkoli in Röschen teilen, Hartkäse reiben."
+    },
+    {
+     "do": "Brokkoli in Salzwasser garen.",
+     "min": 4,
+     "meanwhile": "Knoblauch hacken."
+    },
+    {
+     "do": "Gnocchi dazugeben, bis sie oben schwimmen, dann abgießen.",
+     "min": 3,
+     "meanwhile": "Knoblauch in Öl kurz anschwitzen."
+    },
+    {
+     "do": "Quark, Milch und Hartkäse einrühren und bei kleiner Hitze cremig rühren (nicht kochen).",
+     "min": 2
+    },
+    {
+     "do": "Abschmecken, Gnocchi und Brokkoli unterheben."
+    }
+   ]
+  },
+  "source": null,
+  "note": "Eigenes Rezept der App. Nährwerte aus den Zutaten geschätzt.",
+  "dev": [
+   "herd"
+  ]
  }
 ]

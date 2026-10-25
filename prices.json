@@ -3422,6 +3422,34 @@
 }
 },
 {
+"id": "gnocchi",
+"name": "Kartoffel-Gnocchi (Kühlregal)",
+"pack": 500,
+"unit": "g",
+"match": "gnocchi",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.94,
+"aldi": 0.94,
+"kaufland": 0.99,
+"netto": 0.94,
+"penny": 0.94,
+"edeka": 0.99
+},
+"bio": {
+"rewe": 3.65
+},
+"est": [
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
 "id": "nudeln",
 "name": "Hartweizennudeln",
 "pack": 500,
