@@ -69,10 +69,479 @@
 "u": "Stück (¼)"
 },
 {
-"n": "Röggelchen",
+"n": "Laugenecke mit Butter",
 "a": [
-"roggenbrötchen",
-"roggen-brötchen"
+"butter laugenecke"
+],
+"k": 330,
+"p": 8,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Laugenbogen mit Butter",
+"a": [
+"laugenstange mit butter"
+],
+"k": 330,
+"p": 8,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Käse-Laugenstange",
+"a": [
+"käselaugenstange",
+"käse-laugen"
+],
+"k": 310,
+"p": 12,
+"g": 90,
+"u": "Stück"
+},
+{
+"n": "Laugen-Dinkelbrötchen",
+"a": [
+"dinkel-laugenbrötchen"
+],
+"k": 270,
+"p": 9,
+"g": 75,
+"u": "Stück"
+},
+{
+"n": "Laugenknoten",
+"a": [],
+"k": 280,
+"p": 8,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Laugenstange",
+"a": [],
+"k": 280,
+"p": 8,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Pizza-Donut Diavolo",
+"a": [
+"pizzadonut"
+],
+"k": 270,
+"p": 10,
+"g": 120,
+"u": "Stück"
+},
+{
+"n": "Mini-Pizzadonut Flammkuchen",
+"a": [],
+"k": 280,
+"p": 9,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Pizzasnack Sucuk",
+"a": [],
+"k": 270,
+"p": 11,
+"g": 150,
+"u": "Stück"
+},
+{
+"n": "Pizza Salami",
+"a": [
+"pizzasnack salami"
+],
+"k": 270,
+"p": 11,
+"g": 140,
+"u": "Stück"
+},
+{
+"n": "Pizzasnack Thunfisch",
+"a": [
+"pizzasnack",
+"pizzastange",
+"pizzaschnecke",
+"pizzabrötchen"
+],
+"k": 260,
+"p": 12,
+"g": 150,
+"u": "Stück"
+},
+{
+"n": "Burgerstyle Cheese",
+"a": [],
+"k": 270,
+"p": 12,
+"g": 160,
+"u": "Stück"
+},
+{
+"n": "Geflügelrolle",
+"a": [],
+"k": 260,
+"p": 12,
+"g": 140,
+"u": "Stück"
+},
+{
+"n": "Dinkelschleife mit Käse",
+"a": [],
+"k": 310,
+"p": 13,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Käse-Mozzarella-Fächer",
+"a": [],
+"k": 300,
+"p": 12,
+"g": 120,
+"u": "Stück"
+},
+{
+"n": "Strudelteigrolle Käse",
+"a": [
+"käsestrudel"
+],
+"k": 300,
+"p": 10,
+"g": 120,
+"u": "Stück"
+},
+{
+"n": "Börek-Stange Spinat",
+"a": [
+"spinatbörek",
+"käsebörek",
+"börek-stange"
+],
+"k": 280,
+"p": 9,
+"g": 120,
+"u": "Stück"
+},
+{
+"n": "Maiskracher Salz-Pfeffer",
+"a": [],
+"k": 260,
+"p": 8,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Schinken-Käse-Croissant",
+"a": [
+"käse-croissant",
+"schinkencroissant"
+],
+"k": 360,
+"p": 13,
+"g": 90,
+"u": "Stück"
+},
+{
+"n": "Nuss-Nougat-Croissant",
+"a": [
+"nougat-croissant",
+"croissant mit nuss-nougat"
+],
+"k": 440,
+"p": 7,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Pistazien-Croissant",
+"a": [
+"croissant mit pistazie",
+"pistaziencroissant"
+],
+"k": 450,
+"p": 8,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Marmor-Croissant",
+"a": [
+"marmorcroissant"
+],
+"k": 430,
+"p": 7,
+"g": 90,
+"u": "Stück"
+},
+{
+"n": "Vanille-Croissant",
+"a": [
+"vanillecroissant",
+"puddingcroissant"
+],
+"k": 400,
+"p": 6.5,
+"g": 85,
+"u": "Stück"
+},
+{
+"n": "Pain au Chocolat",
+"a": [
+"pain de chocolat",
+"schokocroissant",
+"schoko-croissant",
+"schokobrötchen"
+],
+"k": 420,
+"p": 7.5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Butter-Croissant",
+"a": [],
+"k": 410,
+"p": 8,
+"g": 60,
+"u": "Stück"
+},
+{
+"n": "Mohnschnecke",
+"a": [],
+"k": 370,
+"p": 7,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Rosinenschnecke",
+"a": [
+"puddingschnecke"
+],
+"k": 350,
+"p": 6,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Nussschnecke",
+"a": [
+"nusszopf"
+],
+"k": 400,
+"p": 7,
+"g": 110,
+"u": "Stück"
+},
+{
+"n": "Süßer Knoten",
+"a": [
+"hefeknoten"
+],
+"k": 330,
+"p": 7,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Süße Biene",
+"a": [
+"bienenstich"
+],
+"k": 360,
+"p": 6,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Plunderteilchen",
+"a": [
+"plunder",
+"plunderschnecke",
+"teilchen"
+],
+"k": 360,
+"p": 6,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Kirschtasche",
+"a": [],
+"k": 300,
+"p": 4,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Quarktasche",
+"a": [
+"topfengolatsche"
+],
+"k": 310,
+"p": 7,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Apfeltasche / Apfeldreieck",
+"a": [
+"apfeldreieck"
+],
+"k": 300,
+"p": 4,
+"g": 100,
+"u": "Stück"
+},
+{
+"n": "Berliner / Krapfen",
+"a": [
+"kreppel"
+],
+"k": 340,
+"p": 6,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Donut Black & White",
+"a": [
+"black and white donut",
+"donut black and white",
+"donut black & white",
+"black & white donut"
+],
+"k": 420,
+"p": 5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Donut Chocolate Cake",
+"a": [
+"schokodonut",
+"schoko donut",
+"donut chocolate cake"
+],
+"k": 430,
+"p": 5,
+"g": 75,
+"u": "Stück"
+},
+{
+"n": "Donut Kakao & Haselnuss",
+"a": [
+"nougat donut",
+"haselnuss donut",
+"donut haselnuss",
+"donut nougat"
+],
+"k": 440,
+"p": 6,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Donut Cookies",
+"a": [
+"cookie donut",
+"donut cookies"
+],
+"k": 440,
+"p": 5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Donut Lotus Speculoos",
+"a": [
+"speculoos donut",
+"donut lotus",
+"lotus donut"
+],
+"k": 440,
+"p": 5,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Donut Pink / Erdbeere",
+"a": [
+"erdbeer donut",
+"pink donut"
+],
+"k": 420,
+"p": 5,
+"g": 65,
+"u": "Stück"
+},
+{
+"n": "Quarkbällchen",
+"a": [
+"quarkini"
+],
+"k": 380,
+"p": 8,
+"g": 25,
+"u": "Stück"
+},
+{
+"n": "Käse-Zwiebel-Brötchen",
+"a": [
+"zwiebelbrötchen"
+],
+"k": 300,
+"p": 13,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Rosen-Mohnbrötchen",
+"a": [
+"mohnbrötchen"
+],
+"k": 270,
+"p": 9,
+"g": 70,
+"u": "Stück"
+},
+{
+"n": "Rosenbrötchen dunkel",
+"a": [],
+"k": 245,
+"p": 8.5,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Grill-Rosenbrötchen",
+"a": [],
+"k": 260,
+"p": 8.5,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Rosenbrötchen hell",
+"a": [
+"kaiserbrötchen",
+"kaisersemmel"
+],
+"k": 260,
+"p": 8.5,
+"g": 80,
+"u": "Stück"
+},
+{
+"n": "Röggelchen / Roggenbrötchen",
+"a": [
+"roggenbrötchen"
 ],
 "k": 240,
 "p": 7.5,
@@ -90,125 +559,62 @@
 "u": "Stück"
 },
 {
-"n": "Butter-Laugengebäck",
+"n": "Kürbiskernbrötchen",
+"a": [],
+"k": 290,
+"p": 11,
+"g": 75,
+"u": "Stück"
+},
+{
+"n": "Chia-Weltmeisterbrötchen",
 "a": [
-"laugenecke mit butter",
-"laugenbogen mit butter",
-"butterlaugenstange"
+"weltmeisterbrötchen"
 ],
-"k": 330,
+"k": 280,
+"p": 10,
+"g": 75,
+"u": "Stück"
+},
+{
+"n": "Mehrkornkrusti",
+"a": [
+"mehrkornbrötchen",
+"kornspitz"
+],
+"k": 270,
+"p": 9.5,
+"g": 75,
+"u": "Stück"
+},
+{
+"n": "Karottenkrüstchen",
+"a": [
+"karottenbrötchen"
+],
+"k": 250,
 "p": 8,
-"g": 100,
+"g": 75,
 "u": "Stück"
 },
 {
-"n": "Käse-Laugenstange",
+"n": "Walnuss-Honig-Brötchen",
 "a": [
-"käselaugenstange",
-"käse-laugen"
+"walnussbrötchen"
 ],
-"k": 310,
-"p": 12,
-"g": 90,
+"k": 300,
+"p": 9,
+"g": 75,
 "u": "Stück"
 },
 {
-"n": "Nuss-Nougat-Croissant",
+"n": "Steinofen-Meisterbrötchen",
 "a": [
-"nougat-croissant",
-"pistazien-croissant",
-"marmor-croissant",
-"gefülltes croissant"
+"steinofenbrötchen"
 ],
-"k": 440,
-"p": 7,
-"g": 80,
-"u": "Stück"
-},
-{
-"n": "Schinken-Käse-Croissant",
-"a": [
-"käse-croissant",
-"schinkencroissant"
-],
-"k": 360,
-"p": 13,
-"g": 90,
-"u": "Stück"
-},
-{
-"n": "Pain au Chocolat",
-"a": [
-"pain de chocolat",
-"schokobrötchen",
-"schokocroissant",
-"schoko-croissant"
-],
-"k": 420,
-"p": 7.5,
+"k": 255,
+"p": 8.5,
 "g": 70,
-"u": "Stück"
-},
-{
-"n": "Plunderschnecke",
-"a": [
-"mohnschnecke",
-"rosinenschnecke",
-"nussschnecke",
-"plunder",
-"süßer knoten"
-],
-"k": 360,
-"p": 6,
-"g": 110,
-"u": "Stück"
-},
-{
-"n": "Apfeltasche",
-"a": [
-"apfeldreieck",
-"kirschtasche",
-"quarktasche"
-],
-"k": 300,
-"p": 4,
-"g": 100,
-"u": "Stück"
-},
-{
-"n": "Quarkbällchen",
-"a": [
-"quarkini"
-],
-"k": 380,
-"p": 8,
-"g": 25,
-"u": "Stück"
-},
-{
-"n": "Pizzasnack",
-"a": [
-"pizzastange",
-"pizzaschnecke",
-"pizzabrötchen",
-"pizzadonut"
-],
-"k": 260,
-"p": 10,
-"g": 150,
-"u": "Stück"
-},
-{
-"n": "Börek",
-"a": [
-"börek-stange",
-"spinatbörek",
-"käsebörek",
-"strudelteigrolle"
-],
-"k": 300,
-"p": 10,
-"g": 120,
 "u": "Stück"
 },
 {
@@ -1565,14 +1971,121 @@
 {
 "n": "Wein",
 "a": [
-"weißwein",
-"rotwein",
-"sekt"
+"glas wein"
 ],
 "k": 75,
 "p": 0,
 "g": 200,
-"u": "Glas"
+"u": "Glas (0,2 l)"
+},
+{
+"n": "Weißwein",
+"a": [
+"weisswein",
+"weißwein trocken",
+"pinot grigio",
+"grauburgunder",
+"weißburgunder",
+"riesling",
+"chardonnay",
+"sauvignon blanc",
+"silvaner",
+"müller-thurgau",
+"grüner veltliner",
+"vinho verde",
+"weiswein",
+"weißwein"
+],
+"k": 72,
+"p": 0.1,
+"g": 200,
+"u": "Glas (0,2 l)"
+},
+{
+"n": "Rotwein",
+"a": [
+"rotwein trocken",
+"merlot",
+"cabernet sauvignon",
+"cabernet",
+"primitivo",
+"shiraz",
+"syrah",
+"dornfelder",
+"spätburgunder",
+"pinot noir",
+"chianti",
+"rioja",
+"montepulciano",
+"tempranillo",
+"malbec",
+"zinfandel",
+"lemberger",
+"trollinger"
+],
+"k": 80,
+"p": 0.1,
+"g": 200,
+"u": "Glas (0,2 l)"
+},
+{
+"n": "Roséwein",
+"a": [
+"rosé",
+"rose wein",
+"roséwein trocken",
+"rosewein",
+"rosé wein"
+],
+"k": 72,
+"p": 0.1,
+"g": 200,
+"u": "Glas (0,2 l)"
+},
+{
+"n": "Wein lieblich",
+"a": [
+"lieblicher wein",
+"halbtrockener wein",
+"weißwein halbtrocken",
+"weißwein lieblich",
+"rotwein halbtrocken",
+"rotwein lieblich",
+"dessertwein",
+"glühwein"
+],
+"k": 88,
+"p": 0.1,
+"g": 200,
+"u": "Glas (0,2 l)"
+},
+{
+"n": "Sekt",
+"a": [
+"prosecco",
+"cava",
+"champagner",
+"crémant",
+"schaumwein",
+"secco"
+],
+"k": 80,
+"p": 0.1,
+"g": 100,
+"u": "Glas (0,1 l)"
+},
+{
+"n": "Weinschorle",
+"a": [
+"schorle",
+"weißweinschorle",
+"rotweinschorle",
+"spritzer"
+],
+"k": 38,
+"p": 0,
+"g": 250,
+"u": "Glas (0,25 l)"
 },
 {
 "n": "Smoothie",

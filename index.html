@@ -1672,7 +1672,7 @@ function nwItem(p){
   if (m) { const v = m[1].toLowerCase(), n0 = /^\d/.test(v) ? Number(v.replace(",", ".")) : v === "½" ? .5 : NUMW[v]; if (n0 != null) { q = n0; unit = (m[2] || "").toLowerCase(); rest = m[3] || m[2] || ""; } }
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
   // frühere Einträge sind Portionen: bei Mengen in g/ml/EL … nicht damit malnehmen (sonst 250 g Skyr = 250 Portionen)
-  const key = fold((rest || p).trim()), hist = key.length >= 3 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
+  const key = fold((rest || p).trim()), hist = key.length >= 3 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll|flaschen?)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
   const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
   if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
@@ -1683,7 +1683,8 @@ function nwItem(p){
   if (!r && !x && !wUnit && key.length >= 4 && typeof sugScore === "function") r = (recipes || []).map(rc => ({rc, sc: sugScore(rc.name, key)})).filter(o => o.sc).sort((a, b) => b.sc - a.sc || a.rc.name.length - b.rc.name.length)[0]?.rc;
   if (r) { const nu = recipeNutri(r); return {text: p, ok: true, name: r.name, g: null, kcal: Math.round(q * nu.kcal), protein: Math.round(q * nu.protein)}; }
   if (!x) return {text: p, ok: false};
-  const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
+  // eine Flasche Wein/Sekt sind 0,75 l, nicht ein Glas
+  const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : /^flaschen?$/.test(unit) && /wein|sekt/i.test(x.n) && x.n !== "Weinschorle" ? q * 750 : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
   return {text: p, ok: true, name: x.n, g: Math.round(g), kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10};
 }
 function nwParse(text){

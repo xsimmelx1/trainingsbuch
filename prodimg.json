@@ -1307,8 +1307,8 @@
   "license": "CC BY-SA 4.0",
   "artist": "User:Tlustulimu",
   "via": "pick",
-  "src": "https://img.rewe-static.de/8901803/39216023_digital-image.png?imwidth=240",
-  "rewe": "Harry Kürbiskernbrötchen"
+  "src": "https://img.rewe-static.de/8038521/30312612_digital-image.png?imwidth=240",
+  "rewe": "Harry Vollkorn Kumpel"
  },
  "backKaese": {
   "title": "File:Brötchen-20130514.jpg",
@@ -1394,9 +1394,7 @@
   "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
   "license": "CC BY-SA 4.0",
   "artist": "Kritzolina",
-  "via": "en:Cinnamon roll",
-  "src": "https://img.rewe-static.de/7993841/31409583_digital-image.png?imwidth=240",
-  "rewe": "Evertzberg Mohnschnecke"
+  "via": "en:Cinnamon roll"
  },
  "backTasche": {
   "title": "File:Apfeltasche 2011 PD 01.JPG",
@@ -1451,5 +1449,372 @@
   "via": "de:Börek",
   "src": "https://img.rewe-static.de/7259801/27797759_digital-image.png?imwidth=240",
   "rewe": "Börek-Stange Spinat"
+ },
+ "backLaugenbogen": {
+  "title": "File:Laugenbroetchen und Laugenbrezel.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Laugenbroetchen_und_Laugenbrezel.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "RudolfSimon",
+  "via": "de:Laugengebäck",
+  "src": "https://img.rewe-static.de/7876277/33649112_digital-image.png?imwidth=240",
+  "rewe": "Ditsch Laugenbogen mit Butter"
+ },
+ "backLaugenDinkel": {
+  "title": "File:Laugenbroetchen und Laugenbrezel.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Laugenbroetchen_und_Laugenbrezel.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "RudolfSimon",
+  "via": "de:Laugengebäck",
+  "src": "https://img.rewe-static.de/8412290/30536787_digital-image.png?imwidth=240",
+  "rewe": "Harry Laugen Dinkel Brötchen"
+ },
+ "backLaugenknoten": {
+  "title": "File:Laugenbroetchen und Laugenbrezel.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Laugenbroetchen_und_Laugenbrezel.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "RudolfSimon",
+  "via": "de:Laugengebäck",
+  "src": "https://img.rewe-static.de/1280387/22199187_digital-image.png?imwidth=240",
+  "rewe": "Harry Laugenknoten"
+ },
+ "backLaugenstange": {
+  "title": "File:Laugenbroetchen und Laugenbrezel.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Laugenbroetchen_und_Laugenbrezel.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "RudolfSimon",
+  "via": "de:Laugengebäck",
+  "src": "https://img.rewe-static.de/0572897/22337240_digital-image.png?imwidth=240",
+  "rewe": "Laugenstange"
+ },
+ "backCroissantPist": {
+  "title": "File:Croissant-newspaper-and-tea.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Croissant-newspaper-and-tea.jpg",
+  "license": "CC0",
+  "artist": "Petr Kratochvil",
+  "via": "de:Croissant",
+  "src": "https://img.rewe-static.de/9981869/44782493_digital-image.png?imwidth=240",
+  "rewe": "Croissant mit Pistaziencremefüllung"
+ },
+ "backCroissantMarmor": {
+  "title": "File:Croissant-newspaper-and-tea.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Croissant-newspaper-and-tea.jpg",
+  "license": "CC0",
+  "artist": "Petr Kratochvil",
+  "via": "de:Croissant",
+  "src": "https://img.rewe-static.de/9096654/45898265_digital-image.png?imwidth=240",
+  "rewe": "Marmor-Croissant"
+ },
+ "backCroissantVanille": {
+  "title": "File:Croissant-newspaper-and-tea.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Croissant-newspaper-and-tea.jpg",
+  "license": "CC0",
+  "artist": "Petr Kratochvil",
+  "via": "de:Croissant",
+  "src": "https://img.rewe-static.de/2115318/26364179_digital-image.png?imwidth=240",
+  "rewe": "Croissant mit Nuss-Nougat-Füllung"
+ },
+ "backMohnschnecke": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll",
+  "src": "https://img.rewe-static.de/7993841/31409583_digital-image.png?imwidth=240",
+  "rewe": "Evertzberg Mohnschnecke"
+ },
+ "backRosinenschnecke": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll",
+  "src": "https://img.rewe-static.de/8442864/31409587_digital-image.png?imwidth=240",
+  "rewe": "Rosinenschnecke"
+ },
+ "backZimtschnecke": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll",
+  "src": "https://img.rewe-static.de/8442864/31409587_digital-image.png?imwidth=240",
+  "rewe": "Rosinenschnecke"
+ },
+ "backNussschnecke": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll"
+ },
+ "backDonutBW": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/2948004/26309227_digital-image.png?imwidth=240",
+  "rewe": "Black & White Donut"
+ },
+ "backDonutCake": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/3545928/43044850_digital-image.png?imwidth=240",
+  "rewe": "B&B Donut Chocolate Cake"
+ },
+ "backDonutNuss": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/9060231/43383875_digital-image.png?imwidth=240",
+  "rewe": "Donut Cocoa & Hazelnut 70g"
+ },
+ "backDonutCookies": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/8653587/34999991_digital-image.png?imwidth=240",
+  "rewe": "Cookies Donut"
+ },
+ "backDonutLotus": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/8840758/37331096_digital-image.png?imwidth=240",
+  "rewe": "Vandemoortele Donut Lotus Spculoos"
+ },
+ "backPizzaDonut": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/7596176/43045239_digital-image.png?imwidth=240",
+  "rewe": "Gefüllter Pizza-Donut Diavolo"
+ },
+ "backPizzaFlamm": {
+  "title": "File:Krispy Kreme Doughnuts.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Krispy_Kreme_Doughnuts.JPG",
+  "license": "Public domain",
+  "artist": "ジダネ",
+  "via": "de:Donut",
+  "src": "https://img.rewe-static.de/8984473/42902536_digital-image.png?imwidth=240",
+  "rewe": "Mini Pizzadonut Flammkuchen"
+ },
+ "backPizzaSucuk": {
+  "title": "File:2023-02-18 Pizzabrötchen in Tauberbischofsheim.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2023-02-18_Pizzabr%C3%B6tchen_in_Tauberbischofsheim.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Triplec85",
+  "via": "de:Pizzabrötchen",
+  "src": "https://img.rewe-static.de/7699519/39069429_digital-image.png?imwidth=240",
+  "rewe": "Freiberger Pizzasnack Sucuk"
+ },
+ "backPizzaSalami": {
+  "title": "File:2023-02-18 Pizzabrötchen in Tauberbischofsheim.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2023-02-18_Pizzabr%C3%B6tchen_in_Tauberbischofsheim.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Triplec85",
+  "via": "de:Pizzabrötchen",
+  "src": "https://img.rewe-static.de/8455757/31353278_digital-image.png?imwidth=240",
+  "rewe": "Ditsch Pizza Salami Premium"
+ },
+ "backPizzaMarg": {
+  "title": "File:2023-02-18 Pizzabrötchen in Tauberbischofsheim.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2023-02-18_Pizzabr%C3%B6tchen_in_Tauberbischofsheim.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Triplec85",
+  "via": "de:Pizzabrötchen",
+  "src": "https://img.rewe-static.de/9591374/50524744_digital-image.png?imwidth=240",
+  "rewe": "Pizza Margherita"
+ },
+ "backBurgerCheese": {
+  "title": "File:2023-02-18 Pizzabrötchen in Tauberbischofsheim.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2023-02-18_Pizzabr%C3%B6tchen_in_Tauberbischofsheim.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Triplec85",
+  "via": "de:Pizzabrötchen",
+  "src": "https://img.rewe-static.de/9897116/47794891_digital-image.png?imwidth=240",
+  "rewe": "Burgerstyle Cheese"
+ },
+ "backGefluegel": {
+  "title": "File:Börek mit Käse.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:B%C3%B6rek_mit_K%C3%A4se.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Alice Wiegand",
+  "via": "de:Börek",
+  "src": "https://img.rewe-static.de/7004068/26755997_digital-image.png?imwidth=240",
+  "rewe": "Geflügelrolle Premium"
+ },
+ "backDinkelKaese": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7697863/27813727_digital-image.png?imwidth=240",
+  "rewe": "Dinkelschleife mit Käse"
+ },
+ "backMozzaFaecher": {
+  "title": "File:Börek mit Käse.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:B%C3%B6rek_mit_K%C3%A4se.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Alice Wiegand",
+  "via": "de:Börek",
+  "src": "https://img.rewe-static.de/9849816/49350836_digital-image.png?imwidth=240",
+  "rewe": "Käse Mozzarella-Fächer"
+ },
+ "backStrudelKaese": {
+  "title": "File:Börek mit Käse.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:B%C3%B6rek_mit_K%C3%A4se.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Alice Wiegand",
+  "via": "de:Börek",
+  "src": "https://img.rewe-static.de/7182956/28468392_digital-image.png?imwidth=240",
+  "rewe": "Strudelteigrolle Käse"
+ },
+ "backMais": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/9865545/49279142_digital-image.png?imwidth=240",
+  "rewe": "Maiskracher Salz-Pfeffer"
+ },
+ "backSuesserKnoten": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll",
+  "src": "https://img.rewe-static.de/2452249/23969732_digital-image.png?imwidth=240",
+  "rewe": "Harry Süsser Knoten"
+ },
+ "backBiene": {
+  "title": "File:Cinnamon roll in Stockholm.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_roll_in_Stockholm.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "en:Cinnamon roll",
+  "src": "https://img.rewe-static.de/9891100/48938299_digital-image.png?imwidth=240",
+  "rewe": "Süße Biene"
+ },
+ "backKirschtasche": {
+  "title": "File:Apfeltasche 2011 PD 01.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Apfeltasche_2011_PD_01.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Bin im Garten",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/2153877/26363859_digital-image.png?imwidth=240",
+  "rewe": "Apfeldreieck"
+ },
+ "backQuarktasche": {
+  "title": "File:Apfeltasche 2011 PD 01.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Apfeltasche_2011_PD_01.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Bin im Garten",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/2153877/26363859_digital-image.png?imwidth=240",
+  "rewe": "Apfeldreieck"
+ },
+ "backRosenMohn": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8045989/30088600_digital-image.png?imwidth=240",
+  "rewe": "Harry Brötchen Rosen Mohn"
+ },
+ "backRosenDunkel": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7047022/26810537_digital-image.png?imwidth=240",
+  "rewe": "Rosenbrötchen dunkel 80g"
+ },
+ "backRosenGrill": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7995964/31185009_digital-image.png?imwidth=240",
+  "rewe": "Grill Rosenbrötchen"
+ },
+ "backRosen": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7047308/26598283_digital-image.png?imwidth=240",
+  "rewe": "Rosenbrötchen 80g"
+ },
+ "backKuerbis": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8901803/39216023_digital-image.png?imwidth=240",
+  "rewe": "Harry Kürbiskernbrötchen"
+ },
+ "backChia": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8146150/34076581_digital-image.png?imwidth=240",
+  "rewe": "Harry Brötchen Chia Weltmeister"
+ },
+ "backKrusti": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/7839852/34840535_digital-image.png?imwidth=240",
+  "rewe": "Harry Bauern Mehrkornkrusti"
+ },
+ "backKarotte": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8084071/29282416_digital-image.png?imwidth=240",
+  "rewe": "Harry Karottenkrüstchen"
+ },
+ "backWalnuss": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/9081361/43325180_digital-image.png?imwidth=240",
+  "rewe": "Harry Walnuss Honig Brötchen"
+ },
+ "backMeister": {
+  "title": "File:Brötchen-20130514.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Br%C3%B6tchen-20130514.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "User:Tlustulimu",
+  "via": "pick",
+  "src": "https://img.rewe-static.de/8593938/33287098_digital-image.png?imwidth=240",
+  "rewe": "Harry Steinofen Meisterbrötchen"
  }
 }
