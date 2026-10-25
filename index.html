@@ -1672,7 +1672,8 @@ function nwItem(p){
   if (m) { const v = m[1].toLowerCase(), n0 = /^\d/.test(v) ? Number(v.replace(",", ".")) : v === "½" ? .5 : NUMW[v]; if (n0 != null) { q = n0; unit = (m[2] || "").toLowerCase(); rest = m[3] || m[2] || ""; } }
   rest = rest.replace(/^(große[nrs]?|kleine[nrs]?)\s+/i, x => { q *= /^groß/i.test(x) ? 1.4 : .7; return ""; });
   // frühere Einträge sind Portionen: bei Mengen in g/ml/EL … nicht damit malnehmen (sonst 250 g Skyr = 250 Portionen)
-  const key = fold((rest || p).trim()), hist = key.length >= 3 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll|flaschen?)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
+  const x00 = NW ? nwFind(rest || p) : null, exact0 = !!x00 && x00.keys.includes(nwNorm(rest || p));
+  const key = fold((rest || p).trim()), hist = key.length >= 3 && !exact0 && !/^(g|gramm|kg|ml|l|liter|el|tl|handvoll|flaschen?)$/.test(unit) && typeof ownHistory === "function" ? ownHistory().find(h => fold(h.name) === key && (h.kcal || h.protein)) : null;
   if (hist) return {text: p, ok: true, name: hist.name, g: null, kcal: Math.round(q * (hist.kcal || 0)), protein: Math.round(q * (hist.protein || 0))};
   const mine = key.length >= 3 && typeof myFoodList === "function" ? myFoodList().find(m => fold(m.name) === key && (m.kcal || m.protein)) : null;
   if (mine && !/^(g|gramm|kg|ml|l|liter)$/.test(unit)) return {text: p, ok: true, name: mine.name, g: null, kcal: Math.round(q * mine.kcal), protein: Math.round(q * mine.protein)};
@@ -1689,7 +1690,7 @@ function nwItem(p){
 }
 function nwParse(text){
   const out = [];
-  for (const part of text.split(/,|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/i).map(s => s.trim()).filter(Boolean)) {
+  for (const part of text.split(/(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/i).map(s => s.trim()).filter(Boolean)) {
     const it = nwItem(part); if (!/\bmit\b/i.test(part) || (it.ok && /\bmit\b/i.test(it.name))) { out.push(it); continue; }  // „Brot mit Frischkäse“ = zwei Posten, „Curry mit Reis“ = ein Gericht
     for (const sp of part.split(/\bmit\b/i).map(s => s.trim()).filter(Boolean)) out.push(nwItem(sp)); }
   return out;
