@@ -1699,13 +1699,22 @@ function nwItem(p){
   const g = /^(g|gramm|ml)$/.test(unit) ? q : /^(kg|l|liter)$/.test(unit) ? q * 1000 : lm != null ? lm : unit === "el" ? q * 15 : unit === "tl" ? q * 5 : unit === "handvoll" ? q * 30 : q * x.g;
   return Object.assign({text: p, ok: true, name: x.n, g: Math.round(g), ml: !!x.ml, kcal: Math.round(g * x.k / 100), protein: Math.round(g * x.p / 10) / 10}, x.ml && x.gl ? {gl: x.gl, fl: x.fl, uk: nwKind(x, unit)} : {});
 }
+// Text in Abschnitte zerlegen und deren Stelle merken (at/len), damit ＋/− und Glas/Flasche/ml genau diesen Posten ändern – auch wenn er zweimal dasteht
+function nwSegs(text, re, base = 0){ const out = []; let last = 0; re.lastIndex = 0;
+  const push = (a, b) => { const raw = text.slice(a, b), lead = raw.length - raw.trimStart().length, t = raw.trim(); if (t) out.push({t, at: base + a + lead}); };
+  for (let m; (m = re.exec(text));) { push(last, m.index); last = m.index + m[0].length; if (!m[0].length) re.lastIndex++; }
+  push(last, text.length); return out; }
 function nwParse(text){
-  const out = [];
-  for (const part of text.split(/(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/i).map(s => s.trim()).filter(Boolean)) {
-    const it = nwItem(part); if (!/\bmit\b/i.test(part) || (it.ok && /\bmit\b/i.test(it.name))) { out.push(it); continue; }  // „Brot mit Frischkäse“ = zwei Posten, „Curry mit Reis“ = ein Gericht
-    for (const sp of part.split(/\bmit\b/i).map(s => s.trim()).filter(Boolean)) out.push(nwItem(sp)); }
+  const out = [], at = (it, sg) => Object.assign(it, {at: sg.at, len: sg.t.length});
+  for (const sg of nwSegs(text, /(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/gi)) {
+    const it = nwItem(sg.t); if (!/\bmit\b/i.test(sg.t) || (it.ok && /\bmit\b/i.test(it.name))) { out.push(at(it, sg)); continue; }  // „Brot mit Frischkäse“ = zwei Posten, „Curry mit Reis“ = ein Gericht
+    for (const sp of nwSegs(sg.t, /\bmit\b/gi, sg.at)) out.push(at(nwItem(sp.t), sp)); }
   return out;
 }
+// Posten im Textfeld ersetzen: an der gemerkten Stelle, sonst (Text inzwischen geändert) beim ersten Vorkommen
+function nwReplace(ta, it, nx){ const v = ta.value; let a = it.at;
+  if (a == null || v.substr(a, it.len ?? it.text.length) !== it.text) a = v.indexOf(it.text);
+  if (a < 0) return; ta.value = v.slice(0, a) + nx + v.slice(a + it.text.length); ta.dispatchEvent(new Event("input", {bubbles: true})); }
 let nwLast = [];
 // Menge eines Postens im Text ändern: „2 Kekse“ → „3 Kekse“, „100 g Skyr“ → „125 g Skyr“, ohne Zahl = 1
 function nwStep(text, d){ const m = text.match(/^\s*(\d+(?:[.,]\d+)?|½|halbe?|eine?n?)\s*(g|ml)?\b\s*/i), rest = m ? text.slice(m[0].length) : text.trim();
@@ -5023,9 +5032,12 @@ async function onClick(e){
   const nwu = t.closest("[data-nwu]"); if (nwu) { const [ix0, k] = nwu.dataset.nwu.split("|"), it = nwLast[+ix0], ta = sheet.querySelector("#ownText"); if (!it || !ta || !it.g) return;
     // Menge umrechnen und den Posten im Text ersetzen: 400 ml → „2 Gläser“, „½ Flasche“, „400 ml“
     const ml = it.g, nm = it.name, nx = k === "glas" ? (n => `${fmtQ(n)} ${n === 1 ? "Glas" : "Gläser"} ${nm}`)(Math.max(1, Math.round(ml / (it.gl || ml)))) : k === "flasche" ? (n => `${n === 0.5 ? "½" : fmtQ(n)} ${n <= 1 ? "Flasche" : "Flaschen"} ${nm}`)(Math.max(1, Math.round(ml / (it.fl || ml) * 2) / 2)) : `${Math.max(50, Math.round(ml / 10) * 10)} ml ${nm}`;
-    const old = it.text, at = ta.value.indexOf(old); if (at < 0) return; ta.value = ta.value.slice(0, at) + nx + ta.value.slice(at + old.length); ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
+    nwReplace(ta, it, nx); return; }
   const nwq = t.closest("[data-nwq]"); if (nwq) { const [ix, d] = nwq.dataset.nwq.split("|").map(Number), it = nwLast[ix], ta = sheet.querySelector("#ownText"); if (!it || !ta) return;
-    const old = it.text, at = ta.value.indexOf(old); if (at < 0) return; ta.value = ta.value.slice(0, at) + nwStep(old, d) + ta.value.slice(at + old.length); ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
+    let nx = nwStep(it.text, d);
+    // Getränk ohne Einheit („Weißwein“): beim Zählen „Gläser“ bzw. „Flaschen“ dazuschreiben
+    if (it.uk && it.uk !== "ml" && !/\b(glas|gläser|tassen?|flaschen?|dosen?|ml|l|liter)\b/i.test(it.text)) nx = nx.replace(/^(\S+)\s+/, (m0, n) => `${n} ${it.uk === "flasche" ? (/^(1|½)$/.test(n) ? "Flasche" : "Flaschen") : (/^(1|½)$/.test(n) ? "Glas" : "Gläser")} `);
+    nwReplace(ta, it, nx); return; }
   const sst = t.closest("[data-shopstore]"); if (sst) { saveFood({store: sst.dataset.shopstore}); renderMore(); return; }
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }
