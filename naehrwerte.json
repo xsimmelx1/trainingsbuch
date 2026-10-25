@@ -2137,6 +2137,131 @@
 "fl": 500
 },
 {
+"n": "Wasser",
+"a": [
+"mineralwasser",
+"sprudel",
+"leitungswasser",
+"sprudelwasser"
+],
+"k": 0,
+"p": 0,
+"g": 250,
+"u": "Glas",
+"ml": true,
+"gl": 250,
+"fl": 1000
+},
+{
+"n": "Tee",
+"a": [
+"kräutertee",
+"grüner tee",
+"schwarztee",
+"früchtetee"
+],
+"k": 1,
+"p": 0,
+"g": 250,
+"u": "Tasse",
+"ml": true,
+"gl": 250
+},
+{
+"n": "Radler",
+"a": [
+"alster",
+"alsterwasser",
+"bier-mix"
+],
+"k": 45,
+"p": 0.3,
+"g": 500,
+"u": "Flasche",
+"ml": true,
+"gl": 300,
+"fl": 500,
+"dose": 500
+},
+{
+"n": "Aperol Spritz",
+"a": [
+"spritz",
+"aperol",
+"hugo",
+"lillet",
+"lillet wild berry"
+],
+"k": 115,
+"p": 0,
+"g": 200,
+"u": "Glas (0,2 l)",
+"ml": true,
+"gl": 200
+},
+{
+"n": "Longdrink",
+"a": [
+"gin tonic",
+"gin-tonic",
+"cuba libre",
+"rum cola",
+"whisky cola",
+"wodka energy",
+"wodka lemon",
+"moscow mule"
+],
+"k": 85,
+"p": 0,
+"g": 300,
+"u": "Glas (0,3 l)",
+"ml": true,
+"gl": 300
+},
+{
+"n": "Cocktail",
+"a": [
+"mojito",
+"caipirinha",
+"pina colada",
+"piña colada",
+"sex on the beach",
+"tequila sunrise",
+"espresso martini"
+],
+"k": 160,
+"p": 0.2,
+"g": 250,
+"u": "Glas (0,25 l)",
+"ml": true,
+"gl": 250
+},
+{
+"n": "Schnaps",
+"a": [
+"wodka",
+"whisky",
+"rum",
+"gin",
+"korn",
+"tequila",
+"shot",
+"kurzer",
+"jägermeister",
+"ouzo",
+"sambuca",
+"obstler",
+"likör"
+],
+"k": 230,
+"p": 0,
+"g": 20,
+"u": "Shot (2 cl)",
+"ml": true,
+"gl": 20,
+"fl": 700
+},
+{
 "n": "Smoothie",
 "a": [],
 "k": 55,
@@ -2262,6 +2387,42 @@
 "p": 18,
 "g": 125,
 "u": "Kugel"
+},
+{
+"n": "Apfel",
+"a": [
+"äpfel",
+"äpfeln",
+"apfelschnitze"
+],
+"k": 52,
+"p": 0.3,
+"g": 150,
+"u": "Stück"
+},
+{
+"n": "Pflaume",
+"a": [
+"pflaumen",
+"zwetschge",
+"zwetschgen"
+],
+"k": 47,
+"p": 0.6,
+"g": 30,
+"u": "Stück"
+},
+{
+"n": "Reiswaffel",
+"a": [
+"reiswaffeln",
+"maiswaffel",
+"maiswaffeln"
+],
+"k": 390,
+"p": 8,
+"g": 8,
+"u": "Stück"
 }
 ]
 }

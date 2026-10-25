@@ -260,7 +260,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .mwbox{border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 10px 10px 0;padding:8px 12px}.mwbox b{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--accent)}
 .mw{display:block;color:var(--accent);margin-top:2px}.cooklist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.cooklist button{background:none;border:0;padding:4px 2px;text-align:left;font:inherit;color:var(--ink);cursor:pointer;width:100%;border-radius:8px}
 .cooklist button.done{color:var(--muted)}.cooklist button.cur{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);padding-left:8px;font-weight:600}.cookall{margin-top:10px}
-.nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwunit{margin:6px 0 2px}.nwunit button{min-height:36px}.nwq .btn{min-height:28px;padding:2px 9px}
+.nwq{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}.nwunit{margin:6px 0 2px}.micbtn{margin-top:8px;width:100%;min-height:48px}.micbtn.on{background:var(--bad,#e5534b);color:#fff;border-color:transparent;animation:micpulse 1.2s ease-in-out infinite}@keyframes micpulse{50%{opacity:.75}}.micnote{margin-top:4px}.nwunit button{min-height:36px}.nwq .btn{min-height:28px;padding:2px 9px}
 .slotlist{display:flex;flex-direction:column}.slotrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.slotrow:first-child{border-top:0}.slotrow.off .slotname{color:var(--muted)}.slotrow .ftpick select{min-width:58px;flex:none}.slotrow.rtrow{grid-template-columns:minmax(0,1fr) auto}
 .porpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .gapinfo{display:flex;align-items:center;gap:6px}.addfood{align-self:flex-start;margin-top:4px}
@@ -1662,7 +1662,7 @@ SESS_CHOICES.splice(SESS_CHOICES.indexOf("okBhome"), 1);
 let NW = null;
 const nwNorm = s => s.toLowerCase().replace(/[^a-zäöüß0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
 function ensureNW(){ return NW ? Promise.resolve(NW) : fetch("naehrwerte.json").then(r => r.json()).then(j => NW = j.items.map(x => Object.assign(x, {keys: [x.n, ...x.a].map(nwNorm)}))); }
-const NUMW = {ein: 1, eine: 1, einen: 1, einer: 1, eins: 1, zwei: 2, drei: 3, vier: 4, "fünf": 5, halb: .5, halbe: .5, halber: .5, halbes: .5, paar: 2};
+const NUMW = {ein: 1, eine: 1, einen: 1, einer: 1, eins: 1, zwei: 2, drei: 3, vier: 4, "fünf": 5, sechs: 6, sieben: 7, acht: 8, neun: 9, zehn: 10, halb: .5, halbe: .5, halben: .5, halber: .5, halbes: .5, paar: 2};
 function nwFind(name){ const n = " " + nwNorm(name) + " ", stem = w => w.replace(/(en|n|e|s)$/, ""), ns = " " + n.trim().split(" ").map(stem).join(" ") + " ";
   let best = null; for (const x of NW) for (const k of x.keys) if (n.includes(" " + k + " ") || ns.includes(" " + k.split(" ").map(stem).join(" ") + " ") || (k.length > 5 && n.includes(k))) { if (!best || k.length > best.len) best = {x, len: k.length}; }
   return best?.x || null; }
@@ -1704,6 +1704,52 @@ function nwSegs(text, re, base = 0){ const out = []; let last = 0; re.lastIndex 
   const push = (a, b) => { const raw = text.slice(a, b), lead = raw.length - raw.trimStart().length, t = raw.trim(); if (t) out.push({t, at: base + a + lead}); };
   for (let m; (m = re.exec(text));) { push(last, m.index); last = m.index + m[0].length; if (!m[0].length) re.lastIndex++; }
   push(last, text.length); return out; }
+// ---------- Sprechen statt tippen (Web Speech API, in Chrome/Android über den Google-Dienst) ----------
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let micRec = null;
+const micBtn = () => SpeechRec ? `<button type="button" class="btn micbtn" data-mic="1" aria-label="Sprechen statt tippen">🎤 Sprechen</button><div class="small muted micnote" hidden></div>` : "";
+// Gesprochenes in eine Liste verwandeln: Füllwörter weg, vor jeder neuen Mengenangabe ein Komma
+// „ich habe heute eine Flasche Wein getrunken zwei Gläser Rotwein und eine Banane“ → „eine Flasche Wein, zwei Gläser Rotwein, eine Banane“
+const MIC_NUM = /^(\d+([.,]\d+)?|½|ein|eine|einen|einer|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|halb|halbe|halben|halber|halbes|½|paar|anderthalb)$/i;
+// Bekanntes Lebensmittel? (Nährwerttabelle, eigene Produkte, frühere Einträge – genauer Name oder Alias)
+function micKnown(str){ const n = nwNorm(str); if (!n) return false; const x = NW ? nwFind(str) : null; if (x && x.keys.includes(n)) return true;
+  const f = fold(str); return (typeof myFoodList === "function" && myFoodList().some(m => fold(m.name) === f || (m.al || []).some(a => fold(a) === f))) || (typeof ownHistory === "function" && ownHistory().some(h => fold(h.name) === f)); }
+const MIC_UNIT = /^(g|gramm|kg|kilo|ml|l|liter|glas|gläser|flaschen?|tassen?|dosen?|becher|stück|scheiben?|portionen?|handvoll|teller|schalen?|riegel|kugeln?)$/i;
+// Ein Abschnitt ohne Komma („Mozzarella Schokocroissant“) wird in bekannte Lebensmittel zerlegt, wenn das ohne Rest aufgeht
+function micSplit(seg){ const w = seg.split(/\s+/).filter(Boolean);
+  if (w.length < 2 || /\bmit\b/i.test(seg) || micKnown(w.filter(x => !MIC_NUM.test(x) && !MIC_UNIT.test(x)).join(" "))) return seg;
+  const out = []; let i = 0, known = 0, unk = [];
+  const flush = () => { if (unk.length) { out.push(unk.join(" ")); unk = []; } };
+  while (i < w.length) { const pre = []; while (i < w.length && (MIC_NUM.test(w[i]) || MIC_UNIT.test(w[i]))) pre.push(w[i++]);
+    let hit = 0; for (let j = Math.min(w.length, i + 4); j > i; j--) if (micKnown(w.slice(i, j).join(" "))) { hit = j; break; }
+    if (hit) { flush(); out.push([...pre, ...w.slice(i, hit)].join(" ")); known++; i = hit; } else { unk.push(...pre, ...(i < w.length ? [w[i]] : [])); i++; } }
+  flush(); return known >= 2 || (known >= 1 && out.length >= 2 && out.every(x => x.split(" ").length <= 3)) ? out.join(", ") : seg; }
+function speechClean(t){
+  t = " " + t.replace(/[.!?]/g, ",") + " ";
+  // gesprochene Bruchzahlen
+  t = t.replace(/\s(einen|eine|ein|einer)\s+(halben|halbe|halbes|halber)\s/gi, " ½ ").replace(/\s(anderthalb|eineinhalb|einhalb)\s/gi, " 1,5 ").replace(/\szweieinhalb\s/gi, " 2,5 ").replace(/\s(halben|halbe|halbes|halber)\s/gi, " ½ ");
+  t = t.replace(/\s(okay|ok|also|ähm|äh|ehm|hm|ja|so|mal|noch|dann|danach|auch|außerdem|zusätzlich|insgesamt|ungefähr|etwa|circa|ca|bisschen|ein bisschen|heute|gestern|vorhin|morgens|mittags|abends|zum frühstück|zum mittag(essen)?|zu mittag|zum abendessen|zum abendbrot|als snack|ich|habe|hab|hatte|wir|haben|getrunken|gegessen|genommen|trinken|essen|gerade)(?=[\s,])/gi, " ");
+  const w = t.split(/\s+/).filter(Boolean), out = [];
+  for (let i = 0; i < w.length; i++) { const x = w[i], prev = out[out.length - 1] || "";
+    if (i > 0 && MIC_NUM.test(x) && !MIC_NUM.test(prev) && !/[,]$/.test(prev) && !/^(und|plus|mit|sowie)$/i.test(prev)) out.push(","); out.push(x); }
+  const txt = out.join(" ").replace(/\s+,/g, ",").replace(/,\s*,+/g, ",").replace(/^[,\s]+|[,\s]+$/g, "").replace(/\bund\b\s*,|,\s*\bund\b/gi, ",").replace(/\s{2,}/g, " ").trim();
+  // „und“/Komma trennen; Abschnitte ohne Trenner in bekannte Lebensmittel zerlegen
+  const segs = txt.split(/(?<!\d)\s*,\s*|\s*,\s*(?!\d)|\s+und\s+/i).filter(Boolean).flatMap(x => micSplit(x).split(/,\s(?!\d)/));
+  // nachgestellte Menge („Pinot Grigio, zwei Gläser“) an den Posten davor hängen
+  const res = []; for (const x of segs) { const w = x.split(/\s+/); if (res.length && w.every(y => MIC_NUM.test(y) || MIC_UNIT.test(y))) res[res.length - 1] = x + " " + res[res.length - 1]; else res.push(x); }
+  return res.join(", "); }
+function micToggle(btn){
+  const ta = sheet.querySelector("#ownText"), note = btn.parentElement.querySelector(".micnote"); if (!ta) return;
+  if (micRec) { micRec.stop(); return; }
+  const base = ta.value.trim() ? ta.value.replace(/[,\s]*$/, ", ") : "";
+  let fin = ""; const rec = new SpeechRec(); micRec = rec; rec.lang = "de-DE"; rec.interimResults = true; rec.continuous = true;
+  const show = live => { ta.value = base + speechClean(fin + " " + live); ta.dispatchEvent(new Event("input", {bubbles: true})); };
+  rec.onresult = e => { let live = ""; for (let i = e.resultIndex; i < e.results.length; i++) { const r = e.results[i]; if (r.isFinal) fin += " " + r[0].transcript; else live += " " + r[0].transcript; } show(live); };
+  rec.onerror = e => { if (note) { note.hidden = false; note.textContent = e.error === "not-allowed" || e.error === "service-not-allowed" ? "Mikrofon nicht erlaubt – in Chrome bei der Seite das Mikrofon freigeben." : e.error === "no-speech" ? "Nichts gehört – nochmal tippen und sprechen." : "Spracherkennung gerade nicht verfügbar (" + e.error + ")."; } };
+  rec.onend = () => { micRec = null; btn.classList.remove("on"); btn.textContent = "🎤 Sprechen"; if (fin.trim()) { show(""); if (note) { note.hidden = false; note.textContent = "Erkannt – kurz prüfen, Mengen bei Bedarf antippen, dann Eintragen."; } } };
+  try { rec.start(); } catch { micRec = null; return; }
+  btn.classList.add("on"); btn.textContent = "⏹ Fertig"; if (note) { note.hidden = false; note.textContent = "Ich höre zu … z. B. „eine Flasche Weißwein, zwei Bier und eine Banane“."; }
+}
 function nwParse(text){
   const out = [], at = (it, sg) => Object.assign(it, {at: sg.at, len: sg.t.length});
   for (const sg of nwSegs(text, /(?<!\d),|,(?!\d)|;|\+|\n|\bund\b|\bsowie\b|\bdazu\b|\bplus\b/gi)) {
@@ -3984,18 +4030,28 @@ function sugScore(t, q){ const words = fold(t).split(/[^a-z0-9ß]+/).filter(Bool
   return fuzzy ? 1 : 2; }
 const SNACK_DEF = ["Banane", "150 g Skyr", "Handvoll Nüsse", "Proteinriegel", "2 Reiswaffeln", "Joghurt", "Studentenfutter", "Karotte", "Käsebrot", "Proteinshake"];
 function snackPicks(){ const c = new Map(), are = avoidRe();
-  for (const d of Object.keys(store.days).sort().reverse().slice(0, 60)) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) { const k = fold(o.name || "").replace(/[^a-z0-9ß]+$/, ""); if (!k) continue; const x = c.get(k) || {name: o.name, kcal: num(o.kcal), protein: num(o.protein), n: 0}; x.n++; c.set(k, x); } }
+  for (const d of Object.keys(store.days).sort().reverse().slice(0, 60)) { const day = d === cur?.date ? cur : store.days[d]; for (const o of day?.own || []) { const k = fold(o.name || "").replace(/[^a-z0-9ß]+$/, ""); if (!k) continue; const x = c.get(k) || {name: (o.name || "").replace(/[,\s]+$/, ""), kcal: num(o.kcal), protein: num(o.protein), n: 0}; x.n++; c.set(k, x); } }
   const mine = [...c.values()].sort((a, b) => b.n - a.n).slice(0, 8);
   for (const n of SNACK_DEF) { if (mine.length >= 10) break; if (c.has(fold(n)) || (are && are.test(n))) continue; mine.push({name: n, def: true}); }
   return mine; }
 function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
-  return `<div class="sh"><h2>Essen eintragen · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
-    <div class="mhead snackamt"><span class="lab">Wie viel?</span><div class="chips sm">${[[0.5, "½"], [1, "1"], [2, "2"], [3, "3"]].map(([v, l]) => `<button type="button" data-snackmul="${v}" aria-pressed="${snackMul === v && !snackG}">${l}×</button>`).join("")}<input type="text" id="snackG" inputmode="decimal" value="${esc(snackG)}" placeholder="g / ml" aria-label="oder Gramm bzw. Milliliter"></div></div>
-    <div class="lab">Antippen = sofort eingetragen${snackG ? ` · ${esc(snackG)} g/ml` : snackMul !== 1 ? ` · ${snackMul === 0.5 ? "½" : snackMul}×` : ""}</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackpick="${esc(x.name)}">${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
-    <div class="card ownf"><div class="field"><label for="ownText">Oder eintippen</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, Cola, 30 g Mandeln" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
-    <div id="ownEst" class="small muted">Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
+  return `<div class="sh"><h2>Essen & Trinken · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
+    <div class="card ownf"><div class="field"><label for="ownText">Was hast du gegessen oder getrunken?</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, ein Glas Weißwein, 30 g Mandeln" autocomplete="off"></textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
+    <div class="lab">Zuletzt · antippen fügt hinzu</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackadd="${esc(snackPickText(x.name))}">＋ ${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
+    <div id="ownEst" class="small muted">Mengen gehen auch direkt im Text: „2 Brezeln“, „200 g Skyr“, „ein Glas“ oder „halbe Flasche“.</div>
     <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>
     <button class="btn" type="button" data-scanstart="snack">📷 Barcode scannen</button><div id="scanSlot"></div></div>`; }
+// Mengenangabe vorn am Posten („2 Flaschen “, „200 g “) für gespeicherte Namen; „ein“ allein fällt weg
+const nwQty = t0 => (t0.match(/^\s*((?:\d+(?:[.,]\d+)?|½|ein|eine|einen|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|halbe?n?)\s*(?:g|ml|kg|l|liter|glas|gläser|flaschen?|tassen?|dosen?|stück|scheiben?|becher|portionen?|handvoll)?\s+)/i) || ["", ""])[1].replace(/^(ein|eine|einen)\s+$/i, "");
+// Schnellwahl-Namen in Text mit Menge vorn: „Skyr, 250 g“ → „250 g Skyr“, „2× Banane“ → „2 Banane“
+const snackPickText = n => { let m = n.match(/^(.*),\s*(\d+(?:[.,]\d+)?)\s*(g|ml)$/); if (m) return `${m[2]} ${m[3]} ${m[1]}`; m = n.match(/^(½|\d+(?:[.,]\d+)?)×\s*(.*)$/); return m ? `${m[1]} ${m[2]}` : n; };
+// Posten hinzufügen; steht derselbe schon im Feld (gleicher Name, ohne eigene Grammzahl), nur um eins erhöhen
+function ownAdd(ta, head, txt){
+  const add = nwParse(txt), one = add.length === 1 && add[0].ok ? add[0] : null, have = one && !/^\s*\d+(?:[.,]\d+)?\s*(g|ml|kg|l)\b/i.test(txt) ? nwParse(head).find(i => i.ok && fold(i.name) === fold(one.name) && !/\b(g|ml|kg|l|liter)\b/i.test(i.text)) : null;
+  if (have) { ta.value = head; nwLast = nwParse(head); const it = nwLast.find(i => i.at === have.at); let nx = nwStep(it.text, 1);
+    if (it.uk && it.uk !== "ml" && !/\b(glas|gläser|tassen?|flaschen?|dosen?)\b/i.test(it.text)) nx = nx.replace(/^(\S+)\s+/, (m0, n) => `${n} ${it.uk === "flasche" ? (/^(1|½)$/.test(n) ? "Flasche" : "Flaschen") : (/^(1|½)$/.test(n) ? "Glas" : "Gläser")} `);
+    nwReplace(ta, it, nx); return; }
+  ta.value = head + (head && !/[,\s]$/.test(head) ? ", " : head && !/,\s*$/.test(head) ? ", " : "") + txt + ", "; ta.dispatchEvent(new Event("input", {bubbles: true})); }
 // Snack speichern: Text → Werte (frühere Einträge, Bon-Produkte, Nährwerttabelle), Uhrzeit jetzt
 async function snackSave(d, tx, amt, known){ await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
   amt = amt || {mul: 1, g: null};
@@ -4004,7 +4060,9 @@ async function snackSave(d, tx, amt, known){ await Promise.all([NW ? null : ensu
   let items = NW ? nwParse(amt.g ? `${amt.g} g ${base}` : tx) : [], f = amt.g ? 1 : amt.mul;
   let byG = !!amt.g; if (amt.g && !items.every(i => i.ok && i.g)) { items = NW ? nwParse(tx) : []; f = 1; byG = false; }
   if (known && !byG) items = [{ok: true, name: tx, kcal: known.kcal || 0, protein: known.protein || 0}];
-  const ok = items.filter(i => i.ok), nm0 = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 110);
+  // Name mit Mengen („2 Flaschen Weißwein, 2 Banane“), damit Schnellwahl und Verlauf die Menge kennen
+  const qty = nwQty; void (t0 => (t0.match(/^\s*((?:\d+(?:[.,]\d+)?|½|ein|eine|einen|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|halbe?n?)\s*(?:g|ml|kg|l|liter|glas|gläser|flaschen?|tassen?|dosen?|stück|scheiben?|becher|portionen?|handvoll)?\s+)/i) || ["", ""])[1]);
+  const ok = items.filter(i => i.ok), nm0 = (ok.length === items.length && ok.length ? ok.map(i => (byG ? "" : qty(i.text)) + i.name).join(", ") : tx.replace(/[,\s]+$/, "")).slice(0, 110);
   const name = byG ? `${nm0}, ${fmtQ(amt.g)} ${items.every(i => i.ml) ? "ml" : "g"}` : f !== 1 ? `${f === 0.5 ? "½" : fmtQ(f)}× ${nm0}` : nm0;
   const kcal = ok.length ? Math.round(ok.reduce((a, i) => a + i.kcal, 0) * f) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0) * f) : null;
   const id = Date.now().toString(36), time = d === todayIso() ? hmStr(new Date().getHours() * 60 + new Date().getMinutes()) : "";
@@ -4042,19 +4100,19 @@ function otherSheet(arg){
     <div class="small muted">${m ? `Statt <b>${esc(m.info.name)}</b> (${esc(MEAL_SHORT[k] || m.label)}, ${fmt(d)}). ` : ""}Wird als gegessen gezählt.</div>
     <div class="card ownf"><div class="field"><label for="ownName">Was war's?</label><input type="text" id="ownName" placeholder="z. B. Pizza Margherita, Mensa-Curry, Döner" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
     <details class="otherdet"><summary>Zutaten grob angeben <span class="small muted">(optional, für kcal und Eiweiß)</span></summary>
-      <div class="field"><label for="ownText">Zutaten und Mengen, so grob wie du magst</label><textarea id="ownText" rows="3" placeholder="z. B. 200 g Nudeln, Tomatensoße, 50 g Käse"></textarea><div class="sugg" id="ownIngSug"></div></div>
+      <div class="field"><label for="ownText">Zutaten und Mengen, so grob wie du magst</label><textarea id="ownText" rows="3" placeholder="z. B. 200 g Nudeln, Tomatensoße, 50 g Käse"></textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
       <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
       <div class="grid2"><div class="field nutri"><label for="ownKcal">kcal</label><input type="text" inputmode="numeric" id="ownKcal"></div><div class="field nutri"><label for="ownProt">Eiweiß g</label><input type="text" inputmode="numeric" id="ownProt"></div></div>
     </details>
     <button class="btn primary big" type="button" id="ownSave" data-mode="other">✓ Eintragen</button></div>`;
 }
 function ownForm(mode){
-  if (mode === "past") return `<div class="card ownf"><div class="field"><label for="ownText">Was hast du gegessen?</label><textarea id="ownText" rows="2" placeholder="z. B. Scramble, 2 Brezeln, eine Cola" autocomplete="off"></textarea><div class="sugg" id="ownIngSug"></div></div>
+  if (mode === "past") return `<div class="card ownf"><div class="field"><label for="ownText">Was hast du gegessen?</label><textarea id="ownText" rows="2" placeholder="z. B. Scramble, 2 Brezeln, eine Cola" autocomplete="off"></textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
     <div id="ownEst" class="small muted">Mehreres mit Komma trennen. Mengen wie „2“, „200 g“ oder „halbe“ werden erkannt.</div>
     <button class="btn primary big" type="button" id="ownSave" data-mode="past">✓ Eintragen</button></div>`;
   const tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
   return `<div class="card ownf"><div class="lab">${mode === "slot" ? "Oder eigenes Essen eintragen" : "Was hast du gegessen?"}</div>
-    <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea><div class="sugg" id="ownIngSug"></div></div>
+    <div class="field"><label for="ownText">In eigenen Worten</label><textarea id="ownText" rows="2" placeholder="z. B. Mensa-Curry mit Reis und eine Brezel"></textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
     <button class="btn small" type="button" data-act="ownEstimate">🧮 Werte schätzen</button><div id="ownEst"></div>
     <button class="btn small" type="button" data-scanstart="own">📷 Barcode scannen</button><div id="scanSlot"></div>
     <div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" placeholder="z. B. Mensa-Curry, Brezel, Pizza" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
@@ -4497,7 +4555,7 @@ function resteEatHtml(name){
   return `<div class="sh"><h2>Eintragen</h2>${close}</div>
     <div class="card ownf"><div class="field"><label for="ownName">Gericht</label><input type="text" id="ownName" value="${esc(rsEat.title ?? (r ? r.name : "Resteessen"))}" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
     <div><div class="lab">Was war drin? <span class="small muted">(abwählen, was du weggelassen hast)</span></div><div class="rsing">${rsEat.lines.map((x, i) => `<label class="check small"><input type="checkbox" data-rsing="${i}" ${x.on ? "checked" : ""}><span>${esc(x.l)}</span></label>`).join("")}</div></div>
-    <div class="field"><label for="ownText">Anderes dazu</label><textarea id="ownText" rows="2" placeholder="z. B. 50 g Feta, Paprika, Reis von gestern" autocomplete="off">${esc(rsEat.extra || "")}</textarea><div class="sugg" id="ownIngSug"></div></div>
+    <div class="field"><label for="ownText">Anderes dazu</label><textarea id="ownText" rows="2" placeholder="z. B. 50 g Feta, Paprika, Reis von gestern" autocomplete="off">${esc(rsEat.extra || "")}</textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
     ${r ? `<div class="mhead"><span>Portionen: <b>${rsEat.por}</b> <span class="small muted">von ${r.servings || 1} laut Rezept</span></span><div class="actions"><button class="btn small" type="button" data-rspor="-0.5" aria-label="Weniger">−</button><button class="btn small" type="button" data-rspor="0.5" aria-label="Mehr">+</button></div></div>` : ""}
     <div class="field"><label for="rsSlot">Als</label><select id="rsSlot"><option value="">Zusätzlich (jetzt)</option>${open.map(m => `<option value="${m.k}" ${rsEat.slot === m.k ? "selected" : ""}>statt ${esc(MEAL_SHORT[m.k] || m.label)}: ${esc(m.info.name)}</option>`).join("")}</select></div>
     <div id="rsEst" class="small muted">Werte werden berechnet …</div>
@@ -4943,7 +5001,7 @@ document.querySelector("nav.bottom").addEventListener("click", e => { const b = 
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { if (micRec) try { micRec.abort(); } catch {}  { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) { cook.run = false; clearInterval(cookInt); releaseWake(); } if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
@@ -4951,8 +5009,8 @@ async function onClick(e){
     if (x.ing && q("#ownText")) q("#ownText").value = x.ing; const det = q(".otherdet"); if (det && (x.kcal || x.protein)) det.open = true;
     q("#ownSug").innerHTML = ""; ownSugList = []; return; }
   const isg = t.closest("[data-ingsug]"); if (isg) { const x = ownIngSug[+isg.dataset.ingsug], ta = sheet.querySelector("#ownText"); if (!x || !ta) return;
-    const {head, amt} = ownIngParts(ta.value); ta.value = head + (head && !/\s$/.test(head) ? " " : "") + (amt.trim() ? amt.trim() + " " : "") + x.name + ", "; ta.focus();
-    sheet.querySelector("#ownIngSug").innerHTML = ""; ownIngSug = []; ta.dispatchEvent(new Event("input", {bubbles: true})); return; }
+    const {head, amt} = ownIngParts(ta.value); sheet.querySelector("#ownIngSug").innerHTML = ""; ownIngSug = [];
+    ownAdd(ta, head.replace(/[,\s]*$/, head.trim() ? ", " : ""), (amt.trim() ? amt.trim() + " " : "") + x.name); ta.focus(); return; }
   const cb = t.closest("[data-coach]"); if (cb) { const k = cb.dataset.coach; ensureCur();
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
@@ -4988,10 +5046,11 @@ async function onClick(e){
   if (t.id === "ownSave" && t.dataset.mode === "snack") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await snackSave(sheetArg || todayIso(), tx, {mul: snackMul, g: num(snackG)}); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
   const snm = t.closest("[data-snackmul]"); if (snm) { snackMul = Number(snm.dataset.snackmul); snackG = ""; renderSheet(); return; }
+  const sna = t.closest("[data-snackadd]"); if (sna) { const ta = sheet.querySelector("#ownText"); if (!ta) return; ownAdd(ta, ta.value.trim() ? ta.value.replace(/[,\s]*$/, ", ") : "", sna.dataset.snackadd); return; }
   const snp = t.closest("[data-snackpick]"); if (snp) { if (snp.disabled) return; snp.disabled = true; const kn = snackPicks().find(x => x.name === snp.dataset.snackpick && !x.def && (x.kcal || x.protein)); await snackSave(sheetArg || todayIso(), snp.dataset.snackpick, {mul: snackMul, g: num(snackG)}, kn); snackMul = 1; snackG = ""; sheetKind = null; sheet.close(); render(); return; }
   if (t.id === "ownSave" && t.dataset.mode === "past") { if (t.disabled) return; const tx = sheet.querySelector("#ownText")?.value.replace(/[,\s]+$/, "").trim(); if (!tx) { sheet.querySelector("#ownText").focus(); return; }
     t.disabled = true; await Promise.all([NW ? null : ensureNW().catch(() => {}), recipes ? null : ensureMeals().catch(() => {})]);
-    const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => i.name).join(", ") : tx).slice(0, 120);
+    const items = NW ? nwParse(tx) : [], ok = items.filter(i => i.ok), name = (ok.length === items.length && ok.length ? ok.map(i => nwQty(i.text) + i.name).join(", ") : tx).slice(0, 120);
     const kcal = ok.length ? ok.reduce((a, i) => a + i.kcal, 0) : null, protein = ok.length ? Math.round(ok.reduce((a, i) => a + i.protein, 0)) : null;
     const d = sheetArg, id = Date.now().toString(36); editDay(d, day => { day.own = [...(day.own || []), Object.assign({id, name, kcal, protein, time: ""}, name !== tx ? {ing: tx} : {})]; day.ate = Object.assign({}, day.ate, {["o" + id]: true}); });
     toast(ok.length < items.length ? "Eingetragen – nicht alles erkannt, Werte sind ein Teilwert" : "Eingetragen"); sheetKind = null; sheet.close(); render(); return; }
@@ -5029,6 +5088,7 @@ async function onClick(e){
     if (k.startsWith("o")) editDay(d, day => { day.own = (day.own || []).map(o => o.id === k.slice(1) ? Object.assign({}, o, {f}) : o); });
     else editDay(d, day => { const pp = Object.assign({}, day.por); if (f === 1) delete pp[k]; else pp[k] = f; day.por = pp; });
     toast(`Menge: ${fTxt(f)}${k.startsWith("o") ? "×" : f === 1 ? " Portion" : " Portionen"}`); render(); if (sheet.open) renderSheet(); return; }
+  const mic = t.closest("[data-mic]"); if (mic) { micToggle(mic); return; }
   const nwu = t.closest("[data-nwu]"); if (nwu) { const [ix0, k] = nwu.dataset.nwu.split("|"), it = nwLast[+ix0], ta = sheet.querySelector("#ownText"); if (!it || !ta || !it.g) return;
     // Menge umrechnen und den Posten im Text ersetzen: 400 ml → „2 Gläser“, „½ Flasche“, „400 ml“
     const ml = it.g, nm = it.name, nx = k === "glas" ? (n => `${fmtQ(n)} ${n === 1 ? "Glas" : "Gläser"} ${nm}`)(Math.max(1, Math.round(ml / (it.gl || ml)))) : k === "flasche" ? (n => `${n === 0.5 ? "½" : fmtQ(n)} ${n <= 1 ? "Flasche" : "Flaschen"} ${nm}`)(Math.max(1, Math.round(ml / (it.fl || ml) * 2) / 2)) : `${Math.max(50, Math.round(ml / 10) * 10)} ml ${nm}`;
