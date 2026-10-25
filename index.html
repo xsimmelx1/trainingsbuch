@@ -359,7 +359,7 @@ h3.sub3{margin:14px 0 4px;font-size:14px;text-transform:uppercase;letter-spacing
 [data-swipe=meal].swiping{transition:none;background:var(--surface);transform:translateX(calc(var(--dx) * 1px));z-index:1}
 [data-swipe=meal]::before,[data-swipe=meal]::after{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 14px;font-weight:700;opacity:0;pointer-events:none;border-radius:10px;white-space:nowrap}
 [data-swipe=meal]::before{content:attr(data-swr);right:100%;width:calc(var(--dx, 0) * 1px);overflow:hidden;justify-content:center;background:var(--good-soft);color:var(--good)}
-[data-swipe=meal]::after{content:attr(data-swl);left:100%;width:calc(var(--dx, 0) * -1px);overflow:hidden;justify-content:center;background:var(--warn-soft);color:var(--warn)}
+[data-swipe=meal]::after{content:attr(data-swl);left:100%;width:calc(var(--dx, 0) * -1px);overflow:hidden;justify-content:center;background:var(--bad-soft);color:var(--bad)}
 [data-swipe=meal].sw-r::before,[data-swipe=meal].sw-l::after{opacity:1}
 [data-swipe=meal]:not(.swiping)::before,[data-swipe=meal]:not(.swiping)::after{display:none}
 [data-swipe=meal].swiping.sw-r{background:var(--good-soft);box-shadow:inset 4px 0 0 var(--good)}
