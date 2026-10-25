@@ -311,6 +311,17 @@ def utc(d, hm):
     return dt.datetime.combine(d, dt.time(h, m), TZ).astimezone(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
+def cal_pref(settings, k):
+    """Kalender-Einstellung je Eintragsart: (im Kalender?, Erinnerung in Minuten vorher oder None). Ohne Einstellung wie bisher."""
+    p = (settings.get("calPrefs") or {}).get(k) or {}
+    pp = settings.get("pushPrefs") or {}
+    default = {"train": 30, "mob": 0 if pp.get("morning") is not False else None, "pain": 0 if pp.get("pain") is not False else None,
+               "checkin": 15 if pp.get("checkin") is not False else None, "marker": None}[k]
+    rem = p["rem"] if "rem" in p else default
+    ok = isinstance(rem, (int, float)) and not isinstance(rem, bool) and 0 <= rem <= 1440
+    return p.get("on") is not False, int(rem) if ok else None
+
+
 def build_ics(now, settings, plan, extras, past):
     stamp = now.strftime("%Y%m%dT000000Z")  # tagesgenau, damit der Feed nur bei echten Änderungen neu committet wird
     L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//trainingsbuch//planner//DE", "CALSCALE:GREGORIAN",
@@ -335,27 +346,31 @@ def build_ics(now, settings, plan, extras, past):
             L.extend(["BEGIN:VALARM", "ACTION:DISPLAY", f"TRIGGER:-PT{alarm}M", "DESCRIPTION:" + ics_escape(summary), "END:VALARM"])
         L.append("END:VEVENT")
 
-    for p in past + plan:
+    (on_train, rem_train), (on_mob, rem_mob), (on_pain, rem_pain), (on_check, rem_check), (on_mark, _) = (
+        cal_pref(settings, k) for k in ("train", "mob", "pain", "checkin", "marker"))
+    for p in (past + plan) if on_train else []:
         d = dt.date.fromisoformat(p["date"])
         s = variant(p["session"], settings, d)
         title = PUBLIC_TITLE.get(s, s)
         desc = ("Nur ein kurzer Slot frei: 30-Minuten-Einheit.\n" if p.get("short") else "") + "Übungen und Sätze stehen in der App."
         past_day = d < now.date()
         ev(f"train-{p['date']}", f"Training: {title}", desc, f"{SITE}#w={p['date']}",
-           utc(d, p["start"]), utc(d, p["end"]), alarm=None if past_day else 30)
+           utc(d, p["start"]), utc(d, p["end"]), alarm=None if past_day else rem_train)
     today = now.date()
     mob, pain = routine_at(settings, "mob"), routine_at(settings, "pain")
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
-        ev(f"morning-{d}", f"Morgenroutine {mob_min(settings)} min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
-           f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, mob_min(settings))), alarm=0 if (settings.get("pushPrefs") or {}).get("morning") is not False else None)
-        ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=0 if (settings.get("pushPrefs") or {}).get("pain") is not False else None)
-    for x in extras:
+        if on_mob:
+            ev(f"morning-{d}", f"Morgenroutine {mob_min(settings)} min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
+               f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, mob_min(settings))), alarm=rem_mob)
+        if on_pain:
+            ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=rem_pain)
+    for x in extras if on_check else []:
         d = dt.date.fromisoformat(x["date"])
         ev(f"checkin-{x['date']}", "Check-in & Meal Prep", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser).",
-           f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=15 if (settings.get("pushPrefs") or {}).get("checkin") is not False else None)
+           f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=rem_check)
     st = settings.get("startDate")
-    if st:
+    if st and on_mark:
         s0 = dt.date.fromisoformat(st)
         cyc = max(0, (today - s0).days // 84)
         s0 = s0 + dt.timedelta(days=84 * cyc)

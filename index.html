@@ -480,6 +480,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .gk.ok{background:color-mix(in srgb,var(--good) 20%,transparent)}
 .gk.no{background:color-mix(in srgb,var(--bad) 22%,transparent)}
 .gearpick{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.calpref{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--line, rgba(127,127,127,.2))}
+.calpref select{max-width:48%}
+.calpref select:disabled{opacity:.45}
 .tmrbtns{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;width:100%}
 .tmrbtns .btn{min-height:48px;font-size:17px}
 .scanbox{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:4/3}
@@ -3707,15 +3710,24 @@ function calMonth(d){
     h += `<button type="button" class="mc ${dd === t ? "t" : ""} ${mk ? "mk" : ""}" data-calday="${dd}" aria-label="${fmt(dd)}${tr ? ", " + esc(tr.title) : ""}"><span class="dn">${i}</span>${tr ? `<span class="tr ${tr.done ? "done" : tr.miss ? "miss" : ""}">${tr.done ? "✓" : esc(tr.tm || "T")}</span>` : ""}${bo ? `<span class="bo">B</span>` : ""}</button>`; }
   return h + `</div><div class="small muted"><span class="lg tr"></span> Training (✓ erledigt) &nbsp; <span class="lg bo"></span> Bouldern &nbsp; <span class="lg mk"></span> Deload/Messtag · Tag antippen für die Tagesansicht.</div>`;
 }
+// Kalender-Abo: welche Einträge drinstehen und wann der Kalender erinnert (Minuten vorher, null = keine). Ohne Einstellung wie bisher.
+const CAL_KINDS = [["train", "Training"], ["mob", "Morgenroutine"], ["pain", "Abendcheck"], ["checkin", "Check-in & Meal Prep"], ["marker", "Mess- & Deload-Tage"]];
+const CAL_REM = [[null, "ohne Erinnerung"], [0, "zum Start"], [5, "5 min vorher"], [10, "10 min vorher"], [15, "15 min vorher"], [30, "30 min vorher"], [60, "1 h vorher"]];
+function calPref(k){ const p = (S().calPrefs || {})[k], pp = S().pushPrefs || {};
+  const def = {train: 30, mob: pp.morning !== false ? 0 : null, pain: pp.pain !== false ? 0 : null, checkin: pp.checkin !== false ? 15 : null, marker: null}[k];
+  return {on: p?.on !== false, rem: p && "rem" in p ? p.rem : def}; }
+const calPrefsHtml = () => `<h3 class="sub3">Was im Kalender steht</h3>${info("Haken weg: der Eintrag verschwindet beim nächsten Abgleich aus dem Kalender. Die Erinnerung gilt je Eintragsart.")}
+  <div class="calprefs">${CAL_KINDS.map(([k, l]) => { const p = calPref(k); return `<div class="calpref"><label class="check"><input type="checkbox" data-calon="${k}" ${p.on ? "checked" : ""}><span>${l}</span></label>${k === "marker" ? `<span class="small muted">ganztägig</span>` : `<select data-calrem="${k}" ${p.on ? "" : "disabled"} aria-label="Erinnerung für ${l}">${CAL_REM.map(([v, t]) => `<option value="${v ?? ""}" ${p.rem === v ? "selected" : ""}>${t}</option>`).join("")}</select>`}</div>`; }).join("")}</div>`;
 function calExportHtml(){
   const url = S().icsUrl;
-  return `<div class="card"><h2>Kalender-Abo</h2>${url ? `${info("Die Trainingstermine gibt es als Kalender-Abo (iCal). Es enthält nur Trainingstermine mit neutralen Namen und aktualisiert sich automatisch.")}
+  return `<div class="card"><h2>Kalender-Abo</h2>${url ? `${info("Deine Termine gibt es als Kalender-Abo (iCal) mit neutralen Namen; es aktualisiert sich automatisch. Welche Einträge drinstehen und wann erinnert wird, stellst du unten ein.")}
     <code class="copy" id="icsUrl">${esc(url)}</code>
     <div class="btnrow two"><button class="btn" id="icsCopy" type="button">Link kopieren</button>
     <a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:"))}" target="_blank" rel="noopener">Google Kalender ↗</a>
     <a class="btn ghost" href="${esc(url.replace(/^https:/, "webcal:"))}">Andere Kalender-App</a>
     <a class="btn ghost" href="${esc(url)}" download="trainingsbuch.ics">.ics herunterladen</a></div>
-    ${info("Die heruntergeladene Datei ist eine Momentaufnahme. Für automatische Updates das Abo nutzen. Google Kalender übernimmt bei Abos keine Wecker; dafür erinnern dich die Push-Nachrichten der App (Apple Kalender und ICSx5 übernehmen sie).")}
+    ${info("Die heruntergeladene Datei ist eine Momentaufnahme. Für automatische Updates das Abo nutzen. Google Kalender übernimmt bei Abos keine Erinnerungen. Auf Android holt die App ICSx⁵ das Abo in den Handy-Kalender, dann klingeln die Erinnerungen auch dort (Apple Kalender und Outlook übernehmen sie direkt).")}
+    ${calPrefsHtml()}
     <h3 class="sub3">Essensplan als eigener Kalender</h3>${info("Separat abonnieren, dann lässt er sich in Google Kalender unabhängig vom Training ein- und ausblenden.")}
     <code class="copy" id="mealIcsUrl">${esc(url.replace(/\.ics$/, "-essen.ics"))}</code>
     <div class="btnrow two"><button class="btn" id="mealIcsCopy" type="button">Link kopieren</button><a class="btn" href="https://calendar.google.com/calendar/r?cid=${encodeURIComponent(url.replace(/^https:/, "webcal:").replace(/\.ics$/, "-essen.ics"))}" target="_blank" rel="noopener">Google Kalender ↗</a></div>` : `<div class="small muted">Nach dem Verbinden unter Einrichtung erscheint hier der iCal-Link.</div>`}</div>`;
@@ -5421,6 +5433,9 @@ async function onChange(e){
   if (t.id === "htIn") { const v = num(t.value); if (v) saveSettings({height:v}); return; }
   if (t.id === "scClr") { saveSettings({scCleared:t.checked}); return; }
   if (t.id === "kn1") { saveSettings({knee1:t.checked}); return; }
+  if (t.dataset.calon || t.dataset.calrem) { const k = t.dataset.calon || t.dataset.calrem, p = calPref(k);
+    if (t.dataset.calon) p.on = t.checked; else p.rem = t.value === "" ? null : +t.value;
+    saveSettings({calPrefs: Object.assign({}, S().calPrefs, {[k]: p})}); replanSoon(); toast(token ? "Gespeichert · der Kalender folgt in ein paar Minuten" : "Gespeichert"); render(); return; }
   if (t.dataset.rth || t.dataset.rtm) { const k = t.dataset.rth || t.dataset.rtm, box = t.closest(".ftpick"), v = `${String(box.querySelector("[data-rth]").value).padStart(2, "0")}:${String(box.querySelector("[data-rtm]").value).padStart(2, "0")}`;
     const rt = Object.assign({}, S().routineTimes, {[k]: v}); saveSettings({routineTimes: rt}); replanSoon();
     toast(`${k === "mob" ? "Morgenroutine" : "Abendcheck"}: ${v} Uhr${token ? " · Kalender und Plan folgen in ein paar Minuten" : ""}`); render(); return; }
