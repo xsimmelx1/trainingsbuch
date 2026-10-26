@@ -1178,12 +1178,13 @@ let tmr = null, tmrInt = null;
 // Morgenroutine: von Hand auf ruhiges Tempo gesetzt (Bewegung nie unter 2 s); sonst aus dem Tempo im Plan (runter-Pause-hoch-halten).
 const REP_STEPS = {
   "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
-  "mob:tiltlie": [["Einrollen", 1, "hin"], ["Halten", 5, "hold"], ["Lösen", 2, "back"]],
-  "mob:tilt": [["Einrollen", 1, "hin"], ["Halten", 3, "hold"], ["Lösen", 2, "back"]],
+  // Beckenkippen: Einrollen ist kein eigener Schritt, es passiert in der ersten Sekunde von „Halten“ (4. Wert = Sekunden Hinweg im Video)
+  "mob:tiltlie": [["Halten", 5, "hold", 1], ["Lösen", 2, "back"]],
+  "mob:tilt": [["Halten", 3, "hold", 1], ["Lösen", 2, "back"]],
   "mob:glutebr": [["Hoch", 1, "hin"], ["Halten", 3, "hold"], ["Runter", 2, "back"]],
   "mob:deadbug": [["Strecken", 2, "hin"], ["Halten", 2, "hold"], ["Zurück", 2, "back"]],
   "mob:shrug30": [["Hoch", 1, "hin"], ["Halten", 2, "hold"], ["Ablassen", 2, "back"]]};
-function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k]) => ({l, s, k}));
+function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k, i]) => i ? {l, s, k, in: i} : {l, s, k});
   const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), st = [{l: "Bewegen", s: Math.max(1, tp ? +tp[3] : 1), k: "hin"}, {l: "Halten", s: d.hold, k: "hold"}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
   if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
 const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
@@ -2283,7 +2284,8 @@ function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!
   const still = x => { v.pause(); v.loop = false; try { v.currentTime = x * k; } catch {} };
   // Standbild: Halten → Halteposition; vor dem Start, in Pausen und Ruhe → Ausgangsposition (bei Halteübungen ohne Wiederholungen die Halteposition)
   if (ph === "still" || ph === "start" || ph === "pause") return still(reps && (ph !== "still" || kind !== "hold") ? mp.start : mp.hold);
-  if (ph === "hold") return still(mp.hold);
+  if (ph === "hold" && !(t.steps?.[t.step]?.in && mp.hin)) return still(mp.hold);
+  if (ph === "hold") { const r = mp.hin; v.loop = false; v.playbackRate = Math.min(3, Math.max(0.2, (r[1] - r[0]) / t.steps[t.step].in)); try { v.currentTime = r[0] * k; } catch {} v._stopAt = r[1] * k; v.play().catch(() => {}); clipWatch(v); return; } // erst einrollen, dann stehen bleiben
   if (ph === "loop") { if (!mp.hin) { v.playbackRate = 1; v.loop = true; v.play().catch(() => {}); } else still(mp.hold); return; }
   const r = ph === "hin" ? mp.hin : mp.back; if (!r) return still(ph === "hin" ? mp.hold : mp.start);
   v.loop = false; v.playbackRate = Math.min(3, Math.max(0.2, (r[1] - r[0]) / Math.max(0.5, t.left + ZERO_SEC)));
