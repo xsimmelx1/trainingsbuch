@@ -763,8 +763,7 @@ def meal_defaults(mp, settings, d, train, is_train=None, boulder=False, rec=None
         o["mi"], o["ab"] = (W["batchA"], W["batchB"]) if i % 2 == 0 else (W["batchB"], W["batchA"])
         if rec is not None and (settings.get("food") or {}).get("mealPrep") is False:  # Meal Prep aus: frische, ähnliche Gerichte (wie in der App)
             for k in ("mi", "ab"):
-                al = alt_meals(mp, rec, k, o[k], rx)
-                sm = [r for r in al if (r.get("servings") or 1) <= 2] + [r for r in al if (r.get("servings") or 1) > 2]
+                sm = alt_meals(mp, rec, k, o[k], rx)
                 if sm:
                     o[k] = sm[(i * 2 + (1 if k == "ab" else 0)) % len(sm)]["name"]
     elif i == 4:

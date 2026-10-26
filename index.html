@@ -3584,7 +3584,7 @@ function journeySheet(kind, arg){
       ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Schon was anderes gegessen</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
-        <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
+        <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
         ${showPrices() ? (() => { const st = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi", c = recipeCost(r, st), best = prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
           return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${STORES[st]}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
@@ -3650,7 +3650,7 @@ function shelfHtml(){
     ["★ Favoriten", ok.filter(r => isFav(r.name)), {fav: true}],
     ["⚡ Schnell (≤ 20 min aktiv)", ok.filter(r => main(r) && (r.activeMin ?? r.timeMin) <= 20).sort((a, b) => (a.activeMin ?? a.timeMin) - (b.activeMin ?? b.timeMin)), {fast: true, cat: "haupt"}],
     ...(prices ? [["💶 Günstig (≤ 1,20 € pro Portion)", ok.filter(r => main(r) && recipeCost(r).portion <= 1.2).sort((a, b) => recipeCost(a).portion - recipeCost(b).portion), {cat: "haupt"}]] : []),
-    ["🍳 Meal Prep", ok.filter(r => main(r) && r.mealPrep && (r.servings || 1) >= 4), {prep: true, cat: "haupt"}],
+    ["🍳 Meal Prep", prepOff() ? [] : ok.filter(r => main(r) && r.mealPrep && (r.servings || 1) >= 4), {prep: true, cat: "haupt"}],
     ["❄️ Kalt zum Mitnehmen", ok.filter(r => main(r) && (r.temp === "kalt" || r.temp === "beides")), {temp: "kalt", cat: "haupt"}],
     ["🔥 Warm & sättigend", ok.filter(r => main(r) && r.temp === "warm").sort((a, b) => recipeNutri(b).protein - recipeNutri(a).protein), {temp: "warm", cat: "haupt"}],
     ["🥣 Frühstück", ok.filter(r => r.category === "fruehstueck"), {cat: "fruehstueck"}],
@@ -4049,7 +4049,7 @@ function budgetSubs0(mo){
 function mealDefaults(d, raw){
   const w = weekNo(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
   if (i <= 3) [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
-  if (i <= 3 && FOOD().mealPrep === false) for (const k of ["mi", "ab"]) { const al = altMeals(k, o[k]), sm = [...al.filter(r => (r.servings || 1) <= 2), ...al.filter(r => (r.servings || 1) > 2)]; if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; }
+  if (i <= 3 && FOOD().mealPrep === false) for (const k of ["mi", "ab"]) { const sm = altMeals(k, o[k]); if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; }
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
   else if (i === 5) [o.mi, o.ab] = [W.frAbend, W.saAbend];
   else [o.mi, o.ab] = [W.saAbend, W.soAbend];
@@ -4141,6 +4141,10 @@ function favFirst(list){
   return [...favs, ...rest];
 }
 // Anzeige im Essensblatt: ähnliche Gerichte, optional nur warm oder kalt (mehr Auswahl als die 8 nächsten)
+// Meal Prep ist eine Art zu kochen, keine Eigenschaft des Gerichts: jedes Gericht geht frisch oder vorgekocht.
+// Ist es aus, steht am Gericht nichts von Meal Prep; ist es an, heißt das Etikett „vorkochbar“ (hält sich gut)
+const prepOff = () => FOOD().mealPrep === false;
+const prepLabel = r => prepOff() ? "" : r.mealPrep ? "vorkochbar" : "";
 function mainAlts(k, curName){
   if (!mealTempF) return altMeals(k, curName);
   const ref = mealInfo(curName), re = avoidRe(), nu = r => recipeNutri(r);
@@ -4171,7 +4175,7 @@ function mealSheet(arg){
     ${(() => { const sl = mealPlan.slots.find(x => x.k === k), are = avoidRe(), fv = recipes.filter(r => isFav(r.name) && r.name !== m.name && sl.cats.includes(r.category) && recipeOk(r, are));
       return `<div class="lab sec">★ Deine Favoriten</div>${fv.length ? fv.map(r => opt(r.name, "Favorit")).join("") : `<div class="small muted">Noch keine passenden Favoriten – im Rezept mit ☆ markieren.</div>`}<div class="lab sec">Ähnliche Gerichte</div>`; })()}
     ${FRIDGE().length ? `<div class="lab sec">🧊 Aus der Restebox (gegessen)</div>` + FRIDGE().map(x => opt(x.name, `Rest · bis ${fmt(x.until)}`).replace('data-meal=', `data-fridge="${x.id}" data-meal=`)).join("") : ""}
-    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, r.mealPrep ? "Meal Prep" : "frisch")).join("")}
+    ${m.swapped ? opt(m.def, "Standard aus dem Plan") : ""}${favFirst(k === "mi" || k === "ab" ? mainAlts(k, m.name) : altMeals(k, m.name)).filter(r => !isFav(r.name)).map(r => opt(r.name, prepLabel(r))).join("")}
     ${opt("away", "Mensa, Kantine, unterwegs")}${opt("skip", "")}
     ${m.k === "mi" || m.k === "ab" ? `<div class="small muted">${esc(mealPlan.away.hint)}</div>` : ""}</div>
     ${ownForm("slot")}
@@ -4283,8 +4287,7 @@ function trainLine(d){
   const day = dayObj(d), p = planFor(d), done = isStrength(day);
   const sk = done ? day.session : p ? variantOf(p.session, d) : null;
   if (!sk || !SESS[sk]) return `<div class="small muted">${day?.boulder?.done ? "Bouldern" : "Kein Krafttraining"}${d >= todayIso() ? " · Ruhetag" : ""}</div>`;
-  const names = SESS[sk].ex.map(id => EX[id]?.name).filter(Boolean);
-  return `<a class="trl ${done ? "done" : ""}" href="#w=${d}"><b>${done ? "✓ " : ""}${esc(SESS[sk].title)}${p?.start && !done ? ` · ${p.start}` : ""}</b><span class="small muted">${names.map(esc).join(" · ")}</span></a>`;
+  return `<a class="trl ${done ? "done" : ""}" href="#w=${d}"><b>${done ? "✓ " : "🏋 "}${esc(SESS[sk].title)}${p?.start && !done ? ` · ${p.start}` : ""}</b></a>`;
 }
 // ---------- Preise: recherchierte Richtpreise je Markt (prices.json), keine Live-Daten ----------
 let prices = null, pricesReady = null;
