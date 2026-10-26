@@ -1178,14 +1178,14 @@ let tmr = null, tmrInt = null;
 // Morgenroutine: von Hand auf ruhiges Tempo gesetzt (Bewegung nie unter 2 s); sonst aus dem Tempo im Plan (runter-Pause-hoch-halten).
 const REP_STEPS = {
   "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
-  // Beckenkippen: Einrollen ist kein eigener Schritt, es passiert in der ersten Sekunde von „Halten“ (4. Wert = Sekunden Hinweg im Video)
-  "mob:tiltlie": [["Halten", 5, "hold", 1], ["Lösen", 2, "back"]],
-  "mob:tilt": [["Halten", 3, "hold", 1], ["Lösen", 2, "back"]],
-  "mob:glutebr": [["Hoch", 1, "hin"], ["Halten", 3, "hold"], ["Runter", 2, "back"]],
-  "mob:deadbug": [["Strecken", 2, "hin"], ["Halten", 2, "hold"], ["Zurück", 2, "back"]],
-  "mob:shrug30": [["Hoch", 1, "hin"], ["Halten", 2, "hold"], ["Ablassen", 2, "back"]]};
+  // Der Hinweg ist kein eigener Schritt: „Halten“ zählt Hinweg + Haltezeit, der 4. Wert sind die Sekunden Hinweg am Anfang (im Video sichtbar)
+  "mob:tiltlie": [["Halten", 6, "hold", 1], ["Lösen", 2, "back"]],
+  "mob:tilt": [["Halten", 4, "hold", 1], ["Lösen", 2, "back"]],
+  "mob:glutebr": [["Halten", 4, "hold", 1], ["Runter", 2, "back"]],
+  "mob:deadbug": [["Halten", 4, "hold", 2], ["Zurück", 2, "back"]],
+  "mob:shrug30": [["Halten", 3, "hold", 1], ["Ablassen", 2, "back"]]};
 function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k, i]) => i ? {l, s, k, in: i} : {l, s, k});
-  const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), st = [{l: "Bewegen", s: Math.max(1, tp ? +tp[3] : 1), k: "hin"}, {l: "Halten", s: d.hold, k: "hold"}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
+  const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), hin = Math.max(1, tp ? +tp[3] : 1), st = [{l: "Halten", s: hin + d.hold, k: "hold", in: hin}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
   if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
 const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
 function timerCfg(key){
