@@ -715,6 +715,8 @@ body.wo .exbody{gap:10px}
 .shopp{font-family:var(--f-num);font-weight:600;font-size:14px;white-space:nowrap}.shopbasis .shopp{font-weight:400;color:var(--muted)}
 .shopnav{margin:8px 0 0}.chips.center{justify-content:center;margin-top:6px}
 .shophead{position:sticky;top:0;z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:8px 0 2px}
+/* aufgeklappt (Märkte, Budget) wäre sie zu hoch und verdeckt beim Scrollen die halbe Liste → scrollt dann mit */
+.shophead[open]{position:relative}
 .shophead > summary{list-style:none;cursor:pointer;padding:10px 14px;display:flex;flex-direction:column;gap:8px}.shophead > summary::-webkit-details-marker{display:none}
 .shoprow{display:flex;justify-content:space-between;gap:10px;font-size:14px}.shoprow span:first-child{white-space:nowrap}.shoprow span:last-child{text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .shophead > .card{border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
@@ -725,6 +727,8 @@ body.wo .exbody{gap:10px}
 summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);text-transform:none;letter-spacing:0;font-size:14px}summary.shopsec::-webkit-details-marker{display:none}summary.shopsec > span:first-child::before{content:"▸ ";color:var(--accent)}.shopbasis[open] > summary.shopsec > span:first-child::before{content:"▾ "}summary.shopsec .n{color:var(--muted)}.shopbasis > .small{margin:0 2px 6px}
 .center{text-align:center;margin-top:10px}
 .mhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+/* geöffnetes ⓘ in einer Kopfzeile: ⓘ bleibt rechts, der Text kommt in voller Breite darunter statt eingequetscht daneben */
+.mhead:has(> details.info[open]){flex-wrap:wrap}.mhead > details.info[open]{display:contents}.mhead > details.info[open] > summary{margin:0}.mhead > details.info[open] > div{flex:1 0 100%}
 .mhead h2{margin:0}
 .meals{display:flex;flex-direction:column;gap:6px}
 .meal{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--meal);border-radius:10px;padding:6px 8px;background:var(--surface)}
