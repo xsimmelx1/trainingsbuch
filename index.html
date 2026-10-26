@@ -504,6 +504,7 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .biopick summary{cursor:pointer;padding:6px 0}
 .favb{border:0;background:none;font-size:24px;line-height:1;min-width:44px;min-height:44px;color:var(--muted);cursor:pointer}
 .favb.on{color:#f5b301}
+.favb.dice{font-size:30px}
 .shr{display:flex;align-items:center;gap:4px}
 .scale button{min-width:40px;min-height:40px}
 .mobi input[type=checkbox]{width:32px;height:32px}
@@ -3585,7 +3586,7 @@ function journeySheet(kind, arg){
   if (kind === "recipe") {
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
-    return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
+    return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${swapCand && swapCand.name === r.name ? "" : `<button type="button" class="favb dice" data-random="rec" data-cur="${esc(r.name)}" aria-label="Anderes Zufallsrezept" title="Anderes Zufallsrezept">⚄</button>`}${favBtn(r.name)}${close}</span></div>
       ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Schon was anderes gegessen</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
@@ -5399,7 +5400,7 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()); if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()).filter((r, _, all) => all.length < 2 || r.name !== rnd.dataset.cur); if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; if (sheetArg !== rc2.dataset.recipe) recTab = "zutaten"; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
