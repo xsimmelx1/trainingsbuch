@@ -5161,10 +5161,10 @@ function shopHtml(){
   const row = i => { const p = P && i.pr && priceOf(i.pr, st0) != null ? i.share * priceOf(i.pr, st0) : null, dn = done.has(i.key);
     return `<label class="shopi ${dn ? "done" : ""} ${prodImgOn() ? "pi" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${dn ? "checked" : ""}>${prodImg(i.pr)}<span class="shopt"><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<span class="small muted"><span class="buy">${esc(i.buy)}</span> · Bedarf ${esc(i.need)}${ownOf(i.pr)[st0] ? ` · <span class="tag">dein Preis</span>` : ""}${P && bio ? bioAlt(i.pr, i.share) : ""}</span>` : ""}${src && shopScope !== "gericht" ? `<span class="small muted">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>` : ""}</span>${p != null ? `<span class="shopp">${eur(p)}${isEst(i.pr, st0) ? `<span class="muted">*</span>` : ""}</span>` : ""}</label>`; };
   const sec = (t, a) => `<span>${esc(t)} <span class="n">· ${a.filter(i => !done.has(i.key)).length}</span></span>${P ? `<span class="n">${eur(shopSum(a, done))}</span>` : ""}`;
-  for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key)); if (!vis.length) continue;
+  for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)); if (!vis.length) continue;
     h += `<div class="shopsec">${sec(g, a)}</div><div class="shopg">${vis.map(row).join("")}</div>`; }
   if (!total) h += `<p class="muted">Nichts zu kaufen – nur Vorrat prüfen.</p>`;
-  if (pantry.length) { const vis = pantry.filter(i => !hide || !done.has(i.key)).sort((x, y) => done.has(x.key) - done.has(y.key));
+  if (pantry.length) { const vis = pantry.filter(i => !hide || !done.has(i.key));
     h += `<details class="shopbasis" ${keepOpen("pantry")}><summary class="shopsec">${sec("🗄 Vorrat prüfen", pantry)}</summary><div class="small muted">Öl, Gewürze, Mehl & Co. – lange haltbar und meist da. Nur nachkaufen, was fehlt; der Preis ist der verbrauchte Anteil.</div><div class="shopg">${vis.map(row).join("")}</div></details>`; }
   if (homeItems.length) h += `<details class="shopbasis" ${keepOpen("home")}><summary class="shopsec"><span>🏠 Im Vorrat <span class="n">· ${homeItems.length}</span></span></summary><div class="small muted">${homeItems.map(i => esc(i.name)).join(" · ")}</div></details>`;
   if (got || pGot) h += `<button class="btn ghost small" type="button" id="shopReset">Alle Haken entfernen</button>`;
@@ -5717,7 +5717,8 @@ async function onChange(e){
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
   if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; touch(); return; }
   if (t.id === "wIn" || t.id === "slIn") { saveCur(); renderToday(); return; }
-  if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]); renderMore(); return; }
+  if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]);
+    const y = window.scrollY; renderMore(); window.scrollTo(0, y); return; } // abgehakt bleibt an seiner Stelle, die Liste springt nicht
   if (t.id === "shopRec") { shopRec = t.value; shopMul = 1; renderMore(); return; }
   if (t.dataset.myo) { const so = setsObj(), id = t.dataset.myo, i = Number(t.dataset.i); so[id] = so[id] || []; while (so[id].length <= i) so[id].push({}); if (t.checked) so[id][i].myo = so[id][i].myo || ""; else delete so[id][i].myo; touch(); renderTraining(); return; }
   if (t.dataset.warm) { warmOpen = true; cur.warm = Object.assign({}, cur.warm, {[t.dataset.warm]: t.checked}); touch(); renderTraining(); return; }
