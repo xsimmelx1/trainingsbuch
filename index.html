@@ -783,6 +783,9 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .pvimg .noimg{display:grid;place-items:center;width:100%;height:100%;font-family:var(--f-display);font-size:22px;color:var(--muted)}
 .pvt{min-width:0;line-height:1.35}
 .pvalt{white-space:nowrap}
+.trk .gt{font-size:56px;text-align:center}.trkstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:6px 0}.trkstats b{display:block;font:600 24px var(--f-num)}.trkstats span{font-size:12px;color:var(--muted)}
+.trksvg{width:100%;max-width:220px;aspect-ratio:1;display:block;margin:6px auto}.trksvg polyline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}.trksvg .s{fill:var(--good)}.trksvg .e{fill:var(--bad)}.trksvg.mini{width:56px;margin:0 6px;flex:0 0 56px}
+.trkpill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));z-index:40;border:0;border-radius:999px;padding:10px 18px;background:var(--accent);color:var(--accent-ink);font:600 15px var(--f-num);box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .varhead{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.varhead b{color:var(--ink);font-size:13px}
 .varrow{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 10px;scrollbar-width:none}.varrow::-webkit-scrollbar{display:none}
 .varc{flex:0 0 116px;scroll-snap-align:center;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:6px;text-align:left;display:flex;flex-direction:column;gap:3px;color:var(--ink);font:inherit}
@@ -3346,7 +3349,7 @@ function progressOverview(){
   const recs = records(), any = Object.values(store.days).some(isStrength), body = Object.values(store.days).some(d => num(d.weight) != null) || Object.keys(store.measures).length > 0;
   let h = any ? "" : body ? `<div class="small muted">Serien, Bestwerte und Volumen erscheinen ab der ersten Krafteinheit${S().startDate > t ? ` (Start ${fmt(S().startDate)})` : ""}.</div>` : `<div class="card empty"><div class="trophy">📈</div><b>Hier wächst dein Fortschritt</b><div class="small muted">Ab der ersten Einheit siehst du Serien, Bestwerte und Volumen pro Muskel. Gewicht und Bauchumfang erscheinen, sobald du sie einträgst.</div><div class="actions"><button class="btn primary" type="button" data-sub="messen">Jetzt messen</button><button class="btn" type="button" data-go="fotos">Fotos</button></div></div>`;
   h += `<div class="kpis"><div class="kpi"><div class="v">${streak()}</div><div class="l">Wochen in Folge ≥ 2 Einheiten</div></div><div class="kpi"><div class="v">${weekCount(mo)}<span class="l">/4</span></div><div class="l">diese Woche</div></div><div class="kpi"><div class="v">${recs.length}</div><div class="l">Bestwerte (30 Tage)</div></div></div>`;
-  { const wk = []; for (let i = 0; i < 6; i++) { const m0 = addDays(mo, -7 * i); let min = 0, km = 0, n = 0; for (let j = 0; j < 7; j++) for (const c of (dayObj(addDays(m0, j))?.cardio || [])) { min += c.min; km += c.km || 0; n++; } wk.push({m0, min, km, n}); }
+  { const wk = []; for (let i = 0; i < 6; i++) { const m0 = addDays(mo, -7 * i); let min = 0, km = 0, n = 0; for (let j = 0; j < 7; j++) for (const c of (dayObj(addDays(m0, j))?.cardio || [])) { min += Math.round(cMin(c)); km += c.km || 0; n++; } wk.push({m0, min, km, n}); }
     if (wk.some(x => x.n)) { const mx = Math.max(...wk.map(x => x.min), 30);
       h += `<div class="card"><h2>Aktivität</h2><div class="small muted">Bouldern, Laufen, Rad … Minuten pro Woche (letzte 6 Wochen)</div><div class="cbars">${wk.reverse().map(x => `<div class="cb"><div class="bar" style="height:${Math.round(x.min / mx * 100)}%"></div><div class="small">${x.min}′${x.km ? `<br>${fmtQ(Math.round(x.km * 10) / 10)} km` : ""}</div><div class="small muted">${fmt(x.m0).split(" ")[1]}</div></div>`).join("")}</div><button class="btn ghost small" type="button" data-sheet="cardio" data-v="${t}">＋ Eintragen</button></div>`; } }
   // Kalender-Heatmap (aktueller Monat)
@@ -3769,7 +3772,7 @@ function calEntries(d, noMeals){
   if (isStrength(day)) out.push({tm: p?.start || "", en: p?.end || "", title: `Training: ${sess ? sess.title : "Einheit"}`, kind:"train", done:true, go:`#w=${d}`});
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
   if (day?.boulder?.done && !(day.cardio || []).some(c => c.type === "boulder")) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
-  for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${c.min} min${c.km ? " · " + fmtQ(c.km) + " km" : ""}`, kind:"cardio", done:true, go:`#d=${d}`});
+  for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${[durTxt(c), c.km ? fmtQ(c.km) + " km" : ""].filter(Boolean).join(" · ")}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
   if (d >= t || mob) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin()), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
@@ -4380,22 +4383,88 @@ function mealCost(name, store){ const r = recipeByName(name); if (r) return reci
 // ---------- Ausdauer: Laufen, Joggen, Gehen, Rad ----------
 const CARDIO = {boulder: ["🧗", "Bouldern", 5.8], lauf: ["🏃", "Laufen/Joggen", 9.8], rad: ["🚴", "Radfahren", 6.8], geh: ["🚶", "Gehen/Wandern", 3.8], schwimm: ["🏊", "Schwimmen", 7], ball: ["⚽", "Fußball/Ballsport", 7], schlaeger: ["🎾", "Tennis/Badminton", 7], yoga: ["🧘", "Yoga/Dehnen", 3], tanz: ["💃", "Tanzen", 5], kurs: ["🤸", "Fitnesskurs", 6], ski: ["⛷", "Wintersport", 6], sonst: ["✨", "Sonstiges", 5]};
 const KM_TYPES = new Set(["lauf", "rad", "geh", "schwimm"]);
-const pace = c => c.km > 0 ? `${Math.floor(c.min / c.km)}:${String(Math.round((c.min / c.km % 1) * 60)).padStart(2, "0")} min/km` : "";
-const cardioKcal = c => { const kg = num(S().weight) || 74; return c.type === "lauf" && c.km > 0 ? Math.round(kg * c.km) : Math.round((CARDIO[c.type]?.[2] || 6) * 3.5 * kg / 200 * c.min); };
-const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${c.min} min${c.km ? ` · ${fmtQ(c.km)} km · ${pace(c)}` : ""}${c.feel ? ` · ${c.feel}` : ""}`;
+// Dauer oder Distanz reicht (z. B. Strecke bekannt, Zeit nicht); aus der Aufzeichnung kommen Sekunden (sec)
+const cSec = c => c.sec || (c.min || 0) * 60;
+const paceOf = (sec, km) => { const p = sec / 60 / km; let m = Math.floor(p), s2 = Math.round((p - m) * 60); if (s2 === 60) { m++; s2 = 0; } return `${m}:${String(s2).padStart(2, "0")} min/km`; };
+const pace = c => c.km > 0 && cSec(c) > 0 ? paceOf(cSec(c), c.km) : "";
+const KM_MIN = {lauf: 6, geh: 12, rad: 3, schwimm: 25}; // geschätzte Minuten je km, wenn nur die Distanz bekannt ist
+const cMin = c => cSec(c) / 60 || (c.km ? c.km * (KM_MIN[c.type] || 6) : 0);
+const cardioKcal = c => { const kg = num(S().weight) || 74, kmK = {lauf: 1, geh: 0.7, rad: 0.3, schwimm: 4.5}[c.type];
+  return c.km > 0 && kmK && (c.type === "lauf" || !cSec(c)) ? Math.round(kmK * kg * c.km) : Math.round((CARDIO[c.type]?.[2] || 6) * 3.5 * kg / 200 * cMin(c)); };
+const durTxt = c => c.sec ? fmtDur(c.sec) : c.min ? `${c.min} min` : "";
+const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${[durTxt(c), c.km ? `${fmtQ(c.km)} km` : "", pace(c)].filter(Boolean).join(" · ")}${c.feel ? ` · ${c.feel}` : ""}`;
 function cardioSheet(d){
   const day = d === cur?.date ? cur : dayObj(d), list = day?.cardio || [], close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
+  if (trk || trkDone) return `<div class="sh"><h2>Aufzeichnung</h2>${close}</div>${trkHtml()}`;
   return `<div class="sh"><h2>Aktivität · ${fmt(d)}</h2>${close}</div>
-    ${list.length ? `<div class="lrows">${list.map(c => `<div class="mhead"><span><b>${esc(CARDIO[c.type]?.[1] || c.type)}</b><br><span class="small">${esc(cardioTxt(c))} · ca. ${cardioKcal(c)} kcal</span>${c.note ? `<br><span class="small muted">${esc(c.note)}</span>` : ""}</span><button class="btn ghost small" type="button" data-cardiodel="${c.id}" data-d="${d}" aria-label="Löschen">✕</button></div>`).join("")}</div>` : ""}
+    ${list.length ? `<div class="lrows">${list.map(c => `<div class="mhead"><span><b>${esc(CARDIO[c.type]?.[1] || c.type)}</b><br><span class="small">${esc(cardioTxt(c))} · ca. ${cardioKcal(c)} kcal</span>${c.note ? `<br><span class="small muted">${esc(c.note)}</span>` : ""}</span>${c.path ? trkSvg(c.path).replace('class="trksvg"', 'class="trksvg mini"') : ""}<button class="btn ghost small" type="button" data-cardiodel="${c.id}" data-d="${d}" aria-label="Löschen">✕</button></div>`).join("")}</div>` : ""}
     <div class="card"><div class="chips" id="caType">${Object.entries(CARDIO).map(([k, [i, l]]) => `<button type="button" data-catype="${k}" aria-pressed="${cardioType === k}">${i} ${l}</button>`).join("")}</div>
-      <div class="lab">Dauer ca.</div><div class="chips sm">${[15, 30, 45, 60, 90, 120].map(m => `<button type="button" data-camin="${m}">${m < 60 ? m + " min" : m / 60 + (m % 60 ? ",5" : "") + " h"}</button>`).join("")}</div>
-      <div class="grid2"><div class="field"><label for="caMin">Minuten</label><input type="text" inputmode="numeric" id="caMin" placeholder="z. B. 45"></div>${KM_TYPES.has(cardioType) ? `<div class="field"><label for="caKm">Distanz (km, optional)</label><input type="text" inputmode="decimal" id="caKm" placeholder="ca. 5"></div>` : ""}</div>
+      ${trkStartHtml()}
+      <div class="lab">Oder nachtragen · Dauer ca.</div><div class="chips sm">${[15, 30, 45, 60, 90, 120].map(m => `<button type="button" data-camin="${m}">${m < 60 ? m + " min" : m / 60 + (m % 60 ? ",5" : "") + " h"}</button>`).join("")}</div>
+      <div class="grid2"><div class="field"><label for="caMin">Minuten${KM_TYPES.has(cardioType) ? " (oder leer)" : ""}</label><input type="text" inputmode="numeric" id="caMin" placeholder="z. B. 45"></div>${KM_TYPES.has(cardioType) ? `<div class="field"><label for="caKm">Distanz (km)</label><input type="text" inputmode="decimal" id="caKm" placeholder="ca. 5"></div>` : ""}</div>
+      ${KM_TYPES.has(cardioType) ? `<div class="small muted">Dauer oder Distanz reicht – z. B. nur „5 km“, wenn du die Zeit nicht weißt.</div>` : ""}
       <details class="small"><summary>Mehr (Anstrengung, Notiz)</summary><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
       <div class="field"><label for="caNote">Notiz</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div></details>
       <button class="btn primary big" type="button" data-act="cardioSave" data-v="${d}">Eintragen</button>
       ${info("Bouldern zählt für den Trainingsplan (kein Oberkörper am selben und am nächsten Tag) und bringt abends den Shake. Knie: nach dem Laufen auf die Ampel achten – liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.")}</div>`;
 }
 let cardioType = "boulder", cardioFeel = "";
+// Aufzeichnen wie eine Lauf-App: Stoppuhr aus Zeitstempeln (stimmt auch nach Sperrbildschirm oder Neuladen), optional GPS (Einstellung „gps“).
+// Browser-Grenze: GPS nur, solange die App im Vordergrund ist – deshalb bleibt der Bildschirm an.
+const GPS_TYPES = new Set(["lauf", "rad", "geh"]), GPS_ON = false; // GPS erst, wenn es im Standby gehen kann (Browser können das nicht)
+let trk = lsGet("trk"), trkInt = null, trkWatch = null, trkDone = null;
+const trkMs = () => trk ? trk.acc + (trk.run ? Date.now() - trk.last : 0) : 0;
+const trkSave = () => lsSet("trk", trk);
+const hav = (a, b) => { const R = 6371000, r = x => x * Math.PI / 180, dl = r(b[0] - a[0]), dn = r(b[1] - a[1]), h = Math.sin(dl / 2) ** 2 + Math.cos(r(a[0])) * Math.cos(r(b[0])) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
+function trkStartHtml(){ if (cardioType === "boulder") return "";
+  return `<button class="btn primary big" type="button" data-trk="start">▶ Jetzt aufzeichnen</button><div class="small muted">Stoppuhr läuft mit, auch wenn das Handy in den Standby geht.${KM_TYPES.has(cardioType) ? " Die Distanz trägst du am Ende ein." : ""}</div>`; }
+function trkGeo(on){ if (on && trk?.gps && trk.run && !trkWatch && navigator.geolocation) trkWatch = navigator.geolocation.watchPosition(trkPos, er => { if (trk) { trk.gpsMsg = er.code === 1 ? "GPS nicht erlaubt – nur Zeit" : "Suche GPS …"; trkPaint(); } }, {enableHighAccuracy: true, maximumAge: 0, timeout: 20000});
+  if (!on && trkWatch != null) { navigator.geolocation.clearWatch(trkWatch); trkWatch = null; } }
+function trkPos(p){ if (!trk?.run) return; const {latitude: la, longitude: lo, accuracy: ac} = p.coords, t = p.timestamp || Date.now(); trk.ac = Math.round(ac);
+  if (ac > 35) { trk.gpsMsg = `GPS ungenau (±${Math.round(ac)} m)`; trkPaint(); return; } trk.gpsMsg = "";
+  const pt = [+la.toFixed(6), +lo.toFixed(6), t], last = trk.pts[trk.pts.length - 1];
+  if (last && !trk.seg) { const d = hav(last, pt), dt = (t - last[2]) / 1000; if (d < Math.max(4, ac * 0.4)) return; if (dt > 0 && d / dt > (trk.type === "rad" ? 25 : 8)) return; trk.m += d; }
+  trk.seg = false; trk.pts.push(pt); trkSave(); trkPaint(); }
+function trkGo(){ clearInterval(trkInt); trkInt = setInterval(trkPaint, 1000); trkGeo(true); trkPaint(); }
+function trkCmd(c){
+  if (c === "start") { trk = {type: cardioType, t0: Date.now(), acc: 0, last: Date.now(), run: true, m: 0, pts: [], seg: true, gps: GPS_ON && GPS_TYPES.has(cardioType) && !!S().gps}; trkDone = null; audioReady(); trkSave(); trkGo(); goTone(); renderSheet(); return; }
+  if (!trk) return;
+  if (c === "pause") { trk.acc = trkMs(); trk.run = false; trkGeo(false); trkSave(); renderSheet(); return; }
+  if (c === "go") { trk.last = Date.now(); trk.run = true; trk.seg = true; trkSave(); trkGo(); renderSheet(); return; }
+  if (c === "stop") { const sec = Math.round(trkMs() / 1000); trkGeo(false); clearInterval(trkInt);
+    trkDone = {type: trk.type, sec, km: trk.gps && trk.m > 30 ? Math.round(trk.m / 10) / 100 : null, path: trkThin(trk.pts), d: todayIso()}; trk = null; lsSet("trk", null); chime(); renderSheet(); return; }
+  if (c === "discard") { trkGeo(false); clearInterval(trkInt); trk = null; trkDone = null; lsSet("trk", null); renderSheet(); return; }
+}
+// Strecke ausdünnen (ein Punkt je ~15 m) und auf 5 Nachkommastellen kürzen – reicht für die Skizze, hält den Tag klein
+function trkThin(pts){ const out = []; for (const p of pts) { if (!out.length || hav(out[out.length - 1], p) >= 15) out.push([+p[0].toFixed(5), +p[1].toFixed(5)]); } if (pts.length > 1) { const l = pts[pts.length - 1]; out.push([+l[0].toFixed(5), +l[1].toFixed(5)]); } return out.length > 1 ? out : null; }
+// Strecke als Linie (ohne Karte): Länge/Breite auf ein Quadrat skaliert
+function trkSvg(path){ if (!path || path.length < 2) return ""; const k = Math.cos(path[0][0] * Math.PI / 180), xs = path.map(p => p[1] * k), ys = path.map(p => -p[0]);
+  const x0 = Math.min(...xs), y0 = Math.min(...ys), w = Math.max(...xs) - x0 || 1e-9, h = Math.max(...ys) - y0 || 1e-9, sc = 90 / Math.max(w, h), ox = (100 - w * sc) / 2, oy = (100 - h * sc) / 2;
+  const pt = (i) => `${(ox + (xs[i] - x0) * sc).toFixed(1)},${(oy + (ys[i] - y0) * sc).toFixed(1)}`;
+  return `<svg class="trksvg" viewBox="0 0 100 100" aria-label="Strecke"><polyline points="${path.map((_, i) => pt(i)).join(" ")}"/><circle class="s" r="2.6" cx="${pt(0).split(",")[0]}" cy="${pt(0).split(",")[1]}"/><circle class="e" r="2.6" cx="${pt(path.length - 1).split(",")[0]}" cy="${pt(path.length - 1).split(",")[1]}"/></svg>`; }
+function trkHtml(){
+  if (trkDone) { const t = trkDone;
+    return `<div class="card trk"><div class="lab">${CARDIO[t.type]?.[0] || ""} ${esc(CARDIO[t.type]?.[1] || "")} · fertig</div>${trkSvg(t.path)}
+      <div class="grid2"><div class="field"><label for="trMin">Dauer (Minuten)</label><input type="text" inputmode="decimal" id="trMin" value="${String(Math.round(t.sec / 6) / 10).replace(".", ",")}"></div>${KM_TYPES.has(t.type) ? `<div class="field"><label for="trKm">Distanz (km)</label><input type="text" inputmode="decimal" id="trKm" value="${t.km ? String(t.km).replace(".", ",") : ""}" placeholder="${t.km ? "" : "z. B. 5,2"}"></div>` : ""}</div>
+      <div class="small muted">${fmtDur(t.sec)}${t.km ? ` · ${fmtQ(t.km)} km · ${paceOf(t.sec, t.km)}` : ""} – Werte bei Bedarf korrigieren.</div>
+      <div class="field"><label for="trNote">Notiz</label><input type="text" id="trNote" placeholder="Strecke, Knie, Wetter …"></div>
+      <div class="btnrow two"><button class="btn primary big" type="button" data-trk="save">✓ Speichern</button><button class="btn ghost" type="button" data-trk="discard">Verwerfen</button></div></div>`; }
+  const t = trk, ms = trkMs(), km = t.m / 1000, recent = t.pts.slice(-8), rp = recent.length > 2 ? (() => { let d = 0; for (let i = 1; i < recent.length; i++) d += hav(recent[i - 1], recent[i]); const s0 = (recent[recent.length - 1][2] - recent[0][2]) / 1000; return d > 20 && s0 > 0 ? paceOf(s0, d / 1000) : ""; })() : "";
+  return `<div class="card trk" id="trkBox"><div class="lab">${CARDIO[t.type]?.[0] || ""} ${esc(CARDIO[t.type]?.[1] || "")} · ${t.run ? "läuft" : "pausiert"}</div>
+    <div class="gt ${t.run ? "" : "muted"}" id="trkT">${fmtDur(ms / 1000)}</div>
+    ${t.gps ? `<div class="trkstats"><div><b id="trkKm">${fmtQ(Math.round(km * 100) / 100)}</b><span>km</span></div><div><b id="trkAvg">${km > 0.05 ? paceOf(ms / 1000, km).replace(" min/km", "") : "–"}</b><span>Ø min/km</span></div><div><b id="trkCur">${rp ? rp.replace(" min/km", "") : "–"}</b><span>aktuell</span></div></div>
+      <div class="small muted" id="trkGps">${esc(t.gpsMsg || (t.pts.length ? `GPS ok${t.ac ? ` (±${t.ac} m)` : ""}` : "Suche GPS …"))}</div>` : ""}
+    <div class="btnrow two">${t.run ? `<button class="btn big" type="button" data-trk="pause">⏸ Pause</button>` : `<button class="btn big" type="button" data-trk="go">▶ Weiter</button>`}<button class="btn primary big" type="button" data-trk="stop">⏹ Fertig</button></div>
+    <div class="small muted">Handy kann normal in den Standby – die Zeit läuft weiter.</div></div>`; }
+// jede Sekunde nur die Zahlen tauschen (nicht das ganze Blatt), außerhalb des Blatts die kleine Leiste
+function trkPaint(){ if (!trk) { document.getElementById("trkPill")?.remove(); return; }
+  const ms = trkMs(), km = trk.m / 1000, set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set("trkT", fmtDur(ms / 1000)); set("trkKm", fmtQ(Math.round(km * 100) / 100)); set("trkAvg", km > 0.05 ? paceOf(ms / 1000, km).replace(" min/km", "") : "–");
+  set("trkGps", trk.gpsMsg || (trk.pts.length ? `GPS ok${trk.ac ? ` (±${trk.ac} m)` : ""}` : "Suche GPS …"));
+  let pill = document.getElementById("trkPill"); const show = !(sheet.open && sheetKind === "cardio");
+  if (!show) { pill?.remove(); return; }
+  if (!pill) { pill = document.createElement("button"); pill.id = "trkPill"; pill.type = "button"; pill.className = "trkpill"; pill.addEventListener("click", () => openSheet("cardio", todayIso())); document.body.appendChild(pill); }
+  pill.textContent = `${CARDIO[trk.type]?.[0] || "⏱"} ${fmtDur(ms / 1000)}${trk.gps ? ` · ${fmtQ(Math.round(km * 100) / 100)} km` : ""}${trk.run ? "" : " · Pause"}`; }
 // ---------- Barcode-Scanner: Kamera → EAN → Open Food Facts (freie Datenbank) ----------
 let scanStream = null, scanRaf = 0, scanReader = null, scanMode = null, scanProd = null;
 function stopScan(){
@@ -5248,6 +5317,7 @@ function setupHtml(){
     <div class="grid2"><div class="field"><label for="stDate">Start Woche 1</label><input type="date" id="stDate" value="${esc(s.startDate || "")}"></div><div class="field"><label for="htIn">Größe (cm)</label><input type="text" inputmode="numeric" id="htIn" value="${esc(s.height ?? 175)}"></div></div>
     <label class="check"><input type="checkbox" id="scClr" ${s.scCleared?"checked":""}><span><b>SC-Gelenk ärztlich freigegeben</b></span></label>
     <label class="check"><input type="checkbox" id="kn1" ${s.knee1?"checked":""}><span><b>Knie-Phase 1 aktiv</b> (Morgentest über 2/10)</span></label>
+
     <div class="lab">Modus</div><div class="seg" id="modeSeg">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
     <div class="card"><h2>Routine-Zeiten</h2><div class="small muted">Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen. Training wird nicht über die Morgenroutine gelegt.</div>
       <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
@@ -5432,6 +5502,12 @@ async function onClick(e){
   const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
   const cfe = t.closest("[data-cafeel]"); if (cfe) { cardioFeel = cardioFeel === cfe.dataset.cafeel ? "" : cfe.dataset.cafeel; sheet.querySelectorAll("[data-cafeel]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cafeel === cardioFeel)); return; }
   const cmn = t.closest("[data-camin]"); if (cmn) { const el = sheet.querySelector("#caMin"); if (el) el.value = cmn.dataset.camin; sheet.querySelectorAll("[data-camin]").forEach(b => b.setAttribute("aria-pressed", b === cmn)); return; }
+  const tkb = t.closest("[data-trk]"); if (tkb) { const c = tkb.dataset.trk;
+    if (c === "save" && trkDone) { const td = trkDone, mn = num(sheet.querySelector("#trMin")?.value), km = num(sheet.querySelector("#trKm")?.value), note = sheet.querySelector("#trNote")?.value.trim() || "";
+      const sec = mn > 0 ? (Math.abs(mn * 60 - td.sec) < 30 ? td.sec : Math.round(mn * 60)) : td.sec, e = {id: Date.now().toString(36), type: td.type, min: Math.max(1, Math.round(sec / 60)), sec, km: km > 0 && KM_TYPES.has(td.type) ? km : null, feel: null, note: note || null, path: km > 0 ? td.path : null};
+      const f = day => { day.cardio = [...(day.cardio || []), e]; }; if (cur && cur.date === td.d) { f(cur); touch(); } else editDay(td.d, f);
+      trkDone = null; cardioType = td.type; toast(`Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
+    trkCmd(c); return; }
   const cdl = t.closest("[data-cardiodel]"); if (cdl) { const id = cdl.dataset.cardiodel, d = cdl.dataset.d, f = day => { const wasB = (day.cardio || []).some(c => c.id === id && c.type === "boulder"); day.cardio = (day.cardio || []).filter(c => c.id !== id); day.cardioDel = [...(day.cardioDel || []), id]; if (wasB && !day.cardio.some(c => c.type === "boulder")) day.boulder = {done: false, at: Date.now()}; };
     if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f); renderSheet(); render(); return; }
   const scs = t.closest("[data-scanstart]"); if (scs) { startScan(scs.dataset.scanstart); return; }
@@ -5510,8 +5586,9 @@ async function onClick(e){
     if (a === "closeSheet") { closeSheet(); return; }
     if (a === "foodUndo" || a === "foodRedo") { undoFood(a === "foodRedo"); return; }
     if (a === "cardioSave") { const min = num(sheet.querySelector("#caMin")?.value), km = num(sheet.querySelector("#caKm")?.value), note = sheet.querySelector("#caNote")?.value.trim() || "";
-      if (!(min > 0)) { toast("Bitte die Dauer in Minuten eintragen"); sheet.querySelector("#caMin")?.focus(); return; }
-      const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min, km: km > 0 && KM_TYPES.has(cardioType) ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min, at: Date.now()}; };
+      const kmOk = km > 0 && KM_TYPES.has(cardioType);
+      if (!(min > 0) && !kmOk) { toast(KM_TYPES.has(cardioType) ? "Bitte Dauer oder Distanz eintragen" : "Bitte die Dauer in Minuten eintragen"); sheet.querySelector(kmOk || !KM_TYPES.has(cardioType) ? "#caMin" : "#caKm")?.focus(); return; }
+      const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min: min > 0 ? min : null, km: kmOk ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min: min || null, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
       const nxt = planFor(addDays(d, 1)); cardioFeel = ""; toast(cardioType === "boulder" && nxt && /^ok/.test(nxt.session) ? `Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf` : `Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
     if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
@@ -5727,7 +5804,7 @@ for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addE
 addEventListener("hashchange", () => { if (dirty) saveCur(); hideActToast(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
 let todayAtHide = todayIso();
-document.addEventListener("pointerdown", keepWake, {capture: true, passive: true}); setTimeout(keepWake, 1500); setInterval(keepWake, 30000);
+document.addEventListener("pointerdown", keepWake, {capture: true, passive: true}); if (trk) setTimeout(trkGo, 800); setTimeout(keepWake, 1500); setInterval(keepWake, 30000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") todayAtHide = todayIso();
   if (document.visibilityState === "visible" && todayIso() !== todayAtHide && selDate === todayAtHide && !(cur?.startedAt && !cur.finishedAt)) { if (dirty) saveCur(); selDate = todayIso(); cur = null; if (tab === "heute") history.replaceState(null, "", `#d=${selDate}`); render(); }
   if (document.visibilityState === "visible") { keepWake(); if (token && !dirty && !sheet.open && tab !== "training") chain.then(() => loadAll()).then(() => { if (!dirty && !sheet.open) { cur = null; render(); } }); } });
