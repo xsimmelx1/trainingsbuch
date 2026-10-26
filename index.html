@@ -507,7 +507,7 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .favb{border:0;background:none;font-size:24px;line-height:1;min-width:44px;min-height:44px;color:var(--muted);cursor:pointer}
 .favb.on{color:#f5b301}
 .favb.dice{font-size:22px}
-.shr{display:flex;align-items:center;gap:4px}
+.shr{display:flex;align-items:center;gap:4px;flex:none}.shr .btn{white-space:nowrap}
 .srclink{display:inline-block;margin-top:8px;font-size:14px;color:var(--accent);text-decoration:none}
 .srcrow>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}.srcrow>summary::-webkit-details-marker{display:none}.srcrow .srclink{margin-top:0}
 .srcrow{margin-top:8px}.srcrow>div{margin-top:6px}.srci{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:13px}
@@ -2519,7 +2519,7 @@ function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = 
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${pr.id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
     <button type="button" class="btn ghost small" data-act="myDel" data-v="${esc(pr.key)}">Vom Bon-Produkt entfernen</button>`; }
 function zinfoHtml(id){
-  const pr = prodById(id), close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!pr) return `<div class="sh"><h2>Zutat</h2>${close}</div>`;
+  const pr = prodById(id), close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`; if (!pr) return `<div class="sh"><h2>Zutat</h2>${close}</div>`;
   if (pr.my) return myInfoHtml(myProdList().find(m => m.id === id) || pr, close);
   const own = ownOf(pr), sel = FOOD().store || "aldi", home = STOCK().has(id);
   const recs = (recipes || []).filter(r => r.ingredients.some(l => { const x = parseIng(l); return (x.parts || [x]).some(pt => pt.pr?.id === id); })).sort((a, b) => a.name.localeCompare(b.name, "de"));
@@ -3227,7 +3227,7 @@ function renderSheetPart(sel){
   for (const s0 of sel) { const a = sheetBody.querySelector(s0), b = tmp.querySelector(s0); if (a && b) a.innerHTML = b.innerHTML; else if (!a || !b) return renderSheet(); }
 }
 function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = document.getElementById("varRow"), c = r?.querySelector(".varc.cur"); if (r && c) r.scrollLeft = c.offsetLeft - r.offsetLeft - (r.clientWidth - c.clientWidth) / 2; }, 0); sheet.classList.toggle("full", ["mob", "mobguide"].includes(sheetKind)); if ((sheetKind === "mobguide" || sheetKind === "mob") && !mobDataReady) { mobDataReady = true; Promise.all([ensureCoachData(), ensureClips()]).then(() => { if (sheet.open && (sheetKind === "mobguide" || sheetKind === "mob")) renderSheet(); }); }
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
     { const left = Math.ceil(autoLeft(MOBILITY.findIndex(([k]) => !cur.mobility[k])) / 60), part = mobCount(cur, selDate) > 0 && left < mobMin();
@@ -3507,7 +3507,7 @@ function lessonList(){
     return `<button type="button" class="task ${done ? "done" : ""}" ${open ? `data-coach="lesson:${l.id}"` : "disabled"}><span class="dot">${done ? "✓" : open ? "" : "🔒"}</span><span><span class="t">${esc(l.title)}</span><br><span class="s">Woche ${l.week} · ${l.min} min${open ? "" : " · noch gesperrt"}</span></span><span class="go">${open ? "›" : ""}</span></button>`; }).join("")}</div>`;
 }
 function journeySheet(kind, arg){
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   if (kind === "w0") {
     const steps = w0Steps();
     return `<div class="sh"><h2>Woche 0 · Checkliste</h2>${close}</div><div class="small muted">Haken, die die App selbst erkennt, setzen sich automatisch.</div>` +
@@ -3531,13 +3531,13 @@ function journeySheet(kind, arg){
   }
   if (kind === "cook") return cookHtml(arg);
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
-  if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
+  if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
-  if (kind === "restleft") { const ask = String(arg).startsWith("ask|"), x = FRIDGE().find(y => y.id === String(arg).replace(/^ask\|/, "")); if (!x) return `<div class="sh"><h2>Restebox</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
+  if (kind === "restleft") { const ask = String(arg).startsWith("ask|"), x = FRIDGE().find(y => y.id === String(arg).replace(/^ask\|/, "")); if (!x) return `<div class="sh"><h2>Restebox</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>`;
     return `<div class="sh"><h2>${ask ? "Ist danach noch was übrig?" : "Ist noch was übrig?"}</h2>${ask ? `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>` : ""}</div><div class="scanres">${mealThumb(x.name)}<div><b>${esc(mealInfo(x.name).name)}</b><div class="small muted">${ask ? "Wird als gegessen eingetragen (nächste passende Mahlzeit von heute)" : "Rest gegessen ✓"}</div></div></div>
       <div class="btnrow two"><button class="btn primary big" type="button" data-restleft="${x.id}|1${ask ? "|eat" : ""}">Ja, noch was da</button><button class="btn big" type="button" data-restleft="${x.id}|0${ask ? "|eat" : ""}">Nein, war alles</button></div>`; }
   if (kind === "leftover") return mealPlan && recipes ? leftoverHtml(arg) : `<p class="muted">Lade …</p>`;
-  if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
+  if (kind === "mealinfo") { const [d, k] = String(arg).split("|"), m = mealsFor(d).find(x => x.k === k), cl = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`; if (!m) return `<div class="sh"><h2>Essen</h2>${cl}</div>`;
     const o = typeof m.name === "object" ? m.name : null, r = m.info;
     return `<div class="sh"><div><div class="lab">${esc(m.label)}${m.time ? " · " + esc(m.time) : ""} · ${fmt(d)}</div><h2>${esc(r.name)}</h2></div>${cl}</div>
       <div class="small nutri">${m.name === "skip" ? "Ausgelassen – zählt nicht zu kcal und Einkauf." : m.name === "away" ? "Mensa, Kantine oder unterwegs – Richtwerte." : `${r.kcal || 0} kcal · ${r.protein || 0} g Protein${o && !o.kcal ? " (ohne Werte)" : ""}`}</div>
@@ -3546,12 +3546,12 @@ function journeySheet(kind, arg){
   if (kind === "resteeat") { if (!recipes || !mealPlan) { ensureMeals().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; } setTimeout(resteEatCalc, 0); return resteEatHtml(arg || ""); }
   if (kind === "reste") { if (!prices) { ensurePrices().then(() => renderSheet()); } return resteHtml(); }
   if (kind === "stock") { if (!prices) { ensurePrices().then(() => renderSheet()); return `<p class="muted">Lade …</p>`; }
-    return `<div class="sh"><h2>🏠 Vorrat zuhause</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
+    return `<div class="sh"><h2>🏠 Vorrat zuhause</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>
       <div class="mhead"><span>Vorrat beim Einkauf abziehen<br><span class="small muted">${STOCK().size} Produkte markiert</span></span><button type="button" class="toggle" data-stockon aria-pressed="${FOOD().stockOn !== false}" aria-label="Vorrat beim Einkauf berücksichtigen"></button></div>
       <div class="small muted">Antippen, was du zuhause hast – hervorgehoben heißt vorhanden. Diese Produkte stehen dann nicht mehr auf der Einkaufsliste, und der Resteverwerter zählt sie mit.</div>
       <input type="text" id="stQ" value="${esc(stQ)}" placeholder="🔎 Produkt suchen" aria-label="Produkt suchen" autocomplete="off">
       <div id="stList">${stockHtml()}</div>${STOCK().size ? `<button class="btn ghost small" type="button" data-stockclear>Vorrat leeren</button>` : ""}`; }
-  if (kind === "shoprec") return `<div class="sh"><h2>Gericht wählen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div><input type="text" id="srQ" value="${esc(srQ)}" placeholder="🔎 Name oder Zutat" aria-label="Gericht suchen" autocomplete="off"><div id="srList">${shopRecList()}</div>`;
+  if (kind === "shoprec") return `<div class="sh"><h2>Gericht wählen</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div><input type="text" id="srQ" value="${esc(srQ)}" placeholder="🔎 Name oder Zutat" aria-label="Gericht suchen" autocomplete="off"><div id="srList">${shopRecList()}</div>`;
   if (kind === "cardio") return cardioSheet(arg || selDate);
   if (kind === "scan") { if (!prices) { ensurePrices().then(() => renderSheet()); return close; } setTimeout(() => { if (!scanSlot()?.innerHTML) startScan("price"); }, 50);
     return `<div class="sh"><h2>📷 Barcode scannen</h2>${close}</div>${info("Barcode scannen (live oder per Foto): Produkt mit Nährwerten speichern, optional mit Preis vom Regal. Unbekannte Produkte trägst du einmal selbst ein, die Nährwerttabelle kannst du abfotografieren. Beim nächsten Scan erkennt die App das Produkt sofort.")}<div id="scanSlot"></div>${ownCount() ? `<button class="btn ghost" type="button" data-sheet="ownprices">Meine Preise (${ownCount()}) ›</button>` : ""}`; }
@@ -4189,8 +4189,8 @@ function altMeals(k, curName){
 }
 let mealQ = "";
 function mealSheet(arg){
-  const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>`;
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, ref = m.info, recM = recipeByName(m.name);
+  const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>`;
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`, ref = m.info, recM = recipeByName(m.name);
   const opt = (n, why) => { const r = mealInfo(n), dk = r.kcal - ref.kcal, dp = r.protein - ref.protein;
     return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${isFav(n) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (m.def && dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
@@ -4227,12 +4227,11 @@ function snackPicks(){ const c = new Map(), are = avoidRe();
   const mine = [...c.values()].sort((a, b) => b.n - a.n).slice(0, 8);
   for (const n of SNACK_DEF) { if (mine.length >= 10) break; if (c.has(fold(n)) || (are && are.test(n))) continue; mine.push({name: n, def: true}); }
   return mine; }
-function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
-  return `<div class="sh"><h2>Essen & Trinken · ${d === todayIso() ? tm : fmt(d)}</h2>${close}</div>
+function snackHtml(d){ const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`, tm = hmStr(new Date().getHours() * 60 + new Date().getMinutes());
+  return `<div class="sh"><h2>Essen & Trinken · ${d === todayIso() ? tm : fmt(d)}</h2><span class="shr"><button class="btn primary" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>${close}</span></div>
     <div class="card ownf"><div class="field"><label for="ownText">Was hast du gegessen oder getrunken?</label><textarea id="ownText" rows="2" placeholder="z. B. 2 Brezeln, ein Glas Weißwein, 30 g Mandeln" autocomplete="off"></textarea>${micBtn()}<div class="sugg" id="ownIngSug"></div></div>
     <div class="lab">Zuletzt · antippen fügt hinzu</div><div class="chips snackchips">${snackPicks().map(x => `<button type="button" data-snackadd="${esc(snackPickText(x.name))}">＋ ${esc(x.name)}${x.kcal ? ` <span class="small muted">${x.kcal} kcal</span>` : ""}</button>`).join("")}</div>
     <div id="ownEst" class="small muted">Mengen gehen auch direkt im Text: „2 Brezeln“, „200 g Skyr“, „ein Glas“ oder „halbe Flasche“.</div>
-    <button class="btn primary big" type="button" id="ownSave" data-mode="snack">✓ Eintragen</button>
     <button class="btn" type="button" data-scanstart="snack">📷 Barcode scannen</button><div id="scanSlot"></div></div>`; }
 // Mengenangabe vorn am Posten („2 Flaschen “, „200 g “) für gespeicherte Namen; „ein“ allein fällt weg
 const nwQty = t0 => (t0.match(/^\s*((?:\d+(?:[.,]\d+)?|½|ein|eine|einen|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn|halbe?n?)\s*(?:g|ml|kg|l|liter|glas|gläser|flaschen?|tassen?|dosen?|stück|scheiben?|becher|portionen?|handvoll)?\s+)/i) || ["", ""])[1].replace(/^(ein|eine|einen)\s+$/i, "");
@@ -4428,7 +4427,7 @@ const cardioKcal = c => { const kg = num(S().weight) || 74, kmK = {lauf: 1, geh:
 const durTxt = c => c.sec ? fmtDur(c.sec) : c.min ? `${c.min} min` : "";
 const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${[durTxt(c), c.km ? `${fmtQ(c.km)} km` : "", pace(c)].filter(Boolean).join(" · ")}${c.feel ? ` · ${c.feel}` : ""}`;
 function cardioSheet(d){
-  const day = d === cur?.date ? cur : dayObj(d), list = day?.cardio || [], close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
+  const day = d === cur?.date ? cur : dayObj(d), list = day?.cardio || [], close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   if (trk || trkDone) return `<div class="sh"><h2>Aufzeichnung</h2>${close}</div>${trkHtml()}`;
   return `<div class="sh"><h2>Aktivität · ${fmt(d)}</h2>${close}</div>
     ${list.length ? `<div class="lrows">${list.map(c => `<div class="mhead"><span><b>${esc(CARDIO[c.type]?.[1] || c.type)}</b><br><span class="small">${esc(cardioTxt(c))} · ca. ${cardioKcal(c)} kcal</span>${c.note ? `<br><span class="small muted">${esc(c.note)}</span>` : ""}</span>${c.path ? trkSvg(c.path).replace('class="trksvg"', 'class="trksvg mini"') : ""}<button class="btn ghost small" type="button" data-cardiodel="${c.id}" data-d="${d}" aria-label="Löschen">✕</button></div>`).join("")}</div>` : ""}
@@ -4812,7 +4811,7 @@ function refPrice(pr, price, size, perKg, count){
 }
 const ownCount = () => Object.values(FOOD().ownPrices || {}).reduce((n, o) => n + Object.keys(o).length, 0);
 function ownPricesHtml(){
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`, own = FOOD().ownPrices || {}, by = {};
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`, own = FOOD().ownPrices || {}, by = {};
   for (const [pid, o] of Object.entries(own)) for (const [st, x] of Object.entries(o)) (by[st] = by[st] || []).push([pid, x]);
   let h = `<div class="sh"><h2>Meine Preise</h2>${close}</div>${info("Aus deinen Kassenbons. Sie gelten vor den Richtpreisen, im Budget und im Planer, und werden mit deinem privaten Repo synchronisiert.")}`;
   const mine = myProdList(); if (mine.length) h += `<details class="opgroup"><summary><b>🧾 Eigene Produkte</b> <span class="small muted">${mine.length} vom Kassenbon gemerkt</span></summary>${mine.sort((a, b) => a.name.localeCompare(b.name, "de")).map(mp => `<div class="mhead small"><span>${esc(mp.name)} <span class="muted">· ${eur(mp.price)} · ${STORES[mp.store] || mp.store || ""}</span></span><button class="btn ghost small" type="button" data-act="myDel" data-v="${esc(mp.id.slice(3))}" aria-label="Entfernen">✕</button></div>`).join("")}</details>`;
@@ -4826,7 +4825,7 @@ function ownPricesHtml(){
   return h;
 }
 function receiptHtml(){
-  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   let h = `<div class="sh"><h2>Kassenbon</h2>${close}</div>`;
   if (!rcpt || !rcpt.items) return h + `${info("REWE-eBon als PDF (REWE-App → Kassenbons → Teilen) oder ein Foto vom Papierbon. Der Bon wird nur im Browser gelesen und nicht gespeichert.")}
     <div class="small muted">Foto-Tipp: Bon glatt auf einen dunkleren Untergrund legen, ganz ins Bild nehmen, von oben fotografieren. Schräg oder mit Schatten geht auch.</div>
@@ -5009,7 +5008,7 @@ function resteQuickHtml(){ const has = new Set(reste.have.map(fold));
   return list.length ? `<div class="lab">Schnell wählen</div><div class="chips sm">${list.map(w => `<button type="button" data-rsadd="${esc(w)}">＋ ${esc(w)}</button>`).join("")}</div>` : ""; }
 function resteHtml(){
   const st = stockOn() ? STOCK().size : 0;
-  return `<div class="sh"><h2>♻️ Resteverwerter</h2><button class="btn ghost" type="button" data-act="closeSheet">Fertig</button></div>
+  return `<div class="sh"><h2>♻️ Resteverwerter</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>
     <div class="small muted">Was muss weg oder worauf hast du Lust? Zutaten eingeben – passende Rezepte erscheinen sofort.</div>
     <div class="field acwrap"><input type="text" id="rsQ" data-ac="reste" autocomplete="off" placeholder="Zutat, z. B. Zucchini" aria-label="Zutat hinzufügen"></div>
     <div id="rsHave">${resteHaveHtml()}</div>
