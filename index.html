@@ -330,7 +330,7 @@ details.slim > summary::-webkit-details-marker{display:none}
 details.slim > summary span:last-child{font-weight:400;font-size:13px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 details.slim > .card{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
 .subhead{margin:4px 0 10px}
-.planrec{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.planrec{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 10px;margin:4px 0}.planrec>span:first-child{grid-column:1/-1}.planrec .chips.sm button{min-height:34px}
 [data-act=foodUndo],[data-act=foodRedo]{font-size:22px;line-height:1;min-width:44px;min-height:40px;padding:0 6px}
 .subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
 h2.ptitle{margin:6px 0 10px}
@@ -3597,9 +3597,11 @@ function journeySheet(kind, arg){
   if (kind === "recipe") {
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
-    return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${swapCand && swapCand.name === r.name ? "" : `<button type="button" class="favb dice" data-random="rec" data-cur="${esc(r.name)}" aria-label="Anderes Zufallsrezept" title="Anderes Zufallsrezept">🎲</button>`}${favBtn(r.name)}${close}</span></div>
+    return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${(() => { const sc = swapCand && swapCand.name === r.name ? swapCand.ctx : ctxM ? `${ctxM.d}|${ctxM.k}` : null;
+      return sc ? `<button type="button" class="favb dice" data-random="meal" data-v="${sc}" data-cur="${esc(mealsFor(sc.split("|")[0]).find(m => m.k === sc.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}" aria-label="Zufällig austauschen" title="Zufällig austauschen">🎲</button>`
+        : `<button type="button" class="favb dice" data-random="rec" data-cur="${esc(r.name)}" aria-label="Anderes Zufallsrezept" title="Anderes Zufallsrezept">🎲</button>`; })()}${favBtn(r.name)}${close}</span></div>
       ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Schon was anderes gegessen</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
-      ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
+      ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">⇄ Austauschen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
@@ -3620,7 +3622,7 @@ function journeySheet(kind, arg){
 // Rezept in den Plan legen: ersetzt die geplante Mahlzeit des Tages (Rückgängig über die Meldung)
 const PLAN_SLOT = {fruehstueck: ["fr"], mittag: ["mi", "ab"], abend: ["ab", "mi"], snack: ["sn"], shake: ["sn"]};
 function planRecHtml(r){ const ks = PLAN_SLOT[r.category] || ["mi", "ab"], t = todayIso(), days = [[t, "Heute"], [addDays(t, 1), "Morgen"]];
-  return `<div class="planrec"><span class="small muted">📅 Einplanen:</span><div class="chips">${days.flatMap(([d, l]) => ks.map(k => `<button type="button" data-planrec="${d}|${k}" data-v="${esc(r.name)}">${l} ${esc(MEAL_SHORT[k])}</button>`)).join("")}</div></div>`; }
+  return `<div class="planrec"><span class="small muted">📅 Einplanen</span>${days.map(([d, l]) => `<span class="prd small muted">${l}</span><div class="chips sm">${ks.map(k => `<button type="button" data-planrec="${d}|${k}" data-v="${esc(r.name)}" aria-label="${l} ${esc(MEAL_SHORT[k])} einplanen">${esc(MEAL_SHORT[k])}</button>`).join("")}</div>`).join("")}</div>`; }
 let sheetQuiz = null;
 let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
@@ -5422,7 +5424,7 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()).filter((r, _, all) => all.length < 2 || r.name !== rnd.dataset.cur); if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()).filter((r, _, all) => all.length < 3 || (r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip)); if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; if (sheetArg !== rc2.dataset.recipe) recTab = "zutaten"; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
