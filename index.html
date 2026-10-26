@@ -2248,7 +2248,9 @@ function clipHtml(key){
   return `<div class="vclip" style="background:#000 url(https://i.ytimg.com/vi/${encodeURIComponent(c.id)}/hqdefault.jpg) center/cover"><span class="vhint">Zum Abspielen antippen</span><iframe data-clip="${esc(key)}" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(c.id)}?autoplay=1&mute=1&controls=0&playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&enablejsapi=1&start=${Math.floor(c.s)}${c.e ? "&end=" + Math.ceil(c.e) : ""}" allow="autoplay; encrypted-media" title="Bewegung"></iframe></div>`;
 }
 let techTab = "anl", techFor = null;
-let realOpen = null; // Schlüssel der Übung, deren echter Clip gerade gezeigt wird
+// Video oder Illustration: einmal aufs Video umgeschaltet, zeigen alle Übungen das Video (echter Mensch), bis wieder „Illustration“ gewählt wird.
+// Ohne Wahl: Routine mit eigenem Clip = Video, sonst Illustration (Übersicht)
+let vidPref = lsGet("vidPref"), realOpen = null;
 // Morgenroutine: eigener Ein-Wiederholungs-Clip (privates Repo) statt YouTube, Halten = Standbild, Lösen = Bewegung im Takt des Timers
 const mobClipId = key => { if (!key.startsWith("mob:") || !GCM) return null; const id = MOB_ID[key.slice(4)]; const f = id && gcHasClip(id) && gcFollow(id); return f && (f.ph?.length || timerCfg(key).mode !== "reps") ? id : null; };
 let mobClipObj = null, mobDataReady = false; // Coach-Daten und Clip-Liste einmal laden, dann Blatt neu zeichnen
@@ -2292,10 +2294,10 @@ function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!
   try { v.currentTime = r[0] * k; } catch {} v._stopAt = r[1] * k; v.play().catch(() => {}); clipWatch(v); }
 function motionHtml(key, img, alt, still){
   const own = mobClipId(key);
-  if (own && realOpen !== "fig:" + key) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig:${esc(key)}">🖼 Illustration</button>` : ""}</div>`;
+  if (own && vidPref !== false) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
   const c = clipOf(key);
-  if (c && (realOpen === key || !img)) return `<div class="exhero">${clipHtml(key)}${img ? `<button type="button" class="herobtn" data-real="">🖼 Illustration</button>` : ""}</div>`;
-  return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : ""}${own ? `<button type="button" class="herobtn" data-real="">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="${esc(key)}">▶ So sieht's echt aus</button>` : ""}</div>`;
+  if (c && (vidPref === true || !img)) return `<div class="exhero">${clipHtml(key)}${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
+  return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : ""}${own ? `<button type="button" class="herobtn" data-real="vid">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="vid">▶ So sieht's echt aus</button>` : ""}</div>`;
 }
 // Schleife: am Ende des Ausschnitts zurück zum Anfang (YouTube-Iframe-API per postMessage)
 window.addEventListener("message", ev => {
@@ -3232,7 +3234,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
     h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}<button type="button" class="xc hurtbtn" data-hurt="${esc(sheetArg)}">😣 Tut weh?</button></div>
       ${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
-      ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && realOpen !== sheetArg ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
+      ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && !(vidPref === true && clipOf(sheetArg)) ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
       <div class="tabs3 ${["", "", "", "", "n4", "n5"][3 + (alts.length ? 1 : 0) + (hasHist ? 1 : 0)] || ""}" role="tablist" id="ttabs">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(hasHist ? [["ver", "Verlauf"]] : []), ...(alts.length ? [["alt", `Alt. (${alts.length})`]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
       <div id="ttabBody">${techTab === "anl" ? `${prim.length ? `<div class="whyb"><div class="lab">Wofür</div>Trainiert vor allem ${esc(prim.join(" und "))}.${MOB_INFO[sheetArg] ? " " + esc(MOB_INFO[sheetArg].why) : ""}</div>` : ""}
         <ol class="steps">${(e.cue || []).map(c => `<li>${esc(c)}</li>`).join("")}</ol>
@@ -5398,7 +5400,7 @@ async function onClick(e){
   if (t.closest("#syncBtn")) { toast(syncDetail || "Alles gespeichert."); return; }
   const gr = t.closest("[data-gear]"); if (gr) { const hg = gearHome(); hg[gr.dataset.gear] = !hg[gr.dataset.gear]; saveSettings({homeGear: hg}); openEx = null; if (sheet.open) renderSheet(); render(); return; }
   const tt = t.closest("[data-ttab]"); if (tt) { techTab = tt.dataset.ttab; renderSheetPart(["#ttabs", "#ttabBody"]); return; }
-  const rl = t.closest("[data-real]"); if (rl) { realOpen = rl.dataset.real || null; renderSheet(); return; }
+  const rl = t.closest("[data-real]"); if (rl) { vidPref = rl.dataset.real === "vid"; lsSet("vidPref", vidPref); renderSheet(); return; }
   const an = t.closest(".exvis .anim"); if (an) { an.classList.toggle("paused"); return; }
   const pv = t.closest("[data-play]"); if (pv) { playVideo(pv.dataset.play, pv.dataset.t != null ? Number(pv.dataset.t) : undefined); return; }
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") && !t.hasAttribute("data-hclose") ? t : null;
