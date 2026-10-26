@@ -233,7 +233,7 @@ body.wo main{padding-bottom:110px}
 .exdots .ok{background:var(--good);border-color:var(--good);color:var(--accent-ink)}
 .exdots .off{opacity:.4}
 .focusex{display:flex;flex-direction:column;gap:10px;touch-action:pan-y}
-.fxhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.fxhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.fxhead>.btn{flex:none;margin-top:2px}.fxname.skipped{text-decoration:line-through;color:var(--muted)}
 .fxhead h2{margin:2px 0 0}
 .focusex .anim{max-height:150px}
 .focusex .anim img{max-height:150px;object-fit:contain}
@@ -2691,7 +2691,8 @@ function altOptions(base){
   for (const [i, r] of (ALTS[base] || [])) add(i, r);
   return out;
 }
-const nSets = (base, w, sk) => { const e = eff(base); if (!e) return 0; return setsFor(e, w, SESS[sk], base); };
+const exSkipped = base => !!(cur?.skipEx || {})[base];
+const nSets = (base, w, sk) => { const e = eff(base); if (!e) return 0; if (exSkipped(base)) return doneSetsOf(base).length; return setsFor(e, w, SESS[sk], base); };
 // Erledigte Sätze einer Planübung, auch wenn sie unterwegs getauscht wurde (Sätze unter der ursprünglichen Übung zählen mit)
 // Sätze zählen über alle Varianten der Übung (Original, Ersatz, Zuhause-Variante, heute geloggte Alternativen)
 const doneSetsOf = base => { const e = eff(base), so = setsObj(), ids = new Set([e, base, eff0(base)]);
@@ -2741,12 +2742,13 @@ function renderTraining(){
     const anyDone = ids.some(x => eff(x) && doneCount(x, w, sk) > 0);
     if (!woSession && !anyDone) h += warmHtml(sess.title);
     h += `<div class="exdots" role="tablist">${ids.map((x, i) => { const e_ = eff(x), n = e_ ? nSets(x, w, sk) : 0, dn = e_ ? doneCount(x, w, sk) : 0;
-      return `<button type="button" class="${x === openEx ? "cur" : ""} ${e_ && dn >= n ? "ok" : ""} ${!e_ ? "off" : ""}" data-open="${x}" aria-label="${esc(EX[e_ || x].name)}">${e_ && dn >= n ? "✓" : i + 1}</button>`; }).join("")}</div>`;
+      return `<button type="button" class="${x === openEx ? "cur" : ""} ${e_ && dn >= n && !exSkipped(x) ? "ok" : ""} ${!e_ || exSkipped(x) ? "off" : ""}" data-open="${x}" aria-label="${esc(EX[e_ || x].name)}${exSkipped(x) ? " (ausgelassen)" : ""}">${exSkipped(x) ? "–" : e_ && dn >= n ? "✓" : i + 1}</button>`; }).join("")}</div>`;
     const id = openEx, e_ = eff(id), idx = ids.indexOf(id);
     h += `<div class="focusex" data-swipe="ex">`;
     if (!e_) h += `<div class="card"><b>${esc(EX[id].name)}</b><div class="small muted">entfällt zuhause</div></div>`;
+    else if (exSkipped(id)) h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ausgelassen</div><h2 class="fxname skipped">${esc(EX[e_].name)}</h2></div></div><div class="card"><div class="small muted">Ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""} – zählt nicht in die offenen Sätze.</div><button class="btn" type="button" data-exskip="${id}">↺ Doch machen</button></div>`;
     else { const n = nSets(id, w, sk), dn = doneCount(id, w, sk);
-      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2></div></div>` + exBody(id, n, w); }
+      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2></div>${dn < n ? `<button class="btn ghost small" type="button" data-exskip="${id}">Auslassen</button>` : ""}</div>` + exBody(id, n, w); }
     h += `</div><div class="fxnav"><button class="btn big" type="button" data-exnav="-1" ${idx <= 0 ? "disabled" : ""}>‹ Vorherige</button><button class="btn big" type="button" data-exnav="1" ${idx >= ids.length - 1 ? "disabled" : ""}>Nächste ›</button></div>`;
     view.innerHTML = h; startClock(); return;
   }
@@ -2755,6 +2757,7 @@ function renderTraining(){
   for (const id of ids) {
     const e_ = eff(id);
     if (!e_) { h += `<div class="exrow complete"><div class="exsum"><span class="st">–</span><span class="nm">${esc(EX[id].name)} <span class="muted small">· entfällt zuhause</span></span><span></span></div></div>`; continue; }
+    if (exSkipped(id) && openEx !== id) { h += `<div class="exrow complete"><button type="button" class="exsum" data-open="${id}"><span class="st">–</span><span class="nm">${esc(EX[e_].name)} <span class="muted small">· ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""}</span></span><span></span></button></div>`; continue; }
     const e = EX[e_], n = nSets(id, w, sk), mine = setsObj()[e_] || [], dn = doneCount(id, w, sk), complete = dn >= n, isOpen = openEx === id;
     const topKg = Math.max(0, ...mine.filter(doneSet).map(x => num(x.kg) || 0));
     const canSwap = dn === 0 && !isOpen && altOptions(id).length > 1;
@@ -5621,6 +5624,11 @@ async function onClick(e){
   const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); hurtOpen = null; openSheet(sh.dataset.sheet, sh.dataset.v); return; }
   const op = t.closest("[data-open]"); if (op) { openEx = document.body.classList.contains("wo") ? op.dataset.open : openEx === op.dataset.open ? null : op.dataset.open; renderTraining(); scrollTo(0, 0); return; }
   const xn = t.closest("[data-exnav]"); if (xn) { exNav(Number(xn.dataset.exnav)); return; }
+  const xs = t.closest("[data-exskip]"); if (xs) { const id = xs.dataset.exskip, on = !exSkipped(id), toggle = v => { if (v) cur.skipEx = Object.assign({}, cur.skipEx, {[id]: true}); else { const o = Object.assign({}, cur.skipEx); delete o[id]; cur.skipEx = o; clr("skipEx." + id); } touch(); saveCur(); };
+    toggle(on); if (on) { const sk = woSession || cur.session, w = weekNo(selDate), ids = exList(sk), i = ids.indexOf(id), open = x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk);
+      openEx = ids.slice(i + 1).find(open) || ids.find(open) || id; }
+    else openEx = id;
+    renderTraining(); scrollTo(0, 0); return; }
   const ok = t.closest("[data-ok]"); if (ok) { checkSet(ok.dataset.ok, ok.dataset.base, Number(ok.dataset.i)); return; }
   const rr = t.closest("[data-rir]"); if (rr) { const id = rr.dataset.rir, base = rr.dataset.base, sk = woSession || cur.session, w = weekNo(selDate); const arr = setsObj()[id] || [], dc = arr.filter(doneSet).length; const last = arr[Math.max(dc, 1) - 1]; if (last) { last.rir = rr.dataset.v.replace("+", ""); touch(); } const nx = exList(sk), ix = nx.indexOf(base); openEx = nx.slice(ix + 1).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)) || base; renderTraining(); return; }
   const pb = t.closest("[data-pain]"); if (pb) { const k = pb.dataset.pain, v = Number(pb.dataset.v); cur.pain[k] = cur.pain[k] === v ? null : v; if (cur.pain[k] == null) clr("pain." + k); document.querySelectorAll(`[data-pain="${k}"]`).forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.v) === cur.pain[k]))); touch(); return; }
