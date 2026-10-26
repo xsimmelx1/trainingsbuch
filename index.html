@@ -299,7 +299,8 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .pps .pp{display:flex;gap:10px;font-size:14px;align-items:baseline;line-height:1.35}
 .pps .pp > span:first-child{flex:none;width:42px;font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
 .pps .pp.due > span:first-child{color:var(--warn)}
-.mealacts{flex-wrap:nowrap !important;gap:6px}.mealacts .btn{flex:1;padding:9px 6px;font-size:14px;min-width:0;white-space:nowrap}
+.mealacts{display:grid !important;grid-template-columns:1fr 1fr;gap:6px}.mealacts .btn{padding:9px 6px;font-size:14px;min-width:0;white-space:normal;line-height:1.2}.mealacts .btn:first-child{grid-column:1/-1}
+.nextc .actions .btn[data-sheet="other"]{white-space:normal;line-height:1.15;font-size:13px}
 .nextc .actions{display:flex;flex-wrap:nowrap;gap:6px}.nextc .actions .btn{flex:1;white-space:nowrap;padding:9px 6px;font-size:14px;min-width:0}.nextc .actions .btn[data-sheet="meal"]{flex:none;min-width:44px}
 .linkbtn{border:0;background:none;padding:0;color:var(--accent);font:inherit;text-align:left}
 .quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.quick .qcard.wide{grid-column:span 2}.quick .qcard b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
@@ -2460,7 +2461,7 @@ function nextBlock(d){
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
   h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Anderes</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
   h += odHtml;
   const other = [];
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
@@ -2572,7 +2573,7 @@ function nowCard(it){
   if (it.hero === "train") return `<div class="lab sec">${nowLab(it)}</div>` + heroCard(true);
   if (it.meal) { const m = it.meal, r = m.info;
     return `<div class="lab sec">${nowLab(it)}</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh tap" ${mealOpenAttr(selDate, m)}>${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}</div></div><span class="go">›</span></div>
-      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Anderes</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Tauschen</button>`}</div>${restPick(selDate, m)}${m.ate ? restBtn(selDate, m) : skipBtn(selDate, m, "btn ghost small")}</div>`; }
+      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Anderes Rezept planen</button>`}</div>${restPick(selDate, m)}${m.ate ? restBtn(selDate, m) : skipBtn(selDate, m, "btn ghost small")}</div>`; }
   return `<div class="lab sec">${nowLab(it)}</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
 }
 const mealOpenAttr = (d, m) => m.own ? `data-sheet="mealinfo" data-v="${d}|${m.k}"` : recOf(m.name) ? `data-recipe="${esc(recOf(m.name).name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`;
@@ -3580,7 +3581,7 @@ function journeySheet(kind, arg){
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${favBtn(r.name)}${close}</span></div>
-      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Anderes</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Tauschen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
+      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Schon was anderes gegessen</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">✓ Dieses nehmen</button><button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep ? `<span class="tag">Meal Prep</span>` : ""}</div>
@@ -4254,7 +4255,7 @@ function ownIngParts(text){ const i = Math.max(text.lastIndexOf(","), text.lastI
   return {head, amt: m?.[1] || (tail.match(/^\s*/)[0]), word: (m?.[2] || tail).trim()}; }
 function otherSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k), close = `<button class="btn ghost" type="button" data-act="closeSheet">Abbrechen</button>`;
-  return `<div class="sh"><h2>Was anderes gegessen</h2>${close}</div>
+  return `<div class="sh"><h2>Schon was anderes gegessen</h2>${close}</div>
     <div class="small muted">${m ? `Statt <b>${esc(m.info.name)}</b> (${esc(MEAL_SHORT[k] || m.label)}, ${fmt(d)}). ` : ""}Wird als gegessen gezählt.</div>
     <div class="card ownf"><div class="field"><label for="ownName">Was war's?</label><input type="text" id="ownName" placeholder="z. B. Pizza Margherita, Mensa-Curry, Döner" autocomplete="off"><div class="sugg" id="ownSug"></div></div>
     <details class="otherdet"><summary>Zutaten grob angeben <span class="small muted">(optional, für kcal und Eiweiß)</span></summary>
@@ -5829,8 +5830,15 @@ iconize(document.body);
 if ("serviceWorker" in navigator) { const hadSW = !!navigator.serviceWorker.controller; let swNew = false;
   // Neue Version aktiv: neu laden, wenn gerade nichts offen ist (kein Blatt, kein laufendes Training, nichts ungespeichert); sonst beim nächsten Wechsel in den Hintergrund
   const swReload = () => { if (!swNew || sheet.open || dirty || (cur?.startedAt && !cur?.finishedAt) || document.getElementById("gc")?.hidden === false) return false; swNew = false; location.reload(); return true; };
-  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadSW) return; swNew = true; if (!swReload()) document.addEventListener("visibilitychange", () => { if (document.hidden) swReload(); }); });
-  navigator.serviceWorker.register("sw.js").catch(() => {}); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadSW) return; swNew = true;
+    if (!swReload()) { document.addEventListener("visibilitychange", () => { if (document.hidden) swReload(); }); if (!dirty && !(cur?.startedAt && !cur?.finishedAt)) toast("Neue Version da", {label: "Jetzt laden", fn: () => location.reload()}); } });
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+  // Neue Version schnell finden: GitHub hält sw.js bis zu 10 min im Zwischenspeicher und der Browser prüft nur beim Neustart.
+  // Deshalb beim Öffnen und alle 5 min die Versionsnummer am Zwischenspeicher vorbei holen; ist sie neu, sw.js mit dieser Nummer registrieren (lädt frisch).
+  let swChk = 0; const swCheck = async () => { if (document.hidden || Date.now() - swChk < 60000) return; swChk = Date.now();
+    try { const v = ((await (await fetch("sw.js?t=" + Date.now(), {cache: "no-store"})).text()).match(/const CACHE = "([^"]+)"/) || [])[1];
+      if (v && !(await caches.has(v))) await navigator.serviceWorker.register("sw.js?v=" + v); } catch {} };
+  document.addEventListener("visibilitychange", swCheck); setTimeout(swCheck, 4000); setInterval(swCheck, 300000); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }
 readHash();
 const c0 = lsGet("cache"); if (c0) Object.assign(store, c0);
 render();

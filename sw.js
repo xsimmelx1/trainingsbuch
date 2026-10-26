@@ -1,5 +1,5 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v194";
+const CACHE = "tb-v195";
 const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
@@ -10,7 +10,7 @@ self.addEventListener("activate", e => {
 });
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
-  if (e.request.method !== "GET" || url.origin !== location.origin) return;
+  if (e.request.method !== "GET" || url.origin !== location.origin || url.pathname.endsWith("/sw.js")) return; // Versionsabfrage immer vom Server
   if (url.pathname.includes("/img/")) {
     // Bilder: erst Cache, dann Netz
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { if (res.ok) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); } return res; })));
