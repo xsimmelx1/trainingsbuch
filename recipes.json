@@ -23,7 +23,7 @@
   "steps": [
    "Hafer, Chia, Kakao in ein Schraubglas geben.",
    "Skyr, Milch und Espresso einrühren, gut mischen.",
-   "Beeren obendrauf, Deckel zu, mind. 6 h (über Nacht) kühlen.",
+   "TK-Beeren kurz aufkochen (roh nicht empfohlen), obendrauf geben, Deckel zu, mind. 6 h (über Nacht) kühlen.",
    "Morgens umrühren, ggf. Schuss Milch dazu."
   ],
   "source": "https://pdf.susannafuhrmann.de/mocha-overnight-oats-kaffee-skyr.pdf",
@@ -52,7 +52,7 @@
      "do": "Skyr, Milch und den abgekühlten Espresso einrühren und alles gut mischen."
     },
     {
-     "do": "TK-Beeren obendrauf geben, Deckel zu und mind. 6 h (über Nacht) kühlen.",
+     "do": "TK-Beeren kurz aufkochen (mind. 2 Min., roh nicht empfohlen) und obendrauf geben, Deckel zu und mind. 6 h (über Nacht) kühlen.",
      "min": 360,
      "passive": true
     },
@@ -119,7 +119,8 @@
     },
     {
      "do": "Über Nacht kühlen.",
-     "passive": true
+     "passive": true,
+     "min": 360
     }
    ]
   }
@@ -538,7 +539,8 @@
    "1 Paprika, gewürfelt",
    "100 g Spinat",
    "1/2 Bund Frühlingszwiebeln",
-   "8 Scheiben Vollkornbrot (2 pro Portion, zum Servieren)"
+   "8 Scheiben Vollkornbrot (2 pro Portion, zum Servieren)",
+   "Salz, Pfeffer"
   ],
   "steps": [
    "Ofen 180 °C, 12er-Muffinblech fetten/Silikonförmchen.",
@@ -547,7 +549,7 @@
    "20–25 Min. backen bis gestockt."
   ],
   "source": "https://www.berrystreet.co/blog/vegetarian-meal-prep-high-protein",
-  "note": "Quelle beschreibt Egg Muffins als Meal-Prep-Snack; Mengen eigene Mit 2 Scheiben Vollkornbrot pro Portion.",
+  "note": "Quelle beschreibt Egg Muffins als Meal-Prep-Snack; Mengen eigene, mit 2 Scheiben Vollkornbrot pro Portion.",
   "img": "img/rezepte/r08.jpg",
   "imgCredit": {
    "artist": "Andy Li",
@@ -806,7 +808,7 @@
   "carbs": 66,
   "fat": 9,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 40,
   "mealPrep": true,
   "shelfLife": "4 Tage Kühlschrank (Quelle: bis 1 Woche), 3 Monate TK",
   "ingredients": [
@@ -892,7 +894,7 @@
    "Basilikum, Salz, Pfeffer"
   ],
   "steps": [
-   "Nudeln al dente kochen, etwas Nudelwasser aufheben.",
+   "Hartweizennudeln ca. 10 Min. al dente kochen, Linsen-/Erbsennudeln nach 2–3 Min. dazugeben; etwas Nudelwasser aufheben.",
    "Tomaten, Hüttenkäse, Paprika, Basilikum glatt mixen.",
    "Soße mit heißen Nudeln mischen (ggf. Nudelwasser).",
    "Mozzarellawürfel unterheben, portionieren."
@@ -921,9 +923,10 @@
      "meanwhile": "Mozzarella würfeln."
     },
     {
-     "do": "Beide Nudelsorten al dente kochen.",
+     "do": "Hartweizennudeln ca. 10 Min. al dente kochen, die Linsen-/Erbsennudeln (garen schneller) nach 2–3 Min. dazugeben.",
      "passive": true,
-     "meanwhile": "Tomaten, Hüttenkäse, geröstete Paprika und Basilikum glatt mixen, mit Salz und Pfeffer abschmecken."
+     "meanwhile": "Tomaten, Hüttenkäse, geröstete Paprika und Basilikum glatt mixen, mit Salz und Pfeffer abschmecken.",
+     "min": 10
     },
     {
      "do": "Etwas Nudelwasser aufheben, Nudeln abgießen und heiß mit der Soße mischen, bei Bedarf Nudelwasser dazugeben."
@@ -1258,11 +1261,9 @@
     },
     {
      "do": "Tofuwürfel im Ofen ca. 20 Min. (Airfryer 12–15 Min.) oder in der Pfanne ca. 8 Min. rundum anbräunen.",
-     "min": 15
-    },
-    {
-     "do": "Zwiebel, Knoblauch und Ingwer in Öl 3 Min. anbraten, dann die Gewürze (Garam Masala, Kreuzkümmel, Koriander, Kurkuma, Paprika) 2 Min. mitrösten.",
-     "min": 5
+     "min": 20,
+     "passive": true,
+     "meanwhile": "Zwiebel, Knoblauch und Ingwer in Öl 3 Min. anbraten, dann die Gewürze (Garam Masala, Kreuzkümmel, Koriander, Kurkuma, Paprika) 2 Min. mitrösten."
     },
     {
      "do": "Tomaten, Kokosmilch, Kichererbsen und Tofu zugeben und 10 Min. köcheln.",
@@ -1446,7 +1447,7 @@
    "Mit Pasta und etwas Nudelwasser 1–2 Min. erhitzen."
   ],
   "source": "https://www.eat-this.org/vegane-high-protein-baerlauch-pasta/",
-  "note": "",
+  "note": "wie Original",
   "img": "img/rezepte/r21.jpg",
   "imgCredit": {
    "artist": "Karen and Brad Emerson",
@@ -1921,14 +1922,14 @@
   "ingredients": [
    "250 g Magerquark",
    "Schuss Milch",
-   "150 g TK-Beeren (aufgetaut)",
+   "150 g TK-Beeren (aufgekocht und abgekühlt)",
    "30 g Haferflocken",
    "10 g Erdnussmus",
    "Zimt, ggf. Süße"
   ],
   "steps": [
    "Quark mit Milch cremig rühren.",
-   "Beeren samt Saft unterziehen.",
+   "Aufgekochte, abgekühlte Beeren samt Saft unterziehen.",
    "Hafer und Erdnussmus darauf."
   ],
   "source": "",
@@ -1946,14 +1947,14 @@
   "dev": [],
   "plan": {
    "ahead": [
-    "TK-Beeren rechtzeitig auftauen lassen (ca. 1–2 h bei Raumtemperatur oder über Nacht im Kühlschrank)."
+    "TK-Beeren vorher kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen."
    ],
    "steps": [
     {
      "do": "Quark mit einem Schuss Milch cremig rühren, nach Wunsch Zimt und Süße dazu."
     },
     {
-     "do": "Aufgetaute Beeren samt Saft unterziehen."
+     "do": "Aufgekochte, abgekühlte Beeren samt Saft unterziehen."
     },
     {
      "do": "Haferflocken und Erdnussmus darauf geben."
@@ -2188,10 +2189,10 @@
   "name": "Herzhafte Protein-Stulle mit Pilz-\"Bacon\"",
   "category": "mittag",
   "servings": 2,
-  "kcal": 575,
+  "kcal": 520,
   "protein": 30,
   "carbs": 17,
-  "fat": 36,
+  "fat": 30,
   "estimated": true,
   "timeMin": 55,
   "mealPrep": false,
@@ -2243,11 +2244,7 @@
      "do": "Pilze bei 180 °C 40 Min. backen, nach der Hälfte wenden.",
      "min": 40,
      "passive": true,
-     "meanwhile": "Frischkäse mit Knoblauch und Zitrone zum Aioli-Frischkäse verrühren, Radieschen schneiden, Grünkohl vorbereiten."
-    },
-    {
-     "do": "In den letzten 8 Min. der Backzeit den Grünkohl in Öl braten.",
-     "min": 8
+     "meanwhile": "Frischkäse mit Knoblauch und Zitrone zum Aioli-Frischkäse verrühren, Radieschen schneiden, Grünkohl vorbereiten. In den letzten 8 Min. den Grünkohl in Öl braten."
     },
     {
      "do": "Eiweißbrot mit Aioli-Frischkäse bestreichen und mit Pilz-\"Bacon\", Grünkohl und Radieschen belegen."
@@ -2826,7 +2823,7 @@
   "name": "Gefüllte Skyr-Senf-Eier",
   "category": "snack",
   "servings": 2,
-  "kcal": 295,
+  "kcal": 265,
   "protein": 26,
   "carbs": 3,
   "fat": 16,
@@ -3095,7 +3092,7 @@
    "Seidentofu abtropfen lassen und mit Quark, Kakao, Sirup, Vanille und Salz glatt pürieren.",
    "Geschmolzene Schokolade zugeben und nochmals mixen, bis die Masse gleichmäßig ist.",
    "In zwei Gläser füllen und mindestens 1 Std. kalt stellen.",
-   "Vor dem Essen mit den (angetauten) Himbeeren toppen."
+   "Vor dem Essen mit den kurz aufgekochten, abgekühlten Himbeeren toppen (TK-Beeren roh nicht empfohlen)."
   ],
   "source": "https://itdoesnttastelikechicken.com/silken-tofu-chocolate-mousse/",
   "note": "adaptiert: Magerquark ergänzt, damit >30 g Protein; weniger Schokolade als im Vorbild. Seidentofu gibt es im Asia-Laden, teils bei REWE/Edeka/Bio-Märkten; Ersatz: 400 g Tofu natur sehr lange pürieren (fester). Quellseite blockiert automatische Abrufe.",
@@ -3133,10 +3130,10 @@
      "do": "In zwei Gläser füllen und mindestens 1 Std. kalt stellen.",
      "min": 60,
      "passive": true,
-     "meanwhile": "Himbeeren aus dem Gefrierfach nehmen und antauen lassen; Mixer abwaschen."
+     "meanwhile": "Himbeeren kurz aufkochen (mind. 2 Min., TK-Beeren roh nicht empfohlen) und abkühlen lassen; Mixer abwaschen."
     },
     {
-     "do": "Vor dem Essen mit den angetauten Himbeeren toppen."
+     "do": "Vor dem Essen mit den aufgekochten, abgekühlten Himbeeren toppen."
     }
    ]
   }
@@ -3169,7 +3166,7 @@
    "Eier trennen, Eiweiß mit Salz steif schlagen.",
    "Quark, Skyr, Eigelb, Zucker, Grieß, Stärke, Zitronenabrieb und Vanille glatt rühren, Eischnee unterheben.",
    "In die Form füllen und ca. 70–80 Min. backen, bis der Rand fest ist und die Mitte nur noch leicht wackelt (bei starker Bräunung nach 50 Min. abdecken). Im ausgeschalteten Ofen bei leicht geöffneter Tür ca. 30 Min. abkühlen lassen (verhindert Risse), dann ganz auskühlen lassen und mind. 2 Std. kalt stellen.",
-   "In 6 Stücke schneiden; jeweils mit 50 g aufgetauten Beeren essen."
+   "In 6 Stücke schneiden; jeweils mit 50 g aufgekochten, abgekühlten Beeren essen (TK-Beeren roh nicht empfohlen)."
   ],
   "source": "https://baketotheroots.de/kaesekuchen-ohne-boden/",
   "note": "stark adaptiert: Vorbild nutzt 20-%-Quark, Mascarpone, 120 g Butter und 250 g Zucker; hier Magerquark und Skyr, ohne Butter/Mascarpone, Zucker auf 80 g reduziert, gebacken bei 170 °C statt 180 °C und etwas kürzer. Konsistenz wird fester und weniger cremig.",
@@ -3182,7 +3179,7 @@
   },
   "activeMin": 30,
   "difficulty": "aufwendig",
-  "temp": "warm",
+  "temp": "kalt",
   "dev": [
    "ofen"
   ],
@@ -3190,7 +3187,7 @@
   "plan": {
    "ahead": [
     "Quark möglichst 1 Std. (oder über Nacht) in einem Sieb mit Küchentuch abtropfen lassen.",
-    "TK-Beeren rechtzeitig zum Servieren auftauen lassen."
+    "TK-Beeren zum Servieren kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen."
    ],
    "steps": [
     {
@@ -3219,7 +3216,7 @@
      "passive": true
     },
     {
-     "do": "In 6 Stücke schneiden; jeweils mit 50 g aufgetauten Beeren essen."
+     "do": "In 6 Stücke schneiden; jeweils mit 50 g aufgekochten, abgekühlten Beeren essen."
     }
    ]
   }
@@ -3246,8 +3243,8 @@
    "40 g Haferflocken"
   ],
   "steps": [
-   "Seidentofu abtropfen lassen.",
-   "Alle Zutaten in den Mixer geben, gefrorene Beeren zuletzt.",
+   "Seidentofu abtropfen lassen; TK-Heidelbeeren kurz aufkochen und abkühlen lassen (roh nicht empfohlen).",
+   "Alle Zutaten in den Mixer geben, die Beeren zuletzt.",
    "Ca. 1 Min. cremig mixen; ist er zu dick, etwas Sojadrink oder Wasser nachgießen."
   ],
   "source": "https://naturallieplantbased.com/silken-tofu-smoothie/",
@@ -3270,10 +3267,10 @@
    "steps": [
     {
      "do": "Seidentofu abtropfen lassen.",
-     "meanwhile": "Banane schälen, Skyr, Sojadrink, Leinsamen und Haferflocken abmessen."
+     "meanwhile": "TK-Heidelbeeren kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen. Banane schälen, Skyr, Sojadrink, Leinsamen und Haferflocken abmessen."
     },
     {
-     "do": "Alle Zutaten in den Mixer geben, gefrorene Beeren zuletzt."
+     "do": "Alle Zutaten in den Mixer geben, die Beeren zuletzt."
     },
     {
      "do": "Ca. 1 Min. cremig mixen; ist er zu dick, etwas Sojadrink oder Wasser nachgießen.",
@@ -3394,7 +3391,7 @@
   },
   "activeMin": 25,
   "difficulty": "leicht",
-  "temp": "warm",
+  "temp": "beides",
   "dev": [
    "herd"
   ],
@@ -3668,7 +3665,7 @@
   },
   "activeMin": 25,
   "difficulty": "mittel",
-  "temp": "warm",
+  "temp": "beides",
   "dev": [
    "herd",
    "ofenk"
@@ -4215,7 +4212,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Ofen auf 220 °C vorheizen. Sojagranulat in der heißen Brühe ca. 10 Min. einweichen.",
+     "do": "Ofen auf 220 °C vorheizen. Sojagranulat in der heißen Brühe einweichen – es zieht, während die Kartoffeln backen.",
      "meanwhile": "Kartoffeln in Spalten schneiden und mit 1 EL Öl und Paprikapulver mischen."
     },
     {
@@ -4619,7 +4616,7 @@
    "url": "https://commons.wikimedia.org/wiki/File:Bocadillo_de_Tortilla_de_patatas_-_34.jpg",
    "title": "File:Bocadillo de Tortilla de patatas - 34.jpg"
   },
-  "temp": "kalt",
+  "temp": "beides",
   "dev": [
    "herd"
   ],
@@ -4863,11 +4860,11 @@
   "name": "Linsen-Kürbis-Eintopf mit Tofu",
   "category": "mittag",
   "servings": 4,
-  "kcal": 409,
+  "kcal": 540,
   "protein": 27,
   "carbs": 46,
-  "fat": 15,
-  "estimated": false,
+  "fat": 23,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -4881,7 +4878,7 @@
    "200 g Tofu natur",
    "2 EL Rapsöl",
    "200 g rote Linsen (trocken)",
-   "1 EL gelbe Currypaste",
+   "1 EL gelbe Currypaste (vegetarisch, ohne Garnelenpaste)",
    "400 g gehackte Tomaten (Dose)",
    "400 ml Kokosmilch light",
    "800 ml Gemüsebrühe",
@@ -4895,7 +4892,7 @@
    "Abschmecken und mit gerösteten Kürbiskernen bestreut servieren."
   ],
   "source": "https://www.rewe.de/rezepte/veganer-linsen-kuerbis-eintopf-tofu/",
-  "note": "nach REWE; Kokosmilch light statt normal (Nährwerte der Quelle beibehalten, real etwas weniger Fett)",
+  "note": "nach REWE; Kokosmilch light statt normal, Nährwerte nachgerechnet",
   "img": "img/rezepte/x-072.jpg",
   "imgCredit": {
    "artist": "Helena Jacoba",
@@ -4933,11 +4930,11 @@
   "name": "Schwäbische Linsen mit Spätzle & Räuchertofu",
   "category": "mittag",
   "servings": 4,
-  "kcal": 545,
+  "kcal": 620,
   "protein": 32,
-  "carbs": 79,
-  "fat": 15,
-  "estimated": false,
+  "carbs": 76,
+  "fat": 17,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -5024,7 +5021,7 @@
    "1 Knoblauchzehe",
    "4 Scheiben Ingwer",
    "1 EL Rapsöl",
-   "2 EL gelbe Currypaste",
+   "2 EL gelbe Currypaste (vegetarisch, ohne Garnelenpaste)",
    "750 ml Kokosmilch light",
    "250 ml Gemüsebrühe",
    "200 g Basmatireis",
@@ -5084,7 +5081,7 @@
   "category": "abend",
   "servings": 4,
   "kcal": 766,
-  "protein": 37,
+  "protein": 31,
   "carbs": 68,
   "fat": 40,
   "estimated": false,
@@ -5446,6 +5443,7 @@
   },
   "temp": "warm",
   "dev": [
+   "herd",
    "ofen"
   ],
   "imgOrig": "https://c.rewe-static.de/56966536/4/56966536.png?impolicy=recipe-meta-image",
@@ -5529,7 +5527,8 @@
     {
      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Reis aufsetzen und kochen.",
      "passive": true,
-     "meanwhile": "Knoblauch hacken, Feldsalat waschen und die Jalapeños abtropfen lassen."
+     "meanwhile": "Knoblauch hacken, Feldsalat waschen und die Jalapeños abtropfen lassen.",
+     "min": 15
     },
     {
      "do": "Hack im Öl scharf anbraten, etwas Knoblauch zugeben und die Bohnen unterheben."
@@ -5927,7 +5926,7 @@
   "carbs": 93,
   "fat": 31,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 35,
   "activeMin": 25,
   "difficulty": "mittel",
   "mealPrep": true,
@@ -5971,15 +5970,13 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis mit 700 ml Salzwasser und Kurkuma aufsetzen und insgesamt ca. 15 Min. garen.",
-     "min": 10,
-     "passive": true,
-     "meanwhile": "Möhre würfeln. Tofu würfeln, mit 3 EL Stärke und Joghurt vermengen und in 2 Portionen im Öl ca. 10 Min. rundum knusprig braten (statt frittieren). Zitronen abreiben und auspressen, Peperoni in Ringe schneiden."
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis mit 700 ml Salzwasser und Kurkuma aufsetzen.",
+     "meanwhile": "Möhre würfeln. Tofu würfeln und mit 3 EL Stärke und Joghurt vermengen. Zitronen abreiben und auspressen, Peperoni in Ringe schneiden."
     },
     {
-     "do": "Nach 10 Min. Möhre und Erbsen zum Reis geben und ca. 5 Min. fertig garen.",
-     "min": 5,
-     "passive": true
+     "do": "Tofu in 2 Portionen im Öl je ca. 10 Min. rundum knusprig braten (statt frittieren).",
+     "min": 20,
+     "meanwhile": "Nach 10 Min. Möhre und Erbsen zum Reis geben; der Reis ist nach insgesamt ca. 15 Min. fertig."
     },
     {
      "do": "Zitronensaft, -abrieb, Zucker, 100 ml Wasser und 1 EL Stärke aufkochen, bis die Soße andickt, und den Tofu darin schwenken."
@@ -6074,10 +6071,10 @@
   "name": "Tofu-Souvlaki mit griechischem Bauernsalat & Feta",
   "category": "abend",
   "servings": 4,
-  "kcal": 630,
-  "protein": 39,
-  "carbs": 46,
-  "fat": 33,
+  "kcal": 750,
+  "protein": 41,
+  "carbs": 56,
+  "fat": 37,
   "estimated": false,
   "timeMin": 30,
   "activeMin": 25,
@@ -6094,7 +6091,7 @@
    "5 EL Olivenöl",
    "1 Paprika gelb",
    "800 g Tofu natur",
-   "1 Fladenbrot",
+   "1 Fladenbrot (ca. 300 g)",
    "150 g Feta (vegetarisch, mikrobielles Lab)",
    "2 TL italienische Kräuter",
    "8 eingelegte Peperoni",
@@ -6117,7 +6114,8 @@
   },
   "temp": "warm",
   "dev": [
-   "herd"
+   "herd",
+   "ofenk"
   ],
   "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/de5d1230-5baf-4f98-8a3e-9b6c6c942440/1x1_fallback_tofu-souvlaki-auf-griechischem-bauernsalat-1774377167.jpeg",
   "plan": {
@@ -6171,7 +6169,7 @@
   "steps": [
    "Zwiebel, Knoblauch und Ingwer fein hacken, Tofu würfeln, Pak Choi achteln.",
    "Zwiebel, Knoblauch, Ingwer und Tofu im Öl kräftig anbraten und mit Curry, Zimt, Salz und Pfeffer würzen.",
-   "Pak Choi 2 Min. mitbraten, Linsen zugeben, mit Kokosmilch und Brühe auffüllen und 10–12 Min. köcheln.",
+   "Pak Choi 2 Min. mitbraten, Linsen zugeben, mit Kokosmilch, Brühe und ca. 300 ml Wasser auffüllen und 10–12 Min. köcheln, bei Bedarf Wasser nachgießen.",
    "Abschmecken und mit Koriander bestreut servieren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/linsen-tofu-curry-mit-pak-choi",
@@ -6201,7 +6199,7 @@
      "min": 2
     },
     {
-     "do": "Linsen zugeben, mit Kokosmilch und Brühe auffüllen und 10–12 Min. köcheln lassen.",
+     "do": "Linsen zugeben, mit Kokosmilch, Brühe und ca. 300 ml Wasser auffüllen und 10–12 Min. köcheln lassen, bei Bedarf weiteres Wasser nachgießen.",
      "min": 12,
      "passive": true,
      "meanwhile": "Koriander hacken."
@@ -6390,7 +6388,7 @@
    "url": "https://www.flickr.com/photos/96763131@N00/477554807",
    "title": "Constructed Asparagus Frittata"
   },
-  "temp": "warm",
+  "temp": "beides",
   "dev": [
    "herd",
    "ofenk"
@@ -6428,11 +6426,11 @@
   "name": "Falafel in orientalischer Linsensuppe mit Skyr",
   "category": "abend",
   "servings": 4,
-  "kcal": 577,
-  "protein": 31,
-  "carbs": 66,
-  "fat": 20,
-  "estimated": false,
+  "kcal": 470,
+  "protein": 24,
+  "carbs": 48,
+  "fat": 17,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -6706,7 +6704,7 @@
     {
      "do": "Gemüse portionsweise im Öl von beiden Seiten je ca. 3 Min. anbraten.",
      "meanwhile": "Bohnen mit 3 EL Zitronensaft, 1 EL Öl, Salz und Pfeffer anmachen; Feldsalat und Rucola waschen und unterheben, Schnittlauch schneiden.",
-     "min": 8
+     "min": 20
     },
     {
      "do": "Marinierten Tofu in derselben Pfanne ca. 3–4 Min. rundum goldbraun braten.",
@@ -6735,7 +6733,7 @@
   "ingredients": [
    "1/2 Bund Frühlingszwiebeln",
    "20 g Ingwer",
-   "8 EL Sojasauce",
+   "4 EL Sojasauce (nach Geschmack mehr)",
    "1 l Gemüsebrühe",
    "1 EL Agavendicksaft",
    "3 EL Sesamöl",
@@ -6905,7 +6903,7 @@
   "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/1a98a97d-fcef-46c2-8b85-bc0ff72c2240/1x1_fallback_fruehstuecksquarkspeise-1774376898.jpeg",
   "plan": {
    "ahead": [
-    "Falls du TK-Beeren nimmst: rechtzeitig vorher auftauen lassen."
+    "Falls du TK-Beeren nimmst: vorher kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen."
    ],
    "steps": [
     {
@@ -6970,7 +6968,7 @@
   "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/20e7b748-db88-47dc-8d72-42104d8926f0/1x1_fallback_dinkel-crepes-mit-blaubeerquark-1774376864.jpeg",
   "plan": {
    "ahead": [
-    "Falls du TK-Beeren nimmst: rechtzeitig vorher auftauen lassen."
+    "Falls du TK-Beeren nimmst: vorher kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen."
    ],
    "steps": [
     {
@@ -7044,6 +7042,9 @@
     {
      "do": "In Schälchen oder Gläser füllen und mit gehackten Mandeln und Rosinen bestreuen."
     }
+   ],
+   "ahead": [
+    "Falls du TK-Beeren nimmst: vorher kurz aufkochen (mind. 2 Min.) und abkühlen lassen – roh nicht empfohlen."
    ]
   }
  },
@@ -7212,7 +7213,7 @@
   "steps": [
    "Knoblauch fein hacken, Kichererbsen abspülen und gut abtropfen lassen.",
    "Knoblauch im Öl sanft anbraten, Kichererbsen und Paprikapulver zugeben und ca. 5 Min. braten, bis sie leicht knusprig sind.",
-   "Beide Nudelsorten nach Packungsangabe kochen, etwas Kochwasser auffangen.",
+   "Bandnudeln ca. 10 Min. kochen, Linsennudeln nach 2–3 Min. dazugeben; etwas Kochwasser auffangen.",
    "Nudeln mit den Kichererbsen mischen, Hartkäse und etwas Nudelwasser unterrühren, bis eine cremige Soße entsteht; mit Basilikum servieren."
   ],
   "source": "https://www.aldi-sued.de/rezepte/menueart/mittagessen/rdp-kichererbsen-pasta",
@@ -7236,9 +7237,10 @@
      "meanwhile": "Knoblauch fein hacken, Kichererbsen abspülen und gut abtropfen lassen."
     },
     {
-     "do": "Beide Nudelsorten nach Packungsangabe kochen.",
+     "do": "Bandnudeln ca. 10 Min. kochen, die Linsennudeln nach 2–3 Min. dazugeben (sie garen schneller).",
      "passive": true,
-     "meanwhile": "Knoblauch im Öl sanft anbraten, Kichererbsen und Paprikapulver zugeben und ca. 5 Min. braten, bis sie leicht knusprig sind; mit Salz und Pfeffer würzen."
+     "meanwhile": "Knoblauch im Öl sanft anbraten, Kichererbsen und Paprikapulver zugeben und ca. 5 Min. braten, bis sie leicht knusprig sind; mit Salz und Pfeffer würzen.",
+     "min": 10
     },
     {
      "do": "Etwas Kochwasser auffangen und die Nudeln abgießen."
@@ -7533,9 +7535,10 @@
      "min": 20
     },
     {
-     "do": "Reis etwas abkühlen lassen.",
+     "do": "Reis ca. 10 Min. etwas abkühlen lassen.",
      "passive": true,
-     "meanwhile": "Salat, Sprossen und Radieschenscheiben anrichten. Restliche Buttermilch mit Zitronensaft, Salz, Pfeffer und Zucker zu einem Dressing verrühren."
+     "meanwhile": "Salat, Sprossen und Radieschenscheiben anrichten. Restliche Buttermilch mit Zitronensaft, Salz, Pfeffer und Zucker zu einem Dressing verrühren.",
+     "min": 10
     },
     {
      "do": "Kohlrabi und Möhre mit Reis, Eiern und Mehl vermengen und würzen."
@@ -7703,11 +7706,11 @@
   "name": "Soba-Bowl mit Räuchertofu, Spargel & Paprika",
   "category": "mittag",
   "servings": 2,
-  "kcal": 590,
-  "protein": 27,
-  "carbs": 67,
-  "fat": 22,
-  "estimated": false,
+  "kcal": 700,
+  "protein": 35,
+  "carbs": 80,
+  "fat": 24,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -7900,7 +7903,8 @@
     {
      "do": "Nudeln al dente kochen.",
      "passive": true,
-     "meanwhile": "Tofu im Öl rundum knusprig braten und herausnehmen."
+     "meanwhile": "Tofu im Öl rundum knusprig braten und herausnehmen.",
+     "min": 9
     },
     {
      "do": "Zwiebel, Ingwer und Brokkoli in der Pfanne kurz anbraten.",
@@ -7963,9 +7967,10 @@
   "plan": {
    "steps": [
     {
-     "do": "Eier hart kochen.",
+     "do": "Eier ca. 10 Min. hart kochen.",
      "passive": true,
-     "meanwhile": "Zwiebel sehr fein hacken und mit Hüttenkäse, Curry, Kräutersalz und Pfeffer kräftig abschmecken. Tomaten halbieren und Rucola waschen."
+     "meanwhile": "Zwiebel sehr fein hacken und mit Hüttenkäse, Curry, Kräutersalz und Pfeffer kräftig abschmecken. Tomaten halbieren und Rucola waschen.",
+     "min": 10
     },
     {
      "do": "Eier abschrecken, pellen, würfeln und unter den Hüttenkäse heben."
@@ -8134,7 +8139,7 @@
    "400 ml Kokosmilch light",
    "1 EL Currypulver",
    "1 TL Gemüsebrühe (Pulver)",
-   "8 EL Sojasauce",
+   "5 EL Sojasauce",
    "1 Prise Chiliflocken",
    "3 EL Olivenöl",
    "180 g Basmatireis"
@@ -8375,7 +8380,8 @@
     {
      "do": "Penne ins kochende Salzwasser geben und knapp al dente kochen.",
      "passive": true,
-     "meanwhile": "Eier verquirlen und mit Spinat, Knoblauch, Salz und Pfeffer verrühren."
+     "meanwhile": "Eier verquirlen und mit Spinat, Knoblauch, Salz und Pfeffer verrühren.",
+     "min": 9
     },
     {
      "do": "Nudeln abgießen und zusammen mit der Paprika unter die Eier-Spinat-Masse mischen."
@@ -8584,10 +8590,10 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Naturreis in ca. 350 ml Salzwasser zugedeckt 30–35 Min. garen.",
+     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Naturreis in ca. 350 ml Salzwasser zugedeckt aufsetzen und 15 Min. vorgaren lassen.",
      "passive": true,
-     "meanwhile": "Zwiebel und Knoblauch hacken, Pilze vierteln. Nach ca. 15 Min. Reiszeit mit den Linsen (nächster Schritt) beginnen.",
-     "min": 35
+     "meanwhile": "Zwiebel und Knoblauch hacken, Pilze vierteln.",
+     "min": 15
     },
     {
      "do": "Die Hälfte von Zwiebel und Knoblauch in einem Teil des Öls anschwitzen, Linsen mit Garam Masala und Curry kurz mitrösten, dann mit Brühe und Tomaten ablöschen."
@@ -8596,7 +8602,7 @@
      "do": "Linsen ca. 12 Min. köcheln lassen.",
      "min": 12,
      "passive": true,
-     "meanwhile": "Pilze mit dem Rest Zwiebel und Knoblauch im restlichen Öl kräftig anbraten. Danach Skyr mit Zitronensaft, Salz und Schnittlauch verrühren und die Avocados würfeln."
+     "meanwhile": "Reis noch ca. 15–20 Min. fertig garen. Pilze mit dem Rest Zwiebel und Knoblauch im restlichen Öl kräftig anbraten. Danach Skyr mit Zitronensaft, Salz und Schnittlauch verrühren und die Avocados würfeln."
     },
     {
      "do": "Reis, Linsen, Pilze und Avocadowürfel in Schalen anrichten und mit dem Skyr toppen."
@@ -8632,7 +8638,7 @@
    "2 EL Rapsöl",
    "1 EL brauner Zucker",
    "2 EL Sojasauce",
-   "2 EL rote Currypaste",
+   "2 EL rote Currypaste (vegetarisch, ohne Garnelenpaste)",
    "400 ml Kokosmilch light",
    "1 Limette",
    "15 g Koriander",
@@ -9071,7 +9077,7 @@
    "Spaghetti al dente kochen, 100 ml Nudelwasser auffangen.",
    "Halloumi würfeln, im Öl rundum kross braten und mit Paprika würzen.",
    "Eier mit 40 g geriebenem Hartkäse und viel Pfeffer verquirlen.",
-   "Pfanne vom Herd nehmen, Nudeln, Halloumi, Eimasse und etwas Nudelwasser zügig vermengen, bis eine cremige Soße entsteht (nicht stocken lassen); mit restlichem Käse und Basilikum servieren."
+   "Nudeln, Halloumi, Eimasse und etwas Nudelwasser zügig vermengen und bei kleinster Hitze unter ständigem Rühren 1–2 Min. erwärmen, bis die Soße cremig bindet (ca. 70 °C); mit restlichem Käse und Basilikum servieren."
   ],
   "source": "https://www.rewe.de/rezepte/halloumi-carbonara/",
   "note": "nach REWE; Pecorino durch vegetarischen Hartkäse ersetzt",
@@ -9096,13 +9102,15 @@
     {
      "do": "Spaghetti im Salzwasser al dente kochen.",
      "passive": true,
-     "meanwhile": "Halloumi im Öl rundum kross braten und mit Paprikapulver würzen. Eier mit 40 g Hartkäse und viel Pfeffer verquirlen."
+     "meanwhile": "Halloumi im Öl rundum kross braten und mit Paprikapulver würzen. Eier mit 40 g Hartkäse und viel Pfeffer verquirlen.",
+     "min": 10
     },
     {
      "do": "100 ml Nudelwasser auffangen, dann die Spaghetti abgießen."
     },
     {
-     "do": "Pfanne vom Herd nehmen, Nudeln, Halloumi, Eimasse und etwas Nudelwasser zügig vermengen, bis eine cremige Soße entsteht – nicht stocken lassen."
+     "do": "Nudeln, Halloumi, Eimasse und etwas Nudelwasser zügig vermengen und bei kleinster Hitze unter ständigem Rühren 1–2 Min. erwärmen, bis die Soße cremig bindet (ca. 70 °C).",
+     "min": 2
     },
     {
      "do": "Mit dem restlichen Käse und Basilikum servieren."
@@ -9164,8 +9172,8 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen.",
-     "meanwhile": "Süßkartoffel würfeln, Zucchini in Scheiben und Zwiebel in Spalten schneiden, Kichererbsen abtropfen lassen."
+     "do": "Zuerst: Kichererbsen aus dem Glas in einem Sieb abspülen und abtropfen lassen. Ofen auf 200 °C vorheizen.",
+     "meanwhile": "Süßkartoffel würfeln, Zucchini in Scheiben und Zwiebel in Spalten schneiden."
     },
     {
      "do": "Gemüse und Kichererbsen mit 2 EL Öl, Thymian, Paprikapulver, Salz und Pfeffer mischen und auf einem Blech ca. 25 Min. rösten.",
@@ -9235,10 +9243,8 @@
   "plan": {
    "steps": [
     {
-     "do": "Kartoffeln schälen, vierteln und in Salzwasser ca. 25 Min. garen.",
-     "meanwhile": "Zwiebeln grob würfeln, Knoblauch hacken, Paprika würfeln, Seitan in 2-cm-Stücke schneiden oder zupfen.",
-     "min": 25,
-     "passive": true
+     "do": "Kartoffeln schälen, vierteln und in Salzwasser aufsetzen – sie garen im Hintergrund, während du das Gulasch kochst.",
+     "meanwhile": "Zwiebeln grob würfeln, Knoblauch hacken, Paprika würfeln, Seitan in 2-cm-Stücke schneiden oder zupfen."
     },
     {
      "do": "Seitan im Öl 3–4 Min. kräftig anbraten, Zwiebeln, Knoblauch und Paprika zugeben und ca. 5 Min. mitbraten, dann Tomatenmark und Paprikapulver ca. 2 Min. mitrösten.",
@@ -9371,7 +9377,7 @@
    "Ofen auf 220 °C vorheizen. Kartoffeln vierteln, mit gehacktem Rosmarin, Salz und 2 EL Öl mischen und ca. 25 Min. backen.",
    "Weiße Bohnen abspülen und mit Knoblauch, Limettensaft, 2 EL Öl, Pinienkernen und etwas Wasser cremig pürieren, würzen.",
    "Grüne Bohnen 6–8 Min. garen und in Butter schwenken.",
-   "Tomaten und Mozzarella schneiden, mit Basilikum, Balsamico und restlichem Öl anmachen und alles zusammen servieren."
+   "Tomaten und Mozzarella schneiden, mit Basilikum, Balsamico, 1 Prise Zucker und restlichem Öl anmachen und alles zusammen servieren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/rosmarinkartoffeln-mit-weisser-bohnenpaste-und-caprese-salat",
   "note": "nach Lidl Kochen; Pinienkerne in die Bohnencreme püriert statt geröstet zu den grünen Bohnen",
@@ -9405,7 +9411,7 @@
      "do": "Grüne Bohnen 6–8 Min. garen, dann in Butter schwenken.",
      "min": 8,
      "passive": true,
-     "meanwhile": "Tomaten und Mozzarella schneiden und mit Basilikum, Balsamico und dem restlichen Öl anmachen."
+     "meanwhile": "Tomaten und Mozzarella schneiden und mit Basilikum, Balsamico, 1 Prise Zucker und dem restlichen Öl anmachen."
     },
     {
      "do": "Rosmarinkartoffeln, Bohnencreme, grüne Bohnen und Caprese zusammen servieren."
@@ -9602,7 +9608,8 @@
   },
   "temp": "warm",
   "dev": [
-   "herd"
+   "herd",
+   "ofenk"
   ],
   "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/3dcdbfe1-3c37-4363-b221-8803e22ad810/1x1_fallback_spinatcrepe-mit-kraeuterquark-und-feldsalat-mit-knackigen-radieschen-1774377156.jpeg",
   "plan": {
@@ -9611,9 +9618,10 @@
      "do": "Ofen auf 80 °C (Umluft) vorheizen, um die Crêpes warm zu halten. Frühlingszwiebeln in Ringe schneiden, weiße und grüne Teile trennen. Die weißen Ringe in 1 EL Öl anschwitzen, Spinat zugeben, zusammenfallen lassen und leicht salzen."
     },
     {
-     "do": "Spinat abkühlen lassen.",
+     "do": "Spinat ca. 10 Min. abkühlen lassen.",
      "passive": true,
-     "meanwhile": "Mehl, Milch, Eier und Salz zu einem glatten Teig rühren. Petersilie hacken und den Quark mit Petersilie, grünen Frühlingszwiebeln, Salz und ggf. etwas Milch cremig rühren."
+     "meanwhile": "Mehl, Milch, Eier und Salz zu einem glatten Teig rühren. Petersilie hacken und den Quark mit Petersilie, grünen Frühlingszwiebeln, Salz und ggf. etwas Milch cremig rühren.",
+     "min": 10
     },
     {
      "do": "Spinat fein hacken und unter den Teig rühren."
@@ -9748,7 +9756,8 @@
   },
   "temp": "warm",
   "dev": [
-   "herd"
+   "herd",
+   "mixer"
   ],
   "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/1bb8ec0d-f695-456e-b81f-3f3a3886e0cb/1x1_fallback_hokkaido-linsen-cashew-curry-eintopf-1774376964.jpeg",
   "plan": {
@@ -9875,9 +9884,9 @@
   ],
   "steps": [
    "Ofen auf 180 °C vorheizen. Tofu würfeln, mit Kräutern, Grieß, 1 EL Öl und Salz mischen und ca. 20 Min. knusprig backen.",
-   "Zwiebel in Streifen schneiden, Knoblauch hacken, Brokkoli in Röschen und Paprika in Streifen schneiden; Nudeln kochen.",
+   "Zwiebel in Streifen schneiden, Knoblauch hacken, Brokkoli in Röschen und Paprika in Streifen schneiden.",
    "Zwiebel, Knoblauch und Paprika im restlichen Öl anbraten, Tomatenmark und Zucker kurz mitrösten, mit Tomaten und Brühe ablöschen.",
-   "Brokkoli und Erbsen ca. 6 Min. in der Soße garen, abschmecken und mit Nudeln, Ofentofu und Basilikum servieren."
+   "Brokkoli und Erbsen ca. 6 Min. in der Soße garen, währenddessen die Nudeln kochen; abschmecken und mit Nudeln, Ofentofu und Basilikum servieren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/gebackener-tofu-auf-nudeln-mit-gemuese",
   "note": "nach Lidl Kochen; Nudelmenge von 500 auf 400 g reduziert",
@@ -9904,7 +9913,7 @@
      "do": "Tofu ca. 20 Min. im Ofen knusprig backen.",
      "min": 20,
      "passive": true,
-     "meanwhile": "Zwiebel in Streifen schneiden, Knoblauch hacken, Brokkoli in Röschen und Paprika in Streifen schneiden. Nudeln ins kochende Salzwasser geben."
+     "meanwhile": "Zwiebel in Streifen schneiden, Knoblauch hacken, Brokkoli in Röschen und Paprika in Streifen schneiden."
     },
     {
      "do": "Zwiebel, Knoblauch und Paprika im restlichen Öl anbraten, Tomatenmark und Zucker kurz mitrösten, mit Tomaten und Brühe ablöschen."
@@ -9913,7 +9922,7 @@
      "do": "Brokkoli und Erbsen ca. 6 Min. in der Soße garen und abschmecken.",
      "min": 6,
      "passive": true,
-     "meanwhile": "Nudeln abgießen, Basilikum zupfen."
+     "meanwhile": "Bandnudeln nach Packungsangabe garen und abgießen, Basilikum zupfen."
     },
     {
      "do": "Nudeln mit Soße, Ofentofu und Basilikum servieren."
@@ -9976,9 +9985,10 @@
      "meanwhile": "Schalotte fein hacken und mit Essig, Öl, Salz und Pfeffer zu einem Dressing verrühren."
     },
     {
-     "do": "Linsen abgießen und abkühlen lassen.",
+     "do": "Linsen abgießen und ca. 10 Min. abkühlen lassen.",
      "passive": true,
-     "meanwhile": "Salat waschen, Trauben halbieren, Camembert in Stücke schneiden, Walnüsse grob hacken."
+     "meanwhile": "Salat waschen, Trauben halbieren, Camembert in Stücke schneiden, Walnüsse grob hacken.",
+     "min": 10
     },
     {
      "do": "Linsen mit dem Dressing mischen und mit Salat, Trauben, Camembert und Walnüssen anrichten."
@@ -10058,10 +10068,10 @@
   "name": "Zucchini-Kichererbsen-Curry mit Reis",
   "category": "mittag",
   "servings": 2,
-  "kcal": 684,
+  "kcal": 770,
   "protein": 20,
-  "carbs": 130,
-  "fat": 6,
+  "carbs": 123,
+  "fat": 17,
   "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
@@ -10087,8 +10097,8 @@
   "steps": [
    "Reis nach Packungsangabe garen.",
    "Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen; Schalotte, Knoblauch und Ingwer hacken.",
-   "Schalotte, Knoblauch und Ingwer im Öl andünsten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
-   "Mit Mangochutney, Curry, Salz, Pfeffer, Chili und Kurkuma abschmecken und mit Reis servieren."
+   "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
+   "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/2746431426709816/Zucchini-Kichererbsen-Curry.html",
   "note": "nach Chefkoch (4,8 Sterne, 20 Bewertungen); Kokosmilch light statt normaler Kokosmilch, Nährwerte nachgerechnet.",
@@ -10110,7 +10120,7 @@
      "do": "Zuerst: Reis waschen, bis das Wasser fast klar ist; Kichererbsen abspülen und abtropfen lassen. Kartoffeln, Möhren und Zucchini klein schneiden; Schalotte, Knoblauch und Ingwer hacken."
     },
     {
-     "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
+     "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
     },
     {
      "do": "Ca. 20 Min. köcheln.",
@@ -10119,7 +10129,7 @@
      "meanwhile": "Reis nach Packungsangabe garen."
     },
     {
-     "do": "Mit Mangochutney, Curry, Salz, Pfeffer, Chili und Kurkuma abschmecken und mit Reis servieren."
+     "do": "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
     }
    ]
   }
@@ -10186,8 +10196,9 @@
      "meanwhile": "Mango und Zwiebel fein würfeln, Koriander hacken."
     },
     {
-     "do": "Linsen abgießen und abkühlen lassen.",
-     "passive": true
+     "do": "Linsen abgießen und ca. 15 Min. abkühlen lassen.",
+     "passive": true,
+     "min": 15
     },
     {
      "do": "Linsen mit Mango, Zwiebel, Koriander, der restlichen Marinade und 2 EL Sesamöl mischen und kräftig mit Salz und Pfeffer würzen."
@@ -10300,10 +10311,10 @@
    "250 g Bandnudeln"
   ],
   "steps": [
-   "Tofu in Scheiben schneiden und kurz in der Sojasauce marinieren; Nudeln kochen.",
+   "Tofu in Scheiben schneiden und kurz in der Sojasauce marinieren.",
    "Zwiebelringe und Pilzscheiben in der Butter ca. 10 Min. langsam weich schmoren und beiseitestellen.",
-   "Tofu im Öl scharf anbraten, Knoblauch, Pilze und Zwiebeln zugeben.",
-   "Tomatenmark, Rotwein und Sahne verrühren, zugießen und ca. 5 Min. leicht einkochen; vorsichtig abschmecken und mit Nudeln servieren."
+   "Tofu im Öl scharf anbraten, Knoblauch, Pilze und Zwiebeln zugeben; Nudeln kochen.",
+   "Tomatenmark, Rotwein und Sahne verrühren, zugießen und ca. 5 Min. leicht einkochen; vorsichtig abschmecken, mit Basilikum bestreuen und mit Nudeln servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/2913411443624213/Tofu-Stroganoff.html",
   "note": "nach Chefkoch (4,8 Sterne, 19 Bewertungen); mehr Tofu, Kochsahne statt Sahne, weniger Butter, Nudeln als Beilage",
@@ -10327,15 +10338,14 @@
     },
     {
      "do": "Zwiebelringe und Pilze in der Butter ca. 10 Min. langsam weich schmoren und beiseitestellen.",
-     "meanwhile": "Nudeln ins kochende Salzwasser geben und garen.",
      "min": 10
     },
     {
      "do": "Tofu im Öl scharf anbraten, Knoblauch, Pilze und Zwiebeln zugeben.",
-     "meanwhile": "Tomatenmark, Rotwein und Sahne verrühren."
+     "meanwhile": "Nudeln ins kochende Salzwasser geben und garen. Tomatenmark, Rotwein und Sahne verrühren."
     },
     {
-     "do": "Die Mischung zugießen und ca. 5 Min. leicht einkochen, vorsichtig abschmecken und mit den Nudeln servieren.",
+     "do": "Die Mischung zugießen und ca. 5 Min. leicht einkochen, vorsichtig abschmecken, mit Basilikum bestreuen und mit den Nudeln servieren.",
      "min": 5
     }
    ]
@@ -10538,7 +10548,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Gurken schälen, längs halbieren, entkernen und in Stücke schneiden; Zwiebel würfeln, Paprika in Streifen schneiden, Tomaten halbieren."
+     "do": "Zuerst: Kichererbsen aus dem Glas in einem Sieb abspülen und abtropfen lassen. Gurken schälen, längs halbieren, entkernen und in Stücke schneiden; Zwiebel würfeln, Paprika in Streifen schneiden, Tomaten halbieren."
     },
     {
      "do": "Zwiebel, Gurken und Paprika im Öl 2 Min. andünsten, mit Wein ablöschen und Brühe einstreuen.",
@@ -10560,11 +10570,11 @@
   "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
   "category": "mittag",
   "servings": 4,
-  "kcal": 604,
-  "protein": 27,
-  "carbs": 70,
-  "fat": 22,
-  "estimated": false,
+  "kcal": 565,
+  "protein": 20,
+  "carbs": 66,
+  "fat": 21,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
   "difficulty": "leicht",
@@ -10690,7 +10700,8 @@
     {
      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis aufsetzen und garen.",
      "passive": true,
-     "meanwhile": "Tofu in Stücke schneiden, Möhren in Scheiben und Paprika in Streifen schneiden, Zwiebeln und Knoblauch würfeln, Frühlingszwiebeln in Ringe schneiden."
+     "meanwhile": "Tofu in Stücke schneiden, Möhren in Scheiben und Paprika in Streifen schneiden, Zwiebeln und Knoblauch würfeln, Frühlingszwiebeln in Ringe schneiden.",
+     "min": 15
     },
     {
      "do": "Tofu in 1 EL Öl goldbraun braten, würzen und herausnehmen."
@@ -11354,13 +11365,12 @@
     {
      "do": "Nudeln ins kochende Salzwasser geben und nach Packung garen.",
      "passive": true,
-     "meanwhile": "Zwiebeln und Knoblauch im Öl scharf anbraten, Tomatenmark kurz mitrösten.",
+     "meanwhile": "Nach 2 Min. die Linsen zu den Nudeln geben. Zwiebeln und Knoblauch im Öl scharf anbraten, Tomatenmark kurz mitrösten.",
      "min": 10
     },
     {
      "do": "Tomaten in die Pfanne geben und 5 Min. köcheln, dann die Pfanne vom Herd nehmen und den Hüttenkäse unterrühren.",
-     "min": 5,
-     "meanwhile": "Linsen zu den Nudeln geben, sobald nur noch 8 Min. Garzeit übrig sind."
+     "min": 5
     },
     {
      "do": "Nudeln und Linsen abgießen, unter die Soße mischen und mit Basilikum, Salz, Pfeffer und Chili abschmecken."
@@ -11425,13 +11435,13 @@
     {
      "do": "Nudeln ins kochende Wasser geben und garen.",
      "passive": true,
-     "meanwhile": "Paprika und Zwiebeln im Öl anrösten, Paprikapulver und Tomatenmark kurz mitbraten.",
+     "meanwhile": "Nach 7 Min. die Erbsen zu den Nudeln geben. Paprika und Zwiebeln im Öl anrösten, Paprikapulver und Tomatenmark kurz mitbraten.",
      "min": 10
     },
     {
      "do": "Mit Brühe ablöschen und 3 Min. köcheln, dann vom Herd nehmen und Magerquark sowie Hüttenkäse einrühren.",
      "min": 3,
-     "meanwhile": "Erbsen 3 Min. vor Ende der Garzeit zu den Nudeln geben. Hartkäse reiben, Schnittlauch schneiden."
+     "meanwhile": "Hartkäse reiben, Schnittlauch schneiden."
     },
     {
      "do": "Nudeln und Erbsen abgießen und unter die Soße mischen."
@@ -11466,7 +11476,7 @@
    "2 Knoblauchzehen",
    "15 g Ingwer",
    "1 EL Öl",
-   "2 EL Currypaste",
+   "2 EL Currypaste (vegetarisch, ohne Garnelenpaste)",
    "200 ml Kokosmilch",
    "250 g Reis",
    "2 TL Currypulver",
@@ -11773,7 +11783,7 @@
   "steps": [
    "Reis nach Packung (ca. 15 Min.) garen. Brokkoli in Röschen teilen und 6–8 Min. bissfest dämpfen.",
    "Erdnussmus mit Brühe, Sojasauce, gepresstem Knoblauch und 2 EL Skyr glatt rühren und erwärmen.",
-   "Kichererbsen abgießen und mit Brokkoli und Reis in die Soße geben, gut erhitzen.",
+   "Kichererbsen abgießen und mit Brokkoli und Reis in die Soße geben, gut erhitzen und mit Salz, Pfeffer und Chili abschmecken.",
    "Mit dem restlichen Skyr als kühlem Dip servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/3074691460107033/Brokkoli-Erdnuss-Reis.html",
@@ -11805,7 +11815,7 @@
      "meanwhile": "Erdnussmus mit Brühe, Sojasauce, Knoblauch und 2 EL Skyr glatt rühren und in einer großen Pfanne erwärmen."
     },
     {
-     "do": "Kichererbsen, Brokkoli und Reis in die Soße geben und gut erhitzen."
+     "do": "Kichererbsen, Brokkoli und Reis in die Soße geben, gut erhitzen und mit Salz, Pfeffer und Chili abschmecken."
     },
     {
      "do": "Mit dem restlichen Skyr als kühlem Dip servieren."
@@ -11899,7 +11909,7 @@
   "carbs": 68,
   "fat": 5,
   "estimated": true,
-  "timeMin": 35,
+  "timeMin": 40,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -11919,7 +11929,7 @@
    "Salz, Pfeffer"
   ],
   "steps": [
-   "Kartoffeln würfeln und im Öl ca. 15 Min. goldbraun braten, Zwiebelringe und Knoblauch die letzten 3 Min. mitbraten.",
+   "Kartoffeln würfeln, 8 Min. in Salzwasser vorgaren, gut abtropfen lassen und im Öl ca. 15 Min. goldbraun braten, Zwiebelringe und Knoblauch die letzten 3 Min. mitbraten.",
    "Grüne Bohnen zugeben, kurz anbraten, Tomatenmark kurz mitrösten, mit Brühe ablöschen und 8 Min. garen.",
    "Weiße Bohnen unterheben und heiß werden lassen, mit Oregano, Salz und Pfeffer würzen.",
    "Quark mit Kräutern, Salz und Pfeffer verrühren und dazu servieren."
@@ -11941,9 +11951,14 @@
   "plan": {
    "steps": [
     {
-     "do": "Kartoffeln würfeln und im Öl braten (insgesamt ca. 15 Min. bis goldbraun).",
-     "min": 12,
+     "do": "Kartoffeln würfeln und in Salzwasser 8 Min. vorgaren.",
+     "min": 8,
+     "passive": true,
      "meanwhile": "Zwiebeln in Ringe schneiden, Knoblauch hacken. Quark mit Kräutern, Salz und Pfeffer verrühren."
+    },
+    {
+     "do": "Kartoffeln gut abtropfen lassen und im Öl ca. 12 Min. goldbraun braten.",
+     "min": 12
     },
     {
      "do": "Zwiebelringe und Knoblauch zugeben und die letzten 3 Min. mitbraten.",
@@ -11993,7 +12008,7 @@
   ],
   "steps": [
    "Reis nach Packung garen. Zwiebeln und Ingwer fein würfeln.",
-   "Hälfte der Zwiebeln im Öl anbraten, Curry kurz mitrösten, Linsen und Brühe zugeben und 12 Min. köcheln.",
+   "Hälfte der Zwiebeln im Öl anbraten, Curry kurz mitrösten, Linsen und Brühe zugeben und 12 Min. köcheln, öfter umrühren und bei Bedarf Wasser nachgießen.",
    "Restliche Zwiebeln und Ingwer anbraten, Spinat und Kokosmilch zugeben und 5 Min. garen.",
    "Linsen und Spinat mischen, mit Salz, Pfeffer und Zitronensaft abschmecken, mit Reis und Skyr servieren."
   ],
@@ -12016,13 +12031,14 @@
     {
      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis nach Packung aufsetzen.",
      "passive": true,
-     "meanwhile": "Zwiebeln und Ingwer fein würfeln."
+     "meanwhile": "Zwiebeln und Ingwer fein würfeln.",
+     "min": 15
     },
     {
      "do": "Hälfte der Zwiebeln im Öl anbraten, Curry kurz mitrösten, Linsen und Brühe zugeben."
     },
     {
-     "do": "Linsen 12 Min. köcheln.",
+     "do": "Linsen 12 Min. köcheln, öfter umrühren, bei Bedarf Wasser nachgießen.",
      "min": 12,
      "passive": true,
      "meanwhile": "In einer zweiten Pfanne restliche Zwiebeln und Ingwer anbraten, Spinat und Kokosmilch zugeben und 5 Min. garen."
@@ -12065,7 +12081,7 @@
    "Salz, Pfeffer"
   ],
   "steps": [
-   "Sojagranulat in heißer Brühe einweichen. Zwiebeln und Möhren würfeln und im Öl mit Kreuzkümmel anbraten.",
+   "Sojagranulat 10 Min. in heißer Brühe einweichen. Zwiebeln und Möhren würfeln und im Öl mit Kreuzkümmel anbraten.",
    "Sojagranulat, Tomatenmark, Tomaten und Bohnen zugeben, 20 Min. köcheln, mit Essig, Chili, Salz abschmecken.",
    "Butter mit gepresstem Knoblauch verrühren, aufs Brot streichen und im Ofen bei 220 °C 5 Min. rösten.",
    "Chili mit dem Knoblauchbrot servieren."
@@ -12088,9 +12104,10 @@
   "plan": {
    "steps": [
     {
-     "do": "Brühe erhitzen und das Sojagranulat darin einweichen.",
+     "do": "Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen.",
      "passive": true,
-     "meanwhile": "Zwiebeln und Möhren würfeln."
+     "meanwhile": "Zwiebeln und Möhren würfeln.",
+     "min": 10
     },
     {
      "do": "Zwiebeln und Möhren im Öl mit Kreuzkümmel anbraten."
@@ -12136,6 +12153,7 @@
    "1 Dose (400 g) gehackte Tomaten",
    "1 EL Tomatenmark",
    "500 g Magerquark",
+   "1/2 Bund Schnittlauch oder Petersilie (oder TK-Kräuter)",
    "Thymian, Salz, Pfeffer, Muskat"
   ],
   "steps": [
@@ -12353,7 +12371,7 @@
    "Salz, Pfeffer"
   ],
   "steps": [
-   "Sojaschnetzel in heißem Wasser mit Sojasauce einweichen, ausdrücken und im Öl anbraten.",
+   "Sojaschnetzel 10 Min. in heißem Wasser mit Sojasauce einweichen, ausdrücken und im Öl anbraten.",
    "Zwiebel, Möhren und Kartoffeln würfeln, mit Brühe und grünen Bohnen 20 Min. garen.",
    "Passierte Tomaten, weiße Bohnen und Sojaschnetzel zugeben und 5 Min. mitköcheln.",
    "Mit Bohnenkraut, Salz und Pfeffer abschmecken, mit Quark-Klecks und Brot servieren."
@@ -12375,9 +12393,10 @@
   "plan": {
    "steps": [
     {
-     "do": "Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce einweichen.",
+     "do": "Wasser erhitzen und die Sojaschnetzel darin mit der Sojasauce 10 Min. einweichen.",
      "passive": true,
-     "meanwhile": "Zwiebel, Möhren und Kartoffeln würfeln."
+     "meanwhile": "Zwiebel, Möhren und Kartoffeln würfeln.",
+     "min": 10
     },
     {
      "do": "Zwiebel, Möhren und Kartoffeln mit Brühe und grünen Bohnen aufsetzen und 20 Min. garen.",
@@ -12720,8 +12739,8 @@
   ],
   "steps": [
    "Lauch in Ringe schneiden, Möhren würfeln.",
-   "Brühe aufkochen, Lauch, Möhren, Reis und Linsen zugeben und 15–20 Min. garen, dabei öfter umrühren und bei Bedarf bis zu 300 ml Wasser nachgießen.",
-   "Kichererbsen abgießen, zugeben und 5 Min. erhitzen, mit Curry, Koriander und Salz abschmecken.",
+   "Brühe aufkochen, Lauch, Möhren, Reis, Linsen und Currypulver zugeben und 15–20 Min. garen, dabei öfter umrühren und bei Bedarf bis zu 300 ml Wasser nachgießen.",
+   "Kichererbsen abgießen, zugeben und 5 Min. erhitzen, mit Koriander und Salz abschmecken.",
    "Skyr mit Ingwer und Salz verrühren und als Dip zum Eintopf reichen."
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.curry-reis-eintopf.r_id=DE_2243.html",
@@ -12745,13 +12764,13 @@
      "meanwhile": "Lauch in Ringe schneiden, Möhren würfeln."
     },
     {
-     "do": "Lauch, Möhren, Reis und Linsen in die Brühe geben und 15–20 Min. garen, dabei öfter umrühren und bei Bedarf bis zu 300 ml Wasser nachgießen.",
+     "do": "Lauch, Möhren, Reis, Linsen und Currypulver in die Brühe geben und 15–20 Min. garen, dabei öfter umrühren und bei Bedarf bis zu 300 ml Wasser nachgießen.",
      "min": 20,
      "passive": true,
      "meanwhile": "Kichererbsen abgießen. Skyr mit Ingwer und Salz zum Dip verrühren."
     },
     {
-     "do": "Kichererbsen zugeben und 5 Min. erhitzen, mit Curry, Koriander und Salz abschmecken.",
+     "do": "Kichererbsen zugeben und 5 Min. erhitzen, mit Koriander und Salz abschmecken.",
      "min": 5
     },
     {
@@ -12862,9 +12881,9 @@
   ],
   "steps": [
    "Zwiebeln, Knoblauch, Paprika und Kartoffeln würfeln.",
-   "Zwiebeln und Knoblauch im Öl andünsten, Kartoffeln und Paprika kurz mitbraten.",
-   "Brühe, Tomaten und Linsen zugeben, 15–20 Min. garen, dann Bohnen zugeben.",
-   "Mit Chili, Kreuzkümmel, Salz und Pfeffer abschmecken und mit Skyr servieren."
+   "Zwiebeln und Knoblauch im Öl andünsten, Kartoffeln, Paprika, Kreuzkümmel und Chilipulver kurz mitbraten.",
+   "Brühe, Tomaten und Linsen zugeben, 15–20 Min. garen, dann Bohnen zugeben und 3 Min. erhitzen.",
+   "Mit Salz und Pfeffer abschmecken und mit Skyr servieren."
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.linsen-chili.r_id=DE_6126.html",
   "note": "adaptiert: Linsen und Kartoffeln (800 g) verdoppelt, Kidneybohnen, Dosentomaten und Skyr ergänzt",
@@ -12890,7 +12909,7 @@
      "meanwhile": "Kartoffeln und Paprika würfeln."
     },
     {
-     "do": "Kartoffeln und Paprika kurz mitbraten."
+     "do": "Kartoffeln, Paprika, Kreuzkümmel und Chilipulver kurz mitbraten."
     },
     {
      "do": "Brühe, Tomaten und Linsen zugeben und 15–20 Min. garen.",
@@ -12899,7 +12918,8 @@
      "meanwhile": "Abwaschen."
     },
     {
-     "do": "Bohnen zugeben, mit Chilipulver, Kreuzkümmel, Salz und Pfeffer abschmecken und mit Skyr servieren."
+     "do": "Bohnen zugeben und 3 Min. erhitzen, mit Salz und Pfeffer abschmecken und mit Skyr servieren.",
+     "min": 3
     }
    ]
   }
@@ -12934,7 +12954,7 @@
   ],
   "steps": [
    "Zwiebel fein würfeln und glasig dünsten. Bohnen abspülen und mit Knoblauch grob zerdrücken.",
-   "Bohnen mit Haferflocken, geriebener Möhre, Zwiebel, Eiern und Gewürzen verkneten, 10 Min. quellen lassen.",
+   "Bohnen mit Haferflocken, geriebener Möhre, Zwiebel, Ei und Gewürzen verkneten, 10 Min. quellen lassen.",
    "Aus der Masse 4 große oder 8 kleine Bratlinge formen und im Öl von beiden Seiten je 4 Min. braten.",
    "Quark mit Senf, Salz und Pfeffer verrühren, Brötchen mit Soße, Bratling und Gurkenscheiben belegen."
   ],
@@ -13169,7 +13189,7 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Linsen in einem Sieb abspülen und verlesen. Linsen in 800 ml Brühe aufsetzen und ca. 30 Min. bissfest garen (Packungsangabe beachten), bei Bedarf Wasser nachgießen. Salzwasser für die Kartoffeln aufsetzen.",
+     "do": "Zuerst: Linsen abspülen und verlesen, in 800 ml Brühe aufsetzen – sie garen jetzt im Hintergrund (Packungsangabe beachten, bei Bedarf Wasser nachgießen). Salzwasser für die Kartoffeln aufsetzen.",
      "meanwhile": "Kartoffeln und Zwiebeln würfeln."
     },
     {
@@ -13202,7 +13222,7 @@
   "carbs": 99,
   "fat": 16,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 55,
   "activeMin": 15,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -13250,7 +13270,8 @@
     {
      "do": "Spätzle nach Packung garen, abgießen und abkühlen lassen.",
      "passive": true,
-     "meanwhile": "Eier 9 Min. hart kochen, pellen und würfeln."
+     "meanwhile": "Eier 9 Min. hart kochen, pellen und würfeln.",
+     "min": 12
     },
     {
      "do": "Gurke und Zwiebel fein würfeln. Quark mit Essig, Öl, Senf, Salz, Pfeffer und einer Prise Zucker zu einem Dressing rühren."
@@ -13411,7 +13432,7 @@
   "timeMin": 485,
   "activeMin": 5,
   "difficulty": "leicht",
-  "mealPrep": false,
+  "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
    "60 g Haferflocken",
@@ -13448,7 +13469,8 @@
     },
     {
      "do": "Skyr und Milch einrühren, Deckel drauf und über Nacht kühlen.",
-     "passive": true
+     "passive": true,
+     "min": 480
     },
     {
      "do": "Morgens Banane in Scheiben schneiden und die Oats damit toppen."
@@ -13635,7 +13657,7 @@
   "timeMin": 10,
   "activeMin": 10,
   "difficulty": "leicht",
-  "mealPrep": false,
+  "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
    "1 Dose (400 g) weiße Bohnen",
@@ -13835,7 +13857,8 @@
      "do": "In eine Schale geben und mit der übrigen Banane in Scheiben und den gehackten Nüssen belegen."
     }
    ]
-  }
+  },
+  "shelfLife": "frisch essen"
  },
  {
   "name": "Blech-Gnocchi mit Kichererbsen, Paprika & Feta",
@@ -13859,7 +13882,7 @@
    "1 rote Zwiebel",
    "1 EL Olivenöl",
    "1 TL Paprikapulver",
-   "100 g Feta",
+   "100 g Feta (vegetarisch, mikrobielles Lab)",
    "200 g Skyr natur",
    "1 Knoblauchzehe"
   ],
@@ -13984,7 +14007,7 @@
    "1 TL Olivenöl",
    "200 g Hüttenkäse (körniger Frischkäse)",
    "100 g Magerquark",
-   "125 g Mozzarella light",
+   "125 g Mozzarella light (vegetarisch, mikrobielles Lab)",
    "1 Prise Muskat"
   ],
   "steps": [

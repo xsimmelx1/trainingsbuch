@@ -34,7 +34,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
   padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));
   padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px))}
 body.resting{padding-bottom:calc(var(--nav-h) + 76px + env(safe-area-inset-bottom,0px))}
-body:has(#cookPill),body:has(#trkPill){padding-bottom:calc(var(--nav-h) + 80px + env(safe-area-inset-bottom,0px))}
+body.resting:has(#cookPill),body.resting:has(#trkPill){padding-bottom:calc(var(--nav-h) + 140px + env(safe-area-inset-bottom,0px))}
+body:not(.resting):has(#cookPill),body:not(.resting):has(#trkPill){padding-bottom:calc(var(--nav-h) + 80px + env(safe-area-inset-bottom,0px))}
 body:has(#cookPill):has(#trkPill){padding-bottom:calc(var(--nav-h) + 136px + env(safe-area-inset-bottom,0px))}
 img{max-width:100%}
 [hidden]{display:none!important}
@@ -762,6 +763,7 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .task .mini{display:flex;gap:6px}
 .task .mini input{width:78px;text-align:center;font-family:var(--f-num);padding:7px 4px}
 .train{border:2px solid var(--accent);border-radius:16px;padding:14px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.ev.train{display:grid;flex-direction:row;gap:10px;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:8px 10px}
 .train.done{border-color:var(--good)}
 .train .meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .toggle{width:48px;height:28px;border-radius:999px;border:0;background:var(--line);position:relative;flex:none}
@@ -800,7 +802,9 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .cookpill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;max-width:calc(100% - 32px);border-radius:999px;background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .cookpill button{border:0;background:none;color:inherit;font:600 15px var(--f-num);min-height:44px;cursor:pointer}
 .cookpill .go{padding:0 6px 0 18px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.cookpill .x{min-width:44px;font-size:18px;opacity:.8}
-body:has(#trkPill) .cookpill{bottom:calc(var(--nav-h) + 68px + env(safe-area-inset-bottom))}
+body.resting .cookpill,body.resting .trkpill{bottom:calc(var(--nav-h) + 76px + env(safe-area-inset-bottom))}
+body.resting:has(#trkPill) .cookpill{bottom:calc(var(--nav-h) + 132px + env(safe-area-inset-bottom))}
+body:not(.resting):has(#trkPill) .cookpill{bottom:calc(var(--nav-h) + 68px + env(safe-area-inset-bottom))}
 .trkpill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));z-index:40;border:0;border-radius:999px;padding:10px 18px;background:var(--accent);color:var(--accent-ink);font:600 15px var(--f-num);box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .varhead{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.varhead b{color:var(--ink);font-size:13px}
 .varrow{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 10px;scrollbar-width:none}.varrow::-webkit-scrollbar{display:none}
@@ -837,8 +841,8 @@ body:has(#trkPill) .cookpill{bottom:calc(var(--nav-h) + 68px + env(safe-area-ins
 .tag.gate{background:var(--warn-soft);color:var(--ink)} .tag.up{background:var(--good-soft);color:var(--ink)}
 .sug{border:0;background:var(--good-soft);border-radius:8px;padding:4px 10px;font-size:13px;text-align:left}
 .sug.hold{background:var(--sunk)}
-.setrow,.sethead{display:grid;grid-template-columns:22px 56px minmax(0,1fr) 12px minmax(0,1fr) 56px;gap:6px;align-items:center}
-.setrow.nokg,.sethead.nokg{grid-template-columns:22px 56px minmax(0,1fr) 56px}
+.setrow,.sethead{display:grid;grid-template-columns:32px 56px minmax(0,1fr) 12px minmax(0,1fr) 56px;gap:6px;align-items:center}
+.setrow.nokg,.sethead.nokg{grid-template-columns:32px 56px minmax(0,1fr) 56px}
 .sethead{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .sethead span:last-child{text-align:center}
 .setrow .prev{font-family:var(--f-num);font-size:12px;color:var(--muted);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1487,11 +1491,12 @@ function mergeDay(srv, loc){
   if (!srv) return loc;
   // Server wurde zurückgesetzt, nachdem dieses Gerät den Tag geladen hat: lokale Trainingsdaten sind veraltet
   if (srv.resetAt && loc._seenReset !== undefined && loc._seenReset !== srv.resetAt && !(loc.resetAt && loc.resetAt >= srv.resetAt)) {
-    loc = Object.assign({}, loc); for (const k of ["sets", "antag", "startedAt", "finishedAt", "where", "swap", "swapHome"]) delete loc[k];
+    loc = Object.assign({}, loc); for (const k of ["sets", "antag", "startedAt", "finishedAt", "where", "swap", "swapHome", "skipEx"]) delete loc[k];
     if (!(loc.sessAt > Date.parse(srv.resetAt))) { delete loc.session; delete loc.sessAt; } }
   // Zurücksetzen verwirft nur die Trainingsdaten des Servers, alles andere wird normal zusammengeführt
-  if (loc.resetAt && (!srv.resetAt || loc.resetAt > srv.resetAt)) srv = Object.assign({}, srv, {sets: {}, antag: {}, startedAt: null, finishedAt: null, where: null, swap: null, swapHome: null});
+  if (loc.resetAt && (!srv.resetAt || loc.resetAt > srv.resetAt)) srv = Object.assign({}, srv, {sets: {}, antag: {}, startedAt: null, finishedAt: null, where: null, swap: null, swapHome: null, skipEx: null});
   const out = Object.assign({}, srv, loc);
+  if (srv.skipEx || loc.skipEx) out.skipEx = Object.assign({}, srv.skipEx || {}, loc.skipEx || {});
   if (srv.boulder && (srv.boulder.at || 0) > (loc.boulder?.at || 0)) out.boulder = srv.boulder;
   if (srv.session && (srv.sessAt || 0) > (loc.sessAt || 0) && !(loc.startedAt || loggedSets(loc))) { out.session = srv.session; out.sessAt = srv.sessAt; }
   out.sets = Object.assign({}, srv.sets || {}, loc.sets || {});
@@ -1670,7 +1675,7 @@ function defaultSession(dateStr){ const p = planFor(dateStr); return p ? variant
 function lastPerfN(id, beforeDate, n, src){  // letzte n Einheiten, Deload-Wochen übersprungen
   src = src || (woSession === "antag" ? "antag" : "sets");
   const keys = Object.keys(store.days).filter(k => k < beforeDate).sort().reverse(), out = [];
-  for (const k of keys) { if (phaseOf(weekNo(k) ?? 0).deload) continue; const s = store.days[k][src]?.[id]; if (s && s.some(x => num(x.reps) != null)) { out.push({date:k, sets:s.filter(x => num(x.reps) != null)}); if (out.length >= n) break; } }
+  for (const k of keys) { if (phaseOf(weekNo(k) ?? 0).deload) continue; const sx = store.days[k].skipEx; if (sx && (sx[id] || sx["antag:" + id])) continue; const s = store.days[k][src]?.[id]; if (s && s.some(x => num(x.reps) != null)) { out.push({date:k, sets:s.filter(x => num(x.reps) != null)}); if (out.length >= n) break; } }
   return out;
 }
 function lastPerf(id, beforeDate, src){ return lastPerfN(id, beforeDate, 1, src)[0] || null; }
@@ -2186,7 +2191,7 @@ function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveT
 // Training zurücksetzen (Sätze, Zeiten); mit drop zusätzlich die Einheit verwerfen = zurück zum Plan, auch auf dem Server
 function trainClear(drop){
   stopRest(); releaseWake(); clearInterval(clockTimer);
-  cur.sets = {}; cur.antag = {}; delete cur.warm; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; openEx = null; woSession = null;
+  cur.sets = {}; cur.antag = {}; delete cur.warm; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; delete cur.skipEx; openEx = null; woSession = null;
   // Entfernen = Tag bewusst trainingsfrei (auch an Plantagen); der Planer legt die Einheit beim nächsten Lauf neu. Zurück geht es über „Trotzdem trainieren“
   if (drop) { cur.session = "frei"; cur.sessAt = Date.now(); if (cur._clr) cur._clr = cur._clr.filter(x => x !== "session" && x !== "sessAt"); }
   dirty = true; saveCur(); }
@@ -2400,7 +2405,7 @@ function heroCard(noCoach){
     const stateTxt = st === "leer" ? "Nichts eingetragen. Über ⋯ zurücksetzen oder löschen." : st === "fertig" ? `${p.d} von ${p.t} Sätzen` : st === "läuft" ? `${p.d} von ${p.t} Sätzen geschafft` : `${sess.ex.length} Übungen · ca. ${mins} min`;
     h += `<div class="tb ${st === "fertig" ? "done" : ""}"><div class="tbm">${pill}<b>${esc(sess.title)}</b><div class="small muted">${stateTxt}</div></div><button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button></div>`;
     if (scHigh()) h += `<div class="small scnote">⚠️ SC-Schmerz ≥ 3: Übungen mit SC-Ampel tauschen.</div>`;
-    if (st === "bereit") h += `<button class="btn primary big" type="button" data-act="start">▶ Training starten</button>`;
+    if (st === "bereit") h += `<button class="btn primary big" type="button" data-act="start">▶ Zum Training</button>`;
     else if (st === "läuft") h += `<button class="btn primary big" type="button" data-act="start">Weiter trainieren</button>`;
     else h += `<button class="btn" type="button" data-act="start">Ansehen</button>`;
   }
@@ -2691,7 +2696,9 @@ function altOptions(base){
   for (const [i, r] of (ALTS[base] || [])) add(i, r);
   return out;
 }
-const exSkipped = base => !!(cur?.skipEx || {})[base];
+// nächste Übung nach base, die noch offene Sätze hat (ausgelassene und erledigte übersprungen)
+const nextOpenEx = base => { const sk = woSession || cur.session, w = weekNo(selDate), ids = exList(sk); return ids.slice(ids.indexOf(base) + 1).find(x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)) || null; };
+const skipKey = base => (woSession ? woSession + ":" : "") + base, exSkipped = base => !!(cur?.skipEx || {})[skipKey(base)];
 const nSets = (base, w, sk) => { const e = eff(base); if (!e) return 0; if (exSkipped(base)) return doneSetsOf(base).length; return setsFor(e, w, SESS[sk], base); };
 // Erledigte Sätze einer Planübung, auch wenn sie unterwegs getauscht wurde (Sätze unter der ursprünglichen Übung zählen mit)
 // Sätze zählen über alle Varianten der Übung (Original, Ersatz, Zuhause-Variante, heute geloggte Alternativen)
@@ -2699,7 +2706,10 @@ const doneSetsOf = base => { const e = eff(base), so = setsObj(), ids = new Set(
   // Alternativen zählen mit (Zurücktauschen), aber nicht, wenn sie in dieser Einheit selbst eine Planübung sind
   const plan = new Set(exList(woSession || cur.session).filter(x => x !== base));
   for (const [i] of (ALTS[base] || [])) ids.add(i); for (const [i] of (ALTS[e] || [])) ids.add(i); const hd = typeof homeDefault === "function" ? homeDefault(base) : null; if (hd) ids.add(hd);
-  return [...ids].filter(id => id && !plan.has(id)).flatMap(id => (so[id] || []).filter(doneSet)); };
+  // eine Alternative, die mehreren Planübungen offensteht, zählt nur bei einer: bei der, die sie gerade nutzt, sonst bei der ersten, die sie anbietet
+  const all = exList(woSession || cur.session), hasAlt = (x, id) => [x, eff(x)].some(y => (ALTS[y] || []).some(([i]) => i === id)),
+    owner = id => all.find(x => eff(x) === id) || all.find(x => hasAlt(x, id));
+  return [...ids].filter(id => id && !plan.has(id) && (id === e || id === base || (owner(id) || base) === base)).flatMap(id => (so[id] || []).filter(doneSet)); };
 const doneCount = (base, w, sk) => { const e = eff(base); if (!e) return 0; return Math.min(nSets(base, w, sk), doneSetsOf(base).length); };
 function renderTraining(){
   ensureCur();
@@ -2756,8 +2766,8 @@ function renderTraining(){
   h += `<div class="exl">`;
   for (const id of ids) {
     const e_ = eff(id);
-    if (!e_) { h += `<div class="exrow complete"><div class="exsum"><span class="st">–</span><span class="nm">${esc(EX[id].name)} <span class="muted small">· entfällt zuhause</span></span><span></span></div></div>`; continue; }
-    if (exSkipped(id) && openEx !== id) { h += `<div class="exrow complete"><button type="button" class="exsum" data-open="${id}"><span class="st">–</span><span class="nm">${esc(EX[e_].name)} <span class="muted small">· ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""}</span></span><span></span></button></div>`; continue; }
+    if (!e_) { h += `<div class="exrow complete"><div class="exsum"><span class="st">–</span><span></span><span class="nm">${esc(EX[id].name)}<br><span class="muted small">entfällt zuhause</span></span><span></span></div></div>`; continue; }
+    if (exSkipped(id)) { h += `<div class="exrow complete"><button type="button" class="exsum" data-open="${id}"><span class="st">–</span><span></span><span class="nm">${esc(EX[e_].name)}<br><span class="muted small">ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""}</span></span><span></span></button></div>`; continue; }
     const e = EX[e_], n = nSets(id, w, sk), mine = setsObj()[e_] || [], dn = doneCount(id, w, sk), complete = dn >= n, isOpen = openEx === id;
     const topKg = Math.max(0, ...mine.filter(doneSet).map(x => num(x.kg) || 0));
     const canSwap = dn === 0 && !isOpen && altOptions(id).length > 1;
@@ -2808,7 +2818,7 @@ function exBody(base, n, w){
     const lr = mine[Math.max(n, mine.filter(doneSet).length) - 1]?.rir;
     h += `<div><div class="lab">Wie viele Wdh. wären im letzten Satz noch gegangen? (RIR)</div><div class="chips" style="margin-top:6px">${["0","1","2","3","4+"].map(r => `<button type="button" data-rir="${id}" data-base="${base}" data-v="${r}" aria-pressed="${String(lr) === r.replace("+","")}">${r}</button>`).join("")}</div></div>`;
   }
-  h += `<div class="actions"><button class="btn small" type="button" data-act="addset" data-v="${id}" data-base="${base}">+ Satz</button>${rows > n ? `<button class="btn ghost small" type="button" data-act="delset" data-v="${id}" data-base="${base}">− letzten Satz</button>` : ""}${allDone ? (exList(woSession || cur.session).indexOf(base) < exList(woSession || cur.session).length - 1 ? `<button class="btn small" type="button" data-act="nextex" data-v="${base}">Nächste Übung ›</button>` : `<button class="btn small primary" type="button" data-act="finish">Training beenden</button>`) : ""}</div></div>`;
+  h += `<div class="actions"><button class="btn small" type="button" data-act="addset" data-v="${id}" data-base="${base}">+ Satz</button>${rows > n ? `<button class="btn ghost small" type="button" data-act="delset" data-v="${id}" data-base="${base}">− letzten Satz</button>` : ""}${allDone && !(cur.finishedAt && !woSession) ? (nextOpenEx(base) ? `<button class="btn small" type="button" data-act="nextex" data-v="${base}">Nächste Übung ›</button>` : `<button class="btn small primary" type="button" data-act="finish">Training beenden</button>`) : ""}</div></div>`;
   return h;
 }
 function exNav(d){ const ids = exList(woSession || cur.session), i = ids.indexOf(openEx), j = Math.max(0, Math.min(ids.length - 1, i + d)); if (j !== i) { openEx = ids[j]; renderTraining(); scrollTo(0, 0); } }
@@ -2835,6 +2845,7 @@ function checkSet(id, base, i){
 function finishWorkout(){
   const sk = woSession || cur.session;
   if (woSession) { woSession = null; saveCur(); go("heute"); return; }
+  if (cur.finishedAt) return;
   if (!Object.values(setsObj()).some(a => a.some(doneSet)) && !finishWorkout.ok) { finishWorkout.ok = true; setTimeout(() => { finishWorkout.ok = false; }, 4000); toast("Noch keine Sätze eingetragen – zum Beenden nochmal tippen"); return; }
   if (loggedSets(cur) < 3 && Object.values(setsObj()).some(a => a.some(doneSet)) && !finishWorkout.ok2) { finishWorkout.ok2 = true; setTimeout(() => { finishWorkout.ok2 = false; }, 4000); toast("Unter 3 Sätzen zählt es nicht als Einheit – zum Beenden nochmal tippen"); return; }
   finishWorkout.ok = false; finishWorkout.ok2 = false;
@@ -3221,7 +3232,7 @@ function openSheet(kind, arg){
   if (kind === "cook") cookMin = false; else if (sheet.open && sheetKind === "cook" && cook) cookMin = true;
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
   if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
-  if (kind === "meal" && (sheetKind !== "meal" || sheetArg !== arg)) mealQ = ""; sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); renderSheet(); if (!sheet.open) sheet.showModal(); else sheet.scrollTop = 0; }
+  if (kind === "meal" && (sheetKind !== "meal" || sheetArg !== arg)) mealQ = ""; sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); sheet.style.transform = ""; renderSheet(); if (!sheet.open) sheet.showModal(); else sheet.scrollTop = 0; }
 function closeSheet(fromPop){ if (sheetKind === "cook" && cook) cookMin = true; sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); cookPaint(); }
 let sheetTarget = null;
 // Nur einen Teil des Blatts neu zeichnen (z. B. Reiter), damit laufende Videos nicht neu laden
@@ -3300,7 +3311,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
     const dv = a.prevVol && a.sets && a.prevSets && Math.abs(a.sets - a.prevSets) <= 2 ? Math.round((a.vol - a.prevVol) / a.prevVol * 100) : null;
     if (!a.sets) { h += `<div class="sumhero"><div class="trophy">⏸</div><h2>${esc(a.title)} ohne Sätze beendet</h2><div class="small muted">Nichts eingetragen. Über ⋯ kannst du das Training zurücksetzen oder löschen; der Planer legt die Einheit sonst auf den nächsten freien Tag.</div><button class="btn primary big" type="button" data-act="summaryDone">OK</button></div>`; }
     else {
-    h += `<div class="sumhero"><div class="trophy">${a.prDet?.length ? "🏆" : "💪"}</div><h2>Stark. ${esc(a.title)} erledigt</h2>
+    h += `<div class="sumhero"><div class="trophy">${a.prDet?.length ? "🏆" : "💪"}</div><h2>${a.sets >= 3 ? `Stark. ${esc(a.title)} erledigt` : `${esc(a.title)} beendet`}</h2>
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${Math.round(a.vol).toLocaleString("de-DE")}</div><div class="l">kg bewegt</div></div><div class="kpi"><div class="v">${dv == null ? "–" : (dv >= 0 ? "+" : "") + dv + " %"}</div><div class="l">vs. letztes Mal</div></div></div>
       ${a.prDet?.length ? `<div class="prs">${a.prDet.map(([n, x, y]) => `<div class="pr">🏆 <b>${esc(n)}</b><span>${esc(x)} <span class="muted">(vorher ${esc(y)})</span></span></div>`).join("")}</div>` : `<div class="small muted">Keine neuen Bestwerte, aber jede Einheit zählt. Konstanz schlägt alles.</div>`}
       ${weekStrip(monday(selDate))}
@@ -3639,22 +3650,23 @@ function shopRecList(){
 const usesProd = (r, pr) => !!pr && r.ingredients.some(l => pr.re.test(l));
 function recipesFiltered(){ const are = avoidRe(), ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null; return recipes.filter(r => recipeOk(r, are) && (!recFilter.ing || usesProd(r, ingP)) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein); }
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
-let cook = null, cookInt = null, cookMin = false;
+let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
 // Minimierter Kochmodus: Pille über der Navigation, Timer läuft weiter, antippen holt das Blatt zurück
 function cookPaint(){ let pill = document.getElementById("cookPill"); if (!cook || !cookMin || (sheet.open && sheetKind === "cook")) { pill?.remove(); return; }
   const r = recipeByName(cook.name); if (!r) { pill?.remove(); return; }
   if (!pill) { pill = document.createElement("div"); pill.id = "cookPill"; pill.className = "cookpill"; pill.innerHTML = `<button type="button" class="go" aria-label="Zurück zum Kochmodus"></button><button type="button" class="x" aria-label="Kochen beenden">✕</button>`;
     pill.querySelector(".go").addEventListener("click", () => openSheet("cook", cook.name)); pill.querySelector(".x").addEventListener("click", cookEnd); document.body.appendChild(pill); }
   const n = cookSteps(r).length; pill.querySelector(".go").textContent = `🍳 ${cook.step < 0 ? "Zutaten" : `Schritt ${cook.step + 1}/${n}`}${cook.run || cook.left ? ` · ⏱ ${fmtDur(cook.left)}${cook.run ? "" : " ⏸"}` : ` · ${r.name}`}`; }
-function cookEnd(){ cookMin = false; if (cook) { cook.run = false; clearInterval(cookInt); } cook = null; if (sheet.open && sheetKind === "cook") closeSheet(); cookPaint(); releaseWake(); }
+function cookEnd(){ cookMin = false; if (cook) { cook.run = false; clearInterval(cookInt); } cook = null; if (sheet.open && sheetKind === "cook") closeSheet(); cookPaint(); if (!wakeWanted()) releaseWake(); }
 const scaleLine = (l, f) => f === 1 ? l : l.replace(/^(\d+(?:[.,]\d+)?|½|\d+\/\d+)/, m0 => { const v = m0 === "½" ? .5 : m0.includes("/") ? m0.split("/").reduce((a, b) => a / b) : Number(m0.replace(",", ".")); const y = v * f, x = y >= 10 ? Math.round(y) : Math.max(0.5, Math.round(y * 2) / 2); return x.toLocaleString("de-DE"); });
 const srcHost = u => (String(u).match(/^https?:\/\/(?:www\.)?([^/]+)/) || [])[1] || "";
+const srcDiff = r => String(r.note || "").replace(/^adaptiert:\s*/i, "").replace(/^nach [^;]*(;\s*|$)/i, "").trim();
 const srcLink = r => { if (!r.source || !srcHost(r.source)) return ""; const a = `<a class="srclink" href="${esc(r.source)}" target="_blank" rel="noopener">📖 Originalrezept · ${esc(srcHost(r.source))} ↗</a>`;
-  return r.note ? `<details class="srcrow"><summary>${a}<span class="srci" aria-label="Was ist anders als im Original?">ⓘ</span></summary><div class="small muted">Anders als im Original: ${esc(r.note.replace(/^adaptiert:\s*/i, ""))}</div></details>` : a; };
+  return srcDiff(r) ? `<details class="srcrow"><summary>${a}<span class="srci" aria-label="Was ist anders als im Original?">ⓘ</span></summary><div class="small muted">Anders als im Original: ${esc(srcDiff(r))}</div></details>` : a; };
 function cookHtml(name){
   const r = recipeByName(name); if (!r) return "";
   if (!cook || cook.name !== name) cook = {name, step: -1, serv: r.servings || 1, left: 0, run: false};
-  const close = `<span class="shr"><button class="btn ghost" type="button" data-act="cookEnd">Beenden</button></span>`, f = cook.serv / (r.servings || 1), CS = cookSteps(r), n = CS.length;
+  const close = `<span class="shr"><button class="btn ghost" type="button" data-act="cookMin">Schließen</button></span>`, f = cook.serv / (r.servings || 1), CS = cookSteps(r), n = CS.length;
   let h = `<div class="sh"><div><div class="lab">Kochen · ${cook.step < 0 ? "Zutaten" : `Schritt ${cook.step + 1} von ${n}`}</div><h2>${esc(r.name)}</h2></div>${close}</div><div class="shopbar"><div class="fill" style="width:${(cook.step + 1) / n * 100}%"></div></div>`;
   if (cook.step < 0) {
     h += `<div class="mhead"><span>Portionen</span><span class="stepper"><button type="button" class="btn small" data-cookserv="-1" aria-label="Weniger">−</button><b>${cook.serv}</b><button type="button" class="btn small" data-cookserv="1" aria-label="Mehr">＋</button></span></div>
@@ -3667,14 +3679,14 @@ function cookHtml(name){
     h += `${cs.passive ? `<div class="pill">⏳ Wartezeit${cs.min ? ` · ${cs.min} min` : ""}</div>` : ""}<div class="cookstep">${esc(st)}</div>${cs.meanwhile ? `<div class="mwbox"><b>Währenddessen</b><div>${esc(cs.meanwhile)}</div></div>` : ""}${used.length ? `<div class="small muted">Dafür: ${used.map(l => esc(scaleLine(l, f))).join(" · ")}</div>` : ""}
       ${tm ? `<div class="gtimer" id="cookTm"><div class="gt" id="cookT">${fmtDur(cook.left || Number(tm[2] || tm[1]) * 60)}</div><div class="tmrbtns"><button type="button" class="btn" data-cookt="-60">−1 min</button><button type="button" class="btn primary" data-cookt="go" data-v="${Number(tm[2] || tm[1]) * 60}">${cook.run ? "Pause" : "⏱ Start"}</button><button type="button" class="btn" data-cookt="60">+1 min</button></div></div>` : ""}`;
   }
-  h += `<div class="actions"><button class="btn big" type="button" data-cookstep="-1" ${cook.step < 0 ? "disabled" : ""}>‹ Zurück</button>${cook.step < n - 1 ? `<button class="btn primary big" type="button" data-cookstep="1">${cook.step < 0 ? "Los geht's ›" : "Weiter ›"}</button>` : `<button class="btn primary big" type="button" data-act="cookEnd">Fertig ✓</button>`}</div>`;
+  h += `<div class="actions"><button class="btn big" type="button" data-cookstep="-1" ${cook.step < 0 ? "disabled" : ""}>‹ Zurück</button>${cook.step < n - 1 ? `<button class="btn primary big" type="button" data-cookstep="1">${cook.step < 0 ? "Los geht's ›" : "Weiter ›"}</button>` : `<button class="btn primary big" type="button" data-act="cookEnd">Fertig ✓</button>`}</div>${cook.step < n - 1 ? `<button class="btn ghost small" type="button" data-act="cookEnd">Kochen beenden</button>` : ""}`;
   // Ganzes Rezept jederzeit aufklappbar: Zutaten (für die gewählten Portionen) und alle Schritte, aktueller markiert, antippen springt hin
   h += `<details class="slim cookall" data-keep="cookall" ${shopOpen.has("cookall") ? "open" : ""}><summary><span>📖 Ganzes Rezept</span><span class="muted">${r.ingredients.length} Zutaten · ${n} Schritte</span></summary><div class="card">
     <div class="lab">Zutaten${cook.serv !== (r.servings || 1) ? ` für ${cook.serv} Portionen` : ""}</div><ul class="cookings">${r.ingredients.map(l => `<li>${esc(scaleLine(l, f))}</li>`).join("")}</ul>
     <div class="lab">Schritte</div>${cookAhead(r).length ? `<div class="aheadbox small"><b>Vorher</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}<ol class="cooklist">${CS.map((x, i) => `<li><button type="button" class="${i === cook.step ? "cur" : i < cook.step ? "done" : ""}" data-cookgo="${i}">${esc(x.do)}${x.meanwhile ? `<span class="mw small">⏳ ${esc(x.meanwhile)}</span>` : ""}</button></li>`).join("")}</ol>${srcLink(r)}</div></details>`;
   return h;
 }
-function cookTick(){ if (!cook?.run) { clearInterval(cookInt); return; } cook.left = Math.max(0, cook.left - 1); const el = document.getElementById("cookT"); if (el) el.textContent = fmtDur(cook.left); cookPaint();
+function cookTick(){ if (!cook?.run) { clearInterval(cookInt); return; } cook.left = Math.max(0, Math.ceil((cook.end - Date.now()) / 1000)); const el = document.getElementById("cookT"); if (el) el.textContent = fmtDur(cook.left); cookPaint();
   if (!cook.left) { cook.run = false; clearInterval(cookInt); beep(); setTimeout(beep, 400); toast("⏱ Zeit ist um"); if (sheetKind === "cook") renderSheetPart(["#cookTm"]); cookPaint(); } }
 function shelfHtml(){
   const are = avoidRe(), ok = recipes.filter(r => recipeOk(r, are)), card = r => `<button type="button" class="scard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">🍴</span>`}<span class="st">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="small muted"><span class="nutri">${recipeNutri(r).protein} g P · </span>${r.activeMin ?? r.timeMin} min${showPrices() ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
@@ -4122,7 +4134,7 @@ function mealTotals(ms){ const t = {kcal:0, protein:0, eKcal:0, eProtein:0}; for
 // Rückgängig/Wiederholen auf der Essen-Seite: merkt sich je Änderung Plan, gegessen, Reste und Portion des Tages vorher und nachher (bis 30 Schritte)
 const UNDO_KEYS = ["meals", "ate", "rest", "por"]; let foodUndo = [], foodRedo = [], undoing = false;
 const foodSnap = d => { const day = cur && cur.date === d ? cur : store.days[d] || {}; return JSON.stringify(UNDO_KEYS.map(k => day[k] || {})); };
-function editDay(d, fn){ const b = !undoing && tab === "essen" ? foodSnap(d) : null; editDayRaw(d, fn); const a = b && foodSnap(d);
+function editDay(d, fn){ const b = !undoing ? foodSnap(d) : null; editDayRaw(d, fn); const a = b && foodSnap(d);
   if (b && a !== b) { foodUndo.push({d, prev: JSON.parse(b), next: JSON.parse(a)}); if (foodUndo.length > 30) foodUndo.shift(); foodRedo = []; } }
 // Was eine Änderung war, in Worten: „Frühstück gegessen“, „Mittag ausgelassen“ …
 function foodDesc(d, a, b){ const lab = k => MEAL_SHORT[k] || (mealsFor(d).find(x => x.k === k)?.label || "Mahlzeit").replace(/^[^A-Za-zÄÖÜ0-9]+/, "").replace(/ · .*$/, ""), out = [], J = x => JSON.stringify(x ?? null);
@@ -4198,7 +4210,7 @@ function mealSheet(arg){
     return `<button type="button" class="altopt mealopt ${n === m.name ? "sel" : ""}" data-meal="${esc(n)}">${mealThumb(n)}<span class="ti"><b>${isFav(n) ? "★ " : ""}${esc(r.name)}</b><span class="small muted"><span class="nutri">${r.kcal} kcal (${dk >= 0 ? "+" : ""}${dk}) · ${r.protein} g P (${dp >= 0 ? "+" : ""}${dp})${why ? " · " : ""}</span>${why ? esc(why) : ""}${recipeByName(n) && effortTxt(recipeByName(n)) ? ` · ${esc(effortTxt(recipeByName(n)))}` : ""}${recipeByName(n)?.temp ? " · " + TEMP[recipeByName(n).temp] : ""}</span></span></button>`; };
   const wk = []; const mo = monday(d); for (let i = 0; i < 7; i++) { const dd = addDays(mo, i); if (m.def && dd !== d && dd >= todayIso() && mealDefaults(dd)[k] === m.def) wk.push(dd); }
   setTimeout(() => sheet.classList.add("swapmode"), 0);
-  return `<div class="swapbar">⇄ Du tauschst: <b>${esc(ref.name)}</b></div><div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "" : "primary"}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "Nicht gegessen" : "✓ Gegessen"}</button></div>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${k}">✎ Was anderes gegessen</button><div class="lab">Tauschen</div>${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}<div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
+  return `<div class="swapbar">⇄ Du tauschst: <b>${esc(ref.name)}</b></div><div class="sh"><h2>${esc(m.label)} · ${fmt(d)}</h2><span class="shr">${recM ? favBtn(m.name) : ""}${close}</span></div>${recM ? `<div class="actions"><button class="btn" type="button" data-recipe="${esc(m.name)}">📖 Rezept öffnen</button><button class="btn ${m.ate ? "primary" : ""}" type="button" data-ate="${m.k}" data-d="${d}">${m.ate ? "✓ Gegessen" : "Gegessen?"}</button></div>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${k}">✎ Was anderes gegessen</button><div class="lab">Tauschen</div>${wk.length ? `<label class="check small"><input type="checkbox" id="mealWeek"><span>Auch an den anderen Tagen dieser Woche mit „${esc(mealInfo(m.def).name)}“ tauschen (${wk.length}×)</span></label>` : ""}<div class="small muted">Jetzt: <b>${esc(ref.name)}</b><span class="nutri"> (${ref.kcal} kcal, ${ref.protein} g Protein)</span>. Vorschläge mit ähnlichen Werten:</div>
     <input type="text" id="mealQ" value="${esc(mealQ)}" placeholder="🔎 Gericht oder Zutat suchen" aria-label="Gericht suchen" autocomplete="off">
     <div id="mealRes">${mealQ.trim().length >= 2 ? (() => { const q = fold(mealQ.trim()), are = avoidRe(), hits = recipes.filter(r => r.name !== m.name && recipeOk(r, are)).map(r => [r, Math.max(sugScore(r.name, q) * 2, sugScore((r.ingredients || []).join(" "), q))]).filter(x => x[1]).sort((a, b) => b[1] - a[1] || a[0].name.localeCompare(b[0].name, "de")).slice(0, 25);
       return hits.length ? `<div class="lab sec">${hits.length} Treffer</div>` + hits.map(([r]) => opt(r.name, "")).join("") : `<div class="small muted">Kein Rezept gefunden – unten kannst du eigenes Essen eintragen.</div>`; })() : ""}</div>
@@ -4436,7 +4448,7 @@ function cardioSheet(d){
     ${list.length ? `<div class="lrows">${list.map(c => `<div class="mhead"><span><b>${esc(CARDIO[c.type]?.[1] || c.type)}</b><br><span class="small">${esc(cardioTxt(c))} · ca. ${cardioKcal(c)} kcal</span>${c.note ? `<br><span class="small muted">${esc(c.note)}</span>` : ""}</span>${c.path ? trkSvg(c.path).replace('class="trksvg"', 'class="trksvg mini"') : ""}<button class="btn ghost small" type="button" data-cardiodel="${c.id}" data-d="${d}" aria-label="Löschen">✕</button></div>`).join("")}</div>` : ""}
     <div class="card"><div class="chips" id="caType">${Object.entries(CARDIO).map(([k, [i, l]]) => `<button type="button" data-catype="${k}" aria-pressed="${cardioType === k}">${i} ${l}</button>`).join("")}</div>
       ${trkStartHtml()}
-      <div class="lab">Oder nachtragen · Dauer ca.</div><div class="chips sm">${[15, 30, 45, 60, 90, 120].map(m => `<button type="button" data-camin="${m}">${m < 60 ? m + " min" : m / 60 + (m % 60 ? ",5" : "") + " h"}</button>`).join("")}</div>
+      <div class="lab">Oder nachtragen · Dauer ca.</div><div class="chips sm">${[15, 30, 45, 60, 90, 120].map(m => `<button type="button" data-camin="${m}">${m < 60 ? m + " min" : (m / 60).toLocaleString("de-DE") + " h"}</button>`).join("")}</div>
       <div class="grid2"><div class="field"><label for="caMin">Minuten${KM_TYPES.has(cardioType) ? " (oder leer)" : ""}</label><input type="text" inputmode="numeric" id="caMin" placeholder="z. B. 45"></div>${KM_TYPES.has(cardioType) ? `<div class="field"><label for="caKm">Distanz (km)</label><input type="text" inputmode="decimal" id="caKm" placeholder="ca. 5"></div>` : ""}</div>
       ${KM_TYPES.has(cardioType) ? `<div class="small muted">Dauer oder Distanz reicht – z. B. nur „5 km“, wenn du die Zeit nicht weißt.</div>` : ""}
       <details class="small"><summary>Mehr (Anstrengung, Notiz)</summary><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
@@ -5124,7 +5136,7 @@ const restBtn = (d, m) => { const r = recOf(m.name); if (!r || (r.servings || 1)
 const restPick = (d, m) => { const f = FRIDGE(); if (!f.length || m.own || m.ate || d > todayIso()) return ""; return `<div class="restpick"><span class="small muted">🧊 Stattdessen Rest gegessen:</span>${f.map(x => `<button type="button" class="btn small" data-resteat="${x.id}|${d}|${m.k}">${esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])}</button>`).join("")}</div>`; };
 function fridgeCard(){ const f = FRIDGE(); if (!f.length) return "";
   return `<details class="slim fridge" data-keep="fridge" ${shopOpen.has("fridge") || f.some(x => x.until <= addDays(todayIso(), 1)) ? "open" : ""}><summary><span>🧊 Restebox</span><span class="muted">${f.map(x => esc(mealInfo(x.name).name.split(/ mit | & |,/)[0])).join(" · ")}</span></summary><div class="card">
-    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0"><b>${esc(mealInfo(x.name).name)}</b><span class="small ${x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><span class="actions"><button class="btn small primary" type="button" data-sheet="restleft" data-v="ask|${x.id}">✓ Gegessen</button><button class="btn small ghost" type="button" data-restgone="${x.id}" aria-label="Weg">✕</button></span></div>`).join("")}
+    ${f.map(x => `<div class="mhead"><span>${mealThumb(x.name)}</span><span class="lmain" style="flex:1;min-width:0;display:flex;flex-direction:column"><b>${esc(mealInfo(x.name).name)}</b><span class="small ${x.until <= addDays(todayIso(), 1) ? "warnt" : "muted"}">${x.until <= todayIso() ? "heute essen!" : "hält bis " + fmt(x.until)}</span></span><span class="actions"><button class="btn small primary" type="button" data-sheet="restleft" data-v="ask|${x.id}">✓ Gegessen</button><button class="btn small ghost" type="button" data-restgone="${x.id}" aria-label="Weg">✕</button></span></div>`).join("")}
     <div class="small muted">„Gegessen“ ersetzt die nächste passende offene Mahlzeit von heute.</div></div></details>`; }
 function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && !m.rest && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
@@ -5412,7 +5424,7 @@ document.querySelector("nav.bottom").addEventListener("click", e => { const b = 
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
 sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
-sheet.addEventListener("close", () => { if (micRec) try { micRec.abort(); } catch {}  { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook && sheetKind === "cook") cookMin = true; if (cook && !cookMin) { cook.run = false; clearInterval(cookInt); releaseWake(); } cookPaint(); if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
+sheet.addEventListener("close", () => { if (micRec) try { micRec.abort(); } catch {}  { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) cookMin = true; cookPaint(); if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
@@ -5426,7 +5438,7 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()).filter((r, _, all) => all.length < 3 || (r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip)); if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; if (sheetArg !== rc2.dataset.recipe) recTab = "zutaten"; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
@@ -5588,13 +5600,15 @@ async function onClick(e){
     toast(`Eingeplant: ${d === todayIso() ? "heute" : "morgen"} ${MEAL_SHORT[k]}`, {label: "Rückgängig", fn: () => { editDay(d, day => { day.meals = Object.assign({}, day.meals, {[k]: prev}); }); render(); toast("Zurückgenommen"); }}); render(); return; }
   const cwi = t.closest("[data-cookwith]"); if (cwi) { recFilter.ing = cwi.dataset.cookwith; recShelves = false; renderRecipes(); window.scrollTo(0, 0); return; }
   if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: "", ing: ""}); recShelves = true; renderRecipes(); return; }
-  const ck = t.closest("[data-cook]"); if (ck) { cook = null; openSheet("cook", ck.dataset.cook); requestWake(); return; }
+  const ck = t.closest("[data-cook]"); if (ck) { const n = ck.dataset.cook; if (cook && cook.name === n) { openSheet("cook", n); requestWake(); return; }
+    if (cook && (cook.run || cook.step >= 0) && cookSwitch !== n) { cookSwitch = n; setTimeout(() => { cookSwitch = null; }, 4000); toast(`Du kochst gerade ${cook.name} – nochmal tippen, um zu wechseln`); return; }
+    cookSwitch = null; if (cook) { cook.run = false; clearInterval(cookInt); } cook = null; cookMin = false; openSheet("cook", n); requestWake(); return; }
   const ckg = t.closest("[data-cookgo]"); if (ckg) { cook.step = Number(ckg.dataset.cookgo); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }
   const cks = t.closest("[data-cookstep]"); if (cks) { cook.step = Math.max(-1, cook.step + Number(cks.dataset.cookstep)); cook.run = false; cook.left = 0; clearInterval(cookInt); renderSheet(); sheet.scrollTop = 0; return; }
   const ckv = t.closest("[data-cookserv]"); if (ckv) { cook.serv = Math.max(1, cook.serv + Number(ckv.dataset.cookserv)); renderSheet(); return; }
   const ckt = t.closest("[data-cookt]"); if (ckt) { const c = ckt.dataset.cookt; audioReady();
-    if (c === "go") { if (!cook.left) cook.left = Number(ckt.dataset.v); cook.run = !cook.run; clearInterval(cookInt); if (cook.run) cookInt = setInterval(cookTick, 1000); }
-    else { cook.left = Math.max(0, (cook.left || 0) + Number(c)); }
+    if (c === "go") { if (!cook.left) cook.left = Number(ckt.dataset.v); cook.run = !cook.run; clearInterval(cookInt); if (cook.run) { cook.end = Date.now() + cook.left * 1000; cookInt = setInterval(cookTick, 1000); } }
+    else { cook.left = Math.max(0, (cook.left || 0) + Number(c)); if (cook.run) cook.end = Date.now() + cook.left * 1000; }
     renderSheetPart(["#cookTm"]); return; }
   const fv = t.closest("[data-fav]"); if (fv) { const n = fv.dataset.fav, set = new Set(FOOD().favs || []); set.has(n) ? set.delete(n) : set.add(n); saveFood({favs: [...set]}); toast(set.has(n) ? "★ Als Favorit gemerkt" : "Aus Favoriten entfernt"); if (sheet.open) renderSheet(); if (document.getElementById("recQ")) renderRecipes(); return; }
   if (t.closest("[data-recfav]")) { recFilter.fav = !recFilter.fav; renderRecipes(); return; }
@@ -5624,7 +5638,7 @@ async function onClick(e){
   const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); hurtOpen = null; openSheet(sh.dataset.sheet, sh.dataset.v); return; }
   const op = t.closest("[data-open]"); if (op) { openEx = document.body.classList.contains("wo") ? op.dataset.open : openEx === op.dataset.open ? null : op.dataset.open; renderTraining(); scrollTo(0, 0); return; }
   const xn = t.closest("[data-exnav]"); if (xn) { exNav(Number(xn.dataset.exnav)); return; }
-  const xs = t.closest("[data-exskip]"); if (xs) { const id = xs.dataset.exskip, on = !exSkipped(id), toggle = v => { if (v) cur.skipEx = Object.assign({}, cur.skipEx, {[id]: true}); else { const o = Object.assign({}, cur.skipEx); delete o[id]; cur.skipEx = o; clr("skipEx." + id); } touch(); saveCur(); };
+  const xs = t.closest("[data-exskip]"); if (xs) { const id = xs.dataset.exskip, key = skipKey(id), on = !exSkipped(id), toggle = v => { if (v) cur.skipEx = Object.assign({}, cur.skipEx, {[key]: true}); else { const o = Object.assign({}, cur.skipEx); delete o[key]; cur.skipEx = o; clr("skipEx." + key); } touch(); saveCur(); };
     toggle(on); if (on) { const sk = woSession || cur.session, w = weekNo(selDate), ids = exList(sk), i = ids.indexOf(id), open = x => eff(x) && doneCount(x, w, sk) < nSets(x, w, sk);
       openEx = ids.slice(i + 1).find(open) || ids.find(open) || id; }
     else openEx = id;
@@ -5652,7 +5666,7 @@ async function onClick(e){
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "alt"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
-    if (a === "setSession") { cur.session = v; cur.sessAt = Date.now(); touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
+    if (a === "setSession") { if (v !== cur.session && cur.skipEx) { for (const k of Object.keys(cur.skipEx)) clr("skipEx." + k); delete cur.skipEx; } cur.session = v; cur.sessAt = Date.now(); touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
     if (a === "rcReset") { rcpt = null; renderSheet(); return; }
@@ -5674,11 +5688,11 @@ async function onClick(e){
     if (a === "clear") { if (clearArmed !== 1) { clearArmed = 1; setTimeout(() => { clearArmed = 0; }, 4000); toast("Nochmal tippen: Arztfreigabe bestätigen – das ändert den ganzen Plan"); return; } clearArmed = 0; saveSettings({scCleared:true}); toast("Freigabe gesetzt"); if (sheet.open) renderSheet(); render(); return; }
     if (a === "delset") { const arr = setsObj()[v]; if (arr) { arr.length = lastMeaningful(arr); arr.pop(); } touch(); renderTraining(); return; }
     if (a === "begin") { cur.where = cur.where || "gym"; cur.startedAt = new Date().toISOString(); if (cur.finishedAt) clr("finishedAt"); delete cur.finishedAt; openEx = null; requestWake(); touch(); saveCur(); renderTraining(); return; }
-    if (a === "resume") { delete cur.finishedAt; clr("finishedAt"); touch(); saveCur(); woSession = null; go("training"); return; }
+    if (a === "resume") { delete cur.finishedAt; clr("finishedAt"); touch(); saveCur(); woSession = null; if (sheet.open) { sheetKind = null; sheet.close(); } requestWake(); go("training"); return; }
     if (a === "resetTraining" || a === "delTraining") {
       if (pendingConfirm !== a) { pendingConfirm = a; renderSheet(); return; }
       pendingConfirm = null; trainClear(a === "delTraining"); sheetKind = null; if (sheet.open) sheet.close(); go("heute"); return; }
-    if (a === "ateAll") { const ks = mealsFor(v).filter(m => !m.own).map(m => m.k); editDay(v, day => { day.ate = Object.assign({}, day.ate, Object.fromEntries(ks.map(k => [k, true]))); }); toast("Alle geplanten Mahlzeiten als gegessen eingetragen"); render(); return; }
+    if (a === "ateAll") { const ks = mealsFor(v).filter(m => !m.own).map(m => m.k), prev = Object.assign({}, dayObj(v)?.ate); editDay(v, day => { day.ate = Object.assign({}, day.ate, Object.fromEntries(ks.map(k => [k, true]))); }); toast("Alle geplanten Mahlzeiten als gegessen eingetragen", {label: "Rückgängig", fn: () => { editDay(v, day => { day.ate = prev; }); render(); }}); render(); return; }
     if (a === "trainDrop") { // ✕ unter „Noch offen“ bzw. „Heute nicht trainieren“: zweimal tippen
       if (dropArm.armed !== selDate) { dropArm.armed = selDate; clearTimeout(dropArm.t); dropArm.t = setTimeout(() => { dropArm.armed = null; }, 4000); toast("Nochmal tippen, um das Training für heute zu entfernen"); return; }
       dropArm.armed = null; trainClear(true); toast("Training für heute entfernt"); render(); return; }
@@ -5695,8 +5709,8 @@ async function onClick(e){
       Promise.all([ensureNW(), recipes ? null : ensureMeals().catch(() => {})]).then(() => { const items = nwParse(tx); box.innerHTML = nwHtml(items); const ok = items.filter(i => i.ok); if (!ok.length) return;
         const nm = sheet.querySelector("#ownName"), kc = sheet.querySelector("#ownKcal"), pr = sheet.querySelector("#ownProt");
         if (nm && !nm.value.trim()) nm.value = tx.slice(0, 60); if (kc) kc.value = ok.reduce((x, i) => x + i.kcal, 0); if (pr) pr.value = Math.round(ok.reduce((x, i) => x + i.protein, 0)); }).catch(() => { box.innerHTML = `<div class="small muted">Tabelle nicht ladbar – bitte Werte selbst eintragen.</div>`; }); return; }
-    if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = setsFor(v, weekNo(selDate), SESS[woSession || cur.session], ac.dataset.base || v), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
-    if (a === "nextex") { const ids = exList(woSession || cur.session); openEx = ids[ids.indexOf(v)+1] || v; renderTraining(); return; }
+    if (a === "addset") { const arr = setsObj()[v] = setsObj()[v] || [], n = exSkipped(ac.dataset.base || v) ? 0 : setsFor(v, weekNo(selDate), SESS[woSession || cur.session], ac.dataset.base || v), rows = Math.max(n, lastMeaningful(arr)); while (arr.length < rows) arr.push({}); arr[rows] = {added:true}; touch(); renderTraining(); return; }
+    if (a === "nextex") { openEx = nextOpenEx(v) || v; renderTraining(); return; }
     if (a === "checkin") { openSheet("checkin", v); return; }
     if (a === "ciSave") { const sel = sheet.querySelector("#ciMode [aria-pressed=true]")?.dataset.mode || "normal";
       saveMap("checkins.json", "checkins", v, {week:v, stress:num(sheet.querySelector("#ci_stress").value), hurdle:sheet.querySelector("#ci_hurdle").value, ifthen:sheet.querySelector("#ci_ifthen").value, good:sheet.querySelector("#ci_good").value, nextMode:sel});
@@ -5860,14 +5874,14 @@ sheet.addEventListener("pointerup", e => { if (shd != null && e.clientY - shd > 
 let sdr = null;
 const sdrUp = el => { for (; el && el !== sheet; el = el.parentElement) if (el.scrollTop > 0) return true; return sheet.scrollTop > 0; };
 sheet.addEventListener("touchstart", e => { sdr = null; if (e.touches.length !== 1 || !sheet.open) return; const t = e.target;
-  if (t.closest('input[type="range"],textarea,canvas,iframe,video,[data-nodrag]') || sdrUp(t)) return;
+  if (t.closest('input[type="range"],textarea,canvas,iframe,video,[data-nodrag]') || (sheet.classList.contains("full") && !t.closest(".grab")) || sdrUp(t)) return;
   sdr = {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now(), on: false, dy: 0}; }, {passive: true});
 sheet.addEventListener("touchmove", e => { if (!sdr) return; const dx = e.touches[0].clientX - sdr.x, dy = e.touches[0].clientY - sdr.y;
   if (!sdr.on) { if (Math.abs(dy) < 8 && Math.abs(dx) < 8) return; if (dy <= 0 || Math.abs(dx) > dy || sdrUp(e.target)) { sdr = null; return; } sdr.on = true; sdr.y += dy > 8 ? 8 : 0; sheet.style.transition = "none"; }
   e.preventDefault(); sdr.dy = Math.max(0, e.touches[0].clientY - sdr.y); sheet.style.transform = `translateY(${sdr.dy}px)`; }, {passive: false});
 const sdrEnd = () => { if (!sdr?.on) { sdr = null; return; } const {dy, t} = sdr, fast = dy / Math.max(1, Date.now() - t) > 0.6; sdr = null;
   sheet.style.transition = "transform .18s ease-out";
-  if (dy > Math.min(140, sheet.offsetHeight * 0.25) || (fast && dy > 40)) { sheet.style.transform = "translateY(100%)"; setTimeout(() => { clearInterval(guideTimer); closeSheet(); sheet.style.transition = "none"; sheet.style.transform = ""; }, 170); }
+  if (dy > Math.min(140, sheet.offsetHeight * 0.25) || (fast && dy > 40)) { sheet.style.transform = "translateY(100%)"; setTimeout(() => { sheet.style.transition = "none"; sheet.style.transform = ""; clearInterval(guideTimer); closeSheet(); }, 170); }
   else { sheet.style.transform = ""; setTimeout(() => { sheet.style.transition = ""; }, 200); } };
 sheet.addEventListener("touchend", sdrEnd); sheet.addEventListener("touchcancel", sdrEnd);
 sheet.addEventListener("pointercancel", () => { shd = null; });
@@ -5899,7 +5913,7 @@ iconize(document.body);
 // ---------- Start ----------
 if ("serviceWorker" in navigator) { const hadSW = !!navigator.serviceWorker.controller; let swNew = false;
   // Neue Version aktiv: neu laden, wenn gerade nichts offen ist (kein Blatt, kein laufendes Training, nichts ungespeichert); sonst beim nächsten Wechsel in den Hintergrund
-  const swReload = () => { if (!swNew || sheet.open || dirty || (cur?.startedAt && !cur?.finishedAt) || document.getElementById("gc")?.hidden === false) return false; swNew = false; location.reload(); return true; };
+  const swReload = () => { if (!swNew || sheet.open || cook || dirty || (cur?.startedAt && !cur?.finishedAt) || document.getElementById("gc")?.hidden === false) return false; swNew = false; location.reload(); return true; };
   navigator.serviceWorker.addEventListener("controllerchange", () => { if (!hadSW) return; swNew = true;
     if (!swReload()) { document.addEventListener("visibilitychange", () => { if (document.hidden) swReload(); }); if (!dirty && !(cur?.startedAt && !cur?.finishedAt)) toast("Neue Version da", {label: "Jetzt laden", fn: () => location.reload()}); } });
   navigator.serviceWorker.register("sw.js").catch(() => {});
