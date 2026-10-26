@@ -5623,7 +5623,7 @@ async function onClick(e){
   const ac = t.closest("[data-act]");
   if (ac) { const a = ac.dataset.act, v = ac.dataset.v;
     if (a === "closeSheet") { closeSheet(); return; }
-    if (a === "cookMin") { closeSheet(); toast("Kochmodus minimiert – unten antippen, um weiterzukochen"); return; }
+    if (a === "cookMin") { closeSheet(); return; }
     if (a === "cookEnd") { cookEnd(); return; }
     if (a === "foodUndo" || a === "foodRedo") { undoFood(a === "foodRedo"); return; }
     if (a === "cardioSave") { const min = num(sheet.querySelector("#caMin")?.value), km = num(sheet.querySelector("#caKm")?.value), note = sheet.querySelector("#caNote")?.value.trim() || "";
@@ -5839,8 +5839,22 @@ view.addEventListener("pointerup", e => { if (!swp) return; const dx = e.clientX
   swipedAt = Date.now();
   if (s0.kind === "ex") exNav(dx < 0 ? 1 : -1); else if (typeof onSwipe === "function") onSwipe(s0, dx); });
 let shd = null;
-sheet.addEventListener("pointerdown", e => { shd = e.target.closest(".grab") ? e.clientY : null; if (shd != null) e.target.setPointerCapture?.(e.pointerId); });
+sheet.addEventListener("pointerdown", e => { shd = e.pointerType !== "touch" && e.target.closest(".grab") ? e.clientY : null; if (shd != null) e.target.setPointerCapture?.(e.pointerId); });
 sheet.addEventListener("pointerup", e => { if (shd != null && e.clientY - shd > 60) { clearInterval(guideTimer); closeSheet(); } shd = null; });
+// Blatt mit dem Finger nach unten ziehen: von überall, solange oben nichts mehr zu scrollen ist; folgt dem Finger, weit genug oder schnell = schließen
+let sdr = null;
+const sdrUp = el => { for (; el && el !== sheet; el = el.parentElement) if (el.scrollTop > 0) return true; return sheet.scrollTop > 0; };
+sheet.addEventListener("touchstart", e => { sdr = null; if (e.touches.length !== 1 || !sheet.open) return; const t = e.target;
+  if (t.closest('input[type="range"],textarea,canvas,iframe,video,[data-nodrag]') || sdrUp(t)) return;
+  sdr = {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now(), on: false, dy: 0}; }, {passive: true});
+sheet.addEventListener("touchmove", e => { if (!sdr) return; const dx = e.touches[0].clientX - sdr.x, dy = e.touches[0].clientY - sdr.y;
+  if (!sdr.on) { if (Math.abs(dy) < 8 && Math.abs(dx) < 8) return; if (dy <= 0 || Math.abs(dx) > dy || sdrUp(e.target)) { sdr = null; return; } sdr.on = true; sdr.y += dy > 8 ? 8 : 0; sheet.style.transition = "none"; }
+  e.preventDefault(); sdr.dy = Math.max(0, e.touches[0].clientY - sdr.y); sheet.style.transform = `translateY(${sdr.dy}px)`; }, {passive: false});
+const sdrEnd = () => { if (!sdr?.on) { sdr = null; return; } const {dy, t} = sdr, fast = dy / Math.max(1, Date.now() - t) > 0.6; sdr = null;
+  sheet.style.transition = "transform .18s ease-out";
+  if (dy > Math.min(140, sheet.offsetHeight * 0.25) || (fast && dy > 40)) { sheet.style.transform = "translateY(100%)"; setTimeout(() => { clearInterval(guideTimer); closeSheet(); sheet.style.transition = "none"; sheet.style.transform = ""; }, 170); }
+  else { sheet.style.transform = ""; setTimeout(() => { sheet.style.transition = ""; }, 200); } };
+sheet.addEventListener("touchend", sdrEnd); sheet.addEventListener("touchcancel", sdrEnd);
 sheet.addEventListener("pointercancel", () => { shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 addEventListener("hashchange", () => { if (dirty) saveCur(); hideActToast(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
