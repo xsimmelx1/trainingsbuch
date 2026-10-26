@@ -783,6 +783,11 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .pvimg .noimg{display:grid;place-items:center;width:100%;height:100%;font-family:var(--f-display);font-size:22px;color:var(--muted)}
 .pvt{min-width:0;line-height:1.35}
 .pvalt{white-space:nowrap}
+.varhead{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.varhead b{color:var(--ink);font-size:13px}
+.varrow{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 10px;scrollbar-width:none}.varrow::-webkit-scrollbar{display:none}
+.varc{flex:0 0 116px;scroll-snap-align:center;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:6px;text-align:left;display:flex;flex-direction:column;gap:3px;color:var(--ink);font:inherit}
+.varc.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.varc img,.varc .noimg{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;background:var(--sunk);display:grid;place-items:center}
+.varc b{font-size:12px;line-height:1.25;font-weight:600}.varc .lv{font-size:11px;color:var(--muted)}.varc.cur .lv{color:var(--accent);font-weight:600}
 .pvact{display:flex;flex-direction:column;align-items:stretch;gap:6px}.pvact .btn{min-width:48px;justify-content:center}
 .exsum .st{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:12px;font-weight:700}
 .exrow.complete .st{background:var(--good);border-color:var(--good);color:var(--accent-ink)}
@@ -3161,6 +3166,24 @@ const keepWake = () => { if (wakeWanted() && (!wakeLock || wakeLock.released)) r
 // ---------- SHEETS ----------
 let pendingConfirm = null;
 let techStack = [];
+// Varianten derselben Bewegung, von leicht nach schwer – oben im Übungsblatt als wischbare Karten
+const VAR_LADDERS = [
+  ["wallsit", "hw_squat", "alt_goblet", "alt_smithsquat"],
+  ["stepdown", "alt_revlunge", "hw_bss", "bss"],
+  ["glutebridge", "hw_hipthrust", "alt_bbbridge", "hipthrust"],
+  ["alt_pullthrough", "alt_dbrdl", "rdl", "hw_slrdl"],
+  ["seatedcurl", "hw_slidecurl", "alt_standcurl", "alt_nordic"],
+  ["calfseated", "calfstand", "hw_calf"],
+  ["deadbug", "alt_birddog", "sideplank", "alt_plank", "abroller"],
+  ["pushupplus", "alt_inclpush", "pushup"],
+  ["alt_1armpd", "latneutral", "alt_assistchin", "chinneutral"],
+  ["hw_doorrow", "hw_tablerow", "alt_machrow", "rowchest"],
+  ["hw_latiso", "hw_latraise", "dblateral", "cablelat"],
+  ["hw_towelshrug", "hw_shrug", "dbshrug", "cableshrug"]];
+const varLadder = id => VAR_LADDERS.find(l => l.includes(id))?.filter(x => EX[x]) || null;
+function varRowHtml(id){ const l = varLadder(id); if (!l || l.length < 2) return ""; const ci = l.indexOf(id);
+  return `<div class="varhead small muted"><span>‹ leichter</span><b>Varianten</b><span>schwerer ›</span></div><div class="varrow" id="varRow">${l.map((x, i) => { const e = EX[x], th = exThumb(x, e.img), gate = e.gate && !S().scCleared;
+    return `<button type="button" class="varc ${x === id ? "cur" : ""}" ${x === id ? 'aria-current="true"' : `data-sheet="tech" data-v="${x}"`}>${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${i + 1}</span>`}<span class="lv">${x === id ? "Diese" : i < ci ? "leichter" : "schwerer"}${gate ? " · nach Freigabe" : ""}</span><b>${esc(e.name)}</b></button>`; }).join("")}</div>${(() => { const base = techStack[0]; return tab === "training" && base && base !== id && altOptions(base).some(([x]) => x === id) ? `<button type="button" class="btn small primary" data-alt="${id}" data-base="${base}">⇄ Heute diese statt ${esc(EX[base].name)}</button>` : ""; })()}`; }
 // Alternativen einer Übung; hat sie keine eigenen, dann die Ursprungsübung(en) und deren übrige Alternativen
 function altsFor(id){
   const own = (ALTS[id] || []).filter(([i]) => EX[i]); if (own.length) return own;
@@ -3183,7 +3206,7 @@ function renderSheetPart(sel){
   const tmp = document.createElement("div"); sheetTarget = tmp; try { renderSheet(); } finally { sheetTarget = null; }
   for (const s0 of sel) { const a = sheetBody.querySelector(s0), b = tmp.querySelector(s0); if (a && b) a.innerHTML = b.innerHTML; else if (!a || !b) return renderSheet(); }
 }
-function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full", ["mob", "mobguide"].includes(sheetKind)); if ((sheetKind === "mobguide" || sheetKind === "mob") && !mobDataReady) { mobDataReady = true; Promise.all([ensureCoachData(), ensureClips()]).then(() => { if (sheet.open && (sheetKind === "mobguide" || sheetKind === "mob")) renderSheet(); }); }
+function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = document.getElementById("varRow"), c = r?.querySelector(".varc.cur"); if (r && c) r.scrollLeft = c.offsetLeft - r.offsetLeft - (r.clientWidth - c.clientWidth) / 2; }, 0); sheet.classList.toggle("full", ["mob", "mobguide"].includes(sheetKind)); if ((sheetKind === "mobguide" || sheetKind === "mob") && !mobDataReady) { mobDataReady = true; Promise.all([ensureCoachData(), ensureClips()]).then(() => { if (sheet.open && (sheetKind === "mobguide" || sheetKind === "mob")) renderSheet(); }); }
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Fertig</button>`;
   let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
@@ -3233,7 +3256,7 @@ function renderSheet(){ setTimeout(hookClips, 0); sheet.classList.toggle("full",
     const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
     h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}<button type="button" class="xc hurtbtn" data-hurt="${esc(sheetArg)}">😣 Tut weh?</button></div>
-      ${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
+      ${varRowHtml(sheetArg)}${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
       ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && !(vidPref === true && clipOf(sheetArg)) ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
       <div class="tabs3 ${["", "", "", "", "n4", "n5"][3 + (alts.length ? 1 : 0) + (hasHist ? 1 : 0)] || ""}" role="tablist" id="ttabs">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(hasHist ? [["ver", "Verlauf"]] : []), ...(alts.length ? [["alt", `Alt. (${alts.length})`]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
       <div id="ttabBody">${techTab === "anl" ? `${prim.length ? `<div class="whyb"><div class="lab">Wofür</div>Trainiert vor allem ${esc(prim.join(" und "))}.${MOB_INFO[sheetArg] ? " " + esc(MOB_INFO[sheetArg].why) : ""}</div>` : ""}
