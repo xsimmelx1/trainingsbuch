@@ -784,6 +784,7 @@ summary.shopsec{list-style:none;cursor:pointer;margin:14px 0 6px;padding:10px 12
 .pvimg .noimg{display:grid;place-items:center;width:100%;height:100%;font-family:var(--f-display);font-size:22px;color:var(--muted)}
 .pvt{min-width:0;line-height:1.35}
 .pvalt{white-space:nowrap}
+.budgetbox{border-top:1px solid var(--line);padding-top:8px;margin-top:6px;display:flex;flex-direction:column;gap:4px}.budgetbox .mhead{align-items:baseline}
 .trk .gt{font-size:56px;text-align:center}.trkstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:6px 0}.trkstats b{display:block;font:600 24px var(--f-num)}.trkstats span{font-size:12px;color:var(--muted)}
 .trksvg{width:100%;max-width:220px;aspect-ratio:1;display:block;margin:6px auto}.trksvg polyline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}.trksvg .s{fill:var(--good)}.trksvg .e{fill:var(--bad)}.trksvg.mini{width:56px;margin:0 6px;flex:0 0 56px}
 .trkpill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));z-index:40;border:0;border-radius:999px;padding:10px 18px;background:var(--accent);color:var(--accent-ink);font:600 15px var(--f-num);box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -4832,6 +4833,17 @@ const SHOP_GROUPS = [
   ["Obst & Gemüse", /apfel|banane|beere|spinat|zucchini|paprika|tomate|zwiebel|knoblauch|gurke|möhre|karotte|brokkoli|pilz|champignon|kartoffel|zitrone|limette|salat|rucola|avocado|mais|petersilie|koriander|basilikum|ingwer|jalape|lauch|kohl|frühlingszwiebel|aubergine|orange|obst|gemüse/i],
 ];
 const shopWeek = () => essenMon || (parse(todayIso()).getDay() === 0 || parse(todayIso()).getDay() === 6 ? addDays(monday(todayIso()), 7) : monday(todayIso()));
+// Budget verständlich: verglichen wird, was die Woche verbraucht (Haltbares anteilig) – der Einkauf kostet mehr, weil ganze Packungen gekauft werden.
+// Die Differenz bleibt als Vorrat. Gerechnet mit dem Hauptmarkt (Plan und Budget), nicht mit dem gerade angesehenen Laden.
+function budgetBox(wc, bud, bs, nSub, allItems, stores, best){
+  const main = stores.includes(FOOD().store) ? FOOD().store : best;
+  const E = main ? shopCosts(allItems, new Set())[main].sum : null; // ganze Liste wie angezeigt (Vorrat zuhause schon abgezogen)
+  let away = 0; const mo = shopWeek(); for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (!m.rest && m.name === "away") away += 4.5;
+  const over = wc - bud, left = E != null ? E - (wc - away) : null, ign = FOOD().budgetIgnore;
+  return `<div class="budgetbox ${over > 0 && !ign ? "over" : "ok"}"><div class="mhead"><span><b>Budget ${eur(bud)}</b> · diese Woche verbraucht ≈ <b>${eur(wc)}</b></span><span class="${over > 0 && !ign ? "warnt" : "okt"}">${ign ? "Grenze aus" : over > 0 ? `${eur(over)} drüber` : `${eur(-over)} Luft`}</span></div>
+    ${E != null ? `<div class="small muted">Einkauf bei ${esc(STORES[main])} ≈ ${eur(E)}${left > 0.5 ? ` – davon bleiben ≈ ${eur(left)} als Vorrat für die nächsten Wochen (ganze Packungen, Reis, Öl, Gewürze)` : left < -0.5 ? ` – ≈ ${eur(-left)} kommen aus deinem Vorrat zuhause` : ""}${away ? `; Mensa/auswärts ≈ ${eur(away)} zählt mit` : ""}.</div>` : ""}
+    <div class="mhead small"><span class="muted">${nSub ? `${nSub} ${nSub === 1 ? "Gericht" : "Gerichte"} gegen günstigere getauscht${bs && !bs.ok && over > 0 ? " – günstiger geht es nicht ganz" : ""}` : over > 0 && !ign ? "Keine günstigeren Gerichte gefunden" : ""}</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div></div>`;
+}
 // Markt, dessen Preise die Einkaufsliste gerade zeigt (nur Ansicht; der Hauptmarkt FOOD().store bestimmt Plan und Budget)
 let shopView = null;
 function shopList(entries){
@@ -5132,7 +5144,7 @@ function shopHtml(){
   const bud = num(FOOD().budget), wc = P && shopScope === "woche" && bud ? weekShopCost(shopWeek()) : null, bs = wc != null && budgetOn() ? budgetSubs(shopWeek()) : null, nSub = bs ? Object.keys(bs.subs).length : 0;
   h += `<details class="shophead shopsticky" ${keepOpen("head")}><summary><div class="shoprow"><span><b>${got}/${total}</b> im Korb</span><span>${P ? `noch ≈ <b>${eur(open)}</b> · ${st0 === "min" ? "günstigster" : STORES[selSt]}${wc != null ? (wc > bud ? ` · <span class="warnt">Budget ⚠</span>` : " · Budget ✓") : ""}` : "Preise laden …"} <span class="muted">⌄</span></span></div><div class="shopbar"><div class="fill" style="width:${total ? got / total * 100 : 0}%"></div></div></summary>
     ${P ? `<div class="card"><div class="mhead"><span class="lab">Noch offen kostet ungefähr</span>${info(`Antippen zeigt die Preise dieses Markts in der Liste – Plan, Liste und die Summen bleiben gleich. Deinen Hauptmarkt (für Plan und Budget) stellst du unter Essen › Einstellungen ein.${st0 === "min" ? " Aktuell: je Produkt der günstigste." : ""} Liste: ganze Packungen bzw. Stück, Vorrat anteilig. Budget: Haltbares (Reis, Dosen, TK) anteilig, deshalb niedriger. * = geschätzt. ${priceNote()}`)}</div><div class="storecmp">${Object.entries(c).filter(([st]) => stores.includes(st)).map(([st, v]) => `<button type="button" class="${st === best ? "best" : ""} ${st === st0 ? "sel" : ""}" data-shopstore="${st}" aria-pressed="${st === st0}"><span>${STORES[st]}${st === FOOD().store ? " · Haupt" : ""}</span><b>${eur(v.sum)}</b>${v.n && v.est ? `<span class="muted">${Math.round(v.est / v.n * 100)} % geschätzt</span>` : ""}</button>`).join("")}</div>
-      ${wc != null ? `<div class="mhead"><span class="${wc > bud ? "warnt" : "okt"}">Budget ${eur(bud)}: Plan der Woche <b>${eur(wc)}</b>${FOOD().budgetIgnore ? " (Grenze aus)" : wc > bud ? (bs && !bs.ok ? " · günstigere Rezepte reichen nicht ganz" : " · darüber") : " · passt ✓"}${nSub ? ` · ${nSub} getauscht` : ""}</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div>` : bud ? "" : `<div class="mhead"><span class="small muted">Kein Wochenbudget gesetzt.</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div>`}
+      ${wc != null ? budgetBox(wc, bud, bs, nSub, allItems, stores, best) : bud ? "" : `<div class="mhead"><span class="small muted">Kein Wochenbudget gesetzt.</span><button type="button" class="btn ghost small" data-sub2="essenset" data-setopen="einkauf">Einstellen ›</button></div>`}
 </div>` : ""}</details>`;
   h += `<div class="btnrow four"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>`;
   // Alle Einstellungen der Liste in einem Aufklapper
@@ -5223,7 +5235,7 @@ function foodSettingsHtml(){
 }
 
 function budgetSlim(mo){ const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return ""; const cost = weekShopCost(mo);
-  return `<details class="slim ${cost > budget ? "over" : ""}"><summary><span>💶 Budget</span><span class="${cost > budget ? "warnt" : "muted"}">${eur(cost)} von ${eur(budget)}${cost > budget ? " ⚠" : " ✓"}</span></summary>${budgetCard(mo)}</details>`; }
+  return `<details class="slim ${cost > budget ? "over" : ""}"><summary><span>💶 Budget</span><span class="${cost > budget ? "warnt" : "muted"}">verbraucht ≈ ${eur(cost)} von ${eur(budget)}${cost > budget ? " ⚠" : " ✓"}</span></summary>${budgetCard(mo)}</details>`; }
 function budgetCard(mo){
   const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return "";
   const cost = weekShopCost(mo), b = budgetOn() ? budgetSubs(mo) : null, n = b ? Object.keys(b.subs).length : 0;
