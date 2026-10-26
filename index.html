@@ -34,6 +34,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
   padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));
   padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom,0px))}
 body.resting{padding-bottom:calc(var(--nav-h) + 76px + env(safe-area-inset-bottom,0px))}
+body:has(#cookPill),body:has(#trkPill){padding-bottom:calc(var(--nav-h) + 80px + env(safe-area-inset-bottom,0px))}
+body:has(#cookPill):has(#trkPill){padding-bottom:calc(var(--nav-h) + 136px + env(safe-area-inset-bottom,0px))}
 img{max-width:100%}
 [hidden]{display:none!important}
 .wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
@@ -507,6 +509,8 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .favb.dice{font-size:22px}
 .shr{display:flex;align-items:center;gap:4px}
 .srclink{display:inline-block;margin-top:8px;font-size:14px;color:var(--accent);text-decoration:none}
+.srcrow>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}.srcrow>summary::-webkit-details-marker{display:none}.srcrow .srclink{margin-top:0}
+.srcrow{margin-top:8px}.srcrow>div{margin-top:6px}.srci{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:13px}
 .scale button{min-width:40px;min-height:40px}
 .mobi input[type=checkbox]{width:32px;height:32px}
 .daychips{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:8px 0}
@@ -2398,7 +2402,7 @@ function heroCard(noCoach){
     if (scHigh()) h += `<div class="small scnote">⚠️ SC-Schmerz ≥ 3: Übungen mit SC-Ampel tauschen.</div>`;
     if (st === "bereit") h += `<button class="btn primary big" type="button" data-act="start">▶ Training starten</button>`;
     else if (st === "läuft") h += `<button class="btn primary big" type="button" data-act="start">Weiter trainieren</button>`;
-    else h += `<div class="actions"><button class="btn" type="button" data-act="start">Ansehen</button><button class="btn" type="button" data-act="resume">Weiter trainieren</button></div>`;
+    else h += `<button class="btn" type="button" data-act="start">Ansehen</button>`;
   }
   if (c && !noCoach) h += `<div class="coachsec"><div class="lab">Dein Coach</div><div class="ct">${esc(c.title)}</div><div class="small">${esc(c.body)}</div>${btns.length ? `<div class="actions">${btns.map(([k, l], i) => `<button class="btn small ${i === 0 && st === "frei" ? "primary" : ""}" type="button" data-coach="${k}">${esc(l)}</button>`).join("")}</div>` : ""}</div>`;
   return h + `</div>`;
@@ -2728,7 +2732,7 @@ function renderTraining(){
   const clockTxt = !cur.startedAt || woSession ? "" : fin ? `beendet · ${fmtDur((Date.parse(cur.finishedAt) - Date.parse(cur.startedAt))/1000)}` : fmtDur((Date.now() - Date.parse(cur.startedAt))/1000);
   let h = `<div class="wohead">${fin ? "" : `<button class="btn ghost woback" type="button" data-act="toHeute" aria-label="Zurück zu Heute">‹</button>`}<div class="wot"><h2>${esc(sess.title)}</h2><span class="small muted">${woSession ? "" : (atHome() ? "Zuhause" : "Gym") + " · "}<span class="clock" id="woClock">${clockTxt}</span></span></div>
     <span class="actions">${woSession ? "" : `<button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button>`}${fin ? "" : `<button class="btn primary" type="button" data-act="finish">Beenden</button>`}</span></div>`;
-  if (fin) { const pr = progress(sk); h += `<div class="finbar"><div><b>Beendet</b><div class="small">${pr.d} von ${pr.t} Sätzen</div></div><span class="actions"><button class="btn small" type="button" data-act="resume">Weiter trainieren</button><button class="btn small" type="button" data-act="toHeute">Zu Heute</button></span></div>`; }
+  if (fin) { const pr = progress(sk); h += `<div class="finbar"><div><b>Beendet</b><div class="small">${pr.d} von ${pr.t} Sätzen</div></div></div>`; }
   if (fin && !woSession) h += `<div class="small muted">Ort: <b>${atHome() ? "Zuhause ohne Geräte" : "Gym"}</b></div>`;
   if (scHigh()) h += fin ? `<div class="banner bad small">SC-Schmerz heute oder gestern ≥ 3: Übungen mit SC-Ampel sind automatisch gegen schonende ersetzt.</div>` : `<div class="small scnote">⚠️ SC-Schmerz ≥ 3: schonende Übungen sind eingesetzt.</div>`;
   if (!fin) {
@@ -3578,6 +3582,7 @@ function journeySheet(kind, arg){
   if (kind === "trainmenu") {
     const cf = pendingConfirm;
     return `<div class="sh"><h2>${esc((SESS[cur.session] || SESS.frei).title)} · ${fmt(selDate)}</h2>${close}</div>
+      ${cur.finishedAt ? `<button class="btn big" type="button" data-act="resume">Training fortsetzen</button>` : ""}
       <button class="btn big" type="button" data-sheet="session">Andere Einheit wählen</button>
       <button class="btn big ${cf === "resetTraining" ? "danger" : ""}" type="button" data-act="resetTraining">${cf === "resetTraining" ? "Wirklich zurücksetzen? Nochmal tippen" : "Training zurücksetzen (Sätze und Zeit löschen)"}</button>
       <button class="btn big ${cf === "delTraining" ? "danger" : ""}" type="button" data-act="delTraining">${cf === "delTraining" ? "Wirklich? Nochmal tippen" : "Heute nicht trainieren (Einheit entfernen)"}</button>
@@ -3608,7 +3613,7 @@ function journeySheet(kind, arg){
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div>${cookAhead(r).length ? `<div class="aheadbox"><b>Vorher erledigen</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
       <ol class="rsteps">${cookSteps(r).map(x => `<li>${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join("")}</ol>
-      <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.imgOrig ? `<div class="small muted">Foto: <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc((r.source.match(/^https?:\/\/(?:www\.)?([^/]+)/) || [])[1] || "Originalrezept")}</a> (Originalrezept)</div>` : ""}${!r.imgOrig && r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
+      <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note && !srcLink(r).includes("srcrow") ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.imgOrig ? `<div class="small muted">Foto: <a href="${esc(r.source)}" target="_blank" rel="noopener">${esc((r.source.match(/^https?:\/\/(?:www\.)?([^/]+)/) || [])[1] || "Originalrezept")}</a> (Originalrezept)</div>` : ""}${!r.imgOrig && r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
   }
   return null;
 }
@@ -3639,11 +3644,12 @@ function cookPaint(){ let pill = document.getElementById("cookPill"); if (!cook 
 function cookEnd(){ cookMin = false; if (cook) { cook.run = false; clearInterval(cookInt); } cook = null; if (sheet.open && sheetKind === "cook") closeSheet(); cookPaint(); releaseWake(); }
 const scaleLine = (l, f) => f === 1 ? l : l.replace(/^(\d+(?:[.,]\d+)?|½|\d+\/\d+)/, m0 => { const v = m0 === "½" ? .5 : m0.includes("/") ? m0.split("/").reduce((a, b) => a / b) : Number(m0.replace(",", ".")); const y = v * f, x = y >= 10 ? Math.round(y) : Math.max(0.5, Math.round(y * 2) / 2); return x.toLocaleString("de-DE"); });
 const srcHost = u => (String(u).match(/^https?:\/\/(?:www\.)?([^/]+)/) || [])[1] || "";
-const srcLink = r => r.source && srcHost(r.source) ? `<a class="srclink" href="${esc(r.source)}" target="_blank" rel="noopener">📖 Originalrezept · ${esc(srcHost(r.source))} ↗</a>` : "";
+const srcLink = r => { if (!r.source || !srcHost(r.source)) return ""; const a = `<a class="srclink" href="${esc(r.source)}" target="_blank" rel="noopener">📖 Originalrezept · ${esc(srcHost(r.source))} ↗</a>`;
+  return r.note ? `<details class="srcrow"><summary>${a}<span class="srci" aria-label="Was ist anders als im Original?">ⓘ</span></summary><div class="small muted">Anders als im Original: ${esc(r.note.replace(/^adaptiert:\s*/i, ""))}</div></details>` : a; };
 function cookHtml(name){
   const r = recipeByName(name); if (!r) return "";
   if (!cook || cook.name !== name) cook = {name, step: -1, serv: r.servings || 1, left: 0, run: false};
-  const close = `<span class="shr"><button class="favb" type="button" data-act="cookMin" aria-label="Minimieren – weiter in der App umsehen" title="Minimieren"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><button class="btn ghost" type="button" data-act="cookEnd">Beenden</button></span>`, f = cook.serv / (r.servings || 1), CS = cookSteps(r), n = CS.length;
+  const close = `<span class="shr"><button class="btn ghost" type="button" data-act="cookEnd">Beenden</button></span>`, f = cook.serv / (r.servings || 1), CS = cookSteps(r), n = CS.length;
   let h = `<div class="sh"><div><div class="lab">Kochen · ${cook.step < 0 ? "Zutaten" : `Schritt ${cook.step + 1} von ${n}`}</div><h2>${esc(r.name)}</h2></div>${close}</div><div class="shopbar"><div class="fill" style="width:${(cook.step + 1) / n * 100}%"></div></div>`;
   if (cook.step < 0) {
     h += `<div class="mhead"><span>Portionen</span><span class="stepper"><button type="button" class="btn small" data-cookserv="-1" aria-label="Weniger">−</button><b>${cook.serv}</b><button type="button" class="btn small" data-cookserv="1" aria-label="Mehr">＋</button></span></div>
