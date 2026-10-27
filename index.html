@@ -4811,14 +4811,14 @@ function parseReceipt(text){
   }
   return {store, items: items.map(matchItem)};
 }
-// Typische Bon-Abkürzungen vor den normalen Suchmustern
-const RC_ALIAS = [[/linsen\s*rot|rote\s*lins/, "roteLinsen"], [/soja\s*-?dr|sojadrink|soja\s*milch/, "sojadrink"], [/hafer\s*-?dr|haferdrink|oat/, "haferdrink"], [/h-?milch|vollmilch|fettarme\s*milch|frischmilch/, "milch"], [/speisequark|magerquark|quark\s*mager/, "magerquark"], [/kichererb/, "kichererbsen"], [/hafer\s*fl|haferfl|bl[äa]tterfl/, "haferflocken"], [/freiland|bodenhalt|\beier\b/, "eier"], [/k[öo]rniger\s*fr|h[üu]ttenk/, "huettenkaese"]];
+// Typische Bon-Abkürzungen vor den normalen Suchmustern; null = bewusst kein Katalogprodukt (z. B. Süßes, das sonst als Milch/Haferdrink erkannt würde)
+const RC_ALIAS = [[/linsen\s*rot|rote\s*lins/, "roteLinsen"], [/soja\s*-?dr|sojadrink|soja\s*milch/, "sojadrink"], [/hafer\s*-?dr|haferdrink|oat/, "haferdrink"], [/h-?milch|vollmilch(?!sch)|fettarme\s*milch|frischmilch/, "milch"], [/speisequark|magerquark|quark\s*mager/, "magerquark"], [/kichererb/, "kichererbsen"], [/hafer\s*fl|haferfl|bl[äa]tterfl/, "haferflocken"], [/freiland|bodenhalt|\beier\b/, "eier"], [/k[öo]rniger\s*fr|h[üu]ttenk/, "huettenkaese"], [/tomaten\s*st[üu]e?ckig|st[üu]e?ckige\s*tomaten/, "tomatenGehackt"], [/phil\.?\s*bal|philadelphia/, "frischkaese"], [/milchsch|cookie|keks/, null]];
 function matchItem(it){
   const nm0 = it.name.toLowerCase(), nm = nm0.replace(/ae/g, "ä").replace(/oe/g, "ö").replace(/ue/g, "ü"); // Bons schreiben Umlaute teils als ae/oe/ue
   const known = prices.products.some(x => x.re.test(nm) || x.re.test(nm0)), kind = known ? "Lebensmittel" : rcKind(nm) !== "Lebensmittel" ? rcKind(nm) : rcKind(nm0); if (kind !== "Lebensmittel") return Object.assign(it, {kind, pid: "", use: false, keep: false, ref: null});
   const al = RC_ALIAS.find(([re]) => re.test(nm) || re.test(nm0)), cl = fold(rcClean(it.name));
-  let pr = (al && prodById(al[1])) || prices.products.find(x => x.re.test(nm) || x.re.test(nm0) || x.re.test(cl));
-  if (!pr && cl.length >= 4) { // tippfehlertolerant: Kernwörter des Produktnamens müssen im Bontext vorkommen
+  let pr = al ? prodById(al[1]) : prices.products.find(x => x.re.test(nm) || x.re.test(nm0) || x.re.test(cl));
+  if (!pr && !al && cl.length >= 4) { // tippfehlertolerant: Kernwörter des Produktnamens müssen im Bontext vorkommen
     const bw = cl.split(/[^a-z0-9ß]+/).filter(w => w.length >= 3), hitw = w => bw.some(x => x === w || (w.length >= 5 && (x.startsWith(w.slice(0, 5)) || lev(w, x) <= 1)));
     let best = null; for (const x of prices.products) { const ws = fold(x.name.replace(/\([^)]*\)/g, "")).split(/[^a-z0-9ß]+/).filter(w => w.length >= 4); if (!ws.length) continue;
       const sc = ws.filter(hitw).length / ws.length; if (sc >= 0.99 && (!best || ws.length > best.n)) best = {x, n: ws.length}; }

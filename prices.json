@@ -3127,7 +3127,7 @@
 "name": "Fettarme H-Milch 1,5 %",
 "pack": 1000,
 "unit": "ml",
-"match": "milch(?!pulver)",
+"match": "milch(?!pulver|sch|reis)",
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 0.85,
