@@ -14,6 +14,14 @@ import sys
 import urllib.request
 import zoneinfo
 
+REC_ALIAS = {
+    "Chili sin Carne mit Sojagranulat & Reis": "Chili sin Carne mit Sojagranulat, Kidney & Mais",
+    "Rote-Linsen-Dal mit Spinat, Reis & Skyr": "Rote Linsen mit Kokos-Spinat & Reis",
+    "Indischer Rote-Linsen-Eintopf mit Reis & Skyr": "Rote Linsen mit Kokos-Spinat & Reis",
+    "Linsen-Soja-Bolognese mit Vollkornnudeln": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping",
+    "Gefüllte Senf-Quark-Eier": "Gefüllte Skyr-Senf-Eier",
+}
+
 TZ = zoneinfo.ZoneInfo("Europe/Berlin")
 ROOT = os.environ.get("DATA_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
@@ -794,6 +802,10 @@ def build_meal_ics(now, settings, plan, days, past=None):
         mp = json.load(f)
     with open(os.path.join(SITE_ROOT, "recipes.json"), encoding="utf-8") as f:
         rec = {r["name"]: r for r in json.load(f)}
+    # zusammengelegte Rezepte: alte Namen in gespeicherten Tagen zeigen auf das behaltene (gleiche Tabelle wie REC_ALIAS in index.html)
+    for old, new in REC_ALIAS.items():
+        if new in rec and old not in rec:
+            rec[old] = rec[new]
     by_date = {p["date"]: p for p in plan}
     past_dates = {p["date"] for p in (past or [])}
     rx = avoid_re(settings)

@@ -659,147 +659,6 @@
   }
  },
  {
-  "name": "Linsen-Soja-Bolognese mit Vollkornnudeln",
-  "category": "mittag",
-  "servings": 4,
-  "kcal": 644,
-  "protein": 39,
-  "carbs": 88,
-  "fat": 10,
-  "estimated": true,
-  "timeMin": 35,
-  "mealPrep": true,
-  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
-  "ingredients": [
-   "150 g rote Linsen",
-   "100 g Sojagranulat (trocken)",
-   "320 g Vollkornnudeln",
-   "2 Pck. passierte/gehackte Tomaten (1 kg)",
-   "1 Zwiebel",
-   "2 Möhren",
-   "1 EL Olivenöl",
-   "40 g vegetarischer Hartkäse (mikrobielles Lab)",
-   "Tomatenmark, Oregano, Sojasauce, Salz, Pfeffer",
-   "200 ml Gemüsebrühe (zum Einweichen)"
-  ],
-  "steps": [
-   "Sojagranulat 10 Min. in heißer Brühe einweichen, ausdrücken.",
-   "Zwiebel/Möhre in Öl anschwitzen, Granulat kräftig anbraten (+ Tomatenmark).",
-   "Tomaten, Linsen und 300 ml Wasser zugeben, 20 Min. köcheln.",
-   "Nudeln al dente kochen, mit Soße in 4 Boxen portionieren, Käse separat."
-  ],
-  "source": "https://www.fuersie.de/kochen-backen/vegetarische-bolognese-15099.html",
-  "note": "Original 25 g P/527 kcal; mit Sojagranulat ergänzt (Zubereitung nach eat-this.org), Linsen auf 150 g erhöht und direkt in der Soße gegart; 1 statt 2 Zwiebeln, ohne Zucchini, Honig, Thymian und Majoran",
-  "img": "img/rezepte/r10.jpg",
-  "imgCredit": {
-   "artist": "Dira0101",
-   "license": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Ingredients_for_spaghetti_with_tomato_sauce.jpg",
-   "title": "File:Ingredients for spaghetti with tomato sauce.jpg"
-  },
-  "activeMin": 15,
-  "difficulty": "leicht",
-  "temp": "warm",
-  "dev": [
-   "herd"
-  ],
-  "imgOrig": "https://media.fuersie.de/2024-05/fk_vegetarischebolognese_1.jpg?focus_crop=2003%2C1126%2C0.5%2C0.577&width=1200",
-  "plan": {
-   "steps": [
-    {
-     "do": "Zuerst: Linsen in einem Sieb abspülen, bis das Wasser klar ist. Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen.",
-     "min": 10,
-     "passive": true,
-     "meanwhile": "Zwiebel und Möhren würfeln."
-    },
-    {
-     "do": "Granulat ausdrücken. Zwiebel und Möhren in Öl anschwitzen, Granulat dazu und mit Tomatenmark kräftig anbraten."
-    },
-    {
-     "do": "Tomaten, Linsen und 300 ml Wasser zugeben, mit Oregano, Sojasauce, Salz und Pfeffer würzen und 20 Min. köcheln.",
-     "min": 20,
-     "passive": true,
-     "meanwhile": "Nudelwasser aufsetzen und die Nudeln al dente kochen."
-    },
-    {
-     "do": "Nudeln abgießen, mit der Soße in 4 Boxen portionieren, Käse separat dazu."
-    }
-   ]
-  }
- },
- {
-  "name": "Chili sin Carne mit Sojagranulat & Reis",
-  "category": "mittag",
-  "servings": 4,
-  "kcal": 610,
-  "protein": 39,
-  "carbs": 88,
-  "fat": 6,
-  "estimated": true,
-  "timeMin": 45,
-  "mealPrep": true,
-  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
-  "ingredients": [
-   "120 g Sojagranulat",
-   "2 Dosen Kidneybohnen (480 g abgetropft)",
-   "1/2 Dose Mais",
-   "2 Dosen gehackte Tomaten",
-   "2 Paprika",
-   "1 Zwiebel",
-   "1 EL Öl",
-   "240 g Reis (roh)",
-   "200 g Skyr als Topping",
-   "Kreuzkümmel, Chili, Paprika edelsüß, 1 TL Kakao",
-   "300 ml Gemüsebrühe (zum Einweichen)"
-  ],
-  "steps": [
-   "Granulat 10 Min. in heißer Brühe einweichen, ausdrücken, in Öl scharf anbraten.",
-   "Zwiebel, Paprika, Gewürze dazu.",
-   "Tomaten, Bohnen, Mais zugeben, 20–30 Min. köcheln.",
-   "Reis kochen, portionieren; Skyr als Sour-Cream-Ersatz extra."
-  ],
-  "source": "https://www.eat-this.org/sind-sojaschnetzel-gesund/",
-  "note": "eigenes Rezept; Soja-Zubereitung nach Quelle",
-  "img": "img/rezepte/r11.jpg",
-  "imgCredit": {
-   "artist": "Carstor",
-   "license": "CC BY-SA 2.5",
-   "url": "https://commons.wikimedia.org/wiki/File:Bowl_of_chili.jpg",
-   "title": "File:Bowl of chili.jpg"
-  },
-  "activeMin": 20,
-  "difficulty": "leicht",
-  "temp": "warm",
-  "dev": [
-   "herd"
-  ],
-  "plan": {
-   "steps": [
-    {
-     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kidneybohnen aus der Dose in einem Sieb abspülen und abtropfen lassen. Brühe erhitzen und das Sojagranulat darin 10 Min. einweichen.",
-     "passive": true,
-     "meanwhile": "Zwiebel und Paprika würfeln.",
-     "min": 10
-    },
-    {
-     "do": "Granulat ausdrücken und in Öl scharf anbraten."
-    },
-    {
-     "do": "Zwiebel, Paprika und Gewürze (Kreuzkümmel, Chili, Paprika edelsüß, Kakao) dazugeben."
-    },
-    {
-     "do": "Tomaten, Bohnen und Mais zugeben und 20–30 Min. köcheln.",
-     "min": 30,
-     "passive": true,
-     "meanwhile": "Reis kochen."
-    },
-    {
-     "do": "Chili und Reis portionieren, Skyr als Sour-Cream-Ersatz extra dazu."
-    }
-   ]
-  }
- },
- {
   "name": "White Chickpea Chili mit Skyr-Topping",
   "category": "mittag",
   "servings": 4,
@@ -1480,73 +1339,6 @@
     {
      "do": "Pasta mit der Soße und etwas Nudelwasser 1–2 Min. erhitzen.",
      "min": 2
-    }
-   ]
-  }
- },
- {
-  "name": "Rote-Linsen-Dal mit Spinat, Reis & Skyr",
-  "category": "abend",
-  "servings": 4,
-  "kcal": 672,
-  "protein": 36,
-  "carbs": 100,
-  "fat": 10,
-  "estimated": true,
-  "timeMin": 30,
-  "mealPrep": true,
-  "shelfLife": "4 Tage Kühlschrank, 3 Monate TK",
-  "ingredients": [
-   "300 g rote Linsen",
-   "1 Dose gehackte Tomaten",
-   "200 ml Kokosmilch light",
-   "1 Zwiebel",
-   "1 EL Öl",
-   "200 g Spinat (TK ok)",
-   "260 g Reis (roh)",
-   "400 g Skyr (100 g/Portion)",
-   "Knoblauch, Ingwer, Curry, Kreuzkümmel, Kurkuma, Zitrone"
-  ],
-  "steps": [
-   "Zwiebel, Knoblauch, Ingwer in Öl anbraten, Gewürze kurz rösten.",
-   "Linsen, Tomaten, Kokosmilch, 600 ml Wasser 15–20 Min. köcheln.",
-   "Spinat unterrühren, mit Zitrone/Salz abschmecken.",
-   "Mit Reis portionieren, Skyr obendrauf."
-  ],
-  "source": "https://www.berrystreet.co/blog/vegetarian-meal-prep-high-protein",
-  "note": "Quelle: Linsen-Currys ca. 18–20 g P; hier mit Skyr auf ≥30 g",
-  "img": "img/rezepte/r22.jpg",
-  "imgCredit": {
-   "artist": "AugustineKajur",
-   "license": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Dal_Tadka-Delhi.jpg",
-   "title": "File:Dal Tadka-Delhi.jpg"
-  },
-  "activeMin": 15,
-  "difficulty": "leicht",
-  "temp": "warm",
-  "dev": [
-   "herd"
-  ],
-  "plan": {
-   "steps": [
-    {
-     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Zwiebel, Knoblauch und Ingwer hacken."
-    },
-    {
-     "do": "Zwiebel, Knoblauch und Ingwer in Öl anbraten, Curry, Kreuzkümmel und Kurkuma kurz mitrösten."
-    },
-    {
-     "do": "Linsen, Tomaten, Kokosmilch und 600 ml Wasser zugeben und 15–20 Min. köcheln.",
-     "min": 20,
-     "passive": true,
-     "meanwhile": "Reis kochen."
-    },
-    {
-     "do": "Spinat unterrühren, mit Zitrone und Salz abschmecken."
-    },
-    {
-     "do": "Mit Reis portionieren, Skyr obendrauf geben."
     }
    ]
   }
@@ -2846,7 +2638,7 @@
    "Mit Paprikapulver und Schnittlauch bestreuen."
   ],
   "source": "https://www.budgetbytes.com/deviled-eggs/",
-  "note": "adaptiert: Skyr statt Mayonnaise (weniger Fett, mehr Protein). 3 Eier = 1 Portion. Die Quellseite blockiert automatische Abrufe; Grundrezept klassisch (Eier, Mayo, Senf, Essig, Paprika).",
+  "note": "adaptiert: Skyr statt Mayonnaise (weniger Fett, mehr Protein). 3 Eier = 1 Portion. Die Quellseite blockiert automatische Abrufe; Grundrezept klassisch (Eier, Mayo, Senf, Essig, Paprika). Variante: Magerquark statt Skyr; als kleiner Snack 2 Eier pro Portion.",
   "img": "img/rezepte/n1-09.jpg",
   "imgCredit": {
    "artist": "Robert Loescher",
@@ -10946,79 +10738,6 @@
   }
  },
  {
-  "name": "Indischer Rote-Linsen-Eintopf mit Reis & Skyr",
-  "category": "abend",
-  "servings": 4,
-  "kcal": 789,
-  "protein": 40,
-  "carbs": 113,
-  "fat": 16,
-  "estimated": true,
-  "timeMin": 40,
-  "activeMin": 15,
-  "difficulty": "leicht",
-  "mealPrep": true,
-  "shelfLife": "4 Tage Kühlschrank / einfrierbar",
-  "ingredients": [
-   "400 g rote Linsen",
-   "1 Zwiebel",
-   "2 Knoblauchzehen",
-   "20 g Ingwer",
-   "1 Paprika",
-   "1 EL Öl",
-   "2 TL Currypulver",
-   "1 TL Senfsamen",
-   "1 Dose (400 g) gehackte Tomaten",
-   "200 ml Kokosmilch",
-   "600 ml Gemüsebrühe",
-   "250 g Reis",
-   "250 g Skyr",
-   "Salz, Pfeffer"
-  ],
-  "steps": [
-   "Zwiebel, Knoblauch und Ingwer fein hacken, Paprika würfeln. Reis ca. 15 Min. garen.",
-   "Currypulver und Senfsamen im heißen Öl kurz rösten, Zwiebel, Knoblauch, Ingwer und Paprika 3 Min. mitbraten.",
-   "Linsen, Tomaten, Kokosmilch und Brühe zugeben, aufkochen und ca. 15 Min. sämig köcheln, bis die Linsen zerfallen; bei Bedarf etwas Wasser nachgießen.",
-   "Mit Salz und Pfeffer abschmecken, mit Reis und je 1 Klecks Skyr servieren."
-  ],
-  "source": "https://www.chefkoch.de/rezepte/1156681221835614/Indischer-Linseneintopf.html",
-  "note": "adaptiert: Linsenmenge erhöht, Kokosmilch reduziert, Öl auf 1 EL, 1 statt 2 Paprika, Zwiebel statt Frühlingszwiebeln; Reis und Skyr-Topping für Protein und Sättigung ergänzt",
-  "img": "img/rezepte/x-156.jpg",
-  "imgCredit": {
-   "artist": "Alone mask",
-   "license": "CC BY-SA 4.0",
-   "url": "https://commons.wikimedia.org/wiki/File:The_Dal_Chawal.jpg",
-   "title": "File:The Dal Chawal.jpg"
-  },
-  "temp": "warm",
-  "dev": [
-   "herd"
-  ],
-  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1156681221835614/bilder/961156/crop-960x540/indischer-linseneintopf.jpg",
-  "plan": {
-   "steps": [
-    {
-     "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Linsen in einem Sieb abspülen, bis das Wasser klar ist. Reis aufsetzen und ca. 15 Min. garen.",
-     "passive": true,
-     "meanwhile": "Zwiebel, Knoblauch und Ingwer fein hacken, Paprika würfeln.",
-     "min": 15
-    },
-    {
-     "do": "Currypulver und Senfsamen im heißen Öl kurz rösten, Zwiebel, Knoblauch, Ingwer und Paprika 3 Min. mitbraten.",
-     "min": 3
-    },
-    {
-     "do": "Linsen, Tomaten, Kokosmilch und Brühe zugeben, aufkochen und ca. 15 Min. sämig köcheln, bis die Linsen zerfallen; bei Bedarf etwas Wasser nachgießen, damit nichts ansetzt.",
-     "min": 15,
-     "passive": true
-    },
-    {
-     "do": "Mit Salz und Pfeffer abschmecken, mit Reis und je 1 Klecks Skyr servieren."
-    }
-   ]
-  }
- },
- {
   "name": "Rote-Linsen-Kartoffel-Eintopf mit Quark-Klecks",
   "category": "mittag",
   "servings": 4,
@@ -11272,7 +10991,7 @@
    "20 Min. köcheln, scharf abschmecken und mit Reis servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/879321193312846/Chili-NON-carne.html",
-  "note": "adaptiert: Sojagranulat statt Tofu (günstiger), doppelte Bohnen, Reis, Möhren und Kreuzkümmel ergänzt; ohne Paprika, frische Tomaten, Chilischote, Basilikum und Senf; auf 5 Portionen ausgelegt",
+  "note": "adaptiert: Sojagranulat statt Tofu (günstiger), doppelte Bohnen, Reis, Möhren und Kreuzkümmel ergänzt; ohne Paprika, frische Tomaten, Chilischote, Basilikum und Senf; auf 5 Portionen ausgelegt Variante: 1 TL Kakao mit den Gewürzen mitrösten und je Portion 50 g Skyr als Sour-Cream-Ersatz dazu (Skyr nicht in den Nährwerten, ca. +30 kcal und +5 g Protein).",
   "img": "img/rezepte/x-160.jpg",
   "imgCredit": {
    "artist": "Thriving Vegetarian",
@@ -12013,7 +11732,7 @@
    "Linsen und Spinat mischen, mit Salz, Pfeffer und Zitronensaft abschmecken, mit Reis und Skyr servieren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/rote-linsen-mit-kokos-spinat",
-  "note": "adaptiert: TK-Spinat statt frischem, Paprika weggelassen, Kokosmilch halbiert, Linsen leicht erhöht (350 statt 300 g), Brühe statt Salzwasser, weniger Öl; Reis und Skyr ergänzt",
+  "note": "adaptiert: TK-Spinat statt frischem, Paprika weggelassen, Kokosmilch halbiert, Linsen leicht erhöht (350 statt 300 g), Brühe statt Salzwasser, weniger Öl; Reis und Skyr ergänzt Variante als Dal: 1 Dose gehackte Tomaten mit den Linsen köcheln, Knoblauch, Kreuzkümmel und Kurkuma mit dem Curry rösten; oder indisch mit 1 TL Senfsamen und 1 gewürfelten Paprika (nicht in den Nährwerten).",
   "img": "img/rezepte/x-170.jpg",
   "imgCredit": {
    "artist": "Yummy O Yummy",
@@ -12450,7 +12169,7 @@
    "Mit je einem Klecks Magerquark und etwas geriebenem Hartkäse servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/3735491566893477/Rote-Linsen-Bolognese.html",
-  "note": "adaptiert: Linsen auf 250 g erhöht, mehr und passierte statt stückiger Tomaten, Oregano statt frischer Kräuter; Magerquark-Topping und vegetarischer Hartkäse für Protein, Mengen für 5 Meal-Prep-Portionen",
+  "note": "adaptiert: Linsen auf 250 g erhöht, mehr und passierte statt stückiger Tomaten, Oregano statt frischer Kräuter; Magerquark-Topping und vegetarischer Hartkäse für Protein, Mengen für 5 Meal-Prep-Portionen Variante: 100 g Sojagranulat in heißer Brühe einweichen, ausdrücken und mit dem Gemüse kräftig anbraten, dazu Vollkornnudeln (nicht in den Nährwerten, ca. +70 kcal und +10 g Protein je Portion).",
   "img": "img/rezepte/x-176.jpg",
   "imgCredit": {
    "artist": "pelican from Tokyo, Japan",
@@ -13698,62 +13417,6 @@
     },
     {
      "do": "Möhren in Sticks schneiden und zum Dippen servieren."
-    }
-   ]
-  }
- },
- {
-  "name": "Gefüllte Senf-Quark-Eier",
-  "category": "snack",
-  "servings": 2,
-  "kcal": 182,
-  "protein": 18,
-  "carbs": 2,
-  "fat": 11,
-  "estimated": true,
-  "timeMin": 15,
-  "activeMin": 10,
-  "difficulty": "leicht",
-  "mealPrep": false,
-  "shelfLife": "2 Tage Kühlschrank",
-  "ingredients": [
-   "4 Eier",
-   "60 g Magerquark",
-   "1 TL Senf",
-   "Paprikapulver, Schnittlauch, Salz, Pfeffer"
-  ],
-  "steps": [
-   "Eier 10 Min. hart kochen, kalt abschrecken und pellen.",
-   "Längs halbieren, Eigelb herauslösen und mit Quark, Senf, Salz und Pfeffer cremig zerdrücken.",
-   "Creme in die Eiweißhälften füllen, mit Paprika und Schnittlauch bestreuen."
-  ],
-  "source": "https://rezepte.lidl.de/rezepte/mediterran-gefuellte-eier",
-  "note": "adaptiert: Schmand durch Magerquark ersetzt, Oliven/getrocknete Tomaten/Pinienkerne weggelassen (Kosten)",
-  "img": "img/rezepte/x-195.jpg",
-  "imgCredit": {
-   "artist": "Michele Ursino",
-   "license": "CC BY-SA 2.0",
-   "url": "https://commons.wikimedia.org/wiki/File:Deviled_eggs_closeup.jpg",
-   "title": "File:Deviled eggs closeup.jpg"
-  },
-  "temp": "kalt",
-  "dev": [
-   "herd"
-  ],
-  "imgOrig": "https://cdn.recipes.lidl/images-v2/recipes/de-DE/c389e3d6-866b-4d89-a0ac-df7332339b4c/1x1_fallback_mediterran-gefuellte-eier-1774377056.jpeg",
-  "plan": {
-   "steps": [
-    {
-     "do": "Eier 10 Min. hart kochen.",
-     "min": 10,
-     "passive": true,
-     "meanwhile": "Schnittlauch schneiden."
-    },
-    {
-     "do": "Eier kalt abschrecken, pellen und längs halbieren. Eigelb herauslösen und mit Quark, Senf, Salz und Pfeffer cremig zerdrücken."
-    },
-    {
-     "do": "Creme in die Eiweißhälften füllen, mit Paprikapulver und Schnittlauch bestreuen."
     }
    ]
   }

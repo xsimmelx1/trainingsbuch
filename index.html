@@ -508,7 +508,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .favb{border:0;background:none;font-size:24px;line-height:1;min-width:44px;min-height:44px;color:var(--muted);cursor:pointer}
 .favb.on{color:#f5b301}
 .favb.dice{font-size:22px}
-.shr{display:flex;align-items:center;gap:4px;flex:none}.shr .btn{white-space:nowrap}
+.shr{display:flex;align-items:center;gap:4px;flex:none}
+.nvrow{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-top:1px solid var(--line)}.nvd{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);font-weight:600;font-size:13px;color:var(--muted)}.nvd.ok{background:var(--good-soft);border-color:var(--good);color:var(--ink)}.nvd.soon{border-color:var(--good);border-style:dashed}.nvn{flex:1;min-width:0}
+.aislel{display:flex;flex-direction:column;gap:6px}.aislerow{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:6px 8px}.aislerow .ai{width:22px;text-align:center;color:var(--muted);font-weight:600}.aislerow .an{flex:1;min-width:0}.shr .btn{white-space:nowrap}
 .srclink{display:inline-block;margin-top:8px;font-size:14px;color:var(--accent);text-decoration:none}
 .srcrow>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer}.srcrow>summary::-webkit-details-marker{display:none}.srcrow .srclink{margin-top:0}
 .srcrow{margin-top:8px}.srcrow>div{margin-top:6px}.srci{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);color:var(--muted);font-size:13px}
@@ -3320,7 +3322,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover","restleft"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover","restleft","kochbar","aisle"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3544,6 +3546,8 @@ function journeySheet(kind, arg){
       <button class="btn ${lessonRead(l.id) ? "" : "primary"} big" type="button" data-act="lessonRead" data-v="${l.id}">${lessonRead(l.id) ? "✓ Gelesen" : "Als gelesen markieren"}</button>`;
   }
   if (kind === "cook") return cookHtml(arg);
+  if (kind === "kochbar") return kochbarHtml();
+  if (kind === "aisle") return aisleHtml(arg);
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
@@ -3700,7 +3704,7 @@ function shelfHtml(){
     ["🔥 Warm & sättigend", ok.filter(r => main(r) && r.temp === "warm").sort((a, b) => recipeNutri(b).protein - recipeNutri(a).protein), {temp: "warm", cat: "haupt"}],
     ["🥣 Frühstück", ok.filter(r => r.category === "fruehstueck"), {cat: "fruehstueck"}],
     ["🥤 Snacks & Shakes", ok.filter(r => r.category === "snack" || r.category === "shake"), {cat: "snack"}]];
-  return cookWithHtml() + `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><a class="btn" href="#t=zutaten">🥕 Alle Zutaten</a><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
+  return cookWithHtml() + `<div class="card"><input type="text" id="recQ" value="" placeholder="🔎 Rezept oder Zutat suchen" aria-label="Rezepte suchen"><div class="actions"><button class="btn" type="button" data-random="rec">🎲 Zufallsrezept</button><button class="btn" type="button" data-sheet="kochbar">🏠 Was kann ich kochen?</button><button class="btn" type="button" data-sheet="reste">♻️ Reste verwerten</button><a class="btn" href="#t=zutaten">🥕 Alle Zutaten</a><button class="btn ghost small" type="button" data-recall>Alle Rezepte & Filter ›</button></div></div>`
     + shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle ›</button></div><div class="srow">${l.slice(0, 12).map(card).join("")}</div></div>`).join("");
 }
 const COOK_WITH = ["gnocchi", "kichererbsen", "tofu", "roteLinsen", "feta", "halloumi", "eier", "huettenkaese", "nudeln", "reis", "kartoffeln", "brokkoli", "spinat", "zucchini", "paprika", "sojagranulat", "raeuchertofu"];
@@ -3904,7 +3908,9 @@ function ensureMeals(){
 const cookSteps = r => r?.plan?.steps?.length ? r.plan.steps : (r?.steps || []).map(x => ({do: x}));
 const cookAhead = r => r?.plan?.ahead || [];
 let recIdx = null, recIdxOf = null;
-const recipeByName = n => { if (typeof n !== "string" || !recipes) return undefined; if (recIdxOf !== recipes) { recIdx = new Map(); for (const x of recipes) if (!recIdx.has(x.name)) recIdx.set(x.name, x); recIdxOf = recipes; } return recIdx.get(n); };
+// zusammengelegte Rezepte: alte Namen in gespeicherten Tagen, Favoriten und Restebox zeigen auf das behaltene Rezept (gleiche Tabelle im Planer)
+const REC_ALIAS = {"Chili sin Carne mit Sojagranulat & Reis": "Chili sin Carne mit Sojagranulat, Kidney & Mais", "Rote-Linsen-Dal mit Spinat, Reis & Skyr": "Rote Linsen mit Kokos-Spinat & Reis", "Indischer Rote-Linsen-Eintopf mit Reis & Skyr": "Rote Linsen mit Kokos-Spinat & Reis", "Linsen-Soja-Bolognese mit Vollkornnudeln": "Rote-Linsen-Bolognese mit Spaghetti & Quark-Topping", "Gefüllte Senf-Quark-Eier": "Gefüllte Skyr-Senf-Eier"};
+const recipeByName = n => { if (typeof n !== "string" || !recipes) return undefined; if (recIdxOf !== recipes) { recIdx = new Map(); for (const x of recipes) if (!recIdx.has(x.name)) recIdx.set(x.name, x); recIdxOf = recipes; } return recIdx.get(n) ?? recIdx.get(REC_ALIAS[n]); };
 let foodMemo = null;
 const FOOD = () => { const f = S().food; if (!foodMemo || foodMemo.ref !== f || foodMemo.ver !== dataVer) foodMemo = {ref: f, ver: dataVer, val: Object.assign({showNutri: true, times: {}, kcal: null, protein: null}, f || {})}; return foodMemo.val; };
 const foodTarget = () => ({kcal: num(FOOD().kcal) || mealPlan.target.kcal, protein: num(FOOD().protein) || mealPlan.target.protein});
@@ -4952,6 +4958,25 @@ const resteTerm = t => { const w = t.toLowerCase().trim().replace(/(en|n|e|s)$/,
 const resteHit = (text, term) => new RegExp("(^|[^a-zäöüß])" + term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
 // Produkt-IDs zu den eingegebenen Resten (für „habe ich“ beim Einkauf)
 const resteIds = () => new Set((prices?.products || []).filter(pr => reste.have.some(t => pr.re.test(t.toLowerCase()) || resteHit(prodLabel(pr), resteTerm(t)))).map(pr => pr.id));
+// „Was kann ich jetzt kochen?“: zählt als da, was im Vorrat steht und was in den letzten 7 Tagen im Einkauf abgehakt wurde; Öl, Gewürze und Basis gelten als vorhanden
+function homeHave(){ const stock = STOCK(), bought = new Set(), t = todayIso(), lim = addDays(t, -7);
+  try { for (let i = 0; i < localStorage.length; i++) { const k0 = localStorage.key(i) || ""; if (!k0.startsWith(LS)) continue; const k = k0.slice(LS.length);
+    const m = k.match(/^shop:(w|d|t):(\d{4}-\d{2}-\d{2})/); if (!m || (m[1] === "w" ? addDays(m[2], 6) : m[2]) < lim || m[2] > addDays(t, 7)) continue;
+    for (const x of lsGet(k) || []) if (String(x).startsWith("p|")) bought.add(String(x).slice(2)); } } catch {}
+  return {stock, bought, all: new Set([...stock, ...bought])}; }
+function kochbarRank(){ const H = homeHave().all, are = avoidRe();
+  return recipes.filter(r => recipeOk(r, are)).map(r => { const da = [], miss = [];
+    for (const l of r.ingredients || []) { if (SPICE_RE.test(l) || /wasser\b/i.test(l)) continue; const x = prices ? parseIng(l) : null; if (x?.pr?.pantry) continue;
+      const ids = x?.pr ? (x.parts || [x]).map(pt => pt.pr.id) : [], lab = x?.pr ? prodLabel(x.pr) : (x?.name || l);
+      (ids.some(id => H.has(id)) ? da : miss).push(lab); }
+    return {r, da: [...new Set(da)], miss: [...new Set(miss)]}; })
+    .filter(o => o.da.length >= 2 && o.miss.length <= 3).sort((a, b) => a.miss.length - b.miss.length || b.da.length - a.da.length).slice(0, 25); }
+function kochbarHtml(){ const H = homeHave(), close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
+  const h = `<div class="sh"><h2>🏠 Was kann ich kochen?</h2>${close}</div><div class="small muted">Zählt als da: Vorrat zuhause (${H.stock.size}) und was du in den letzten 7 Tagen im Einkauf abgehakt hast (${H.bought.size}). Öl, Gewürze und Basis gelten als vorhanden.</div>`;
+  if (!H.all.size) return h + `<p class="muted">Noch weiß die App nicht, was da ist. Hak im Einkauf ab, was du gekauft hast, oder halte unter 🏠 Vorrat fest, was immer da ist.</p><button class="btn" type="button" data-sheet="stock">🏠 Vorrat festhalten</button>`;
+  const L = kochbarRank(); if (!L.length) return h + `<p class="muted">Mit dem, was da ist, passt gerade kein Rezept – höchstens 3 Zutaten dürften fehlen.</p><button class="btn" type="button" data-sheet="stock">🏠 Vorrat ergänzen</button>`;
+  return h + L.map(o => `<div class="card rsrow"><button type="button" class="lrow menu" data-recipe="${esc(o.r.name)}">${mealThumb(o.r.name)}<span class="lmain"><b>${esc(o.r.name)}</b><span class="small muted"><span class="nutri">${o.r.protein} g P · </span>${o.r.activeMin ?? o.r.timeMin} min</span></span></button>
+    <div class="small"><span class="okt">✓ ${o.da.map(esc).join(", ")}</span>${o.miss.length ? ` · <span class="muted">fehlt: ${o.miss.map(esc).join(", ")}</span>` : ` · <b>alles da</b>`}</div></div>`).join(""); }
 function resteRank(){
   const terms = reste.have.map(resteTerm), st = reste.stock && stockOn() ? STOCK() : new Set(), are = avoidRe();
   return recipes.filter(r => recipeOk(r, are)).map(r => { let hit = 0; const used = new Set(), miss = [];
@@ -5140,6 +5165,18 @@ function fridgeCard(){ const f = FRIDGE(); if (!f.length) return "";
     <div class="small muted">„Gegessen“ ersetzt die nächste passende offene Mahlzeit von heute.</div></div></details>`; }
 function weekRecipes(mo, ok = () => true){ const c = {}; for (let i = 0; i < 7; i++) for (const m of mealsFor(addDays(mo, i))) if (recipeByName(m.name) && !m.rest && ok(m)) c[m.name] = (c[m.name] || 0) + 1; return c; }
 // Liefert Einträge, Schlüssel fürs Abhaken und Titel je nach Umfang
+// Laufweg: Reihenfolge der Gänge pro Markt (Discounter fangen meist mit Obst & Gemüse an, Kühlregal früh; Vollsortimenter Kühlung oft am Ende) – im Blatt anpassbar
+const AISLE_GROUPS = [...SHOP_GROUPS.map(([g]) => g), "Vorrat & Gewürze"];
+const AISLE_DEF = {disc: ["Obst & Gemüse", "Brot & Backwaren", "Milchprodukte & Eier", "Tofu & Soja", "Getreide & Nudeln", "Hülsenfrüchte", "Vorrat & Gewürze"],
+  voll: ["Obst & Gemüse", "Brot & Backwaren", "Getreide & Nudeln", "Hülsenfrüchte", "Vorrat & Gewürze", "Tofu & Soja", "Milchprodukte & Eier"]};
+const aisleOf = st => { const own = (FOOD().aisle || {})[st], base = own || AISLE_DEF[["aldi", "lidl", "netto", "penny"].includes(st) ? "disc" : "voll"];
+  return [...base.filter(g => AISLE_GROUPS.includes(g)), ...AISLE_GROUPS.filter(g => !base.includes(g))]; };
+const aisleStore = st0 => st0 && st0 !== "min" && (prices?.stores || []).includes(st0) ? st0 : (prices?.stores || []).includes(FOOD().store) ? FOOD().store : "aldi";
+function aisleHtml(st){ const L = aisleOf(st), own = !!(FOOD().aisle || {})[st];
+  return `<div class="sh"><h2>Laufweg · ${esc(STORES[st] || st)}</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>
+    <div class="small muted">So sortiert die Einkaufsliste die Gänge, wenn „Laufweg“ an ist. Stell es so ein, wie du durch deinen Markt gehst.</div>
+    <div class="aislel">${L.map((g, i) => `<div class="aislerow"><span class="ai">${i + 1}</span><span class="an">${esc(g)}</span><button class="btn small" type="button" data-aisle="${st}|${i}|-1" ${i ? "" : "disabled"} aria-label="${esc(g)} nach oben">↑</button><button class="btn small" type="button" data-aisle="${st}|${i}|1" ${i < L.length - 1 ? "" : "disabled"} aria-label="${esc(g)} nach unten">↓</button></div>`).join("")}</div>
+    ${own ? `<button class="btn ghost small" type="button" data-aisle="${st}|reset">Standard-Reihenfolge</button>` : ""}`; }
 function shopCtx(){
   const mo = shopWeek();
   if (shopScope === "tag") { const d = shopDay || todayIso(), c = {};
@@ -5167,6 +5204,7 @@ function shopHtml(){
   // Vorratsartikel (Öl, Gewürze, Mehl …) braucht man nur anteilig – sie stehen eingeklappt unter der Liste
   const groups = sl.groups.map(([g, a]) => [g, a.filter(i => { if (i.pr && home.has(i.pr.id)) { homeItems.push(i); return false; } if (i.pr?.pantry || i.key.startsWith("s|")) { pantry.push(i); return false; } return true; })]).filter(([, a]) => a.length);
   pantry.sort((x, y) => x.name.localeCompare(y.name, "de"));
+  const wSt = aisleStore(st0); if (shopKind === "weg") { const L = aisleOf(wSt); groups.sort((a, b) => L.indexOf(a[0]) - L.indexOf(b[0])); }
   const buyItems = groups.flatMap(([, a]) => a), total = buyItems.length, got = buyItems.filter(i => done.has(i.key)).length, pGot = pantry.filter(i => done.has(i.key)).length;
   let h = `<div class="seg" role="group" aria-label="Einkaufen für">${[["tag","Tag"],["tage","Tage"],["woche","Woche"],["gericht","Gericht"]].map(([k, l]) => `<button type="button" data-shopscope="${k}" aria-pressed="${shopScope === k}">${l}</button>`).join("")}</div>`;
   if (shopScope === "gericht") { const r = recipeByName(cx.n);
@@ -5192,9 +5230,10 @@ function shopHtml(){
   h += `<div class="btnrow four"><button class="btn small" type="button" data-sheet="scan" aria-label="Preis per Barcode merken">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt" aria-label="Kassenbon hinzufügen">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" id="shopShare">↗ Teilen</button></div>`;
   // Alle Einstellungen der Liste in einem Aufklapper
   const mealsTxt = shopScope === "gericht" ? "" : (shopMeals.length === SHOPM.length ? "Alle Mahlzeiten" : SHOPM.filter(([k]) => shopMeals.includes(k)).map(([, l]) => l.replace(/^\S+\s/, "")).join(", ")) + " · ";
-  h += `<details class="slim shopopt" ${keepOpen("opt")}><summary><span>⚙ Filter & Ansicht</span><span class="muted">${mealsTxt}${shopKind === "gang" ? "nach Gang" : "Frisch/Basis"}${hide ? " · ohne Erledigtes" : ""}</span></summary><div class="card">
+  h += `<details class="slim shopopt" ${keepOpen("opt")}><summary><span>⚙ Filter & Ansicht</span><span class="muted">${mealsTxt}${shopKind === "gang" ? "nach Gang" : shopKind === "weg" ? "Laufweg " + (STORES[wSt] || "") : "Frisch/Basis"}${hide ? " · ohne Erledigtes" : ""}</span></summary><div class="card">
     ${shopScope === "gericht" ? "" : `<div><div class="lab">Mahlzeiten</div><div class="chips sm">${SHOPM.map(([k, l]) => `<button type="button" data-shopm="${k}" aria-pressed="${shopMeals.includes(k)}">${l}</button>`).join("")}</div></div>`}
-    <div><div class="lab">Sortieren</div><div class="seg">${[["gang", "Nach Gang"], ["lager", "Frisch/Basis"]].map(([k, l]) => `<button type="button" data-shopkind="${k}" aria-pressed="${shopKind === k}">${l}</button>`).join("")}</div></div>
+    <div><div class="lab">Sortieren</div><div class="seg">${[["gang", "Nach Gang"], ["weg", "Laufweg"], ["lager", "Frisch/Basis"]].map(([k, l]) => `<button type="button" data-shopkind="${k}" aria-pressed="${shopKind === k}">${l}</button>`).join("")}</div>
+      ${shopKind === "weg" ? `<div class="mhead small" style="margin-top:6px"><span class="muted">${esc(STORES[wSt] || "")}: ${aisleOf(wSt).map(g => esc(g.split(" ")[0])).join(" › ")}</span><button class="btn ghost small" type="button" data-sheet="aisle" data-v="${wSt}">✎ Anpassen</button></div>` : ""}</div>
     <label class="check small"><input type="checkbox" id="stockOnCb" ${stockOn() ? "checked" : ""} ${(FOOD().stock || []).length ? "" : "disabled"}><span>Vorrat zuhause abziehen${homeItems.length ? ` (${homeItems.length})` : (FOOD().stock || []).length ? "" : " – unter 🏠 Vorrat markieren"}</span></label>
     <label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label>
     ${P ? `<label class="check small"><input type="checkbox" id="shopBio" ${bio ? "checked" : ""}><span>Bio-Preis je Artikel zeigen</span></label>` : ""}
@@ -5277,6 +5316,28 @@ function foodSettingsHtml(){
     <div class="small muted center">Bereich antippen zum Auf- und Zuklappen.</div>`;
 }
 
+// Kritische Nährstoffe bei vegetarischer Kost: an wie vielen Tagen der Woche eine gute Quelle gegessen wurde (geplant zählt getrennt). Grobe Orientierung, keine Messung.
+const NUTRI_V = [
+  ["b12", "B12", /skyr|quark|joghurt|milch|käse|feta|mozzarella|halloumi|camembert|parmesan|\beier?\b|eiern/i, 5, "Milchprodukte, Eier"],
+  ["fe", "Eisen", /linsen|kichererbsen|bohnen|tofu|tempeh|hafer|spinat|kürbiskern|hirse|quinoa|vollkorn|amaranth|sesam/i, 5, "Hülsenfrüchte, Hafer, Kürbiskerne – mit Vitamin C (Paprika, Zitrone) zusammen"],
+  ["zn", "Zink", /hafer|kürbiskern|linsen|kichererbsen|bohnen|käse|vollkorn|cashew|tofu|sesam|hanf/i, 5, "Hafer, Kürbiskerne, Hülsenfrüchte, Käse"],
+  ["ca", "Calcium", /milch|skyr|quark|joghurt|käse|feta|mozzarella|tofu|grünkohl|brokkoli|sesam|mandel/i, 5, "Milchprodukte, Tofu (mit Calcium), Grünkohl"],
+  ["o3", "Omega-3", /leinsamen|leinöl|walnu|chia|rapsöl|hanfsamen|hanföl/i, 3, "Leinsamen, Walnüsse, Chia, Rapsöl"],
+  ["jod", "Jod", /jodsalz|nori|algen/i, 7, "Jodsalz im Haushalt"]];
+function nutriWeek(mo){ const out = {}; for (const [k] of NUTRI_V) out[k] = {ate: 0, plan: 0}; const jod = !!FOOD().jodsalz, t = todayIso();
+  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), ms = mealsFor(d);
+    const txt = ate => ms.filter(m => ate ? m.ate : !m.ate && d >= t).map(m => m.own ? JSON.stringify(m.name) : (recipeByName(m.name)?.ingredients || []).join(" ") + " " + m.name).join(" ");
+    const A = txt(true), P = txt(false);
+    for (const [k, , re] of NUTRI_V) { if (k === "jod" ? jod && ms.some(m => m.ate) : re.test(A)) out[k].ate++; else if (k === "jod" ? jod && !!P.trim() : re.test(P)) out[k].plan++; } }
+  return out; }
+function nutriCard(mo){ const W = nutriWeek(mo), jod = !!FOOD().jodsalz;
+  const row = ([k, l, , goal, src]) => { const w = W[k], ok = w.ate >= goal, soon = !ok && w.ate + w.plan >= goal;
+    return `<div class="nvrow"><span class="nvd ${ok ? "ok" : soon ? "soon" : ""}">${ok ? "✓" : w.ate}</span><span class="nvn"><b>${l}</b> <span class="small muted">${k === "jod" && !jod ? "Jodsalz?" : `${w.ate}/${goal} Tage${w.plan ? ` · +${w.plan} geplant` : ""}`}</span><br><span class="small muted">${esc(src)}</span></span></div>`; };
+  const n = NUTRI_V.filter(([k, , , goal]) => W[k].ate >= goal).length;
+  return `<details class="slim nutriv" ${keepOpen("nutriv")}><summary><span>🌱 Nährstoffe vegetarisch</span><span class="muted">${n}/${NUTRI_V.length} diese Woche</span></summary><div class="card">
+    <div class="small muted">An wie vielen Tagen eine gute Quelle dabei war (gegessene Mahlzeiten). Grobe Orientierung, keine Messung – B12, Ferritin und Vitamin D lässt du laut Plan im Blut prüfen.</div>
+    ${NUTRI_V.map(row).join("")}
+    <label class="check small"><input type="checkbox" id="jodsalz" ${jod ? "checked" : ""}><span>Ich salze mit Jodsalz</span></label></div></details>`; }
 function budgetSlim(mo){ const f = FOOD(), budget = num(f.budget); if (!prices || !budget) return ""; const cost = weekShopCost(mo);
   return `<details class="slim ${cost > budget ? "over" : ""}"><summary><span>💶 Budget</span><span class="${cost > budget ? "warnt" : "muted"}">verbraucht ≈ ${eur(cost)} von ${eur(budget)}${cost > budget ? " ⚠" : " ✓"}</span></summary>${budgetCard(mo)}</details>`; }
 function budgetCard(mo){
@@ -5324,7 +5385,7 @@ function essenHtml(b){
     ${tg.kcal - tt.kcal >= 150 ? `<div class="nutri gapinfo">${info(`Plan liegt ${tg.kcal - tt.kcal} kcal unter deinem Ziel – auffüllen z. B. mit ${tg.kcal - tt.kcal >= 350 ? "einem Brot mit Erdnussmus (~300 kcal) oder " : ""}30 g Nüssen (~190 kcal), einer Banane (~110 kcal) oder 1 EL Öl extra beim Kochen (~90 kcal).`)}<span class="small muted">Plan ${tg.kcal - tt.kcal} kcal unter Ziel</span></div>` : ""}
     <div class="mrows">${ms.filter(m => !(m.name === "skip" && d < todayIso())).map(m => diaryRow(d, m)).join("")}</div>
     <button class="btn small addfood" type="button" data-sheet="snack" data-v="${d}">＋ Essen oder Snack eintragen</button></div>`;
-  h += `<div class="lab sec">Die Woche</div>` + (FOOD().mealPrep !== false ? prep : "") + budgetSlim(mo);
+  h += `<div class="lab sec">Die Woche</div>` + (FOOD().mealPrep !== false ? prep : "") + budgetSlim(mo) + nutriCard(mo);
   b.innerHTML = h;
 }
 
@@ -5522,6 +5583,9 @@ async function onClick(e){
   const ss = t.closest("[data-shopscope]"); if (ss) { shopScope = ss.dataset.shopscope; lsSet("shopScope", shopScope); renderMore(); return; }
   const smk = t.closest("[data-shopm]"); if (smk) { const k = smk.dataset.shopm, a = new Set(shopMeals); a.has(k) ? a.delete(k) : a.add(k); if (!a.size) return toast("Mindestens eine Mahlzeit auswählen"); shopMeals = SHOPM.map(x => x[0]).filter(x => a.has(x)); lsSet("shopMeals", shopMeals); renderMore(); return; }
   const sd = t.closest("[data-shopdays]"); if (sd) { shopDays = Number(sd.dataset.shopdays); lsSet("shopDays", shopDays); renderMore(); return; }
+  const ais = t.closest("[data-aisle]"); if (ais) { const [st, i, d] = ais.dataset.aisle.split("|"), A = Object.assign({}, FOOD().aisle);
+    if (i === "reset") A[st] = null; else { const L = aisleOf(st), a = Number(i), b = a + Number(d); [L[a], L[b]] = [L[b], L[a]]; A[st] = L; }
+    saveFood({aisle: A}); renderSheet(); renderMore(); return; }
   const sk2 = t.closest("[data-shopkind]"); if (sk2) { shopKind = sk2.dataset.shopkind; lsSet("shopKind", shopKind); renderMore(); return; }
   const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else if (shopScope === "tage") shopDay = addDays(shopDay || todayIso(), v * shopDays); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
   if (t.closest("[data-shoprandom]")) { const are = avoidRe(), pool = recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt" && r.name !== shopRec); const pick = pool[Math.floor(Math.random() * pool.length)]; if (pick) { shopRec = pick.name; shopMul = 1; shopFromReste = false; renderMore(); toast("🎲 " + pick.name); } return; }
@@ -5793,6 +5857,7 @@ async function onChange(e){
   if (t.id === "rsQ") { if (t.value.trim()) { resteAdd(ingSuggest(t.value, 1, reste.have)[0] || t.value); t.value = ""; const el = t.parentElement.querySelector(".acl"); if (el) el.innerHTML = ""; } return; }
   if (t.id === "rsStock") { reste.stock = t.checked; renderSheetPart(["#rsList"]); return; }
   if (t.id === "stockOnCb") { saveFood({stockOn: t.checked}); renderMore(); return; }
+  if (t.id === "jodsalz") { saveFood({jodsalz: t.checked}); render(); return; }
   if (t.id === "foodAvoid") { saveFood({avoid: t.value}); renderEssen(); return; }
   if (t.id === "foodBudget") { const v = num(t.value); saveFood({budget: v && v > 0 ? v : null}); return; }
   if (t.id === "foodBudgetIgnore") { saveFood({budgetIgnore: t.checked}); return; }
