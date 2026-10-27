@@ -1116,9 +1116,10 @@ const TARGETS = {
 };
 const RIR = {0:["3","3"],1:["3","3"],2:["3","3"],3:["2","1"],4:["1–2","0–1"],5:["1","0"],6:["3–4","3–4"],7:["2","1"],8:["2","1"],9:["1–2","0–1"],10:["1","0"],11:["1","0"],12:["3–4","3–4"]};
 const MOB_OLD = ["knietest", "hipflexor", "deadbug", "shrug30", "tilt"], MOB_SINCE = "2026-10-21";
-const mobTotal = d => d < MOB_SINCE ? MOB_OLD.length : MOBILITY.filter(m => !MOB_OPT.has(m[0])).length;
+const mobTotal = d => d < MOB_SINCE ? MOB_OLD.length : MOBILITY.filter(m => !mobOpt(m[0], d)).length;
 // Routine gilt als abgeschlossen, wenn alles erledigt ist oder bewusst abgeschlossen wurde (übersprungene Übungen ok)
 function mobAlt(k){ // Hinweis, wenn für eine Routine-Übung das Zubehör fehlt
+  if (MOB_PAUSE.has(k) && inPause(selDate)) return "Trainingspause: weglassen, zählt nicht zur Routine.";
   if (k === "shrug30" && !hasGear("kh")) return hasGear("gewicht") ? "Ohne Kurzhanteln: mit Rucksack oder zwei vollen Wasserflaschen, gleiche Ausführung."
     : hasGear("band") ? "Ohne Gewichte: Band-Shrug – mittig auf das Widerstandsband stellen, Enden greifen, Schultern 5 × 6 s gegen den Zug hochziehen."
     : hasGear("handtuch") ? "Ohne Gewichte: Handtuch-Shrug – auf ein Handtuch stellen, Enden greifen, Schultern 5 × 6 s gegen das Handtuch hochziehen."
@@ -1127,7 +1128,7 @@ function mobAlt(k){ // Hinweis, wenn für eine Routine-Übung das Zubehör fehlt
   return "";
 }
 const mobFinished = (day, d) => mobCount(day, d) >= mobTotal(d) || !!day?.mobility?._done;
-const mobCount = (day, d) => day?.mobility ? (d < MOB_SINCE ? MOB_OLD : MOBILITY.map(m => m[0]).filter(k => !MOB_OPT.has(k))).filter(k => day.mobility[k]).length : 0;
+const mobCount = (day, d) => day?.mobility ? (d < MOB_SINCE ? MOB_OLD : MOBILITY.map(m => m[0]).filter(k => !mobOpt(k, d))).filter(k => day.mobility[k]).length : 0;
 let mobZoom = null;
 // ---------- Muskelkarte: vereinfachte Figur vorn/hinten, Bereiche nach den Muskelschlüsseln der Übungen ----------
 const MUSCLE_LABEL = Object.assign(Object.fromEntries(MUSCLES), {hipflex: "Hüftbeuger", vordS: "Vord. Schulter"});
@@ -1427,6 +1428,8 @@ const MOBILITY = [["knietest","Knie-Test: 5 einbeinige Kniebeugen auf 45° oder 
   ["k2c","Knie zur Brust (freiwillig, zum Entspannen): auf dem Rücken ein Knie mit beiden Händen zur Brust ziehen, anderes Bein lang, Kopf bleibt liegen. 25 s/Seite ruhig atmen",""]];
 const MOB_ID = Object.fromEntries(MOBILITY.map(m => [m[0], m[2]])); // Übungs-Kennung (Coach/Clip), bevor m[2] auf die Illustration umgestellt wird
 const MOB_OPT = new Set(["k2c"]); // freiwillig: zählt nicht zur Pflicht der Routine
+const MOB_PAUSE = new Set(["rkc", "shrug30"]); // belasten das Schlüsselbein: in der Trainingspause weglassen
+const mobOpt = (k, d) => MOB_OPT.has(k) || (MOB_PAUSE.has(k) && inPause(d));
 // Einheitliche Illustrationen: RepDB Free (repdb.co), Namensnennung Pflicht; ohne Eintrag bleibt das Foto
 const RDB = {"mob:k2c":"knee-to-chest-stretch","legpress":"leg-press","rdl":"romanian-deadlift","legext":"leg-extension","seatedcurl":"seated-leg-curl","calfstand":"standing-calf-raise","rowchest":"chest-supported-db-row","inclinedb":"incline-db-press","latneutral":"v-bar-lat-pulldown","cablelat":"cable-lateral-raise","facepull":"face-pull","cableshrug":"db-shrug","bayesian":"cable-curl","pushdown":"tricep-pushdown","extrot":"cable-external-rotation","hipthrust":"hip-thrust","bss":"bulgarian-split-squat","lyingcurl":"leg-curl","abduction":"hip-abduction","calfseated":"seated-calf-raise","chinneutral":"neutral-grip-pull-ups","cablerow":"seated-cable-row","chestpress":"chest-press-machine","dblateral":"lateral-raise","revfly":"machine-reverse-fly","skull":"skull-crusher","abroller":"ab-wheel-rollout","onearmrow":"single-arm-db-row","pushup":"incline-push-ups","dblathome":"lateral-raise","dbshrug":"db-shrug","spidercurl":"spider-curl","legext45":"leg-extension","abduction30":"hip-abduction","glutebridge":"glute-bridge","hw_squat":"box-squat","hw_bss":"bulgarian-split-squat","hw_slrdl":"single-leg-romanian-deadlift","hw_slidecurl":"ball-leg-curl","hw_calf":"single-leg-calf-raise","hw_tablerow":"inverted-row","hw_doorrow":"trx-row","hw_latraise":"lateral-raise","hw_shrug":"db-shrug","hw_curl":"inverted-row","hw_hipthrust":"single-leg-glute-bridge","hw_abd":"side-lying-hip-abduction","alt_goblet":"goblet-squat","alt_smithsquat":"smith-machine-squat","alt_dbrdl":"dumbbell-romanian-deadlift","alt_pullthrough":"cable-pull-through","alt_backext":"back-extension","alt_sllegext":"single-leg-extension","alt_nordic":"nordic-hamstring-curl","alt_plank":"plank","alt_dbrow":"single-arm-db-row","alt_machrow":"chest-supported-machine-row","alt_cablepress":"cable-chest-press","alt_inclpush":"incline-push-ups","alt_floorpress":"dumbbell-floor-press","alt_1armpd":"one-arm-lat-pulldown","alt_assistchin":"assisted-pull-ups","alt_sapd":"straight-arm-pulldown","alt_lylat":"side-lying-lateral-raise","alt_machlat":"plate-loaded-lateral-raise","alt_smithshrug":"smith-machine-shrug","alt_hammer":"cable-hammer-curl","alt_bbbridge":"barbell-glute-bridge","alt_htmachine":"smith-machine-hip-thrust","alt_glutekick":"cable-kickback","alt_revlunge":"reverse-lunge","alt_smithsplit":"smith-machine-split-squat","alt_cableabd":"banded-standing-hip-abduction","alt_suitcase":"suitcase-carry","mob:glutebr":"glute-bridge","mob:rkc":"plank","mob:hipflexor":"kneeling-hip-flexor-stretch","mob:shrug30":"db-shrug","hw_latiso":"lateral-raise","hw_extrot":"cable-external-rotation","wallsit":"wall-sit","alt_birddog":"bird-dog"};
 const isrc = (img, i) => img.startsWith("r/") ? `img/${img}-${i}.webp` : `img/${img}-${i}.jpg`;
@@ -1634,6 +1637,11 @@ function maybeReplan(day){
 
 // ---------- Ableitungen ----------
 const S = () => store.settings || {};
+const MODES = ["normal", "reduziert", "notfall", "pause"];
+const inPause = d => (S().pauses || []).some(p => d >= p.from && (!p.to || d <= p.to));
+function setMode(m){ const s = S(), was = s.mode || "normal"; if (m === was) return; const t = todayIso(), ps = (s.pauses || []).map(p => Object.assign({}, p)), open = ps.find(p => !p.to);
+  if (m === "pause" && !open) ps.push({from: t}); else if (m !== "pause" && open) { if (open.from >= t) ps.splice(ps.indexOf(open), 1); else open.to = addDays(t, -1); }
+  saveSettings({mode: m, pauses: ps}); replanSoon(); }
 // Feste Zeiten der Routinen (Einstellungen › Training & Plan); der Planer liest dieselben Werte
 const ROUTINE_DEF = {mob: "07:30", pain: "21:45"};
 const routineAt = k => { const v = (S().routineTimes || {})[k]; return /^([01]\d|2[0-3]):[0-5]\d$/.test(v || "") ? v : ROUTINE_DEF[k]; };
@@ -1673,7 +1681,7 @@ function variantOf(base, dateStr){
   if (k) { if (base === "beineA") return "beineAk"; if (base === "beineB") return "beineBk"; }
   return base;
 }
-function defaultSession(dateStr){ const p = planFor(dateStr); return p ? variantOf(p.session, dateStr) : "frei"; }
+function defaultSession(dateStr){ const p = planFor(dateStr); return p && !(S().mode === "pause" && dateStr >= todayIso()) ? variantOf(p.session, dateStr) : "frei"; }
 function lastPerfN(id, beforeDate, n, src){  // letzte n Einheiten, Deload-Wochen übersprungen
   src = src || (woSession === "antag" ? "antag" : "sets");
   const keys = Object.keys(store.days).filter(k => k < beforeDate).sort().reverse(), out = [];
@@ -2389,7 +2397,7 @@ function trainState(){
 function nextPlanned(after){ return (store.plan.days || []).find(x => x.date > after); }
 function restInfo(){
   const sd = S().startDate, np = nextPlanned(selDate);
-  const why = sd && selDate < sd ? `Woche 1 startet am ${fmt(sd)} – bis dahin Ausgangswerte sammeln.` : "Ruhetag. Erholung gehört zum Plan.";
+  const why = sd && selDate < sd ? `Woche 1 startet am ${fmt(sd)} – bis dahin Ausgangswerte sammeln.` : S().mode === "pause" ? "Trainingspause wegen der Schulter: keine Krafteinheiten, Morgenroutine ohne Plank und Shrug. Beenden unter Mehr › Training & Plan › Modus." : "Ruhetag. Erholung gehört zum Plan.";
   const next = np ? `Nächstes Training: <b>${fmt(np.date)}${np.start ? `, ${np.start} Uhr` : ""}</b> · ${esc(SESS[variantOf(np.session, np.date)].title)}` : "";
   return {why, next};
 }
@@ -2400,7 +2408,7 @@ function heroCard(noCoach){
   if (st === "frei") {
     const nxt = variantOf(nextInSeq(selDate), selDate), ri = restInfo();
     h += `<div class="tb rest"><div class="tbm"><span class="pillst">Kein Training</span><b>${isToday ? "Heute ist trainingsfrei" : "Trainingsfreier Tag"}</b><div class="small muted">${esc(ri.why)}</div>${ri.next ? `<div class="small">${ri.next}</div>` : ""}</div></div>
-      <button class="btn ghost small" type="button" data-act="setSession" data-v="${nxt}" data-then="start" style="align-self:flex-start">Trotzdem trainieren: ${esc(SESS[nxt].title)} ›</button>`;
+      ${S().mode === "pause" ? "" : `<button class="btn ghost small" type="button" data-act="setSession" data-v="${nxt}" data-then="start" style="align-self:flex-start">Trotzdem trainieren: ${esc(SESS[nxt].title)} ›</button>`}`;
   } else {
     const p = progress(sk), mins = Math.round(sess.ex.reduce((a, id) => a + setsFor(id, w, sess) * (REST[EX[id].type] + 40), 0) / 60 + 8);
     const pill = st === "bereit" ? `<span class="pillst plan">Geplant${plan && plan.start ? ` · ${plan.start} Uhr` : ""}</span>` : st === "läuft" ? `<span class="pillst run">Läuft</span>` : st === "leer" ? `<span class="pillst plan">Ohne Sätze beendet</span>` : `<span class="pillst done">Erledigt</span>`;
@@ -3331,7 +3339,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
       <div class="field"><label for="ci_hurdle">Größte Hürde</label><textarea id="ci_hurdle">${esc(ci.hurdle ?? "")}</textarea></div>
       <div class="field"><label for="ci_ifthen">Wenn-Dann-Plan dagegen</label><textarea id="ci_ifthen" placeholder="Wenn …, dann …">${esc(ci.ifthen ?? "")}</textarea></div>
       <div class="field"><label for="ci_good">Eine Sache, die gut lief</label><textarea id="ci_good">${esc(ci.good ?? "")}</textarea></div>
-      <div class="lab">Modus nächste Woche</div><div class="seg" id="ciMode">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(ci.nextMode || S().mode || "normal") === m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div>
+      <div class="lab">Modus nächste Woche</div><div class="seg" id="ciMode">${MODES.map(m => `<button type="button" data-mode="${m}" aria-pressed="${(ci.nextMode || S().mode || "normal") === m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div>
       <button class="btn primary big" type="button" data-act="ciSave" data-v="${mo}">Check-in speichern</button>`;
   }
   if (hurtOpen && sheetKind !== "hurt") h += `<div class="zoomov" data-hclose><div class="zoomcard hurtcard" role="dialog" aria-label="Tut weh">${hurtHtml(hurtOpen)}</div></div>`;
@@ -5440,7 +5448,7 @@ function setupHtml(){
     <label class="check"><input type="checkbox" id="scClr" ${s.scCleared?"checked":""}><span><b>SC-Gelenk ärztlich freigegeben</b></span></label>
     <label class="check"><input type="checkbox" id="kn1" ${s.knee1?"checked":""}><span><b>Knie-Phase 1 aktiv</b> (Morgentest über 2/10)</span></label>
 
-    <div class="lab">Modus</div><div class="seg" id="modeSeg">${["normal","reduziert","notfall"].map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
+    <div class="lab">Modus</div><div class="seg" id="modeSeg">${MODES.map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div></div>
     <div class="card"><h2>Routine-Zeiten</h2><div class="small muted">Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen. Training wird nicht über die Morgenroutine gelegt.</div>
       <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
       <div class="small muted">Essenszeiten: <button type="button" class="linkbtn" data-sub2="essenset" data-setopen="ziel">Essen › Ziel & Mahlzeiten</button></div>
@@ -5778,10 +5786,10 @@ async function onClick(e){
     if (a === "checkin") { openSheet("checkin", v); return; }
     if (a === "ciSave") { const sel = sheet.querySelector("#ciMode [aria-pressed=true]")?.dataset.mode || "normal";
       saveMap("checkins.json", "checkins", v, {week:v, stress:num(sheet.querySelector("#ci_stress").value), hurdle:sheet.querySelector("#ci_hurdle").value, ifthen:sheet.querySelector("#ci_ifthen").value, good:sheet.querySelector("#ci_good").value, nextMode:sel});
-      if (sel !== (S().mode || "normal")) saveSettings({mode:sel}); closeSheet(); return; } }
+      setMode(sel); closeSheet(); return; } }
   const cm = t.closest("#ciMode [data-mode]"); if (cm) { cm.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === cm))); return; }
   const rc = t.closest("#recCat [data-cat]"); if (rc) { recFilter.cat = rc.dataset.cat; renderRecipes(); return; }
-  const ms = t.closest("#modeSeg [data-mode]"); if (ms) { saveSettings({mode:ms.dataset.mode}); renderMore(); return; }
+  const ms = t.closest("#modeSeg [data-mode]"); if (ms) { setMode(ms.dataset.mode); renderMore(); return; }
   if (t.id === "mSave") { const d = document.getElementById("mDate").value || todayIso(), m = Object.assign({}, store.measures[d] || {}, {date:d}); let any = false;
     const RANGE = {waist: [40, 200], neck: [20, 70], chest: [50, 200], arm: [15, 70], thigh: [25, 120], pelvis: [-10, 40], pullups: [0, 100], legpress10: [0, 1000]}; const bad = [];
     for (const [k, l] of MF) { const val = num(document.getElementById("m_"+k).value); if (val != null) { const [lo, hi] = RANGE[k] || [-1e9, 1e9]; if (val < lo || val > hi) { bad.push(l); continue; } m[k] = val; any = true; } }

@@ -233,7 +233,7 @@ def build_plan(now, settings, days, busy, keep=None):
             if b in SEQ:
                 nxt = (SEQ.index(b) + 1) % 4
                 break
-    max_week = {"normal": 4, "reduziert": 2, "notfall": 2}.get(settings.get("mode", "normal"), 4)
+    max_week = {"normal": 4, "reduziert": 2, "notfall": 2, "pause": 0}.get(settings.get("mode", "normal"), 4)
     count, consec = {}, 0
     # bereits erledigte Einheiten dieser Woche und die Serie bis gestern mitzählen
     for i in range(1, 8):
@@ -988,6 +988,9 @@ def main():
         plan = [p for p in old_plan["days"] if p["date"] >= today.isoformat()]
         extras = old_plan.get("extras", extras)
         print("Kalender unvollständig: alter Plan bleibt")
+    pause = settings.get("mode") == "pause"
+    if pause:  # Trainingspause: keine Krafteinheiten, auch nicht aus dem alten Plan
+        plan = [p for p in plan if p is keep]
 
     if keep and not any(p["date"] == today.isoformat() for p in plan):
         plan.insert(0, keep)
@@ -997,7 +1000,7 @@ def main():
             if p["date"] <= today.isoformat() and p["date"] not in in_plan and p["date"] >= (today - dt.timedelta(days=21)).isoformat()]
     past = list({p["date"]: p for p in past}.values())
     # ausgefallene Einheiten zählen (für die Morgen-Nachricht)
-    missed_yday = next((p for p in past if p["date"] == (today - dt.timedelta(days=1)).isoformat() and not p["done"]), None)
+    missed_yday = None if pause else next((p for p in past if p["date"] == (today - dt.timedelta(days=1)).isoformat() and not p["done"]), None)
 
     feed_failed = False
     save("plan.json", {"generated": now.isoformat(timespec="minutes"), "days": plan, "extras": extras, "past": past})
@@ -1035,12 +1038,12 @@ def main():
             if missed_yday:
                 body = "Gestern ausgefallen, deshalb heute dran: " + body
         else:
-            body = "Heute keine Krafteinheit geplant."
+            body = "Trainingspause: keine Krafteinheit, Routine ohne Plank und Shrug." if pause else "Heute keine Krafteinheit geplant."
             if missed_yday:
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
         once(f"morning-{tday}", {"title": f"Guten Morgen: {mob_min(settings)} min Routine", "body": body + " " + coaching(settings, today),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
-    p_eve = p_today or next((p for p in past if p["date"] == tday), None)  # auch eine heute herausgefallene Einheit nachfragen
+    p_eve = p_today or (None if pause else next((p for p in past if p["date"] == tday), None))  # auch eine heute herausgefallene Einheit nachfragen
     if "20:15" <= hm < "23:30" and p_eve and hm >= p_eve.get("end", "00:00") and not is_strength(day):
         once(f"evening-{tday}", {"title": "Noch keine Einheit eingetragen",
                                  "body": "Hast du trainiert? Dann jetzt eintragen. Sonst rutscht die Einheit automatisch auf den nächsten freien Tag.",
