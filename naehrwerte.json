@@ -641,7 +641,16 @@
 "mischbrot",
 "graubrot",
 "toastbrot",
-"toast"
+"toast",
+"weißbrot",
+"weissbrot",
+"weizenbrot",
+"bauernbrot",
+"sauerteigbrot",
+"dinkelbrot",
+"baguette",
+"ciabatta",
+"fladenbrot"
 ],
 "k": 240,
 "p": 8,
@@ -652,7 +661,9 @@
 "n": "Vollkornbrot",
 "a": [
 "roggenbrot",
-"schwarzbrot"
+"schwarzbrot",
+"pumpernickel",
+"vollkorntoast"
 ],
 "k": 210,
 "p": 7,
