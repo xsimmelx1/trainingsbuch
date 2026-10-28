@@ -332,7 +332,11 @@ details.slim > summary::-webkit-details-marker{display:none}
 details.slim > summary span:last-child{font-weight:400;font-size:13px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 details.slim > .card{margin:0;border:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
 .subhead{margin:4px 0 10px}
-.eatrec{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:4px 0}.eatrec .chips.sm button{min-height:34px}.planrec{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 10px;margin:4px 0}.planrec>span:first-child{grid-column:1/-1}.planrec .chips.sm button{min-height:34px}
+.ddrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}.ddrow>.btn,.ddm>summary{width:100%;min-width:0}
+.ddm{position:relative}.ddm>summary{list-style:none;cursor:pointer;justify-content:center}.ddm>summary::-webkit-details-marker{display:none}.ddm[open] .ddc{display:inline-block;transform:rotate(180deg)}
+.ddlist{position:absolute;z-index:30;top:calc(100% + 4px);left:0;min-width:100%;width:max-content;max-width:min(300px,86vw);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.28);padding:4px;display:flex;flex-direction:column}
+.ddm.right .ddlist{left:auto;right:0}
+.ddlist button{text-align:left;font:inherit;color:var(--ink);background:none;border:0;border-radius:8px;padding:10px 12px;min-height:44px;cursor:pointer}.ddlist button:hover,.ddlist button:focus-visible{background:var(--sunk)}.ddlist button:disabled{color:var(--muted);cursor:default}.planrec{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 10px;margin:4px 0}.planrec>span:first-child{grid-column:1/-1}.planrec .chips.sm button{min-height:34px}
 [data-act=foodUndo],[data-act=foodRedo]{font-size:22px;line-height:1;min-width:44px;min-height:40px;padding:0 6px}
 .subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
 h2.ptitle{margin:6px 0 10px}
@@ -3681,7 +3685,8 @@ function journeySheet(kind, arg){
     return `<div class="sh"><h2>${esc(r.name)}</h2><span class="shr">${(() => { const sc = swapCand && swapCand.name === r.name ? swapCand.ctx : ctxM ? `${ctxM.d}|${ctxM.k}` : null;
       return sc ? `<button type="button" class="favb dice" data-random="meal" data-v="${sc}" data-cur="${esc(mealsFor(sc.split("|")[0]).find(m => m.k === sc.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}" aria-label="Zufällig austauschen" title="Zufällig austauschen">🎲</button>`
         : `<button type="button" class="favb dice" data-random="rec" data-cur="${esc(r.name)}" aria-label="Anderes Zufallsrezept" title="Anderes Zufallsrezept">🎲</button>`; })()}${favBtn(r.name)}${close}</span></div>
-      ${ctxM ? `<div class="actions mealacts"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}">${ctxM.ate ? "✓ Gegessen" : "Gegessen?"}</button><button class="btn" type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Schon was anderes gegessen</button><button class="btn" type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button></div>${porPick(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restBtn(ctxM.d, mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM)}${restPick(ctxM.d, ctxM)}${skipBtn(ctxM.d, ctxM, "btn ghost small")}` : ""}
+      ${ctxM ? (() => { const mm = mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM;
+        return `<div class="actions ddrow"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}" aria-pressed="${ctxM.ate}">${ctxM.ate ? "✓ Gegessen" : "Gegessen"}</button>${ddMenu("Mehr", `<button type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Was anderes gegessen</button><button type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button>${restBtn(ctxM.d, mm).replace(/class="[^"]*"/, "")}${skipBtn(ctxM.d, ctxM, "")}`, "right")}</div>${porPick(ctxM.d, mm)}${restPick(ctxM.d, ctxM)}`; })() : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">⇄ Austauschen</button>${swapCand.ctx.split("|")[0] <= todayIso() ? `<button class="btn" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}" data-eat="1">✓ Austauschen & gegessen</button>` : ""}<button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
@@ -3703,8 +3708,10 @@ function journeySheet(kind, arg){
 // Rezept in den Plan legen: ersetzt die geplante Mahlzeit des Tages (Rückgängig über die Meldung)
 const PLAN_SLOT = {fruehstueck: ["fr"], mittag: ["mi", "ab"], abend: ["ab", "mi"], snack: ["sn"], shake: ["sn"]};
 function planRecHtml(r){ const ks = PLAN_SLOT[r.category] || ["mi", "ab"], t = todayIso(), days = [[t, "Heute"], [addDays(t, 1), "Morgen"]];
-  return `<div class="eatrec"><span class="small muted">✓ Heute gegessen als</span><div class="chips sm">${ks.map(k => `<button type="button" data-planrec="${t}|${k}" data-eat="1" data-v="${esc(r.name)}" aria-label="Heute ${esc(MEAL_SHORT[k])} als gegessen eintragen">✓ ${esc(MEAL_SHORT[k])}</button>`).join("")}</div></div>
-    <div class="planrec"><span class="small muted">📅 Einplanen</span>${days.map(([d, l]) => `<span class="prd small muted">${l}</span><div class="chips sm">${ks.map(k => `<button type="button" data-planrec="${d}|${k}" data-v="${esc(r.name)}" aria-label="${l} ${esc(MEAL_SHORT[k])} einplanen">${esc(MEAL_SHORT[k])}</button>`).join("")}</div>`).join("")}</div>`; }
+  const it = (d, l, k, eat) => `<button type="button" data-planrec="${d}|${k}" ${eat ? `data-eat="1" ` : ""}data-v="${esc(r.name)}">${l} · ${esc(MEAL_SHORT[k])}</button>`;
+  return `<div class="actions ddrow">${ddMenu("Gegessen", ks.map(k => it(t, "Heute", k, true)).join(""))}${ddMenu("📅 Einplanen", days.map(([d, l]) => ks.map(k => it(d, l, k)).join("")).join(""), "right")}</div>`; }
+// Aufklapp-Menü: Knopf mit ▾, Liste darunter; schließt beim Tippen daneben
+const ddMenu = (label, items, cls = "") => `<details class="ddm ${cls}"><summary class="btn">${label} <span class="ddc">▾</span></summary><div class="ddlist">${items}</div></details>`;
 let sheetQuiz = null;
 let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
@@ -5553,6 +5560,7 @@ sheet.addEventListener("click", e => { if (e.target === sheet) closeSheet(); });
 sheet.addEventListener("close", () => { if (micRec) try { micRec.abort(); } catch {}  { const tt = document.getElementById("toast"); if (tt?.parentNode === sheet) document.body.appendChild(tt); } sheet.classList.remove("swapmode"); hurtOpen = null; if (autoFlow) { autoFlow = false; clearInterval(tmrInt); tmr = null; if (tab !== "training") releaseWake(); } if (cook) cookMin = true; cookPaint(); if (sheetHist) { sheetHist = false; setTimeout(() => { try { if (history.state?.sheet) history.back(); } catch {} }, 0); } techStack = []; stopScan(); if (sheetKind) { sheetKind = null; if (dirty) saveCur(); render(); } });
 async function onClick(e){
   const t = e.target, inSheet = sheet.contains(t);
+  for (const dd of document.querySelectorAll("details.ddm[open]")) if (!dd.querySelector("summary").contains(t)) dd.open = false;
   const osg = t.closest("[data-ownsug]"); if (osg) { const x = ownSugList[+osg.dataset.ownsug]; if (!x) return; const q = id => sheet.querySelector(id);
     q("#ownName").value = x.name; if (q("#ownKcal")) q("#ownKcal").value = x.kcal || ""; if (q("#ownProt")) q("#ownProt").value = x.protein || "";
     if (x.ing && q("#ownText")) q("#ownText").value = x.ing; const det = q(".otherdet"); if (det && (x.kcal || x.protein)) det.open = true;
