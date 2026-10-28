@@ -286,13 +286,14 @@ def build_plan(now, settings, days, busy, keep=None):
         consec += 1
         last = d
         count[wk] = count.get(wk, 0) + 1
-    # Sonntag: Check-in & Meal Prep (2 h), wenn möglich
+    # Sonntag: Check-in & Meal Prep (2 h), wenn möglich; ohne Meal Prep nur der Check-in (30 min)
     extras = []
+    prep = (settings.get("food") or {}).get("mealPrep") is not False
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
         if d.weekday() == 6:
             nb = now + dt.timedelta(minutes=30) if d == today else dt.datetime.combine(d, dt.time(0), TZ)
-            sl = find_slot(d, busy, 120, nb) or (dt.datetime.combine(d, dt.time(17), TZ), dt.datetime.combine(d, dt.time(19), TZ))
+            sl = find_slot(d, busy, 120 if prep else 30, nb) or (dt.datetime.combine(d, dt.time(17), TZ), dt.datetime.combine(d, dt.time(19 if prep else 17, 0 if prep else 30), TZ))
             extras.append({"date": d.isoformat(), "kind": "checkin", "start": sl[0].strftime("%H:%M"), "end": sl[1].strftime("%H:%M")})
     return plan, extras
 
@@ -375,7 +376,8 @@ def build_ics(now, settings, plan, extras, past):
             ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=rem_pain)
     for x in extras if on_check else []:
         d = dt.date.fromisoformat(x["date"])
-        ev(f"checkin-{x['date']}", "Check-in & Meal Prep", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser).",
+        prep = (settings.get("food") or {}).get("mealPrep") is not False
+        ev(f"checkin-{x['date']}", "Check-in & Meal Prep" if prep else "Wochen-Check-in", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser)." if prep else "Wochen-Check-in in der App (10 min).",
            f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=rem_check)
     st = settings.get("startDate")
     if st and on_mark:
@@ -678,7 +680,7 @@ def effort_subst(mp, rec, settings, o, rx, W):
     """Zu aufwendige frische Gerichte tauschen, Batch-Gerichte bleiben (wie mealDefaults in der App)."""
     if not effort_on(settings):
         return o
-    bt = {W["batchA"], W["batchB"]}
+    bt = set() if (settings.get("food") or {}).get("mealPrep") is False else {W["batchA"], W["batchB"]}
     o = dict(o)
     for k in list(o):
         r = rec.get(o[k])
@@ -694,7 +696,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
     budget = num(f.get("budget"))
     if not P or not budget or budget <= 0 or f.get("budgetIgnore"):
         return {}
-    batch = {W["batchA"], W["batchB"]} if W else set()
+    batch = {W["batchA"], W["batchB"]} if W and f.get("mealPrep") is not False else set()
     store, subst, memo = f.get("store") or "aldi", f.get("subst") or {}, {}
     cost = lambda n: portion_cost(rec[n], P, store, subst, memo) if n in rec else 0
     occ = {}

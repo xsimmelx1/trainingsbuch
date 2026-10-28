@@ -102,6 +102,7 @@ textarea{min-height:64px;resize:vertical}
 .ingg{display:flex;flex-direction:column;margin-top:6px;font-size:14px}
 .ingg .ih,.ingg .ir{display:grid;grid-template-columns:72px minmax(0,1fr) 64px;gap:8px;padding:6px 2px;border-bottom:1px solid var(--line);align-items:baseline}
 .ingg.zg .ih,.ingg.zg .ir{grid-template-columns:var(--zc, minmax(0,1fr) 64px 52px)}
+.zcmp .ih{align-items:end}.zcmp .ih .num{display:flex;flex-direction:column;align-items:flex-end;gap:2px}.zcmp .ih .linkbtn{white-space:normal;text-align:right;overflow-wrap:anywhere;hyphens:auto;font-size:12px;line-height:1.25}.zcmp .ir{gap:6px}
 .ingg .num.cheap{color:var(--good);font-weight:700}
 .zst{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.zst button{flex:none}
 .zw{display:flex;flex-direction:column;margin-top:6px}
@@ -1211,7 +1212,7 @@ const REP_STEPS = {
   "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
   // Der Hinweg ist kein eigener Schritt: „Halten“ zählt Hinweg + Haltezeit, der 4. Wert sind die Sekunden Hinweg am Anfang (im Video sichtbar)
   "mob:tiltlie": [["Halten", 6, "hold", 1], ["Lösen", 2, "back"]],
-  "mob:tilt": [["Halten", 4, "hold", 1], ["Lösen", 2, "back"]],
+  "mob:tilt": [["Halten", 5, "hold", 2], ["Lösen", 2, "back"]],  // Einrollen im Video 2,8 s: 2 s Hinweg statt 1 s, sonst läuft es fast dreifach
   "mob:glutebr": [["Halten", 4, "hold", 1], ["Runter", 2, "back"]],
   "mob:deadbug": [["Halten", 4, "hold", 2], ["Zurück", 2, "back"]],
   "mob:shrug30": [["Halten", 3, "hold", 1], ["Ablassen", 2, "back"]]};
@@ -2466,7 +2467,8 @@ function dayPreps(d, ev){
       out.push({t: T - 90, for: e.k, icon: "🍌", txt: "Kleine Mahlzeit 1–2 h vorher (z. B. Banane, Skyr), dann nichts Schweres mehr"}); }
     if (e.meal) { const r = recipeByName(e.meal.name); if (!r) continue; const act = r.activeMin ?? r.timeMin ?? 15, tot = r.timeMin ?? act;
       const main = e.meal.k === "mi" || e.meal.k === "ab";
-      if (r.mealPrep) { if (main && wd >= 1 && wd <= 4) out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"}); }
+      // aus der Box nur Mo–Do mit Meal Prep; sonst wird frisch gekocht (auch vorkochbare Gerichte)
+      if (r.mealPrep && !prepOff() && main && wd >= 1 && wd <= 4) { out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"}); }
       else if (tot >= 10 && tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
   // für morgen: Gerichte, die über Nacht ziehen
   if (mealPlan && recipes) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
@@ -2519,7 +2521,7 @@ function ingTable(r){
 function zutatenPage(){
   zGrp = "";
   return `<input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off">
-    <div class="btnrow"><button class="btn small" type="button" data-sheet="scan">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button></div>
+    <div class="btnrow"><button class="btn small" type="button" data-sheet="scan">📷 Barcode</button><button class="btn small" type="button" data-sheet="receipt">🧾 Bon</button><button class="btn small" type="button" data-sheet="stock">🏠 Vorrat</button><button class="btn small" type="button" data-sheet="zcmp">⚖ Vergleichen${zCmp.length ? ` (${zCmp.length})` : ""}</button></div>
     <div class="zall small"><button type="button" class="linkbtn" data-zall="1">Alle aufklappen</button> · <button type="button" class="linkbtn" data-zall="0">Alle zuklappen</button></div>
     <div id="zBody">${zutatenHtml()}</div>`;
 }
@@ -2533,6 +2535,42 @@ function myInfoHtml(pr, close){ const home = STOCK().has(pr.id), x = pr.nw, b = 
     ${pr.priceEst ? `<div class="small muted">* Geschätzt aus ${pr.size ? `${fmtQ(pr.size)} g` : "250 g (Packung unbekannt)"} und dem üblichen Preis vergleichbarer Produkte der Rubrik. Eigenen Preis per Barcode-Scan oder Kassenbon eintragen.</div>` : ""}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${pr.id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
     <button type="button" class="btn ghost small" data-act="myDel" data-v="${esc(pr.key)}">Vom Bon-Produkt entfernen</button>`; }
+// Nährwerte der Katalog-Zutaten (zutaten-nw.json, je 100 g bzw. 100 ml): k kcal, p Eiweiß, c Kohlenhydrate, f Fett, fi Ballaststoffe; g = Gramm je Stück
+const NV_ROWS = [["k", "kcal", ""], ["p", "Eiweiß", " g"], ["c", "Kohlenhydrate", " g"], ["f", "Fett", " g"], ["fi", "Ballaststoffe", " g"]];
+const fmtNv = v => (v >= 10 ? Math.round(v) : Math.round(v * 10) / 10).toLocaleString("de-DE");
+const nvPiece = pr => pr.piece || (pr.unit === "Stück" ? pr.nv?.g : null) || null;
+const packG = pr => pr.unit === "Stück" ? (nvPiece(pr) ? pr.pack * nvPiece(pr) : null) : pr.pack;
+const nvPer = pr => pr.unit === "ml" ? "100 ml" : "100 g";
+const price100 = (pr, st) => { const v = priceOf(pr, st), g = packG(pr); return v != null && g ? v / g * 100 : null; };
+let zCmp = (lsGet("zCmp") || []).slice(0, 4), zcQ = "";
+function zCmpToggle(id){ if (!zCmp.includes(id) && zCmp.length >= 4) return; zCmp = zCmp.includes(id) ? zCmp.filter(x => x !== id) : zCmp.concat(id); lsSet("zCmp", zCmp); }
+function nvHtml(pr){ const nv = pr.nv, pg = nvPiece(pr), inC = zCmp.includes(pr.id);
+  const full = !inC && zCmp.length >= 4, btn = `<div class="btnrow"><button type="button" class="btn small ${inC ? "primary" : ""}" data-zcmp="${pr.id}" aria-pressed="${inC}" ${full ? "disabled" : ""}>${inC ? "⚖ Im Vergleich ✓" : full ? "⚖ Vergleich voll (4)" : "⚖ Zum Vergleich"}</button>${zCmp.length ? `<button type="button" class="btn small ghost" data-sheet="zcmp">Vergleich öffnen (${zCmp.length})</button>` : ""}</div>`;
+  if (!nv) return btn;
+  return `<div class="lab sec nutri">Nährwerte</div><div class="ingg zp nutri"><div class="ih"><span></span><span class="num">je ${nvPer(pr)}</span><span class="num">${pg ? "je Stück" : ""}</span></div>
+    ${NV_ROWS.map(([k, l, e]) => `<div class="ir"><span>${l}</span><span class="num">${fmtNv(nv[k])}${e}</span><span class="num">${pg ? fmtNv(nv[k] * pg / 100) + e : ""}</span></div>`).join("")}</div>
+    <div class="small muted nutri">${nv.k >= 20 ? `${fmtNv(nv.p / nv.k * 100)} g Eiweiß je 100 kcal · ` : ""}${pg ? `1 Stück ≈ ${pg} g · ` : ""}Richtwerte, die Packung kann abweichen.</div>${btn}`; }
+// Vergleich: bis zu 4 Zutaten nebeneinander, je 100 g; grün = am besten (mehr Eiweiß und Ballaststoffe, weniger Preis)
+function zcmpHtml(){
+  const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`, st = FOOD().store || "aldi", stN = prices.stores.includes(st) ? STORES[st] : "günstigster Markt";
+  const ps = zCmp.map(id => prodById(id)).filter(Boolean), n = ps.length;
+  const add = `<input type="text" id="zcQ" value="${esc(zcQ)}" placeholder="🔎 Zutat hinzufügen" aria-label="Zutat zum Vergleich suchen" autocomplete="off"><div id="zcRes" class="lrows">${zcResHtml()}</div>`;
+  if (!n) return `<div class="sh"><h2>⚖ Zutaten vergleichen</h2>${close}</div><p class="small muted">Bis zu 4 Zutaten nebeneinander: Nährwerte je 100 g und Preis. Such eine Zutat und tipp sie an.</p>${add}`;
+  const rows = [...NV_ROWS.map(([k, l, e]) => [l + (e ? " (g)" : ""), pr => pr.nv?.[k], k === "p" || k === "fi" ? 1 : 0, true]),
+    ["Eiweiß je 100 kcal (g)", pr => pr.nv && pr.nv.k >= 20 ? pr.nv.p / pr.nv.k * 100 : null, 1, true],
+    [`Preis je 100 g/ml (${stN})`, pr => price100(pr, st), -1, false],
+    ["Preis je 10 g Eiweiß", pr => { const v = price100(pr, st); return v != null && pr.nv?.p >= 2 ? v / pr.nv.p * 10 : null; }, -1, false]];
+  const cols = `minmax(0,1.1fr) repeat(${n},minmax(0,1fr))`;
+  const body = rows.map(([l, f, dir, nut]) => { const vs = ps.map(f), ok = vs.filter(v => v != null), best = dir && ok.length > 1 ? (dir > 0 ? Math.max(...ok) : Math.min(...ok)) : null;
+    return `<div class="ir ${nut ? "nutri" : ""}"><span class="small">${l}</span>${ps.map((pr, i) => `<span class="num ${best != null && vs[i] === best ? "cheap" : ""}">${vs[i] == null ? "–" : nut ? fmtNv(vs[i]) : eur(vs[i])}</span>`).join("")}</div>`; }).join("")
+    + `<div class="ir"><span class="small">Packung</span>${ps.map(pr => `<span class="num small">${fmtAmt(pr.pack, pr.unit)}<br>${eur(priceOf(pr, st))}</span>`).join("")}</div>`;
+  return `<div class="sh"><h2>⚖ Zutaten vergleichen</h2>${close}</div>
+    <div class="ingg zg zcmp" style="--zc:${cols}" lang="de"><div class="ih"><span>je 100 g</span>${ps.map(pr => `<span class="num"><button type="button" class="linkbtn" data-zinfo="${pr.id}">${esc(prodLabel(pr))}</button> <button type="button" class="linkbtn" data-zcmp="${pr.id}" aria-label="${esc(prodLabel(pr))} aus dem Vergleich nehmen">✕</button></span>`).join("")}</div>${body}</div>
+    <div class="small muted">Richtwerte je 100 g (Getränke je 100 ml) · grün = am besten: mehr Eiweiß und Ballaststoffe, weniger Preis. Preise: ${stN}.</div>
+    ${n < 4 ? add : `<div class="small muted">Höchstens 4 – mit ✕ eine entfernen.</div>`}`;
+}
+function zcResHtml(){ const qq = fold(zcQ.trim()); if (qq.length < 2) return "";
+  return prices.products.filter(pr => !zCmp.includes(pr.id) && fold(prodLabel(pr)).includes(qq)).slice(0, 8).map(pr => `<button type="button" class="lrow menu" data-zcmp="${pr.id}">${prodImg(pr, "pmini")}<span class="lmain"><b>${esc(prodLabel(pr))}</b>${pr.nv ? `<span class="small muted nutri">${fmtNv(pr.nv.k)} kcal · ${fmtNv(pr.nv.p)} g Eiweiß je ${nvPer(pr)}</span>` : ""}</span><span class="go">＋</span></button>`).join("") || `<div class="small muted">Keine Zutat gefunden.</div>`; }
 function zinfoHtml(id){
   const pr = prodById(id), close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`; if (!pr) return `<div class="sh"><h2>Zutat</h2>${close}</div>`;
   if (pr.my) return myInfoHtml(myProdList().find(m => m.id === id) || pr, close);
@@ -2543,7 +2581,8 @@ function zinfoHtml(id){
     <div class="field"><label for="nickIn">Eigener Name</label><input type="text" id="nickIn" data-nick="${esc(id)}" value="${esc(nickOf(pr))}" placeholder="${esc(prodLabel0(pr))}" autocomplete="off" enterkeyhint="done"></div>
     <div class="small muted">${esc(pr.group || "Vorrat & Gewürze")} · Packung ${fmtAmt(pr.pack, pr.unit)}${pr.pantry ? " · hält lange (Vorrat)" : ""}</div>${prodCredit(pr)}
     <button type="button" class="btn ${home ? "primary" : ""}" data-stock="${id}" aria-pressed="${home}">${home ? "🏠 Im Vorrat" : "🏠 Als Vorrat markieren"}</button>
-    <div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span>Bio</span></div>${rows}</div>
+    ${nvHtml(pr)}
+    <div class="lab sec">Preise</div><div class="ingg zp"><div class="ih"><span>Markt</span><span>Preis</span><span>Bio</span></div>${rows}</div>
     <div class="small muted">* geschätzt (Discounter-Eigenmarken sind meist preisgleich). Eigene Preise kommen vom Kassenbon oder Scan.</div>
     <div class="lab sec">In ${recs.length} Rezept${recs.length === 1 ? "" : "en"}</div><div class="lrows">${recs.slice(0, 40).map(r => `<button type="button" class="lrow menu" data-recipe="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted nutri">${nutTxt(r)}</span></span><span class="go">›</span></button>`).join("") || `<div class="small muted">In keinem Rezept.</div>`}</div>`;
 }
@@ -2566,26 +2605,27 @@ function zutatenHtml(){
   else if (zSort === "preis") rows.sort((x, y) => (y.pp[0] ?? -1) - (x.pp[0] ?? -1));
   else if (zSort === "spar") rows.sort((x, y) => y.diff - x.diff || x.name.localeCompare(y.name, "de"));
   else if (zSort === "haeufig") rows.sort((x, y) => y.n - x.n || x.name.localeCompare(y.name, "de"));
+  else if (zSort === "eiweiss") rows.sort((x, y) => (y.pr.nv?.p ?? -1) - (x.pr.nv?.p ?? -1) || x.name.localeCompare(y.name, "de"));
   else rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
   // Bon-Produkte wie andere Zutaten: eigene Gruppe, antippbar, Preis beim Markt des Bons
   const mine = myProdList().map(mp => ({pr: mp, my: true, name: mp.name, grp: mp.group, pp: SS.map(st => st === mp.store || (mp.priceEst && st === SS[0]) ? mp.price : null), lo: mp.price, diff: 0, best: null, n: 0, home: home.has(mp.id)}))
     .filter(x => (!qq || fold(x.name).includes(fold(qq))) && (!zGrp || zGrp === x.grp || zGrp === "🧾 Vom Kassenbon"));
   if (zGrp === "🧾 Vom Kassenbon") rows = []; rows = rows.concat(mine);
   if (zSort === "laden") rows.sort((x, y) => GO.indexOf(x.grp) - GO.indexOf(y.grp) || x.name.localeCompare(y.name, "de")); else if (zSort === "az") rows.sort((x, y) => x.name.localeCompare(y.name, "de"));
-  const sub = x => x.my ? `${x.pr.ean ? "📷 gescannt" : "🧾 vom Bon"} · ${STORES[x.pr.store] || ""}${x.pr.priceEst ? " · Preis geschätzt" : ""}${x.pr.nw ? "" : " · ohne Nährwerte"}` : fmtAmt(x.pr.pack, x.pr.unit);
+  const sub = x => x.my ? `${x.pr.ean ? "📷 gescannt" : "🧾 vom Bon"} · ${STORES[x.pr.store] || ""}${x.pr.priceEst ? " · Preis geschätzt" : ""}${x.pr.nw ? "" : " · ohne Nährwerte"}` : fmtAmt(x.pr.pack, x.pr.unit) + (x.pr.nv ? `<span class="nutri"> · ${fmtNv(x.pr.nv.k)} kcal · ${fmtNv(x.pr.nv.p)} g Eiweiß/${nvPer(x.pr)}</span>` : "");
   const cols = cmp ? `minmax(0,1fr) repeat(${SS.length},58px)` : `minmax(0,1fr) 64px 52px`;
   const full = rows.filter(x => !x.my && x.pp.every(v => v != null)), sums = SS.map((st, i) => full.reduce((t, x) => t + x.pp[i], 0)), wins = SS.map((st, i) => rows.filter(x => x.lo != null && x.pp[i] === x.lo && x.pp.filter(v => v === x.lo).length < SS.length).length);
   const cell = (x, i) => { const v = x.pp[i]; return `<span class="num ${cmp && v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? eur(v) + (isEst(x.pr, SS[i]) ? "*" : "") : "–"}</span>`; };
   const AB = {kaufland: "Kaufl.", edeka: "Edeka", penny: "Penny", netto: "Netto"}, ab = st => AB[st] || STORES[st];
-  if (wide) return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
-    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
+  if (wide) return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig", eiweiss: "Eiweiß"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="${SS.length === prices.stores.length}">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ["spar", "Ersparnis"], ["haeufig", "Häufig"], ...(FOOD().showNutri !== false ? [["eiweiss", "Eiweiß"]] : [])].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
     <div class="zw" style="--zn:${SS.length}"><div class="zwh">${SS.map(st => `<span>${ab(st)}</span>`).join("")}</div>
     ${zGroups(rows, x => `<button type="button" class="zwr" data-zinfo="${x.pr.id}"><span class="zwn">${esc(x.name)} <span class="small muted">${sub(x)}${x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span><span class="zwp">${SS.map((st, i) => { const v = x.pp[i]; return `<span class="${v != null && v === x.lo && x.diff > 0 ? "cheap" : ""}">${v != null ? v.toFixed(2).replace(".", ",") + (isEst(x.pr, st) ? "*" : "") : "–"}</span>`; }).join("")}</span></button>`)}
     ${rows.length ? `<div class="zwr sum"><span class="zwn">Summe · ${full.length} Zutaten mit Preis überall</span><span class="zwp">${sums.map(v => `<span class="${v === Math.min(...sums) ? "cheap" : ""}">${Math.round(v)}</span>`).join("")}</span></div>
       <div class="zwr"><span class="zwn small muted">wie oft am günstigsten</span><span class="zwp">${wins.map(w => `<span class="small">${w}×</span>`).join("")}</span></div>` : ""}</div>
     <div class="small muted">Preise in € je Packung · * geschätzt · grün = am günstigsten · Antippen für Details.</div>`;
-  return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="false">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
-    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"]].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
+  return `<details class="slim zset" ${keepOpen("zset")}><summary><span>⚙ Märkte & Sortierung</span><span class="muted">${SS.map(st => STORES[st]).join(", ")} · ${{laden: "nach Rubrik", az: "A–Z", preis: "Preis", spar: "Ersparnis", haeufig: "häufig", eiweiss: "Eiweiß"}[zSort] || ""}</span></summary><div class="card"><div class="lab">Märkte <span class="muted">(mehrere antippen zum Vergleichen)</span></div><div class="chips sm zst"><button type="button" data-zst="*" aria-pressed="false">Alle</button>${prices.stores.map(st => `<button type="button" data-zst="${st}" aria-pressed="${SS.includes(st)}">${STORES[st]}</button>`).join("")}</div>
+    <div class="chips sm">${[["laden", "Laden"], ["az", "A–Z"], ["preis", "Preis"], ...(cmp ? [["spar", "Ersparnis"]] : []), ["haeufig", "Häufig"], ...(FOOD().showNutri !== false ? [["eiweiss", "Eiweiß"]] : [])].map(([k, l]) => `<button type="button" data-zsort="${k}" aria-pressed="${zSort === k}">${l}</button>`).join("")}</div></div></details>
     <div class="ingg zg" style="--zc:${cols}"><div class="ih"><span>Zutat</span>${cmp ? SS.map(st => `<span class="num">${STORES[st]}</span>`).join("") : `<span class="num">${STORES[SS[0]]}</span><span class="num">Rez.</span>`}</div>
     ${zGroups(rows, x => `<button type="button" class="ir" data-zinfo="${x.pr.id}"><span>${prodImg(x.pr, "pmini")}${esc(x.name)}${x.home ? ` <span class="tag">🏠</span>` : ""}<br><span class="small muted">${sub(x)}${!cmp && x.best && x.best[0] !== SS[0] ? ` · günstiger: ${STORES[x.best[0]]} ${eur(x.best[1])}` : ""}${cmp && x.diff > 0 ? ` · ${eur(x.diff)} Unterschied` : ""}</span></span>${cmp ? SS.map((st, i) => cell(x, i)).join("") : cell(x, 0) + `<span class="num">${x.n || "–"}</span>`}</button>`)}
     ${cmp && rows.length ? `<div class="ir sum"><span>Summe · ${full.length} Zutaten mit Preis in allen, je 1 Packung</span>${sums.map((v, i) => `<span class="num ${v === Math.min(...sums) ? "cheap" : ""}">${eur(v)}</span>`).join("")}</div>
@@ -3330,7 +3370,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
       <div class="kpis"><div class="kpi"><div class="v">${fmtDur(a.dur)}</div><div class="l">Dauer</div></div><div class="kpi"><div class="v">${a.sets}</div><div class="l">Sätze</div></div><div class="kpi"><div class="v">${a.prs.length}</div><div class="l">Bestwerte</div></div></div>
       ${a.prs.length ? `<div class="small">Besser als letztes Mal: ${a.prs.map(esc).join(", ")}</div>` : ""}
       ${info("Heute Abend noch das Schmerz-Log. Der Planer legt die nächste Einheit automatisch in einen freien Slot.")}`;
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover","restleft","kochbar","aisle"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","ownfood","receipt","ownprices","scan","cardio","cook","shoprec","reste","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","leftover","restleft","kochbar","aisle","zcmp"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {};
@@ -3556,6 +3596,7 @@ function journeySheet(kind, arg){
   if (kind === "cook") return cookHtml(arg);
   if (kind === "kochbar") return kochbarHtml();
   if (kind === "aisle") return aisleHtml(arg);
+  if (kind === "zcmp") { if (!prices) { ensurePrices().then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zcmpHtml(); }
   if (kind === "zinfo") { if (!prices || !recipes) { Promise.all([ensurePrices(), ensureMeals()]).then(() => renderSheet()).catch(() => {}); return `<p class="muted">Lade …</p>`; } return zinfoHtml(arg); }
   if (kind === "zutaten") return `<div class="sh"><h2>📋 Alle Zutaten</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div><input type="text" id="zQ" value="${esc(zQ)}" placeholder="🔎 Zutat suchen" aria-label="Zutat suchen" autocomplete="off"><div id="zBody">${zutatenHtml()}</div>`;
   if (kind === "snack") return snackHtml(arg || todayIso());
@@ -3653,7 +3694,7 @@ let sheetQuiz = null;
 let recShelves = true, recipeCtx = null, swapCand = null, srQ = "", recTab = "zutaten";
 function shopRecList(){
   const qq = srQ.trim().toLowerCase(), wr = Object.keys(weekRecipes(shopWeek())), hit = r => !qq || recipeText(r).includes(qq);
-  const row = r => `<button type="button" class="lrow menu ${r.name === shopRec ? "sel" : ""}" data-shoprec="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)} · </span>${r.activeMin ?? r.timeMin} min${r.mealPrep ? " · Meal Prep" : ""}</span></span><span class="go">${r.name === shopRec ? "✓" : "›"}</span></button>`;
+  const row = r => `<button type="button" class="lrow menu ${r.name === shopRec ? "sel" : ""}" data-shoprec="${esc(r.name)}">${mealThumb(r.name)}<span class="lmain"><b>${esc(r.name)}</b><span class="small muted"><span class="nutri">${nutTxt(r)} · </span>${r.activeMin ?? r.timeMin} min${r.mealPrep && !prepOff() ? " · vorkochbar" : ""}</span></span><span class="go">${r.name === shopRec ? "✓" : "›"}</span></button>`;
   const byName = (a, b) => a.name.localeCompare(b.name, "de");
   const G = [["📅 Diese Woche im Plan", wr.map(recipeByName).filter(Boolean)], ["★ Favoriten", recipes.filter(r => isFav(r.name) && !wr.includes(r.name)).sort(byName)], ["Alle Rezepte", recipes.filter(r => !wr.includes(r.name) && !isFav(r.name)).sort(byName)]];
   let h = ""; for (const [g, a] of G) { const v = a.filter(hit); if (v.length) h += `<div class="lab sec">${g} (${v.length})</div><div class="lrows">${v.map(row).join("")}</div>`; }
@@ -3831,7 +3872,7 @@ function calEntries(d, noMeals){
   else if (p) out.push({tm: p.start || "", en: p.end || "", title: `Training: ${SESS[variantOf(p.session, d)].title}`, kind:"train", go:`#w=${d}`, miss: d < t});
   if (day?.boulder?.done && !(day.cardio || []).some(c => c.type === "boulder")) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
   for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${[durTxt(c), c.km ? fmtQ(c.km) + " km" : ""].filter(Boolean).join(" · ")}`, kind:"cardio", done:true, go:`#d=${d}`});
-  for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title:"Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
+  for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title: prepOff() ? "Wochen-Check-in" : "Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
   if (d >= t || mob) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin()), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
   if (d >= t || pain) out.push({tm: routineAt("pain"), en: hmStr(hm(routineAt("pain")) + 5), title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
@@ -3865,7 +3906,7 @@ function calMonth(d){
   return h + `</div><div class="small muted"><span class="lg tr"></span> Training (✓ erledigt) &nbsp; <span class="lg bo"></span> Bouldern &nbsp; <span class="lg mk"></span> Deload/Messtag · Tag antippen für die Tagesansicht.</div>`;
 }
 // Kalender-Abo: welche Einträge drinstehen und wann der Kalender erinnert (Minuten vorher, null = keine). Ohne Einstellung wie bisher.
-const CAL_KINDS = [["train", "Training"], ["mob", "Morgenroutine"], ["pain", "Abendcheck"], ["checkin", "Check-in & Meal Prep"], ["marker", "Mess- & Deload-Tage"]];
+const CAL_KINDS = [["train", "Training"], ["mob", "Morgenroutine"], ["pain", "Abendcheck"], ["checkin", "Wochen-Check-in"], ["marker", "Mess- & Deload-Tage"]];
 const CAL_REM = [[null, "ohne Erinnerung"], [0, "zum Start"], [5, "5 min vorher"], [10, "10 min vorher"], [15, "15 min vorher"], [30, "30 min vorher"], [60, "1 h vorher"]];
 function calPref(k){ const p = (S().calPrefs || {})[k], pp = S().pushPrefs || {};
   const def = {train: 30, mob: pp.morning !== false ? 0 : null, pain: pp.pain !== false ? 0 : null, checkin: pp.checkin !== false ? 15 : null, marker: null}[k];
@@ -4068,7 +4109,7 @@ function budgetCands(k, curName){
 }
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
 const budgetQuick = new Map();
-const BUDGET_V = 1; // erhöhen, wenn sich die Tausch-Logik ändert (verwirft gespeicherte Ergebnisse)
+const BUDGET_V = 2; // erhöhen, wenn sich die Tausch-Logik ändert (verwirft gespeicherte Ergebnisse)
 const strHash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0; return h.toString(36) + t.length.toString(36); };
 function budgetSubs(mo){
   const qk = mo + "|" + dataVer; if (budgetQuick.has(qk)) return budgetQuick.get(qk);
@@ -4081,7 +4122,7 @@ function budgetSubs0(mo){
   const pk = strHash([BUDGET_V, key, JSON.stringify(FOOD()), prices?.date || "", (prices?.products || []).length, (recipes || []).length, JSON.stringify(mealPlan?.target || {}), S().startDate || ""].join("|")), pm = lsGet("budgetMemo") || {};
   if (pm[pk]) { budgetMemo.set(key, pm[pk]); return pm[pk]; }
   const occ = {}; for (const o of raw) for (const [k, n] of Object.entries(o)) (occ[n] = occ[n] || {n, slot: k, cnt: 0}).cnt++;
-  const W = mealWeek(weekNo(mo) ?? 0), batch = new Set([W.batchA, W.batchB]);
+  const W = mealWeek(weekNo(mo) ?? 0), batch = new Set(prepOff() ? [] : [W.batchA, W.batchB]);
   // Bewertet wird der echte Wocheneinkauf (Packungen), nicht die Portionskosten
   const total = sb => { const c = {}; for (const x of Object.values(occ)) { const n = sb[x.n] || x.n; c[n] = (c[n] || 0) + x.cnt; } return shopCostCounts(c); };
   // Kein Tausch darf einen Tag unter das Protein-Ziel drücken (bzw. unter den Ausgangswert, falls der schon darunter liegt)
@@ -4107,8 +4148,8 @@ function budgetSubs0(mo){
 }
 function mealDefaults(d, raw){
   const w = weekNo(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
-  if (i <= 3) [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
-  if (i <= 3 && FOOD().mealPrep === false) for (const k of ["mi", "ab"]) { const sm = altMeals(k, o[k]); if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; }
+  if (i <= 3) { [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
+    if (prepOff()) for (const k of ["mi", "ab"]) { const sm = altMeals(k, o[k]); if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; } }
   else if (i === 4) [o.mi, o.ab] = [W.frMittag, W.frAbend];
   else if (i === 5) [o.mi, o.ab] = [W.frAbend, W.saAbend];
   else [o.mi, o.ab] = [W.saAbend, W.soAbend];
@@ -4121,7 +4162,7 @@ function mealDefaults(d, raw){
   const re = avoidRe();
   if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alt = altMeals(k, o[k])[0]; if (alt) o[k] = alt.name; } }
   // Zu aufwendige frische Gerichte tauschen; Meal Prep (Batch) wird nur einmal pro Woche gekocht und bleibt
-  if (effortOn()) { const bt = new Set([W.batchA, W.batchB]);
+  if (effortOn()) { const bt = new Set(prepOff() ? [] : [W.batchA, W.batchB]);
     for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !bt.has(o[k]) && !effortOk(r)) { const alt = altMeals(k, o[k]).find(effortOk); if (alt) o[k] = alt.name; } } }
   if (!raw && budgetOn()) { const b = budgetSubs(monday(d)).subs, mark = new Set(); for (const k of Object.keys(o)) if (b[o[k]]) { o[k] = b[o[k]]; mark.add(k); }
     Object.defineProperty(o, "_budget", {value: mark, enumerable: false}); }
@@ -4362,7 +4403,8 @@ const STORES = {rewe: "REWE", lidl: "Lidl", aldi: "Aldi", kaufland: "Kaufland", 
 const showPrices = () => !!FOOD().prices && !!prices;
 function ensurePrices(){
   if (prices) return Promise.resolve();
-  return pricesReady = pricesReady || fetch("prices.json").then(r => r.json()).then(j => { prices = j; for (const pr of j.products) { pr.re = new RegExp(pr.match, "i"); pr.basePrices = Object.assign({}, pr.prices); }
+  return pricesReady = pricesReady || Promise.all([fetch("prices.json").then(r => r.json()), fetch("zutaten-nw.json").then(r => r.ok ? r.json() : {}).catch(() => ({}))]).then(([j, nw]) => { prices = j; for (const pr of j.products) { pr.re = new RegExp(pr.match, "i"); pr.basePrices = Object.assign({}, pr.prices); pr.nv = nw.items?.[pr.id] || null; }
+    zCmp = (lsGet("zCmp") || zCmp).filter(id => j.products.some(pr => pr.id === id)).slice(0, 4);  // nicht mehr vorhandene Zutaten fallen raus
     j.stores = Object.keys(STORES).filter(st => j.products.some(pr => pr.prices?.[st] != null)); costMemo.clear(); recVec.clear(); budgetMemo.clear(); }).catch(e => { pricesReady = null; throw e; });
 }
 const eur = v => v == null ? "–" : v.toLocaleString("de-DE", {style: "currency", currency: "EUR"});
@@ -5609,6 +5651,7 @@ async function onClick(e){
   const zsb = t.closest("[data-zst]"); if (zsb) { const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi"; let L = (zStores || [def]).slice(); const k = zsb.dataset.zst;
     if (k === "*") L = L.length === prices.stores.length ? [def] : prices.stores.slice(); else { L = L.includes(k) ? L.filter(x => x !== k) : [...L, k]; if (!L.length) L = [k]; } zStores = L; lsSet("zStores", L); if (zSort === "spar" && L.length < 2) zSort = "preis"; zUpd(); return; }
   const zg = t.closest("[data-zgrp]"); if (zg) { zGrp = zg.dataset.zgrp; document.querySelectorAll("[data-zgrp]").forEach(b => b.setAttribute("aria-pressed", b === zg)); zUpd(); return; }
+  const zc = t.closest("[data-zcmp]"); if (zc) { zCmpToggle(zc.dataset.zcmp); if (sheetKind === "zcmp") zcQ = ""; renderSheet(); if (sheetKind === "zcmp" && zCmp.length < 4) document.getElementById("zcQ")?.focus(); return; }
   const zi = t.closest("[data-zinfo]"); if (zi) { openSheet("zinfo", zi.dataset.zinfo); return; }
   const zf = t.closest("[data-zfind]"); if (zf) { closeSheet(); essenView = "rezepte"; recShelves = false; recFilter.q = zf.dataset.zfind; go("essen"); return; }
   const isr = t.closest("[data-ingsort]"); if (isr) { lsSet("ingSort", isr.dataset.ingsort); const box = document.getElementById("ingTab"), r = recipeByName(sheetArg); if (box && r) box.innerHTML = ingTable(r); return; }
@@ -5828,6 +5871,7 @@ function onInput(e){
   if (t.dataset.ftime && t.value) { saveFood({times: Object.assign({}, FOOD().times, {[t.dataset.ftime]: t.value})}); return; }
   if (t.id === "snackG") { snackG = t.value.trim(); const l = sheet.querySelector(".snackamt + .lab"); if (l) l.textContent = "Antippen = sofort eingetragen" + (snackG ? ` · ${snackG} g/ml` : snackMul !== 1 ? ` · ${snackMul}×` : ""); sheet.querySelectorAll("[data-snackmul]").forEach(b => b.setAttribute("aria-pressed", !snackG && Number(b.dataset.snackmul) === snackMul)); return; }
   if (t.id === "nickQ") { nickQ = t.value; const b = document.getElementById("nickList"); if (b) b.innerHTML = nickListHtml(); return; }
+  if (t.id === "zcQ") { zcQ = t.value; const r = document.getElementById("zcRes"); if (r) r.innerHTML = zcResHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }

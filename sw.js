@@ -1,6 +1,6 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v212";
-const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
+const CACHE = "tb-v213";
+const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "zutaten-nw.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, {cache: "reload"})))).then(() => self.skipWaiting()));
