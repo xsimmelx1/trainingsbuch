@@ -406,10 +406,16 @@ ALLERGENS = {"nuesse": "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern|stu
              "gluten": "weizen|mehl|nudel|pasta|spaghetti|brot|brötchen|couscous|tortilla|wrap|hafer|knäcke|bulgur|biskuit|dürüm|seitan|dinkel|grünkern|gerste|panko|semmel", "sesam": "sesam|tahin", "senf": "senf"}
 
 
+# wie VEGAN_RE in der App: tierische Zutaten; Pflanzendrinks, Soja-/Kokosjoghurt, Erdnuss-/Mandelbutter zählen nicht
+VEGAN_RE = r"\beier?\b|eiklar|eigelb|rührei|spiegelei|omelett|\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee"
+
+
 def avoid_re(settings):
     import re
     f = settings.get("food") or {}
     parts = [ALLERGENS[k] for k in f.get("allergens") or [] if k in ALLERGENS]
+    if f.get("vegan"):
+        parts.append(VEGAN_RE)
     for w in re.split(r"[,;\n]", f.get("avoid") or ""):
         w = w.strip().lower()
         if len(w) < 3:
@@ -456,8 +462,9 @@ def substitute(mp, rec, o, rx):
         minp = 13 if k in ("sn", "ex") else 25
         cands = [x for x in uniq(rec) if x["category"] in slots[k]["cats"] and x["name"] != n and x["protein"] >= minp and not rx.search(text(x))]
         cands.sort(key=lambda x: abs(x["kcal"] - r["kcal"]) / 8 + abs(x["protein"] - r["protein"]))
+        used = set(v for v in o.values() if isinstance(v, str))  # möglichst kein Gericht zweimal am Tag (wie mealDefaults)
         if cands:
-            o[k] = cands[0]["name"]
+            o[k] = next((x for x in cands if x["name"] not in used), cands[0])["name"]
     return o
 
 
@@ -472,13 +479,13 @@ SUBST_D = {"milch": {"sojadrink": (-8, -0.1), "haferdrink": (-1, -2.7), "mix": (
 
 
 def adjust_recipes(rec, P, subst):
-    """Kopie der Rezepte mit angepassten kcal/Protein und Text inkl. Ersatzprodukt-Namen (wie recipeNutri/substNames)."""
+    """Kopie der Rezepte mit angepassten kcal/Protein und Text mit Ersatzprodukten statt ersetzter Zeilen (wie recipeNutri/recIngText)."""
     if not P or not subst:
         return rec
     out = {}
     for n, r in rec.items():
         k = p = 0.0
-        extra = ""
+        lines = []
         for line in r.get("ingredients") or []:
             orig = parse_ing(line, P, {})
             subd = parse_ing(line, P, subst)
@@ -487,10 +494,12 @@ def adjust_recipes(rec, P, subst):
                 amt = orig[0][1]
                 k += amt / 100 * d[0]
                 p += amt / 100 * d[1]
-                extra += " " + " ".join(x[0]["name"] for x in subd)
+                lines.append(" ".join(x[0]["name"] for x in subd))  # ersetzte Zeile zählt als Ersatzprodukt (wie recIngText)
+            else:
+                lines.append(line)
         sv = r.get("servings") or 1
         rnd = lambda x: math.floor(x + 0.5)  # wie Math.round in der App
-        out[n] = dict(r, kcal=rnd(r["kcal"] + k / sv), protein=rnd(r["protein"] + p / sv), _text=(r["name"] + " " + " ".join(r.get("ingredients", [])) + extra).lower())
+        out[n] = dict(r, kcal=rnd(r["kcal"] + k / sv), protein=rnd(r["protein"] + p / sv), _text=(r["name"] + " " + " ".join(lines)).lower())
     return out
 
 

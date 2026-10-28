@@ -3689,7 +3689,7 @@ function journeySheet(kind, arg){
         return `<div class="actions ddrow"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}" aria-pressed="${ctxM.ate}">${ctxM.ate ? "✓ Gegessen" : "Gegessen"}</button>${ddMenu("Mehr", `<button type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Was anderes gegessen</button><button type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button>${restBtn(ctxM.d, mm).replace(/class="[^"]*"/, "")}${skipBtn(ctxM.d, ctxM, "")}`, "right")}</div>${porPick(ctxM.d, mm)}${restPick(ctxM.d, ctxM)}`; })() : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">⇄ Austauschen</button>${swapCand.ctx.split("|")[0] <= todayIso() ? `<button class="btn" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}" data-eat="1">✓ Austauschen & gegessen</button>` : ""}<button class="btn" type="button" data-random="meal" data-v="${swapCand.ctx}" data-cur="${esc(mealsFor(swapCand.ctx.split("|")[0]).find(m => m.k === swapCand.ctx.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}">🎲 Noch eins</button></div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
-        <div class="rfacts">${tempTag(r)}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
+        <div class="rfacts">${tempTag(r)}${veganOk(r) ? `<span class="tag">🌱 vegan</span>` : ""}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
         ${showPrices() ? (() => { const st = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi", c = recipeCost(r, st), best = prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
           return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${STORES[st]}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
@@ -3723,7 +3723,7 @@ function shopRecList(){
   return h || `<p class="muted">Kein Gericht gefunden.</p>`; }
 // „Kochen mit …“: Rezepte, die eine Zutat enthalten (über das Suchmuster des Produkts)
 const usesProd = (r, pr) => !!pr && r.ingredients.some(l => pr.re.test(l));
-function recipesFiltered(){ const are = avoidRe(), ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null; return recipes.filter(r => recipeOk(r, are) && (!recFilter.ing || usesProd(r, ingP)) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein); }
+function recipesFiltered(){ const are = avoidRe(), ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null; return recipes.filter(r => recipeOk(r, are) && (!recFilter.ing || usesProd(r, ingP)) && (recFilter.cat === "alle" || catOf(r) === recFilter.cat) && (!recFilter.prep || r.mealPrep) && (!recFilter.fav || isFav(r.name)) && (!recFilter.vegan || veganOk(r)) && (!recFilter.temp || r.temp === recFilter.temp || r.temp === "beides") && (!recFilter.diff || r.difficulty === recFilter.diff) && (!recFilter.fast || (r.activeMin ?? r.timeMin) <= 20) && (!recFilter.q || (r.name + " " + r.ingredients.join(" ")).toLowerCase().includes(recFilter.q.toLowerCase()))).sort((a,b) => b.protein - a.protein); }
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
 // Minimierter Kochmodus: Pille über der Navigation, Timer läuft weiter, antippen holt das Blatt zurück
@@ -3768,6 +3768,7 @@ function shelfHtml(){
   const main = r => catOf(r) === "haupt";
   const shelves = [
     ["★ Favoriten", ok.filter(r => isFav(r.name)), {fav: true}],
+    ...(FOOD().vegan ? [] : [["🌱 Vegan", ok.filter(r => veganOk(r)).sort((a, b) => recipeNutri(b).protein - recipeNutri(a).protein), {vegan: true}]]),
     ["⚡ Schnell (≤ 20 min aktiv)", ok.filter(r => main(r) && (r.activeMin ?? r.timeMin) <= 20).sort((a, b) => (a.activeMin ?? a.timeMin) - (b.activeMin ?? b.timeMin)), {fast: true, cat: "haupt"}],
     ...(prices ? [["💶 Günstig (≤ 1,20 € pro Portion)", ok.filter(r => main(r) && recipeCost(r).portion <= 1.2).sort((a, b) => recipeCost(a).portion - recipeCost(b).portion), {cat: "haupt"}]] : []),
     ["🍳 Meal Prep", prepOff() ? [] : ok.filter(r => main(r) && r.mealPrep && (r.servings || 1) >= 4), {prep: true, cat: "haupt"}],
@@ -3793,14 +3794,14 @@ const recGrid = list => `<div class="rgrid">${list.map(r => `<button type="butto
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
-  const filt = recFilter.q || recFilter.ing || recFilter.cat !== "alle" || recFilter.prep || recFilter.diff || recFilter.fast || recFilter.temp || recFilter.fav;
+  const filt = recFilter.q || recFilter.ing || recFilter.cat !== "alle" || recFilter.prep || recFilter.diff || recFilter.fast || recFilter.temp || recFilter.fav || recFilter.vegan;
   if (recShelves && !filt) { b.innerHTML = shelfHtml(); return; }
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
   const list = recipesFiltered();
   const ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null;
   b.innerHTML = `<button class="btn ghost small" type="button" data-recshelves>‹ Übersicht</button>${ingP ? `<div class="mhead"><b>🥘 Kochen mit ${esc(cwLabel(ingP))} · ${list.length} Rezept${list.length === 1 ? "" : "e"}</b><button type="button" class="btn ghost small" data-cookwith="" aria-label="Zutat-Filter entfernen">✕</button></div>${list.length ? "" : `<div class="empty small">Noch kein Rezept mit dieser Zutat.</div>`}` : ""}<div class="card"><input type="text" id="recQ" value="${esc(recFilter.q)}" placeholder="Suche: Name oder Zutat" aria-label="Rezepte suchen">
     <div class="chips" id="recCat">${["alle",...Object.keys(CAT)].map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat===c}">${c==="alle"?"Alle":CAT[c]}</button>`).join("")}</div>
-    <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
+    <div class="chips"><button type="button" data-recfav="1" aria-pressed="${recFilter.fav}">★ Favoriten (${(FOOD().favs || []).length})</button>${FOOD().vegan ? "" : `<button type="button" data-recvegan="1" aria-pressed="${recFilter.vegan}">🌱 Vegan</button>`}${[["", "Warm & kalt"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]].map(([v, l]) => `<button type="button" data-rectemp="${v}" aria-pressed="${recFilter.temp === v}">${l}</button>`).join("")}</div>
     <div class="chips">${[["", "Jeder Aufwand"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]].map(([v, l]) => `<button type="button" data-recdiff="${v}" aria-pressed="${recFilter.diff === v}">${l}</button>`).join("")}<button type="button" data-recfast="1" aria-pressed="${recFilter.fast}">⏱ ≤ 20 min aktiv</button></div>
     <label class="check small"><input type="checkbox" id="recPrep" ${recFilter.prep?"checked":""}><span>Nur Meal-Prep-tauglich · <span id="recCount">${list.length}</span> Rezepte</span></label>${hidden ? `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen → ⚙).</div>` : ""}</div>
     <div id="recRes">${recGrid(list)}</div>
@@ -3993,6 +3994,9 @@ const ALLERGENS = {nuesse: ["Nüsse", "walnu|cashew|haselnu|mandel|pistazie|nüs
 function avoidTerm(w){ w = w.trim().toLowerCase(); if (w.length < 3) return null;
   for (const suf of ["en", "n", "e", "s"]) if (w.endsWith(suf) && w.length - suf.length >= 4) { w = w.slice(0, -suf.length); break; }
   return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/[aä]/g, "[aä]").replace(/[oö]/g, "[oö]").replace(/[uü]/g, "[uü]"); }
+// Vegan: tierische Zutaten (Pflanzendrinks, Soja-/Kokosjoghurt, Erdnuss-/Mandelbutter zählen nicht); ersetzte Zutaten (Ersatzprodukte) prüft recipeText schon als Ersatz
+const VEGAN_RE = "\\beier?\\b|eiklar|eigelb|rührei|spiegelei|omelett|\\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee", VEGAN_RX = new RegExp(VEGAN_RE, "i");
+const veganOk = r => !VEGAN_RX.test(recipeText(r).replace(/§[a-z]+§/g, ""));
 let avoidMemo = {k: null, re: null};
 // Küchengeräte: Rezepte tragen dev (herd, ofen = Auflauf/Blech, ofenk = kleines Ofengericht, mixer); fehlende Geräte wirken wie gemiedene Zutaten
 const KITCHEN = {herd: "🍳 Herd", ofen: "♨️ Backofen", airfryer: "🌀 Heißluftfritteuse", mixer: "🥤 Mixer / Pürierstab", mikrowelle: "📡 Mikrowelle"};
@@ -4002,13 +4006,13 @@ const kitchenHas = () => new Set(FOOD().devices || KITCHEN_DEF);
 function devParts(){ const h = kitchenHas(), p = []; if (!h.has("herd")) p.push("§herd§"); if (!h.has("ofen")) { p.push("§ofen§"); if (!h.has("airfryer")) p.push("§ofenk§"); } if (!h.has("mixer")) p.push("§mixer§"); return p; }
 const warnTxt = w => w && w[0] === "§" ? `braucht ${DEV_NEED[w] || "ein Gerät"}` : `enthält „${w}“`;
 function devLine(r){ const d = (r.dev || []).map(k => k === "ofenk" ? "♨️ Ofen oder 🌀 Heißluftfritteuse" : KITCHEN[k]).filter(Boolean); return d.length ? `<div class="small muted">Geräte: ${d.join(" · ")}</div>` : ""; }
-function avoidRe(){ const key = JSON.stringify([FOOD().allergens, FOOD().avoid, FOOD().devices]); if (avoidMemo.k === key) return avoidMemo.re; avoidMemo = {k: key, re: avoidRe0()}; return avoidMemo.re; }
-function avoidRe0(){ const f = FOOD(), parts = (f.allergens || []).map(k => ALLERGENS[k]?.[1]).filter(Boolean).concat((f.avoid || "").split(/[,;\n]/).map(avoidTerm).filter(Boolean)).concat(devParts());
+function avoidRe(){ const key = JSON.stringify([FOOD().allergens, FOOD().avoid, FOOD().devices, !!FOOD().vegan, FOOD().subst]); if (avoidMemo.k === key) return avoidMemo.re; avoidMemo = {k: key, re: avoidRe0()}; return avoidMemo.re; }
+function avoidRe0(){ const f = FOOD(), parts = (f.allergens || []).map(k => ALLERGENS[k]?.[1]).filter(Boolean).concat((f.avoid || "").split(/[,;\n]/).map(avoidTerm).filter(Boolean)).concat(devParts()).concat(f.vegan ? [VEGAN_RE] : []);
   return parts.length ? new RegExp(parts.join("|"), "i") : null; }
 const recTextMemo = new WeakMap();
 const recipeText = r => { const sb = FOOD().subst, m = recTextMemo.get(r); if (m && m.p === prices && m.s === sb) return m.t;
-  const t = (r.name + " " + (r.ingredients || []).join(" ") + substNames(r)).toLowerCase() + (r.dev || []).map(d => " §" + d + "§").join(""); recTextMemo.set(r, {p: prices, s: sb, t}); return t; };
-function substNames(r){ if (!prices || !Object.keys(FOOD().subst || {}).length) return ""; let t = ""; for (const l of r.ingredients || []) { const x = parseIng(l); if (x.orig) t += " " + (x.parts || [x]).map(p => p.pr.name).join(" "); } return t; }
+  const t = (r.name + " " + recIngText(r)).toLowerCase() + (r.dev || []).map(d => " §" + d + "§").join(""); recTextMemo.set(r, {p: prices, s: sb, t}); return t; };
+function recIngText(r){ const on = prices && Object.keys(FOOD().subst || {}).length; return (r.ingredients || []).map(l => { if (!on) return l; const x = parseIng(l); return x.orig ? (x.parts || [x]).map(p => p.pr.name).join(" ") : l; }).join(" "); }
 const recipeOk = (r, re = avoidRe()) => !re || !re.test(recipeText(r));
 function avoidHit(r, re = avoidRe()){ const m = re && recipeText(r).match(re); return m ? m[0] : null; }
 // Ersatzprodukte: kcal- und Protein-Unterschied je 100 g bzw. ml gegenüber dem Original
@@ -4182,7 +4186,7 @@ function mealDefaults(d, raw){
   if (!tr) o.ex = !raw && dayObj(d)?.boulder?.done ?  // Budget rechnet ohne den Bouldern-Shake, damit der Schalter keine anderen Gerichte tauscht
     (W.trainingSnack || mealPlan.trainingSnack) : mealPlan.restExtra[ri % 2];
   const re = avoidRe();
-  if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alt = altMeals(k, o[k])[0]; if (alt) o[k] = alt.name; } }
+  if (re) for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !recipeOk(r, re)) { const alts = altMeals(k, o[k]), used = Object.values(o), alt = alts.find(x => !used.includes(x.name)) || alts[0]; if (alt) o[k] = alt.name; } }  // möglichst kein Gericht zweimal am Tag
   // Zu aufwendige frische Gerichte tauschen; Meal Prep (Batch) wird nur einmal pro Woche gekocht und bleibt
   if (effortOn()) { const bt = new Set(prepOff() ? [] : [W.batchA, W.batchB]);
     for (const k of Object.keys(o)) { const r = recipeByName(o[k]); if (r && !bt.has(o[k]) && !effortOk(r)) { const alt = altMeals(k, o[k]).find(effortOk); if (alt) o[k] = alt.name; } } }
@@ -5349,8 +5353,11 @@ function foodSettingsHtml(){
       <button class="btn ghost small" type="button" id="ftReset">Standardzeiten</button></div>
 
     <div class="card"><h2>Meal Prep</h2><label class="check"><input type="checkbox" id="foodMealPrep" ${f.mealPrep !== false ? "checked" : ""}><span>Sonntags vorkochen für Mo–Do<br><span class="small muted">An: 2 Gerichte à 4 Portionen wechseln sich Mo–Do ab. Aus: jeden Tag frische, ähnliche Gerichte (vergleichbare kcal und Protein); was übrig bleibt, plant die App beim Abhaken als Rest ein.</span></span></label></div></div></details>
-    <details class="slim setgrp" data-keep="set:teller" ${shopOpen.has("set:teller") ? "open" : ""}><summary><span>🥗 Was auf den Teller kommt</span><span class="muted">${(f.allergens || []).length ? (f.allergens || []).length + " Allergene · " : ""}${f.avoid ? "meidet " + esc(f.avoid) : "nichts gemieden"} · Aufwand ${["egal", "max. mittel", "nur leicht"][f.effort?.lvl || 0]}</span></summary><div class="setbody">
-    <div class="card"><h2>Allergien & Unverträglichkeiten</h2>
+    <details class="slim setgrp" data-keep="set:teller" ${shopOpen.has("set:teller") ? "open" : ""}><summary><span>🥗 Was auf den Teller kommt</span><span class="muted">${(f.allergens || []).length ? (f.allergens || []).length + " Allergene · " : ""}${f.vegan ? "vegan · " : ""}${f.avoid ? "meidet " + esc(f.avoid) : "nichts gemieden"} · Aufwand ${["egal", "max. mittel", "nur leicht"][f.effort?.lvl || 0]}</span></summary><div class="setbody">
+    <div class="card"><h2>Ernährung & Unverträglichkeiten</h2>
+      <div class="chips"><button type="button" data-vegan aria-pressed="${!!f.vegan}">🌱 Vegan</button></div>
+      <div class="small muted">${f.vegan ? `Vegan an: ${recipes.filter(r => veganOk(r)).length} von ${recipes.length} Rezepten passen. Gerichte mit Ei, Milchprodukten oder Honig ersetzt der Plan durch das ähnlichste vegane; Milch, Kochsahne und Butter laufen über die Ersatzprodukte unten.` : "Vegan: blendet Rezepte mit Ei, Milchprodukten und Honig aus und tauscht sie im Plan."}</div>
+      <div class="lab">Allergien</div>
       <div class="chips">${Object.entries(ALLERGENS).map(([k, [l]]) => `<button type="button" data-allergen="${k}" aria-pressed="${(f.allergens || []).includes(k)}">${esc(l)}</button>`).join("")}</div>
       <div class="field"><label for="foodAvoid">Weitere Zutaten meiden (mit Komma trennen)</label><input type="text" id="foodAvoid" data-ac="avoid" autocomplete="off" value="${esc(f.avoid || "")}" placeholder="z. B. Äpfel, Pilze, Koriander"></div>
       <div class="small muted">${avoidRe() ? `${recipes.filter(r => !recipeOk(r)).length} Rezepte werden gemieden. Im Plan rückt automatisch das ähnlichste erlaubte Gericht nach, in Einkauf und Kalender ebenso.` : "Gerichte mit diesen Zutaten ersetzt der Plan automatisch durch ähnliche."} Bei echten Allergien zusätzlich die Zutatenliste der Produkte prüfen.</div></div>
@@ -5461,7 +5468,7 @@ function essenHtml(b){
   b.innerHTML = h;
 }
 
-let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false, ing:""};
+let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false, ing:"", vegan:false};
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
 // Mittag und Abend sind austauschbar; unterschieden wird warm/kalt
 // Hauptmahlzeiten heißen nach dem Gericht: warm oder kalt
@@ -5688,6 +5695,9 @@ async function onClick(e){
   const rsp = t.closest("[data-rspor]"); if (rsp && rsEat) { rsEat.title = sheet.querySelector("#ownName")?.value; rsEat.por = Math.max(0.5, Math.min(8, rsEat.por + Number(rsp.dataset.rspor))); renderSheet(); return; }
   const rss = t.closest("[data-resteshop]"); if (rss) { shopScope = "gericht"; shopRec = rss.dataset.resteshop; shopMul = 1; shopFromReste = true; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const kt = t.closest("[data-kitchen]"); if (kt) { const h = kitchenHas(), k = kt.dataset.kitchen; h.has(k) ? h.delete(k) : h.add(k); saveFood({devices: Object.keys(KITCHEN).filter(x => h.has(x))}); renderEssen(); return; }
+  if (t.closest("[data-vegan]")) { const on = !FOOD().vegan, sb = Object.assign({}, FOOD().subst);
+    if (on) for (const [k, v] of [["milch", "mix"], ["kochsahne", "cuisine"], ["butter", "margarine"]]) if (!sb[k]) sb[k] = v;
+    saveFood(on ? {vegan: true, subst: sb} : {vegan: false}); renderEssen(); return; }
   const ag = t.closest("[data-allergen]"); if (ag) { const k = ag.dataset.allergen, a = new Set(FOOD().allergens || []); a.has(k) ? a.delete(k) : a.add(k); saveFood({allergens: [...a]}); renderEssen(); return; }
   if (t.closest("#syncBtn")) { toast(syncDetail || "Alles gespeichert."); return; }
   const gr = t.closest("[data-gear]"); if (gr) { const hg = gearHome(); hg[gr.dataset.gear] = !hg[gr.dataset.gear]; saveSettings({homeGear: hg}); openEx = null; if (sheet.open) renderSheet(); render(); return; }
@@ -5731,7 +5741,7 @@ async function onClick(e){
   const ed = t.closest("[data-eday]"); if (ed) { essenDay = ed.dataset.eday; renderMore(); return; }
   if (t.closest("[data-prepshop]")) { shopScope = "woche"; essenView = "einkauf"; renderMore(); scrollTo(0, 0); return; }
   const osc = t.closest("[data-ownscan]"); if (osc) { openSheet("ownfood", osc.dataset.ownscan); setTimeout(() => startScan("own"), 80); return; }
-  const shf = t.closest("[data-shelf]"); if (shf) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: ""}, JSON.parse(shf.dataset.shelf)); recShelves = false; renderRecipes(); scrollTo(0, 0); return; }
+  const shf = t.closest("[data-shelf]"); if (shf) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: "", vegan: false}, JSON.parse(shf.dataset.shelf)); recShelves = false; renderRecipes(); scrollTo(0, 0); return; }
   if (t.closest("[data-recall]")) { recShelves = false; renderRecipes(); return; }
   const plr = t.closest("[data-planrec]"); if (plr) { const [d, k] = plr.dataset.planrec.split("|"), n = plr.dataset.v, eat = !!plr.dataset.eat; let prev = null, prevAte;
     editDay(d, day => { prev = day.meals?.[k] ?? null; prevAte = (day.ate || {})[k]; day.meals = Object.assign({}, day.meals, {[k]: n === mealDefaults(d)[k] ? null : n}); slotReset(day, k); if (eat) day.ate = Object.assign({}, day.ate, {[k]: true}); });
@@ -5739,7 +5749,7 @@ async function onClick(e){
     if (eat) { sheetKind = null; sheet.close(); }
     toast(eat ? `✓ Gegessen: heute ${MEAL_SHORT[k]}` : `Eingeplant: ${d === todayIso() ? "heute" : "morgen"} ${MEAL_SHORT[k]}`, {label: "Rückgängig", fn: undo}); render(); return; }
   const cwi = t.closest("[data-cookwith]"); if (cwi) { recFilter.ing = cwi.dataset.cookwith; recShelves = false; renderRecipes(); window.scrollTo(0, 0); return; }
-  if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: "", ing: ""}); recShelves = true; renderRecipes(); return; }
+  if (t.closest("[data-recshelves]")) { Object.assign(recFilter, {cat: "alle", prep: false, diff: "", fast: false, temp: "", fav: false, q: "", ing: "", vegan: false}); recShelves = true; renderRecipes(); return; }
   const ck = t.closest("[data-cook]"); if (ck) { const n = ck.dataset.cook; if (cook && cook.name === n) { openSheet("cook", n); requestWake(); return; }
     if (cook && (cook.run || cook.step >= 0) && cookSwitch !== n) { cookSwitch = n; setTimeout(() => { cookSwitch = null; }, 4000); toast(`Du kochst gerade ${cook.name} – nochmal tippen, um zu wechseln`); return; }
     cookSwitch = null; if (cook) { cook.run = false; clearInterval(cookInt); } cook = null; cookMin = false; openSheet("cook", n); requestWake(); return; }
@@ -5754,6 +5764,7 @@ async function onClick(e){
   if (t.closest("[data-recfav]")) { recFilter.fav = !recFilter.fav; renderRecipes(); return; }
   const rte = t.closest("[data-rectemp]"); if (rte) { recFilter.temp = rte.dataset.rectemp; renderRecipes(); return; }
   const rd = t.closest("[data-recdiff]"); if (rd) { recFilter.diff = rd.dataset.recdiff; renderRecipes(); return; }
+  if (t.closest("[data-recvegan]")) { recFilter.vegan = !recFilter.vegan; renderRecipes(); return; }
   if (t.closest("[data-recfast]")) { recFilter.fast = !recFilter.fast; renderRecipes(); return; }
   const cw2 = t.closest("[data-catw]"); if (cw2) { catF.where = cw2.dataset.catw; renderMore(); return; }
   const cm2 = t.closest("[data-catm]"); if (cm2) { catF.m = cm2.dataset.catm; renderMore(); return; }
