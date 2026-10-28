@@ -438,6 +438,11 @@ def dev_tok(r):
     return "".join(" §%s§" % d for d in r.get("dev") or [])
 
 
+def uniq(rec):
+    """Jedes Rezept einmal: Alias-Namen (REC_ALIAS) zeigen auf dasselbe Rezept und dürfen in Auswahllisten nicht mehrfach zählen."""
+    return [r for n, r in rec.items() if r["name"] == n]
+
+
 def substitute(mp, rec, o, rx):
     """Gemiedene Gerichte durch das ähnlichste erlaubte derselben Mahlzeit ersetzen (wie altMeals in der App)."""
     if not rx:
@@ -449,7 +454,7 @@ def substitute(mp, rec, o, rx):
         if not r or not rx.search(text(r)):
             continue
         minp = 13 if k in ("sn", "ex") else 25
-        cands = [x for x in rec.values() if x["category"] in slots[k]["cats"] and x["name"] != n and x["protein"] >= minp and not rx.search(text(x))]
+        cands = [x for x in uniq(rec) if x["category"] in slots[k]["cats"] and x["name"] != n and x["protein"] >= minp and not rx.search(text(x))]
         cands.sort(key=lambda x: abs(x["kcal"] - r["kcal"]) / 8 + abs(x["protein"] - r["protein"]))
         if cands:
             o[k] = cands[0]["name"]
@@ -545,6 +550,8 @@ def parse_ing(line, P, subst):
         amt = q * (pr.get("piece") or 100)
     if pr["unit"] == "Stück" and unit in ("g", "ml"):
         amt = q / (pr.get("piece") or 60)
+    elif pr["unit"] == "Stück" and unit in ("EL", "TL", "Handvoll", "Prise", "Prisen"):  # 2 EL Petersilie ≈ 1 Bund, nicht 30 (wie parseIng in der App)
+        amt = (q * 15 if unit == "EL" else q * 5 if unit == "TL" else q * 30 if unit == "Handvoll" else q) / (pr.get("piece") or 60)
     ids = SUBST_OK.get(pr["id"], {}).get((subst or {}).get(pr["id"]))
     if ids:
         ps = [x for x in P["products"] if x["id"] in ids]
@@ -648,7 +655,7 @@ def alt_meals(mp, rec, k, cur, rx):
     ref = rec.get(cur) or {"kcal": 0, "protein": 0}
     minp = 13 if k in ("sn", "ex") else 25
     text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
-    c = [r for r in rec.values() if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp and not (rx and rx.search(text(r)))]
+    c = [r for r in uniq(rec) if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp and not (rx and rx.search(text(r)))]
     c.sort(key=lambda r: abs(r["kcal"] - ref["kcal"]) / 8 + abs(r["protein"] - ref["protein"]))
     return c[:8]
 
@@ -734,7 +741,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
             return cand_memo[(k, cur)]
         al = alt_meals(mp, rec, k, cur, rx)
         slot = next(x for x in mp["slots"] if x["k"] == k)
-        cheap = [r for r in rec.values() if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp(k) and not (rx and rx.search(text(r)))]
+        cheap = [r for r in uniq(rec) if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp(k) and not (rx and rx.search(text(r)))]
         cheap = sorted(cheap, key=lambda r: math.floor(cost(r["name"]) * 1e4 + 0.5) / 1e4)[:15]
         names = {r["name"] for r in al}
         cand_memo[(k, cur)] = al + [r for r in cheap if r["name"] not in names]
