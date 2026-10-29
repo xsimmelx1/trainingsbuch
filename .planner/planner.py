@@ -430,14 +430,14 @@ def build_ics(now, settings, plan, extras, past):
     for x in extras if on_check else []:
         d = dt.date.fromisoformat(x["date"])
         prep = (settings.get("food") or {}).get("mealPrep") is not False
-        ev(f"checkin-{x['date']}", "Check-in & Meal Prep" if prep else "Wochen-Check-in", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser)." if prep else "Wochen-Check-in in der App (10 min).",
+        ev(f"checkin-{x['date']}", "Wochen-Check-in & Meal Prep" if prep else "Wochen-Check-in", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser)." if prep else "Wochen-Check-in in der App (10 min).",
            f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=rem_check)
     st = settings.get("startDate")
     if st and on_mark:  # Zyklustage ohne Pausen, wie calMarkers in der App
         cyc = max(0, cycle_days(settings, today) // 84)
-        for name, off, length in [("Messtag Woche 0: Fotos, Umfänge, Tests", -1, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 35, 7),
-                                  ("Messtag: Fotos, Umfänge, Re-Test", 41, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 77, 7),
-                                  ("Messtag: Fotos, Umfänge, Re-Test", 83, 1)]:
+        for name, off, length in [("Messtag Woche 0: Fotos, Maße, Tests", -1, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 35, 7),
+                                  ("Messtag: Fotos, Maße, Re-Test", 41, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 77, 7),
+                                  ("Messtag: Fotos, Maße, Abschlusstest", 83, 1)]:
             if cyc and off < 0:
                 continue
             a, e = cycle_date(settings, 84 * cyc + off), cycle_date(settings, 84 * cyc + off + length)
