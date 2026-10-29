@@ -276,7 +276,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .subhead h2{margin:0}
-.chips.focus{justify-content:center;margin:2px 0 8px}.esum{margin:8px 2px}
+.chips.focus{justify-content:center;margin:2px 0 8px}
 .tline{display:flex;gap:4px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none;align-items:stretch}
 .tline button{flex:1 0 62px;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;padding:6px 3px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font:inherit;font-size:14px;color:var(--ink)}
 .tline button b{font-size:11px;color:var(--muted);font-weight:600}
@@ -291,8 +291,6 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .tline button.next .ts{color:var(--accent)}
 .tnow{flex:none;width:2px;margin:0 1px;border-radius:2px;background:var(--bad,#e5534b);position:relative}
 .tnow i{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9.5px;font-weight:700;color:var(--bad,#e5534b);white-space:nowrap}.tnow:first-child i{left:0;transform:none}.tnow:last-child i{left:auto;right:0;transform:none}
-.tleg{display:flex;gap:12px;flex-wrap:wrap;margin:2px 0 4px}
-.tleg span{display:inline-flex;align-items:center;gap:5px}
 .lg{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:4px;border:1px solid var(--line);font-style:normal;font-size:9px}
 .lg.next{border:2px solid var(--accent);background:var(--accent-soft)}
 .lg.miss{border:2px solid var(--warn)}
@@ -560,6 +558,7 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .stepper{display:flex;align-items:center;gap:10px}
 .stepper b{min-width:24px;text-align:center;font-size:18px}
 .coachline{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--accent-soft);border-radius:12px;padding:10px 12px;color:var(--ink);font:inherit}
+.coachline + .coachline{margin-top:6px}.coachline .cta{color:var(--accent);font-weight:600}.coachline.lesson{background:var(--surface)}.coachline .actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .nowc{display:flex;flex-direction:column;gap:12px;border:2px solid var(--accent);border-radius:16px;padding:16px;background:var(--surface)}
 .nowh{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
 .nowh .mthumb{width:64px;height:64px}
@@ -696,6 +695,7 @@ body.wo .exbody{gap:10px}
 .weekstrip .done .ring{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .weekstrip .bould .ring{border-color:var(--good);color:var(--good)}
 .weekstrip .plan .ring{border-style:dashed;border-color:var(--accent)}
+.weekstrip .miss .ring{border-style:dashed;border-color:var(--warn)}.weekstrip .miss .tm{color:var(--warn)}
 .weekstrip .today b{color:var(--accent)}
 .weekstrip .sel .ring{box-shadow:0 0 0 2px var(--accent-soft)}
 .weekstrip .tm{font-size:10px;color:var(--muted);font-family:var(--f-num);min-height:12px}
@@ -2469,81 +2469,82 @@ function heroCard(noCoach){
   if (c && !noCoach) h += `<div class="coachsec"><div class="lab">Dein Coach</div><div class="ct">${esc(c.title)}</div><div class="small">${esc(c.body)}</div>${btns.length ? `<div class="actions">${btns.map(([k, l], i) => `<button class="btn small ${i === 0 && st === "frei" ? "primary" : ""}" type="button" data-coach="${k}">${esc(l)}</button>`).join("")}</div>` : ""}</div>`;
   return h + `</div>`;
 }
-// Aufgaben des Tages mit Priorität nach Uhrzeit; die erste offene wird groß als „Jetzt“ gezeigt
-function todayItems(focus){
-  const t = todayIso(), now = new Date(), hm0 = now.getHours() * 60 + now.getMinutes(), out = [];
-  const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate), st = trainState(), plan = planFor(selDate);
-  out.push({k: "mob", t: routineAt("mob"), prio: hm0 < hm(routineAt("mob")) + 210 ? 1 : 7, done: mobFinished(cur, selDate), icon: "🧘", title: "Morgenroutine", sub: `${routineAt("mob")} · ${mobMin(selDate)} min · ${mobDone}/${mobN}${cur.mobility?._done && mobDone < mobN ? " · abgeschlossen" : ""}`, act: `data-sheet="mob"`, cta: mobDone ? "Weiter" : "Starten"});
-  if (focus !== "essen" && st !== "frei") {
-    const startM = plan?.start ? hm(plan.start) : 18 * 60;
-    out.push({k: "train", t: st === "läuft" ? "" : plan?.start || "", prio: st === "läuft" ? 0 : hm0 >= startM - 90 ? 2 : 5, done: st === "fertig" || st === "leer", icon: "🏋", title: (SESS[cur.session] || SESS.frei).title, sub: st === "läuft" ? "läuft" : plan?.start ? `geplant ${plan.start} Uhr` : selDate === todayIso() ? "heute" : selDate < todayIso() ? "nicht gemacht" : "geplant", act: `data-act="start"`, cta: st === "läuft" ? "Weiter" : "Starten", hero: "train"});
-  }
-  if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(selDate)) { if (m.name === "skip") continue;
-    const tm = m.time ? hm(m.time) : 20 * 60;
-    out.push({k: "meal:" + m.k, t: m.time || "", prio: hm0 > tm + 150 ? 9.7 : hm0 >= tm - 45 ? 3 : 8 + tm / 10000, done: m.ate, icon: "🍽", title: `${m.label}: ${m.info.name}`, sub: `${m.time ? m.time + " · " : ""}<span class="nutri">${nutTxt(m.info)}</span>`, meal: m});
-  }
-  const painDone = cur.pain.sc != null && cur.pain.knee != null;
-  out.push({k: "pain", t: routineAt("pain"), prio: hm0 >= hm(routineAt("pain")) - 165 ? (st !== "frei" && st !== "fertig" && st !== "leer" && selDate === t ? 2.5 : 1) : 9, done: painDone, icon: "📝", title: "Abendcheck", sub: `${routineAt("pain")} · 30 s · Schmerz-Log`, act: `data-sheet="pain"`, cta: "Eintragen"});
-  const wd = parse(selDate).getDay();
-  if (wd === 0 || (wd === 1 && !store.checkins[monday(addDays(selDate, -7))])) { const mo = wd === 0 ? monday(selDate) : monday(addDays(selDate, -7));
-    out.push({k: "ci", prio: hm0 >= 17 * 60 ? 2 : 6, done: !!store.checkins[mo], icon: "📊", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
-  return out.sort((a, b) => a.prio - b.prio);
-}
-
-// ---------- Heute: Tagesablauf mit Uhrzeiten, nächster Termin und Vorbereitungen ----------
+// ---------- Heute: ein Tagesmodell (Termine mit Uhrzeit) für alle Fokus-Modi und Tage ----------
 const MEAL_SHORT = {fr: "Frühstück", mi: "Mittag", sn: "Snack", ab: "Abendbrot", ex: "Extra"};
 const hmDiff = m => m < 1 ? "jetzt" : m < 60 ? `in ${m} min` : `in ${Math.floor(m / 60)} h${m % 60 ? " " + (m % 60) + " min" : ""}`;
-function dayEvents(d){
-  const ev = [], st = trainState(), pl = planFor(d);
-  ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: "Starten"});
+const painLogged = day => day?.pain?.sc != null; // Abendcheck erledigt = SC eingetragen (Knie optional) – wie Kalender und Planer
+// Check-in-Zeit: Slot des Planers (Kalender frei), sonst 17:00; Montag = Nachholtermin
+const ciAt = d => parse(d).getDay() === 1 ? "19:30" : (store.plan.extras || []).find(x => x.date === d)?.start || "17:00";
+function dayEvents(d, focus = todayFocus){
+  const ev = [], st = trainState(), pl = planFor(d), mc = mobCount(cur, d), mt = mobTotal(d);
+  ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", sub: `${mobMin(d)} min · ${mc}/${mt}`, done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: mc ? "Weiter" : "Starten"});
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
-    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Training öffnen", train: true}); }
-  if (mealPlan && recipes) for (const m of mealsFor(d)) if (m.time && m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time, icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
-  const wd0 = parse(d).getDay(); if (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))])) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
-    ev.push({k: "ci", t: wd0 === 0 ? "17:00" : "19:30", icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
-  ev.push({k: "pain", t: routineAt("pain"), icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: cur.pain.sc != null && cur.pain.knee != null, act: `data-sheet="pain"`, cta: "Eintragen"});
-  return ev.sort((a, b) => a.t.localeCompare(b.t));
+    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: st === "bereit" && d < todayIso() ? "nicht gemacht" : `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Zum Training", train: true}); }
+  if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(d)) if (m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time || "", icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
+  const wd0 = parse(d).getDay(); if (focus !== "training" && (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))]))) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
+    ev.push({k: "ci", t: ciAt(d), icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
+  ev.push({k: "pain", t: routineAt("pain"), icon: "📝", short: "Abendcheck", title: "Abendcheck", sub: "30 s · Schmerz-Log", done: painLogged(cur), act: `data-sheet="pain"`, cta: "Eintragen"});
+  return ev.sort((a, b) => (a.t || "24:00").localeCompare(b.t || "24:00"));
 }
-// Vorbereitungen: wann man womit anfangen sollte
+// Vorbereitungen: nur Koch-Hinweise (kochen, aus der Box, über Nacht, Meal Prep)
 function dayPreps(d, ev){
   const out = [], wd = parse(d).getDay();
-  for (const e of ev) { if (e.done) continue; const T = hm(e.t);
-    if (e.train) { const home = /Zuhause/.test(e.sub);
-      out.push({t: T - (home ? 15 : 60), for: e.k, icon: "🎒", txt: home ? `Platz und Sachen bereitlegen (Matte, Kurzhanteln, Wasser) – Training ${e.t}` : `Tasche packen: Schuhe, Handtuch, Wasser, Schloss – Training ${e.t}`});
-      out.push({t: T - 90, for: e.k, icon: "🍌", txt: "Kleine Mahlzeit 1–2 h vorher (z. B. Banane, Skyr), dann nichts Schweres mehr"}); }
-    if (e.meal) { const r = recipeByName(e.meal.name); if (!r) continue; const act = r.activeMin ?? r.timeMin ?? 15, tot = r.timeMin ?? act;
-      const main = e.meal.k === "mi" || e.meal.k === "ab";
-      // aus der Box nur Mo–Do mit Meal Prep; sonst wird frisch gekocht (auch vorkochbare Gerichte)
-      if (r.mealPrep && !prepOff() && main && wd >= 1 && wd <= 4) { out.push({t: T - 10, for: e.k, icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"}); }
-      else if (tot >= 10 && tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); } }
+  for (const e of ev) { if (e.done || !e.meal) continue; const T = hm(e.t), r = recipeByName(e.meal.name); if (!r) continue; const act = r.activeMin ?? r.timeMin ?? 15, tot = r.timeMin ?? act;
+    const main = e.meal.k === "mi" || e.meal.k === "ab";
+    // aus der Box nur Mo–Do mit Meal Prep; sonst wird frisch gekocht (auch vorkochbare Gerichte)
+    if (r.mealPrep && !prepOff() && main && wd >= 1 && wd <= 4) { out.push({t: T - 10, for: e.k, who: MEAL_SHORT[e.meal.k], icon: r.temp === "kalt" ? "🥡" : "♨️", txt: r.temp === "kalt" ? "Box aus dem Kühlschrank nehmen" : "Portion aus dem Meal Prep aufwärmen (~5 min)"}); }
+    else if (tot >= 10 && tot < 240) out.push({t: T - Math.min(tot, 90), for: e.k, icon: "🔪", who: MEAL_SHORT[e.meal.k], txt: `Kochen beginnen: ${act} min aktiv${tot > act ? `, ${tot} min gesamt` : ""}`, recipe: r.name}); }
   // für morgen: Gerichte, die über Nacht ziehen
-  if (mealPlan && recipes) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
-  if (wd === 0 && FOOD().mealPrep !== false) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
+  if (ev.some(e => e.meal)) for (const m of mealsFor(addDays(d, 1))) { const r = recipeByName(m.name); if (r && (r.timeMin || 0) >= 240) out.push({t: 21 * 60, for: "", icon: "🌙", txt: `Für morgen ansetzen: ${r.name}`, recipe: r.name}); }
+  if (wd === 0 && !prepOff() && ev.some(e => e.meal)) out.push({t: 17 * 60, for: "", icon: "🍳", txt: "Meal Prep für Mo–Do kochen (Einkauf vorher prüfen)", go: "#t=einkauf"});
   return out.sort((a, b) => a.t - b.t);
 }
-function nextBlock(d){
-  const ev = dayEvents(d), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
-  // Mahlzeiten sind keine Aufgaben: nur kommende zählen. Aufgaben bleiben offen, bis sie erledigt sind.
+const ppRow = p => `<div class="pp"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${p.who ? esc(p.who) + ": " : ""}${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`;
+// Heute: Zeitleiste, „Als Nächstes“, Offenes, Vorbereitungen – nach der aktuellen Uhrzeit
+function nextBlock(d, all){
+  const ev = all.filter(e => e.t), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
+  // Mahlzeiten sind keine Aufgaben: nur kommende zählen (verpasste der letzten 2 h bleiben unten abhakbar). Aufgaben bleiben offen, bis sie erledigt sind.
   const win = e => e.meal ? 30 : e.train ? (trainState() === "läuft" ? 24 * 60 : 120) : e.k === "mob" ? 240 : 24 * 60;
   const nx = ev.find(e => !e.done && hm(e.t) + win(e) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
   const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
+  const missed = ev.filter(e => e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm && nm - hm(e.t) <= 120);
   // Tagesablauf: jeder Punkt mit Uhrzeit, Symbol, Kurzname und eindeutigem Status; „jetzt“-Strich an der aktuellen Uhrzeit
   const nowAt = ev.findIndex(e => hm(e.t) > nm);
   const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? mealOpenAttr(d, e.meal) : e.act;
     const stat = e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
-    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>
-    <div class="tleg small muted"><span><i class="lg next"></i>als Nächstes</span><span><i class="lg miss"></i>noch offen</span><span><i class="lg done">✓</i>erledigt</span></div>`;
+    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
-  const odHtml = overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "";
-  if (!nx) return {h: h + (overdue.length ? odHtml : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`), key: null};
-  const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), m = nx.meal;
-  h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
+  const odHtml = (overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "")
+    + missed.map(e => { const m = e.meal; return `<div class="odline small"><span class="muted">${e.t} ${esc(m.label)}:</span><button type="button" class="linkbtn" ${mealOpenAttr(d, m)}>${esc(e.title)}</button><span class="odit"><button type="button" class="btn ghost small" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${skipBtn(d, m, "btn ghost small odx")}</span></div>`; }).join("");
+  if (!nx) return h + odHtml + (overdue.length ? "" : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`);
+  const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), other = preps.filter(p => !mine.includes(p)), m = nx.meal;
+  const lab = `${nx.t} · ${mins < 0 ? "seit " + (-mins) + " min" : hmDiff(mins)}`;
+  if (nx.train) h += `<div class="lab sec">Als Nächstes · ${lab}</div><div class="nowbig">${heroCard(true)}</div>`;
+  else h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${lab}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${recipeByName(m.name) ? `<button class="btn" type="button" data-recipe="${esc(m.name)}" data-rctx="${d}|${m.k}">📖 Rezept</button>` : ""}<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Tauschen">⇄</button>` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${m.own ? "" : `<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Anderes Rezept planen">⇄</button>`}` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
   h += odHtml;
-  const other = [];
-  if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(p => `<div class="pp"><span>${hmStr(p.t)}</span><span>${p.icon} ${p.recipe ? `<button type="button" class="linkbtn" data-recipe="${esc(p.recipe)}">${esc(p.txt)}</button>` : p.go ? `<a href="${p.go}">${esc(p.txt)}</a>` : esc(p.txt)}</span></div>`).join("")}</div>`;
-  return {h, key: nx.k};
+  if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(ppRow).join("")}</div>`;
+  return h;
+}
+// Andere Tage: dieselben Termine, nach Uhrzeit (ohne Bezug zur aktuellen Uhrzeit)
+function dayList(d, ev){
+  const past = d < todayIso(); if (!ev.length) return "";
+  return `<div class="lab sec">${past ? "An diesem Tag" : "Geplant"}</div><div class="lrows">${ev.map(e => { const m = e.meal;
+    if (m) return `<div class="lrow ${e.done ? "done" : ""}" ${mealSw(d, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${mealOpenAttr(d, m)}><b>${esc(e.title)}</b><span class="small muted">${e.t ? e.t + " · " : ""}${e.sub}</span></button></div>`;
+    return `<div class="lrow ${e.done ? "done" : ""}"><span class="mdot static">${e.done ? "✓" : e.icon}</span><button type="button" class="lmain" ${e.act}><b>${esc(e.title)}</b><span class="small muted">${[e.t, e.sub, past && !e.done && !e.train ? "offen" : ""].filter(Boolean).join(" · ")}</span></button><span class="go">›</span></div>`; }).join("")}</div>`;
+}
+// Coach auf Heute: Titel + kurzer Text (antippbar, wenn es eine Aktion gibt), Wenn-Dann-Plan der Woche, Lektion als eigene Zeile
+function coachHtml(){
+  const c = coach(); if (!c) return "";
+  const acts = c.btns.filter(([k]) => !k.startsWith("lesson:")), ls = c.btns.find(([k]) => k.startsWith("lesson:"));
+  const body = `<span>💬</span><span><b>${esc(c.title)}</b>${c.body ? `<br><span class="small muted">${esc(c.body)}</span>` : ""}`;
+  let h = c.quiet || !c.title ? "" : acts.length === 1 ? `<button type="button" class="coachline" data-coach="${acts[0][0]}">${body}<br><span class="small cta">${esc(acts[0][1])}</span></span><span class="go">›</span></button>`
+    : `<div class="coachline">${body}${acts.length ? `<span class="actions">${acts.map(([k, l]) => `<button class="btn small" type="button" data-coach="${k}">${esc(l)}</button>`).join("")}</span>` : ""}</span><span></span></div>`;
+  const it = (store.checkins[addDays(monday(todayIso()), -7)]?.ifthen || "").trim();  // Check-in vom Sonntag gilt für diese Woche
+  if (it) h += `<div class="coachline"><span>🎯</span><span><span class="small muted">Dein Wenn-Dann-Plan diese Woche</span><br><b>${esc(it)}</b></span><span></span></div>`;
+  if (ls) h += `<button type="button" class="coachline lesson" data-coach="${ls[0]}"><span>📖</span><span><span class="small muted">Lektion der Woche</span><br><b>${esc(ls[1].replace(/^Lektion: /, ""))}</b></span><span class="go">›</span></button>`;
+  return h;
 }
 // Zutaten als Tabelle, sortierbar nach Rezept, Gang im Laden, Preis oder A–Z
 function ingTable(r){
@@ -2679,19 +2680,6 @@ function zutatenHtml(){
     </div>
     <div class="small muted">Preis je Packung · * geschätzt · grün = günstigster der gewählten Märkte · Antippen für Details.</div>`;
 }
-// „Jetzt“ nur, wenn die Aufgabe wirklich dran ist (ab 30 min vorher); sonst „Als Nächstes · 07:30 · in 3 h“
-function nowLab(it){
-  if (!it.t) return "Jetzt";
-  const n = new Date(), d = hm(it.t) - (n.getHours() * 60 + n.getMinutes());
-  return d > 30 ? `Als Nächstes · ${it.t} · ${hmDiff(d)}` : "Jetzt";
-}
-function nowCard(it){
-  if (it.hero === "train") return `<div class="lab sec">${nowLab(it)}</div>` + heroCard(true);
-  if (it.meal) { const m = it.meal, r = m.info;
-    return `<div class="lab sec">${nowLab(it)}</div><div class="nowc" ${mealSw(selDate, m)}><div class="nowh tap" ${mealOpenAttr(selDate, m)}>${mealThumb(m.name)}<div><div class="lab">${esc(m.time || "")} · ${esc(m.label)}</div><b>${esc(r.name)}</b><div class="small muted nutri">${nutTxt(r)}</div></div><span class="go">›</span></div>
-      <div class="actions"><button class="btn primary big" type="button" data-ate="${m.k}" data-d="${selDate}">✓ Gegessen</button>${m.own ? "" : `<button class="btn big" type="button" data-sheet="other" data-v="${selDate}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn big" type="button" data-sheet="meal" data-v="${selDate}|${m.k}">⇄ Anderes Rezept planen</button>`}</div>${restPick(selDate, m)}${m.ate ? restBtn(selDate, m) : skipBtn(selDate, m, "btn ghost small")}</div>`; }
-  return `<div class="lab sec">${nowLab(it)}</div><div class="nowc"><div class="nowh tap" ${it.act}><span class="nowi">${it.icon}</span><div><b>${esc(it.title)}</b><div class="small muted">${it.sub}</div></div></div><button class="btn primary big" type="button" ${it.act}>${esc(it.cta)}</button></div>`;
-}
 const mealOpenAttr = (d, m) => m.own ? `data-sheet="mealinfo" data-v="${d}|${m.k}"` : recOf(m.name) ? `data-recipe="${esc(recOf(m.name).name)}" data-rctx="${d}|${m.k}"` : `data-sheet="mealinfo" data-v="${d}|${m.k}"`;
 const POR = [[0.25, "¼"], [0.5, "½"], [1, "1"], [1.5, "1½"], [2, "2"]];
 const fTxt = f => (POR.find(x => x[0] === f) || [, fmtQ(f)])[1];
@@ -2708,46 +2696,31 @@ function pastFoodCard(d){
     ${own.map(m => `<div class="pfrow"><button type="button" class="pfi ${m.ate ? "on" : ""}" data-sheet="mealinfo" data-v="${d}|${m.k}" aria-label="${esc(m.info.name)} öffnen">${row(m)}</button><button type="button" class="mcheck" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.info.name)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="btn ghost small ic" data-owndel="${m.k.slice(1)}" data-d="${d}" aria-label="Eintrag entfernen">✕</button></div>`).join("")}</div>
     <div class="actions"><button class="btn primary" type="button" data-sheet="ownfood" data-v="${d}">＋ Nachtragen</button>${plan.some(m => !m.ate) ? `<button class="btn" type="button" data-act="ateAll" data-v="${d}">✓ Alles wie geplant</button>` : ""}</div></div>`;
 }
-function laterRow(it){
-  if (it.meal) { const m = it.meal; return `<div class="lrow ${it.done ? "done" : ""}" ${mealSw(selDate, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${selDate}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${m.own ? "disabled" : recipeByName(m.name) ? `data-recipe="${esc(m.name)}" data-rctx="${selDate}|${m.k}"` : `data-sheet="meal" data-v="${selDate}|${m.k}"`}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button></div>`; }
-  return `<div class="lrow ${it.done ? "done" : ""}"><span class="mdot static">${it.done ? "✓" : it.icon}</span><button type="button" class="lmain" ${it.act}><b>${esc(it.title)}</b><span class="small muted">${it.sub}</span></button><span class="go">›</span></div>`;
-}
-let showDone = false, warmOpen = false, clearArmed = 0;
+let warmOpen = false, clearArmed = 0;
 const dropArm = {armed: null, t: null}; // Doppeltipp-Zustand für „Heute nicht trainieren“
 view.addEventListener("toggle", e => { if (e.target?.classList?.contains("warm")) warmOpen = e.target.open; }, true);
 function renderToday(){
   ensureCur(); if (token && S().mobMin !== mobMin()) saveSettings({mobMin: mobMin()});  // Dauer von heute (in der Pause ohne Plank/Shrug) – der Planer nutzt sie
   if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {});
-  const t = todayIso(), isToday = selDate === t, hour = new Date().getHours(), wd = parse(selDate).getDay();
-  const mobDone = mobCount(cur, selDate), mobN = mobTotal(selDate);
-  const painDone = cur.pain.sc != null && cur.pain.knee != null;
+  const t = todayIso(), isToday = selDate === t, pastD = selDate < t, pz = S().mode === "pause", food = !!(mealPlan && recipes);
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
     <div class="dt"><h2>${isToday ? "Heute · " : ""}${fmt(selDate)}</h2>${isToday ? "" : `<button class="btn ghost small" type="button" data-day="0">↺ Zu heute</button>`}</div><div class="nav"><button type="button" data-day="1" aria-label="Nächster Tag">›</button></div></div>`;
-  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}${todayFocus === "training" ? "" : `<button type="button" class="snackbtn" data-sheet="snack" data-v="${selDate}">＋ Snack</button>`}</div>`;
-  h += S().mode === "pause" && inPause(selDate) && todayFocus !== "essen" ? pauseCard() : gapBanner();
-  {
-    const pastD = selDate < todayIso(); // vergangene Tage: Essen nur als Übersicht mit „Nachtragen“
-    const c = isToday && todayFocus !== "essen" ? coach() : null, its = todayItems(todayFocus).filter(i => !(pastD && i.meal)), open = its.filter(i => !i.done), done = its.filter(i => i.done);
-    if (c && c.btns?.length) h += `<button type="button" class="coachline" data-coach="${c.btns[0][0]}"><span>💬</span><span><b>${esc(c.title)}</b><br><span class="small muted">${esc(c.btns[0][1])}</span></span><span class="go">›</span></button>`;
-    let nxKey = null;
-    if (todayFocus === "essen" && pastD) { h += pastFoodCard(selDate); view.innerHTML = h + `</div>`; return; }
-    if (todayFocus === "essen" && mealPlan && recipes) { const ms = mealsFor(selDate), tt = mealTotals(ms), tg = foodTarget();
-      h += `<div class="card diary"><div class="small muted nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div><div class="mrows">${ms.filter(m => !(m.name === "skip" && selDate < todayIso())).map(m => diaryRow(selDate, m)).join("")}</div><a class="btn ghost small" href="#t=essen">Wochenplan ›</a></div>`;
-      view.innerHTML = h + `</div>`; return; }
-    let nbOk = false; if (isToday && todayFocus === "alles") try { const nb = nextBlock(selDate); h += nb.h; nxKey = nb.key; nbOk = true; } catch (e) { console.error(e); }
-    if (isToday && !nbOk) h += open.length ? (todayFocus === "training" ? `<div class="nowbig">${nowCard(open[0])}</div>` : nowCard(open[0])) : `<div class="nowc"><b>Alles erledigt für heute ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`;
-    const later = isToday ? (nbOk ? open.filter(i => i.k !== nxKey) : open.slice(1)) : open, LIM = 3;
-    if (later.length && !nbOk) h += `<div class="lab sec">${isToday ? "Danach" : "Geplant"}</div><div class="lrows">${later.slice(0, showMore ? 99 : LIM).map(laterRow).join("")}</div>${later.length > LIM ? `<button type="button" class="btn ghost small" data-act="toggleMore">${showMore ? "▴ weniger" : `▾ ${later.length - LIM} weitere`}</button>` : ""}`;
-    if (pastD && todayFocus === "alles") h += pastFoodCard(selDate);
-    if (todayFocus === "essen" && mealPlan && recipes) { const tt = mealTotals(mealsFor(selDate)), tg = foodTarget(); h += `<div class="small muted nutri esum">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein · <a href="#t=essen">Wochenplan ›</a></div>`; }
-    if (todayFocus !== "essen") h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><button type="button" class="qcard wide" data-sheet="cardio" data-v="${selDate}"><span>🏅 Aktivität</span><b>${(() => { const ca = cur.cardio || [], hasB = ca.some(c => c.type === "boulder"); const parts = ca.map(c => (CARDIO[c.type]?.[0] || "🏃") + " " + (c.sec ? fmtDur(c.sec) : c.min ? c.min + "′" : c.km ? fmtQ(c.km) + " km" : "")); if (cur.boulder.done && !hasB) parts.unshift("🧗"); return parts.length ? parts.join(" · ") : "＋"; })()}</b></button></div>
-      ${cur.boulder.done ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
-    if (done.length && !nbOk) h += `<button type="button" class="btn ghost small" data-act="toggleDone">${showDone ? "▴" : "▾"} Erledigt (${done.length})</button>${showDone ? `<div class="lrows">${done.map(laterRow).join("")}</div>` : ""}`;
-    if (todayFocus !== "essen") h += weekStrip();
-    view.innerHTML = h + `</div>`;
-    const tl = view.querySelector(".tline"), tn = tl?.querySelector(".next, .tnow"); if (tn && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = tn.offsetLeft - tl.offsetLeft - tl.clientWidth / 2 + tn.offsetWidth / 2;
-    return;
-  }
+  h += `<div class="chips sm focus" role="group" aria-label="Anzeigen">${[["training","🏋 Training"],["alles","Alles"],["essen","🍽 Essen"]].map(([k, l]) => `<button type="button" data-focus="${k}" aria-pressed="${todayFocus === k}">${l}</button>`).join("")}${todayFocus === "training" || pastD ? "" : `<button type="button" class="snackbtn" data-sheet="snack" data-v="${selDate}">＋ Snack</button>`}</div>`;
+  h += pz && inPause(selDate) && todayFocus !== "essen" ? pauseCard() : gapBanner();
+  // Fokus Essen: Summe + Mahlzeiten des Tages (vergangene Tage: Rückblick mit Nachtragen)
+  if (todayFocus === "essen") { const ms = food ? mealsFor(selDate) : [], tt = mealTotals(ms), tg = foodTarget();
+    h += pastD ? pastFoodCard(selDate) : food ? `<div class="card diary"><div class="small muted nutri">Gegessen: <b>${tt.eKcal}</b> / ${tg.kcal} kcal · <b>${tt.eProtein}</b> / ${tg.protein} g Protein</div><div class="mrows">${ms.map(m => diaryRow(selDate, m)).join("")}</div><a class="btn ghost small" href="#t=essen">Essen ›</a></div>` : `<div class="small muted">Lade …</div>`;
+    view.innerHTML = h + `</div>`; return; }
+  if (isToday) h += coachHtml();
+  const ev = dayEvents(selDate).filter(e => !(pastD && e.meal));
+  if (isToday) try { h += nextBlock(selDate, ev); } catch (e) { console.error(e); h += `<div class="small muted">Tagesablauf gerade nicht verfügbar.</div>`; }
+  else h += dayList(selDate, ev);
+  if (pastD && todayFocus === "alles") h += pastFoodCard(selDate);
+  h += `<div class="lab sec">Kurz notieren</div><div class="quick"><label><span>😴 Schlaf</span><input type="text" inputmode="decimal" id="slIn" aria-label="Schlaf in Stunden" placeholder="h" value="${cur.sleep ?? ""}"></label><label><span>⚖ Gewicht</span><input type="text" inputmode="decimal" id="wIn" aria-label="Gewicht in kg, optional" placeholder="kg" value="${cur.weight ?? ""}"></label><button type="button" class="qcard wide" data-sheet="cardio" data-v="${selDate}"><span>🏅 Aktivität</span><b>${(() => { const ca = cur.cardio || [], hasB = ca.some(c => c.type === "boulder"); const parts = ca.map(c => (CARDIO[c.type]?.[0] || "🏃") + " " + (c.sec ? fmtDur(c.sec) : c.min ? c.min + "′" : c.km ? fmtQ(c.km) + " km" : "")); if (cur.boulder.done && !hasB) parts.unshift("🧗"); return parts.length ? parts.join(" · ") : "＋"; })()}</b></button></div>
+    ${cur.boulder.done && !pz ? `<button class="btn ghost small" type="button" data-act="antag">Antagonisten nach dem Bouldern loggen (10 min) ›</button>` : ""}`;
+  h += weekStrip();
+  view.innerHTML = h + `</div>`;
+  const tl = view.querySelector(".tline"), tn = tl?.querySelector(".next, .tnow"); if (tn && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = tn.offsetLeft - tl.offsetLeft - tl.clientWidth / 2 + tn.offsetWidth / 2;
 }
 // Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
 function weekStrip(mo){
@@ -2755,8 +2728,8 @@ function weekStrip(mo){
   for (let i = 0; i < 7; i++) if (isStrength(store.days[addDays(mo, i)])) n++;
   const g = weekTarget();
   let h = `<div class="lab sec wsh"><span>Diese Woche · ${g ? `${n}/${g} Einheiten` : `${n} ${n === 1 ? "Einheit" : "Einheiten"} · Pause`}</span><a href="#t=kalender">Kalender ›</a></div><div class="weekstrip" aria-label="Diese Woche">`; n = 0;
-  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p0 = planFor(d), off = !!p0 && inPause(d), p = off ? null : p0, s = isStrength(day), b = day?.boulder?.done; if (s) n++;
-    h += `<button type="button" class="${s ? "done" : b ? "bould" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}${off && !s ? ", Einheit entfallen (Pause)" : ""}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : p ? "" : ""}</span><span class="tm">${!s && p?.start ? p.start : off && !s ? "Pause" : ""}</span></button>`; }
+  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p0 = planFor(d), off = !!p0 && inPause(d), p = off ? null : p0, s = isStrength(day), b = day?.boulder?.done, miss = !!p && !s && d < t; if (s) n++;
+    h += `<button type="button" class="${s ? "done" : b ? "bould" : miss ? "miss" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}${off && !s ? ", Einheit entfallen (Pause)" : miss ? ", Einheit verpasst" : ""}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : ""}</span><span class="tm">${miss ? "verpasst" : !s && p?.start ? p.start : off && !s ? "Pause" : ""}</span></button>`; }
   return h + `</div>`;
 }
 function gapBanner(){
@@ -3389,7 +3362,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   if (sheetKind === "mob") {
     { const left = Math.ceil(autoLeft(mobNext()) / 60), part = mobCount(cur, selDate) > 0 && left < mobMin(selDate);
     h += `<div class="sh"><h2>Morgenroutine · ${mobMin(selDate)} min</h2>${close}</div><div class="btnrow two"><button class="btn primary big" type="button" data-guide="auto"><b>⏱ Automatisch</b><span class="small">${part ? `noch ≈ ${left} min` : "läuft von selbst"}</span></button><button class="btn big" type="button" data-guide="start"><b>▶ Selbst starten</b><span class="small">Timer je Übung antippen</span></button></div><div class="small muted">Automatisch: Ansage, Übung, Pause und Wechsel laufen nacheinander durch. Selbst starten: du startest jeden Timer und gehst im eigenen Tempo weiter.</div>`; }
-    h += `${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}`;
+    h += `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
     MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb("mob:" + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb("mob:" + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${mobAlt(k) ? `<br><span class="small muted">${esc(mobAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
     h += `<button class="btn ${mobFinished(cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${mobFinished(cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
     if (mobZoom != null) { const [k, t, img] = MOBILITY[mobZoom], g = GUIDE[k];
@@ -3400,7 +3373,6 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
         ${k === "knietest" ? `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}` : ""}
         <div class="actions"><button type="button" class="btn big" data-tmrin="mob:${k}">⏱ Timer</button><button type="button" class="btn primary big" data-mobdone="${k}">${cur.mobility[k] ? "✓ Erledigt" : "Erledigt"}</button></div><button type="button" class="btn ghost small" data-hurt="mob:${k}">😣 Tut was weh?</button>
         <div class="zn"><button type="button" class="btn ghost small" data-mobzoom="${Math.max(0, mobZoom - 1)}" ${mobZoom === 0 ? "disabled" : ""}>‹ Vorherige</button><button type="button" class="btn ghost small" data-mobzoom="${Math.min(MOBILITY.length - 1, mobZoom + 1)}" ${mobZoom === MOBILITY.length - 1 ? "disabled" : ""}>Nächste ›</button></div></div></div>`; }
-    h += `<div class="lab">Knie-Test: Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}<div class="small muted">Über 2/10 mehrere Tage: Knie-Phase 1 unter Mehr → Einrichtung aktivieren.</div><div class="small muted">Bilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>; Fotos: free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0, Wikimedia Commons.</div>`;
   } else if (sheetKind === "hurt") { h += `<div class="hurtcard">${hurtHtml(sheetArg)}</div>`;
   } else if (sheetKind === "mobguide") {
     const i = sheetArg, N = MOBILITY.filter(([k]) => !mobSkip(k, selDate)).length, pos = MOBILITY.slice(0, i).filter(([k]) => !mobSkip(k, selDate)).length;
@@ -3416,9 +3388,9 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
-      <div class="lab">Knie</div>${scaleHtml("knee","knee",cur.pain.knee)}
+      <div class="lab">Knie <span class="small muted">(optional)</span></div>${scaleHtml("knee","knee",cur.pain.knee)}
       ${climbed(selDate) || climbed(addDays(selDate, -1)) || cur.pain.finger != null ? `<div class="lab">Finger / Ellbogen <span class="small muted">(nach dem Bouldern)</span></div>${scaleHtml("knee","finger",cur.pain.finger)}` : ""}
-      ${info("SC: 0–2 grün · 3 Übung tauschen · über 3 rot. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.")}
+      ${info(`Erledigt, sobald SC eingetragen ist. SC: 0–2 grün · ${S().mode === "pause" ? "3 gelb · über 3 rot – der Verlauf zeigt, ob die Pause wirkt" : "3 Übung tauschen · über 3 rot"}. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.`)}
       ${(cur.hurt || []).length ? `<div class="lab">Heute gemeldet</div><ul class="hurtl small">${cur.hurt.map(x => `<li>${esc(exName(x.ex))}: ${esc(HURT[x.where]?.label || x.where)} <span class="muted">(${esc(x.t)})</span></li>`).join("")}</ul>` : ""}
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
@@ -3613,7 +3585,7 @@ function coach(){
     if (!pz && sc4 >= 3) { c.title = `Schulter: ${sc4} der letzten ${sv.length} Abende SC ≥ 4/10`; c.body = "Das Schlüsselbeingelenk bleibt gereizt. Gönn ihm Ruhe: Pause (keine Krafteinheiten) oder Reduziert (2 kurze Ganzkörper-Einheiten). Und den Arzttermin vorziehen – Warnzeichen unter Mehr › Regeln & Wissen.";
       c.btns.push(["modePause", "Pause aktivieren"]); if (S().mode !== "reduziert") c.btns.push(["modeRed", "Reduziert"]); }
     else if (pz && sc7 >= 3) { c.title = `Schulter: trotz Pause ${sc7} der letzten ${sv.length} Abende SC ≥ 7/10`; c.body = "Zieh den Arzttermin vor. Was sofort zum Arzt gehört, steht unter Mehr › Regeln & Wissen › Sofort handeln."; c.btns.push(["arzt", "Arzttermin vorbereiten"]); }
-    else if (pz) { c.title = "Trainingspause"; c.body = `Heute nur die Routine (${mobMin(t)} min, ohne Plank und Shrug) und der Abendcheck. Gehen und Rad sind okay, solange die Schulter ruhig bleibt.`; }
+    else if (pz) { c.quiet = true; c.title = "Trainingspause"; c.body = `Heute nur die Routine (${mobMin(t)} min, ohne Plank und Shrug) und der Abendcheck. Gehen und Rad sind okay, solange die Schulter ruhig bleibt.`; }
     else if (painHi && !S().scCleared) { c.title = "Die Schulter meldet sich"; c.body = "Heute Übungen mit SC-Ampel durch den Ersatz tauschen. Hält das länger als 1–2 Wochen an, den Arzttermin vorziehen."; }
     else if (kneeHi && !S().knee1) { c.title = `Knie: ${kv.filter(v => v > 2).length} von ${kv.length} Morgentests über 2/10`; c.body = "Knie-Phase 1 schont mit kürzerem Bewegungsweg: Beinpresse nur bis 60°, Beinstrecker 90→45°, Wandsitz statt Kniebeuge. Du kannst jederzeit zurück."; c.btns.push(["knee1on", "Knie-Phase 1 aktivieren"]); }
     else if (kneeCalm && S().knee1) { c.title = "Knie ruhig: " + kv.length + " Morgentests ≤ 2/10"; c.body = "Du kannst zu den normalen Beineinheiten zurück. Erst die Wiederholungen steigern, dann das Gewicht."; c.btns.push(["knee1off", "Zurück zu normalen Beineinheiten"]); }
@@ -3944,7 +3916,7 @@ function renderMore(){
   if (tab === "essen") return renderEssen();
   if (["essen","rezepte"].includes(sub.mehr)) sub.mehr = "menu";
   const s = sub.mehr || "menu";
-  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k === "bon" ? 'data-sheet="receipt"' : k === "scan" ? 'data-sheet="scan"' : k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db, Wikimedia Commons. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2><div class="lrows">${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k === "bon" ? 'data-sheet="receipt"' : k === "scan" ? 'data-sheet="scan"' : k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
   const title = s === "setup" ? "Einstellungen" : s === "essenset" ? "Essen-Einstellungen" : (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
   view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
@@ -3978,7 +3950,7 @@ function calEntries(d, noMeals){
   if (day?.boulder?.done && !(day.cardio || []).some(c => c.type === "boulder")) out.push({tm:"", title:"Bouldern", kind:"boulder", done:true, go:`#d=${d}`});
   for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${[durTxt(c), c.km ? fmtQ(c.km) + " km" : ""].filter(Boolean).join(" · ")}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title: prepOff() ? "Wochen-Check-in" : "Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
-  const mob = mobCount(day, d), mobN = mobTotal(d), pain = day?.pain && (day.pain.sc != null || day.pain.knee != null);
+  const mob = mobCount(day, d), mobN = mobTotal(d), pain = painLogged(day);
   if (d >= t || mob) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin(d)), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
   if (d >= t || pain) out.push({tm: routineAt("pain"), en: hmStr(hm(routineAt("pain")) + 5), title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
@@ -4340,7 +4312,7 @@ function mealBars(t){
   return `<div class="mbars nutri"><div><div class="small"><b>noch ${rk}</b> kcal</div><div class="track"><div class="fill" style="width:${Math.min(t.eKcal / T.kcal * 100, 100)}%"></div></div></div><div><div class="small"><b>noch ${rp}</b> g Protein</div><div class="track"><div class="fill p" style="width:${Math.min(t.eProtein / T.protein * 100, 100)}%"></div></div></div></div>`;
 }
 
-let showMore = false, mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus4") || "training";
+let mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus4") || "alles";
 
 let mealTempF = "";
 // Favoriten im Tauschblatt nach oben (nur Anzeige, Plan und Budget bleiben unberührt); dazu passende Favoriten, die sonst nicht in der Liste wären
@@ -4601,7 +4573,7 @@ const paceOf = (sec, km) => { const p = sec / 60 / km; let m = Math.floor(p), s2
 const pace = c => c.km > 0 && cSec(c) > 0 ? paceOf(cSec(c), c.km) : "";
 const KM_MIN = {lauf: 6, geh: 12, rad: 3, schwimm: 25}; // geschätzte Minuten je km, wenn nur die Distanz bekannt ist
 const cMin = c => cSec(c) / 60 || (c.km ? c.km * (KM_MIN[c.type] || 6) : 0);
-const cardioKcal = c => { const kg = num(S().weight) || 74, kmK = {lauf: 1, geh: 0.7, rad: 0.3, schwimm: 4.5}[c.type];
+const cardioKcal = c => { const kg = num(lastWeight()) || 74, kmK = {lauf: 1, geh: 0.7, rad: 0.3, schwimm: 4.5}[c.type];
   return c.km > 0 && kmK && (c.type === "lauf" || !cSec(c)) ? Math.round(kmK * kg * c.km) : Math.round((CARDIO[c.type]?.[2] || 6) * 3.5 * kg / 200 * cMin(c)); };
 const durTxt = c => c.sec ? fmtDur(c.sec) : c.min ? `${c.min} min` : "";
 const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${[durTxt(c), c.km ? `${fmtQ(c.km)} km` : "", pace(c)].filter(Boolean).join(" · ")}${c.feel ? ` · ${c.feel}` : ""}`;
@@ -4618,7 +4590,7 @@ function cardioSheet(d){
       <details class="small"><summary>Mehr (Anstrengung, Notiz)</summary><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
       <div class="field"><label for="caNote">Notiz</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div></details>
       <button class="btn primary big" type="button" data-act="cardioSave" data-v="${d}">Eintragen</button>
-      ${info("Bouldern zählt für den Trainingsplan (kein Oberkörper am selben und am nächsten Tag) und bringt abends den Shake. Knie: nach dem Laufen auf die Ampel achten – liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.")}</div>`;
+      ${cardioType === "boulder" && S().mode !== "pause" ? info("Bouldern zählt für den Trainingsplan (kein Oberkörper am selben und am nächsten Tag) und bringt abends den Shake.") : cardioType === "lauf" || cardioType === "geh" ? info("Knie: nach dem Laufen auf die Ampel achten – liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.") : ""}</div>`;
 }
 let cardioType = "boulder", cardioFeel = "";
 // Aufzeichnen wie eine Lauf-App: Stoppuhr aus Zeitstempeln (stimmt auch nach Sperrbildschirm oder Neuladen), optional GPS (Einstellung „gps“).
@@ -5643,7 +5615,7 @@ async function enablePush(){
 // ---------- Ereignisse (ein Handler für Seite und Sheet) ----------
 // „Heute“ antippen, während Heute schon offen ist (also auch Doppeltipp): zurück zum heutigen Tag
 document.querySelector("nav.bottom").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return;
-  if (b.dataset.tab === "heute" && tab === "heute" && selDate !== todayIso()) { if (dirty) saveCur(); selDate = todayIso(); history.replaceState(null, "", "#t=heute"); loadCur(); renderToday(); scrollTo(0, 0); toast("Heute"); return; }
+  if (b.dataset.tab === "heute" && tab === "heute" && selDate !== todayIso()) { if (dirty) saveCur(); selDate = todayIso(); history.replaceState(null, "", "#t=heute"); loadCur(); renderToday(); scrollTo(0, 0); return; }
   if (b.dataset.tab === "mehr" && tab === "mehr" && sub.mehr !== "menu") { sub.mehr = "menu"; history.replaceState(null, "", "#t=mehr"); render(); scrollTo(0, 0); return; }  // erneut „Mehr“ → zurück zum Menü
   go(b.dataset.tab); });
 document.getElementById("restBar").addEventListener("click", e => { const b = e.target.closest("[data-rest]"); if (!b) return; const v = b.dataset.rest; if (v === "stop") stopRest(); else { restEnd += Number(v)*1000; scheduleNote(); updateRestBar(); } });
@@ -5802,7 +5774,7 @@ async function onClick(e){
     if (c === "save" && trkDone) { const td = trkDone, mn = num(sheet.querySelector("#trMin")?.value), km = num(sheet.querySelector("#trKm")?.value), note = sheet.querySelector("#trNote")?.value.trim() || "";
       const sec = mn > 0 ? (Math.abs(mn * 60 - td.sec) < 30 ? td.sec : Math.round(mn * 60)) : td.sec, e = {id: Date.now().toString(36), type: td.type, min: Math.max(1, Math.round(sec / 60)), sec, km: km > 0 && KM_TYPES.has(td.type) ? km : null, feel: null, note: note || null, path: km > 0 ? td.path : null};
       const f = day => { day.cardio = [...(day.cardio || []), e]; }; if (cur && cur.date === td.d) { f(cur); touch(); } else editDay(td.d, f);
-      trkDone = null; cardioType = td.type; toast(`Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
+      trkDone = null; cardioType = td.type; renderSheet(); render(); return; }
     trkCmd(c); return; }
   const cdl = t.closest("[data-cardiodel]"); if (cdl) { const id = cdl.dataset.cardiodel, d = cdl.dataset.d, f = day => { const wasB = (day.cardio || []).some(c => c.id === id && c.type === "boulder"); day.cardio = (day.cardio || []).filter(c => c.id !== id); day.cardioDel = [...(day.cardioDel || []), id]; if (wasB && !day.cardio.some(c => c.type === "boulder")) day.boulder = {done: false, at: Date.now()}; };
     if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f); renderSheet(); render(); return; }
@@ -5856,7 +5828,6 @@ async function onClick(e){
   const cw2 = t.closest("[data-catw]"); if (cw2) { catF.where = cw2.dataset.catw; renderMore(); return; }
   const cm2 = t.closest("[data-catm]"); if (cm2) { catF.m = cm2.dataset.catm; renderMore(); return; }
   if (t.closest("[data-catp]")) { catF.plan = !catF.plan; renderMore(); return; }
-  if (t.closest('[data-act="toggleMore"]')) { showMore = !showMore; renderToday(); return; }
   const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus4", todayFocus); renderToday(); return; }
   const mf = t.closest("[data-mealfold]"); if (mf) { mealOpen = !mealOpen; lsSet("mealOpen", mealOpen); renderToday(); return; }
   const df = t.closest("[data-dayfold]"); if (df) { const d = df.dataset.dayfold; openDays.set.has(d) ? openDays.set.delete(d) : openDays.set.add(d); renderMore(); return; }
@@ -5897,7 +5868,7 @@ async function onClick(e){
       if (!(min > 0) && !kmOk) { toast(KM_TYPES.has(cardioType) ? "Bitte Dauer oder Distanz eintragen" : "Bitte die Dauer in Minuten eintragen"); sheet.querySelector(kmOk || !KM_TYPES.has(cardioType) ? "#caMin" : "#caKm")?.focus(); return; }
       const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min: min > 0 ? min : null, km: kmOk ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min: min || null, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
-      const nxt = planFor(addDays(d, 1)); cardioFeel = ""; toast(cardioType === "boulder" && nxt && /^ok/.test(nxt.session) ? `Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf` : `Eingetragen: ${cardioTxt(e)}`); renderSheet(); render(); return; }
+      const nxt = planFor(addDays(d, 1)); cardioFeel = ""; if (cardioType === "boulder" && nxt && /^ok/.test(nxt.session)) toast("Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf"); renderSheet(); render(); return; }
     if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
     if (a === "mobFinish") { cur.mobility = Object.assign({}, cur.mobility); if (mobFinished(cur, selDate) && cur.mobility._done) { delete cur.mobility._done; clr("mobility._done"); } else cur.mobility._done = true; touch(); renderSheet(); render(); return; }
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
@@ -5919,7 +5890,6 @@ async function onClick(e){
       saveFood(Object.assign({ownPrices: own}, nm ? {myProds: my} : {}, stock ? {stock: [...stock], stockOn: true} : {})); rcpt = null; sheetKind = null; sheet.close();
       toast(`${n} Preise übernommen${ns ? ` · ${ns} als Vorrat` : ""}${nm ? ` · ${nm} ${nm === 1 ? "neues Produkt" : "neue Produkte"} gemerkt` : ""}`); render(); return; }
     if (a === "ownDel") { const own = JSON.parse(JSON.stringify(FOOD().ownPrices || {})), [pid, st] = v.split("|"); if (own[pid]) { delete own[pid][st]; if (!Object.keys(own[pid]).length) delete own[pid]; } saveFood({ownPrices: own}); render(); if (sheet.open) renderSheet(); return; }
-    if (a === "toggleDone") { showDone = !showDone; renderToday(); return; }
     if (a === "endPause") { setMode("normal"); render(); return; }
     if (a === "toMode") { shopOpen.add("set:training"); sub.mehr = "setup"; go("mehr"); document.getElementById("modeSeg")?.scrollIntoView({block: "center"}); return; }
     if (a === "dayDeload") { if (cur.deload) { delete cur.deload; clr("deload"); } else cur.deload = true; touch(); renderSheet(); render(); return; }
@@ -6009,7 +5979,7 @@ async function onChange(e){
   const t = e.target;
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
   if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; touch(); return; }
-  if (t.id === "wIn" || t.id === "slIn") { saveCur(); renderToday(); return; }
+  if (t.id === "wIn" || t.id === "slIn") { saveCur(); return; }
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]);
     const y = window.scrollY; renderMore(); window.scrollTo(0, y); return; } // abgehakt bleibt an seiner Stelle, die Liste springt nicht
   if (t.id === "shopRec") { shopRec = t.value; shopMul = 1; renderMore(); return; }
@@ -6091,7 +6061,7 @@ function onSwipe(s0, dx){
       const row = view.querySelector(`[data-swipe="meal"][data-d="${d}"][data-k="${k}"]`); if (row) { row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 700); } }
     else if (!mealsFor(d).find(x => x.k === k)?.own) { try { navigator.vibrate && navigator.vibrate(20); } catch {} skipMeal(d, k); } return; }
   if (s0.kind === "shop") { const cb = z.querySelector("input[data-shop]"); if (cb) { cb.checked = !cb.checked; cb.dispatchEvent(new Event("change", {bubbles: true})); } return; }
-  if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); toast(`${dx < 0 ? "→" : "←"} ${selDate === todayIso() ? "Heute" : fmt(selDate)}`); }
+  if (s0.kind === "day" && tab === "heute") { if (dirty) saveCur(); selDate = addDays(selDate, dx < 0 ? 1 : -1); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); }
 }
 // Wischgesten: horizontal über [data-swipe]
 let swp = null, swipedAt = 0;

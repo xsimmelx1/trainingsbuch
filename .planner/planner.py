@@ -142,8 +142,8 @@ def is_strength(day):
 
 
 def has_pain_log(day):
-    p = (day or {}).get("pain") or {}
-    return p.get("sc") is not None or p.get("knee") is not None
+    # Abendcheck erledigt = SC eingetragen (Knie optional), wie in der App
+    return ((day or {}).get("pain") or {}).get("sc") is not None
 
 
 # ---------- Kalender ----------
@@ -1057,6 +1057,10 @@ def main():
         plan = [p for p in old_plan["days"] if p["date"] >= today.isoformat()]
         extras = old_plan.get("extras", extras)
         print("Kalender unvollständig: alter Plan bleibt")
+    # heutigen Check-in-Slot nicht bei jedem Lauf nach hinten schieben (find_slot startet heute bei „jetzt + 30 min“)
+    old_ci = next((x for x in old_plan.get("extras", []) if x.get("date") == today.isoformat()), None)
+    if old_ci:
+        extras = [old_ci if x.get("date") == old_ci["date"] else x for x in extras]
     pause = settings.get("mode") == "pause"
     if pause:  # Trainingspause: keine Krafteinheiten, auch nicht aus dem alten Plan
         plan = [p for p in plan if p is keep]
@@ -1121,7 +1125,8 @@ def main():
         once(f"pain-{tday}", {"title": "Abendcheck fehlt (30 s)", "body": "Schmerz-Log in der App eintragen.",
                               "url": f"{SITE}#p={tday}", "tag": f"p-{tday}", "action": "Eintragen"})
     mon = (today - dt.timedelta(days=today.weekday())).isoformat()
-    if today.weekday() == 6 and "18:30" <= hm <= "23:30" and mon not in load("checkins.json", {}):
+    ci_at = next((x.get("start") for x in extras if x.get("date") == tday), None) or "17:00"  # Slot aus plan.extras, wie Heute und Kalender
+    if today.weekday() == 6 and ci_at <= hm <= "23:30" and mon not in load("checkins.json", {}):
         once(f"checkin-{mon}", {"title": "Wochen-Check-in", "body": "10 Minuten: Bilanz der Woche und Modus für die nächste.",
                                 "url": f"{SITE}#c={mon}", "tag": f"c-{mon}", "action": "Öffnen"})
 
