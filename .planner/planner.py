@@ -30,21 +30,21 @@ SITE = "https://xsimmelx1.github.io/trainingsbuch/"
 SEQ = ["beineA", "okA", "beineB", "okB"]
 BASE = {"beineAk": "beineA", "beineBk": "beineB", "okBhome": "okB"}
 TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB": "Oberkörper B",
-         "notfall": "Notfall-Ganzkörper", "reduziert": "Ganzkörper (reduziert)", "beineAk": "Beine A (Knie-Phase 1)", "beineBk": "Beine B (Knie-Phase 1)"}
+         "notfall": "Notfall-Ganzkörper", "reduziert": "Ganzkörper (reduziert)", "beineAk": "Beine A · Knie-Phase 1", "beineBk": "Beine B · Knie-Phase 1"}
 # Öffentlicher Kalender-Feed: neutrale Namen ohne Reha- oder Stress-Status
 PUBLIC_TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB": "Oberkörper B", "beineAk": "Beine A", "beineBk": "Beine B",
                 "notfall": "Kurz-Einheit", "reduziert": "Ganzkörper", "okBhome": "Oberkörper B",
                 "notfallK": "Kurz-Einheit", "reduziertK": "Ganzkörper"}
-EXERCISES = {
-    "beineA": ["Beinpresse/Hack Squat", "Rumänisches Kreuzheben", "Beinstrecker", "Sitzender Beinbeuger", "Wadenheben stehend", "Dead Bug"],
-    "okA": ["Brustgestütztes Rudern", "KH-Schrägbank Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben", "Face Pull", "Kabel-Shrug 30°", "Bayesian Curl", "Trizeps-Pushdown"],
-    "beineB": ["Hip Thrust", "Bulgarian Split Squat", "Liegender Beinbeuger", "Hüftabduktion", "Step-Downs", "Wadenheben sitzend", "Pallof Press"],
-    "okB": ["Klimmzug Neutralgriff", "Kabelrudern", "Brustpresse", "Landmine Press", "KH-Seitheben", "Reverse Fly", "Serratus Punch", "Schrägbank-Curl", "Skull Crusher", "Ab-Roller kurz"],
-    "notfall": ["Bulgarian Split Squat", "Rumänisches Kreuzheben", "Latzug", "Brustpresse", "Seitheben"],
-    "reduziert": ["Beinpresse", "Rumänisches Kreuzheben", "Latzug Neutralgriff", "Brustgestütztes Rudern", "Brustpresse", "Kabel-Seitheben", "Kabel-Shrug 30°"],
+EXERCISES = {  # Namen wie in der App (EX.name)
+    "beineA": ["Beinpresse / Hack Squat", "Rumänisches Kreuzheben", "Beinstrecker", "Sitzender Beinbeuger", "Wadenheben stehend", "Dead Bug"],
+    "okA": ["Brustgestütztes Rudern", "KH-Schrägbank 15–30°, Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben bis 90°", "Face Pull (Ende in Außenrotation)", "Kabel-Shrug, 30° abgespreizt", "Bayesian Curl am Kabel", "Trizeps-Pushdown"],
+    "beineB": ["Hip Thrust", "Bulgarian Split Squat", "Liegender Beinbeuger", "Hüftabduktion Maschine", "Step-Downs 10→20 cm", "Wadenheben sitzend", "Pallof Press"],
+    "okB": ["Klimmzug Neutralgriff", "Kabelrudern sitzend", "Brustpresse Maschine/Kabel", "Landmine Press halbkniend", "KH-Seitheben", "Reverse Fly Maschine", "Serratus Punch am Kabel", "Kabel-Shrug, 30° abgespreizt", "Skull Crusher", "Ab-Roller kniend, kurzer Weg"],
+    "notfall": ["Bulgarian Split Squat", "Rumänisches Kreuzheben", "Latzug Neutralgriff", "Brustpresse Maschine/Kabel", "KH-Seitheben"],
+    "reduziert": ["Beinpresse / Hack Squat", "Rumänisches Kreuzheben", "Latzug Neutralgriff", "Brustgestütztes Rudern", "Brustpresse Maschine/Kabel", "Kabel-Seitheben bis 90°", "Kabel-Shrug, 30° abgespreizt"],
 }
-EXERCISES["beineAk"] = ["Wandsitz 60°", "Beinstrecker 90→45°", "Beinpresse 0→60°", "Rumänisches Kreuzheben", "Hüftabduktion", "Wadenheben stehend", "Seitstütz"]
-EXERCISES["beineBk"] = ["Wandsitz 60°", "Beinstrecker 90→45°", "Beinpresse 0→60°", "Hip Thrust", "Hüftabduktion", "Liegender Beinbeuger", "Wadenheben sitzend", "Seitstütz"]
+EXERCISES["beineAk"] = ["Wandsitz", "Beinstrecker 90→45°", "Beinpresse 0→60°", "Rumänisches Kreuzheben", "Hüftabduktion", "Wadenheben stehend", "Seitstütz"]
+EXERCISES["beineBk"] = ["Wandsitz", "Beinstrecker 90→45°", "Beinpresse 0→60°", "Hip Thrust", "Hüftabduktion", "Liegender Beinbeuger", "Wadenheben sitzend", "Seitstütz"]
 
 # Coaching im Morgen-Push: Fokus der Etappe und Lektion der Woche (wie in der App)
 FOCUS = {"w0": "Woche 0: Ausgangswerte sammeln.", "einstieg": "Fokus: Technik und RIR 3.", "aufbau": "Fokus: ↑-Vorschläge umsetzen, RIR 2→1.",
