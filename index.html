@@ -1208,7 +1208,7 @@ function guideTick(){
   if (!el || !g || sheetKind !== "mobguide") { clearInterval(guideTimer); guide.end = 0; return; }
   if (g.stop) { el.textContent = fmtDur(guide.acc + (guide.end ? (Date.now() - guide.start) / 1000 : 0)); return; }
   const left = (guide.end - Date.now()) / 1000; el.textContent = fmtDur(Math.max(0, Math.ceil(left)));
-  if (guide.end && left <= -1) { guide.end = 0; guide.round++; clearInterval(guideTimer); chime(); toast(guide.round < g.rounds ? (g.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft"); renderSheet(); }
+  if (guide.end && left <= -1) { guide.end = 0; guide.round++; clearInterval(guideTimer); chime(); if (guide.round < g.rounds) toast(g.side ? "Seite wechseln" : "Nächste Runde"); renderSheet(); }
 }
 
 // ---------- Halte-/Satz-Timer: läuft im Blatt, ohne neu zu zeichnen (Video läuft weiter), ±10 s ----------
@@ -1217,21 +1217,22 @@ let tmr = null, tmrInt = null;
 // Morgenroutine: von Hand auf ruhiges Tempo gesetzt (Bewegung nie unter 2 s); sonst aus dem Tempo im Plan (runter-Pause-hoch-halten).
 const REP_STEPS = {
   "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
-  // Der Hinweg ist kein eigener Schritt: „Halten“ zählt Hinweg + Haltezeit, der 4. Wert sind die Sekunden Hinweg am Anfang (im Video sichtbar)
-  "mob:tiltlie": [["Halten", 6, "hold", 1], ["Lösen", 2, "back"]],
-  "mob:tilt": [["Halten", 5, "hold", 2], ["Lösen", 2, "back"]],  // Einrollen im Video 2,8 s: 2 s Hinweg statt 1 s, sonst läuft es fast dreifach
-  "mob:glutebr": [["Halten", 4, "hold", 1], ["Runter", 2, "back"]],
-  "mob:deadbug": [["Halten", 4, "hold", 2], ["Zurück", 2, "back"]],
-  "mob:shrug30": [["Halten", 3, "hold", 1], ["Ablassen", 2, "back"]]};
-function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k, i]) => i ? {l, s, k, in: i} : {l, s, k});
+  // Hinweg ist ein eigener Schritt; „Halten“ dauert genau die Haltezeit (DOSE.hold bzw. Einstellung), die 0-Sekunde zählt mit
+  "mob:tiltlie": [["Einrollen", 1, "hin"], ["Halten", 0, "hold"], ["Lösen", 2, "back"]],
+  "mob:tilt": [["Einrollen", 2, "hin"], ["Halten", 0, "hold"], ["Lösen", 2, "back"]],  // Einrollen im Video 2,8 s
+  "mob:glutebr": [["Hoch", 1, "hin"], ["Halten", 0, "hold"], ["Runter", 2, "back"]],
+  "mob:deadbug": [["Strecken", 2, "hin"], ["Halten", 0, "hold"], ["Zurück", 2, "back"]],
+  "mob:shrug30": [["Hoch", 1, "hin"], ["Halten", 0, "hold"], ["Ablassen", 2, "back"]]};
+const holdRun = h => Math.max(0, h - ZERO_SEC); // Countdown so, dass Halten inkl. der 0-Sekunde genau h Sekunden dauert
+function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k]) => ({l, s: k === "hold" ? holdRun(d.hold || 1) : s, k}));
   const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), hin = Math.max(1, tp ? +tp[3] : 1), st = [{l: "Halten", s: hin + d.hold, k: "hold", in: hin}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
   if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
 const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
 function timerCfg(key){
   const k = key.startsWith("mob:") ? key.slice(4) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
   if (k && AUTO_CFG[k]) return AUTO_CFG[k]; // geführter Ablauf auch beim Selbst-Starten (z. B. Knie-Test)
-  if (g) return g.stop ? {mode: "stop", rounds: g.rounds || 1, side: false, rest: d.rest || 30} : {mode: "count", sec: g.sec, rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
-  if (d.hold >= 10) return {mode: "count", sec: d.hold, rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
+  if (g) return g.stop ? {mode: "stop", rounds: g.rounds || 1, side: false, rest: d.rest || 30} : {mode: "count", sec: holdRun(g.sec), rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
+  if (d.hold >= 10) return {mode: "count", sec: holdRun(d.hold), rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
   if (d.hold > 0 && m) return {mode: "reps", steps: repSteps(key, d), reps: +m[2], rounds: +m[1] * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
   return {mode: "stop", rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 30};
 }
@@ -1240,20 +1241,21 @@ function timerCfg(key){
 let autoFlow = false;
 const AUTO_CFG = {knietest: {mode: "reps", steps: repSteps("mob:knietest", {}), reps: 5, rounds: 2, side: true, rest: 0}};
 const STOP_EST = 20; // Annahme je Stoppuhr-Satz („so lange sauber möglich“) für die Restzeit
+const stopEst = key => key === "mob:rkc" ? mobHoldSec("rkc") : STOP_EST;
 const PREP_SEC = 10, SWITCH_SEC = 10, NEXT_SEC = 12; // genug Zeit zum Hinlegen, Aufstehen, Seite wechseln
 const ZERO_SEC = 1; // jede Phase zeigt am Ende eine volle Sekunde lang 0, erst dann kommt die nächste
 let autoCarry = 0; // Übergangszeit, die an den Vorlauf der nächsten Übung angehängt wird (deren Video ist dann schon zu sehen)
 function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null; return (k && AUTO_CFG[k]) || timerCfg(key); }
 // Dauer einer Übung im Durchlauf (ohne Vorbereitung) und Rest der Routine ab Übung i
-function autoSecs(key){ const c = autoCfg(key), Z = ZERO_SEC, per = c.mode === "reps" ? c.reps * repSecs(c) : c.mode === "stop" ? STOP_EST : c.sec + Z; return c.rounds * per + (c.rounds - 1) * ((c.side ? SWITCH_SEC : (c.rest || 10)) + Z); }
+function autoSecs(key){ const c = autoCfg(key), Z = ZERO_SEC, per = c.mode === "reps" ? c.reps * repSecs(c) : c.mode === "stop" ? stopEst(key) : c.sec + Z; return c.rounds * per + (c.rounds - 1) * ((c.side ? SWITCH_SEC : (c.rest || 10)) + Z); }
 // Dauer der ganzen Morgenroutine in Minuten (wie durchgetaktet: Vorlauf, Übung, Wechsel); gilt für Texte, Kalender und Planer
 const mobMin = (d = todayIso()) => Math.round(MOBILITY.filter(([k]) => !mobSkip(k, d)).reduce((t, [k]) => t + PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC, 0) / 60);
 function autoLeft(i){ let t = 0; for (let j = Math.max(0, i); j < MOBILITY.length; j++) { const k = MOBILITY[j][0]; if ((cur.mobility[k] && j !== i) || mobSkip(k, selDate)) continue; t += PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC; } return t; }
 // Nächste offene Übung ab Blatt-Index – als Kurzname
 const mobShort = t => t.split(":")[0].split(/\s\d+(?:–\d+)?\s*×/)[0].split(" (")[0].split(",")[0].trim();
-function tmrRemain(t){ if (!t) return 0; const Z = ZERO_SEC, per = t.mode === "reps" ? t.reps * repSecs(t) : t.mode === "stop" ? STOP_EST : t.sec + Z, gap = (t.side ? SWITCH_SEC : (t.rest || 10)) + Z, left = Math.max(0, t.left + Z);
+function tmrRemain(t){ if (!t) return 0; const Z = ZERO_SEC, per = t.mode === "reps" ? t.reps * repSecs(t) : t.mode === "stop" ? stopEst(t.key) : t.sec + Z, gap = (t.side ? SWITCH_SEC : (t.rest || 10)) + Z, left = Math.max(0, t.left + Z);
   if (t.phase === "next") return left; if (t.phase === "prep") return left + t.rounds * per + (t.rounds - 1) * gap + NEXT_SEC;
-  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + t.steps.slice(t.step + 1).reduce((a, x) => a + x.s + Z, 0) + Math.max(0, t.reps - t.rep - 1) * repSecs(t) : t.mode === "stop" ? Math.max(0, STOP_EST - t.acc) : left;
+  const roundsAfter = Math.max(0, t.rounds - t.round - (t.phase === "switch" ? 0 : 1)), inRound = t.phase === "switch" ? 0 : t.mode === "reps" ? left + t.steps.slice(t.step + 1).reduce((a, x) => a + x.s + Z, 0) + Math.max(0, t.reps - t.rep - 1) * repSecs(t) : t.mode === "stop" ? Math.max(0, stopEst(t.key) - t.acc) : left;
   return inRound + left * (t.phase === "switch" ? 1 : 0) + roundsAfter * (per + gap) + NEXT_SEC; }
 // Hinweise je Schmerzstelle: zuerst die Regel aus dem Plan, dann typische Ursachen – allgemein und je Bewegungsmuster
 const HURT = {
@@ -1350,8 +1352,8 @@ function timerHtml(key){
 function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
   const pause = ["prep", "switch", "next"].includes(t.phase);
-  const head = t.phase === "prep" ? (t.fresh ? "✓ Geschafft · jetzt diese Übung – Position einnehmen" : "Bereit machen · Position einnehmen") : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
-    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.steps[t.step].l}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
+  const head = t.phase === "prep" ? (t.fresh ? "Jetzt diese Übung – Position einnehmen" : "Bereit machen · Position einnehmen") : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
+    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr${t.key.startsWith("mob:") ? ` · Ziel ${stopEst(t.key)} s` : ""}`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.steps[t.step].l}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
   const stopRun = t.mode === "stop" && !pause, val = stopRun ? t.acc : t.left;
   return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, stopRun ? val : Math.ceil(val)))}</div>
     ${t.times?.length ? `<div class="small muted">Bisher: ${t.times.map((x, i) => `Satz ${i + 1} ${fmtDur(x)}`).join(" · ")}</div>` : ""}
@@ -1391,7 +1393,7 @@ function tmrTick(){
   if (t.phase === "next") { t.run = false; clearInterval(tmrInt); guideNext(true); return; }
   // Rundenende: geführt → anhalten, Durchlauf → Seitenwechsel/Pause bzw. Übergang zur nächsten Übung
   const roundEnd = () => { const more = t.round < t.rounds; if (!more) t.round = t.rounds - 1;
-    toast(more ? (t.side ? "Seite wechseln" : "Nächste Runde") : "Geschafft");
+    if (more && !t.auto) toast(t.side ? "Seite wechseln" : "Nächste Runde"); // im Durchlauf zeigt die Phase es groß
     if (t.auto && !more) { autoAdvance(); return true; }
     const rel = t.mode === "reps" ? "" : "Lösen. "; // bei Wiederholungen ist schon gelöst
     if (t.auto) { t.phase = "switch"; t.left = t.side ? SWITCH_SEC : (t.rest || 10); say(rel + (t.side ? "Seite wechseln" : "Kurze Pause")); }
@@ -1417,7 +1419,7 @@ function tmrCmd(c){
   else if (c === "set") { if (t.mode !== "stop" || t.done) return; const sec = Math.round(t.acc); (t.times = t.times || []).push(sec); t.acc = 0; t.round++;
     if (t.key.startsWith("mob:")) { cur.mobSec = Object.assign({}, cur.mobSec, {[t.key.slice(4)]: t.times.slice()}); touch(); }
     const more = t.round < t.rounds; if (!more) { t.round = t.rounds - 1; t.done = true; }
-    chime(); toast(more ? `Satz ${t.round}: ${fmtDur(sec)} – kurze Pause` : `Geschafft: ${t.times.map(fmtDur).join(" · ")}`);
+    chime(); // Zeiten stehen unter „Bisher“
     if (t.auto && !more) return autoAdvance();
     if (t.auto) { t.phase = "switch"; t.left = t.rest || 30; t.run = true; t.last = Date.now(); clearInterval(tmrInt); tmrInt = setInterval(tmrTick, 250); }
     else { t.run = false; clearInterval(tmrInt); } }
@@ -1644,7 +1646,8 @@ function maybeReplan(day){
 }
 
 // ---------- Ableitungen ----------
-const S = () => store.settings || {};
+let MOB_HOLD0 = null, mobHoldRef = null; // Planwerte der Haltezeiten (nach DOSE/MOBILITY gesetzt) und zuletzt angewandte Einstellung
+const S = () => { const s = store.settings || {}; if (MOB_HOLD0 && s.mobHold !== mobHoldRef) applyMobHold(s.mobHold); return s; };
 const MODES = ["normal", "reduziert", "notfall", "pause"];
 const inPause = d => (S().pauses || []).some(p => d >= p.from && (!p.to || d <= p.to));
 function setMode(m){ const s = S(), was = s.mode || "normal"; if (m === was) return; const t = todayIso(), ps = (s.pauses || []).map(p => Object.assign({}, p)), open = ps.find(p => !p.to);
@@ -2299,6 +2302,15 @@ function suggestion(id){
   return {kg:lkg, reps:Math.max(...reps), up:false, short:"= Gewicht halten, +1 Wdh. anpeilen", text:`= Gewicht halten, Ziel: in einem Satz +1 Wdh. Letztes Mal: ${list}.`};
 }
 for (const [id, r] of Object.entries(RDB)) { if (id.startsWith("mob:")) { const mb = MOBILITY.find(x => x[0] === id.slice(4)); if (mb) mb[2] = "r/" + r; } else if (EX[id]) { EX[id].img = "r/" + r; EX[id].credit = RDB_CREDIT; } }
+// Haltezeiten der Morgenroutine (Mehr › Einstellungen › Training & Plan): settings.mobHold = {k: s}; RKC-Plank = Zielzeit der Stoppuhr
+const MOB_HOLD_KEYS = ["tiltlie", "tilt", "glutebr", "rkc", "deadbug", "hipflexor", "shrug30", "k2c"];
+MOB_HOLD0 = Object.fromEntries(MOB_HOLD_KEYS.map(k => { const d = DOSE["mob:" + k], mb = MOBILITY.find(m => m[0] === k); return [k, {sec: k === "rkc" ? STOP_EST : d.hold, dose: d.dose, tempo: d.tempo, txt: mb[1]}]; })); mobHoldRef = {};
+const mobHoldMin = k => MOB_HOLD0[k].sec >= 10 ? 5 : 1, mobHoldMax = k => MOB_HOLD0[k].sec >= 10 ? 90 : 15, mobHoldStep = k => MOB_HOLD0[k].sec >= 10 ? 5 : 1;
+function mobHoldSec(k, mh = (store.settings || {}).mobHold){ const v = Math.round(+(mh || {})[k]); return v >= mobHoldMin(k) && v <= mobHoldMax(k) ? v : MOB_HOLD0[k].sec; }
+function applyMobHold(mh){ mobHoldRef = mh;
+  for (const k of MOB_HOLD_KEYS) { if (k === "rkc") continue; const o = MOB_HOLD0[k], n = mobHoldSec(k, mh), d = DOSE["mob:" + k], mb = MOBILITY.find(m => m[0] === k);
+    const rep = x => x && n !== o.sec ? x.replace(new RegExp(`(^|[^\\d–])${o.sec} s( halten|/Seite)`, "g"), `$1${n} s$2`) : x;
+    d.hold = n; d.dose = rep(o.dose); d.tempo = o.tempo && n !== o.sec ? rep(o.tempo).replace(/^[\d-]+\s*\((.*)\)$/, "$1") : o.tempo; mb[1] = rep(o.txt); if (GUIDE[k]) GUIDE[k].sec = n; } }
 for (const id of IMG_NONE) { if (id.startsWith("mob:")) { const mb = MOBILITY.find(x => x[0] === id.slice(4)); if (mb) mb[2] = null; } else if (EX[id]) EX[id].img = null; }
 // Vorschaubild: Illustration/Foto, sonst Standbild aus dem Erklärvideo
 const exThumb = (key, img) => img ? isrc(img, img.startsWith("r/") ? 1 : 0) : VIDS?.[key]?.video ? `https://i.ytimg.com/vi/${encodeURIComponent(VIDS[key].video)}/mqdefault.jpg` : null;
@@ -5606,6 +5618,9 @@ function setupHtml(){
       <div class="small muted">Essenszeiten: <button type="button" class="linkbtn" data-sub2="essenset" data-setopen="ziel">Essen › Ziel & Mahlzeiten</button></div>
       ${info("Der Abendcheck dauert 30 s und blockiert nichts. Push-Erinnerungen kommen über GitHub-Zeitpläne und können sich um bis zu eine Stunde verspäten; der Wecker im Kalender-Abo kommt pünktlich. Spätester Abendcheck 22:55, damit die Erinnerung noch vor Mitternacht ankommt.")}
       ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Auf ${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain} zurücksetzen</button>` : ""}</div>
+    <div class="card"><h2>Haltezeiten der Morgenroutine</h2><div class="small muted">Sekunden je Halten; Timer, Texte und Dauer der Routine richten sich danach.</div>
+      <div class="slotlist">${MOB_HOLD_KEYS.map(k => { const n = mobHoldSec(k), o = MOB_HOLD0[k].sec, nm = mobShort(MOB_HOLD0[k].txt) + (k === "rkc" ? " (Ziel je Satz)" : ""); return `<div class="slotrow rtrow"><span class="slotname">${esc(nm)}${n !== o ? ` <span class="small muted">· Plan ${o} s</span>` : ""}</span><span class="stepper"><button type="button" class="btn small" data-mhold="${k}" data-d="-1" aria-label="${esc(nm)} kürzer" ${n <= mobHoldMin(k) ? "disabled" : ""}>−</button><b>${n} s</b><button type="button" class="btn small" data-mhold="${k}" data-d="1" aria-label="${esc(nm)} länger" ${n >= mobHoldMax(k) ? "disabled" : ""}>＋</button></span></div>`; }).join("")}</div>
+      ${Object.keys(S().mobHold || {}).length ? `<button class="btn ghost small" type="button" id="mhReset">Standard</button>` : ""}</div>
     <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME, "Was hast du zuhause?")}</div></div></details>
   <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${(store.push.subs || []).length ? `${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an` : "Push noch nicht aktiviert"}${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
     <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten du bekommst. Wecker im Kalender stellst du unter Kalender-Abo ein.</div>
@@ -5758,6 +5773,9 @@ async function onClick(e){
   const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
+  const mhb = t.closest("[data-mhold]"); if (mhb || t.id === "mhReset") { let o = null;
+    if (mhb) { const k = mhb.dataset.mhold, n = Math.min(mobHoldMax(k), Math.max(mobHoldMin(k), mobHoldSec(k) + Number(mhb.dataset.d) * mobHoldStep(k))); o = Object.assign({}, S().mobHold); if (n === MOB_HOLD0[k].sec) delete o[k]; else o[k] = n; if (!Object.keys(o).length) o = null; }
+    saveSettings({mobHold: o}); tmr = null; if (S().mobMin !== mobMin()) { saveSettings({mobMin: mobMin()}); replanSoon(); } render(); return; }
   if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
   const rtb = t.closest("[data-rtab]"); if (rtb) { recTab = rtb.dataset.rtab; renderSheetPart(["#rTabs", "#rTab"]); return; }
