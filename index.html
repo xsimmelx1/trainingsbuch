@@ -4193,7 +4193,7 @@ function budgetCands(k, curName){
 }
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
 const budgetQuick = new Map();
-const BUDGET_V = 3; // erhöhen, wenn sich die Tausch-Logik ändert (verwirft gespeicherte Ergebnisse)
+const BUDGET_V = 4; // erhöhen, wenn sich die Tausch-Logik ändert (verwirft gespeicherte Ergebnisse)
 const strHash = t => { let h = 5381; for (let i = 0; i < t.length; i++) h = (h * 33 ^ t.charCodeAt(i)) >>> 0; return h.toString(36) + t.length.toString(36); };
 function budgetSubs(mo){
   const qk = mo + "|" + dataVer; if (budgetQuick.has(qk)) return budgetQuick.get(qk);
@@ -4550,9 +4550,10 @@ let ingMemo = new Map(), ingMemoP = null, ingMemoS = null;
 function parseIng(line){
   const sb = FOOD().subst; if (ingMemoP !== prices || ingMemoS !== sb) { ingMemo = new Map(); ingMemoP = prices; ingMemoS = sb; }
   let r = ingMemo.get(line); if (!r) { r = parseIng0(line); ingMemo.set(line, r); } return r; }
+const HERB_RE = /kräuter|petersilie|schnittlauch|basilikum|minze|koriander|dill|salbei|thymian|rosmarin|oregano|estragon|kerbel|bärlauch/i;  // gehackte Kräuter: 1 EL ≈ 4 g (nicht 15 g wie Flüssiges)
 function parseIng0(line){
   line = line.replace(/^(ca\.|etwas|etwa|optional:?)\s+/i, "");
-  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$/);
+  const m = line.match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Zweige?|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$/);
   const q = m ? (m[1] === "½" ? .5 : m[1].includes("/") ? m[1].split("/").reduce((a, b) => a / b) : Number(m[1].replace(",", "."))) : null;
   const unit = m ? (m[2] || "") : "", name = (m ? m[3] : line).replace(/\(.*?\)/g, "").split(", ")[0].trim();
   const pr = prices?.products.find(x => x.re.test(name)); if (!pr) return {name, q, unit, pr: null, amt: 0};
@@ -4568,10 +4569,11 @@ function parseIng0(line){
   else if (unit === "Bund") amt = pr.unit === "Stück" ? q : q * pr.pack;
   else if (unit === "Becher") amt = q * 250;
   else if (/^Pck/.test(unit)) amt = q * pr.pack;
+  else if (/^Zweig/.test(unit)) amt = pr.unit === "Stück" ? q / 10 : q * 2;  // ~10 Zweige je Bund/Topf, ein Zweig ≈ 2 g
   else if (pr.unit === "Stück") amt = q;
-  else amt = q * (pr.piece || 100);
+  else amt = q * (pr.piece || (pr.pantry && SPICE_RE.test(name) ? 1 : 100));  // Gewürz aus dem Vorrat ohne Stückgewicht („1 Msp.“): 1 g, nicht 100 g
   if (pr.unit === "Stück" && (unit === "g" || unit === "ml")) amt = q / (pr.piece || 60);
-  else if (pr.unit === "Stück" && /^(EL|TL|Handvoll|Prisen?)$/.test(unit)) amt = (unit === "EL" ? q * 15 : unit === "TL" ? q * 5 : unit === "Handvoll" ? q * 30 : q) / (pr.piece || 60);  // 2 EL Petersilie ≈ 1 Bund, nicht 30
+  else if (pr.unit === "Stück" && /^(EL|TL|Handvoll|Prisen?)$/.test(unit)) amt = (unit === "EL" ? q * (HERB_RE.test(name) ? 4 : 15) : unit === "TL" ? q * (HERB_RE.test(name) ? 1.5 : 5) : unit === "Handvoll" ? q * 30 : q) / (pr.piece || 60);  // 2 EL gehackte Petersilie ≈ ¼ Bund, nicht 30 Bund
   const sub = FOOD().subst?.[pr.id], opt = sub && SUBST[pr.id]?.opts[sub];
   if (opt) { const ids = opt[3] || [sub], ps = ids.map(id => prices.products.find(x => x.id === id)).filter(Boolean);
     if (ps.length) return {name, q, unit, pr: ps[0], orig: pr, subKey: sub, amt, parts: ps.map(x => ({pr: x, amt: amt / ps.length}))}; }

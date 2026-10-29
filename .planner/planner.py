@@ -567,10 +567,13 @@ def load_prices():
     return P
 
 
+HERB_RE = __import__("re").compile(r"kräuter|petersilie|schnittlauch|basilikum|minze|koriander|dill|salbei|thymian|rosmarin|oregano|estragon|kerbel|bärlauch", __import__("re").I)
+
+
 def parse_ing(line, P, subst):
     import re
     global ING_RE
-    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$")
+    ING_RE = ING_RE or re.compile(r"^(\d+(?:[.,]\d+)?|\d+/\d+|½)(?:\s*[–-]\s*\d+(?:[.,]\d+)?)?\s*(g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Zweige?|Pck\.?|Becher|Scheiben?|Prisen?)?\s+(.+)$")
     line = re.sub(r"^(ca\.|etwas|etwa|optional:?)\s+", "", line, flags=re.I)
     m = ING_RE.match(line)
     q = None
@@ -604,14 +607,17 @@ def parse_ing(line, P, subst):
         amt = q * 250
     elif unit.startswith("Pck"):
         amt = q * pr["pack"]
+    elif unit.startswith("Zweig"):  # ~10 Zweige je Bund/Topf, ein Zweig ≈ 2 g (wie parseIng)
+        amt = q / 10 if pr["unit"] == "Stück" else q * 2
     elif pr["unit"] == "Stück":
         amt = q
     else:
-        amt = q * (pr.get("piece") or 100)
+        amt = q * (pr.get("piece") or (1 if pr.get("pantry") and SPICE_RE.search(name) else 100))  # Gewürz aus dem Vorrat ohne Stückgewicht: 1 g (wie parseIng)
     if pr["unit"] == "Stück" and unit in ("g", "ml"):
         amt = q / (pr.get("piece") or 60)
     elif pr["unit"] == "Stück" and unit in ("EL", "TL", "Handvoll", "Prise", "Prisen"):  # 2 EL Petersilie ≈ 1 Bund, nicht 30 (wie parseIng in der App)
-        amt = (q * 15 if unit == "EL" else q * 5 if unit == "TL" else q * 30 if unit == "Handvoll" else q) / (pr.get("piece") or 60)
+        herb = HERB_RE.search(name)  # gehackte Kräuter: 1 EL ≈ 4 g
+        amt = (q * (4 if herb else 15) if unit == "EL" else q * (1.5 if herb else 5) if unit == "TL" else q * 30 if unit == "Handvoll" else q) / (pr.get("piece") or 60)
     ids = SUBST_OK.get(pr["id"], {}).get((subst or {}).get(pr["id"]))
     if ids:
         ps = [x for x in P["products"] if x["id"] in ids]
