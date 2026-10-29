@@ -889,6 +889,8 @@ def build_meal_ics(now, settings, plan, days, past=None):
         for pr in P["products"]:
             for st, o in (own.get(pr["id"]) or {}).items():
                 if o and o.get("price") is not None:
+                    if o.get("date") and P.get("date") and o["date"] < P["date"] and (pr.get("prices") or {}).get(st) is not None:
+                        continue  # älter als die Richtpreise: Richtpreis gilt (wie ownOf in der App)
                     pr.setdefault("prices", {})[st] = o["price"]
     rec = adjust_recipes(rec, P, (settings.get("food") or {}).get("subst") or {})
 
