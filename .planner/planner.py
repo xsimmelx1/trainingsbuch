@@ -60,10 +60,10 @@ def coaching(settings, d):
     w = week_no(settings, d)
     c = 0 if w <= 0 else ((w - 1) % 12) + 1
     pid = next((p for p, a, b in PHASE_RANGES if a <= c <= b), "w0")
-    tip = FOCUS[pid]
+    tip = "" if settings.get("mode") == "pause" else FOCUS[pid]  # in der Pause kein Trainings-Fokus
     if not (settings.get("lessons") or {}).get(f"l{c}"):
         tip += f" Lektion der Woche: {LESSON_TITLES[c]}"
-    return tip
+    return tip.strip()
 
 
 TRAIN_MIN = 75         # Dauer einer Einheit inkl. Aufwärmen
@@ -196,7 +196,58 @@ def find_slot(day, busy, minutes, not_before):
 
 
 # ---------- Planung ----------
+# Zyklus: Pausentage zählen nicht mit (offene Pause bis heute) – wie cycleDays/weekNo in der App
+def _pauses(settings):
+    out = []
+    for p in settings.get("pauses") or []:
+        try:
+            a = dt.date.fromisoformat(p["from"])
+            b = dt.date.fromisoformat(p["to"]) if p.get("to") else None
+            out.append((a, b))
+        except (KeyError, TypeError, ValueError, AttributeError):
+            continue
+    return out
+
+
+def paused_day(settings, d):
+    today = dt.datetime.now(TZ).date()
+    return any(a <= d <= (b or today) for a, b in _pauses(settings))
+
+
+def cycle_days(settings, d):
+    st = dt.date.fromisoformat(settings["startDate"])
+    today = dt.datetime.now(TZ).date()
+    n = 0
+    for a, b in _pauses(settings):
+        a = max(a, st)
+        e = min(b or today, d - dt.timedelta(days=1))
+        if e >= a:
+            n += (e - a).days + 1
+    return (d - st).days - n
+
+
+def cycle_date(settings, off):
+    x = dt.date.fromisoformat(settings["startDate"]) + dt.timedelta(days=off)
+    for _ in range(4000):
+        if cycle_days(settings, x) >= off and not paused_day(settings, x):
+            break
+        x += dt.timedelta(days=1)
+    return x
+
+
 def week_no(settings, d):
+    st = settings.get("startDate")
+    if not st:
+        return 0
+    s0 = dt.date.fromisoformat(st)
+    mon = lambda x: x - dt.timedelta(days=x.weekday())
+    if (mon(d) - mon(s0)).days < 0:
+        return 0
+    return max(0, cycle_days(settings, d) + (s0 - mon(s0)).days) // 7 + 1
+
+
+def cal_week_no(settings, d):
+    """Kalenderwoche seit Start ohne Pausen-Abzug: der Essensplan bleibt an Montage gebunden (wie calWeek in der App)."""
     st = settings.get("startDate")
     if not st:
         return 0
@@ -359,6 +410,8 @@ def build_ics(now, settings, plan, extras, past):
         cal_pref(settings, k) for k in ("train", "mob", "pain", "checkin", "marker"))
     for p in (past + plan) if on_train else []:
         d = dt.date.fromisoformat(p["date"])
+        if not p.get("done") and paused_day(settings, d):
+            continue  # in der Pause entfallen (App: „entfallen (Pause)“)
         s = variant(p["session"], settings, d)
         title = PUBLIC_TITLE.get(s, s)
         desc = ("Nur ein kurzer Slot frei: 30-Minuten-Einheit.\n" if p.get("short") else "") + "Übungen und Sätze stehen in der App."
@@ -380,19 +433,17 @@ def build_ics(now, settings, plan, extras, past):
         ev(f"checkin-{x['date']}", "Check-in & Meal Prep" if prep else "Wochen-Check-in", "Wochen-Check-in in der App, danach Meal Prep (2 Töpfe, 1 Blech, 3 Gläser)." if prep else "Wochen-Check-in in der App (10 min).",
            f"{SITE}#c={(d - dt.timedelta(days=d.weekday())).isoformat()}", utc(d, x["start"]), utc(d, x["end"]), alarm=rem_check)
     st = settings.get("startDate")
-    if st and on_mark:
-        s0 = dt.date.fromisoformat(st)
-        cyc = max(0, (today - s0).days // 84)
-        s0 = s0 + dt.timedelta(days=84 * cyc)
+    if st and on_mark:  # Zyklustage ohne Pausen, wie calMarkers in der App
+        cyc = max(0, cycle_days(settings, today) // 84)
         for name, off, length in [("Messtag Woche 0: Fotos, Umfänge, Tests", -1, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 35, 7),
                                   ("Messtag: Fotos, Umfänge, Re-Test", 41, 1), ("Deload-Woche (Sätze halbieren, RIR 3–4)", 77, 7),
                                   ("Messtag: Fotos, Umfänge, Re-Test", 83, 1)]:
-            a = s0 + dt.timedelta(days=off)
             if cyc and off < 0:
                 continue
-            if a + dt.timedelta(days=length) >= today - dt.timedelta(days=7):
+            a, e = cycle_date(settings, 84 * cyc + off), cycle_date(settings, 84 * cyc + off + length)
+            if e >= today - dt.timedelta(days=7):
                 ev(f"marker-{a}-{length}", name, "Siehe Plan & Regeln in der App.", f"{SITE}#t=messen" if length == 1 else SITE,
-                   allday=(a, a + dt.timedelta(days=length)))
+                   allday=(a, e))
     L.append("END:VCALENDAR")
     return "\r\n".join(L) + "\r\n"
 
@@ -781,7 +832,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
 
 
 def meal_defaults(mp, settings, d, train, is_train=None, boulder=False, rec=None, rx=None):
-    w = week_no(settings, d)
+    w = cal_week_no(settings, d)
     W = mp["weeks"][(w - 1) % len(mp["weeks"]) if w > 0 else len(mp["weeks"]) - 1]
     i = d.weekday()
     o = {"fr": W["fr"][i]}
@@ -853,7 +904,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
     def subs_for(dd):
         mo = dd - dt.timedelta(days=dd.weekday())
         if mo not in week_subs:
-            w0 = week_no(settings, mo)
+            w0 = cal_week_no(settings, mo)
             W0 = mp["weeks"][(w0 - 1) % len(mp["weeks"]) if w0 > 0 else len(mp["weeks"]) - 1]
             raws = [effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train, rec=rec, rx=rx), rx), rx, W0) for i in range(7)]
             week_subs[mo] = budget_subs(mp, rec, settings, raws, rx, P, W0)
@@ -866,7 +917,7 @@ def build_meal_ics(now, settings, plan, days, past=None):
         iso = d.isoformat()
         day = days.get(iso) or {}
         pl = by_date.get(iso)
-        wd = week_no(settings, d)
+        wd = cal_week_no(settings, d)
         names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d), rec=rec, rx=rx), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
@@ -1059,7 +1110,7 @@ def main():
             body = "Trainingspause: keine Krafteinheit, Routine ohne Plank und Shrug." if pause else "Heute keine Krafteinheit geplant."
             if missed_yday:
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
-        once(f"morning-{tday}", {"title": f"Guten Morgen: {mob_min(settings)} min Routine", "body": body + " " + coaching(settings, today),
+        once(f"morning-{tday}", {"title": f"Guten Morgen: {mob_min(settings)} min Routine", "body": (body + " " + coaching(settings, today)).strip(),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
     p_eve = p_today or (None if pause else next((p for p in past if p["date"] == tday), None))  # auch eine heute herausgefallene Einheit nachfragen
     if "20:15" <= hm < "23:30" and p_eve and hm >= p_eve.get("end", "00:00") and not is_strength(day):
