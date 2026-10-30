@@ -3137,7 +3137,20 @@ function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (
     clipUrl(pl.id).then(u => { const v = gcClipEl(); if (gc !== me || n !== gcMountN || !v) { if (u) URL.revokeObjectURL(u); return; } if (!u) { box.innerHTML = html; gcMediaHook(); return after(); } gcClipObjUrl = u; v.src = u; v.addEventListener("loadeddata", after, {once: true}); }).catch(() => {}); return; }
   box.innerHTML = html; gcMediaHook(); after(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
-function gcSay(t){ if (!gcVoice || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = 0.95; u.pitch = 1; const v = ss.getVoices().find(v => /^de/i.test(v.lang)); if (v) u.voice = v; ss.speak(u); } catch {} }
+// Ansage-Stimme: automatisch die natürlichste deutsche Stimme (Natural/Online/Google vor einfachen Offline-Stimmen); pro Gerät wählbar unter Einstellungen › Training & Plan
+let ttsVoice = lsGet("ttsVoice") || "", ttsRate = +lsGet("ttsRate") || 1;
+const deVoices = () => { try { return speechSynthesis.getVoices().filter(v => /^de/i.test(v.lang)); } catch { return []; } };
+const voiceScore = v => (/natural|neural|online|premium|enhanced|wavenet|studio/i.test(v.name) ? 8 : 0) + (/google/i.test(v.name) ? 3 : 0) + (v.localService === false ? 2 : 0) + (/^de[-_]DE/i.test(v.lang) ? 1 : 0) - (/compact|espeak/i.test(v.name) ? 5 : 0);
+const autoVoice = () => deVoices().sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
+const pickVoice = () => deVoices().find(v => v.voiceURI === ttsVoice) || autoVoice();
+function gcSay(t, force){ if ((!gcVoice && !force) || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = ttsRate; u.pitch = 1; const v = pickVoice(); if (v) try { u.voice = v; u.lang = v.lang; } catch {} ss.speak(u); } catch {} }
+const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/i, "").replace(/\s*-\s*German.*$|\s*\(Germany\)/i, "").trim() || v.name;
+function ttsHtml(){ const vs = deVoices().sort((a, b) => voiceScore(b) - voiceScore(a)), cur = pickVoice(), auto = autoVoice();
+  return `<h2>Stimme der Ansagen</h2><div class="small muted">Für Morgenroutine und Trainings-Coach, gilt nur auf diesem Gerät.</div>
+  ${vs.length > 1 ? `<div class="chips">${vs.map(v => `<button type="button" aria-pressed="${!!cur && v.voiceURI === cur.voiceURI}" data-ttsv="${esc(v.voiceURI)}">${esc(voiceLabel(v))}${v === auto ? " ★" : ""}</button>`).join("")}</div>` : `<div class="small">${vs.length ? `Stimme: <b>${esc(voiceLabel(vs[0]))}</b>. ` : ""}Android nimmt die Stimme aus den System-Einstellungen: <b>Einstellungen › Bedienungshilfen › Sprachausgabe</b> (Text-in-Sprache) › bevorzugte Engine <b>Google</b> › ⚙ › Stimme installieren › Deutsch › eine andere Stimme wählen.</div>`}
+  <div class="slotrow rtrow"><span class="slotname">Tempo</span><span class="stepper"><button type="button" class="btn small" data-ttsrate="-1" aria-label="langsamer" ${ttsRate <= 0.8 ? "disabled" : ""}>−</button><b>${Math.round(ttsRate * 100)} %</b><button type="button" class="btn small" data-ttsrate="1" aria-label="schneller" ${ttsRate >= 1.3 ? "disabled" : ""}>＋</button></span></div>
+  <div class="actions"><button class="btn" type="button" id="ttsProbe">▶ Probe hören</button></div>`; }
+try { speechSynthesis.addEventListener("voiceschanged", () => { const c = document.getElementById("ttsCard"); if (c) c.innerHTML = ttsHtml(); }); } catch {}
 function gcBeep(f = 660, len = .5, vol = .05){ try { const a = audioCtx; if (!a) return; const t = a.currentTime, o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain();
   o.type = "sine"; o2.type = "sine"; o.frequency.value = f; o2.frequency.value = f * 2; o.connect(g); o2.connect(g); g.connect(a.destination);
   g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + len); o.start(t); o2.start(t); o.stop(t + len); o2.stop(t + len); } catch {} }
@@ -5621,6 +5634,7 @@ function setupHtml(){
     <div class="card"><h2>Haltezeiten der Morgenroutine</h2><div class="small muted">Sekunden je Halten; Timer, Texte und Dauer der Routine richten sich danach.</div>
       <div class="slotlist">${MOB_HOLD_KEYS.map(k => { const n = mobHoldSec(k), o = MOB_HOLD0[k].sec, nm = mobShort(MOB_HOLD0[k].txt) + (k === "rkc" ? " (Ziel je Satz)" : ""); return `<div class="slotrow rtrow"><span class="slotname">${esc(nm)}${n !== o ? ` <span class="small muted">· Plan ${o} s</span>` : ""}</span><span class="stepper"><button type="button" class="btn small" data-mhold="${k}" data-d="-1" aria-label="${esc(nm)} kürzer" ${n <= mobHoldMin(k) ? "disabled" : ""}>−</button><b>${n} s</b><button type="button" class="btn small" data-mhold="${k}" data-d="1" aria-label="${esc(nm)} länger" ${n >= mobHoldMax(k) ? "disabled" : ""}>＋</button></span></div>`; }).join("")}</div>
       ${Object.keys(S().mobHold || {}).length ? `<button class="btn ghost small" type="button" id="mhReset">Standard</button>` : ""}</div>
+    <div class="card" id="ttsCard">${ttsHtml()}</div>
     <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME, "Was hast du zuhause?")}</div></div></details>
   <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${(store.push.subs || []).length ? `${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an` : "Push noch nicht aktiviert"}${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
     <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten du bekommst. Wecker im Kalender stellst du unter Kalender-Abo ein.</div>
@@ -5773,6 +5787,7 @@ async function onClick(e){
   const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
+  const tv = t.closest("[data-ttsv]"); if (tv || t.closest("[data-ttsrate]") || t.id === "ttsProbe") { if (tv) { ttsVoice = tv.dataset.ttsv; lsSet("ttsVoice", ttsVoice); } const tr = t.closest("[data-ttsrate]"); if (tr) { ttsRate = Math.round(Math.min(1.3, Math.max(0.8, ttsRate + Number(tr.dataset.ttsrate) * 0.05)) * 100) / 100; lsSet("ttsRate", ttsRate); } const c = document.getElementById("ttsCard"); if (c && !t.id) c.innerHTML = ttsHtml(); gcSay("Halten. Noch zehn Sekunden. Sehr gut, Satz geschafft.", true); return; }
   const mhb = t.closest("[data-mhold]"); if (mhb || t.id === "mhReset") { let o = null;
     if (mhb) { const k = mhb.dataset.mhold, n = Math.min(mobHoldMax(k), Math.max(mobHoldMin(k), mobHoldSec(k) + Number(mhb.dataset.d) * mobHoldStep(k))); o = Object.assign({}, S().mobHold); if (n === MOB_HOLD0[k].sec) delete o[k]; else o[k] = n; if (!Object.keys(o).length) o = null; }
     saveSettings({mobHold: o}); tmr = null; if (S().mobMin !== mobMin()) { saveSettings({mobMin: mobMin()}); replanSoon(); } render(); return; }
