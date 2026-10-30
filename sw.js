@@ -1,16 +1,21 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v219";
+const CACHE = "tb-v220";
 const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "zutaten-nw.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL.map(u => new Request(u, {cache: "reload"})))).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE && !/^tb-(clips|voice)$/.test(k)).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin || url.pathname.endsWith("/sw.js")) return; // Versionsabfrage immer vom Server
+  if (url.pathname.includes("/voice/") && url.pathname.endsWith(".mp3")) {
+    // Ansagen: Dateinamen sind Hashes des Satzes – einmal laden, dann dauerhaft offline (eigener Cache, bleibt über Versionen)
+    e.respondWith(caches.open("tb-voice").then(c => c.match(e.request).then(r => r || fetch(e.request).then(res => { if (res.ok) c.put(e.request, res.clone()); return res; }))));
+    return;
+  }
   if (url.pathname.includes("/img/")) {
     // Bilder: erst Cache, dann Netz
     e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => { if (res.ok) { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); } return res; })));

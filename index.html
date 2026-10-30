@@ -1415,7 +1415,7 @@ function tmrCmd(c){
     if (t.run && t.mode !== "stop" && t.phase === "hold") say(t.mode === "reps" ? t.steps[t.step].l : "Halten"); }
   else if (c === "plus" || c === "minus") { const d = c === "plus" ? 10 : -10; if (t.mode === "stop") t.acc = Math.max(0, t.acc + d); else t.left = Math.max(1, t.left + d); }
   else if (c === "skip") { if (["prep", "switch", "next"].includes(t.phase)) t.left = -ZERO_SEC; }
-  else if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} }
+  else if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) sayStop(); }
   else if (c === "set") { if (t.mode !== "stop" || t.done) return; const sec = Math.round(t.acc); (t.times = t.times || []).push(sec); t.acc = 0; t.round++;
     if (t.key.startsWith("mob:")) { cur.mobSec = Object.assign({}, cur.mobSec, {[t.key.slice(4)]: t.times.slice()}); touch(); }
     const more = t.round < t.rounds; if (!more) { t.round = t.rounds - 1; t.done = true; }
@@ -2429,6 +2429,7 @@ function renderHeader(){
   pill.className = "pill" + (ph.deload ? " warn" : "");
 }
 function render(){
+  recVarSync();
   if (typeof applyNutri === "function") applyNutri();
   if (!token && !(tab === "mehr")) { tab = "mehr"; sub.mehr = "setup"; }
   document.querySelectorAll("nav.bottom button").forEach(b => b.setAttribute("aria-current", b.dataset.tab === tab ? "page" : "false"));
@@ -3137,24 +3138,45 @@ function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (
     clipUrl(pl.id).then(u => { const v = gcClipEl(); if (gc !== me || n !== gcMountN || !v) { if (u) URL.revokeObjectURL(u); return; } if (!u) { box.innerHTML = html; gcMediaHook(); return after(); } gcClipObjUrl = u; v.src = u; v.addEventListener("loadeddata", after, {once: true}); }).catch(() => {}); return; }
   box.innerHTML = html; gcMediaHook(); after(); }
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
-// Ansage-Stimme: automatisch die natürlichste deutsche Stimme (Natural/Online/Google vor einfachen Offline-Stimmen); pro Gerät wählbar unter Einstellungen › Training & Plan
-let ttsVoice = lsGet("ttsVoice") || "", ttsRate = +lsGet("ttsRate") || 1;
+// Ansagen: KI-Stimme (vorab erzeugte Neural-Sätze voice/<f|s>/<id>.mp3, Index voice/index.json, Erzeugung tools/voicegen.py) oder Gerätestimme; fehlt ein Satz oder das Netz → Gerätestimme
+let ttsKind = ["f", "s", "dev"].includes(lsGet("ttsKind")) ? lsGet("ttsKind") : "f", ttsVoice = lsGet("ttsVoice") || "", ttsRate = +lsGet("ttsRate") || 1;
+const TTS_KI = [["f", "Florian"], ["s", "Seraphina"]], V_PRE = ["Tipp für den nächsten Satz: ", "Übung geschafft. Als Nächstes ", "Weiter mit "];
+let vIdx = null, vIdxP = null, vSeq = 0, vSrcs = [];
+const vBuf = new Map();
+function ensureVoice(){ if (vIdx) return Promise.resolve(vIdx); return vIdxP ||= fetch("voice/index.json").then(r => r.json()).then(j => vIdx = j).catch(() => (vIdxP = null)); }
+function vParts(t){ if (!vIdx) return null; if (vIdx[t]) return [t]; for (const p of V_PRE) { const r = t.slice(p.length).trim(); if (t.startsWith(p) && vIdx[p.trim()] && vIdx[r]) return [p.trim(), r]; } return null; }
+function vLoad(t, kind = ttsKind){ const k = kind + vIdx[t]; if (!vBuf.has(k)) vBuf.set(k, fetch(`voice/${kind}/${vIdx[t]}.mp3`).then(r => { if (!r.ok) throw 0; return r.arrayBuffer(); }).then(a => audioCtx.decodeAudioData(a)).then(vTrim).catch(e => { vBuf.delete(k); throw e; })); return vBuf.get(k); }
+// Stille vorn/hinten abschneiden (die erzeugten Sätze haben je ~0,5 s), damit die Ansage sofort kommt
+function vTrim(b){ const d = b.getChannelData(0), th = 0.012; let i = 0, j = d.length - 1; while (i < j && Math.abs(d[i]) < th) i++; while (j > i && Math.abs(d[j]) < th) j--;
+  const pad = Math.round(b.sampleRate * 0.03); i = Math.max(0, i - pad); j = Math.min(d.length, j + pad * 2); if (j - i < b.sampleRate * 0.1) return b;
+  const o = audioCtx.createBuffer(b.numberOfChannels, j - i, b.sampleRate); for (let c = 0; c < b.numberOfChannels; c++) o.copyToChannel(b.getChannelData(c).subarray(i, j), c); return o; }
+// häufige kurze Ansagen vorladen, damit die erste nicht verzögert kommt
+function vWarm(){ if (ttsKind === "dev" || !gcVoice) return; audioReady(); ensureVoice().then(() => { if (vIdx && audioCtx) ["Halten", "Lösen", "Los", "Drei", "Eins", "Zwei", "Seite wechseln", "Lösen. Seite wechseln", "Lösen. Kurze Pause", "Lösen. Nächste Übung", "Nächste Übung", "Halbzeit", "Noch zehn", "Pause vorbei", "Sehr gut. Satz geschafft.", "Letzte", "Noch zwei"].forEach(t => vIdx[t] && vLoad(t).catch(() => {})); }); }
+async function vPlay(parts, my){ try { const bufs = await Promise.all(parts.map(t => vLoad(t))); if (my !== vSeq) return true; let at = audioCtx.currentTime + 0.02;
+  for (const b of bufs) { const s = audioCtx.createBufferSource(); s.buffer = b; s.connect(audioCtx.destination); s.start(at); at += b.duration + 0.08; vSrcs.push(s); } return true; } catch { return false; } }
+function sayStop(){ vSeq++; vSrcs.forEach(s => { try { s.stop(); } catch {} }); vSrcs = []; try { speechSynthesis.cancel(); } catch {} }
 const deVoices = () => { try { return speechSynthesis.getVoices().filter(v => /^de/i.test(v.lang)); } catch { return []; } };
 const voiceScore = v => (/natural|neural|online|premium|enhanced|wavenet|studio/i.test(v.name) ? 8 : 0) + (/google/i.test(v.name) ? 3 : 0) + (v.localService === false ? 2 : 0) + (/^de[-_]DE/i.test(v.lang) ? 1 : 0) - (/compact|espeak/i.test(v.name) ? 5 : 0);
 const autoVoice = () => deVoices().sort((a, b) => voiceScore(b) - voiceScore(a))[0] || null;
 const pickVoice = () => deVoices().find(v => v.voiceURI === ttsVoice) || autoVoice();
-function gcSay(t, force){ if ((!gcVoice && !force) || !t) return; try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = ttsRate; u.pitch = 1; const v = pickVoice(); if (v) try { u.voice = v; u.lang = v.lang; } catch {} ss.speak(u); } catch {} }
+function devSay(t){ try { const ss = speechSynthesis; ss.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "de-DE"; u.rate = ttsRate; u.pitch = 1; const v = pickVoice(); if (v) try { u.voice = v; u.lang = v.lang; } catch {} ss.speak(u); } catch {} }
+function gcSay(t, force){ if ((!gcVoice && !force) || !t) return; sayStop(); const my = vSeq;
+  if (ttsKind !== "dev") { audioReady(); if (audioCtx) { if (!vIdx) { ensureVoice().then(() => { if (my !== vSeq) return; const p = vParts(t); if (p) vPlay(p, my).then(ok => ok || my !== vSeq || devSay(t)); else devSay(t); }); return; }
+    const p = vParts(t); if (p) { vPlay(p, my).then(ok => ok || my !== vSeq || devSay(t)); return; } } }
+  devSay(t); }
 const voiceLabel = v => v.name.replace(/^(Microsoft|Google)\s+/i, "").replace(/\s*-\s*German.*$|\s*\(Germany\)/i, "").trim() || v.name;
 function ttsHtml(){ const vs = deVoices().sort((a, b) => voiceScore(b) - voiceScore(a)), cur = pickVoice(), auto = autoVoice();
-  return `<h2>Stimme der Ansagen</h2><div class="small muted">Für Morgenroutine und Trainings-Coach, gilt nur auf diesem Gerät.</div>
-  ${vs.length > 1 ? `<div class="chips">${vs.map(v => `<button type="button" aria-pressed="${!!cur && v.voiceURI === cur.voiceURI}" data-ttsv="${esc(v.voiceURI)}">${esc(voiceLabel(v))}${v === auto ? " ★" : ""}</button>`).join("")}</div>` : `<div class="small">${vs.length ? `Stimme: <b>${esc(voiceLabel(vs[0]))}</b>. ` : ""}Android nimmt die Stimme aus den System-Einstellungen: <b>Einstellungen › Bedienungshilfen › Sprachausgabe</b> (Text-in-Sprache) › bevorzugte Engine <b>Google</b> › ⚙ › Stimme installieren › Deutsch › eine andere Stimme wählen.</div>`}
-  <div class="slotrow rtrow"><span class="slotname">Tempo</span><span class="stepper"><button type="button" class="btn small" data-ttsrate="-1" aria-label="langsamer" ${ttsRate <= 0.8 ? "disabled" : ""}>−</button><b>${Math.round(ttsRate * 100)} %</b><button type="button" class="btn small" data-ttsrate="1" aria-label="schneller" ${ttsRate >= 1.3 ? "disabled" : ""}>＋</button></span></div>
+  return `<h2>Stimme der Ansagen</h2><div class="small muted">Für Morgenroutine und Trainings-Coach, gilt nur auf diesem Gerät. KI-Stimmen brauchen beim ersten Mal Netz, danach gehen sie offline.</div>
+  <div class="chips">${TTS_KI.map(([k, l]) => `<button type="button" aria-pressed="${ttsKind === k}" data-ttsk="${k}">${l} (KI)</button>`).join("")}<button type="button" aria-pressed="${ttsKind === "dev"}" data-ttsk="dev">Gerätestimme</button></div>
+  ${ttsKind !== "dev" ? "" : `${vs.length > 1 ? `<div class="chips sm">${vs.map(v => `<button type="button" aria-pressed="${!!cur && v.voiceURI === cur.voiceURI}" data-ttsv="${esc(v.voiceURI)}">${esc(voiceLabel(v))}${v === auto ? " ★" : ""}</button>`).join("")}</div>` : `<div class="small">Android nimmt die Gerätestimme aus <b>Einstellungen › Bedienungshilfen › Sprachausgabe</b>.</div>`}
+  <div class="slotrow rtrow"><span class="slotname">Tempo</span><span class="stepper"><button type="button" class="btn small" data-ttsrate="-1" aria-label="langsamer" ${ttsRate <= 0.8 ? "disabled" : ""}>−</button><b>${Math.round(ttsRate * 100)} %</b><button type="button" class="btn small" data-ttsrate="1" aria-label="schneller" ${ttsRate >= 1.3 ? "disabled" : ""}>＋</button></span></div>`}
   <div class="actions"><button class="btn" type="button" id="ttsProbe">▶ Probe hören</button></div>`; }
 try { speechSynthesis.addEventListener("voiceschanged", () => { const c = document.getElementById("ttsCard"); if (c) c.innerHTML = ttsHtml(); }); } catch {}
 function gcBeep(f = 660, len = .5, vol = .05){ try { const a = audioCtx; if (!a) return; const t = a.currentTime, o = a.createOscillator(), o2 = a.createOscillator(), g = a.createGain();
   o.type = "sine"; o2.type = "sine"; o.frequency.value = f; o2.frequency.value = f * 2; o.connect(g); o2.connect(g); g.connect(a.destination);
   g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + len); o.start(t); o2.start(t); o.stop(t + len); o2.stop(t + len); } catch {} }
 function gcOpen(base){
+  vWarm();
   audioReady(); requestWake(); try { speechSynthesis.getVoices(); } catch {}
   const pl = gcPlan(base); gc = {pl, i: doneSetsOf(base).length, side: 0, rep: 0, pi: 0, stage: "ready", end: 0, t0: 0, paused: 0, said: {}};
   if (gc.i >= pl.n) gc.stage = "done"; gc.myo = pl.myoOk && gc.i === pl.n - 1;
@@ -3162,7 +3184,7 @@ function gcOpen(base){
   el.innerHTML = `<div class="gcin"><div id="gcHead"></div><div id="gcMediaBox"></div><div id="gcMid" class="gcmid"></div><div class="gcbtns" id="gcBtns"></div></div>`; gcPaint();
   const me = gc; ensureCoachData().then(() => { if (gc !== me) return; if (gc.stage === "ready") { const keep = {i: gc.i}; gc.pl = gcPlan(base); Object.assign(gc, keep); gcPaint(); } gcMediaMount(); });
 }
-function gcClose(){ clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcVdur = 0; gcClipFree(); try { speechSynthesis.cancel(); } catch {} if (!cur?.startedAt || cur.finishedAt) releaseWake(); gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
+function gcClose(){ clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); clearTimeout(gcPrepTm); gcVdur = 0; gcClipFree(); sayStop(); if (!cur?.startedAt || cur.finishedAt) releaseWake(); gc = null; const el = document.getElementById("gc"); el.hidden = true; el.innerHTML = ""; document.body.classList.remove("gcon"); if (tab === "training") renderTraining(); }
 // Abschnitt starten: sec = Länge (null = Stoppuhr); countdown = Zahl zählt sichtbar bis 0 und bleibt dort 1 s
 function gcSeg(stage, sec, countdown, at){ gc.stage = stage; gc.t0 = at && Date.now() - at < 400 ? at : Date.now(); gc.len = sec; gc.end = sec == null ? 0 : gc.t0 + (sec + (countdown ? 1 : 0)) * 1000; gc.cd = !!countdown; gc.said = {}; gc.paused = 0; gcPaint(); clearInterval(gcInt); gcInt = setInterval(gcTick, 100); }
 function gcGo(){ // nach dem 3-2-1: Satz beginnt (bzw. ein Myo-Mini-Satz)
@@ -3287,12 +3309,12 @@ function gcPaint(){
 function gcCmd(c, v){
   if (!gc) return; audioReady(); const pl = gc.pl;
   if (c === "close") return gcClose();
-  if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) try { speechSynthesis.cancel(); } catch {} return gcPaint(); }
+  if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) sayStop(); return gcPaint(); }
   if (c === "start" || c === "skip") return gcCountIn();
   if (c === "pause" && gc.stage === "myorest") { if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; } else gc.paused = Date.now(); return gcPaint(); }
   if (c === "pause") { const b = document.getElementById("gcFigB");
     if (gc.paused) { const d = Date.now() - gc.paused; gc.end += d; gc.t0 += d; gc.paused = 0; if (gc.stage === "work") { const cv = gcClipEl(); if (cv && (gc.pl.mode !== "tempo" || !gc.clipMap?.[gc.pi]?.freeze)) cv.play().catch(() => {}); if (!cv) { gcPlay(); gcVShow(); gcReplanPrep(); } if (pl.mode === "tempo") gcFig(gc.moved, Math.max(0, (gc.end - Date.now()) / 1000)); } }
-    else { gc.paused = Date.now(); try { speechSynthesis.cancel(); } catch {} gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); clearTimeout(gcVtm); gc.prep = false; gcClipEl()?.pause(); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
+    else { gc.paused = Date.now(); sayStop(); gcPauseX(gcAct); gcPauseX(gcStby()); clearTimeout(gcPrepTm); clearTimeout(gcVtm); gc.prep = false; gcClipEl()?.pause(); const cb = document.querySelector("#gcBar[data-css]"); if (cb) { cb.style.transition = "none"; cb.style.width = getComputedStyle(cb).width; } if (b) { b.style.transition = "none"; b.style.opacity = getComputedStyle(b).opacity; } }
     return gcPaint(); }
   if (c === "tempo") { gcTempo = v; lsSet("coachTempo", v); const keep = {i: gc.i, side: gc.side}; gc.pl = gcPlan(pl.base); Object.assign(gc, keep); return gcPaint(); }
   if (c === "view") { gcView = v; lsSet("coachView", v); return gc.preview && gc.next ? gcPreview(gc.next) : gcMediaMount(); }
@@ -3306,7 +3328,7 @@ function gcCmd(c, v){
   if (c === "save") return gcSave();
   if (c === "rest15" || c === "rest-15") { gc.end = Math.max(Date.now() + 2000, gc.end + (c === "rest15" ? 15000 : -15000)); gc.len = Math.round((gc.end - gc.t0) / 1000) - 1; gc.said = {}; return gcTick(); }
   if (c === "rir") { gc.rir = v; const a = setsObj()[pl.id] || [], last = a[gc.lastIdx ?? Math.max(a.filter(doneSet).length, 1) - 1]; if (last) { last.rir = v.replace("+", ""); touch(); } return gcPaint(); }
-  if (c === "skipex") { const nx = gcNextEx(pl.base); clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); try { speechSynthesis.cancel(); } catch {} if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcSay(`Weiter mit ${EX[eff(nx)].name}`); return gcOpen(nx); }
+  if (c === "skipex") { const nx = gcNextEx(pl.base); clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); sayStop(); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcSay(`Weiter mit ${EX[eff(nx)].name}`); return gcOpen(nx); }
   if (c === "nextex") { const nx = gc.next; clearInterval(gcInt); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcOpen(nx); }
 }
 addEventListener("click", e => { const b = e.target.closest("[data-gc]"); if (!b) return; if (b.dataset.gc === "open") { gcOpen(b.dataset.v); return; } if (b.closest("#gc")) gcCmd(b.dataset.gc, b.dataset.v); });
@@ -3365,6 +3387,7 @@ function varRowHtml(id){ const l = varLadder(id); if (!l || l.length < 2) return
 let sheetHist = false;
 addEventListener("popstate", () => { if (sheetHist && sheet.open) { sheetHist = false; closeSheet(true); } });
 function openSheet(kind, arg){
+  if (/^mob/.test(kind)) vWarm();
   if (kind === "cook") cookMin = false; else if (sheet.open && sheetKind === "cook" && cook) cookMin = true;
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
   if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
@@ -3778,6 +3801,7 @@ function journeySheet(kind, arg){
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}${veganOk(r) ? `<span class="tag">🌱 vegan</span>` : ""}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
+        ${(b => b.normal ? `<div class="chips sm"><button type="button" data-recvar="high" data-rn="${esc(r.name)}" aria-pressed="${r.variant !== "normal"}">💪 High Protein${b.protein > b.normal.protein ? ` · +${b.protein - b.normal.protein} g` : ""}</button><button type="button" data-recvar="normal" data-rn="${esc(r.name)}" aria-pressed="${r.variant === "normal"}">Normal</button></div>` : "")(r._base || r)}
         ${(d0 => d0 ? `<div class="small muted">Zuletzt gegessen ${d0 === todayIso() ? "heute" : "am " + fmt(d0)}</div>` : "")(lastAte(r.name))}
         ${showPrices() ? (() => { const st = FOOD().store || "aldi", c = recipeCost(r, st), best = st === "min" ? null : prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
           return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${st === "min" ? "je Produkt günstigster Markt" : STORES[st] || st}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
@@ -3875,7 +3899,7 @@ function cookWithHtml(){
 const recGrid = list => `<div class="rgrid">${list.map(r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${({fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤"})[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(r.name)}</span><span class="rm"><span class="nutri"><b>${recipeNutri(r).protein} g</b> Protein · </span>${r.activeMin ?? r.timeMin} min${r.difficulty ? " · " + r.difficulty : ""}${r.temp ? " · " + (r.temp === "kalt" ? "❄️" : r.temp === "warm" ? "🔥" : "🔥/❄️") : ""}</span></button>`).join("")}</div>`;
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
-  if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { recipes = j; if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
+  if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { setRecipes(j); if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
   const filt = recFilter.q || recFilter.ing || recFilter.cat !== "alle" || recFilter.prep || recFilter.diff || recFilter.fast || recFilter.temp || recFilter.fav || recFilter.vegan || recFilter.week || recFilter.cheap;
   if (recShelves && !filt) { b.innerHTML = shelfHtml(); return; }
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
@@ -4058,7 +4082,7 @@ function ensureMeals(){
   if (mealPlan && recipes) return Promise.resolve();
   const pr = ensurePrices().catch(() => {});  // gleichzeitig mit Plan und Rezepten
   return mealsReady = mealsReady || Promise.all([fetch("mealplan.json").then(r => r.json()), recipes ? Promise.resolve(recipes) : fetch("recipes.json").then(r => r.json())])
-    .then(([m, r]) => { for (const sl of m.slots || []) if (MEAL_SHORT[sl.k]) sl.label = MEAL_SHORT[sl.k]; mealPlan = m; recipes = r; return pr; }).catch(e => { mealsReady = null; throw e; });
+    .then(([m, r]) => { for (const sl of m.slots || []) if (MEAL_SHORT[sl.k]) sl.label = MEAL_SHORT[sl.k]; mealPlan = m; if (r !== recipes) setRecipes(r); return pr; }).catch(e => { mealsReady = null; throw e; });
 }
 const cookSteps = r => r?.plan?.steps?.length ? r.plan.steps : (r?.steps || []).map(x => ({do: x}));
 const cookAhead = r => r?.plan?.ahead || [];
@@ -4107,7 +4131,7 @@ const SUBST = {
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
 const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
   for (const k of ["favs", "stock", "bioItems", "slotsOff"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
-  for (const k of ["ownPrices", "myProds", "nick"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
+  for (const k of ["ownPrices", "myProds", "nick", "recVar"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
   saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
 const nutriMemo = new Map();
 function recipeNutri(r){
@@ -4212,8 +4236,8 @@ const portionCost = n => { const r = recipeByName(n); return r ? recipeCost(r).p
 const budgetMemo = new Map();
 // Günstigste passende Gerichte eines Slots (Kosten gerundet, damit App und Planer gleich sortieren)
 function budgetCands(k, curName){
-  const sl = mealPlan.slots.find(x => x.k === k), minP = k === "sn" || k === "ex" ? 13 : 25, re = avoidRe();
-  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && recipeNutri(r).protein >= minP && recipeOk(r, re))
+  const sl = mealPlan.slots.find(x => x.k === k), minP = minProt(k), re = avoidRe();
+  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && recPlanOk(r) && recipeNutri(r).protein >= minP && recipeOk(r, re))
     .map(r => [r, Math.round(recipeCost(r).portion * 1e4) / 1e4]).sort((a, b) => a[1] - b[1]).slice(0, 15).map(x => x[0]);
 }
 // Ersetzt die teuersten Gerichte der Woche durch günstigere mit ähnlichen Werten, bis das Budget passt
@@ -4224,9 +4248,10 @@ function budgetSubs(mo){
   const qk = mo + "|" + dataVer; if (budgetQuick.has(qk)) return budgetQuick.get(qk);
   const res0 = budgetSubs0(mo); if (budgetQuick.size > 50) budgetQuick.clear(); budgetQuick.set(qk, res0); return res0;
 }
-function budgetSubs0(mo){
+const budgetSubs0 = mo => withPlanDay(mo, () => budgetSubs00(mo));
+function budgetSubs00(mo){
   const budget = num(FOOD().budget), raw = []; for (let i = 0; i < 7; i++) raw.push(mealDefaults(addDays(mo, i), true));
-  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), !!FOOD().bio, FOOD().bioItems || []]); if (budgetMemo.has(key)) return budgetMemo.get(key);
+  const key = JSON.stringify([raw, budget, FOOD().store, effortCfg(), !!FOOD().bio, FOOD().bioItems || [], recipes.filter(r => !recPlanOk(r)).length]); if (budgetMemo.has(key)) return budgetMemo.get(key);
   // auf dem Gerät gespeichert: gleiches Ergebnis, solange Plan, Preise, Rezepte und Essens-Einstellungen gleich sind (spart beim Start ~0,5 s)
   const pk = strHash([BUDGET_V, key, JSON.stringify(FOOD()), prices?.date || "", (prices?.products || []).length, (recipes || []).length, JSON.stringify(mealPlan?.target || {}), S().startDate || ""].join("|")), pm = lsGet("budgetMemo") || {};
   if (pm[pk]) { budgetMemo.set(key, pm[pk]); return pm[pk]; }
@@ -4255,7 +4280,8 @@ function budgetSubs0(mo){
   try { const keep = Object.entries(pm).slice(-7); lsSet("budgetMemo", Object.fromEntries([...keep, [pk, res]])); } catch {}
   return res;
 }
-function mealDefaults(d, raw){
+const mealDefaults = (d, raw) => withPlanDay(d, () => mealDefaults0(d, raw));
+function mealDefaults0(d, raw){
   const w = calWeek(d) ?? 0, W = mealWeek(w), i = (parse(d).getDay() + 6) % 7, tr = isTrainDay(d), o = {fr: W.fr[i]};
   if (i <= 3) { [o.mi, o.ab] = i % 2 === 0 ? [W.batchA, W.batchB] : [W.batchB, W.batchA];
     if (prepOff()) for (const k of ["mi", "ab"]) { const sm = altMeals(k, o[k]); if (sm.length) o[k] = sm[(i * 2 + (k === "ab" ? 1 : 0)) % sm.length].name; } }
@@ -4359,14 +4385,14 @@ const prepLabel = r => prepOff() ? "" : r.mealPrep ? "vorkochbar" : "";
 function mainAlts(k, curName){
   if (!mealTempF) return altMeals(k, curName);
   const ref = mealInfo(curName), re = avoidRe(), nu = r => recipeNutri(r);
-  return recipes.filter(r => (r.category === "mittag" || r.category === "abend") && r.name !== curName && nu(r).protein >= 25 && recipeOk(r, re) && (r.temp === mealTempF || r.temp === "beides"))
+  return recipes.filter(r => (r.category === "mittag" || r.category === "abend") && r.name !== curName && recPlanOk(r) && nu(r).protein >= minProt("mi") && recipeOk(r, re) && (r.temp === mealTempF || r.temp === "beides"))
     .sort((a, b) => (Math.abs(nu(a).kcal - ref.kcal) / 8 + Math.abs(nu(a).protein - ref.protein)) - (Math.abs(nu(b).kcal - ref.kcal) / 8 + Math.abs(nu(b).protein - ref.protein))).slice(0, 12);
 }
 function altMeals(k, curName){
-  const sl = mealPlan.slots.find(x => x.k === k), ref = mealInfo(curName), minP = k === "sn" || k === "ex" ? 13 : 25;
+  const sl = mealPlan.slots.find(x => x.k === k), ref = mealInfo(curName), minP = minProt(k);
   const re = avoidRe();
   const nu = r => recipeNutri(r), score = r => Math.abs(nu(r).kcal - ref.kcal) / 8 + Math.abs(nu(r).protein - ref.protein);
-  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && nu(r).protein >= minP && recipeOk(r, re)).sort((a, b) => score(a) - score(b)).slice(0, 8);
+  return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && recPlanOk(r) && nu(r).protein >= minP && recipeOk(r, re)).sort((a, b) => score(a) - score(b)).slice(0, 8);
 }
 let mealQ = "";
 function mealSheet(arg){
@@ -5442,6 +5468,8 @@ function foodSettingsHtml(){
 
     <div class="card"><h2>Meal Prep</h2><label class="check"><input type="checkbox" id="foodMealPrep" ${f.mealPrep !== false ? "checked" : ""}><span>Sonntags vorkochen für Mo–Do<br><span class="small muted">An: 2 Gerichte (je 4–5 Portionen laut Rezept) wechseln sich Mo–Do ab. Aus: jeden Tag frische, ähnliche Gerichte (vergleichbare kcal und Protein); was übrig bleibt, plant die App beim Abhaken als Rest ein.</span></span></label></div></div></details>
     <details class="slim setgrp" data-keep="set:teller" ${shopOpen.has("set:teller") ? "open" : ""}><summary><span>🥗 Was auf den Teller kommt</span><span class="muted">${(f.allergens || []).length ? (f.allergens || []).length + " Allergene · " : ""}${f.vegan ? "vegan · " : ""}${f.avoid ? "meidet " + esc(f.avoid) : "nichts gemieden"} · Aufwand ${["egal", "max. mittel", "nur leicht"][f.effort?.lvl || 0]}</span></summary><div class="setbody">
+    <div class="card"><h2>Rezepte</h2><div class="chips"><button type="button" data-recmode="high" aria-pressed="${f.recMode !== "normal"}">💪 High Protein</button><button type="button" data-recmode="normal" aria-pressed="${f.recMode === "normal"}">Normal</button></div>
+      <div class="small muted">${f.recMode === "normal" ? "Normal: Rezepte wie im Original, ohne Extra-Protein. Plan, Nährwerte und Einkauf rechnen damit." : "High Protein: Rezepte mit Extra-Protein aus Skyr, Quark, Tofu, Hülsenfrüchten (kein Pulver). Normal = wie im Original."} Im Rezept kannst du einzeln umschalten.</div>${Object.keys(f.recVar || {}).length ? `<button type="button" class="btn ghost small" data-recvarreset>${Object.keys(f.recVar).length} einzeln umgestellte zurücksetzen</button>` : ""}</div>
     <div class="card"><h2>Ernährung & Unverträglichkeiten</h2>
       <div class="chips"><button type="button" data-vegan aria-pressed="${!!f.vegan}">🌱 Vegan</button></div>
       <div class="small muted">${f.vegan ? `Vegan an: ${recipes.filter(r => veganOk(r)).length} von ${recipes.length} Rezepten passen. Gerichte mit Ei, Milchprodukten oder Honig ersetzt der Plan durch das ähnlichste vegane; Milch, Kochsahne und Butter laufen über die Ersatzprodukte unten. ${(() => { const ok = r => recipeOk(r) && recipeNutri(r).protein >= (r.category === "fruehstueck" ? 25 : 13), nf = recipes.filter(r => r.category === "fruehstueck" && ok(r)).length, ns = recipes.filter(r => (r.category === "snack" || r.category === "shake") && ok(r)).length;
@@ -5562,7 +5590,19 @@ function essenHtml(b){
   b.innerHTML = h;
 }
 
-let recipes = null; const recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false, ing:"", vegan:false, week:false, cheap:false};
+// Rezept-Varianten: Grundfassung = High Protein, Feld normal = Originalfassung ohne Protein-Anpassung; Wahl global (food.recMode) und je Rezept (food.recVar)
+let recipes = null, recipesRaw = null, recVarRef = "";
+const recHigh = () => FOOD().recMode !== "normal";
+const recModeOf = name => (FOOD().recVar || {})[name] || (recHigh() ? "high" : "normal");
+function setRecipes(j){ recipesRaw = j; recVarRef = JSON.stringify([FOOD().recMode, FOOD().recVar]);
+  recipes = j.map(r => r.normal && recModeOf(r.name) === "normal" ? Object.assign({}, r, r.normal, {variant: "normal", _base: r}) : r); clearFoodMemos(); }
+const recVarSync = () => { if (recipesRaw && JSON.stringify([FOOD().recMode, FOOD().recVar]) !== recVarRef) setRecipes(recipesRaw); };
+// Neue Rezepte (Feld since) plant die Automatik erst ab dieser Woche ein, damit ein laufender Wochenplan samt Einkauf nicht umspringt; von Hand geht jedes sofort
+let planDay = null;
+const recPlanOk = r => !(planDay && r.since && r.since > planDay);
+const withPlanDay = (d, fn) => { const p = planDay; planDay = d; try { return fn(); } finally { planDay = p; } };
+const minProt = k => recHigh() ? (k === "sn" || k === "ex" ? 13 : 25) : 0;
+let recFilter = {cat:"alle", prep:false, q:"", diff:"", fast:false, temp:"", fav:false, ing:"", vegan:false, week:false, cheap:false};
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake/Dessert"};
 // Slot-Namen überall gleich: Frühstück · Mittag · Snack · Abendbrot · Extra; warm/kalt steht nur als Tag am Gericht
 const mainLabel = sl => MEAL_SHORT[sl.k] || sl.label;
@@ -5787,12 +5827,14 @@ async function onClick(e){
   const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
   if (t.id === "ftReset") { saveFood({times: {}}); renderMore(); return; }
-  const tv = t.closest("[data-ttsv]"); if (tv || t.closest("[data-ttsrate]") || t.id === "ttsProbe") { if (tv) { ttsVoice = tv.dataset.ttsv; lsSet("ttsVoice", ttsVoice); } const tr = t.closest("[data-ttsrate]"); if (tr) { ttsRate = Math.round(Math.min(1.3, Math.max(0.8, ttsRate + Number(tr.dataset.ttsrate) * 0.05)) * 100) / 100; lsSet("ttsRate", ttsRate); } const c = document.getElementById("ttsCard"); if (c && !t.id) c.innerHTML = ttsHtml(); gcSay("Halten. Noch zehn Sekunden. Sehr gut, Satz geschafft.", true); return; }
+  const tv = t.closest("[data-ttsv]"), tk = t.closest("[data-ttsk]"); if (tv || tk || t.closest("[data-ttsrate]") || t.id === "ttsProbe") { if (tk) { ttsKind = tk.dataset.ttsk; lsSet("ttsKind", ttsKind); } if (tv) { ttsVoice = tv.dataset.ttsv; lsSet("ttsVoice", ttsVoice); } const tr = t.closest("[data-ttsrate]"); if (tr) { ttsRate = Math.round(Math.min(1.3, Math.max(0.8, ttsRate + Number(tr.dataset.ttsrate) * 0.05)) * 100) / 100; lsSet("ttsRate", ttsRate); } const c = document.getElementById("ttsCard"); if (c && !t.id) c.innerHTML = ttsHtml(); gcSay("Halten. Noch zehn Sekunden. Sehr gut, Satz geschafft.", true); return; }
   const mhb = t.closest("[data-mhold]"); if (mhb || t.id === "mhReset") { let o = null;
     if (mhb) { const k = mhb.dataset.mhold, n = Math.min(mobHoldMax(k), Math.max(mobHoldMin(k), mobHoldSec(k) + Number(mhb.dataset.d) * mobHoldStep(k))); o = Object.assign({}, S().mobHold); if (n === MOB_HOLD0[k].sec) delete o[k]; else o[k] = n; if (!Object.keys(o).length) o = null; }
     saveSettings({mobHold: o}); tmr = null; if (S().mobMin !== mobMin()) { saveSettings({mobMin: mobMin()}); replanSoon(); } render(); return; }
   if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
+  const rvb = t.closest("[data-recvar]"); if (rvb) { const o = Object.assign({}, FOOD().recVar), nm = rvb.dataset.rn; if (rvb.dataset.recvar === (recHigh() ? "high" : "normal")) delete o[nm]; else o[nm] = rvb.dataset.recvar;
+    saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); if (sheet.open) renderSheet(); render(); return; }
   const rtb = t.closest("[data-rtab]"); if (rtb) { recTab = rtb.dataset.rtab; renderSheetPart(["#rTabs", "#rTab"]); return; }
   const zUpd = () => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); };
   const zs = t.closest("[data-zsort]"); if (zs) { zSort = zs.dataset.zsort; lsSet("zSort", zSort); zUpd(); return; }
@@ -5813,6 +5855,8 @@ async function onClick(e){
   const rsp = t.closest("[data-rspor]"); if (rsp && rsEat) { rsEat.title = sheet.querySelector("#ownName")?.value; rsEat.por = Math.max(0.5, Math.min(8, rsEat.por + Number(rsp.dataset.rspor))); renderSheet(); return; }
   const rss = t.closest("[data-resteshop]"); if (rss) { shopScope = "gericht"; shopRec = rss.dataset.resteshop; shopMul = 1; shopFromReste = true; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const kt = t.closest("[data-kitchen]"); if (kt) { const h = kitchenHas(), k = kt.dataset.kitchen; h.has(k) ? h.delete(k) : h.add(k); saveFood({devices: Object.keys(KITCHEN).filter(x => h.has(x))}); renderEssen(); return; }
+  const rmb = t.closest("[data-recmode]"); if (rmb) { saveFood({recMode: rmb.dataset.recmode === "normal" ? "normal" : null, recVar: null}); render(); return; }
+  if (t.closest("[data-recvarreset]")) { saveFood({recVar: null}); render(); return; }
   if (t.closest("[data-vegan]")) { const on = !FOOD().vegan, sb = Object.assign({}, FOOD().subst);
     if (on) for (const [k, v] of [["milch", "mix"], ["kochsahne", "cuisine"], ["butter", "margarine"]]) if (!sb[k]) sb[k] = v;
     saveFood(on ? {vegan: true, subst: sb} : {vegan: false}); renderEssen(); return; }

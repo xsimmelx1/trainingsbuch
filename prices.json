@@ -3,6 +3,881 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "sojajoghurt",
+"name": "Sojajoghurt natur",
+"pack": 500,
+"unit": "g",
+"match": "soja-?joghurt|sojagurt|joghurt-?alternative|skyr-?alternative|sauerrahm-?alternative|soja-?skyr",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "griechJoghurt",
+"name": "Griechischer Joghurt",
+"pack": 500,
+"unit": "g",
+"match": "griechische[rs]? joghurt|joghurt griechisch",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "gewuerzgurken",
+"name": "Gewürzgurken (Glas)",
+"pack": 360,
+"unit": "g",
+"match": "gewürzgurke|essiggurke|gurkenwasser|cornichon",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "asianudeln",
+"name": "Reis-/Glasnudeln",
+"pack": 250,
+"unit": "g",
+"match": "reisnudel|glasnudel|mie-?nudel|udon|soba",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kichererbsenmehl",
+"name": "Kichererbsenmehl",
+"pack": 500,
+"unit": "g",
+"match": "kichererbsenmehl",
+"pantry": true,
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "paniermehl",
+"name": "Paniermehl",
+"pack": 400,
+"unit": "g",
+"match": "paniermehl|semmelbrösel",
+"pantry": true,
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79,
+"netto": 0.79,
+"penny": 0.79,
+"edeka": 0.87
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "ahornsirup",
+"name": "Ahornsirup",
+"pack": 250,
+"unit": "ml",
+"match": "ahornsirup|rübensirup|dattelsirup",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 3.74,
+"lidl": 2.99,
+"aldi": 2.99,
+"kaufland": 2.99,
+"netto": 2.99,
+"penny": 2.99,
+"edeka": 3.29
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "hafersahne",
+"name": "Hafer-Kochsahne",
+"pack": 200,
+"unit": "ml",
+"match": "hafersahne|pflanzen-?sahne|soja-?sahne",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 1.11,
+"lidl": 0.89,
+"aldi": 0.89,
+"kaufland": 0.89,
+"netto": 0.89,
+"penny": 0.89,
+"edeka": 0.98
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kapern",
+"name": "Kapern (Glas)",
+"pack": 60,
+"unit": "g",
+"match": "kapern",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "reispapier",
+"name": "Reispapier",
+"pack": 200,
+"unit": "g",
+"match": "reispapier",
+"piece": 9,
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.11,
+"lidl": 1.69,
+"aldi": 1.69,
+"kaufland": 1.69,
+"netto": 1.69,
+"penny": 1.69,
+"edeka": 1.86
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "sauerkraut",
+"name": "Sauerkraut",
+"pack": 520,
+"unit": "g",
+"match": "sauerkraut",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79,
+"netto": 0.79,
+"penny": 0.79,
+"edeka": 0.87
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "reibeware",
+"name": "Vegane Reibeware",
+"pack": 200,
+"unit": "g",
+"match": "reibeware|hirtenblock-?alternative|vegane[rs]? (reib)?käse",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "nussmus",
+"name": "Mandel-/Cashewmus",
+"pack": 250,
+"unit": "g",
+"match": "mandelmus|cashewmus|(?<!erd)nussmus",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 4.36,
+"lidl": 3.49,
+"aldi": 3.49,
+"kaufland": 3.49,
+"netto": 3.49,
+"penny": 3.49,
+"edeka": 3.84
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kokosraspeln",
+"name": "Kokosraspeln",
+"pack": 200,
+"unit": "g",
+"match": "kokosraspel|kokosflocken",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "yufka",
+"name": "Yufka-/Filoteig",
+"pack": 500,
+"unit": "g",
+"match": "yufka|filoteig",
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "mandeldrink",
+"name": "Mandeldrink",
+"pack": 1000,
+"unit": "ml",
+"match": "mandeldrink|mandelmilch",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "linsenGruen",
+"name": "Grüne Linsen",
+"pack": 500,
+"unit": "g",
+"match": "grüne linsen|belugalinsen",
+"group": "Hülsenfrüchte",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "dickeBohnen",
+"name": "Dicke Bohnen / Schwarzaugenbohnen (Dose)",
+"pack": 265,
+"unit": "g",
+"match": "dicke bohnen|schwarzaugenbohnen|ful medames|favabohnen",
+"group": "Hülsenfrüchte",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "harissa",
+"name": "Harissa / Chilipaste",
+"pack": 90,
+"unit": "g",
+"match": "harissa|shatta|berbere|adobo",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "satesauce",
+"name": "Saté-/Erdnusssauce",
+"pack": 250,
+"unit": "ml",
+"match": "saté|sate-?so|erdnusssauce|erdnuss-?soße",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "asiasauce",
+"name": "Asia-Sauce (Pad Thai, Austern vegetarisch)",
+"pack": 250,
+"unit": "ml",
+"match": "austernsauce|pad-?thai-?sauce|hoisin",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "chai",
+"name": "Chai-Tee",
+"pack": 20,
+"unit": "Stück",
+"match": "chai",
+"piece": 2,
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "endivie",
+"name": "Endiviensalat",
+"pack": 1,
+"unit": "Stück",
+"match": "endivie",
+"piece": 400,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "veganWuerstchen",
+"name": "Vegane Würstchen",
+"pack": 200,
+"unit": "g",
+"match": "vegane (wiener )?würstchen|veggie-?würstchen",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "frischcreme",
+"name": "Vegane Frischcreme",
+"pack": 150,
+"unit": "g",
+"match": "frischcreme|vegane[rs]? frischkäse",
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kokoswasser",
+"name": "Kokoswasser",
+"pack": 1000,
+"unit": "ml",
+"match": "kokoswasser",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "pesto",
+"name": "Pesto",
+"pack": 190,
+"unit": "g",
+"match": "pesto",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "salatcreme",
+"name": "Salatcreme",
+"pack": 250,
+"unit": "ml",
+"match": "salatcreme",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "ricotta",
+"name": "Ricotta",
+"pack": 250,
+"unit": "g",
+"match": "ricotta",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 1.49,
+"lidl": 1.19,
+"aldi": 1.19,
+"kaufland": 1.19,
+"netto": 1.19,
+"penny": 1.19,
+"edeka": 1.31
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "toastbrot",
+"name": "Toastbrot",
+"pack": 500,
+"unit": "g",
+"match": "toast",
+"piece": 25,
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "mascarpone",
+"name": "Mascarpone",
+"pack": 250,
+"unit": "g",
+"match": "mascarpone",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 2.11,
+"lidl": 1.69,
+"aldi": 1.69,
+"kaufland": 1.69,
+"netto": 1.69,
+"penny": 1.69,
+"edeka": 1.86
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "artischocken",
+"name": "Artischockenherzen (Glas)",
+"pack": 170,
+"unit": "g",
+"match": "artischocke",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "tomatensosse",
+"name": "Tomatensoße (Glas)",
+"pack": 400,
+"unit": "g",
+"match": "tomatenso(ß|ss)e|tomatensauce",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
 "id": "burgerbroetchen",
 "name": "Vollkorn-Burgerbrötchen, 4 Stück",
 "pack": 4,
@@ -5478,7 +6353,7 @@
 "name": "Chilischoten frisch",
 "pack": 50,
 "unit": "g",
-"match": "chilischote|frische chili|peperoncino|^(rote |grüne )?chili$|rote chili",
+"match": "chilischote|frische chili|peperoncino|^(rote |grüne )?chili$|rote chili|grüne chilis?|^chilis$",
 "group": "Obst & Gemüse",
 "piece": 10,
 "prices": {

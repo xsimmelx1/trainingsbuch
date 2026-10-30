@@ -497,7 +497,10 @@ def dev_tok(r):
 
 def uniq(rec):
     """Jedes Rezept einmal: Alias-Namen (REC_ALIAS) zeigen auf dasselbe Rezept und dürfen in Auswahllisten nicht mehrfach zählen."""
-    return [r for n, r in rec.items() if r["name"] == n]
+    return [r for n, r in rec.items() if r["name"] == n and not (PLAN_DAY and r.get("since") and r["since"] > PLAN_DAY)]
+
+
+PLAN_DAY = None  # Datum, für das gerade geplant wird: neue Rezepte (since) erst ab dann in Auswahllisten (wie recPlanOk in der App)
 
 
 def substitute(mp, rec, o, rx):
@@ -510,7 +513,7 @@ def substitute(mp, rec, o, rx):
         r = rec.get(n)
         if not r or not rx.search(text(r)):
             continue
-        minp = 13 if k in ("sn", "ex") else 25
+        minp = min_prot(k)
         cands = [x for x in uniq(rec) if x["category"] in slots[k]["cats"] and x["name"] != n and x["protein"] >= minp and not rx.search(text(x))]
         cands.sort(key=lambda x: abs(x["kcal"] - r["kcal"]) / 8 + abs(x["protein"] - r["protein"]))
         used = set(v for v in o.values() if isinstance(v, str))  # möglichst kein Gericht zweimal am Tag (wie mealDefaults)
@@ -527,6 +530,20 @@ ING_RE = None
 
 SUBST_D = {"milch": {"sojadrink": (-8, -0.1), "haferdrink": (-1, -2.7), "mix": (-4.5, -1.4)},
            "kochsahne": {"cuisine": (-20, -2.2)}, "butter": {"margarine": (-20, -0.7)}}
+
+
+REC_NORMAL = False  # globale Rezept-Variante „Normal“ (food.recMode): keine Protein-Mindestwerte bei Tausch/Budget (wie minProt in der App)
+
+
+def min_prot(k):
+    return 0 if REC_NORMAL else (13 if k in ("sn", "ex") else 25)
+
+
+def rec_variant(rec, fd):
+    """Grundfassung = High Protein; Feld normal = Originalfassung. Wahl global (recMode) und je Rezept (recVar) wie setRecipes in der App."""
+    over = fd.get("recVar") or {}
+    dflt = "normal" if fd.get("recMode") == "normal" else "high"
+    return {n: (dict(r, **r["normal"], variant="normal") if r.get("normal") and (over.get(r["name"]) or dflt) == "normal" else r) for n, r in rec.items()}
 
 
 def adjust_recipes(rec, P, subst):
@@ -719,7 +736,7 @@ def shop_cost(counts, rec, P, store, subst, memo):
 def alt_meals(mp, rec, k, cur, rx):
     slot = next(x for x in mp["slots"] if x["k"] == k)
     ref = rec.get(cur) or {"kcal": 0, "protein": 0}
-    minp = 13 if k in ("sn", "ex") else 25
+    minp = min_prot(k)
     text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
     c = [r for r in uniq(rec) if r["category"] in slot["cats"] and r["name"] != cur and r["protein"] >= minp and not (rx and rx.search(text(r)))]
     c.sort(key=lambda r: abs(r["kcal"] - ref["kcal"]) / 8 + abs(r["protein"] - ref["protein"]))
@@ -796,7 +813,7 @@ def budget_subs(mp, rec, settings, raws, rx, P, W=None):
 
     def floors_ok(sb):  # jeder Tag einzeln
         return all(v >= p0[i] for i, v in enumerate(day_v(sb, "protein"))) and all(v >= k0[i] for i, v in enumerate(day_v(sb, "kcal")))
-    minp = lambda k: 13 if k in ("sn", "ex") else 25
+    minp = min_prot
     text = lambda r: (r.get("_text") or (r["name"] + " " + " ".join(r.get("ingredients", []))).lower()) + dev_tok(r)
 
     cand_memo = {}
@@ -886,6 +903,9 @@ def build_meal_ics(now, settings, plan, days, past=None):
     rx = avoid_re(settings)
     P = load_prices()
     fd = settings.get("food") or {}
+    global REC_NORMAL
+    REC_NORMAL = fd.get("recMode") == "normal"
+    rec = rec_variant(rec, fd)
     if P and (fd.get("bio") or fd.get("bioItems")):  # Bio für alle oder einzeln gewählte Produkte (wie bioUse in der App)
         for pr in P["products"]:
             if pr.get("bio") and (fd.get("bio") or pr["id"] in (fd.get("bioItems") or [])):
@@ -912,10 +932,13 @@ def build_meal_ics(now, settings, plan, days, past=None):
     def subs_for(dd):
         mo = dd - dt.timedelta(days=dd.weekday())
         if mo not in week_subs:
+            global PLAN_DAY
+            p0, PLAN_DAY = PLAN_DAY, mo.isoformat()
             w0 = cal_week_no(settings, mo)
             W0 = mp["weeks"][(w0 - 1) % len(mp["weeks"]) if w0 > 0 else len(mp["weeks"]) - 1]
             raws = [effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, mo + dt.timedelta(days=i), is_train(mo + dt.timedelta(days=i)), is_train, rec=rec, rx=rx), rx), rx, W0) for i in range(7)]
             week_subs[mo] = budget_subs(mp, rec, settings, raws, rx, P, W0)
+            PLAN_DAY = p0
         return week_subs[mo]
     stamp = now.strftime("%Y%m%dT000000Z")
     L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//trainingsbuch//essen//DE", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
@@ -926,6 +949,8 @@ def build_meal_ics(now, settings, plan, days, past=None):
         day = days.get(iso) or {}
         pl = by_date.get(iso)
         wd = cal_week_no(settings, d)
+        global PLAN_DAY
+        PLAN_DAY = iso
         names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d), rec=rec, rx=rx), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
