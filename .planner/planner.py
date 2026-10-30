@@ -954,6 +954,9 @@ def build_meal_ics(now, settings, plan, days, past=None):
         names = effort_subst(mp, rec, settings, substitute(mp, rec, meal_defaults(mp, settings, d, is_train(d), is_train, bo(d), rec=rec, rx=rx), rx), rx, mp["weeks"][(wd - 1) % len(mp["weeks"]) if wd > 0 else len(mp["weeks"]) - 1])
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
+        fz = ((fd.get("weekFreeze") or {}).get((d - dt.timedelta(days=d.weekday())).isoformat()) or {}).get(iso)
+        if fz:  # festgehaltene Woche (wie mealDefaults in der App): fr/mi/sn/ab aus dem gespeicherten Plan
+            names.update({k: v for k, v in (fz.get("m") or {}).items() if k in ("fr", "mi", "sn", "ab") and v})
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
         times = (settings.get("food") or {}).get("times") or {}
         off = set((settings.get("food") or {}).get("slotsOff") or [])

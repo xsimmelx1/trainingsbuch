@@ -29,7 +29,8 @@
    "time": "16:00",
    "cats": [
     "snack",
-    "shake"
+    "shake",
+    "dessert"
    ]
   },
   {
@@ -47,7 +48,8 @@
    "time": "",
    "cats": [
     "snack",
-    "shake"
+    "shake",
+    "dessert"
    ]
   }
  ],
