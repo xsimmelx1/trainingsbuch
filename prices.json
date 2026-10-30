@@ -3,6 +3,1202 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "weisskohl",
+"name": "Weißkohl",
+"pack": 1,
+"unit": "Stück",
+"match": "weißkohl|weisskohl|krautsalat",
+"piece": 1500,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "spitzkohl",
+"name": "Spitzkohl",
+"pack": 1,
+"unit": "Stück",
+"match": "spitzkohl",
+"piece": 1000,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "chinakohl",
+"name": "Chinakohl",
+"pack": 1,
+"unit": "Stück",
+"match": "chinakohl",
+"piece": 800,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "fenchel",
+"name": "Fenchel",
+"pack": 1,
+"unit": "Stück",
+"match": "fenchel(?!samen|saat)",
+"piece": 250,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "rhabarber",
+"name": "Rhabarber",
+"pack": 500,
+"unit": "g",
+"match": "rhabarber",
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "ananas",
+"name": "Ananas (Dose, abgetropft)",
+"pack": 260,
+"unit": "g",
+"match": "ananas",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "nektarine",
+"name": "Nektarinen",
+"pack": 1,
+"unit": "Stück",
+"match": "nektarine",
+"piece": 150,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 0.49,
+"lidl": 0.39,
+"aldi": 0.39,
+"kaufland": 0.39,
+"netto": 0.39,
+"penny": 0.39,
+"edeka": 0.43
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kiwi",
+"name": "Kiwi",
+"pack": 1,
+"unit": "Stück",
+"match": "kiwi",
+"piece": 80,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 0.36,
+"lidl": 0.29,
+"aldi": 0.29,
+"kaufland": 0.29,
+"netto": 0.29,
+"penny": 0.29,
+"edeka": 0.32
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "passionsfrucht",
+"name": "Passionsfrucht",
+"pack": 1,
+"unit": "Stück",
+"match": "passionsfr|maracuja",
+"piece": 30,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 0.74,
+"lidl": 0.59,
+"aldi": 0.59,
+"kaufland": 0.59,
+"netto": 0.59,
+"penny": 0.59,
+"edeka": 0.65
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "datteln",
+"name": "Datteln (getrocknet)",
+"pack": 200,
+"unit": "g",
+"match": "datteln",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "puderzucker",
+"name": "Puderzucker",
+"pack": 250,
+"unit": "g",
+"match": "puderzucker",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79,
+"netto": 0.79,
+"penny": 0.79,
+"edeka": 0.87
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "hefe",
+"name": "Hefe (Trocken- oder Frischhefe)",
+"pack": 3,
+"unit": "Stück",
+"match": "trockenhefe|frischhefe|frische hefe|(?<!flocken )\\bhefe\\b(?!flocken)",
+"piece": 7,
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 0.49,
+"lidl": 0.39,
+"aldi": 0.39,
+"kaufland": 0.39,
+"netto": 0.39,
+"penny": 0.39,
+"edeka": 0.43
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kuemmel",
+"name": "Kümmel / Schwarzkümmel",
+"pack": 50,
+"unit": "g",
+"match": "^(schwarz)?kümmel",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "tabasco",
+"name": "Tabasco",
+"pack": 60,
+"unit": "ml",
+"match": "tabasco",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 3.11,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49,
+"netto": 2.49,
+"penny": 2.49,
+"edeka": 2.74
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "meerrettich",
+"name": "Meerrettich (Glas)",
+"pack": 140,
+"unit": "g",
+"match": "meerrettich",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "graupen",
+"name": "Perlgraupen",
+"pack": 500,
+"unit": "g",
+"match": "graupen",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "ketchup",
+"name": "Tomatenketchup",
+"pack": 500,
+"unit": "ml",
+"match": "ketchup",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "gruenkern",
+"name": "Grünkern",
+"pack": 500,
+"unit": "g",
+"match": "grünkern",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 3.11,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49,
+"netto": 2.49,
+"penny": 2.49,
+"edeka": 2.74
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "maiskoelbchen",
+"name": "Maiskölbchen (Glas)",
+"pack": 190,
+"unit": "g",
+"match": "maiskölbchen",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "tortellini",
+"name": "Tortellini (Kühlregal)",
+"pack": 250,
+"unit": "g",
+"match": "tortellini",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "maultaschen",
+"name": "Maultaschen vegetarisch",
+"pack": 360,
+"unit": "g",
+"match": "maultasche",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "hirseflocken",
+"name": "Hirseflocken",
+"pack": 500,
+"unit": "g",
+"match": "hirseflocken",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "hirse",
+"name": "Hirse",
+"pack": 500,
+"unit": "g",
+"match": "hirse(?!flocken)",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "buchweizen",
+"name": "Buchweizen",
+"pack": 500,
+"unit": "g",
+"match": "buchweizen(?!mehl)",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "spekulatius",
+"name": "Spekulatius",
+"pack": 200,
+"unit": "g",
+"match": "spekulatius",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "raclette",
+"name": "Raclettekäse",
+"pack": 200,
+"unit": "g",
+"match": "raclette",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 3.11,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49,
+"netto": 2.49,
+"penny": 2.49,
+"edeka": 2.74
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "gelee",
+"name": "Gelee / Konfitüre",
+"pack": 450,
+"unit": "g",
+"match": "gelee|konfitüre",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "muesli",
+"name": "Müsli",
+"pack": 750,
+"unit": "g",
+"match": "müsli",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 2.49,
+"lidl": 1.99,
+"aldi": 1.99,
+"kaufland": 1.99,
+"netto": 1.99,
+"penny": 1.99,
+"edeka": 2.19
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "blaetterteig",
+"name": "Blätterteig (Kühlregal)",
+"pack": 275,
+"unit": "g",
+"match": "blätterteig",
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "fruehlingsrollenteig",
+"name": "Frühlingsrollenteig",
+"pack": 250,
+"unit": "g",
+"match": "frühlingsrollen",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 3.11,
+"lidl": 2.49,
+"aldi": 2.49,
+"kaufland": 2.49,
+"netto": 2.49,
+"penny": 2.49,
+"edeka": 2.74
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+],
+"piece": 12
+},
+{
+"id": "tee",
+"name": "Schwarzer Tee",
+"pack": 6250,
+"unit": "ml",
+"match": "schwarze[rn]? tee|^teebeutel",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kefir",
+"name": "Kefir",
+"pack": 500,
+"unit": "ml",
+"match": "kefir",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "salsa",
+"name": "Salsa-Dip",
+"pack": 300,
+"unit": "g",
+"match": "salsa",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "mohn",
+"name": "Mohn",
+"pack": 250,
+"unit": "g",
+"match": "mohn",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 2.86,
+"lidl": 2.29,
+"aldi": 2.29,
+"kaufland": 2.29,
+"netto": 2.29,
+"penny": 2.29,
+"edeka": 2.52
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "bagel",
+"name": "Bagels",
+"pack": 4,
+"unit": "Stück",
+"match": "bagel",
+"piece": 85,
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 2.24,
+"lidl": 1.79,
+"aldi": 1.79,
+"kaufland": 1.79,
+"netto": 1.79,
+"penny": 1.79,
+"edeka": 1.97
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "cranberrys",
+"name": "Cranberrys (getrocknet)",
+"pack": 125,
+"unit": "g",
+"match": "cranberr",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "schmelzkaese",
+"name": "Schmelzkäse",
+"pack": 200,
+"unit": "g",
+"match": "schmelzkäse",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "sauerrahm",
+"name": "Sauerrahm",
+"pack": 200,
+"unit": "g",
+"match": "sauerrahm",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 0.86,
+"lidl": 0.69,
+"aldi": 0.69,
+"kaufland": 0.69,
+"netto": 0.69,
+"penny": 0.69,
+"edeka": 0.76
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "schlagsahne",
+"name": "Schlagsahne 30 %",
+"pack": 200,
+"unit": "ml",
+"match": "schlagsahne",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "roestzwiebeln",
+"name": "Röstzwiebeln",
+"pack": 150,
+"unit": "g",
+"match": "röstzwiebel",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.49,
+"lidl": 1.19,
+"aldi": 1.19,
+"kaufland": 1.19,
+"netto": 1.19,
+"penny": 1.19,
+"edeka": 1.31
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "puddingpulver",
+"name": "Puddingpulver",
+"pack": 3,
+"unit": "Stück",
+"match": "puddingpulver",
+"piece": 37,
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 0.86,
+"lidl": 0.69,
+"aldi": 0.69,
+"kaufland": 0.69,
+"netto": 0.69,
+"penny": 0.69,
+"edeka": 0.76
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "hanfsamen",
+"name": "Hanfsamen (geschält)",
+"pack": 250,
+"unit": "g",
+"match": "hanfsamen",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 4.36,
+"lidl": 3.49,
+"aldi": 3.49,
+"kaufland": 3.49,
+"netto": 3.49,
+"penny": 3.49,
+"edeka": 3.84
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "kuerbiskernoel",
+"name": "Kürbiskernöl",
+"pack": 250,
+"unit": "ml",
+"match": "kürbiskernöl",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 6.24,
+"lidl": 4.99,
+"aldi": 4.99,
+"kaufland": 4.99,
+"netto": 4.99,
+"penny": 4.99,
+"edeka": 5.49
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "schupfnudeln",
+"name": "Schupfnudeln (Kühlregal)",
+"pack": 500,
+"unit": "g",
+"match": "schupfnudel",
+"group": "Getreide & Nudeln",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "buttermilch",
+"name": "Buttermilch",
+"pack": 500,
+"unit": "ml",
+"match": "buttermilch",
+"group": "Milchprodukte & Eier",
+"prices": {
+"rewe": 0.86,
+"lidl": 0.69,
+"aldi": 0.69,
+"kaufland": 0.69,
+"netto": 0.69,
+"penny": 0.69,
+"edeka": 0.76
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
 "id": "sojajoghurt",
 "name": "Sojajoghurt natur",
 "pack": 500,
