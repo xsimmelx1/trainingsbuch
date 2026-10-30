@@ -3144,7 +3144,7 @@
     "120 ml Sojadrink (ungesüßt)",
     "1 EL Hefeflocken",
     "½ TL Backpulver",
-    "1 Pak Choi",
+    "150 g Pak Choi (1 kleiner Kopf)",
     "30 g Sprossen",
     "½ Avocado",
     "2 TL Rapsöl",
@@ -5941,7 +5941,7 @@
   "ingredients": [
    "8 Weizentortillas (à ca. 40 g)",
    "2 Dosen schwarze Bohnen (500 g abgetropft)",
-   "1 kleine Dose Mais (140 g abgetropft)",
+   "140 g Mais (1 kleine Dose, abgetropft)",
    "1 Zwiebel",
    "1 rote Paprika",
    "200 g Hüttenkäse",
@@ -6002,7 +6002,7 @@
    "ingredients": [
     "8 Weizentortillas (à ca. 40 g)",
     "2 Dosen schwarze Bohnen (500 g abgetropft)",
-    "1 kleine Dose Mais (140 g abgetropft)",
+    "140 g Mais (1 kleine Dose, abgetropft)",
     "1 Zwiebel",
     "1 rote Paprika",
     "240 g Gouda (gerieben; vegetarisch, auf mikrobielles Lab/V-Label achten)",
@@ -6189,8 +6189,8 @@
     ]
    }
   },
-  "short": "Gefüllte Paprika",
-  "sub": "mit Sojahack, Reis & Feta"
+  "short": "Sojahack-Paprika",
+  "sub": "mit Reis, Kidneybohnen & Feta"
  },
  {
   "name": "Black-Bean-Burger mit Ofenkartoffeln & Kräuterquark",
@@ -6626,7 +6626,7 @@
   "protein": 25,
   "carbs": 27,
   "fat": 19,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -6699,7 +6699,7 @@
   "protein": 34,
   "carbs": 70,
   "fat": 14,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -6831,7 +6831,7 @@
   "protein": 26,
   "carbs": 34,
   "fat": 20,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -6901,7 +6901,7 @@
   "protein": 44,
   "carbs": 82,
   "fat": 27,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -6970,7 +6970,7 @@
   "protein": 27,
   "carbs": 57,
   "fat": 11,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -7047,7 +7047,7 @@
   "protein": 29,
   "carbs": 89,
   "fat": 31,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -7326,7 +7326,7 @@
   "protein": 32,
   "carbs": 75,
   "fat": 25,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -7405,7 +7405,7 @@
   "protein": 31,
   "carbs": 68,
   "fat": 40,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -7495,7 +7495,7 @@
   "protein": 37,
   "carbs": 88,
   "fat": 30,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -7579,7 +7579,7 @@
   "protein": 31,
   "carbs": 26,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -7660,7 +7660,7 @@
   "protein": 31,
   "carbs": 47,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -7790,7 +7790,7 @@
   "protein": 32,
   "carbs": 30,
   "fat": 23,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 50,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -7869,7 +7869,7 @@
   "protein": 31,
   "carbs": 76,
   "fat": 31,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -7942,7 +7942,7 @@
   "protein": 29,
   "carbs": 25,
   "fat": 31,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -8016,7 +8016,7 @@
   "protein": 21,
   "carbs": 48,
   "fat": 16,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 20,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -8087,7 +8087,7 @@
   "protein": 43,
   "carbs": 94,
   "fat": 25,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 55,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -8179,7 +8179,7 @@
   "protein": 40,
   "carbs": 92,
   "fat": 29,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -8305,7 +8305,7 @@
   "protein": 36,
   "carbs": 10,
   "fat": 30,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -8452,7 +8452,7 @@
   "protein": 33,
   "carbs": 77,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -8535,7 +8535,7 @@
   "protein": 41,
   "carbs": 56,
   "fat": 37,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -8610,7 +8610,7 @@
   "protein": 31,
   "carbs": 49,
   "fat": 18,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -8628,7 +8628,7 @@
    "20 g Koriander",
    "250 g Tofu natur",
    "400 ml Kokosmilch light",
-   "4 Pak Choi",
+   "600 g Pak Choi (4 kleine Köpfe)",
    "300 g rote Linsen (trocken)",
    "1 Knoblauchzehe"
   ],
@@ -8686,7 +8686,7 @@
   "protein": 30,
   "carbs": 69,
   "fat": 25,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -8746,8 +8746,8 @@
     }
    ]
   },
-  "short": "Rote-Linsen-Salat",
-  "sub": "mit Feta, Mango & Cashews"
+  "short": "Mango-Feta-Linsensalat",
+  "sub": "aus roten Linsen, mit Cashews"
  },
  {
   "name": "Gebratene Quarkklöße mit Salat & Radieschen",
@@ -8833,7 +8833,7 @@
   "protein": 27,
   "carbs": 79,
   "fat": 17,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -8904,10 +8904,10 @@
   "name": "Falafel in orientalischer Linsensuppe mit Skyr",
   "category": "abend",
   "servings": 4,
-  "kcal": 470,
-  "protein": 24,
-  "carbs": 48,
-  "fat": 17,
+  "kcal": 571,
+  "protein": 33,
+  "carbs": 62,
+  "fat": 18,
   "estimated": true,
   "timeMin": 30,
   "activeMin": 20,
@@ -8923,22 +8923,22 @@
    "1 Prise Kreuzkümmel",
    "3 EL Rapsöl",
    "400 ml Gemüsebrühe",
-   "400 ml Wasser",
+   "600 ml Wasser",
    "10 g Koriander",
    "400 g passierte Tomaten",
-   "200 g rote Linsen (trocken)",
+   "300 g rote Linsen (trocken)",
    "3 Knoblauchzehen",
    "250 g Falafel (Kühlregal)",
-   "200 g Skyr natur"
+   "300 g Skyr natur"
   ],
   "steps": [
    "Ofen auf 180 °C vorheizen und die Falafel ca. 10 Min. aufbacken.",
    "Zwiebeln und Knoblauch hacken und im Öl 3 Min. anbraten, Linsen 3 Min. mitrösten.",
-   "Brühe, passierte Tomaten und 400 ml Wasser zugeben und ca. 15 Min. köcheln, dann mit Kreuzkümmel, Zitronensaft, Zucker, Salz und Pfeffer abschmecken (nach Wunsch pürieren).",
+   "Brühe, passierte Tomaten und 600 ml Wasser zugeben und ca. 15 Min. köcheln, dann mit Kreuzkümmel, Zitronensaft, Zucker, Salz und Pfeffer abschmecken (nach Wunsch pürieren).",
    "Skyr mit etwas Zitronensaft und Salz verrühren; Suppe mit Falafel, einem Klecks Skyr und Koriander servieren. Falafel separat aufbewahren."
   ],
   "source": "https://rezepte.lidl.de/rezepte/falafel-in-orientalischer-linsensuppe",
-  "note": "Angepasst: Skyr-Topping statt veganem Frischkäse und Sojajoghurt in der Suppe, dazu 400 ml Wasser mehr (Kochzeit ca. 15 statt 10 Min.).",
+  "note": "Angepasst: Skyr-Topping statt veganem Frischkäse und Sojajoghurt, 300 statt 200 g Linsen und dafür 600 ml Wasser mehr (Kochzeit ca. 15 statt 10 Min.).",
   "img": "img/rezepte/x-093.jpg",
   "imgCredit": {
    "artist": "jules",
@@ -8964,7 +8964,7 @@
      "min": 6
     },
     {
-     "do": "Brühe, passierte Tomaten und 400 ml Wasser zugeben und ca. 15 Min. köcheln lassen.",
+     "do": "Brühe, passierte Tomaten und 600 ml Wasser zugeben und ca. 15 Min. köcheln lassen.",
      "min": 15,
      "passive": true,
      "meanwhile": "Falafel in den Ofen schieben und ca. 10 Min. aufbacken. Skyr mit etwas Zitronensaft und Salz verrühren, Koriander hacken."
@@ -9043,7 +9043,7 @@
   "protein": 27,
   "carbs": 22,
   "fat": 41,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -9119,7 +9119,7 @@
   "protein": 26,
   "carbs": 42,
   "fat": 23,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -9189,7 +9189,7 @@
   "protein": 25,
   "carbs": 45,
   "fat": 22,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -9268,7 +9268,7 @@
   "protein": 32,
   "carbs": 54,
   "fat": 22,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -9282,7 +9282,7 @@
    "1 EL Agavendicksaft",
    "3 EL Sesamöl",
    "400 g Tofu natur",
-   "2 Pak Choi",
+   "300 g Pak Choi (2 kleine Köpfe)",
    "2 EL helle Misopaste",
    "2 Knoblauchzehen",
    "200 g Mie-Nudeln",
@@ -9348,7 +9348,7 @@
     "1 EL Agavendicksaft",
     "3 EL Sesamöl",
     "400 g Tofu natur",
-    "2 Pak Choi",
+    "300 g Pak Choi (2 kleine Köpfe)",
     "2 EL helle Misopaste",
     "2 Knoblauchzehen",
     "200 g Mie-Nudeln",
@@ -9405,7 +9405,7 @@
   "protein": 31,
   "carbs": 50,
   "fat": 1,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -9489,7 +9489,7 @@
   "protein": 28,
   "carbs": 63,
   "fat": 10,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 10,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -9596,7 +9596,7 @@
   "protein": 31,
   "carbs": 64,
   "fat": 13,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -10031,7 +10031,7 @@
   "protein": 37,
   "carbs": 74,
   "fat": 25,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 60,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -10052,7 +10052,7 @@
    "125 g Cherrytomaten",
    "½ Salatgurke",
    "2 Frühlingszwiebeln",
-   "1 Römersalatherz",
+   "150 g Römersalatherz (1 Stück)",
    "150 g Skyr natur"
   ],
   "steps": [
@@ -10117,7 +10117,7 @@
     "125 g Cherrytomaten",
     "½ Salatgurke",
     "2 Frühlingszwiebeln",
-    "1 Römersalatherz",
+    "150 g Römersalatherz (1 Stück)",
     "150 g Sojajoghurt natur"
    ],
    "kcal": 684,
@@ -10168,7 +10168,7 @@
   "protein": 30,
   "carbs": 60,
   "fat": 23,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -10243,7 +10243,7 @@
   "protein": 29,
   "carbs": 39,
   "fat": 11,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -10324,7 +10324,7 @@
   "protein": 27,
   "carbs": 50,
   "fat": 32,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -10402,7 +10402,7 @@
   "protein": 25,
   "carbs": 39,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 60,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -10552,7 +10552,7 @@
   "protein": 29,
   "carbs": 41,
   "fat": 18,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -10651,7 +10651,7 @@
   "protein": 44,
   "carbs": 90,
   "fat": 32,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "mittel",
@@ -10731,7 +10731,7 @@
   "protein": 40,
   "carbs": 33,
   "fat": 37,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 15,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -10798,7 +10798,7 @@
   "protein": 31,
   "carbs": 12,
   "fat": 14,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 10,
   "difficulty": "mittel",
@@ -10849,8 +10849,8 @@
     }
    ]
   },
-  "short": "Gefüllte Paprika",
-  "sub": "mit Kräuter-Hüttenkäse & Gouda"
+  "short": "Hüttenkäse-Paprika",
+  "sub": "mit Kräutern & Gouda überbacken"
  },
  {
   "name": "Gemüse-Frittata mit Hüttenkäse & Tomaten",
@@ -10860,7 +10860,7 @@
   "protein": 31,
   "carbs": 22,
   "fat": 28,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -11151,7 +11151,7 @@
   "protein": 38,
   "carbs": 107,
   "fat": 29,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -11225,7 +11225,7 @@
   "protein": 28,
   "carbs": 45,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -11301,7 +11301,7 @@
   "protein": 27,
   "carbs": 61,
   "fat": 9,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -11375,7 +11375,7 @@
   "protein": 33,
   "carbs": 86,
   "fat": 20,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 50,
   "activeMin": 25,
   "difficulty": "mittel",
@@ -11501,11 +11501,11 @@
   "name": "Thai-Curry mit Tofu, Kürbis & grünen Bohnen",
   "category": "abend",
   "servings": 4,
-  "kcal": 613,
-  "protein": 21,
-  "carbs": 82,
-  "fat": 23,
-  "estimated": false,
+  "kcal": 710,
+  "protein": 31,
+  "carbs": 83,
+  "fat": 29,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -11519,7 +11519,7 @@
    "1 Stück Lauch (Stange)",
    "2 Knoblauchzehen",
    "30 g Ingwer",
-   "300 g Tofu natur",
+   "600 g Tofu natur",
    "250 g Basmatireis",
    "Salz",
    "2 EL Rapsöl",
@@ -11533,13 +11533,13 @@
   ],
   "steps": [
    "Gemüse in mundgerechte Stücke schneiden, Knoblauch und Ingwer fein hacken, Tofu würfeln; Reis garen.",
-   "Tofu im Öl goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen.",
+   "Tofu im Öl portionsweise goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen.",
    "Knoblauch, Ingwer und Currypaste anrösten, Kürbis, Bohnen, Lauch, Paprika und Pilze zugeben und kurz mitbraten.",
    "Mit Kokosmilch und etwas Wasser ablöschen und ca. 10 Min. köcheln, Tofu zurückgeben und mit Limettensaft abschmecken.",
    "Mit Reis, Koriander und gehackten Erdnüssen servieren."
   ],
   "source": "https://www.rewe.de/rezepte/thai-curry/",
-  "note": "Angepasst: Kokosmilch light, Rapsöl statt Kokosöl, Gemüse angebraten und 10 Min. mitgeköchelt statt erst 5 Min. vor Ende zugegeben.",
+  "note": "Angepasst: doppelte Tofumenge, Kokosmilch light, Rapsöl statt Kokosöl, Gemüse angebraten und 10 Min. mitgeköchelt statt erst 5 Min. vor Ende zugegeben.",
   "img": "img/rezepte/x-124.jpg",
   "imgCredit": {
    "artist": "Ryan Snyder",
@@ -11561,7 +11561,7 @@
      "min": 15
     },
     {
-     "do": "Tofu im Öl goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen."
+     "do": "Tofu im Öl portionsweise goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen."
     },
     {
      "do": "Knoblauch, Ingwer und Currypaste in der Pfanne anrösten, Kürbis, Bohnen, Lauch, Paprika und Pilze zugeben und kurz mitbraten."
@@ -11578,16 +11578,75 @@
    ]
   },
   "short": "Thai-Curry",
-  "sub": "mit Tofu, Kürbis & grünen Bohnen"
+  "sub": "mit Tofu, Kürbis & grünen Bohnen",
+  "normal": {
+   "ingredients": [
+    "200 g TK-grüne Bohnen",
+    "300 g Hokkaido (frisch oder TK)",
+    "1 Paprika rot",
+    "250 g Champignons",
+    "1 Stück Lauch (Stange)",
+    "2 Knoblauchzehen",
+    "30 g Ingwer",
+    "300 g Tofu natur",
+    "250 g Basmatireis",
+    "Salz",
+    "2 EL Rapsöl",
+    "1 EL brauner Zucker",
+    "2 EL Sojasauce",
+    "2 EL rote Currypaste (vegetarisch, ohne Garnelenpaste)",
+    "400 ml Kokosmilch light",
+    "1 Limette",
+    "15 g Koriander",
+    "2 EL geröstete Erdnüsse"
+   ],
+   "kcal": 613,
+   "protein": 21,
+   "carbs": 82,
+   "fat": 23,
+   "note": "Fassung ohne Protein-Anpassung (300 g Tofu wie im Original; Kokosmilch light)",
+   "steps": [
+    "Gemüse in mundgerechte Stücke schneiden, Knoblauch und Ingwer fein hacken, Tofu würfeln; Reis garen.",
+    "Tofu im Öl goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen.",
+    "Knoblauch, Ingwer und Currypaste anrösten, Kürbis, Bohnen, Lauch, Paprika und Pilze zugeben und kurz mitbraten.",
+    "Mit Kokosmilch und etwas Wasser ablöschen und ca. 10 Min. köcheln, Tofu zurückgeben und mit Limettensaft abschmecken.",
+    "Mit Reis, Koriander und gehackten Erdnüssen servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Reis aufsetzen und ca. 15 Min. garen.",
+      "passive": true,
+      "meanwhile": "Gemüse in mundgerechte Stücke schneiden, Knoblauch und Ingwer fein hacken, Tofu würfeln.",
+      "min": 15
+     },
+     {
+      "do": "Tofu im Öl goldbraun braten, mit Zucker und Sojasauce glasieren und herausnehmen."
+     },
+     {
+      "do": "Knoblauch, Ingwer und Currypaste in der Pfanne anrösten, Kürbis, Bohnen, Lauch, Paprika und Pilze zugeben und kurz mitbraten."
+     },
+     {
+      "do": "Mit Kokosmilch und etwas Wasser ablöschen und ca. 10 Min. köcheln.",
+      "min": 10,
+      "passive": true,
+      "meanwhile": "Koriander zupfen, Erdnüsse hacken, Limette auspressen."
+     },
+     {
+      "do": "Tofu zurückgeben, mit Limettensaft abschmecken und mit Reis, Koriander und gehackten Erdnüssen servieren."
+     }
+    ]
+   }
+  }
  },
  {
   "name": "Pilzragout mit Räuchertofu, Paprika & Wildreis",
   "category": "abend",
   "servings": 4,
-  "kcal": 529,
-  "protein": 20,
-  "carbs": 93,
-  "fat": 10,
+  "kcal": 620,
+  "protein": 29,
+  "carbs": 94,
+  "fat": 16,
   "estimated": true,
   "timeMin": 50,
   "activeMin": 25,
@@ -11600,14 +11659,14 @@
    "Salz",
    "250 g braune Champignons",
    "250 g Shiitake (oder mehr Champignons)",
-   "185 g Räuchertofu",
+   "400 g Räuchertofu",
    "1 Zwiebel",
    "1 Knoblauchzehe",
    "1 Bund Petersilie",
    "4 Frühlingszwiebeln",
    "2 EL Rapsöl",
    "100 ml Gemüsebrühe",
-   "150 ml Hafer-Cuisine (oder Kochsahne)",
+   "150 ml Soja-Cuisine",
    "1 Prise Cayennepfeffer",
    "1 EL Zitronensaft",
    "1 Prise Zucker"
@@ -11619,7 +11678,7 @@
    "Mit Brühe und Cuisine ablöschen, Paprika zugeben, kurz einköcheln und mit Cayenne, Zitronensaft, Zucker und Salz abschmecken; mit Petersilie und Reis servieren."
   ],
   "source": "https://www.rewe.de/rezepte/veganes-pilzragout-raeuchertofu-wildreis/",
-  "note": "Wie im Original.",
+  "note": "Angepasst: 400 statt 185 g Räuchertofu, Soja- statt Hafer-Cuisine.",
   "img": "img/rezepte/x-125.jpg",
   "imgCredit": {
    "artist": "MartinThoma",
@@ -11659,7 +11718,63 @@
    ]
   },
   "short": "Pilzragout",
-  "sub": "mit Räuchertofu, Ofenpaprika & Wildreis"
+  "sub": "mit Räuchertofu, Ofenpaprika & Wildreis",
+  "normal": {
+   "ingredients": [
+    "4 Paprika rot",
+    "300 g Vollkorn-Wildreis-Mischung",
+    "Salz",
+    "250 g braune Champignons",
+    "250 g Shiitake (oder mehr Champignons)",
+    "185 g Räuchertofu",
+    "1 Zwiebel",
+    "1 Knoblauchzehe",
+    "1 Bund Petersilie",
+    "4 Frühlingszwiebeln",
+    "2 EL Rapsöl",
+    "100 ml Gemüsebrühe",
+    "150 ml Hafer-Cuisine (oder Kochsahne)",
+    "1 Prise Cayennepfeffer",
+    "1 EL Zitronensaft",
+    "1 Prise Zucker"
+   ],
+   "kcal": 529,
+   "protein": 20,
+   "carbs": 93,
+   "fat": 10,
+   "note": "Originalfassung (REWE), ohne Protein-Anpassung",
+   "steps": [
+    "Paprika im Ofen bei 220 °C (Ober-/Unterhitze) ca. 25 Min. rösten, bis die Haut Blasen wirft, einmal wenden; 10 Min. abgedeckt ausdampfen lassen, häuten, in Streifen schneiden. Reis garen.",
+    "Pilze in Scheiben, Tofu in Würfel schneiden; Zwiebel, Knoblauch und Frühlingszwiebeln hacken.",
+    "Tofu im Öl knusprig braten, Pilze, Zwiebel und Knoblauch zugeben und kräftig anbraten.",
+    "Mit Brühe und Cuisine ablöschen, Paprika zugeben, kurz einköcheln und mit Cayenne, Zitronensaft, Zucker und Salz abschmecken; mit Petersilie und Reis servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist. Ofen auf 220 °C (Ober-/Unterhitze) vorheizen. Reis aufsetzen und garen.",
+      "meanwhile": "Pilze in Scheiben, Tofu in Würfel schneiden; Zwiebel, Knoblauch und Frühlingszwiebeln hacken."
+     },
+     {
+      "do": "Paprika ganz auf ein Blech legen und ca. 25 Min. rösten, bis die Haut dunkle Blasen wirft, einmal wenden.",
+      "min": 25,
+      "passive": true,
+      "meanwhile": "Tofu im Öl knusprig braten, dann Pilze, Zwiebel, Knoblauch und Frühlingszwiebeln zugeben und kräftig anbraten. Petersilie hacken."
+     },
+     {
+      "do": "Paprika 10 Min. abgedeckt ausdampfen lassen, dann häuten und in Streifen schneiden.",
+      "min": 10,
+      "passive": true
+     },
+     {
+      "do": "Pilzpfanne mit Brühe und Cuisine ablöschen, Paprika zugeben, kurz einköcheln und mit Cayenne, Zitronensaft, Zucker und Salz abschmecken."
+     },
+     {
+      "do": "Mit Petersilie und Reis servieren."
+     }
+    ]
+   }
+  }
  },
  {
   "name": "Smashed Potatoes mit Zitronen-Kräuterquark",
@@ -11669,7 +11784,7 @@
   "protein": 28,
   "carbs": 93,
   "fat": 18,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 55,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -11741,7 +11856,7 @@
   "protein": 36,
   "carbs": 23,
   "fat": 32,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -11849,7 +11964,7 @@
   "protein": 25,
   "carbs": 65,
   "fat": 32,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 50,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -12001,7 +12116,7 @@
   "protein": 33,
   "carbs": 75,
   "fat": 28,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 20,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12073,7 +12188,7 @@
   "protein": 32,
   "carbs": 56,
   "fat": 41,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12148,7 +12263,7 @@
   "protein": 51,
   "carbs": 62,
   "fat": 14,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 45,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -12224,7 +12339,7 @@
   "protein": 33,
   "carbs": 82,
   "fat": 24,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 60,
   "activeMin": 20,
   "difficulty": "mittel",
@@ -12307,7 +12422,7 @@
   "protein": 30,
   "carbs": 76,
   "fat": 30,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12387,7 +12502,7 @@
   "protein": 31,
   "carbs": 52,
   "fat": 18,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 25,
   "activeMin": 25,
   "difficulty": "leicht",
@@ -12583,7 +12698,7 @@
   "protein": 35,
   "carbs": 60,
   "fat": 24,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -12716,7 +12831,7 @@
   "protein": 26,
   "carbs": 65,
   "fat": 17,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12792,7 +12907,7 @@
   "protein": 25,
   "carbs": 53,
   "fat": 24,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12864,7 +12979,7 @@
   "protein": 31,
   "carbs": 62,
   "fat": 23,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -12959,7 +13074,7 @@
   "protein": 40,
   "carbs": 114,
   "fat": 22,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 35,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -13042,7 +13157,7 @@
   "protein": 33,
   "carbs": 54,
   "fat": 29,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 15,
   "difficulty": "leicht",
@@ -13100,8 +13215,8 @@
     }
    ]
   },
-  "short": "Rote-Linsen-Salat",
-  "sub": "mit Camembert, Trauben & Walnüssen"
+  "short": "Camembert-Linsensalat",
+  "sub": "aus roten Linsen, mit Trauben & Walnüssen"
  },
  {
   "name": "Spaghetti-Auflauf mit Hüttenkäse & Tomaten",
@@ -13111,7 +13226,7 @@
   "protein": 36,
   "carbs": 94,
   "fat": 21,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 10,
   "difficulty": "leicht",
@@ -13179,10 +13294,10 @@
   "name": "Zucchini-Kichererbsen-Curry mit Reis",
   "category": "mittag",
   "servings": 2,
-  "kcal": 770,
-  "protein": 20,
-  "carbs": 123,
-  "fat": 17,
+  "kcal": 801,
+  "protein": 29,
+  "carbs": 118,
+  "fat": 18,
   "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
@@ -13190,16 +13305,17 @@
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
-   "150 g Reis",
+   "100 g Reis",
    "1 Schalotte",
    "1 Knoblauchzehe",
    "10 g Ingwer (ca. 2 cm)",
    "1 EL Rapsöl",
-   "2 Kartoffeln",
+   "1 Kartoffel",
    "2 Möhren",
    "1 Zucchini",
    "1 Dose Kichererbsen (240 g abgetropft)",
-   "200 ml Gemüsebrühe",
+   "100 g rote Linsen (trocken)",
+   "400 ml Gemüsebrühe",
    "200 ml Kokosmilch light",
    "3 EL Mangochutney",
    "2 EL Currypulver",
@@ -13210,12 +13326,12 @@
   ],
   "steps": [
    "Reis nach Packungsangabe garen.",
-   "Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen; Schalotte, Knoblauch und Ingwer hacken.",
-   "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
+   "Kartoffel, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen, Linsen abspülen; Schalotte, Knoblauch und Ingwer hacken.",
+   "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse, Kichererbsen und Linsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
    "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
   ],
   "source": "https://www.chefkoch.de/rezepte/2746431426709816/Zucchini-Kichererbsen-Curry.html",
-  "note": "Angepasst: Kokosmilch light statt normaler Kokosmilch.",
+  "note": "Angepasst: Kokosmilch light statt normaler Kokosmilch, 100 g rote Linsen im Curry, dafür weniger Reis und nur eine Kartoffel.",
   "img": "img/rezepte/x-144.jpg",
   "imgCredit": {
    "artist": "Deodora333",
@@ -13231,13 +13347,13 @@
   "plan": {
    "steps": [
     {
-     "do": "Zuerst: Reis waschen, bis das Wasser fast klar ist; Kichererbsen abspülen und abtropfen lassen. Kartoffeln, Möhren und Zucchini klein schneiden; Schalotte, Knoblauch und Ingwer hacken."
+     "do": "Zuerst: Reis waschen, bis das Wasser fast klar ist; Kichererbsen und Linsen abspülen und abtropfen lassen. Kartoffel, Möhren und Zucchini klein schneiden; Schalotte, Knoblauch und Ingwer hacken."
     },
     {
-     "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
+     "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse, Kichererbsen und Linsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
     },
     {
-     "do": "Ca. 20 Min. köcheln.",
+     "do": "Ca. 20 Min. köcheln, bis die Linsen weich sind.",
      "min": 20,
      "passive": true,
      "meanwhile": "Reis nach Packungsangabe garen."
@@ -13248,7 +13364,58 @@
    ]
   },
   "short": "Zucchini-Kichererbsen-Curry",
-  "sub": "mit Kartoffeln, Mangochutney & Reis"
+  "sub": "mit Kartoffeln, Mangochutney & Reis",
+  "normal": {
+   "ingredients": [
+    "150 g Reis",
+    "1 Schalotte",
+    "1 Knoblauchzehe",
+    "10 g Ingwer (ca. 2 cm)",
+    "1 EL Rapsöl",
+    "2 Kartoffeln",
+    "2 Möhren",
+    "1 Zucchini",
+    "1 Dose Kichererbsen (240 g abgetropft)",
+    "200 ml Gemüsebrühe",
+    "200 ml Kokosmilch light",
+    "3 EL Mangochutney",
+    "2 EL Currypulver",
+    "Salz",
+    "Pfeffer",
+    "Chili",
+    "Kurkuma"
+   ],
+   "kcal": 770,
+   "protein": 20,
+   "carbs": 123,
+   "fat": 17,
+   "note": "Fassung ohne Protein-Anpassung (Kokosmilch light), wie bisher",
+   "steps": [
+    "Reis nach Packungsangabe garen.",
+    "Kartoffeln, Möhren und Zucchini klein schneiden, Kichererbsen abtropfen; Schalotte, Knoblauch und Ingwer hacken.",
+    "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen und ca. 20 Min. köcheln.",
+    "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zuerst: Reis waschen, bis das Wasser fast klar ist; Kichererbsen abspülen und abtropfen lassen. Kartoffeln, Möhren und Zucchini klein schneiden; Schalotte, Knoblauch und Ingwer hacken."
+     },
+     {
+      "do": "Schalotte, Knoblauch und Ingwer im Öl andünsten, Currypulver und Kurkuma kurz mitrösten, Gemüse und Kichererbsen kurz mitdünsten, mit Brühe und Kokosmilch ablöschen."
+     },
+     {
+      "do": "Ca. 20 Min. köcheln.",
+      "min": 20,
+      "passive": true,
+      "meanwhile": "Reis nach Packungsangabe garen."
+     },
+     {
+      "do": "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
+     }
+    ]
+   }
+  }
  },
  {
   "name": "Mango-Linsensalat mit mariniertem Tofu",
@@ -13258,7 +13425,7 @@
   "protein": 28,
   "carbs": 45,
   "fat": 23,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 75,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -13359,7 +13526,7 @@
   "protein": 40,
   "carbs": 60,
   "fat": 26,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 30,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -13456,7 +13623,7 @@
   "protein": 34,
   "carbs": 53,
   "fat": 29,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 20,
   "difficulty": "mittel",
@@ -13552,7 +13719,7 @@
   "protein": 29,
   "carbs": 55,
   "fat": 28,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 55,
   "activeMin": 20,
   "difficulty": "leicht",
@@ -13628,7 +13795,7 @@
   "protein": 27,
   "carbs": 68,
   "fat": 29,
-  "estimated": false,
+  "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
   "difficulty": "mittel",
@@ -13793,10 +13960,10 @@
   "name": "Reis-Bowl mit Falafel, Kichererbsen-Hummus & Skyr-Dip",
   "category": "mittag",
   "servings": 4,
-  "kcal": 565,
-  "protein": 20,
-  "carbs": 66,
-  "fat": 21,
+  "kcal": 661,
+  "protein": 28,
+  "carbs": 76,
+  "fat": 23,
   "estimated": true,
   "timeMin": 40,
   "activeMin": 30,
@@ -13813,12 +13980,12 @@
    "2 EL gehackte Petersilie",
    "1 Paprika",
    "1 Möhre",
-   "240 g Kichererbsen (Dose, abgetropft)",
+   "480 g Kichererbsen (2 Dosen, abgetropft)",
    "Salz",
    "Pfeffer",
    "500 ml Gemüsebrühe",
    "1 EL Kürbiskerne",
-   "150 g Skyr natur",
+   "300 g Skyr natur",
    "1 Knoblauchzehe",
    "1 TL Senf",
    "½ TL Kreuzkümmel",
@@ -13829,12 +13996,12 @@
   ],
   "steps": [
    "Reis in der Brühe ca. 15 Min. garen, Butter und Mais unterrühren.",
-   "Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken.",
+   "Die Hälfte der Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken.",
    "Gurke, Paprika und Möhre schneiden, Tomaten halbieren; Falafel nach Packungsangabe erhitzen.",
-   "Skyr mit Senf, Ahornsirup, restlichem Zitronensaft und Petersilie verrühren; alles in Schalen anrichten und mit Sesam und Kürbiskernen bestreuen."
+   "Skyr mit Senf, Ahornsirup, restlichem Zitronensaft und Petersilie verrühren; alles in Schalen anrichten und mit übrigen Kichererbsen, Sesam und Kürbiskernen bestreuen."
   ],
   "source": "https://filiale.kaufland.de/rezepte/rezeptsuche/rezept.reis-bowl-hummus-falafel.r_id=Recipe_49519987.html",
-  "note": "Angepasst: Skyr statt Naturjoghurt als separater Dip (Gemüse nicht im Dressing mariniert), Sesam ungeröstet.",
+  "note": "Angepasst: doppelte Menge Skyr statt Naturjoghurt als separater Dip (Gemüse nicht im Dressing mariniert), zweite Dose Kichererbsen als Topping, Sesam ungeröstet.",
   "img": "img/rezepte/x-151.jpg",
   "imgCredit": {
    "artist": "Gerda Arendt",
@@ -13853,7 +14020,7 @@
     {
      "do": "Zuerst: Reis in einem Sieb waschen, bis das Wasser fast klar ist; Kichererbsen aus der Dose in einem Sieb abspülen und abtropfen lassen. Reis in der Brühe aufsetzen und ca. 15 Min. garen.",
      "passive": true,
-     "meanwhile": "Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken. Gurke, Paprika und Möhre schneiden, Tomaten halbieren.",
+     "meanwhile": "Die Hälfte der Kichererbsen mit Tahin, 3 TL Zitronensaft, Knoblauch und etwas Wasser fein pürieren und mit Salz, Pfeffer und Kreuzkümmel abschmecken. Gurke, Paprika und Möhre schneiden, Tomaten halbieren.",
      "min": 15
     },
     {
@@ -13864,7 +14031,7 @@
      "do": "Butter und Mais unter den fertigen Reis rühren."
     },
     {
-     "do": "Alles in Schalen anrichten und mit Sesam und Kürbiskernen bestreuen."
+     "do": "Alles in Schalen anrichten und mit übrigen Kichererbsen, Sesam und Kürbiskernen bestreuen."
     }
    ]
   },
@@ -18482,9 +18649,9 @@
   "name": "Porridge mit Banane, Zimt & Nüssen",
   "category": "fruehstueck",
   "servings": 1,
-  "kcal": 600,
-  "protein": 24,
-  "carbs": 67,
+  "kcal": 694,
+  "protein": 40,
+  "carbs": 73,
   "fat": 24,
   "estimated": true,
   "timeMin": 8,
@@ -18497,15 +18664,16 @@
    "300 ml Sojadrink natur (oder Haferdrink)",
    "1 Banane",
    "20 g Walnüsse (oder andere Nüsse)",
+   "150 g Skyr natur",
    "1 TL Zimt",
    "1 Prise Salz"
   ],
   "steps": [
    "Haferflocken mit dem Drink und einer Prise Salz aufkochen und 3–4 Min. unter Rühren köcheln, bis es cremig ist.",
    "Die Hälfte der Banane hineinzerdrücken, Zimt einrühren.",
-   "In eine Schale geben, mit der übrigen Banane in Scheiben und den grob gehackten Nüssen belegen."
+   "In eine Schale geben, Skyr daraufgeben und mit der übrigen Banane in Scheiben und den grob gehackten Nüssen belegen."
   ],
-  "note": "Angepasst: eigenes App-Rezept ohne Vorlage, mit Sojadrink statt Haferdrink rund 8 g mehr Protein.",
+  "note": "Angepasst: eigenes App-Rezept ohne Vorlage, mit Sojadrink statt Haferdrink und Skyr-Topping für mehr Protein.",
   "dev": [
    "herd"
   ],
@@ -18523,13 +18691,51 @@
      "do": "Die Hälfte der Banane hineinzerdrücken und den Zimt einrühren."
     },
     {
-     "do": "In eine Schale geben und mit der übrigen Banane in Scheiben und den gehackten Nüssen belegen."
+     "do": "In eine Schale geben, Skyr daraufgeben und mit der übrigen Banane in Scheiben und den gehackten Nüssen belegen."
     }
    ]
   },
   "shelfLife": "frisch essen",
   "short": "Porridge",
-  "sub": "mit Banane, Zimt & Nüssen"
+  "sub": "mit Banane, Zimt & Nüssen",
+  "normal": {
+   "ingredients": [
+    "70 g zarte Haferflocken",
+    "300 ml Sojadrink natur (oder Haferdrink)",
+    "1 Banane",
+    "20 g Walnüsse (oder andere Nüsse)",
+    "1 TL Zimt",
+    "1 Prise Salz"
+   ],
+   "kcal": 600,
+   "protein": 24,
+   "carbs": 67,
+   "fat": 24,
+   "note": "Ohne Skyr-Topping (bisherige Fassung)",
+   "steps": [
+    "Haferflocken mit dem Drink und einer Prise Salz aufkochen und 3–4 Min. unter Rühren köcheln, bis es cremig ist.",
+    "Die Hälfte der Banane hineinzerdrücken, Zimt einrühren.",
+    "In eine Schale geben, mit der übrigen Banane in Scheiben und den grob gehackten Nüssen belegen."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Haferflocken mit dem Drink und einer Prise Salz in einem Topf aufkochen.",
+      "meanwhile": "Nüsse grob hacken."
+     },
+     {
+      "do": "3–4 Min. unter Rühren köcheln, bis es cremig ist.",
+      "min": 4
+     },
+     {
+      "do": "Die Hälfte der Banane hineinzerdrücken und den Zimt einrühren."
+     },
+     {
+      "do": "In eine Schale geben und mit der übrigen Banane in Scheiben und den gehackten Nüssen belegen."
+     }
+    ]
+   }
+  }
  },
  {
   "name": "Blech-Gnocchi mit Kichererbsen, Paprika & Feta",
@@ -19134,7 +19340,7 @@
   "carbs": 118,
   "fat": 11,
   "estimated": true,
-  "timeMin": 60,
+  "timeMin": 65,
   "activeMin": 30,
   "mealPrep": true,
   "shelfLife": "4 Tage Kühlschrank",
@@ -19873,7 +20079,7 @@
   "normal": {
    "ingredients": [
     "240 g Reis (roh)",
-    "1,2 kg Blumenkohl",
+    "1,5 Stück Blumenkohl (ca. 1,2 kg)",
     "120 g Mehl",
     "60 g Maisstärke (Teig)",
     "240 ml Haferdrink",
@@ -20090,7 +20296,7 @@
    "2 EL Tomatenmark",
    "1 EL Zuckerrübensirup",
    "1 EL Öl",
-   "4 Pita-Brote (à ca. 80 g)",
+   "320 g Pita-Brote (4 Stück)",
    "½ Zitrone",
    "1 EL Öl (zum Braten)",
    "3 Tomaten",
@@ -20508,7 +20714,42 @@
    "protein": 25,
    "carbs": 113,
    "fat": 40,
-   "note": "Originalfassung (eat this!): halb so viel Tofu und Sojajoghurt, viel mehr Röstzwiebeln, Kokosöl."
+   "note": "Originalfassung (eat this!): halb so viel Tofu und Sojajoghurt, viel mehr Röstzwiebeln, Kokosöl.",
+   "steps": [
+    "Ofen auf 180 °C vorheizen. Reis waschen, in Salzwasser mit Zitronensaft und Kardamomkapseln ca. 6 Min. vorkochen (noch deutlich bissfest) und abgießen.",
+    "Zwiebel, Knoblauch und Ingwer hacken, Karotte und Kartoffeln klein würfeln, Tofu würfeln.",
+    "Kokosöl in einem ofenfesten Topf erhitzen, Tofu, Zwiebel, Knoblauch und Ingwer anbraten, Gewürze, Lorbeer und Tomatenmark kurz mitrösten.",
+    "Karotte, Kartoffeln, Kichererbsen und 150 ml Wasser zugeben und zugedeckt 10 Min. garen. Vom Herd nehmen, Sojajoghurt, Salz und die Hälfte der Röstzwiebeln unterrühren.",
+    "Reis darauf verteilen, Haferdrink mit Safran darüberträufeln, restliche Röstzwiebeln und Cashews daraufgeben und abgedeckt 25 Min. im Ofen garen.",
+    "Mit gehacktem Koriander und Minze bestreuen und servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Ofen auf 180 °C vorheizen. Reis waschen, in Salzwasser mit Zitronensaft und Kardamomkapseln ca. 6 Min. vorkochen (noch deutlich bissfest) und abgießen.",
+      "min": 10,
+      "meanwhile": "Zwiebel, Knoblauch und Ingwer hacken, Karotte und Kartoffeln klein würfeln, Tofu würfeln."
+     },
+     {
+      "do": "Kokosöl in einem ofenfesten Topf erhitzen, Tofu, Zwiebel, Knoblauch und Ingwer anbraten, Gewürze, Lorbeer und Tomatenmark kurz mitrösten.",
+      "min": 8
+     },
+     {
+      "do": "Karotte, Kartoffeln, Kichererbsen und 150 ml Wasser zugeben und zugedeckt 10 Min. garen. Vom Herd nehmen, Sojajoghurt, Salz und die Hälfte der Röstzwiebeln unterrühren.",
+      "min": 10,
+      "passive": true,
+      "meanwhile": "Kräuter hacken, Safran in den Haferdrink rühren."
+     },
+     {
+      "do": "Reis darauf verteilen, Haferdrink mit Safran darüberträufeln, restliche Röstzwiebeln und Cashews daraufgeben und abgedeckt 25 Min. im Ofen garen.",
+      "min": 25,
+      "passive": true
+     },
+     {
+      "do": "Mit gehacktem Koriander und Minze bestreuen und servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Biryani",
@@ -20537,7 +20778,7 @@
    "2 EL gehackte Petersilie",
    "1 EL Tahin",
    "½ Zitrone",
-   "2 Pita-Brote (à ca. 80 g)",
+   "160 g Pita-Brote (2 Stück)",
    "Salz",
    "Chiliflocken (oder Sambal)"
   ],
@@ -20581,7 +20822,7 @@
     "½ kleine Tomate",
     "1 EL Petersilie",
     "1 EL Frühlingszwiebel",
-    "2 Pita-Brote (à ca. 80 g)",
+    "160 g Pita-Brote (2 Stück)",
     "Salz",
     "Shatta (oder Chili)"
    ],
@@ -20589,7 +20830,28 @@
    "protein": 12,
    "carbs": 51,
    "fat": 9,
-   "note": "Originalfassung (FalasteeniFoodie), Menge für 2 von 4 Portionen; ohne Tahin und Zitrone, mit Pita."
+   "note": "Originalfassung (FalasteeniFoodie), Menge für 2 von 4 Portionen; ohne Tahin und Zitrone, mit Pita.",
+   "steps": [
+    "Bohnen mit ihrer Flüssigkeit und dem zerdrückten Knoblauch 3–4 Min. erhitzen, bis es blubbert.",
+    "Kreuzkümmel und Salz zugeben und alles mit einer Gabel grob zerdrücken.",
+    "Tomate fein würfeln. Ful anrichten und mit Tomate, Frühlingszwiebel, Petersilie, Olivenöl und Shatta toppen.",
+    "Mit warmer Pita servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Bohnen mit ihrer Flüssigkeit und dem zerdrückten Knoblauch 3–4 Min. erhitzen, bis es blubbert.",
+      "min": 4,
+      "meanwhile": "Tomate würfeln, Petersilie hacken, Pita erwärmen."
+     },
+     {
+      "do": "Kreuzkümmel und Salz zugeben und alles mit einer Gabel grob zerdrücken."
+     },
+     {
+      "do": "Anrichten, mit Tomate, Frühlingszwiebel, Petersilie, Öl und Shatta toppen und mit Pita servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Ful Medames",
@@ -20683,7 +20945,37 @@
    "protein": 18,
    "carbs": 50,
    "fat": 12,
-   "note": "Originalfassung (Indian Veggie Delight), Tofumenge für 2 von 3 Portionen; Brot wie in der Grundfassung."
+   "note": "Originalfassung (Indian Veggie Delight), Tofumenge für 2 von 3 Portionen; Brot wie in der Grundfassung.",
+   "steps": [
+    "Tofu gut ausdrücken und grob zerkrümeln. Zwiebel, Tomate, Paprika und Chilis fein würfeln.",
+    "Kreuzkümmelsamen im Öl kurz anrösten, dann Ingwer, Chilis und Zwiebel 3 Min. braten.",
+    "Tomate und Paprika 3–4 Min. weich braten, Kurkuma, Chilipulver und Garam Masala unterrühren.",
+    "Tofu zugeben, salzen und 4–5 Min. braten, mit Limettensaft und Koriander abschmecken.",
+    "Mit getoastetem Vollkornbrot servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Tofu gut ausdrücken und grob zerkrümeln. Zwiebel, Tomate, Paprika und Chilis fein würfeln."
+     },
+     {
+      "do": "Kreuzkümmelsamen im Öl kurz anrösten, dann Ingwer, Chilis und Zwiebel 3 Min. braten.",
+      "min": 3
+     },
+     {
+      "do": "Tomate und Paprika 3–4 Min. weich braten, Kurkuma, Chilipulver und Garam Masala unterrühren.",
+      "min": 4,
+      "meanwhile": "Brot toasten."
+     },
+     {
+      "do": "Tofu zugeben, salzen und 4–5 Min. braten, mit Limettensaft und Koriander abschmecken.",
+      "min": 5
+     },
+     {
+      "do": "Mit getoastetem Vollkornbrot servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Tofu Bhurji",
@@ -20748,7 +21040,7 @@
   "imgOrig": "https://assets.zuckerjagdwurst.com/cdn-cgi/image/width=1200,height=1200,quality=85,format=auto,fit=cover/assets/9ae98e23-a0c1-57f7-b001-1b49a4eff010/de/6b0c8f4e-80c2-521d-8a90-817caf4d8dcd.jpg",
   "normal": {
    "ingredients": [
-    "100 g Hafer-Porridge (Haferflocken)",
+    "100 g Haferflocken",
     "240 ml Haferdrink",
     "1 EL Chaipulver (vegan; oder 2 Beutel Chai-Tee)",
     "100 g Waldheidelbeeren (Glas)",
@@ -20882,7 +21174,36 @@
    "protein": 9,
    "carbs": 39,
    "fat": 11,
-   "note": "Originalfassung (Swasthi's Recipes) mit grünen Bohnen und Mais, ohne Edamame und Sojajoghurt."
+   "note": "Originalfassung (Swasthi's Recipes) mit grünen Bohnen und Mais, ohne Edamame und Sojajoghurt.",
+   "steps": [
+    "Zwiebel, Möhre und Tomate fein würfeln, grüne Bohnen klein schneiden, Knoblauch, Ingwer und Chili hacken.",
+    "Öl im Topf erhitzen, Kreuzkümmel kurz anrösten, Zwiebel, Ingwer, Knoblauch und Chili 2–3 Min. andünsten.",
+    "Möhre, Tomate, Bohnen, Erbsen und Mais zugeben, Kurkuma, Chilipulver und Garam Masala einrühren und 3 Min. mitbraten.",
+    "Haferflocken unterrühren, 800 ml Wasser und Salz zugeben und unter Rühren 4–5 Min. cremig köcheln.",
+    "Mit Zitronensaft und Koriander abschmecken und heiß servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zwiebel, Möhre und Tomate fein würfeln, grüne Bohnen klein schneiden, Knoblauch, Ingwer und Chili hacken."
+     },
+     {
+      "do": "Öl im Topf erhitzen, Kreuzkümmel kurz anrösten, Zwiebel, Ingwer, Knoblauch und Chili 2–3 Min. andünsten.",
+      "min": 3
+     },
+     {
+      "do": "Möhre, Tomate, Bohnen, Erbsen und Mais zugeben, Kurkuma, Chilipulver und Garam Masala einrühren und 3 Min. mitbraten.",
+      "min": 3
+     },
+     {
+      "do": "Haferflocken unterrühren, 800 ml Wasser und Salz zugeben und unter Rühren 4–5 Min. cremig köcheln.",
+      "min": 5
+     },
+     {
+      "do": "Mit Zitronensaft und Koriander abschmecken und heiß servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Masala Oats",
@@ -21027,7 +21348,7 @@
    "1 Möhre",
    "1 Paprika",
    "3 Frühlingszwiebeln",
-   "½ Römersalat",
+   "150 g Römersalat (½ Kopf)",
    "10 g Minze",
    "10 g Koriander",
    "10 g Thai-Basilikum (oder Basilikum)",
@@ -21082,7 +21403,7 @@
     "1 Karotte",
     "1 Paprika (rot)",
     "3 Frühlingszwiebeln",
-    "½ Römersalat (oder Eisbergsalat)",
+    "150 g Römersalat (½ Kopf; oder Eisbergsalat)",
     "10 g Thai-Basilikum",
     "10 g Koriander",
     "10 g Minze",
@@ -21233,7 +21554,23 @@
     "Bohnen, Aquafaba, Tomaten, Wasser, Miso und Gewürze zugeben und 15 Min. köcheln, einen Teil der Bohnen zerdrücken.",
     "Nudeln im Eintopf garen, Endivie in Streifen schneiden und zum Schluss unterziehen.",
     "Mit Salz und Tabasco abschmecken."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zwiebel, Karotte und Sellerie klein würfeln, Knoblauch hacken und im Öl 8 Min. dünsten, Tomatenmark kurz mitrösten."
+     },
+     {
+      "do": "Bohnen, Aquafaba, Tomaten, Wasser, Miso und Gewürze zugeben und 15 Min. köcheln, einen Teil der Bohnen zerdrücken."
+     },
+     {
+      "do": "Nudeln im Eintopf garen, Endivie in Streifen schneiden und zum Schluss unterziehen."
+     },
+     {
+      "do": "Mit Salz und Tabasco abschmecken."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Pasta e fagioli",
@@ -21314,7 +21651,7 @@
     "2 EL Olivenöl",
     "250 g getrocknete grüne Schälerbsen",
     "1250 ml Gemüsebrühe",
-    "2 vegane Wiener Würstchen",
+    "100 g vegane Wiener Würstchen (2 Stück)",
     "2 EL rote Zwiebel-Pickles",
     "15 g Petersilie",
     "Liquid Smoke (5–6 Tropfen)"
@@ -21329,7 +21666,23 @@
     "Schälerbsen und Brühe zugeben und ca. 45 Min. weich köcheln.",
     "Würstchen in Scheiben schneiden und anbraten.",
     "Suppe grob pürieren, mit Liquid Smoke würzen und mit Würstchen, Zwiebel-Pickles und Petersilie servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Kartoffeln, Zwiebel und Karotte würfeln und im Öl anschwitzen."
+     },
+     {
+      "do": "Schälerbsen und Brühe zugeben und ca. 45 Min. weich köcheln."
+     },
+     {
+      "do": "Würstchen in Scheiben schneiden und anbraten."
+     },
+     {
+      "do": "Suppe grob pürieren, mit Liquid Smoke würzen und mit Würstchen, Zwiebel-Pickles und Petersilie servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Rauchige Erbsensuppe",
@@ -21344,14 +21697,14 @@
   "carbs": 86,
   "fat": 24,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 35,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
    "125 g Naturreis",
-   "1 Romana-Salatherz",
+   "150 g Romana-Salatherz (1 Stück)",
    "1 Dose Kidneybohnen (240 g)",
    "90 g Mais (Dose)",
    "150 g Cherrytomaten",
@@ -21403,7 +21756,7 @@
   "normal": {
    "ingredients": [
     "125 g Naturreis",
-    "1 Romana-Salatherz",
+    "150 g Romana-Salatherz (1 Stück)",
     "90 g Kidneybohnen",
     "90 g Mais (Dose)",
     "150 g Cherrytomaten",
@@ -21427,7 +21780,23 @@
     "Paprika in Streifen schneiden und im Öl braten.",
     "Bohnen, Mais, Tomaten, Zwiebel, Salat und Avocado vorbereiten.",
     "Alles in Schalen anrichten, mit Mayo, Sesam, Kräutern, Chili und Limette servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Reis garen."
+     },
+     {
+      "do": "Paprika in Streifen schneiden und im Öl braten."
+     },
+     {
+      "do": "Bohnen, Mais, Tomaten, Zwiebel, Salat und Avocado vorbereiten."
+     },
+     {
+      "do": "Alles in Schalen anrichten, mit Mayo, Sesam, Kräutern, Chili und Limette servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Räuchertofu-Burrito-Bowl",
@@ -21442,14 +21811,14 @@
   "carbs": 53,
   "fat": 20,
   "estimated": true,
-  "timeMin": 40,
+  "timeMin": 55,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
   "shelfLife": "3 Tage Kühlschrank",
   "ingredients": [
    "1 kg Kartoffeln (festkochend)",
-   "4 Essiggurken",
+   "200 g Essiggurken (4 Stück)",
    "10 Radieschen",
    "2 EL vegane Mayonnaise",
    "250 g Sojajoghurt (ungesüßt)",
@@ -21505,7 +21874,7 @@
   "normal": {
    "ingredients": [
     "1 kg Kartoffeln (festkochend)",
-    "4 Essiggurken",
+    "200 g Essiggurken (4 Stück)",
     "10 Radieschen",
     "5 EL vegane Mayonnaise",
     "2 EL Gurkenwasser",
@@ -21526,7 +21895,23 @@
     "Mayo mit Gurkenwasser, Senf und Gewürzen verrühren.",
     "Gurken, Radieschen, Frühlingszwiebeln und Petersilie schneiden.",
     "Alles mischen und durchziehen lassen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Kartoffeln kochen, pellen und in Scheiben schneiden."
+     },
+     {
+      "do": "Mayo mit Gurkenwasser, Senf und Gewürzen verrühren."
+     },
+     {
+      "do": "Gurken, Radieschen, Frühlingszwiebeln und Petersilie schneiden."
+     },
+     {
+      "do": "Alles mischen und durchziehen lassen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Cremiger Kartoffelsalat",
@@ -21626,7 +22011,23 @@
     "Mais kurz im Öl anrösten.",
     "Sojajoghurt mit Limette, Agave, Adobo-Sauce, Knoblauch, Paprika und Salz verrühren.",
     "Nudeln, Bohnen, Gemüse und Dressing mischen, die Hirtenblock-Alternative darüberbröseln."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Nudeln kochen und abschrecken."
+     },
+     {
+      "do": "Mais kurz im Öl anrösten."
+     },
+     {
+      "do": "Sojajoghurt mit Limette, Agave, Adobo-Sauce, Knoblauch, Paprika und Salz verrühren."
+     },
+     {
+      "do": "Nudeln, Bohnen, Gemüse und Dressing mischen, die Hirtenblock-Alternative darüberbröseln."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Mexikanischer Nudelsalat",
@@ -21657,7 +22058,7 @@
    "1000 ml Gemüsebrühe",
    "300 g Sauerkraut (abgetropft)",
    "100 g Sojajoghurt (ungesüßt)",
-   "2 Essiggurken",
+   "100 g Essiggurken (2 Stück)",
    "1 kg Kartoffeln",
    "4 TL Paprikapulver (edelsüß)",
    "2 TL Kümmel",
@@ -21718,7 +22119,7 @@
     "800 ml Gemüsebrühe",
     "300 g Sauerkraut (abgetropft)",
     "2 EL vegane Sauerrahm-Alternative (Hafer)",
-    "2 Essiggurken",
+    "100 g Essiggurken (2 Stück)",
     "1 kg Kartoffeln",
     "4 TL Paprikapulver (edelsüß)",
     "2 TL Kümmel",
@@ -21730,7 +22131,40 @@
    "protein": 33,
    "carbs": 56,
    "fat": 13,
-   "note": "Originalmengen (100 g Räuchertofu, 170 g Sojaschnetzel, vegane Sauerrahm-Alternative), Kartoffeln als Beilage, ohne Protein-Anpassung"
+   "note": "Originalmengen (100 g Räuchertofu, 170 g Sojaschnetzel, vegane Sauerrahm-Alternative), Kartoffeln als Beilage, ohne Protein-Anpassung",
+   "steps": [
+    "Sojaschnetzel 10 Min. in ca. 400 ml der heißen Brühe einweichen, dann gut ausdrücken; die Brühe auffangen.",
+    "Zwiebel und Räuchertofu würfeln, im Öl 5 Min. braten, Schnetzel dazugeben und 5 Min. kräftig anbraten.",
+    "Knoblauch, Tomatenmark, Kümmel und Paprikapulver kurz mitrösten, Mehl darüberstäuben und mit der gesamten Brühe ablöschen.",
+    "Sauerkraut und Lorbeer zugeben und 25–30 Min. zugedeckt schmoren. Inzwischen Kartoffeln schälen und in Salzwasser gar kochen.",
+    "Gulasch mit Salz, Pfeffer und gewürfelten Essiggurken abschmecken, mit veganer Sauerrahm-Alternative und Kartoffeln servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Sojaschnetzel 10 Min. in ca. 400 ml der heißen Brühe einweichen, dann gut ausdrücken; die Brühe auffangen.",
+      "min": 10,
+      "passive": true,
+      "meanwhile": "Zwiebel und Räuchertofu würfeln, Knoblauch hacken."
+     },
+     {
+      "do": "Zwiebel und Räuchertofu 5 Min. braten, Schnetzel 5 Min. mitbraten.",
+      "min": 10
+     },
+     {
+      "do": "Knoblauch, Tomatenmark, Kümmel und Paprikapulver kurz mitrösten, Mehl darüberstäuben und mit der gesamten Brühe ablöschen."
+     },
+     {
+      "do": "Sauerkraut und Lorbeer zugeben und zugedeckt schmoren.",
+      "min": 30,
+      "passive": true,
+      "meanwhile": "Kartoffeln schälen und in Salzwasser gar kochen, Essiggurken würfeln."
+     },
+     {
+      "do": "Gulasch mit Salz, Pfeffer und gewürfelten Essiggurken abschmecken, mit veganer Sauerrahm-Alternative und Kartoffeln servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Szegediner Gulasch",
@@ -21931,7 +22365,23 @@
     "Bohnen, Mais, Reis, gestückelte Tomaten und Gewürze zugeben und einköcheln.",
     "Tortillas füllen, aufrollen, in eine Form mit Tomatensoße legen, mit restlicher Soße und Reibeware bedecken.",
     "20 Min. backen und mit Frühlingszwiebeln, Koriander, Jalapeños und Limette servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Ofen auf 200 °C vorheizen. Zwiebeln, Knoblauch, Möhre und Paprika würfeln und im Öl braten."
+     },
+     {
+      "do": "Bohnen, Mais, Reis, gestückelte Tomaten und Gewürze zugeben und einköcheln."
+     },
+     {
+      "do": "Tortillas füllen, aufrollen, in eine Form mit Tomatensoße legen, mit restlicher Soße und Reibeware bedecken."
+     },
+     {
+      "do": "20 Min. backen und mit Frühlingszwiebeln, Koriander, Jalapeños und Limette servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Ofen-Enchiladas",
@@ -22033,7 +22483,23 @@
     "Nudeln kochen, Brokkoli mitgaren.",
     "Gemüse, Cashews, Hefeflocken, Zitrone, Senf, Kurkuma, Öl, Salz, Stärke und Haferdrink cremig mixen und kurz aufkochen.",
     "Mit Nudeln und Brokkoli mischen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Cashews einweichen. Kartoffel und Karotte mit Knoblauch weich kochen."
+     },
+     {
+      "do": "Nudeln kochen, Brokkoli mitgaren."
+     },
+     {
+      "do": "Gemüse, Cashews, Hefeflocken, Zitrone, Senf, Kurkuma, Öl, Salz, Stärke und Haferdrink cremig mixen und kurz aufkochen."
+     },
+     {
+      "do": "Mit Nudeln und Brokkoli mischen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Mac & Cheese",
@@ -22135,7 +22601,23 @@
     "Auberginen in Öl goldbraun braten.",
     "Zwiebel, Knoblauch, Tomatenmark und Chili anschwitzen, Tomaten und Agave zugeben und köcheln; Rigatoni kochen.",
     "Alles mischen und mit Mandel-Frischcreme und Basilikum servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Aubergine würfeln, salzen und ziehen lassen, trocken tupfen und mit Stärke bestäuben."
+     },
+     {
+      "do": "Auberginen in Öl goldbraun braten."
+     },
+     {
+      "do": "Zwiebel, Knoblauch, Tomatenmark und Chili anschwitzen, Tomaten und Agave zugeben und köcheln; Rigatoni kochen."
+     },
+     {
+      "do": "Alles mischen und mit Mandel-Frischcreme und Basilikum servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Pasta alla Norma",
@@ -22252,7 +22734,23 @@
     "Bohnen pürieren, mit allen Bällchen-Zutaten mischen, Bällchen formen und bei 200 °C ca. 25 Min. backen.",
     "Tomatensoße kochen, Spaghetti garen.",
     "Bällchen in die Soße geben und mit Spaghetti servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Pilze mit Zwiebel und Knoblauch braten, Walnüsse und Haferflocken zerkleinern."
+     },
+     {
+      "do": "Bohnen pürieren, mit allen Bällchen-Zutaten mischen, Bällchen formen und bei 200 °C ca. 25 Min. backen."
+     },
+     {
+      "do": "Tomatensoße kochen, Spaghetti garen."
+     },
+     {
+      "do": "Bällchen in die Soße geben und mit Spaghetti servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Bohnen-Soja-Bällchen",
@@ -22289,7 +22787,8 @@
    "250 g Reis",
    "2 Lorbeerblätter",
    "½ TL Muskatblüte",
-   "Salz, Pfeffer (weiß)"
+   "Salz",
+   "Pfeffer (weiß)"
   ],
   "steps": [
    "Reis nach Packungsangabe garen.",
@@ -22351,14 +22850,50 @@
     "250 g Reis",
     "2 Lorbeerblätter",
     "½ TL Muskatblüte",
-    "Salz, Pfeffer (weiß)",
+    "Salz",
+    "Pfeffer (weiß)",
     "Zitronenschale"
    ],
    "kcal": 604,
    "protein": 34,
    "carbs": 71,
    "fat": 17,
-   "note": "Originalmengen (400 g Seitan, Hafersahne, 2 EL vegane Margarine, wenig Erbsen) mit Reis, ohne Protein-Anpassung"
+   "note": "Originalmengen (400 g Seitan, Hafersahne, 2 EL vegane Margarine, wenig Erbsen) mit Reis, ohne Protein-Anpassung",
+   "steps": [
+    "Reis nach Packungsangabe garen.",
+    "Seitan in mundgerechte Stücke zupfen oder schneiden, in einer Pfanne goldbraun anbraten und herausnehmen.",
+    "Zwiebel und Karotte fein würfeln, Champignons vierteln. Margarine im Topf schmelzen und das Gemüse darin 5 Min. dünsten.",
+    "Mehl darüberstäuben, kurz anschwitzen, mit Weißwein ablöschen, dann Brühe und Hafersahne einrühren. Lorbeer, Muskatblüte, Zitronenschale, Salz und Pfeffer zugeben und 10 Min. köcheln.",
+    "Erbsen, Seitan und Kapern 5 Min. darin ziehen lassen. Mit Zitronensaft abschmecken, Lorbeer und Schale entfernen, mit Petersilie und Reis servieren."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Reis aufsetzen.",
+      "min": 20,
+      "passive": true,
+      "meanwhile": "Seitan zerkleinern und goldbraun anbraten, herausnehmen. Zwiebel und Karotte würfeln, Champignons vierteln."
+     },
+     {
+      "do": "Margarine im Topf schmelzen, Gemüse 5 Min. dünsten.",
+      "min": 5
+     },
+     {
+      "do": "Mehl anschwitzen, mit Wein ablöschen, Brühe und Hafersahne einrühren, würzen und 10 Min. köcheln.",
+      "min": 10,
+      "passive": true,
+      "meanwhile": "Petersilie hacken."
+     },
+     {
+      "do": "Erbsen, Seitan und Kapern 5 Min. ziehen lassen.",
+      "min": 5,
+      "passive": true
+     },
+     {
+      "do": "Mit Zitronensaft abschmecken, Lorbeer und Schale entfernen, mit Petersilie und Reis servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Seitan-Frikassee",
@@ -22400,7 +22935,7 @@
    "Sojajoghurt, Mayonnaise, Senf, Gurkenwasser, Kurkuma, Kala Namak, Pfeffer und Dill glatt rühren.",
    "Frühlingszwiebeln in Ringe schneiden, Cornichons und Paprika fein würfeln, Erbsen auftauen lassen.",
    "Tofu, Gemüse und Erbsen mit der Creme mischen und abschmecken.",
-   "Erst vor dem Essen Tortillas kurz in der Pfanne erwärmen, mit Salat und Kresse füllen und einrollen."
+   "Erst vor dem Essen Tortillas kurz in der Pfanne erwärmen, mit dem Tofusalat und Kresse füllen und einrollen."
   ],
   "source": "https://biancazapatka.com/de/veganer-eiersalat-fruehstuecks-wraps/",
   "note": "Angepasst: mehr Tofu und Erbsen, Creme überwiegend aus Sojajoghurt statt veganer Mayo, ohne veganen Reibekäse.",
@@ -22419,7 +22954,7 @@
      "do": "Alles mischen und abschmecken (für Meal Prep den Salat in einer Box aufbewahren)."
     },
     {
-     "do": "Tortillas kurz erwärmen, mit Salat und Kresse füllen und einrollen.",
+     "do": "Tortillas kurz erwärmen, mit dem Tofusalat und Kresse füllen und einrollen.",
      "min": 2
     }
    ]
@@ -22446,7 +22981,32 @@
    "protein": 21,
    "carbs": 40,
    "fat": 29,
-   "note": "Originalfassung (400 g Tofu, 100 g vegane Mayo, 150 g Erbsen), ohne Protein-Anpassung"
+   "note": "Originalfassung (400 g Tofu, 100 g vegane Mayo, 150 g Erbsen), ohne Protein-Anpassung",
+   "steps": [
+    "Tofu gut abtropfen lassen und mit einer Gabel grob zerdrücken, sodass Stücke wie gehacktes Ei bleiben.",
+    "Mayonnaise, Senf, Gurkenwasser, Kurkuma, Kala Namak, Pfeffer und Dill glatt rühren.",
+    "Frühlingszwiebeln in Ringe schneiden, Cornichons und Paprika fein würfeln, Erbsen auftauen lassen.",
+    "Tofu, Gemüse und Erbsen mit der Mayo-Creme mischen und abschmecken.",
+    "Erst vor dem Essen Tortillas kurz in der Pfanne erwärmen, mit dem Tofusalat und Kresse füllen und einrollen."
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Erbsen auftauen lassen, Tofu abtropfen lassen und grob zerdrücken."
+     },
+     {
+      "do": "Creme aus Mayo, Senf, Gurkenwasser, Kurkuma, Kala Namak, Pfeffer und Dill rühren.",
+      "meanwhile": "Frühlingszwiebeln, Cornichons und Paprika klein schneiden."
+     },
+     {
+      "do": "Alles mischen und abschmecken."
+     },
+     {
+      "do": "Tortillas kurz erwärmen, mit Tofusalat und Kresse füllen und einrollen.",
+      "min": 2
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Tofu-Eiersalat-Wraps",
@@ -22536,7 +23096,23 @@
     "Banane zerdrücken und mit Pflanzendrink, Vanille und Zimt verrühren, Haferflocken und Backpulver unterrühren.",
     "In eine Form füllen, Blaubeeren und Mandeln darauf verteilen, mit Zucker bestreuen.",
     "25 Min. backen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Ofen auf 180 °C vorheizen."
+     },
+     {
+      "do": "Banane zerdrücken und mit Pflanzendrink, Vanille und Zimt verrühren, Haferflocken und Backpulver unterrühren."
+     },
+     {
+      "do": "In eine Form füllen, Blaubeeren und Mandeln darauf verteilen, mit Zucker bestreuen."
+     },
+     {
+      "do": "25 Min. backen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Baked Oats",
@@ -22616,7 +23192,9 @@
     "1 TL Backpulver",
     "3 EL Hefeflocken",
     "360 ml Pflanzendrink (ungesüßt)",
-    "400 g Gemüse (nach Wahl, z. B. Paprika, Zucchini, Spinat)",
+    "1 Paprika",
+    "1 Zucchini",
+    "2 Handvoll Spinat",
     "1 TL Knoblauchpulver",
     "1 TL italienische Kräuter",
     "1 TL Kala Namak",
@@ -22631,9 +23209,25 @@
    "steps": [
     "Ofen auf 180 °C vorheizen.",
     "Trockene Zutaten mischen, Pflanzendrink einrühren.",
-    "Gemüse klein schneiden und unterheben.",
+    "Paprika und Zucchini klein würfeln, Spinat hacken und alles unterheben.",
     "In 12 Muffinmulden füllen und 25–30 Min. backen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Ofen auf 180 °C vorheizen."
+     },
+     {
+      "do": "Trockene Zutaten mischen, Pflanzendrink einrühren."
+     },
+     {
+      "do": "Gemüse klein schneiden und unterheben."
+     },
+     {
+      "do": "In 12 Muffinmulden füllen und 25–30 Min. backen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Kichererbsen-Muffins",
@@ -22721,7 +23315,20 @@
     "Mehl, Backpulver, Salz und Zimt mischen, Pflanzendrink, Mineralwasser und Ahornsirup kurz unterrühren.",
     "In Kokosöl kleine Pancakes backen.",
     "Mit Nussmus, Ahornsirup, Beeren und Kokosraspeln servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Mehl, Backpulver, Salz und Zimt mischen, Pflanzendrink, Mineralwasser und Ahornsirup kurz unterrühren."
+     },
+     {
+      "do": "In Kokosöl kleine Pancakes backen."
+     },
+     {
+      "do": "Mit Nussmus, Ahornsirup, Beeren und Kokosraspeln servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Seidentofu-Pancakes",
@@ -22940,7 +23547,7 @@
   "ingredients": [
    "1 gefrorene Banane",
    "1 EL Kakaopulver",
-   "6 Cashewkerne",
+   "10 g Cashewkerne (ca. 6 Stück)",
    "1 EL Erdnussmus",
    "2 TL Hanfsamen",
    "2 TL Agavendicksaft",
@@ -22974,7 +23581,7 @@
    "ingredients": [
     "1 TL Kakaonibs",
     "1 EL Kakaopulver",
-    "6 Cashewkerne",
+    "10 g Cashewkerne (ca. 6 Stück)",
     "2 TL Agavendicksaft",
     "1 EL Mandelmus",
     "2 TL Hanfsamen",
@@ -23237,7 +23844,7 @@
   "carbs": 80,
   "fat": 17,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -23247,7 +23854,7 @@
    "6 Eier",
    "300 g TK-Erbsen",
    "1 Dose Mais (285 g)",
-   "3 Gewürzgurken (Glas)",
+   "150 g Gewürzgurken (3 Stück, Glas)",
    "Gurkenwasser (4 EL aus dem Glas)",
    "3 Tomaten",
    "400 g Skyr",
@@ -23296,7 +23903,7 @@
   "normal": {
    "ingredients": [
     "200 g Nudeln (kurze Hörnchen)",
-    "3 Gewürzgurken (Glas)",
+    "150 g Gewürzgurken (3 Stück, Glas)",
     "Gurkenwasser (3 EL aus dem Glas)",
     "140 g Mais (Dose)",
     "140 g Erbsen (Dose)",
@@ -24843,7 +25450,7 @@
   "carbs": 63,
   "fat": 11,
   "estimated": true,
-  "timeMin": 10,
+  "timeMin": 190,
   "activeMin": 10,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -25052,7 +25659,7 @@
    "150 g Skyr",
    "1 EL Mayonnaise",
    "1 EL Senf",
-   "2 Gewürzgurken (Glas)",
+   "100 g Gewürzgurken (2 Stück, Glas)",
    "½ Bund Schnittlauch",
    "4 Scheiben Vollkornbrot",
    "Salz",
@@ -25094,7 +25701,7 @@
     "6 Eier",
     "3 EL Mayonnaise",
     "1 EL Senf",
-    "2 Gewürzgurken (Glas)",
+    "100 g Gewürzgurken (2 Stück, Glas)",
     "4 Scheiben Vollkornbrot",
     "Salz",
     "Pfeffer"
@@ -25108,7 +25715,20 @@
     "Eier hart kochen, abschrecken und schälen.",
     "Mayonnaise mit Senf verrühren, Eier und Gurken würfeln und untermischen.",
     "Mit Salz und Pfeffer abschmecken und auf Brot servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Eier hart kochen, abschrecken und schälen."
+     },
+     {
+      "do": "Mayonnaise mit Senf verrühren, Eier und Gurken würfeln und untermischen."
+     },
+     {
+      "do": "Mit Salz und Pfeffer abschmecken und auf Brot servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Eiersalat",
@@ -25484,7 +26104,7 @@
    "400 g Tofu natur",
    "300 g Edamame (TK)",
    "4 Möhren",
-   "2 Pak Choi (ca. 500 g)",
+   "500 g Pak Choi (2 Stück)",
    "2 Knoblauchzehen",
    "3 EL Sesamöl",
    "2 EL Tomatenmark",
@@ -25537,7 +26157,7 @@
    "ingredients": [
     "250 g Mie-Nudeln",
     "4 Möhren",
-    "2 Pak Choi (ca. 500 g)",
+    "500 g Pak Choi (2 Stück)",
     "2 Knoblauchzehen",
     "8 EL Sesamöl",
     "2 EL Tomatenmark",
@@ -25930,7 +26550,7 @@
   "carbs": 36,
   "fat": 22,
   "estimated": true,
-  "timeMin": 95,
+  "timeMin": 105,
   "activeMin": 40,
   "difficulty": "mittel",
   "mealPrep": true,
@@ -25946,7 +26566,7 @@
    "1 Bund Basilikum",
    "250 g Hüttenkäse",
    "250 g Mozzarella (light)",
-   "80 g Hartkäse (Parmesan-Art, vegetarisch, gerieben)",
+   "80 g Hartkäse (vegetarisch, gerieben)",
    "Salz",
    "Pfeffer"
   ],
@@ -27186,7 +27806,26 @@
     "Für die Soße Zwiebel und Knoblauch in Olivenöl andünsten, Tomatenmark einrühren, passierte Tomaten und Zucker zugeben, 10 Min. köcheln und mit Gyrosgewürz, Salz und Pfeffer würzen.",
     "Aus der Masse 8 flache Bifteki formen, je ein Stück Feta in die Mitte drücken und gut verschließen. In Olivenöl von beiden Seiten 8–10 Min. braten.",
     "Reis mit der Tomatensoße mischen und mit den Bifteki servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Sojagranulat mit heißer Brühe übergießen, 10 Min. quellen lassen und kräftig ausdrücken. Toast einweichen und ausdrücken, Zwiebel fein hacken, Knoblauch pressen."
+     },
+     {
+      "do": "Soja, Toast, Zwiebel, Knoblauch, Ei, Gewürze, Olivenöl und Sojasauce verkneten und 15 Min. ziehen lassen. Reis in Salzwasser mit Brühpulver garen."
+     },
+     {
+      "do": "Für die Soße Zwiebel und Knoblauch in Olivenöl andünsten, Tomatenmark einrühren, passierte Tomaten und Zucker zugeben, 10 Min. köcheln und mit Gyrosgewürz, Salz und Pfeffer würzen."
+     },
+     {
+      "do": "Aus der Masse 8 flache Bifteki formen, je ein Stück Feta in die Mitte drücken und gut verschließen. In Olivenöl von beiden Seiten 8–10 Min. braten."
+     },
+     {
+      "do": "Reis mit der Tomatensoße mischen und mit den Bifteki servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Soja-Bifteki",
@@ -27529,7 +28168,26 @@
     "Linsenmasse etwas abkühlen lassen, dann mit Zwiebeln, Knoblauch, Kräutern, Kichererbsenmehl-Mischung, Mehl, Paprika, Kreuzkümmel und Salz verkneten.",
     "Tahin mit etwas Zitronensaft, Wasser und Salz cremig rühren. Gurke und Tomaten würfeln und mit Zitronensaft und Salz anmachen.",
     "Aus der Masse 12 kleine Küchlein formen und in Öl von jeder Seite ca. 2–3 Min. braten. Mit Dip, Salat und Fladenbrot servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Linsen in Margarine kurz anschwitzen, 500 ml Wasser und Brühpulver zugeben und zugedeckt ca. 20 Min. weich köcheln, bis die Flüssigkeit aufgenommen ist; bei Bedarf kurz pürieren."
+     },
+     {
+      "do": "Inzwischen Zwiebeln, Knoblauch, Petersilie und Koriander fein hacken. Kichererbsenmehl mit 4 EL Wasser glatt rühren."
+     },
+     {
+      "do": "Linsenmasse etwas abkühlen lassen, dann mit Zwiebeln, Knoblauch, Kräutern, Kichererbsenmehl-Mischung, Mehl, Paprika, Kreuzkümmel und Salz verkneten."
+     },
+     {
+      "do": "Tahin mit etwas Zitronensaft, Wasser und Salz cremig rühren. Gurke und Tomaten würfeln und mit Zitronensaft und Salz anmachen."
+     },
+     {
+      "do": "Aus der Masse 12 kleine Küchlein formen und in Öl von jeder Seite ca. 2–3 Min. braten. Mit Dip, Salat und Fladenbrot servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Linsen-Falafel",
@@ -27623,7 +28281,23 @@
     "Joghurt mit Crème fraîche, gehacktem Schnittlauch und Petersilie verrühren und mit Kräutersalz und Pfeffer abschmecken.",
     "Gemüse in einem Sieb kräftig ausdrücken. Gemüse mit Zwiebeln, Eiern und Mehl verrühren, pfeffern.",
     "Öl in einer Pfanne erhitzen, kleine Puffer hineinsetzen, flach drücken und von beiden Seiten goldbraun backen. Kurz abtropfen lassen und mit der Kräutercreme servieren."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Zucchini und Möhren grob raspeln, mit 1 TL Salz mischen und 15 Min. ziehen lassen. Zwiebeln fein hacken."
+     },
+     {
+      "do": "Joghurt mit Crème fraîche, gehacktem Schnittlauch und Petersilie verrühren und mit Kräutersalz und Pfeffer abschmecken."
+     },
+     {
+      "do": "Gemüse in einem Sieb kräftig ausdrücken. Gemüse mit Zwiebeln, Eiern und Mehl verrühren, pfeffern."
+     },
+     {
+      "do": "Öl in einer Pfanne erhitzen, kleine Puffer hineinsetzen, flach drücken und von beiden Seiten goldbraun backen. Kurz abtropfen lassen und mit der Kräutercreme servieren."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Zucchini-Möhren-Puffer",
@@ -27708,7 +28382,23 @@
     "Masse in ein mit einem sauberen Tuch ausgelegtes Sieb über einer Schüssel füllen, abdecken und im Kühlschrank 24 Std. abtropfen lassen.",
     "Den fest gewordenen Frischkäse in eine Dose umfüllen und kühl lagern; die abgetropfte Molke eignet sich für Salatsoßen.",
     "Pro Portion zwei Scheiben Vollkornbrot dick bestreichen und mit Radieschenscheiben belegen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Sahne steif schlagen. Quark, Schmand, Kräuter, gepressten Knoblauch, Salz und Pfeffer zugeben und nur kurz unterrühren."
+     },
+     {
+      "do": "Masse in ein mit einem sauberen Tuch ausgelegtes Sieb über einer Schüssel füllen, abdecken und im Kühlschrank 24 Std. abtropfen lassen."
+     },
+     {
+      "do": "Den fest gewordenen Frischkäse in eine Dose umfüllen und kühl lagern; die abgetropfte Molke eignet sich für Salatsoßen."
+     },
+     {
+      "do": "Pro Portion zwei Scheiben Vollkornbrot dick bestreichen und mit Radieschenscheiben belegen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Bresso selbst gemacht",
@@ -29580,7 +30270,7 @@
   "carbs": 120,
   "fat": 15,
   "estimated": true,
-  "timeMin": 45,
+  "timeMin": 50,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -30198,7 +30888,7 @@
   "shelfLife": "5 Tage Kühlschrank",
   "ingredients": [
    "480 g Kichererbsen (2 Dosen, abgetropft)",
-   "5 Datteln (entsteint)",
+   "40 g Datteln (5 Stück, entsteint)",
    "30 g Mandeln",
    "150 g Sojajoghurt natur",
    "100 ml Sojadrink",
@@ -30244,7 +30934,7 @@
   "normal": {
    "ingredients": [
     "265 g Kichererbsen (1 Dose, abgetropft)",
-    "5 Datteln (entsteint)",
+    "40 g Datteln (5 Stück, entsteint)",
     "30 g Mandeln",
     "120 ml Haferdrink",
     "4 TL Agavendicksaft",
@@ -30306,7 +30996,7 @@
   "ingredients": [
    "480 g Kichererbsen (2 Dosen, abgetropft)",
    "250 g weiße Bohnen (1 Dose, abgetropft)",
-   "1 Rote Bete (ca. 200 g, roh)",
+   "200 g Rote Bete (1 Stück, roh)",
    "3 Knoblauchzehen",
    "3 EL Tahin",
    "2 EL Zitronensaft",
@@ -30354,7 +31044,7 @@
   "normal": {
    "ingredients": [
     "400 g Kichererbsen (abgetropft)",
-    "1 Rote Bete (ca. 200 g, roh)",
+    "200 g Rote Bete (1 Stück, roh)",
     "3 Knoblauchzehen",
     "2 EL Tahin",
     "2 EL Zitronensaft",
@@ -30410,7 +31100,7 @@
   "carbs": 54,
   "fat": 21,
   "estimated": true,
-  "timeMin": 35,
+  "timeMin": 45,
   "activeMin": 30,
   "difficulty": "leicht",
   "mealPrep": false,
@@ -30536,7 +31226,7 @@
   "carbs": 55,
   "fat": 23,
   "estimated": true,
-  "timeMin": 35,
+  "timeMin": 45,
   "activeMin": 30,
   "difficulty": "leicht",
   "mealPrep": false,
@@ -30646,8 +31336,8 @@
    }
   },
   "since": "2026-11-02",
-  "short": "Spinat mit Spiegelei",
-  "sub": "mit Rahmspinat & Salzkartoffeln"
+  "short": "Spiegeleier & Rahmspinat",
+  "sub": "mit Quark & Salzkartoffeln"
  },
  {
   "name": "Veganer Grünkohl-Eintopf mit Räuchertofu & Kartoffeln",
@@ -30759,7 +31449,7 @@
    "2 EL Öl",
    "450 g Zwiebeln",
    "4 Paprika (ca. 680 g)",
-   "5 Gewürzgurken (ca. 250 g)",
+   "250 g Gewürzgurken (5 Stück)",
    "100 ml Gurkenwasser",
    "150 g Tomatenmark",
    "1 EL Sambal Oelek",
@@ -30815,7 +31505,7 @@
     "2 EL Öl",
     "450 g Zwiebeln",
     "4 Paprika (ca. 680 g)",
-    "5 Gewürzgurken (ca. 250 g)",
+    "250 g Gewürzgurken (5 Stück)",
     "100 ml Gurkenwasser",
     "150 g Tomatenmark",
     "1 EL Sambal Oelek",
@@ -31014,7 +31704,7 @@
   "carbs": 56,
   "fat": 5,
   "estimated": true,
-  "timeMin": 60,
+  "timeMin": 70,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -31405,7 +32095,7 @@
   "carbs": 71,
   "fat": 16,
   "estimated": true,
-  "timeMin": 55,
+  "timeMin": 70,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -31929,7 +32619,7 @@
   "carbs": 34,
   "fat": 0,
   "estimated": true,
-  "timeMin": 130,
+  "timeMin": 135,
   "activeMin": 10,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -32345,7 +33035,7 @@
   "carbs": 54,
   "fat": 28,
   "estimated": true,
-  "timeMin": 25,
+  "timeMin": 30,
   "activeMin": 20,
   "difficulty": "mittel",
   "mealPrep": false,
@@ -32567,7 +33257,7 @@
   "carbs": 43,
   "fat": 28,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 35,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": false,
@@ -33782,7 +34472,7 @@
    }
   },
   "since": "2026-11-02",
-  "short": "Schupfnudeln mit Lauch",
+  "short": "Schupfnudel-Lauch-Pfanne",
   "sub": "mit Pilzen, Räuchertofu & Rahmsoße"
  },
  {
@@ -34368,7 +35058,7 @@
   "carbs": 51,
   "fat": 25,
   "estimated": true,
-  "timeMin": 80,
+  "timeMin": 85,
   "activeMin": 30,
   "difficulty": "mittel",
   "mealPrep": true,
@@ -34790,7 +35480,23 @@
     "Bohnen, Hafermehl, Backpulver, Salz, Kakao, Haferdrink, Vanille, Kokosöl, Birnenmus und Agavendicksaft sehr fein pürieren.",
     "Chia, Schokolade und Mandeln unterrühren und bei 175 °C 30–40 Min. backen; innen darf er feucht bleiben.",
     "Auskühlen lassen und in Stücke schneiden."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Bohnen gründlich abspülen, Haferflocken fein mahlen, Chia mit 3 EL Wasser quellen lassen."
+     },
+     {
+      "do": "Bohnen, Hafermehl, Backpulver, Salz, Kakao, Haferdrink, Vanille, Kokosöl, Birnenmus und Agavendicksaft sehr fein pürieren."
+     },
+     {
+      "do": "Chia, Schokolade und Mandeln unterrühren und bei 175 °C 30–40 Min. backen; innen darf er feucht bleiben."
+     },
+     {
+      "do": "Auskühlen lassen und in Stücke schneiden."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Bohnen-Brownies",
@@ -34897,7 +35603,23 @@
     "Soja-Gyros im Öl anbraten, dann das klein geschnittene Gemüse im selben Fett anbraten und alles mit den Nudeln mischen.",
     "Sahne, Schmand, Tomatenmark und Metaxa verrühren, würzen und darübergießen.",
     "Mit Käse bestreuen und bei 180 °C Umluft 20–30 Min. überbacken."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Sojaschnetzel in heißer Brühe einweichen, ausdrücken und mit Gyrosgewürz mischen. Nudeln kochen und in eine Auflaufform geben."
+     },
+     {
+      "do": "Soja-Gyros im Öl anbraten, dann das klein geschnittene Gemüse im selben Fett anbraten und alles mit den Nudeln mischen."
+     },
+     {
+      "do": "Sahne, Schmand, Tomatenmark und Metaxa verrühren, würzen und darübergießen."
+     },
+     {
+      "do": "Mit Käse bestreuen und bei 180 °C Umluft 20–30 Min. überbacken."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Gyros-Nudelauflauf",
@@ -35163,7 +35885,7 @@
   "carbs": 40,
   "fat": 19,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 60,
   "activeMin": 10,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -35336,7 +36058,20 @@
     "Beeren, Banane, Mandeldrink, Haferflocken, Ahornsirup und Chia im Mixer cremig mixen.",
     "In eine Schüssel füllen.",
     "Mit Beeren, Haferflocken, Chia und Kokosraspeln garnieren und sofort essen."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Beeren, Banane, Mandeldrink, Haferflocken, Ahornsirup und Chia im Mixer cremig mixen."
+     },
+     {
+      "do": "In eine Schüssel füllen."
+     },
+     {
+      "do": "Mit Beeren, Haferflocken, Chia und Kokosraspeln garnieren und sofort essen."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Beeren-Smoothie-Bowl",
@@ -35419,7 +36154,20 @@
     "Quinoa gründlich waschen, mit Wasser und dem Großteil der Milch aufkochen und ca. 20 Min. leise köcheln.",
     "Bananen in Scheiben schneiden.",
     "Quinoa mit Obst, Rosinen, Nüssen und restlicher Milch anrichten, mit Honig und Zimt abschmecken."
-   ]
+   ],
+   "plan": {
+    "steps": [
+     {
+      "do": "Quinoa gründlich waschen, mit Wasser und dem Großteil der Milch aufkochen und ca. 20 Min. leise köcheln."
+     },
+     {
+      "do": "Bananen in Scheiben schneiden."
+     },
+     {
+      "do": "Quinoa mit Obst, Rosinen, Nüssen und restlicher Milch anrichten, mit Honig und Zimt abschmecken."
+     }
+    ]
+   }
   },
   "since": "2026-11-02",
   "short": "Quinoa-Frühstück",
@@ -36159,97 +36907,6 @@
   "since": "2026-11-02",
   "short": "Quarkkeulchen",
   "sub": "aus Kartoffeln & Quark mit Skyr-Beeren"
- },
- {
-  "name": "Großer Kichererbsenmehl-Pancake mit Sojajoghurt und Beeren",
-  "category": "fruehstueck",
-  "servings": 1,
-  "kcal": 557,
-  "protein": 33,
-  "carbs": 55,
-  "fat": 19,
-  "estimated": true,
-  "timeMin": 10,
-  "activeMin": 10,
-  "difficulty": "leicht",
-  "mealPrep": false,
-  "shelfLife": "frisch essen",
-  "ingredients": [
-   "80 g Kichererbsenmehl",
-   "150 ml Sojadrink",
-   "1 Prise Zucker",
-   "1 Prise Salz",
-   "Zimt",
-   "1 TL Rapsöl",
-   "150 g Sojajoghurt",
-   "100 g TK-Beeren",
-   "10 g Hanfsamen",
-   "1 TL Ahornsirup"
-  ],
-  "steps": [
-   "Kichererbsenmehl mit Zucker, Salz und Zimt mischen, Sojadrink zugeben und zu einem glatten, halbflüssigen Teig rühren.",
-   "Öl in einer beschichteten Pfanne erhitzen, Teig eingießen und glatt streichen.",
-   "Von jeder Seite 3–4 Min. goldbraun backen.",
-   "Mit Sojajoghurt, aufgetauten Beeren, Hanfsamen und Ahornsirup servieren."
-  ],
-  "source": "https://www.chefkoch.de/rezepte/3979471610221303/Pancake-suess-oder-herzhaft-aus-Kichererbsenmehl.html",
-  "note": "Angepasst: mehr Kichererbsenmehl, Sojadrink statt Haferdrink, weniger Öl, als süße Variante mit Sojajoghurt, Beeren und Hanfsamen.",
-  "temp": "warm",
-  "dev": [
-   "herd"
-  ],
-  "plan": {
-   "steps": [
-    {
-     "do": "Teig rühren.",
-     "meanwhile": "Beeren auftauen.",
-     "min": 3
-    },
-    {
-     "do": "Pancake von beiden Seiten backen.",
-     "min": 7
-    },
-    {
-     "do": "Toppen und servieren."
-    }
-   ]
-  },
-  "imgOrig": "https://img.chefkoch-cdn.de/rezepte/3979471610221303/bilder/1364337/crop-960x540/pancake-suess-oder-herzhaft-aus-kichererbsenmehl.jpg",
-  "normal": {
-   "ingredients": [
-    "60 g Kichererbsenmehl",
-    "100 ml Haferdrink",
-    "1 Prise Zucker",
-    "1 Prise Salz",
-    "1 EL Rapsöl",
-    "1 TL Kokosöl"
-   ],
-   "kcal": 364,
-   "protein": 14,
-   "carbs": 34,
-   "fat": 18,
-   "note": "Originalfassung der Quelle, ohne Protein-Anpassung",
-   "steps": [
-    "Kichererbsenmehl, Salz und Zucker mischen, Haferdrink und Rapsöl einrühren.",
-    "Kokosöl in einer beschichteten Pfanne erhitzen und den Teig eingießen.",
-    "Von beiden Seiten 3–4 Min. goldbraun backen und nach Wunsch süß oder herzhaft belegen."
-   ],
-   "plan": {
-    "steps": [
-     {
-      "do": "Teig rühren.",
-      "min": 3
-     },
-     {
-      "do": "Pancake backen.",
-      "min": 7
-     }
-    ]
-   }
-  },
-  "since": "2026-11-02",
-  "short": "Kichererbsen-Pancake",
-  "sub": "mit Sojajoghurt, Beeren & Hanfsamen"
  },
  {
   "name": "Spaghetti aglio, olio e peperoncino mit Linsennudeln und weißen Bohnen",
@@ -37498,6 +38155,7 @@
   "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1466981251568000/bilder/709809/crop-960x540/gemuesepfanne-mexikanisch.jpg",
   "normal": {
    "ingredients": [
+    "200 g Reis",
     "2 EL Rapsöl",
     "1 rote Paprika",
     "1 Lauch",
@@ -37514,28 +38172,30 @@
     "Salz",
     "Pfeffer"
    ],
-   "kcal": 221,
-   "protein": 11,
-   "carbs": 25,
+   "kcal": 396,
+   "protein": 15,
+   "carbs": 64,
    "fat": 7,
-   "note": "Vegane Originalnähe (Sojajoghurt statt Crème fraîche), ohne Protein-Anpassung",
+   "note": "Vegane Originalnähe (Sojajoghurt statt Crème fraîche), ohne Protein-Anpassung; Reis als Beilage wie in der Grundfassung (laut Quelle passt Reis dazu)",
    "steps": [
-    "Gemüse und Chili schneiden und im Öl weich braten, mit den Möhren beginnen.",
+    "Reis nach Packungsangabe garen. Gemüse und Chili schneiden und im Öl weich braten, mit den Möhren beginnen.",
     "Mais und abgespülte Kidneybohnen zugeben und kurz mitgaren.",
-    "Tomatenmark und Sojajoghurt einrühren, ca. 10 Min. erwärmen und abschmecken."
+    "Tomatenmark und Sojajoghurt einrühren, ca. 10 Min. erwärmen, abschmecken und mit Reis servieren."
    ],
    "plan": {
     "steps": [
      {
-      "do": "Gemüse schneiden.",
-      "min": 10
+      "do": "Reis aufsetzen und garen.",
+      "meanwhile": "Gemüse und Chili schneiden.",
+      "min": 15,
+      "passive": true
      },
      {
-      "do": "Gemüse braten.",
+      "do": "Gemüse im Öl weich braten, mit den Möhren beginnen.",
       "min": 12
      },
      {
-      "do": "Bohnen, Mais, Tomatenmark und Sojajoghurt zugeben, erwärmen.",
+      "do": "Bohnen, Mais, Tomatenmark und Sojajoghurt zugeben, ca. 10 Min. erwärmen und mit Reis servieren.",
       "min": 10
      }
     ]
@@ -37660,7 +38320,7 @@
   "mealPrep": false,
   "shelfLife": "2 Tage Kühlschrank",
   "ingredients": [
-   "8 vegetarische Maultaschen (ca. 400 g)",
+   "400 g vegetarische Maultaschen (8 Stück)",
    "200 g Räuchertofu",
    "330 g Champignons",
    "2 rote Paprika",
@@ -37710,7 +38370,7 @@
   "imgOrig": "https://img.chefkoch-cdn.de/rezepte/1102631216201397/bilder/1135802/crop-960x540/maultaschen-pfanne.jpg",
   "normal": {
    "ingredients": [
-    "8 vegetarische Maultaschen (ca. 400 g)",
+    "400 g vegetarische Maultaschen (8 Stück)",
     "330 g Champignons",
     "3 Paprika",
     "1 Lauch",
@@ -37764,7 +38424,7 @@
   "carbs": 60,
   "fat": 14,
   "estimated": true,
-  "timeMin": 45,
+  "timeMin": 50,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -37863,8 +38523,8 @@
    }
   },
   "since": "2026-11-02",
-  "short": "Grüne Bohnen mit Kartoffeln",
-  "sub": "mit weißen Bohnen, Räuchertofu & Harissa"
+  "short": "Grüne-Bohnen-Harissa-Topf",
+  "sub": "mit Kartoffeln, weißen Bohnen & Räuchertofu"
  },
  {
   "name": "Kritharaki-Gemüsepfanne mit doppelt Räuchertofu und roten Linsen",
@@ -38463,7 +39123,7 @@
    }
   },
   "since": "2026-11-02",
-  "short": "Pide mit Veggie-Hack",
+  "short": "Veggie-Hack-Pide",
   "sub": "mit Sojagranulat, Tomate & Ajvar"
  },
  {
@@ -38778,7 +39438,7 @@
   "carbs": 38,
   "fat": 10,
   "estimated": true,
-  "timeMin": 10,
+  "timeMin": 70,
   "activeMin": 10,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -39271,7 +39931,7 @@
   "shelfLife": "3 Tage Kühlschrank · einfrierbar",
   "ingredients": [
    "130 g Mehl",
-   "20 g Hartkäse (Parmesan, gerieben)",
+   "20 g Hartkäse (vegetarisch, gerieben)",
    "½ TL Salz (Teig)",
    "40 g Butter",
    "60 g Magerquark",
@@ -39282,7 +39942,7 @@
    "150 g Feta",
    "200 g Hüttenkäse",
    "30 g Sonnenblumenkerne",
-   "15 g Hartkäse (Parmesan, gerieben)",
+   "15 g Hartkäse (vegetarisch, gerieben)",
    "75 g Skyr",
    "Kräuter der Provence",
    "Salz",
@@ -39330,7 +39990,7 @@
   "normal": {
    "ingredients": [
     "130 g Mehl",
-    "20 g Hartkäse (Parmesan, gerieben)",
+    "20 g Hartkäse (vegetarisch, gerieben)",
     "½ TL Salz (Teig)",
     "65 g Butter",
     "1 Ei (Teig)",
@@ -39339,7 +39999,7 @@
     "2 Eier",
     "150 g Feta",
     "30 g Sonnenblumenkerne",
-    "15 g Hartkäse (Parmesan, gerieben)",
+    "15 g Hartkäse (vegetarisch, gerieben)",
     "75 g saure Sahne",
     "Kräuter der Provence",
     "Salz",
@@ -39872,7 +40532,7 @@
    "1 l Gemüsebrühe",
    "250 g Erbsen (TK)",
    "250 g Edamame (TK, geschält)",
-   "40 g Hartkäse (Parmesan, gerieben)",
+   "40 g Hartkäse (vegetarisch, gerieben)",
    "250 g Skyr",
    "1 Zitrone (Bio)",
    "1 Bund Petersilie",
@@ -39922,7 +40582,7 @@
     "125 ml Weißwein (trocken)",
     "1 l Gemüsebrühe",
     "25 g Butter",
-    "25 g Hartkäse (Parmesan, gerieben)",
+    "25 g Hartkäse (vegetarisch, gerieben)",
     "1 Bund Petersilie",
     "½ Zitrone (Bio)",
     "Salz",
@@ -39982,7 +40642,7 @@
    "300 g Tofu (natur)",
    "1 TL Öl (Tofu)",
    "150 g Skyr",
-   "40 g Hartkäse (Parmesan, gerieben)",
+   "40 g Hartkäse (vegetarisch, gerieben)",
    "30 g Kürbiskerne",
    "½ Kästchen Kresse",
    "Salz",
@@ -40034,7 +40694,7 @@
     "1 l Gemüsebrühe",
     "100 g Frühlingszwiebeln (1 Bund)",
     "3 EL Crème fraîche",
-    "50 g Hartkäse (Parmesan, gerieben)",
+    "50 g Hartkäse (vegetarisch, gerieben)",
     "½ Kästchen Kresse",
     "Pfeffer"
    ],
@@ -40075,7 +40735,7 @@
   "carbs": 77,
   "fat": 13,
   "estimated": true,
-  "timeMin": 40,
+  "timeMin": 45,
   "activeMin": 30,
   "difficulty": "mittel",
   "mealPrep": false,
@@ -40089,7 +40749,7 @@
    "150 ml Rotwein",
    "1 l Gemüsebrühe",
    "100 g Belugalinsen",
-   "30 g Hartkäse (Parmesan, gerieben)",
+   "30 g Hartkäse (vegetarisch, gerieben)",
    "200 g Skyr",
    "2 EL Meerrettich (Glas)",
    "120 g Feta",
@@ -40141,7 +40801,7 @@
     "150 ml Rotwein",
     "1 l Gemüsebrühe",
     "50 g Butter",
-    "75 g Hartkäse (Parmesan, gerieben)",
+    "75 g Hartkäse (vegetarisch, gerieben)",
     "2 EL Meerrettich (Glas)",
     "Salz",
     "Pfeffer"
@@ -40150,7 +40810,7 @@
    "protein": 13,
    "carbs": 62,
    "fat": 23,
-   "note": "Originalfassung (Chefkoch): mit Butter und mehr Parmesan, ohne Linsen, Feta und Skyr.",
+   "note": "Originalfassung (Chefkoch): mit Butter und mehr Hartkäse, ohne Linsen, Feta und Skyr.",
    "steps": [
     "Rote Bete, Zwiebel und Knoblauch würfeln und im Öl anschwitzen, Reis zugeben und glasig werden lassen.",
     "Mit Rotwein ablöschen, dann nach und nach Brühe einrühren, bis der Reis cremig ist.",
@@ -40299,7 +40959,7 @@
   "carbs": 70,
   "fat": 25,
   "estimated": true,
-  "timeMin": 25,
+  "timeMin": 80,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -40401,7 +41061,7 @@
   "sub": "mit Linsennudeln, weißen Bohnen & Räuchertofu"
  },
  {
-  "name": "Spargel-Brotsalat mit weißen Bohnen, Ei & Parmesan",
+  "name": "Spargel-Brotsalat mit weißen Bohnen, Ei & Hartkäse",
   "category": "mittag",
   "servings": 2,
   "kcal": 672,
@@ -40426,7 +41086,7 @@
    "3 EL Wasser",
    "½ TL Zucker",
    "2 EL Olivenöl",
-   "40 g Hartkäse (Parmesan)",
+   "40 g Hartkäse (vegetarisch, am Stück)",
    "Salz",
    "Pfeffer"
   ],
@@ -40435,7 +41095,7 @@
    "Spargel im unteren Drittel schälen, Enden abschneiden, schräg in 3-cm-Stücke schneiden und 3 Min. in Salzwasser garen, kalt abschrecken.",
    "Essig mit Wasser, Salz, Pfeffer und Zucker verrühren, Öl unterschlagen.",
    "Spargel, halbierte Tomaten und abgespülte Bohnen mit der Vinaigrette mischen und kurz ziehen lassen.",
-   "Brot in Stücke brechen, mit Basilikum unterheben, mit Eiern anrichten und Parmesan darüberhobeln."
+   "Brot in Stücke brechen, mit Basilikum unterheben, mit Eiern anrichten und Hartkäse darüberhobeln."
   ],
   "source": "https://www.chefkoch.de/rezepte/2520621395238605/Spargel-Brotsalat.html",
   "note": "Angepasst: weiße Bohnen und Eier dazu, weniger Öl im Dressing.",
@@ -40456,7 +41116,7 @@
      "min": 5
     },
     {
-     "do": "Gemüse mit Vinaigrette mischen, Brot und Basilikum unterheben, mit Ei und Parmesan servieren."
+     "do": "Gemüse mit Vinaigrette mischen, Brot und Basilikum unterheben, mit Ei und Hartkäse servieren."
     }
    ]
   },
@@ -40472,7 +41132,7 @@
     "3 EL Wasser",
     "½ TL Zucker",
     "5 EL Olivenöl",
-    "40 g Hartkäse (Parmesan)",
+    "40 g Hartkäse (vegetarisch, am Stück)",
     "Salz",
     "Pfeffer"
    ],
@@ -40484,7 +41144,7 @@
    "steps": [
     "Ciabatta in dünnen Scheiben rösten und mit Knoblauch einreiben.",
     "Spargel schälen, schneiden, 3 Min. garen und abschrecken; Tomaten halbieren.",
-    "Vinaigrette aus Essig, Wasser, Salz, Pfeffer, Zucker und Öl rühren, mit Gemüse mischen, Brot und Basilikum unterheben und mit Parmesan bestreuen."
+    "Vinaigrette aus Essig, Wasser, Salz, Pfeffer, Zucker und Öl rühren, mit Gemüse mischen, Brot und Basilikum unterheben und mit gehobeltem Hartkäse bestreuen."
    ],
    "plan": {
     "steps": [
@@ -40495,14 +41155,14 @@
       "do": "Spargel schälen, schneiden, 3 Min. garen und abschrecken; Tomaten halbieren."
      },
      {
-      "do": "Vinaigrette aus Essig, Wasser, Salz, Pfeffer, Zucker und Öl rühren, mit Gemüse mischen, Brot und Basilikum unterheben und mit Parmesan bestreuen."
+      "do": "Vinaigrette aus Essig, Wasser, Salz, Pfeffer, Zucker und Öl rühren, mit Gemüse mischen, Brot und Basilikum unterheben und mit gehobeltem Hartkäse bestreuen."
      }
     ]
    }
   },
   "since": "2026-11-02",
   "short": "Spargel-Brotsalat",
-  "sub": "mit weißen Bohnen, Ei & Parmesan"
+  "sub": "mit weißen Bohnen, Ei & Hartkäse"
  },
  {
   "name": "Kisir – türkischer Bulgursalat mit Linsen, Kichererbsen & Edamame",
@@ -40735,7 +41395,7 @@
   "carbs": 32,
   "fat": 34,
   "estimated": true,
-  "timeMin": 20,
+  "timeMin": 45,
   "activeMin": 15,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -41144,7 +41804,7 @@
   "carbs": 57,
   "fat": 25,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 100,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": true,
@@ -42078,7 +42738,7 @@
   "carbs": 47,
   "fat": 9,
   "estimated": true,
-  "timeMin": 30,
+  "timeMin": 40,
   "activeMin": 20,
   "difficulty": "leicht",
   "mealPrep": false,
@@ -42611,7 +43271,7 @@
   "carbs": 69,
   "fat": 15,
   "estimated": true,
-  "timeMin": 55,
+  "timeMin": 60,
   "activeMin": 35,
   "difficulty": "mittel",
   "mealPrep": true,
@@ -42951,7 +43611,7 @@
   "carbs": 59,
   "fat": 16,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 60,
   "activeMin": 40,
   "difficulty": "mittel",
   "mealPrep": true,
@@ -44067,7 +44727,7 @@
   "carbs": 68,
   "fat": 36,
   "estimated": true,
-  "timeMin": 50,
+  "timeMin": 55,
   "activeMin": 25,
   "difficulty": "leicht",
   "mealPrep": false,
@@ -44664,7 +45324,7 @@
   "mealPrep": false,
   "shelfLife": "2 Tage Kühlschrank",
   "ingredients": [
-   "1 Ananas",
+   "200 g Ananas-Fruchtfleisch (aus 1 frischen Ananas, Rest dient als Spießbasis)",
    "600 g gemischte Pilze (z. B. Kräuterseitlinge, Champignons)",
    "300 g Seitan",
    "3 rote Zwiebeln",
@@ -44718,7 +45378,7 @@
   "imgOrig": "https://img.chefkoch-cdn.de/rezepte/4045331625120015/bilder/1411745/crop-960x540/pilz-schawarma-al-pastor.jpg",
   "normal": {
    "ingredients": [
-    "1 Ananas",
+    "200 g Ananas-Fruchtfleisch (aus 1 frischen Ananas, Rest dient als Spießbasis)",
     "1 rote Chilischote",
     "3 rote Zwiebeln",
     "500 g gemischte Pilze (z. B. Kräuterseitlinge, Champignons)",
@@ -46061,7 +46721,7 @@
    "protein": 7,
    "carbs": 17,
    "fat": 1,
-   "note": "Originalfassung der Quelle, ohne Protein-Anpassung",
+   "note": "Originalfassung der Quelle (nur Brokkoli, Kartoffeln und Brühe), ohne Protein-Anpassung",
    "steps": [
     "Kartoffeln schälen und klein schneiden, Brokkoli in Röschen teilen.",
     "Brokkoli und Kartoffeln in der Brühe ca. 20 Min. köcheln, bis beides weich ist.",
@@ -46360,7 +47020,7 @@
    "½ Bund Minze",
    "4 Weizen-Tortillas (groß)",
    "200 g Skyr",
-   "4 Datteln (getrocknet)"
+   "32 g Datteln (4 Stück, getrocknet)"
   ],
   "steps": [
    "Kichererbsen und Bohnen mind. 12 Std. in reichlich Wasser einweichen, dann abgießen.",
@@ -46420,7 +47080,7 @@
     "½ Bund Minze",
     "4 Weizen-Tortillas (groß)",
     "130 g Schmand",
-    "5 Datteln (getrocknet)",
+    "40 g Datteln (5 Stück, getrocknet)",
     "1 TL Honig"
    ],
    "kcal": 735,

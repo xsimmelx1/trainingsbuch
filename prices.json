@@ -3,6 +3,166 @@
 "note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
 "products": [
 {
+"id": "kaffee",
+"name": "Kaffee (gebrüht, aus Pulver)",
+"pack": 1000,
+"unit": "ml",
+"match": "kaffee(?!sahne|pulver)",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 0.5,
+"lidl": 0.4,
+"aldi": 0.4,
+"kaufland": 0.4,
+"netto": 0.4,
+"penny": 0.4,
+"edeka": 0.44
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "zitronengras",
+"name": "Zitronengras",
+"pack": 1,
+"unit": "Stück",
+"match": "zitronengras",
+"piece": 20,
+"group": "Obst & Gemüse",
+"prices": {
+"rewe": 0.99,
+"lidl": 0.79,
+"aldi": 0.79,
+"kaufland": 0.79,
+"netto": 0.79,
+"penny": 0.79,
+"edeka": 0.87
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "tortillachips",
+"name": "Tortilla-Chips",
+"pack": 200,
+"unit": "g",
+"match": "tortilla-?chips|nachos",
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.61,
+"lidl": 1.29,
+"aldi": 1.29,
+"kaufland": 1.29,
+"netto": 1.29,
+"penny": 1.29,
+"edeka": 1.42
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "flammkuchenteig",
+"name": "Flammkuchenteig (Kühlregal)",
+"pack": 260,
+"unit": "g",
+"match": "flammkuchenteig",
+"group": "Brot & Backwaren",
+"prices": {
+"rewe": 1.86,
+"lidl": 1.49,
+"aldi": 1.49,
+"kaufland": 1.49,
+"netto": 1.49,
+"penny": 1.49,
+"edeka": 1.64
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "glutenpulver",
+"name": "Weizengluten / Seitan-Fix",
+"pack": 500,
+"unit": "g",
+"match": "seitan-?fix|weizengluten|glutenpulver",
+"pantry": true,
+"group": "Tofu & Soja",
+"prices": {
+"rewe": 4.99,
+"lidl": 3.99,
+"aldi": 3.99,
+"kaufland": 3.99,
+"netto": 3.99,
+"penny": 3.99,
+"edeka": 4.39
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
+"id": "zimtzucker",
+"name": "Zimtzucker",
+"pack": 100,
+"unit": "g",
+"match": "zimtzucker|zimt-?zucker",
+"pantry": true,
+"group": "Vorrat & Gewürze",
+"prices": {
+"rewe": 1.24,
+"lidl": 0.99,
+"aldi": 0.99,
+"kaufland": 0.99,
+"netto": 0.99,
+"penny": 0.99,
+"edeka": 1.09
+},
+"est": [
+"rewe",
+"lidl",
+"aldi",
+"kaufland",
+"netto",
+"penny",
+"edeka"
+]
+},
+{
 "id": "weisskohl",
 "name": "Weißkohl",
 "pack": 1,
@@ -990,7 +1150,7 @@
 "name": "Sauerrahm",
 "pack": 200,
 "unit": "g",
-"match": "sauerrahm",
+"match": "sauerrahm|saure sahne|saurer sahne",
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 0.86,
@@ -4182,7 +4342,7 @@
 "name": "Crème fraîche / Schmand",
 "pack": 200,
 "unit": "g",
-"match": "crème fraîche|creme fraiche|cr[eè]me fra[iî]che|schmand|saure sahne",
+"match": "crème fraîche|creme fraiche|cr[eè]me fra[iî]che|schmand",
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 0.99,
@@ -4960,7 +5120,7 @@
 "pack": 400,
 "unit": "g",
 "dose": true,
-"match": "gehackte tomaten|stückige tomaten|dosen? tomaten",
+"match": "gehackte tomaten|stückige tomaten|dosen? tomaten|geschälte tomaten|gestückelte tomaten|tomaten,? geschält|tomaten,? gestückelt",
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 0.59,
@@ -5646,7 +5806,8 @@
 },
 "est": [
 "kaufland"
-]
+],
+"piece": 62
 },
 {
 "id": "loeffelbiskuits",
@@ -5702,7 +5863,7 @@
 "name": "TK-Beerenmischung",
 "pack": 750,
 "unit": "g",
-"match": "beere",
+"match": "beere(?!n?essig)",
 "group": "Obst & Gemüse",
 "prices": {
 "rewe": 2.69,
@@ -6247,7 +6408,7 @@
 "name": "Gemüsebrühe Pulver (200 g ergibt 10 l)",
 "pack": 10000,
 "unit": "ml",
-"match": "brühe",
+"match": "brühe|brühpulver|gemüsebrühe",
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
@@ -6318,7 +6479,7 @@
 "name": "Speisestärke",
 "pack": 400,
 "unit": "g",
-"match": "stärke",
+"match": "stärke|kartoffelmehl",
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
@@ -6480,7 +6641,8 @@
 "est": [
 "lidl",
 "edeka"
-]
+],
+"piece": 250
 },
 {
 "id": "schokolade",
@@ -6524,7 +6686,8 @@
 },
 "bio": {
 "rewe": 1.69
-}
+},
+"piece": 170
 },
 {
 "id": "halloumi",
@@ -6591,7 +6754,8 @@
 "est": [
 "lidl",
 "edeka"
-]
+],
+"piece": 350
 },
 {
 "id": "aubergine",
@@ -6612,7 +6776,8 @@
 "est": [
 "lidl",
 "edeka"
-]
+],
+"piece": 300
 },
 {
 "id": "blattsalat",
@@ -6684,7 +6849,8 @@
 ],
 "bio": {
 "rewe": 1.39
-}
+},
+"piece": 400
 },
 {
 "id": "pakchoi",
@@ -7414,7 +7580,7 @@
 "pack": 250,
 "unit": "g",
 "piece": 8,
-"match": "espresso|kaffee(?!sahne)",
+"match": "espresso|kaffeepulver|instant-?kaffee|löslicher kaffee",
 "group": "Vorrat & Gewürze",
 "pantry": true,
 "prices": {

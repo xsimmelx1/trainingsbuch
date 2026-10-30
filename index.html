@@ -3479,7 +3479,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
       ${a.prDet?.length ? `<div class="prs">${a.prDet.map(([n, x, y]) => `<div class="pr">🏆 <b>${esc(n)}</b><span>${esc(x)} <span class="muted">(vorher ${esc(y)})</span></span></div>`).join("")}</div>` : `<div class="small muted">Keine neuen Bestwerte, aber jede Einheit zählt. Konstanz schlägt alles.</div>`}
       ${weekStrip(monday(selDate))}
       <button class="btn primary big" type="button" data-act="summaryDone">Fertig</button></div>`; }
-  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","receipt","ownprices","scan","cardio","cook","shoprec","reste","recfilter","stock","zutaten","zinfo","hurt","resteeat","snack","mealinfo","restleft","aisle","zcmp"].includes(sheetKind)) {
+  } else if (["w0","phase","lesson","recipe","alt","trainmenu","arzt","photo","meal","other","receipt","ownprices","scan","cardio","cook","shoprec","reste","recfilter","stock","zinfo","hurt","resteeat","snack","mealinfo","restleft","aisle","zcmp"].includes(sheetKind)) {
     h += journeySheet(sheetKind, sheetArg);
   } else if (sheetKind === "checkin") {
     const mo = sheetArg, ci = store.checkins[mo] || {}, scMax = weekMax(mo, d => d.pain?.sc), cap = m => m[0].toUpperCase() + m.slice(1);
@@ -3839,7 +3839,9 @@ const REC_SORT = {protein: ["Protein", (a, b) => recipeNutri(b).protein - recipe
 function recipesFiltered(F = recFilter){ const f = Object.assign({}, REC_F0, F), are = avoidRe(), ingP = f.ing && prices ? prodById(f.ing) : null, wk = f.set === "week" ? weekRecipes(monday(todayIso())) : null, srt = (REC_SORT[f.sort || recSort] || REC_SORT.protein)[1];
   return recipes.filter(r => recipeOk(r, are) && (!f.ing || usesProd(r, ingP)) && (f.cat === "alle" || catOf(r) === f.cat) && (!f.prep || (r.mealPrep && (r.servings || 1) >= 4)) && (f.set !== "fav" || isFav(r.name)) && (f.set !== "neu" || recNew(r)) && (!wk || wk[r.name]) && (!f.vegan || veganOk(r)) && (!f.temp || r.temp === f.temp || r.temp === "beides") && (!f.diff || r.difficulty === f.diff) && (!f.time || (r.activeMin ?? r.timeMin) <= f.time) && (!f.cheap || (!!prices && recipeCost(r).portion <= 1.2)) && (!f.q || recQScore(r, f.q) > 0))
     .sort((a, b) => (f.q ? recQScore(b, f.q) - recQScore(a, f.q) : 0) || srt(a, b) || recipeNutri(b).protein - recipeNutri(a).protein); }
-const recQScore = (r, q) => { q = fold(q.trim()); return Math.max(sugScore((r.short || "") + " " + r.name, q) * 2, sugScore(r.ingredients.join(" "), q)); };
+let recQMemo = {q: null, m: new Map()};
+const recQScore = (r, q) => { q = fold(q.trim()); if (recQMemo.q !== q || recQMemo.r !== recipes) recQMemo = {q, r: recipes, m: new Map()};
+  let v = recQMemo.m.get(r.name); if (v == null) { v = Math.max(sugScore((r.short || "") + " " + r.name, q) * 2, sugScore(r.ingredients.join(" "), q)); recQMemo.m.set(r.name, v); } return v; };
 const recTitle = r => r.short || r.name;
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
@@ -3903,17 +3905,19 @@ function recFilterHtml(){ const n = recipesFiltered().length;
     ${REC_FGROUPS().map(([l, k, opts]) => `<div class="lab">${l}</div><div class="chips">${opts.map(([v, t]) => `<button type="button" data-rf="${k}" data-v='${esc(JSON.stringify(v))}' aria-pressed="${JSON.stringify(recFilter[k]) === JSON.stringify(v)}">${t}</button>`).join("")}</div>`).join("")}
     <div class="lab">Sortieren nach</div><div class="chips">${Object.entries(REC_SORT).filter(([k]) => k !== "preis" || prices).map(([k, [t]]) => `<button type="button" data-rsort="${k}" aria-pressed="${recSort === k}">${t}</button>`).join("")}</div>
     ${recActive().length ? `<button class="btn ghost small" type="button" data-rfreset>Filter zurücksetzen</button>` : ""}`; }
+const recCatsHtml = () => { const all = recipesFiltered(Object.assign({}, recFilter, {cat: "alle"})), n = {alle: all.length}; for (const r of all) n[catOf(r)] = (n[catOf(r)] || 0) + 1;
+  return ["alle", ...Object.keys(CAT)].filter(c => c === "alle" || n[c] || recFilter.cat === c).map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat === c}">${c === "alle" ? "Alle" : CAT[c]} <span class="muted">${n[c] || 0}</span></button>`).join(""); };
+const recHeadHtml = list => `<span><b id="recCount">${list.length}</b> Rezept${list.length === 1 ? "" : "e"} · nach ${recFilter.q ? "Treffer" : REC_SORT[recSort]?.[0] || "Protein"}</span><button type="button" class="btn ghost small" data-recshelves>Übersicht</button>`;
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { setRecipes(j); if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
   const act = recActive(), over = recShelves && !act.length && !recFilter.q && recFilter.cat === "alle";
-  const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0, base = Object.assign({}, recFilter, {cat: "alle"});
-  const cats = ["alle", ...Object.keys(CAT)].map(c => [c, recipesFiltered(c === "alle" ? base : Object.assign({}, base, {cat: c})).length]).filter(([c, n]) => c === "alle" || n || recFilter.cat === c);
+  const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
   const ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null;
-  const chip = (k, t) => `<button type="button" class="fchip" data-rfx="${k}">${t} ✕</button>`;
+  const chip = (k, t) => `<button type="button" class="fchip" data-rfx="${k}" aria-label="${t.replace(/<[^>]+>/g, "")} entfernen">${t} ✕</button>`;
   let h = `<div class="card recbar">${searchBox("recQ", recFilter.q, "🔎 Rezept oder Zutat suchen", "Rezepte suchen")}
     <div class="recact"><button class="btn small" type="button" data-sheet="recfilter">⚙ Filter${act.length ? ` · ${act.length}` : ""}</button><button class="btn small" type="button" data-random="rec">🎲 Zufall</button><button class="btn small" type="button" data-sheet="reste">🏠 Was kann ich kochen?</button></div>
-    <div class="chips sm" id="recCat">${cats.map(([c, n]) => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat === c}">${c === "alle" ? "Alle" : CAT[c]} <span class="muted">${n}</span></button>`).join("")}</div>
+    <div class="chips sm" id="recCat">${recCatsHtml()}</div>
     ${act.length ? `<div class="chips sm">${act.map(k => chip(k, k === "ing" ? "🥘 " + esc(ingP ? cwLabel(ingP) : "Zutat") : REC_FLABEL[k]?.[recFilter[k]] || k)).join("")}</div>` : ""}</div>`;
   if (over) {
     const shelves = [["★ Favoriten", {set: "fav"}], ["📅 Diese Woche im Plan", {set: "week"}], ["🆕 Neu", {set: "neu"}], ...(prepOff() ? [] : [["🍳 Meal Prep", {prep: true}]])].map(([t, f]) => [t, recipesFiltered(f), f]);
@@ -3921,7 +3925,7 @@ function renderRecipes(b){
       + `<button class="btn" type="button" data-recall>Alle ${recipesFiltered().length} Rezepte ›</button>`;
   } else {
     const list = recipesFiltered();
-    h += `<div class="mhead small muted"><span><b id="recCount">${list.length}</b> Rezept${list.length === 1 ? "" : "e"} · nach ${REC_SORT[recSort]?.[0] || "Protein"}</span>${act.length || recFilter.q || recFilter.cat !== "alle" ? `<button type="button" class="btn ghost small" data-recshelves>Übersicht</button>` : ""}</div>
+    h += `<div class="mhead small muted" id="recHead">${recHeadHtml(list)}</div>
       <div id="recRes">${list.length ? recGrid(list) : `<div class="empty small">Kein Rezept passt. Filter lockern?</div>`}</div>`;
   }
   if (hidden) h += `<div class="small muted">${hidden} Rezept${hidden > 1 ? "e" : ""} wegen Unverträglichkeiten ausgeblendet (Essen-Einstellungen).</div>`;
@@ -4158,7 +4162,10 @@ const SUBST = {
   butter: {label: "Butter", opts: {margarine: ["Margarine", -20, -0.7]}},
 };
 const clearFoodMemos = () => { for (const m of [costMemo, nutriMemo, budgetMemo, recVec]) m.clear(); if (typeof budgetQuick !== "undefined") budgetQuick.clear(); if (typeof prodUse !== "undefined") prodUse = null; dataVer++; };
-const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch);
+// nur Einstellungen, die andere Gerichte verlangen – Ansicht (High Protein/Normal), Markt, Bio, Ersatzprodukte lassen den gekauften Plan stehen
+const FREEZE_RESET = ["avoid", "allergens", "vegan", "effort", "mealPrep", "budget", "budgetIgnore", "slotsOff", "devices"];
+const saveFood = patch => { const f0 = FOOD(), pt = Object.assign({}, patch), mo0 = monday(todayIso());
+  if (!("weekFreeze" in pt) && FREEZE_RESET.some(k => k in pt) && (f0.weekFreeze || {})[mo0]) { const w = Object.assign({}, f0.weekFreeze); delete w[mo0]; pt.weekFreeze = w; }
   for (const k of ["favs", "stock", "bioItems", "slotsOff", "staples"]) if (Array.isArray(pt[k])) { const a = new Set(f0[k] || []), b = new Set(pt[k]); pt[k] = {_ops: true, add: [...b].filter(x => !a.has(x)), del: [...a].filter(x => !b.has(x))}; }
   for (const k of ["ownPrices", "myProds", "nick", "recVar"]) if (pt[k] && !pt[k]._delta) { const a = f0[k] || {}, b = pt[k], dl = {_delta: true}; for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) if (JSON.stringify(a[id]) !== JSON.stringify(b[id])) dl[id] = b[id] ?? null; pt[k] = dl; }
   saveSettings({food: pt}); applyNutri(); clearFoodMemos(); };
@@ -4309,7 +4316,7 @@ function budgetSubs00(mo){
   try { const keep = Object.entries(pm).slice(-7); lsSet("budgetMemo", Object.fromEntries([...keep, [pk, res]])); } catch {}
   return res;
 }
-const FREEZE_K = ["fr", "mi", "sn", "ab"];  // Extra (ex) bleibt live: hängt am Bouldern
+const FREEZE_K = ["fr", "mi", "ab"];  // Snack (sn) und Extra (ex) bleiben live: hängen an Training/Bouldern
 function mealDefaults(d, raw){ const o = withPlanDay(d, () => mealDefaults0(d, raw)), fz = !raw && (FOOD().weekFreeze || {})[monday(d)]?.[d];
   if (fz) { for (const k of FREEZE_K) if (fz.m?.[k]) o[k] = fz.m[k]; Object.defineProperty(o, "_budget", {value: new Set(fz.b || []), enumerable: false, configurable: true}); }
   return o; }
@@ -4405,7 +4412,7 @@ function mealThumb(n){
   return r?.img || r?.imgOrig ? recImgTag(r, "mthumb") : `<span class="mthumb ph">${n === "away" ? "🍽" : n === "skip" ? "–" : typeof n === "object" ? "✎" : CAT_IC[r?.category] || "🍴"}</span>`;
 }
 
-let mealOpen = !!lsGet("mealOpen"), todayFocus = lsGet("todayFocus4") || "alles";
+let todayFocus = lsGet("todayFocus4") || "alles";
 
 let mealTempF = "";
 // Favoriten im Tauschblatt nach oben (nur Anzeige, Plan und Budget bleiben unberührt); dazu passende Favoriten, die sonst nicht in der Liste wären
@@ -4671,7 +4678,7 @@ function parseIng0(line){
 const costMemo = new Map();
 function recipeCost(r, store){ const k = r.name + "|" + (store || FOOD().store || "aldi"); if (!costMemo.has(k)) costMemo.set(k, recipeCost0(r, store)); return costMemo.get(k); }
 // Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“
-const SPICE_RE = new RegExp("rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", "i");
+const SPICE_RE = new RegExp("rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\\brum\\b|metaxa|likör", "i");
 function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { if (x.q != null && !SPICE_RE.test(l)) miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
 function mealCost(name, store){ const r = recipeByName(name); if (r) return recipeCost(r, store).portion; if (name === "away") return 4.5; return null; }
 
@@ -5346,12 +5353,6 @@ const shopOk = m => shopMeals.includes(mealKind(m));
 const FRIDGE = () => (FOOD().fridge || []).filter(x => x && x.por > 0 && x.until >= todayIso());
 const shelfDays = r => { const m = String(r?.shelfLife || "").match(/(\d+)\s*(?:–\s*\d+\s*)?Tag/i); return m ? Math.min(5, Number(m[1])) : 3; };
 const SLOT_FIT = {fr: ["fr"], mi: ["mi", "ab"], ab: ["mi", "ab"], sn: ["sn", "ex"], ex: ["sn", "ex"]};
-function mealCountAround(name, d, k, back){ let n = 0;
-  for (let i = back ? -4 : 0; i <= (back ? 0 : 4); i++) { const dd = addDays(d, i), day = dayObj(dd) || {};
-    for (const m of mealsFor(dd)) { if (m.own || m.name !== name || (dd === d && m.k === k)) continue;
-      const slotIdx = mealPlan.slots.findIndex(x => x.k === m.k), myIdx = mealPlan.slots.findIndex(x => x.k === k);
-      if (back ? (i < 0 || slotIdx < myIdx) && (day.ate || {})[m.k] : (i > 0 || slotIdx > myIdx) && !(day.ate || {})[m.k]) n++; } }
-  return n; }
 // Freie, passende Mahlzeiten der nächsten Tage für Reste
 function restSlots(name, d, k, days){ const r = recipeByName(name), fit = (k && SLOT_FIT[k]) || (r?.category === "fruehstueck" ? ["fr"] : ["snack", "shake", "dessert"].includes(r?.category) ? ["sn", "ex"] : ["mi", "ab"]), out = [];
   const myIdx = k ? mealPlan.slots.findIndex(x => x.k === k) : -1;
@@ -5367,7 +5368,6 @@ function fridgeAdd(name, por, frozen){ const r = recipeByName(name), f = [...FRI
 function fridgeTake(id, n = 1){ const f = FRIDGE().map(x => Object.assign({}, x)), x = f.find(y => y.id === id); if (x) x.por -= n; fridgeSave(f.filter(y => y.por > 0)); }
 // Restebox ändern: ↶ im Essen-Kopf nimmt es zurück
 function fridgeSave(f){ const prev = FRIDGE(); saveFood({fridge: f}); if (!undoing) undoPush({fr: [prev, f]}); }
-let restState = null;
 // Rest essen: ersetzt die gewählte (oder nächste passende offene) Mahlzeit von heute und hakt sie ab; sonst als eigener Eintrag
 // Neues Gericht in einem Slot: alte Rest-Markierung und Portionsfaktor gelten nicht mehr
 function slotReset(day, k){ for (const f of ["rest", "por"]) if (day[f] && k in day[f]) { const o = Object.assign({}, day[f]); delete o[k]; day[f] = o; } }
@@ -5590,8 +5590,8 @@ function dupHint(d, m, dup){ dup = dup === undefined ? dupSlot(d, m) : dup; retu
 
 function essenHtml(b){
   let h = `<div class="subhead"><h2 class="ptitle">Essen</h2><span class="actions"><button type="button" class="btn ghost small ic" data-act="foodUndo" ${foodUndo.length ? "" : "disabled"} aria-label="Rückgängig" title="Rückgängig">↶</button><button type="button" class="btn ghost small ic" data-act="foodRedo" ${foodRedo.length ? "" : "disabled"} aria-label="Wiederholen" title="Wiederholen">↷</button><button type="button" class="btn ghost small" data-sub2="essenset" aria-label="Essen-Einstellungen">⚙ Einstellungen</button></span></div>` + `<div class="seg" role="group" aria-label="Essen">${[["plan","Plan"],["einkauf","Einkauf"],["rezepte","Rezepte"]].map(([k, l]) => `<button type="button" data-essen="${k}" aria-pressed="${essenView === k}">${l}</button>`).join("")}</div>`;
-  if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (!mealPlan || !recipes) { b.innerHTML = h + `<p class="muted">Lade Ernährungsplan …</p>`; ensureMeals().then(() => { if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = h + `<p>Plan konnte nicht geladen werden.</p>`; }); return; }
+  if (essenView === "rezepte") { b.innerHTML = h + `<div id="recBody"></div>`; renderRecipes(document.getElementById("recBody")); return; }
   if (essenView === "einkauf") { b.innerHTML = h + shopHtml(); return; }
   const t = todayIso(), mo = essenMon || monday(t), w = calWeek(mo), W = mealWeek(w ?? 0);
   if (!openDays || openDays.mo !== mo) openDays = {mo, set: new Set([mo === monday(t) ? t : mo])};
@@ -5762,7 +5762,7 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
@@ -5807,8 +5807,6 @@ async function onClick(e){
   const slo = t.closest("[data-slotoff]"); if (slo) { const k = slo.dataset.slotoff, a = new Set(FOOD().slotsOff || []); a.has(k) ? a.delete(k) : a.add(k); if (a.size >= mealPlan.slots.length) return toast("Mindestens eine Mahlzeit muss bleiben"); saveFood({slotsOff: [...a]}); renderMore(); return; }
   const za = t.closest("[data-zall]"); if (za) { const on = za.dataset.zall === "1"; for (const d of document.querySelectorAll("details.zgd")) { d.open = on; on ? shopOpen.add(d.dataset.keep) : shopOpen.delete(d.dataset.keep); } lsSet("shopOpen", [...shopOpen]); return; }
   const skm = t.closest("[data-skipmeal]"); if (skm) { const [d, k] = skm.dataset.skipmeal.split("|"); skipMeal(d, k); return; }
-  const rsn = t.closest("[data-restn]"); if (rsn && restState) { restState.n = Math.max(0, Math.min(12, restState.n + Number(rsn.dataset.restn))); if (restState.n === 0) { restState = null; sheetKind = null; sheet.close(); return; }
-    renderSheet(); return; }
   const rad = t.closest("[data-restadd]"); if (rad) { if (rad.disabled) return; fridgeAdd(rad.dataset.restadd, 1, false); render(); if (sheet.open) renderSheet(); return; }
   const rse = t.closest("[data-resteat]"); if (rse) { const [id, d, k] = rse.dataset.resteat.split("|"); eatRest(id, d, k); if (sheet.open) { sheetKind = null; sheet.close(); } render(); if (restAsk) setTimeout(() => openSheet("restleft", restAsk), 120); return; }
   const rlf = t.closest("[data-restleft]"); if (rlf) { const [id, v, eat] = rlf.dataset.restleft.split("|"); if (eat) eatRest(id); if (v === "0") fridgeTake(id, 999); restAsk = null; sheetKind = null; sheet.close(); render(); return; }
@@ -6041,7 +6039,7 @@ async function onClick(e){
       if (sel !== was) { setMode(sel); ciSaved = v; renderSheet(); render(); } else closeSheet(); return; } }
   const dps = t.closest("[data-dpset]"); if (dps) { dpSet(dps.dataset.dpset, dps.dataset.v); return; }
   const cm = t.closest("#ciMode [data-mode]"); if (cm) { cm.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b === cm))); return; }
-  const rc = t.closest("#recCat [data-cat]"); if (rc) { recFilter.cat = rc.dataset.cat; renderRecipes(); return; }
+  const rc = t.closest("#recCat [data-cat]"); if (rc) { recFilter.cat = rc.dataset.cat; recShelves = rc.dataset.cat === "alle" && !recActive().length && !recFilter.q; renderRecipes(); return; }
   const ms = t.closest("#modeSeg [data-mode]"); if (ms) { setMode(ms.dataset.mode); renderMore(); return; }
   if (t.id === "mSave") { const d = document.getElementById("mDate").value || todayIso(), m = Object.assign({}, store.measures[d] || {}, {date:d}); let any = false;
     const RANGE = {waist: [40, 200], neck: [20, 70], chest: [50, 200], arm: [15, 70], thigh: [25, 120], pelvis: [-10, 40], pullups: [0, 100], legpress10: [0, 1000]}; const bad = [];
@@ -6088,7 +6086,7 @@ function onInput(e){
   if (t.id === "allQ") { allQ = t.value; const up = () => { const r = document.getElementById("allRes"), m = document.getElementById("moreMenu"); if (r) r.innerHTML = allResHtml(); if (m) m.hidden = allQ.trim().length >= 2; };
     if (!recipes || !prices) Promise.all([ensurePrices(), ensureMeals()]).then(up).catch(() => {}); clearTimeout(t._d); t._d = setTimeout(up, 150); return; }
   if (t.id === "catQ") { catF.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const had = document.activeElement === t; renderMore(); const q = document.getElementById("catQ"); if (q && had) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
-  if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; const pos = t.selectionStart, had = document.activeElement === t; renderRecipes(); const q = document.getElementById("recQ"); if (q && q !== t) { q.replaceWith(t); if (had) { t.focus(); try { t.setSelectionRange(pos, pos); } catch {} } } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const res = document.getElementById("recRes"); if (!res) return renderRecipes(); const list = recipesFiltered(); res.innerHTML = recGrid(list); const c = document.getElementById("recCount"); if (c) c.textContent = list.length; }, 150); return; }
+  if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; const pos = t.selectionStart, had = document.activeElement === t; renderRecipes(); const q = document.getElementById("recQ"); if (q && q !== t) { q.replaceWith(t); if (had) { t.focus(); try { t.setSelectionRange(pos, pos); } catch {} } } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const res = document.getElementById("recRes"); if (!res) return renderRecipes(); const list = recipesFiltered(); res.innerHTML = list.length ? recGrid(list) : `<div class="empty small">Kein Rezept passt. Filter lockern?</div>`; const hd = document.getElementById("recHead"), rc = document.getElementById("recCat"); if (hd) hd.innerHTML = recHeadHtml(list); if (rc) rc.innerHTML = recCatsHtml(); }, 150); return; }
   if (/^m_/.test(t.id)) measDraft[t.id] = t.value;
   if (t.id === "m_waist" || t.id === "m_neck") { const bf = navy(num(document.getElementById("m_waist").value), num(document.getElementById("m_neck").value), S().height || 175); document.getElementById("navyLive").textContent = bf ? `Körperfett (Navy): ${bf.toLocaleString("de-DE", {minimumFractionDigits: 1, maximumFractionDigits: 1})} %` : "Körperfett (Navy) erscheint nach Taille + Hals."; }
 }

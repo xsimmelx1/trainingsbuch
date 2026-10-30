@@ -654,7 +654,7 @@ def price_of(pr, store, P):
 
 
 # Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“ (wie SPICE_RE in der App)
-SPICE_RE = __import__("re").compile(r"rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse", __import__("re").I)
+SPICE_RE = __import__("re").compile(r"rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\brum\b|metaxa|likör", __import__("re").I)
 
 
 def portion_cost(r, P, store, subst, memo):
@@ -955,8 +955,8 @@ def build_meal_ics(now, settings, plan, days, past=None):
         bs = subs_for(d)
         names = {k: bs.get(v, v) for k, v in names.items()}
         fz = ((fd.get("weekFreeze") or {}).get((d - dt.timedelta(days=d.weekday())).isoformat()) or {}).get(iso)
-        if fz:  # festgehaltene Woche (wie mealDefaults in der App): fr/mi/sn/ab aus dem gespeicherten Plan
-            names.update({k: v for k, v in (fz.get("m") or {}).items() if k in ("fr", "mi", "sn", "ab") and v})
+        if fz:  # festgehaltene Woche (wie mealDefaults in der App): fr/mi/ab aus dem gespeicherten Plan
+            names.update({k: v for k, v in (fz.get("m") or {}).items() if k in ("fr", "mi", "ab") and v})
         names.update({k: v for k, v in (day.get("meals") or {}).items() if v})
         times = (settings.get("food") or {}).get("times") or {}
         off = set((settings.get("food") or {}).get("slotsOff") or [])
