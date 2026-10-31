@@ -28,13 +28,14 @@ DATA = os.path.join(ROOT, "data")
 SITE = "https://xsimmelx1.github.io/trainingsbuch/"
 
 SEQ = ["beineA", "okA", "beineB", "okB"]
-BASE = {"beineAk": "beineA", "beineBk": "beineB", "okBhome": "okB"}
+BASE = {"beineAk": "beineA", "beineBk": "beineB", "okBhome": "okB", "okAs": "okA", "okBs": "okB"}
 TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB": "Oberkörper B",
-         "notfall": "Notfall-Ganzkörper", "reduziert": "Ganzkörper (reduziert)", "beineAk": "Beine A · Knie-Phase 1", "beineBk": "Beine B · Knie-Phase 1"}
+         "notfall": "Notfall-Ganzkörper", "reduziert": "Ganzkörper (reduziert)", "beineAk": "Beine A · Knie-Phase 1", "beineBk": "Beine B · Knie-Phase 1",
+         "okAs": "Oberkörper A · Schulter schonen", "okBs": "Oberkörper B · Schulter schonen"}
 # Öffentlicher Kalender-Feed: neutrale Namen ohne Reha- oder Stress-Status
 PUBLIC_TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B", "okB": "Oberkörper B", "beineAk": "Beine A", "beineBk": "Beine B",
                 "notfall": "Kurz-Einheit", "reduziert": "Ganzkörper", "okBhome": "Oberkörper B",
-                "notfallK": "Kurz-Einheit", "reduziertK": "Ganzkörper"}
+                "notfallK": "Kurz-Einheit", "reduziertK": "Ganzkörper", "okAs": "Oberkörper A", "okBs": "Oberkörper B"}
 EXERCISES = {  # Namen wie in der App (EX.name)
     "beineA": ["Beinpresse / Hack Squat", "Rumänisches Kreuzheben", "Beinstrecker", "Sitzender Beinbeuger", "Wadenheben stehend", "Dead Bug"],
     "okA": ["Brustgestütztes Rudern", "KH-Schrägbank 15–30°, Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben bis 90°", "Face Pull (Ende in Außenrotation)", "Kabel-Shrug, 30° abgespreizt", "Bayesian Curl am Kabel", "Trizeps-Pushdown"],
@@ -263,6 +264,8 @@ def variant(base, settings, d):
         return "notfall" + k
     if settings.get("mode") == "reduziert":
         return "reduziert" + k
+    if settings.get("mode") == "schonen" and base in ("okA", "okB"):
+        return base + "s"
     if k:
         return {"beineA": "beineAk", "beineB": "beineBk"}.get(base, base)
     return base
@@ -284,7 +287,7 @@ def build_plan(now, settings, days, busy, keep=None):
             if b in SEQ:
                 nxt = (SEQ.index(b) + 1) % 4
                 break
-    max_week = {"normal": 4, "reduziert": 2, "notfall": 2, "pause": 0}.get(settings.get("mode", "normal"), 4)
+    max_week = {"normal": 4, "schonen": 4, "reduziert": 2, "notfall": 2, "pause": 0}.get(settings.get("mode", "normal"), 4)
     count, consec = {}, 0
     # bereits erledigte Einheiten dieser Woche und die Serie bis gestern mitzählen
     for i in range(1, 8):
