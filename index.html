@@ -1145,6 +1145,7 @@ function mobAlt(k){ // Hinweis, wenn für eine Routine-Übung das Zubehör fehlt
   return "";
 }
 const mobFinished = (day, d) => mobCount(day, d) >= mobTotal(d) || !!day?.mobility?._done;
+const mobSkipped = day => !!day?.mobility?._skip && !mobCount(day) && !day?.mobility?._done;
 const mobCount = (day, d) => day?.mobility ? (d < MOB_SINCE ? MOB_OLD : MOBILITY.map(m => m[0]).filter(k => !mobOpt(k, d))).filter(k => day.mobility[k]).length : 0;
 let mobZoom = null;
 // ---------- Muskelkarte: vereinfachte Figur vorn/hinten, Bereiche nach den Muskelschlüsseln der Übungen ----------
@@ -2530,7 +2531,7 @@ const painLogged = day => day?.pain?.sc != null; // Abendcheck erledigt = SC ein
 const ciAt = d => parse(d).getDay() === 1 ? "19:30" : (store.plan.extras || []).find(x => x.date === d)?.start || "17:00";
 function dayEvents(d, focus = todayFocus){
   const ev = [], st = trainState(), pl = planFor(d), mc = mobCount(cur, d), mt = mobTotal(d);
-  ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", sub: `${mobMin(d)} min · ${mc}/${mt}`, done: mobFinished(cur, d), act: `data-sheet="mob"`, cta: mc ? "Weiter" : "Starten"});
+  { const sk = mobSkipped(cur); ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", sub: sk ? "ausgelassen" : `${mobMin(d)} min · ${mc}/${mt}`, done: mobFinished(cur, d) || sk, skip: sk, act: `data-sheet="mob"`, cta: mc ? "Weiter" : "Starten"}); }
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: st === "bereit" && d < todayIso() ? "nicht gemacht" : `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Zum Training", train: true}); }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(d)) if (m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time || "", icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: !m.own && typeof m.name === "string" && recipeByName(m.name) ? recTitle(recipeByName(m.name)) : m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
@@ -2564,10 +2565,10 @@ function nextBlock(d, all){
   // Tagesablauf: jeder Punkt mit Uhrzeit, Symbol, Kurzname und eindeutigem Status; „jetzt“-Strich an der aktuellen Uhrzeit
   const nowAt = ev.findIndex(e => hm(e.t) > nm);
   const line = `<div class="tline" role="list">${ev.map((e, i) => { const past = hm(e.t) < nm, miss = !e.done && past && e !== nx && !e.meal; const act = e.meal ? mealOpenAttr(d, e.meal) : e.act;
-    const stat = e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
-    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>`;
+    const stat = e.skip ? "ausgelassen" : e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
+    return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.skip ? "✕" : e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
-  const odHtml = (overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : ""}</span>`).join("")}</div>` : "")
+  const odHtml = (overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : e.k === "mob" && !mobCount(cur) ? `<button type="button" class="btn ghost small odx" data-act="mobSkip" aria-label="Morgenroutine heute ausgelassen">✕</button>` : ""}</span>`).join("")}</div>` : "")
     + missed.map(e => { const m = e.meal; return `<div class="odline small"><span class="muted">${e.t} ${esc(m.label)}:</span><button type="button" class="linkbtn" ${mealOpenAttr(d, m)}>${esc(e.title)}</button><span class="odit"><button type="button" class="btn ghost small" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${skipBtn(d, m, "btn ghost small odx")}</span></div>`; }).join("");
   if (!nx) return h + odHtml + (overdue.length ? "" : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`);
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), other = preps.filter(p => !mine.includes(p)), m = nx.meal;
@@ -2575,7 +2576,7 @@ function nextBlock(d, all){
   if (nx.train) h += `<div class="lab sec">Als Nächstes · ${lab}</div><div class="nowbig">${heroCard(true)}</div>`;
   else h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${lab}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${m.own ? "" : `<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Anderes Rezept planen">⇄</button>`}` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${m.own ? "" : `<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Anderes Rezept planen">⇄</button>`}` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>${nx.k === "mob" && !mobCount(cur) ? `<button class="btn ghost" type="button" data-act="mobSkip">✕ Heute ausgelassen</button>` : ""}`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
   h += odHtml;
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(ppRow).join("")}</div>`;
   return h;
@@ -2585,7 +2586,7 @@ function dayList(d, ev){
   const past = d < todayIso(); if (!ev.length) return "";
   return `<div class="lab sec">${past ? "An diesem Tag" : "Geplant"}</div><div class="lrows">${ev.map(e => { const m = e.meal;
     if (m) return `<div class="lrow ${e.done ? "done" : ""}" ${mealSw(d, m)}><button type="button" class="mdot" data-ate="${m.k}" data-d="${d}" aria-pressed="${m.ate}" aria-label="${esc(m.label)} gegessen">${m.ate ? "✓" : ""}</button><button type="button" class="lmain" ${mealOpenAttr(d, m)}><b>${esc(e.title)}</b><span class="small muted">${e.t ? e.t + " · " : ""}${e.sub}</span></button></div>`;
-    return `<div class="lrow ${e.done ? "done" : ""}"><span class="mdot static">${e.done ? "✓" : e.icon}</span><button type="button" class="lmain" ${e.act}><b>${esc(e.title)}</b><span class="small muted">${[e.t, e.sub, past && !e.done && !e.train ? "offen" : ""].filter(Boolean).join(" · ")}</span></button><span class="go">›</span></div>`; }).join("")}</div>`;
+    return `<div class="lrow ${e.done ? "done" : ""}"><span class="mdot static">${e.skip ? "✕" : e.done ? "✓" : e.icon}</span><button type="button" class="lmain" ${e.act}><b>${esc(e.title)}</b><span class="small muted">${[e.t, e.sub, past && !e.done && !e.train ? "offen" : ""].filter(Boolean).join(" · ")}</span></button><span class="go">›</span></div>`; }).join("")}</div>`;
 }
 // Coach auf Heute: Titel + kurzer Text (antippbar, wenn es eine Aktion gibt), Wenn-Dann-Plan der Woche, Lektion als eigene Zeile
 function coachHtml(){
@@ -3470,6 +3471,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
     h += `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
     MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb("mob:" + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb("mob:" + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${mobAlt(k) ? `<br><span class="small muted">${esc(mobAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
     h += `<button class="btn ${mobFinished(cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${mobFinished(cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
+    if (!mobCount(cur) && !cur.mobility._done) h += mobSkipped(cur) ? `<div class="small muted">Heute ausgelassen.</div><button class="btn ghost" type="button" data-act="mobSkip">↺ Doch nicht ausgelassen</button>` : `<button class="btn ghost" type="button" data-act="mobSkip">✕ Heute ausgelassen</button>`;
     if (mobZoom != null) { const [k, t, img] = MOBILITY[mobZoom], g = GUIDE[k];
       h += `<div class="zoomov" data-mobzoom="close"><div class="zoomcard" role="dialog" aria-label="${esc(t)}"><div class="zh"><span class="lab">Übung ${mobZoom + 1} von ${MOBILITY.length}</span><button type="button" class="btn ghost small" data-mobzoom="close" aria-label="Schließen">✕</button></div>
         ${motionHtml("mob:" + k, img, t, false)}${IMG_NOTE["mob:" + k] && img ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE["mob:" + k])}</div>` : ""}<div class="zt">${esc(t)}</div>${mobAlt(k) ? `<div class="warnb small">${esc(mobAlt(k))}</div>` : ""}${doseHtml("mob:" + k)}${gearHtml("mob:" + k, true)}<div id="tmrSlot"></div>
@@ -4093,11 +4095,11 @@ function calEntries(d, noMeals){
   for (const c of day?.cardio || []) out.push({tm:"", title:`${CARDIO[c.type]?.[1] || "Ausdauer"} ${[durTxt(c), c.km ? fmtQ(c.km) + " km" : ""].filter(Boolean).join(" · ")}`, kind:"cardio", done:true, go:`#d=${d}`});
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title: prepOff() ? "Wochen-Check-in" : "Wochen-Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = painLogged(day);
-  if (d >= t || mob) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin(d)), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
+  if (d >= t || mob || mobSkipped(day)) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin(d)), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), skip: mobSkipped(day), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
   if (d >= t || pain) out.push({tm: routineAt("pain"), en: hmStr(hm(routineAt("pain")) + 5), title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
 }
-const evState = e => e.done ? "✓" : e.part ? e.part : e.off ? "entfallen (Pause)" : e.miss ? "verpasst" : "";
+const evState = e => e.skip ? "ausgelassen" : e.done ? "✓" : e.part ? e.part : e.off ? "entfallen (Pause)" : e.miss ? "verpasst" : "";
 function evRow(e){
   const inner = `<span class="tm">${esc(e.tm || "–")}</span><span class="ti"><b>${esc(e.title)}</b>${e.en ? `<small>bis ${esc(e.en)}</small>` : ""}</span><span class="st">${esc(evState(e))}${e.go ? " ›" : ""}</span>`;
   return e.go ? `<a class="ev ${e.kind} ${e.done ? "done" : ""}" href="${e.go}">${inner}</a>` : `<div class="ev ${e.kind}">${inner}</div>`;
@@ -6048,6 +6050,7 @@ async function onClick(e){
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
       const nxt = planFor(addDays(d, 1)); cardioFeel = ""; if (cardioType === "boulder" && nxt && /^ok/.test(nxt.session)) toast("Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf"); renderSheet(); render(); return; }
     if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
+    if (a === "mobSkip") { cur.mobility = Object.assign({}, cur.mobility); if (cur.mobility._skip) { delete cur.mobility._skip; clr("mobility._skip"); } else cur.mobility._skip = true; touch(); if (sheet.open) renderSheet(); render(); return; }
     if (a === "mobFinish") { cur.mobility = Object.assign({}, cur.mobility); if (mobFinished(cur, selDate) && cur.mobility._done) { delete cur.mobility._done; clr("mobility._done"); } else cur.mobility._done = true; touch(); renderSheet(); render(); return; }
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
@@ -6159,7 +6162,7 @@ function onInput(e){
 async function onChange(e){
   const t = e.target;
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
-  if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; touch(); return; }
+  if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; if (cur.mobility._skip) { delete cur.mobility._skip; clr("mobility._skip"); } touch(); return; }
   if (t.id === "wIn" || t.id === "slIn") { saveCur(); return; }
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]);
     const y = window.scrollY; renderMore(); window.scrollTo(0, y); return; } // abgehakt bleibt an seiner Stelle, die Liste springt nicht
