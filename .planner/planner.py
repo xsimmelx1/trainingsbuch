@@ -461,7 +461,7 @@ ALLERGENS = {"nuesse": "walnu|cashew|haselnu|mandel|pistazie|nüsse|nusskern|stu
 
 
 # wie VEGAN_RE in der App: tierische Zutaten; Pflanzendrinks, Soja-/Kokosjoghurt, Erdnuss-/Mandelbutter zählen nicht
-VEGAN_RE = r"\beier?\b|eiklar|eigelb|rührei|spiegelei|omelett|\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee"
+VEGAN_RE = r"\beier?\b|eiklar|eigelb|rührei|spiegelei|omelett|\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee|(?<!vegane )spätzle|eiernudel|tortellini|maultasche|(?<!vegane )mayonnaise"
 
 
 def avoid_re(settings):
@@ -633,8 +633,8 @@ def parse_ing(line, P, subst):
         amt = q
     else:
         amt = q * (pr.get("piece") or (1 if pr.get("pantry") and SPICE_RE.search(name) else 100))  # Gewürz aus dem Vorrat ohne Stückgewicht: 1 g (wie parseIng)
-    if pr["unit"] == "Stück" and unit in ("g", "ml"):
-        amt = q / (pr.get("piece") or 60)
+    if pr["unit"] == "Stück" and unit in ("g", "ml", "kg", "l"):  # kg/l: Menge ist schon in g/ml umgerechnet (wie parseIng)
+        amt = q * (1000 if unit in ("kg", "l") else 1) / (pr.get("piece") or 60)
     elif pr["unit"] == "Stück" and unit in ("EL", "TL", "Handvoll", "Prise", "Prisen"):  # 2 EL Petersilie ≈ 1 Bund, nicht 30 (wie parseIng in der App)
         herb = HERB_RE.search(name)  # gehackte Kräuter: 1 EL ≈ 4 g
         amt = (q * (4 if herb else 15) if unit == "EL" else q * (1.5 if herb else 5) if unit == "TL" else q * 30 if unit == "Handvoll" else q) / (pr.get("piece") or 60)
@@ -657,7 +657,7 @@ def price_of(pr, store, P):
 
 
 # Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“ (wie SPICE_RE in der App)
-SPICE_RE = __import__("re").compile(r"rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\brum\b|metaxa|likör", __import__("re").I)
+SPICE_RE = __import__("re").compile(r"sternanis|safran|rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\brum\b|metaxa|likör", __import__("re").I)
 
 
 def portion_cost(r, P, store, subst, memo):

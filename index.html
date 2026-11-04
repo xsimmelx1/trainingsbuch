@@ -129,6 +129,12 @@ dialog.swapmode{background:color-mix(in srgb, var(--warn-soft) 55%, var(--bg));b
 details.rprice summary{cursor:pointer;font-size:14px;list-style:none}details.rprice summary::-webkit-details-marker{display:none}details.rprice summary::after{content:" ›";color:var(--muted)}
 details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{margin-top:6px}
 .rsteps{padding-left:22px;margin:8px 0}.rsteps li{margin:8px 0;line-height:1.45}
+.rsteps li.pp{border-left:3px solid var(--good);padding-left:8px;margin-left:-11px}.ppt{font-size:11px;font-weight:700;color:var(--good);white-space:nowrap}
+.rdiff{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline;line-height:1.5}.rdiff span{padding:1px 7px;border-radius:6px;background:var(--sunk)}.rdiff .dadd{background:var(--good-soft);color:var(--good)}.rdiff .dgone{text-decoration:line-through;color:var(--muted)}
+.ingg .ir.pp{box-shadow:inset 3px 0 0 var(--good)}.ingg .ir.gone{color:var(--muted);text-decoration:line-through}.ingg .ppn{font-size:12px;color:var(--good);font-weight:600}
+.recnav{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:2px 0 6px}.recnav .mid{flex:1;text-align:center;line-height:1.25}
+#sheet.slnext .rhero,#sheet.slnext .recnav~*{animation:slnext .22s ease-out}#sheet.slprev .rhero,#sheet.slprev .recnav~*{animation:slprev .22s ease-out}
+@keyframes slnext{from{opacity:.2;transform:translateX(36px)}to{opacity:1;transform:none}}@keyframes slprev{from{opacity:.2;transform:translateX(-36px)}to{opacity:1;transform:none}}
 .rinfo{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 
 
@@ -2604,11 +2610,12 @@ function coachHtml(){
 // Zutaten als Tabelle, sortierbar nach Rezept, Gang im Laden, Preis oder A–Z
 function ingTable(r){
   if (!prices) { ensurePrices().then(() => { const box = document.getElementById("ingTab"); if (box) box.innerHTML = ingTable(r); }).catch(() => {}); }
-  const sort = lsGet("ingSort") || "rezept", st = stockOn() ? STOCK() : new Set(), pz = !!prices;
+  const sort = lsGet("ingSort") || "rezept", st = stockOn() ? STOCK() : new Set(), pz = !!prices, dd = r.normal && r.variant !== "normal" ? recDiff(r) : null;
   const rows = r.ingredients.map((l, i) => { const x = prices ? parseIng(l) : null, m = l.match(/^((?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Stiele?|Zweige?)?)\s+(.+)$/);
     const pr = x?.pr, cost = pr ? (x.parts || [x]).reduce((a, pt) => { const v = priceOf(pt.pr); return v == null ? a : a + pt.amt / pt.pr.pack * v; }, 0) : null, name = m ? m[2] : l;
     const grp = pr?.group || (SPICE_RE.test(l) || !pr ? "Vorrat & Gewürze" : (SHOP_GROUPS.find(([, re]) => re.test(name))?.[0] || "Vorrat & Gewürze"));
-    return {i, amt: m ? m[1] : "", name: name.replace(/\s*\([^)]*\)/g, "").trim() || name, sub: x?.orig ? SUBST[x.orig.id].opts[x.subKey][0] : null, cost, grp, home: !!(pr && st.has(pr.id))}; });
+    return {i, amt: m ? m[1] : "", name: name.replace(/\s*\([^)]*\)/g, "").trim() || name, sub: x?.orig ? SUBST[x.orig.id].opts[x.subKey][0] : null, cost, grp, home: !!(pr && st.has(pr.id)), pp: dd?.line.get(l)}; });
+  if (dd) for (const l of dd.gone) { const [a, n] = ingSplit(l); rows.push({i: 999, amt: a, name: n.replace(/\s*\([^)]*\)/g, "").trim(), cost: null, grp: "Vorrat & Gewürze", gone: true}); }
   const GO = SHOP_GROUPS.map(g => g[0]).concat("Vorrat & Gewürze");
   if (sort === "laden") rows.sort((a, b) => GO.indexOf(a.grp) - GO.indexOf(b.grp) || a.name.localeCompare(b.name, "de"));
   else if (sort === "preis") rows.sort((a, b) => (b.cost ?? -1) - (a.cost ?? -1));
@@ -2617,7 +2624,7 @@ function ingTable(r){
   return `<div class="lab">Zutaten · ${r.servings} Portion${r.servings > 1 ? "en" : ""}</div>
     <div class="chips sm">${[["rezept", "Rezept"], ["laden", "Laden"], ["preis", "Preis"], ["az", "A–Z"]].map(([k, lb]) => `<button type="button" data-ingsort="${k}" aria-pressed="${sort === k}">${lb}</button>`).join("")}</div>
     <div class="ingg"><div class="ih"><span>Menge</span><span>Zutat</span><span>${pz ? "Preis" : ""}</span></div>${rows.map((x, j) => (sort === "laden" && (j === 0 || rows[j - 1].grp !== x.grp) ? `<div class="ig">${esc(x.grp)}</div>` : "")
-      + `<div class="ir ${x.home ? "home" : ""}"><span class="amt">${esc(x.amt)}</span><span>${esc(x.name)}${x.sub ? ` <b>→ ${esc(x.sub)}</b>` : ""}${x.home ? ` <span class="tag">🏠 Vorrat</span>` : ""}</span><span class="num">${pz ? (x.cost != null ? eur(x.cost) : "–") : ""}</span></div>`).join("")}
+      + `<div class="ir ${x.home ? "home" : ""} ${x.pp ? "pp" : ""} ${x.gone ? "gone" : ""}"><span class="amt">${esc(x.amt)}</span><span>${esc(x.name)}${x.sub ? ` <b>→ ${esc(x.sub)}</b>` : ""}${x.home ? ` <span class="tag">🏠 Vorrat</span>` : ""}${x.pp ? ` <span class="ppn">${ppNote(x.pp)}</span>` : ""}${x.gone ? ` <span class="small">nur Normal</span>` : ""}</span><span class="num">${pz ? (x.cost != null ? eur(x.cost) : "–") : ""}</span></div>`).join("")}
     ${pz ? `<div class="ir sum"><span></span><span>Gesamt · ${eur(recipeCost(r).portion)} pro Portion</span><span class="num">${eur(recipeCost(r).total)}</span></div><div class="small muted">Preise: ${st0}, anteilig gerechnet.</div>` : ""}</div>`;
 }
 function zutatenPage(){
@@ -3868,14 +3875,15 @@ function journeySheet(kind, arg){
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
     return `<div class="sh"><div><h2>${esc(recTitle(r))}</h2>${r.sub ? `<div class="small muted rsub">${esc(r.sub)}</div>` : ""}</div><span class="shr">${(() => { const sc = swapCand && swapCand.name === r.name ? swapCand.ctx : ctxM ? `${ctxM.d}|${ctxM.k}` : null;
       return sc ? `<button type="button" class="favb dice" data-random="meal" data-v="${sc}" data-cur="${esc(mealsFor(sc.split("|")[0]).find(m => m.k === sc.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}" aria-label="Zufällig austauschen" title="Zufällig austauschen">🎲</button>`
-        : `<button type="button" class="favb dice" data-random="rec" data-cur="${esc(r.name)}" aria-label="Anderes Zufallsrezept" title="Anderes Zufallsrezept">🎲</button>`; })()}${favBtn(r.name)}${close}</span></div>
+        : ""; })()}${favBtn(r.name)}${close}</span></div>
+      ${!ctxM && !(swapCand && swapCand.name === r.name) ? recNavHtml(r) : ""}
       ${ctxM ? (() => { const mm = mealsFor(ctxM.d).find(x => x.k === ctxM.k) || ctxM;
         return `<div class="actions ddrow"><button class="btn ${ctxM.ate ? "primary" : ""}" type="button" data-ate="${ctxM.k}" data-d="${ctxM.d}" aria-pressed="${ctxM.ate}">${ctxM.ate ? "✓ Gegessen" : "Gegessen"}</button>${ddMenu("Mehr", `<button type="button" data-sheet="other" data-v="${ctxM.d}|${ctxM.k}">✎ Was anderes gegessen</button><button type="button" data-sheet="meal" data-v="${ctxM.d}|${ctxM.k}">⇄ Anderes Rezept planen</button>${restBtn(ctxM.d, mm).replace(/class="[^"]*"/, "")}${skipBtn(ctxM.d, ctxM, "")}`, "right")}</div>${porPick(ctxM.d, mm)}${devPick(ctxM.d, mm, r)}${restPick(ctxM.d, ctxM)}`; })() : ""}
       ${swapCand && swapCand.name === r.name ? `<div class="actions"><button class="btn primary" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}">⇄ Austauschen</button>${swapCand.ctx.split("|")[0] <= todayIso() ? `<button class="btn" type="button" data-meal="${esc(r.name)}" data-swapctx="${swapCand.ctx}" data-eat="1">✓ Austauschen & gegessen</button>` : ""}</div>` : ""}
       <div class="rhero">${recImgTag(r, "rimg")}
         <div class="rfacts">${tempTag(r)}${veganOk(r) ? `<span class="tag">🌱 vegan</span>` : ""}<span>⏱ ${r.activeMin != null && r.activeMin !== r.timeMin ? `${r.activeMin} min aktiv · ` : ""}${r.timeMin} min</span>${r.difficulty ? `<span class="diff d${DIFF_RANK[r.difficulty]}">${esc(r.difficulty)}</span>` : ""}${r.mealPrep && !prepOff() ? `<span class="tag">vorkochbar</span>` : ""}</div>
         <div class="rnut nutri"><span><b>${recipeNutri(r).kcal}</b> kcal</span><span><b>${recipeNutri(r).protein}</b> g Protein</span><span class="muted">${r.carbs} g KH · ${r.fat} g Fett · pro Portion</span></div>
-        ${(b => b.normal ? `<div class="chips sm"><button type="button" data-recvar="high" data-rn="${esc(r.name)}" aria-pressed="${r.variant !== "normal"}">💪 High Protein${b.protein > b.normal.protein ? ` · +${b.protein - b.normal.protein} g` : ""}</button><button type="button" data-recvar="normal" data-rn="${esc(r.name)}" aria-pressed="${r.variant === "normal"}">Normal</button></div>` : "")(r._base || r)}
+        ${(b => b.normal ? `<div class="chips sm"><button type="button" data-recvar="high" data-rn="${esc(r.name)}" aria-pressed="${r.variant !== "normal"}">💪 High Protein${b.protein > b.normal.protein ? ` · +${b.protein - b.normal.protein} g` : ""}</button><button type="button" data-recvar="normal" data-rn="${esc(r.name)}" aria-pressed="${r.variant === "normal"}">Normal</button></div>${recDiffHtml(r)}` : "")(r._base || r)}
         ${(d0 => d0 ? `<div class="small muted">Zuletzt gegessen ${d0 === todayIso() ? "heute" : "am " + fmt(d0)}</div>` : "")(lastAte(r.name))}
         ${showPrices() ? (() => { const st = FOOD().store || "aldi", c = recipeCost(r, st), best = st === "min" ? null : prices.stores.map(x => [x, recipeCost(r, x).portion]).sort((a, b) => a[1] - b[1])[0];
           return `<details class="rprice"><summary><b>${eur(c.portion)}</b> pro Portion <span class="muted">· ${st === "min" ? "je Produkt günstigster Markt" : STORES[st] || st}${best && best[0] !== st ? ` · ${STORES[best[0]]} ${eur(best[1])}` : ""}</span></summary><div class="storecmp">${prices.stores.map(x => `<div class="${x === st ? "sel" : ""}"><span>${STORES[x]}</span><b>${eur(recipeCost(r, x).portion)}</b></div>`).join("")}</div><div class="small muted">Anteilig gerechnet. ${priceNote()}</div></details>`; })() : ""}
@@ -3883,10 +3891,10 @@ function journeySheet(kind, arg){
       </div>
       ${avoidHit(r) ? `<div class="pill warn">${avoidHit(r)[0] === "§" ? `Braucht ${esc(DEV_NEED[avoidHit(r)])} – fehlt in deiner Küche` : `Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)`}</div>` : ""}
       ${!ctxM && !(swapCand && swapCand.name === r.name) ? planRecHtml(r) : ""}
-      <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>
+      <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>${reweCart(r)}
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div>${cookAhead(r).length ? `<div class="aheadbox"><b>Vorher erledigen</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
-      <ol class="rsteps">${cookSteps(r).map(x => `<li>${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join("")}</ol>
+      <ol class="rsteps">${(ns => cookSteps(r).map(x => `<li${ns && !ns.has(x.do) ? ` class="pp"` : ""}>${ns && !ns.has(x.do) ? `<span class="ppt">💪 Protein+</span> ` : ""}${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join(""))(r.normal && r.variant !== "normal" ? new Set(cookSteps(recNormalOf(r)).map(x => x.do)) : null)}</ol>
       <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note && !srcLink(r).includes("srcrow") ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.imgOrig ? `<div class="small muted">Foto: ${esc(srcHost(r.source) || "Originalrezept")}</div>` : ""}${!r.imgOrig && r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
   }
   return null;
@@ -3914,12 +3922,63 @@ const recNew = r => !!r.since && r.since > addDays(todayIso(), -42);
 const recActive = (f = recFilter) => Object.keys(REC_F0).filter(k => k !== "cat" && k !== "q" && JSON.stringify(f[k]) !== JSON.stringify(REC_F0[k]));
 const REC_SORT = {protein: ["Protein", (a, b) => recipeNutri(b).protein - recipeNutri(a).protein], zeit: ["Zeit", (a, b) => (a.activeMin ?? a.timeMin) - (b.activeMin ?? b.timeMin)], preis: ["Preis", (a, b) => (prices ? recipeCost(a).portion - recipeCost(b).portion : 0)], neu: ["Neu", (a, b) => (b.since || "").localeCompare(a.since || "")], az: ["A–Z", (a, b) => recTitle(a).localeCompare(recTitle(b), "de")]};
 function recipesFiltered(F = recFilter){ const f = Object.assign({}, REC_F0, F), are = avoidRe(), ingP = f.ing && prices ? prodById(f.ing) : null, wk = f.set === "week" ? weekRecipes(monday(todayIso())) : null, srt = (REC_SORT[f.sort || recSort] || REC_SORT.protein)[1];
-  return recipes.filter(r => recipeOk(r, are) && (!f.ing || usesProd(r, ingP)) && (f.cat === "alle" || catOf(r) === f.cat) && (!f.prep || (r.mealPrep && (r.servings || 1) >= 4)) && (f.set !== "fav" || isFav(r.name)) && (f.set !== "neu" || recNew(r)) && (!wk || wk[r.name]) && (!f.vegan || veganOk(r)) && (!f.temp || r.temp === f.temp || r.temp === "beides") && (!f.diff || r.difficulty === f.diff) && (!f.time || (r.activeMin ?? r.timeMin) <= f.time) && (!f.cheap || (!!prices && recipeCost(r).portion <= 1.2)) && (!f.q || recQScore(r, f.q) > 0))
+  return recipes.filter(r => recipeOk(r, are) && (!f.ing || usesProd(r, ingP)) && (f.cat === "alle" || catOf(r) === f.cat) && (!f.prep || (r.mealPrep && (r.servings || 1) >= 4)) && (f.set !== "fav" || isFav(r.name)) && (f.set !== "neu" || recNew(r)) && (!wk || wk[r.name]) && (!f.vegan || veganOk(r)) && (!f.temp || r.temp === f.temp || r.temp === "beides") && (!f.diff || r.difficulty === f.diff) && (!f.time || (r.activeMin ?? r.timeMin) <= f.time) && (!f.cheap || cheapOk(r)) && (!f.style || r.style === f.style) && (!f.q || recQScore(r, f.q) > 0))
     .sort((a, b) => (f.q ? recQScore(b, f.q) - recQScore(a, f.q) : 0) || srt(a, b) || recipeNutri(b).protein - recipeNutri(a).protein); }
+// Günstig = günstigstes Drittel der eigenen Kategorie (sonst wäre Frühstück immer günstig und Hauptgerichte nie)
+let cheapMemo = {k: null};
+const cheapLim = c => { const k = (FOOD().store || "aldi"); if (cheapMemo.k !== k || cheapMemo.r !== recipes || cheapMemo.p !== prices) cheapMemo = {k, r: recipes, p: prices, m: {}};
+  if (cheapMemo.m[c] == null) { const v = recipes.filter(r => catOf(r) === c).map(r => recipeCost(r).portion).sort((a, b) => a - b); cheapMemo.m[c] = v.length ? v[Math.floor((v.length - 1) / 3)] : 0; } return cheapMemo.m[c]; };
+const cheapOk = r => !!prices && recipeCost(r).portion <= cheapLim(catOf(r)) + 0.005;
+const STYLE = {einfach: "🍽 Einfach", besonders: "✨ Besonders"};
 let recQMemo = {q: null, m: new Map()};
 const recQScore = (r, q) => { q = fold(q.trim()); if (recQMemo.q !== q || recQMemo.r !== recipes) recQMemo = {q, r: recipes, m: new Map()};
-  let v = recQMemo.m.get(r.name); if (v == null) { v = Math.max(sugScore((r.short || "") + " " + r.name, q) * 2, sugScore(r.ingredients.join(" "), q)); recQMemo.m.set(r.name, v); } return v; };
+  let v = recQMemo.m.get(r.name); if (v == null) { v = Math.max(sugScore((r.short || "") + " " + r.name, q) * 2, sugScore(r.ingredients.join(" "), q), sugScore([CAT[catOf(r)], r.category === "mittag" || r.category === "abend" ? "mittagessen abendessen" : "", r.style === "besonders" ? "besonders ausgefallen speziell" : r.style === "einfach" ? "einfach alltag" : "", veganOk(r) ? "vegan" : ""].join(" "), q)); recQMemo.m.set(r.name, v); } return v; };
 const recTitle = r => r.short || r.name;
+// ---------- Zufall ohne Wiederholung + Blättern im Rezeptblatt ----------
+// Je Auswahl (Kategorie + Filter) merkt sich das Gerät, was schon gezeigt wurde; erst wenn alle durch sind, beginnt eine neue Runde
+let recNav = null;  // {f: Filter, hist: [Namen], i: Position, round: neue Runde begonnen}
+const recSeenKey = f => JSON.stringify(Object.keys(REC_F0).map(k => f[k]));
+function recDraw(f, skip){ const pool = recipesFiltered(f).map(r => r.name); if (!pool.length) return null;
+  const all = lsGet("recSeen") || {}, k = recSeenKey(f), ex = new Set(skip), inP = new Set(pool); let seen = (all[k] || []).filter(n => inP.has(n)), round = false;
+  let cand = pool.filter(n => !ex.has(n) && !seen.includes(n));
+  if (!cand.length) { round = true; seen = []; cand = pool.filter(n => n !== skip[skip.length - 1]); if (!cand.length) cand = pool; }
+  const n = cand[Math.floor(Math.random() * cand.length)]; seen.push(n); delete all[k]; all[k] = seen; const ks = Object.keys(all); for (const x of ks.slice(0, Math.max(0, ks.length - 15))) delete all[x];
+  lsSet("recSeen", all); return {n, round, total: pool.length, left: cand.length - 1}; }
+function recNavGo(dir){ if (!recNav) return; let n;
+  if (dir < 0) { if (recNav.i <= 0) return; n = recNav.hist[--recNav.i]; }
+  else if (recNav.i < recNav.hist.length - 1) n = recNav.hist[++recNav.i];
+  else { const d = recDraw(recNav.f, recNav.hist); if (!d) return; n = d.n; recNav.round = d.round; recNav.hist.push(n); recNav.i = recNav.hist.length - 1; }
+  sheet.classList.remove("slnext", "slprev"); void sheet.offsetWidth; sheet.classList.add(dir > 0 ? "slnext" : "slprev"); setTimeout(() => sheet.classList.remove("slnext", "slprev"), 260);
+  openSheet("recipe", n); sheet.scrollTop = 0; }
+function recNavHtml(r){ if (!recNav || recNav.hist[recNav.i] !== r.name) recNav = {f: Object.assign({}, REC_F0, {cat: catOf(r)}), hist: [r.name], i: 0};
+  const f = recNav.f, n = recipesFiltered(f).length, ex = Object.keys(REC_F0).filter(k => k !== "cat" && JSON.stringify(f[k]) !== JSON.stringify(REC_F0[k])).map(k => k === "q" ? `„${f.q}“` : k === "ing" ? "Zutat" : REC_FLABEL[k]?.[f[k]] || "").filter(Boolean);
+  return `<div class="recnav"><button type="button" class="btn small" data-recnav="-1" ${recNav.i ? "" : "disabled"} aria-label="Vorheriges Rezept">‹</button><span class="mid small muted">🎲 ${esc(CAT[f.cat] || "Rezepte")}${ex.length ? " · " + ex.map(esc).join(" · ") : ""} · ${n}<br>${recNav.round && recNav.i === recNav.hist.length - 1 ? "Alle gesehen – neue Runde" : "wischen oder tippen"}</span><button type="button" class="btn small primary" data-recnav="1" aria-label="Nächstes Zufallsrezept">Nächstes ›</button></div>`; }
+// Protein+ gegenüber Normal: gleiche Zutat = gleicher Name (ohne Menge und Klammern); Tausche stehen im Rezept (swaps), sonst gleiche Produkt-Zuordnung
+const ING_AMT = /^((?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Stiele?|Zweige?)?)\s+(.+)$/;
+const ingSplit = l => { const m = String(l).match(ING_AMT); return m ? [m[1], m[2]] : ["", String(l)]; };
+const ingKey = l => fold(ingSplit(l)[1].replace(/\s*\([^)]*\)/g, "").trim().toLowerCase()).split(/\s+/).map(w => w.length > 3 ? w.replace(/(en|er|n|e|s)$/, "") : w).join(" ");  // „1 Ei“ ↔ „3 Eier“, „Zwiebel“ ↔ „Zwiebeln“
+const amtNum = l => { const a = ingSplit(l)[0].replace(/^ca\.\s*/, "").match(/^(\d+(?:[.,]\d+)?|\d+\/\d+|½|¼|¾)/); if (!a) return null; const v = a[1]; return v === "½" ? .5 : v === "¼" ? .25 : v === "¾" ? .75 : v.includes("/") ? v.split("/").reduce((x, y) => x / y) : Number(v.replace(",", ".")); };
+let diffMemo = new WeakMap();
+function recDiff(r){ const b = r._base || r; if (!b.normal) return null; const mk = diffMemo.get(b); if (mk && mk.p === !!prices) return mk;
+  const H = b.ingredients, N = b.normal.ingredients || [], out = {p: !!prices, add: [], chg: [], swap: [], gone: [], line: new Map()}, uH = new Set(), uN = new Set();
+  for (const [n, h] of b.swaps || []) if (H.includes(h) && N.includes(n)) { out.swap.push([n, h]); out.line.set(h, {t: "swap", from: n}); uH.add(h); uN.add(n); }
+  const nk = new Map(); for (const l of N) if (!uN.has(l)) { const k = ingKey(l); if (!nk.has(k)) nk.set(k, []); nk.get(k).push(l); }  // gleiche Namen mehrfach (z. B. Zwiebel für Bratlinge und Reis): erst exakt, dann der Reihe nach
+  const addL = []; for (const l of H) { if (uH.has(l)) continue; const a = nk.get(ingKey(l));
+    if (!a?.length) { addL.push(l); continue; } const j = a.indexOf(l), n = a.splice(j >= 0 ? j : 0, 1)[0];
+    if (n !== l) { const a = amtNum(n), c = amtNum(l); out.chg.push([n, l]); out.line.set(l, {t: a != null && c != null ? (c < a ? "less" : c > a ? "more" : "chg") : "chg", from: n}); } }
+  let gone = [...nk.values()].flat();
+  if (prices) for (const g of [...gone]) { const pg = parseIng(g).pr, a = pg && addL.find(x => parseIng(x).pr === pg); if (a) { out.swap.push([g, a]); out.line.set(a, {t: "swap", from: g}); addL.splice(addL.indexOf(a), 1); gone = gone.filter(x => x !== g); } }
+  for (const l of addL) { out.add.push(l); out.line.set(l, {t: "add"}); } out.gone = gone;
+  diffMemo.set(b, out); return out; }
+const ingNm = l => ingSplit(l)[1].replace(/\s*\([^)]*\)/g, "").trim();
+const ppNote = p => p.t === "add" ? "＋ Protein+" : p.t === "swap" ? `statt ${esc(ingSplit(p.from)[0] ? ingSplit(p.from)[0] + " " : "")}${esc(ingNm(p.from))}` : `Normal: ${esc(ingSplit(p.from)[0] || "–")}`;
+function recDiffHtml(r){ const d = recDiff(r); if (!d) return ""; const hi = r.variant !== "normal";
+  const it = [...d.add.map(l => `<span class="dadd">＋ ${esc(ingSplit(l)[0] ? ingSplit(l)[0] + " " : "")}${esc(ingNm(l))}</span>`), ...d.swap.map(([n, h]) => `<span>${esc(ingNm(h))} statt ${esc(ingNm(n))}</span>`),
+    ...d.chg.map(([n, h]) => `<span>${esc(ingNm(h))} ${esc(ingSplit(n)[0] || "–")} → ${esc(ingSplit(h)[0] || "–")}</span>`), ...d.gone.map(l => `<span class="dgone">${esc(ingNm(l))}</span>`)];
+  if (!it.length) return "";
+  return `<div class="rdiff small"><b>${hi ? "💪 Anders als Normal:" : "💪 Protein+ wäre:"}</b>${it.join("")}</div>`; }
+// REWE-Rezepte: auf rewe.de lassen sich alle Zutaten des Rezepts direkt in den Warenkorb legen
+const reweCart = r => /(^|\.)rewe\.de$/.test(srcHost(r.source)) ? `<a class="btn small" href="${esc(r.source)}" target="_blank" rel="noopener">🛒 Zutaten bei REWE in den Warenkorb ↗</a><div class="small muted">Öffnet das Original auf rewe.de – dort „Zutaten in den Warenkorb“ (Mengen wie im Original${r.normal && r.variant !== "normal" ? ", ohne die Protein+-Zutaten" : ""}).</div>` : "";
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
 // Minimierter Kochmodus: Pille über der Navigation, Timer läuft weiter, antippen holt das Blatt zurück
@@ -3974,28 +4033,34 @@ const CAT_IC = {fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕
 const recCard = r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${CAT_IC[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(recTitle(r))}</span>${r.sub ? `<span class="rs">${esc(r.sub)}</span>` : ""}<span class="rm"><span class="nutri"><b>${recipeNutri(r).protein} g</b> P · </span>${r.activeMin ?? r.timeMin} min${showPrices() && prices ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
 const recGrid = list => `<div class="rgrid">${list.map(recCard).join("")}</div>`;
 // Filter-Blatt: Gruppen mit Einfachwahl; Sortierung gehört dazu
-const REC_FGROUPS = () => [["Sammlung", "set", [["", "Alle"], ["fav", "★ Favoriten"], ["week", "📅 Diese Woche"], ["neu", "🆕 Neu"]]], ["Zeit (aktiv)", "time", [[0, "Egal"], [20, "≤ 20 min"], [40, "≤ 40 min"]]], ["Aufwand", "diff", [["", "Egal"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]]], ["Warm oder kalt", "temp", [["", "Egal"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]]],
-  ...(FOOD().vegan ? [] : [["Ernährung", "vegan", [[false, "Alles"], [true, "🌱 Vegan"]]]]), ...(prices ? [["Preis", "cheap", [[false, "Egal"], [true, "💶 Günstig (≤ 1,20 €)"]]]] : []), ...(prepOff() ? [] : [["Meal Prep", "prep", [[false, "Egal"], [true, "🍳 Vorkochbar (ab 4 Portionen)"]]]])];
-const REC_FLABEL = {set: {fav: "★ Favoriten", week: "📅 Diese Woche", neu: "🆕 Neu"}, time: {20: "≤ 20 min", 40: "≤ 40 min"}, diff: {leicht: "Leicht", mittel: "Mittel", aufwendig: "Aufwendig"}, temp: {warm: "🔥 Warm", kalt: "❄️ Kalt"}, vegan: {true: "🌱 Vegan"}, cheap: {true: "💶 Günstig"}, prep: {true: "🍳 Meal Prep"}};
+const REC_FGROUPS = () => [["Sammlung", "set", [["", "Alle"], ["fav", "★ Favoriten"], ["week", "📅 Diese Woche"], ["neu", "🆕 Neu"]]], ["Zeit (aktiv)", "time", [[0, "Egal"], [20, "≤ 20 min"], [40, "≤ 40 min"]]], ["Aufwand", "diff", [["", "Egal"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]]], ["Stil", "style", [["", "Egal"], ["einfach", "🍽 Einfach (Alltag)"], ["besonders", "✨ Besonders (mal was Neues)"]]], ["Warm oder kalt", "temp", [["", "Egal"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]]],
+  ...(FOOD().vegan ? [] : [["Ernährung", "vegan", [[false, "Alles"], [true, "🌱 Vegan"]]]]), ...(prices ? [["Preis", "cheap", [[false, "Egal"], [true, "💶 Günstig (günstigstes Drittel je Kategorie)"]]]] : []), ...(prepOff() ? [] : [["Meal Prep", "prep", [[false, "Egal"], [true, "🍳 Vorkochbar (ab 4 Portionen)"]]]])];
+const REC_FLABEL = {set: {fav: "★ Favoriten", week: "📅 Diese Woche", neu: "🆕 Neu"}, time: {20: "≤ 20 min", 40: "≤ 40 min"}, diff: {leicht: "Leicht", mittel: "Mittel", aufwendig: "Aufwendig"}, temp: {warm: "🔥 Warm", kalt: "❄️ Kalt"}, vegan: {true: "🌱 Vegan"}, cheap: {true: "💶 Günstig"}, prep: {true: "🍳 Meal Prep"}, style: STYLE};
 function recFilterHtml(){ const n = recipesFiltered().length;
   return `<div class="sh"><h2>Filter & Sortierung</h2><button class="btn primary" type="button" data-act="closeSheet">${n} Rezept${n === 1 ? "" : "e"} zeigen</button></div>
     ${REC_FGROUPS().map(([l, k, opts]) => `<div class="lab">${l}</div><div class="chips">${opts.map(([v, t]) => `<button type="button" data-rf="${k}" data-v='${esc(JSON.stringify(v))}' aria-pressed="${JSON.stringify(recFilter[k]) === JSON.stringify(v)}">${t}</button>`).join("")}</div>`).join("")}
     <div class="lab">Sortieren nach</div><div class="chips">${Object.entries(REC_SORT).filter(([k]) => k !== "preis" || prices).map(([k, [t]]) => `<button type="button" data-rsort="${k}" aria-pressed="${recSort === k}">${t}</button>`).join("")}</div>
     ${recActive().length ? `<button class="btn ghost small" type="button" data-rfreset>Filter zurücksetzen</button>` : ""}`; }
+// Schnellfilter direkt unter den Kategorien: ein Tipp an, nochmal aus
+const REC_QUICK = () => [["style", "einfach", STYLE.einfach], ["style", "besonders", STYLE.besonders], ...(FOOD().prices ? [["cheap", true, "💶 Günstig"]] : []), ["time", 20, "⏱ ≤ 20 min"], ...(FOOD().vegan ? [] : [["vegan", true, "🌱 Vegan"]])];
+const recQuickOn = k => REC_QUICK().some(([qk, v]) => qk === k && JSON.stringify(recFilter[k]) === JSON.stringify(v));
+const recQuickHtml = () => REC_QUICK().map(([k, v, t]) => `<button type="button" data-rq="${k}" data-v='${esc(JSON.stringify(v))}' aria-pressed="${JSON.stringify(recFilter[k]) === JSON.stringify(v)}">${t}</button>`).join("");
 const recCatsHtml = () => { const all = recipesFiltered(Object.assign({}, recFilter, {cat: "alle"})), n = {alle: all.length}; for (const r of all) n[catOf(r)] = (n[catOf(r)] || 0) + 1;
   return ["alle", ...Object.keys(CAT)].filter(c => c === "alle" || n[c] || recFilter.cat === c).map(c => `<button type="button" data-cat="${c}" aria-pressed="${recFilter.cat === c}">${c === "alle" ? "Alle" : CAT[c]} <span class="muted">${n[c] || 0}</span></button>`).join(""); };
 const recHeadHtml = list => `<span><b id="recCount">${list.length}</b> Rezept${list.length === 1 ? "" : "e"} · nach ${recFilter.q ? "Treffer" : REC_SORT[recSort]?.[0] || "Protein"}</span><button type="button" class="btn ghost small" data-recshelves>Übersicht</button>`;
 function renderRecipes(b){
   b = b || document.getElementById("recBody") || document.getElementById("moreBody"); if (!b) return;
   if (!recipes) { b.innerHTML = `<p class="muted">Lade Rezepte …</p>`; fetch("recipes.json").then(r => r.json()).then(j => { setRecipes(j); if (tab === "essen") renderMore(); }).catch(() => { b.innerHTML = `<p>Rezepte konnten nicht geladen werden.</p>`; }); return; }
+  if (!prices && FOOD().prices) ensurePrices().then(() => { if (document.getElementById("recQuick")) renderRecipes(); }).catch(() => {});
   const act = recActive(), over = recShelves && !act.length && !recFilter.q && recFilter.cat === "alle";
   const are = avoidRe(), hidden = are ? recipes.filter(r => !recipeOk(r, are)).length : 0;
   const ingP = recFilter.ing && prices ? prodById(recFilter.ing) : null;
   const chip = (k, t) => `<button type="button" class="fchip" data-rfx="${k}" aria-label="${t.replace(/<[^>]+>/g, "")} entfernen">${t} ✕</button>`;
   let h = `<div class="card recbar">${searchBox("recQ", recFilter.q, "🔎 Rezept oder Zutat suchen", "Rezepte suchen")}
-    <div class="recact"><button class="btn small" type="button" data-sheet="recfilter">⚙ Filter${act.length ? ` · ${act.length}` : ""}</button><button class="btn small" type="button" data-random="rec">🎲 Zufall</button><button class="btn small" type="button" data-sheet="reste">🏠 Was kann ich kochen?</button></div>
+    <div class="recact"><button class="btn small" type="button" data-sheet="recfilter">⚙ Filter${act.length ? ` · ${act.length}` : ""}</button><button class="btn small primary" type="button" data-random="rec">🎲 Zufall · ${esc(CAT[recFilter.cat] || CAT.haupt)}</button><button class="btn small" type="button" data-sheet="reste">🏠 Was kann ich kochen?</button></div>
     <div class="chips sm" id="recCat">${recCatsHtml()}</div>
-    ${act.length ? `<div class="chips sm">${act.map(k => chip(k, k === "ing" ? "🥘 " + esc(ingP ? cwLabel(ingP) : "Zutat") : REC_FLABEL[k]?.[recFilter[k]] || k)).join("")}</div>` : ""}</div>`;
+    <div class="chips sm" id="recQuick">${recQuickHtml()}</div>
+    ${act.filter(k => !recQuickOn(k)).length ? `<div class="chips sm">${act.filter(k => !recQuickOn(k)).map(k => chip(k, k === "ing" ? "🥘 " + esc(ingP ? cwLabel(ingP) : "Zutat") : REC_FLABEL[k]?.[recFilter[k]] || k)).join("")}</div>` : ""}</div>`;
   if (over) {
     const shelves = [["★ Favoriten", {set: "fav"}], ["📅 Diese Woche im Plan", {set: "week"}], ["🆕 Neu", {set: "neu"}], ...(prepOff() ? [] : [["🍳 Meal Prep", {prep: true}]])].map(([t, f]) => [t, recipesFiltered(f), f]);
     h += shelves.filter(([, l]) => l.length).map(([t, l, f]) => `<div class="shelf"><div class="mhead"><b>${t}</b><button type="button" class="btn ghost small" data-shelf='${esc(JSON.stringify(f))}'>alle ${l.length} ›</button></div><div class="srow">${l.slice(0, 12).map(recCard).join("")}</div></div>`).join("")
@@ -4212,7 +4277,7 @@ function avoidTerm(w){ w = w.trim().toLowerCase(); if (w.length < 3) return null
   for (const suf of ["en", "n", "e", "s"]) if (w.endsWith(suf) && w.length - suf.length >= 4) { w = w.slice(0, -suf.length); break; }
   return w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/[aä]/g, "[aä]").replace(/[oö]/g, "[oö]").replace(/[uü]/g, "[uü]"); }
 // Vegan: tierische Zutaten (Pflanzendrinks, Soja-/Kokosjoghurt, Erdnuss-/Mandelbutter zählen nicht); ersetzte Zutaten (Ersatzprodukte) prüft recipeText schon als Ersatz
-const VEGAN_RE = "\\beier?\\b|eiklar|eigelb|rührei|spiegelei|omelett|\\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee", VEGAN_RX = new RegExp(VEGAN_RE, "i");
+const VEGAN_RE = "\\beier?\\b|eiklar|eigelb|rührei|spiegelei|omelett|\\bei-|(?<!kokos)(?<!hafer)(?<!soja)(?<!mandel)(?<!reis)(?<!erbsen)milch|skyr|(?<!soja)quark|käse|(?<!soja)(?<!kokos)joghurt|(?<!hafer)(?<!soja)(?<!kokos)sahne|(?<!erdnuss)(?<!nuss)(?<!mandel)(?<!cashew)(?<!kakao)butter|feta|harzer|mozzarella|halloumi|camembert|gouda|emmentaler|parmesan|ricotta|mascarpone|schmand|crème fraîche|creme fraiche|kefir|molke|whey|honig|gelatine|ghee|(?<!vegane )spätzle|eiernudel|tortellini|maultasche|(?<!vegane )mayonnaise", VEGAN_RX = new RegExp(VEGAN_RE, "i");
 const veganOk = r => !VEGAN_RX.test(recipeText(r).replace(/§[a-z]+§/g, ""));
 let avoidMemo = {k: null, re: null};
 // Küchengeräte: Rezepte tragen dev (herd, ofen = Auflauf/Blech, ofenk = kleines Ofengericht, mixer); fehlende Geräte wirken wie gemiedene Zutaten
@@ -4746,7 +4811,7 @@ function parseIng0(line){
   else if (/^Zweig/.test(unit)) amt = pr.unit === "Stück" ? q / 10 : q * 2;  // ~10 Zweige je Bund/Topf, ein Zweig ≈ 2 g
   else if (pr.unit === "Stück") amt = q;
   else amt = q * (pr.piece || (pr.pantry && SPICE_RE.test(name) ? 1 : 100));  // Gewürz aus dem Vorrat ohne Stückgewicht („1 Msp.“): 1 g, nicht 100 g
-  if (pr.unit === "Stück" && (unit === "g" || unit === "ml")) amt = q / (pr.piece || 60);
+  if (pr.unit === "Stück" && /^(g|ml|kg|l)$/.test(unit)) amt = q * (unit === "kg" || unit === "l" ? 1000 : 1) / (pr.piece || 60);  // 1,5 kg Auberginen = 1500 g, nicht 1500 Stück
   else if (pr.unit === "Stück" && /^(EL|TL|Handvoll|Prisen?)$/.test(unit)) amt = (unit === "EL" ? q * (HERB_RE.test(name) ? 4 : 15) : unit === "TL" ? q * (HERB_RE.test(name) ? 1.5 : 5) : unit === "Handvoll" ? q * 30 : q) / (pr.piece || 60);  // 2 EL gehackte Petersilie ≈ ¼ Bund, nicht 30 Bund
   const sub = FOOD().subst?.[pr.id], opt = sub && SUBST[pr.id]?.opts[sub];
   if (opt) { const ids = opt[3] || [sub], ps = ids.map(id => prices.products.find(x => x.id === id)).filter(Boolean);
@@ -4756,7 +4821,7 @@ function parseIng0(line){
 const costMemo = new Map();
 function recipeCost(r, store){ const k = r.name + "|" + (store || FOOD().store || "aldi"); if (!costMemo.has(k)) costMemo.set(k, recipeCost0(r, store)); return costMemo.get(k); }
 // Gewürze, Kräuter und Kleinkram ohne Preis zählen nicht als „fehlender Preis“
-const SPICE_RE = new RegExp("rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\\brum\\b|metaxa|likör", "i");
+const SPICE_RE = new RegExp("sternanis|safran|rosenpaprika|edelsüß|pulver|gewürz|kümmel|kurkuma|curry(?!paste)|zimt|muskat|oregano|thymian|rosmarin|basilikum|petersilie|koriander|schnittlauch|dill|minze|kräuter|lorbeer|salz|pfeffer|chili|wasser|garam|essig|backpulver|vanill|nelke|kardamom|sumach|ras el|cayenne|zitronensaft|zitronenschale|hefe|sesam|liebstöckel|majoran|bohnenkraut|estragon|kresse|eiswürfel|\\brum\\b|metaxa|likör", "i");
 function recipeCost0(r, store){ let c = 0, miss = 0; for (const l of r.ingredients || []) { const x = parseIng(l); if (!x.pr) { if (x.q != null && !SPICE_RE.test(l)) miss++; continue; } for (const pt of x.parts || [x]) { const v = priceOf(pt.pr, store); if (v == null) { miss++; continue; } c += pt.amt / pt.pr.pack * v; } } return {total: c, portion: c / (r.servings || 1), miss}; }
 function mealCost(name, store){ const r = recipeByName(name); if (r) return recipeCost(r, store).portion; if (name === "away") return 4.5; return null; }
 
@@ -5703,7 +5768,8 @@ let recipes = null, recipesRaw = null, recVarRef = "";
 const recHigh = () => FOOD().recMode !== "normal";
 const recModeOf = name => (FOOD().recVar || {})[name] || (recHigh() ? "high" : "normal");
 function setRecipes(j){ recipesRaw = j; recVarRef = JSON.stringify([FOOD().recMode, FOOD().recVar]);
-  recipes = j.map(r => r.normal && recModeOf(r.name) === "normal" ? Object.assign({}, r, r.normal, {variant: "normal", _base: r}) : r); clearFoodMemos(); }
+  recipes = j.map(r => r.normal && recModeOf(r.name) === "normal" ? recNormalOf(r) : r); clearFoodMemos(); }
+function recNormalOf(r){ const b = r._base || r; if (!b.normal) return b; return Object.assign({}, b, b.normal, {variant: "normal", _base: b}, b.normal.plan || !b.normal.steps ? {} : {plan: {ahead: b.plan?.ahead, steps: b.normal.steps.map(x => ({do: x}))}}); }
 const recVarSync = () => { if (recipesRaw && JSON.stringify([FOOD().recMode, FOOD().recVar]) !== recVarRef) setRecipes(recipesRaw); };
 // Neue Rezepte (Feld since) plant die Automatik erst ab dieser Woche ein, damit ein laufender Wochenplan samt Einkauf nicht umspringt; von Hand geht jedes sofort
 let planDay = null;
@@ -5711,7 +5777,7 @@ const recPlanOk = r => !(planDay && r.since && r.since > planDay);
 const withPlanDay = (d, fn) => { const p = planDay; planDay = d; try { return fn(); } finally { planDay = p; } };
 const minProt = k => recHigh() ? (k === "sn" || k === "ex" ? 13 : 25) : 0;
 // Rezeptfilter: ein Modell für Regale, Liste, Zufall. set = Sammlung (fav|week|neu), time = max. aktive Minuten
-const REC_F0 = {cat: "alle", q: "", ing: "", set: "", vegan: false, temp: "", diff: "", time: 0, cheap: false, prep: false};
+const REC_F0 = {cat: "alle", q: "", ing: "", set: "", vegan: false, temp: "", diff: "", time: 0, cheap: false, prep: false, style: ""};
 let recFilter = Object.assign({}, REC_F0), recSort = lsGet("recSort") || "protein";
 const CAT = {fruehstueck:"Frühstück",haupt:"Hauptgericht",snack:"Snack",shake:"Shake",dessert:"Dessert"};
 // Slot-Namen überall gleich: Frühstück · Mittag · Snack · Abendbrot · Extra; warm/kalt steht nur als Tag am Gericht
@@ -5850,9 +5916,9 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; const f = Object.assign({}, recFilter, {cat: recFilter.cat !== "alle" ? recFilter.cat : "haupt"}), d = recDraw(f, []); if (!d) return toast("Keine passenden Rezepte"); recNav = {f, hist: [d.n], i: 0, round: d.round}; openSheet("recipe", d.n); return; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
-  const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; openSheet("recipe", rc2.dataset.recipe); return; }
+  const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; { const r0 = recipeByName(rc2.dataset.recipe); if (r0) recNav = {f: Object.assign({}, rc2.closest("#recRes") ? recFilter : REC_F0, {cat: catOf(r0)}), hist: [r0.name], i: 0}; } openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
     if (g === "messen" || g === "fotos") { sub.fortschritt = "messen"; go("fortschritt"); if (g === "fotos") document.getElementById("photos")?.scrollIntoView({block:"start"}); } else { sub.mehr = g; go("mehr"); } return; }
   const al = t.closest("[data-alt]"); if (al) { const base = al.dataset.base, id = al.dataset.alt, sw = Object.assign({}, cur[swapKey()]);
@@ -6016,6 +6082,8 @@ async function onClick(e){
     toast(eat ? `✓ Gegessen: heute ${MEAL_SHORT[k]}` : `Eingeplant: ${d === todayIso() ? "heute" : "morgen"} ${MEAL_SHORT[k]}`, {label: "Rückgängig", fn: undo}); render(); return; }
   const cwi = t.closest("[data-cookwith]"); if (cwi) { Object.assign(recFilter, REC_F0, {ing: cwi.dataset.cookwith}); recShelves = false; if (sheet.open) closeSheet(); essenView = "rezepte"; if (tab !== "essen") go("essen"); else renderMore(); window.scrollTo(0, 0); return; }
   if (t.closest("[data-recshelves]")) { Object.assign(recFilter, REC_F0); recShelves = true; renderRecipes(); return; }
+  const rqb = t.closest("[data-rq]"); if (rqb) { const k = rqb.dataset.rq, v = JSON.parse(rqb.dataset.v); recFilter[k] = JSON.stringify(recFilter[k]) === JSON.stringify(v) ? REC_F0[k] : v; recShelves = !recActive().length && !recFilter.q && recFilter.cat === "alle"; if (k === "cheap" && !prices) ensurePrices().then(() => renderRecipes()).catch(() => {}); renderRecipes(); return; }
+  const rnv = t.closest("[data-recnav]"); if (rnv) { recNavGo(Number(rnv.dataset.recnav)); return; }
   const rfb = t.closest("[data-rf]"); if (rfb) { recFilter[rfb.dataset.rf] = JSON.parse(rfb.dataset.v); recShelves = false; renderSheet(); renderRecipes(); return; }
   const rsb = t.closest("[data-rsort]"); if (rsb) { recSort = rsb.dataset.rsort; lsSet("recSort", recSort); recShelves = false; renderSheet(); renderRecipes(); return; }
   if (t.closest("[data-rfreset]")) { const q = recFilter.q, c = recFilter.cat; Object.assign(recFilter, REC_F0, {q, cat: c}); renderSheet(); renderRecipes(); return; }
@@ -6298,6 +6366,12 @@ const sdrEnd = () => { if (!sdr?.on) { sdr = null; return; } const {dy, t} = sdr
   if (dy > Math.min(140, sheet.offsetHeight * 0.25) || (fast && dy > 40)) { sheet.style.transform = "translateY(100%)"; setTimeout(() => { sheet.style.transition = "none"; sheet.style.transform = ""; clearInterval(guideTimer); closeSheet(); }, 170); }
   else { sheet.style.transform = ""; setTimeout(() => { sheet.style.transition = ""; }, 200); } };
 sheet.addEventListener("touchend", sdrEnd); sheet.addEventListener("touchcancel", sdrEnd);
+// Rezeptblatt: seitlich wischen blättert im Zufall – nach rechts = nächstes Rezept, nach links = vorheriges
+let rsw = null;
+const hScroll = el => { for (; el && el !== sheet; el = el.parentElement) if (el.scrollWidth > el.clientWidth + 2 && /(auto|scroll)/.test(getComputedStyle(el).overflowX)) return true; return false; };
+sheet.addEventListener("touchstart", e => { rsw = sheetKind === "recipe" && e.touches.length === 1 && sheet.querySelector(".recnav") && !e.target.closest("input,textarea,select,video,iframe,.ddm[open]") && !hScroll(e.target) ? {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now()} : null; }, {passive: true});
+sheet.addEventListener("touchend", e => { if (!rsw) return; const c = e.changedTouches[0], dx = c.clientX - rsw.x, dy = c.clientY - rsw.y, dt = Date.now() - rsw.t; rsw = null;
+  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && dt < 900) recNavGo(dx > 0 ? 1 : -1); }, {passive: true});
 sheet.addEventListener("pointercancel", () => { shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 // Suchfelder: Lupe/Enter schließt die Tastatur; ✕ leert; „zuletzt gesucht“ füllt ohne Tastatur; beim Tippen Feld nach oben, damit die Treffer über der Tastatur stehen
