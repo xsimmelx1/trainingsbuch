@@ -981,8 +981,12 @@ def build_meal_ics(now, settings, plan, days, past=None):
                 continue
             own = isinstance(name, dict)
             r = {} if own else rec.get(name, {})
+            if r.get("variant") == "normal":  # Normal-Fassung: eigener Titel (wie recFull in der App)
+                name_disp = " ".join(x for x in (r.get("short") or name, r.get("sub")) if x)
+            else:
+                name_disp = None
             # öffentlicher Feed: eigene Einträge ohne Freitext
-            title = "Eigenes Essen" if own else mp["away"]["name"] if name == "away" else name
+            title = "Eigenes Essen" if own else mp["away"]["name"] if name == "away" else name_disp or name
             h, m = map(int, t.split(":"))
             dur_m = 15 if k == "sn" else 30
             if h * 60 + m > 23 * 60 + 59 - dur_m:  # Ende muss nach dem Start liegen (RFC 5545)

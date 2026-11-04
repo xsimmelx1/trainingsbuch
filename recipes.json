@@ -102,10 +102,11 @@
       "do": "Morgens umrühren, bei Bedarf einen Schuss Mandeldrink dazugeben."
      }
     ]
-   }
+   },
+   "sub": "mit Mandeldrink, Kaffee & Chiasamen"
   },
   "short": "Overnight Oats Mocha",
-  "sub": "mit Skyr, Espresso & Beeren",
+  "sub": "mit Skyr, Kaffee & Zartbitterschokolade",
   "style": "einfach",
   "swaps": [
    [
@@ -431,7 +432,8 @@
       "do": "Mit dem Vollkornbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spinat, Zucchini & Vollkornbrot"
   },
   "short": "Räuchertofu-Scramble",
   "sub": "mit Spinat, Zucchini & Vollkornbrot",
@@ -614,7 +616,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Cheddar & Sauerteigbrot"
   },
   "short": "Jalapeño-Hüttenkäse-Toast",
   "sub": "mit Cheddar & Sauerteigbrot",
@@ -886,7 +889,8 @@
       "do": "Vor dem Essen schütteln oder in eine Schüssel kippen."
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Paprika & Tahin-Dressing"
   },
   "short": "Quinoa-Salat im Glas",
   "sub": "mit Kichererbsen, Edamame & Tahin-Dressing",
@@ -1015,7 +1019,8 @@
       "do": "Portionieren."
      }
     ]
-   }
+   },
+   "sub": "mit weißen Bohnen, Mais & Kreuzkümmel"
   },
   "short": "Weißes Kichererbsen-Chili",
   "sub": "mit weißen Bohnen, Mais & Skyr-Topping",
@@ -1128,7 +1133,8 @@
       "do": "Mozzarellawürfel unterheben und portionieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Mozzarella & Basilikum"
   },
   "short": "Hüttenkäse-Paprika-Pasta",
   "sub": "mit Linsennudeln, Tomaten & Mozzarella",
@@ -1250,7 +1256,8 @@
       "do": "Reis, Gemüse und Tofu in 4 Boxen portionieren, Sesam darüberstreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Edamame, Brokkoli & Reis"
   },
   "short": "Teriyaki-Tofu-Bowl",
   "sub": "mit Edamame, Brokkoli & Reis",
@@ -1378,7 +1385,8 @@
       "do": "Portionieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Zucchini & Paprika"
   },
   "short": "Couscous-Kichererbsen-Pfanne",
   "sub": "mit Feta, Zucchini & Paprika",
@@ -1492,7 +1500,8 @@
       "do": "Wraps füllen und fest rollen. Zum Mitnehmen in Alufolie wickeln, Soße separat einpacken."
      }
     ]
-   }
+   },
+   "sub": "mit Joghurt-Knoblauchsoße & Salat"
   },
   "short": "Räuchertofu-Döner-Wrap",
   "sub": "mit Skyr-Knoblauchsoße & Salat",
@@ -1629,10 +1638,11 @@
       "do": "Vom Herd nehmen, Sahne und Hartkäse einrühren, mit Basilikum. Mit Brot oder Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spinat, getrockneten Tomaten & Sahne"
   },
   "short": "Marry-Me-Linsen",
-  "sub": "mit Räuchertofu, Spinat & Kochsahne",
+  "sub": "mit Räuchertofu, Spinat & Sahne",
   "style": "einfach"
  },
  {
@@ -1757,7 +1767,9 @@
       "do": "Mit dem Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kokosmilch, Tomaten & Basmati",
+   "short": "Kichererbsen-Tikka-Masala"
   },
   "short": "Tofu-Tikka-Masala",
   "sub": "mit Kichererbsen, Skyr & Basmatireis",
@@ -1881,7 +1893,8 @@
       "meanwhile": "Abwaschen."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Paprika & Majoran"
   },
   "short": "Nudelgulasch",
   "sub": "mit Sojagranulat, Paprika & Skyr",
@@ -1999,7 +2012,8 @@
       "do": "Blech servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, grünen Bohnen & Rosmarin"
   },
   "short": "Blech-Tofu",
   "sub": "mit Kartoffeln, Bohnen & Kräuterquark",
@@ -2261,7 +2275,8 @@
       "do": "Tortillas mit der Füllung belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Austernpilzen, Paprika & Tortillas"
   },
   "short": "Blech-Fajitas",
   "sub": "mit Räuchertofu, Kidneybohnen & Skyr-Dip",
@@ -2470,7 +2485,8 @@
       "min": 15
      }
     ]
-   }
+   },
+   "sub": "mit Paprika & Knoblauch"
   },
   "short": "Knusper-Kichererbsen",
   "sub": "mit Edamame & Rauchpaprika",
@@ -2864,7 +2880,8 @@
       "do": "Mit Beeren servieren."
      }
     ]
-   }
+   },
+   "sub": "mit griechischem Joghurt & Beeren"
   },
   "short": "Chia-Pudding",
   "sub": "mit Skyr, Milch & Beeren",
@@ -3073,7 +3090,8 @@
       "do": "Mit den Zwetschgen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Zwetschgenröster"
   },
   "short": "Quark-Kaiserschmarrn",
   "sub": "mit Zwetschgenröster",
@@ -3204,7 +3222,8 @@
       "do": "Mit Spinat, Tomate und Paprikastreifen belegen und einrollen. Vollkornbrot dazu essen."
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Spinat & Paprika"
   },
   "short": "Hüttenkäse-Flatbread-Wrap",
   "sub": "mit Ei, Spinat & Skyr",
@@ -3328,7 +3347,8 @@
       "do": "Pak Choi, Sprossen und Avocado auf eine Hälfte geben und zuklappen."
      }
     ]
-   }
+   },
+   "sub": "mit Pak Choi, Sprossen & Avocado"
   },
   "short": "Kichererbsen-Omelett",
   "sub": "mit Räuchertofu, Pak Choi & Avocado",
@@ -3450,7 +3470,8 @@
       "do": "Oats in eine Schüssel geben, Gemüse und Ei darauf, mit Chiliflocken bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Spiegelei, Champignons & Hartkäse"
   },
   "short": "Herzhafte Oats",
   "sub": "mit Spiegelei, Pilzen & Hüttenkäse",
@@ -3599,7 +3620,8 @@
       "do": "Abkühlen lassen, in 3 Portionen schneiden und in Dosen packen."
      }
     ]
-   }
+   },
+   "sub": "ohne Boden, mit Feta & Mozzarella"
   },
   "short": "Spinat-Pilz-Quiche",
   "sub": "ohne Boden, mit Feta & Hüttenkäse",
@@ -3721,7 +3743,8 @@
       "do": "Tortilla mit Bohnensoße, Eiern, saurer Sahne, Avocadoscheiben, Feta und Kräutern belegen."
      }
     ]
-   }
+   },
+   "sub": "mit schwarzen Bohnen, Feta & Avocado"
   },
   "short": "Huevos Rancheros",
   "sub": "mit schwarzen Bohnen, Feta & Skyr",
@@ -3854,7 +3877,8 @@
       "do": "Pro Portion 2 Brötchen aufschneiden, mit je 30 g Frischkäse, Gurkenscheiben, Schnittlauch und Pfeffer belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Frischkäse, Gurke & Schnittlauch"
   },
   "short": "Hafer-Quark-Brötchen",
   "sub": "mit Hüttenkäse, Gurke & Schnittlauch",
@@ -3989,7 +4013,8 @@
       "do": "Tofuwürfel mit Sriracha zum Dippen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sriracha & Knoblauch"
   },
   "short": "Ofen-Tofu-Würfel",
   "sub": "mit Skyr-Sriracha-Dip",
@@ -4108,7 +4133,8 @@
       "do": "Masse in die Eiweißhälften füllen (mit Löffel oder Gefrierbeutel mit abgeschnittener Ecke) und mit Paprikapulver und Schnittlauch bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Senf-Mayonnaise & Paprika"
   },
   "short": "Gefüllte Eier",
   "sub": "mit Skyr-Senf-Creme & Paprika",
@@ -4227,7 +4253,8 @@
       "do": "Gemüsesticks und Knäckebrot zum Dippen dazu essen."
      }
     ]
-   }
+   },
+   "sub": "mit Hüttenkäse, Karotten & Knäcke"
   },
   "short": "Weiße-Bohnen-Dip",
   "sub": "mit Hüttenkäse, Gemüsesticks & Knäcke",
@@ -4330,7 +4357,9 @@
       "do": "In zwei Dosen füllen, Olivenöl darüberträufeln; mit je 3 Scheiben Knäckebrot essen."
      }
     ]
-   }
+   },
+   "sub": "mit Gurke, Dill & Vollkorn-Knäcke",
+   "short": "Joghurt-Tzatziki"
   },
   "short": "Skyr-Tzatziki",
   "sub": "mit Gurke, Dill & Vollkorn-Knäcke",
@@ -4438,7 +4467,8 @@
     "Banane am Vorabend in Scheiben schneiden und einfrieren.",
     "Alle Zutaten in den Mixer geben.",
     "30–60 Sek. auf höchster Stufe cremig mixen, bei Bedarf einen Schuss Milch nachgießen."
-   ]
+   ],
+   "sub": "mit Milch, Erdnussmus & Haferflocken"
   },
   "short": "Erdnuss-Bananen-Shake",
   "sub": "mit Magerquark, Milch & Haferflocken",
@@ -4563,7 +4593,8 @@
       "do": "Vor dem Essen mit den aufgekochten, abgekühlten Himbeeren toppen."
      }
     ]
-   }
+   },
+   "sub": "aus Seidentofu, mit Himbeeren"
   },
   "short": "Schoko-Mousse",
   "sub": "aus Seidentofu & Quark, mit Himbeeren",
@@ -4717,7 +4748,8 @@
       "do": "In 6 Stücke schneiden; jeweils mit 50 g aufgekochten, abgekühlten Beeren essen."
      }
     ]
-   }
+   },
+   "sub": "aus Quark & Mascarpone, mit Beeren"
   },
   "short": "Käsekuchen ohne Boden",
   "sub": "aus Magerquark & Skyr, mit Beeren",
@@ -4824,7 +4856,8 @@
     "Seidentofu abtropfen lassen; TK-Heidelbeeren kurz aufkochen und abkühlen lassen (roh nicht empfohlen).",
     "Alle Zutaten in den Mixer geben, die Beeren zuletzt.",
     "Ca. 1 Min. cremig mixen; ist er zu dick, etwas Sojadrink oder Wasser nachgießen."
-   ]
+   ],
+   "sub": "mit Seidentofu, Banane & Leinsamen"
   },
   "short": "Blaubeer-Smoothie",
   "sub": "mit Seidentofu, Skyr & Banane",
@@ -4953,7 +4986,8 @@
       "do": "In 4 Boxen füllen, Brot separat einpacken."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, Lauch & Möhren"
   },
   "short": "Linseneintopf",
   "sub": "mit Räuchertofu, Kartoffeln & Lauch",
@@ -5077,7 +5111,8 @@
       "do": "Alles mit Gemüse und Soße mischen und in 4 Boxen füllen."
      }
     ]
-   }
+   },
+   "sub": "mit Paprika, Möhre & Gurke"
   },
   "short": "Erdnuss-Nudeln",
   "sub": "mit Tofu, Edamame & Gemüse",
@@ -5199,7 +5234,8 @@
       "do": "Reis zugeben und bei hoher Hitze braten, Ei, Sojasauce, Sesamöl und Pfeffer unterheben, mit Frühlingszwiebeln portionieren."
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Erbsen & Frühlingszwiebeln"
   },
   "short": "Gebratener Reis",
   "sub": "mit Tofu, Ei & Erbsen",
@@ -5323,7 +5359,8 @@
       "do": "Alles mischen oder das Dressing in kleinen Gläsern getrennt einpacken, damit der Salat knackig bleibt."
      }
     ]
-   }
+   },
+   "sub": "mit Feta, Gurke & Joghurt-Dill-Dressing"
   },
   "short": "Griechischer Nudelsalat",
   "sub": "mit Kichererbsen, Feta & Skyr-Dill-Dressing",
@@ -5450,7 +5487,8 @@
       "do": "Mit der angerührten Stärke binden, mit Sichuanpfeffer würzen, Frühlingszwiebeln darüber und mit Reis in 4 Boxen füllen."
      }
     ]
-   }
+   },
+   "sub": "mit Shiitake, Brokkoli & Reis"
   },
   "short": "Mapo Tofu",
   "sub": "mit Sojahack, Brokkoli & Reis",
@@ -5593,7 +5631,8 @@
       "do": "Abgekühlt in 4 Stücke schneiden und mit dem Brot essen."
      }
     ]
-   }
+   },
+   "sub": "mit Zwiebeln & Vollkornbrot"
   },
   "short": "Kartoffel-Tortilla",
   "sub": "mit Hüttenkäse & Vollkornbrot",
@@ -5717,7 +5756,9 @@
       "do": "Reis, Gyros, restliche Gurke und Tomaten auf 4 Boxen verteilen, Tzatziki in kleinen Behältern dazu."
      }
     ]
-   }
+   },
+   "sub": "mit Champignons, Reis & Joghurt-Tzatziki",
+   "short": "Pilz-Gyros-Bowl"
   },
   "short": "Soja-Gyros-Bowl",
   "sub": "mit Reis & Quark-Tzatziki",
@@ -5895,7 +5936,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Spinat-Schicht & Gouda"
   },
   "short": "Linsen-Soja-Lasagne",
   "sub": "mit Hüttenkäse-Spinat-Schicht",
@@ -6049,7 +6091,8 @@
       "meanwhile": "Töpfe abwaschen."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffelpüree, Champignons & Gouda"
   },
   "short": "Linsen-Shepherd's-Pie",
   "sub": "mit Quark-Kartoffelpüree & Pilzen",
@@ -6195,7 +6238,8 @@
       "do": "Sahne unterrühren, kurz erhitzen und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spinat, Sahne & Basmatireis"
   },
   "short": "Eier-Curry",
   "sub": "mit Kichererbsen, Spinat & Reis",
@@ -6326,7 +6370,8 @@
       "do": "Zum Einfrieren die Quesadillas einzeln in Folie wickeln."
      }
     ]
-   }
+   },
+   "sub": "mit schwarzen Bohnen, Mais & Gouda"
   },
   "short": "Bohnen-Quesadillas",
   "sub": "mit Hüttenkäse, Gouda & Skyr-Salsa-Dip",
@@ -6469,7 +6514,9 @@
       "do": "Paprika servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Reis, Kidneybohnen & Feta",
+   "short": "Gefüllte Paprika"
   },
   "short": "Sojahack-Paprika",
   "sub": "mit Reis, Kidneybohnen & Feta",
@@ -6601,7 +6648,8 @@
       "do": "Burger mit Tomate und Salat belegen, mit Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Ofenkartoffeln & Salat"
   },
   "short": "Black-Bean-Burger",
   "sub": "mit Ofenkartoffeln & Kräuterquark",
@@ -6714,7 +6762,8 @@
       "do": "Feta und Tomaten zerdrücken, Nudeln und Spinat unterheben, mit Nudelwasser cremig rühren und pfeffern."
      }
     ]
-   }
+   },
+   "sub": "mit Kirschtomaten, Spinat & Knoblauch"
   },
   "short": "Ofen-Feta-Pasta",
   "sub": "mit weißen Bohnen, Tomaten & Spinat",
@@ -6834,7 +6883,8 @@
       "do": "Reis in Schalen geben, Gemüse und Tofu darauf anrichten, mit Sesam, Sojasauce und Gochujang servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Spinat & Möhre"
   },
   "short": "Bibimbap",
   "sub": "mit Tofu, Edamame & Spiegelei",
@@ -7105,7 +7155,8 @@
       "do": "Im Rapsöl portionsweise kleine Pancakes ausbacken und mit Kräuter-Skyr und Gemüse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kräuter-Skyr, Gurke & Möhren"
   },
   "short": "Spinat-Pancakes",
   "sub": "mit Kräuter-Skyr & Gemüsestreifen",
@@ -7612,7 +7663,8 @@
       "do": "Linsen mit Essig, Salz und Pfeffer säuerlich abschmecken und mit Spätzle servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spätzle, Möhren & Lauch"
   },
   "short": "Schwäbische Linsen",
   "sub": "mit Spätzle & Räuchertofu",
@@ -8081,7 +8133,8 @@
       "do": "Kartoffeln abgießen, mit warmem Haferdrink und Butter stampfen und mit Spinat und Rührtofu servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffelpüree & Rahmspinat"
   },
   "short": "Rührtofu",
   "sub": "mit Kartoffelpüree & Rahmspinat",
@@ -8609,7 +8662,8 @@
       "do": "Tofu-Sticks mit Kartoffeln und Spinat servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Blattspinat & Kartoffeln"
   },
   "short": "Panierte Tofu-Sticks",
   "sub": "mit Kichererbsen-Spinat & Kartoffeln",
@@ -9356,7 +9410,8 @@
       "do": "Suppe mit Falafel, einem Klecks Joghurt und Koriander servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Falafel, Frischkäse & Koriander"
   },
   "short": "Orientalische Linsensuppe",
   "sub": "mit Falafel, Skyr & Koriander",
@@ -9728,7 +9783,8 @@
       "do": "Nudeln in Schalen verteilen, Brühe darübergeben und mit Tofu, Frühlingszwiebeln und Sesam toppen."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Pak Choi & Champignons"
   },
   "short": "Miso-Ramen",
   "sub": "mit Tofu, Ei, Pak Choi & Champignons",
@@ -9813,7 +9869,8 @@
    "protein": 21,
    "carbs": 47,
    "fat": 1,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit extra viel Kräuterquark & Kresse"
   },
   "short": "Pellkartoffeln",
   "sub": "mit extra viel Kräuterquark & Kresse",
@@ -9921,7 +9978,8 @@
       "do": "In Schalen oder Meal-Prep-Gläser füllen und mit Haferflocken und Studentenfutter bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Haferflocken & Studentenfutter"
   },
   "short": "Beeren-Quarkspeise",
   "sub": "mit Skyr, Haferflocken & Studentenfutter",
@@ -10016,7 +10074,8 @@
    "protein": 24,
    "carbs": 57,
    "fat": 29,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Blaubeerquark"
   },
   "short": "Dinkel-Crêpes",
   "sub": "mit Blaubeerquark",
@@ -10512,7 +10571,8 @@
       "do": "Fladen mit Tofu, Blumenkohl, Gemüse und Sojajoghurt-Soße füllen."
      }
     ]
-   }
+   },
+   "sub": "mit Ofen-Blumenkohl & Sojajoghurt-Soße"
   },
   "short": "Tofu-Shawarma",
   "sub": "mit Ofen-Blumenkohl & Skyr-Soße",
@@ -11007,7 +11067,8 @@
    "protein": 22,
    "carbs": 44,
    "fat": 19,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Quark-Joghurt-Dip & Schnittlauch"
   },
   "short": "Linsen-Hafer-Bratlinge",
   "sub": "mit Quark-Joghurt-Dip & Schnittlauch",
@@ -11872,7 +11933,8 @@
       "do": "Reis, Linsen, Pilze und Avocadowürfel in Schalen anrichten und mit dem Sojajoghurt toppen."
      }
     ]
-   }
+   },
+   "sub": "mit Naturreis, Avocado & Sojajoghurt"
   },
   "short": "Linsen-Pilz-Bowl",
   "sub": "mit Naturreis, Avocado & Skyr",
@@ -12023,7 +12085,8 @@
       "do": "Tofu zurückgeben, mit Limettensaft abschmecken und mit Reis, Koriander und gehackten Erdnüssen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Kürbis & grünen Bohnen"
   },
   "style": "besonders"
  },
@@ -12161,7 +12224,8 @@
       "do": "Mit Petersilie und Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Ofenpaprika & Wildreis"
   },
   "style": "besonders"
  },
@@ -12341,7 +12405,8 @@
       "do": "Servieren – dazu passt Brot oder Reis."
      }
     ]
-   }
+   },
+   "sub": "mit Feta-Frischkäse-Creme"
   },
   "short": "Gefüllte Spitzpaprika",
   "sub": "mit Feta-Hüttenkäse-Creme",
@@ -13011,7 +13076,8 @@
       "do": "Brötchen mit Soße, Tofu, Tomate und Paprika belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Honig-Senf-Soße & Paprika"
   },
   "short": "Tofu-Burger",
   "sub": "mit Senf-Skyr-Soße & Paprika",
@@ -13230,7 +13296,8 @@
       "do": "Feldsalat und Radieschen mit Balsamico, Senf und Öl anmachen. Crêpes mit Kräuterquark füllen und mit dem Salat servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kräuterquark & Radieschen-Feldsalat"
   },
   "short": "Spinat-Crêpes",
   "sub": "mit Kräuterquark & Radieschen-Feldsalat",
@@ -13482,7 +13549,8 @@
    "protein": 25,
    "carbs": 61,
    "fat": 23,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Quinoa & Frühlingszwiebeln"
   },
   "short": "Tofu süß-sauer",
   "sub": "mit Quinoa & Frühlingszwiebeln",
@@ -13839,7 +13907,8 @@
       "do": "Mit Mangochutney, Salz, Pfeffer und Chili abschmecken und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, Mangochutney & Reis"
   },
   "style": "einfach"
  },
@@ -13939,7 +14008,8 @@
    "protein": 20,
    "carbs": 33,
    "fat": 25,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit mariniertem Tofu & Koriander"
   },
   "short": "Mango-Linsensalat",
   "sub": "mit mariniertem Tofu & Koriander",
@@ -14037,7 +14107,8 @@
    "protein": 24,
    "carbs": 59,
    "fat": 27,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Spinat, Kokosmilch & Reis"
   },
   "short": "Palak-Tofu",
   "sub": "mit Spinat, Kokosmilch & Reis",
@@ -14134,7 +14205,8 @@
    "protein": 24,
    "carbs": 53,
    "fat": 25,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Champignons & Bandnudeln"
   },
   "short": "Tofu-Stroganoff",
   "sub": "mit Champignons & Bandnudeln",
@@ -14382,7 +14454,8 @@
    "protein": 19,
    "carbs": 48,
    "fat": 25,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Kichererbsen, Feta & Dill"
   },
   "short": "Schmorgurken",
   "sub": "mit Kichererbsen, Feta & Dill",
@@ -14522,7 +14595,8 @@
       "do": "Alles in Schalen anrichten und mit Sesam und Kürbiskernen bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen-Hummus & Joghurt-Dip"
   },
   "short": "Falafel-Reis-Bowl",
   "sub": "mit Hummus, Skyr-Dip & Gemüse",
@@ -14979,7 +15053,8 @@
       "do": "Mit Essig, Salz und Pfeffer abschmecken und mit dem Quark und Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Möhren & Quark-Klecks"
   },
   "short": "Linsen-Kartoffel-Eintopf",
   "sub": "mit roten Linsen, Möhren & Quark-Klecks",
@@ -15103,7 +15178,8 @@
       "do": "Mit Salz und Pfeffer abschmecken und mit Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tellerlinsen, Kartoffeln & Paprika"
   },
   "short": "Kenianischer Linsen-Eintopf",
   "sub": "mit Tellerlinsen, Kartoffeln & Quark",
@@ -15234,7 +15310,8 @@
       "do": "Mit Salz und Chili abschmecken, mit Reis und Joghurt servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojagranulat, Reis & Joghurt"
   },
   "short": "Chana Masala",
   "sub": "mit Sojagranulat, Reis & Skyr",
@@ -15527,7 +15604,8 @@
       "do": "Mit geriebenem Hartkäse und Schnittlauch servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Hüttenkäse, saurer Sahne & Erbsen"
   },
   "short": "Paprika-Rahm-Nudeln",
   "sub": "mit Hüttenkäse, Quark & Erbsen",
@@ -15710,7 +15788,8 @@
    "protein": 25,
    "carbs": 33,
    "fat": 18,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "lauwarm, mit Feta, Ei & Gurke"
   },
   "short": "Tellerlinsen-Salat",
   "sub": "lauwarm, mit Feta, Ei & Gurke",
@@ -15937,7 +16016,8 @@
       "do": "Mit Majoran, Salz und Pfeffer abschmecken, Sahne einrühren und mit Schnittlauch bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojaschnetzeln, Kartoffeln & Lauch"
   },
   "short": "Erbsen-Linsen-Eintopf",
   "sub": "mit Sojaschnetzeln & Schnittlauch-Quark",
@@ -16059,7 +16139,8 @@
       "do": "Kichererbsen, Brokkoli und Reis in die Soße geben, gut erhitzen und mit Salz, Pfeffer und Chili abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Erdnusssoße & Chili"
   },
   "short": "Brokkoli-Kichererbsen-Reis",
   "sub": "mit Erdnusssoße & Skyr-Dip",
@@ -16194,7 +16275,8 @@
       "do": "Mit Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Tomaten & Vollkornbrot"
   },
   "short": "Kichererbsen-Spinat-Pfanne",
   "sub": "mit Ei, roten Linsen, Quark & Brot",
@@ -16334,7 +16416,8 @@
       "do": "Mit dem Kräuterquark servieren."
      }
     ]
-   }
+   },
+   "sub": "mit grünen Bohnen & Kräuterquark"
   },
   "short": "Bratkartoffeln",
   "sub": "mit Bohnengemüse & Kräuterquark",
@@ -16464,7 +16547,8 @@
       "do": "Linsen und Spinat mischen, mit Salz, Pfeffer und Zitronensaft abschmecken und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Reis & Zitrone"
   },
   "short": "Kokos-Spinat-Linsen",
   "sub": "mit roten Linsen, Reis & Skyr",
@@ -16601,7 +16685,8 @@
       "do": "Chili mit dem Knoblauchbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen & Knoblauchbrot"
   },
   "short": "Bohnen-Möhren-Chili",
   "sub": "mit Sojagranulat & Knoblauchbrot",
@@ -16720,7 +16805,8 @@
       "do": "Stampf mit Tomatensoße und Kräuterquark servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomatensoße & Kräuterquark"
   },
   "short": "Kartoffel-Bohnen-Stampf",
   "sub": "mit Tomatensoße & Kräuterquark",
@@ -16858,7 +16944,8 @@
       "do": "Röstkartoffeln mit Eiern und Soße servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Röstkartoffeln & Chiliflocken"
   },
   "short": "Eier in Tomaten-Linsen-Soße",
   "sub": "mit Röstkartoffeln & Quark-Dip",
@@ -16953,7 +17040,8 @@
    "protein": 31,
    "carbs": 40,
    "fat": 18,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Erbsen, Kartoffeln & Quark"
   },
   "short": "Ofen-Frittata",
   "sub": "mit Erbsen, Kartoffeln & Quark",
@@ -17092,7 +17180,8 @@
       "do": "Mit Bohnenkraut, Salz und Pfeffer abschmecken und mit einem Klecks Crème fraîche und Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojaschnetzeln & Vollkornbrot"
   },
   "short": "Bohnen-Gemüse-Eintopf",
   "sub": "mit Sojaschnetzeln & Vollkornbrot",
@@ -17228,7 +17317,8 @@
       "do": "Mit je einem Klecks Quark servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spaghetti & Quark-Topping"
   },
   "short": "Rote-Linsen-Bolognese",
   "sub": "mit Spaghetti & Quark-Topping",
@@ -17381,7 +17471,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Quark-Ei-Creme & Gouda"
   },
   "short": "Linsen-Lasagne",
   "sub": "mit Quark-Ei-Creme & Gouda",
@@ -17484,7 +17575,8 @@
    "protein": 38,
    "carbs": 103,
    "fat": 14,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Sojagranulat & Quark"
   },
   "short": "Bohnen-Reis-Burritos",
   "sub": "mit Sojagranulat & Quark",
@@ -17686,7 +17778,8 @@
       "do": "Eintopf mit dem Sauerrahm-Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Lauch & saurer Sahne"
   },
   "short": "Curry-Reis-Eintopf",
   "sub": "mit Kichererbsen, Lauch & Skyr-Dip",
@@ -17827,7 +17920,8 @@
       "do": "Mit dem Joghurt-Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojagranulat, Nudeln & Joghurt-Dip"
   },
   "short": "Kichererbsen-Bolognese",
   "sub": "mit Sojagranulat, Nudeln & Skyr-Dip",
@@ -17962,7 +18056,8 @@
       "do": "Mit Salz und Pfeffer abschmecken und mit Joghurt servieren."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Paprika & Joghurt"
   },
   "short": "Linsen-Kartoffel-Chili",
   "sub": "mit Kidneybohnen & Skyr",
@@ -18095,7 +18190,8 @@
       "do": "Brötchen mit Soße, Bratling und Gurkenscheiben belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Quark-Senf-Soße & Gurke"
   },
   "short": "Kidney-Hafer-Burger",
   "sub": "mit Quark-Senf-Soße & Gurke",
@@ -18198,7 +18294,8 @@
    "protein": 21,
    "carbs": 56,
    "fat": 9,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Ei-Kresse-Quark & Gurkensalat"
   },
   "short": "Ofenkartoffeln",
   "sub": "mit Ei-Kresse-Quark & Gurkensalat",
@@ -18299,7 +18396,8 @@
    "protein": 28,
    "carbs": 53,
    "fat": 14,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Quark & Vollkornbrot"
   },
   "short": "Kohlrabi-Kartoffel-Frittata",
   "sub": "mit Quark & Vollkornbrot",
@@ -18398,7 +18496,8 @@
    "protein": 31,
    "carbs": 67,
    "fat": 9,
-   "note": "Originalfassung der Quelle"
+   "note": "Originalfassung der Quelle",
+   "sub": "mit Kartoffeln & Senfquark"
   },
   "short": "Grünkohl-Linsen-Pfanne",
   "sub": "mit Kartoffeln & Senfquark",
@@ -18546,7 +18645,8 @@
       "do": "Mit Petersilie bestreuen und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Gurke & Senf-Dressing"
   },
   "short": "Spätzle-Linsen-Salat",
   "sub": "mit Ei & Quark-Dressing",
@@ -18675,7 +18775,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Banane & Zimt"
   },
   "short": "Quark-Hafer-Auflauf",
   "sub": "mit Banane & Zimt",
@@ -18768,7 +18869,8 @@
       "do": "Bananenscheiben, Erdnussmus und Zimt obenauf geben."
      }
     ]
-   }
+   },
+   "sub": "mit Banane & Erdnussmus"
   },
   "short": "Quark-Hafer-Schüssel",
   "sub": "mit Banane & Erdnussmus",
@@ -18872,7 +18974,8 @@
       "do": "Morgens Banane in Scheiben schneiden und die Oats damit toppen."
      }
     ]
-   }
+   },
+   "sub": "mit Sojadrink & Leinsamen"
   },
   "short": "Bananen-Overnight-Oats",
   "sub": "mit Skyr & Leinsamen",
@@ -18975,7 +19078,8 @@
       "min": 6
      }
     ]
-   }
+   },
+   "sub": "mit Haferflocken & Zimt"
   },
   "short": "Bananen-Quark-Pfannkuchen",
   "sub": "mit Haferflocken & Zimt",
@@ -19068,7 +19172,8 @@
       "do": "Quark unterrühren (nicht mehr kochen) und warm essen."
      }
     ]
-   }
+   },
+   "sub": "mit Magerquark"
   },
   "short": "Kakao-Porridge",
   "sub": "mit Magerquark",
@@ -19221,7 +19326,8 @@
       "do": "Möhren in Sticks schneiden und zum Dippen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Quark & Möhrensticks"
   },
   "short": "Weiße-Bohnen-Hummus",
   "sub": "mit Quark & Möhrensticks",
@@ -19326,7 +19432,8 @@
       "do": "Quark, Zimt und Vanille unterrühren und die Bananenscheiben darauf verteilen."
      }
     ]
-   }
+   },
+   "sub": "mit Banane"
   },
   "short": "Vanille-Zimt-Quark",
   "sub": "mit Banane",
@@ -19421,7 +19528,8 @@
       "do": "In eine Schale geben und mit der übrigen Banane in Scheiben und den gehackten Nüssen belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Zimt & Nüssen"
   },
   "style": "einfach"
  },
@@ -19532,7 +19640,8 @@
       "do": "Mit dem Knoblauch-Joghurt servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Paprika & Feta"
   },
   "short": "Blech-Gnocchi",
   "sub": "mit Kichererbsen, Paprika & Feta",
@@ -19656,7 +19765,8 @@
       "do": "Mit Hartkäse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & Oregano"
   },
   "short": "Linsen-Tomaten-Gnocchi",
   "sub": "mit Hartkäse & Skyr",
@@ -19781,7 +19891,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Frischkäse-Soße & Mozzarella"
   },
   "short": "Spinat-Gnocchi",
   "sub": "mit Hüttenkäse-Soße & Mozzarella",
@@ -19964,7 +20075,8 @@
       "do": "Abschmecken, Gnocchi und Brokkoli unterheben."
      }
     ]
-   }
+   },
+   "sub": "in Käse-Quark-Soße"
   },
   "short": "Brokkoli-Gnocchi",
   "sub": "in Käse-Quark-Soße",
@@ -20094,7 +20206,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten & Reis"
   },
   "since": "2026-11-02",
   "short": "Kidneybohnen-Erdnuss-Eintopf",
@@ -20312,7 +20425,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Berglinsen, Basmatireis & Zwiebeln"
   },
   "since": "2026-11-02",
   "short": "Mujadarra",
@@ -20455,7 +20569,8 @@
       "do": "Mit Limettensaft, Salz und Pfeffer abschmecken, mit Sesam und Koriander bestreuen und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Blumenkohl, Kartoffeln & Reis"
   },
   "since": "2026-11-02",
   "short": "Aloo Gobi",
@@ -20669,7 +20784,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Linsen, Kichererbsen & Safran"
   },
   "since": "2026-11-02",
   "short": "Harira",
@@ -20804,7 +20920,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Aubergine & Schwarzaugenbohnen"
   },
   "since": "2026-11-02",
   "short": "Jollof-Bohnenreis",
@@ -20939,7 +21056,8 @@
       "do": "Blumenkohl in der Soße schwenken, mit Erdnüssen, Sesam und Schnittlauch bestreuen und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Erdnüssen, Sesam & Reis"
   },
   "since": "2026-11-02",
   "short": "Kung-Pao-Blumenkohl",
@@ -21320,7 +21438,8 @@
       "do": "Mit Zitronensaft abschmecken und mit Couscous, Mandeln und Petersilie servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Couscous, Kichererbsen & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Zwetschgen-Linsen-Tajine",
@@ -21433,7 +21552,8 @@
       "do": "Mit Salz und Pfeffer abschmecken und mit Fladenbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "rote Linsen mit Berbere & Fladenbrot"
   },
   "since": "2026-11-02",
   "short": "Misir Wot",
@@ -21593,7 +21713,8 @@
       "do": "Mit gehacktem Koriander und Minze bestreuen und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Kichererbsen & Sojajoghurt"
   },
   "since": "2026-11-02",
   "short": "Biryani",
@@ -21693,7 +21814,8 @@
       "do": "Anrichten, mit Tomate, Frühlingszwiebel, Petersilie, Olivenöl und Shatta toppen und mit Pita servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomate, Petersilie & Pita"
   },
   "since": "2026-11-02",
   "short": "Ful Medames",
@@ -21820,7 +21942,8 @@
       "do": "Mit getoastetem Vollkornbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Paprika & Vollkorntoast"
   },
   "since": "2026-11-02",
   "short": "Tofu Bhurji",
@@ -21917,7 +22040,8 @@
       "do": "Auf zwei Schalen verteilen und mit Heidelbeersoße, Banane, Schokolade und Haselnüssen toppen."
      }
     ]
-   }
+   },
+   "sub": "mit Heidelbeeren, Banane & Haselnüssen"
   },
   "since": "2026-11-02",
   "short": "Chai-Porridge",
@@ -22058,7 +22182,8 @@
       "do": "Mit Zitronensaft und Koriander abschmecken und heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Erbsen, Möhre & grünen Bohnen"
   },
   "since": "2026-11-02",
   "short": "Masala Oats",
@@ -22191,7 +22316,8 @@
       "do": "Zitronenabrieb und -saft, Frühlingszwiebeln und Petersilie untermischen und mit feuchten Händen ca. 24 Bällchen formen."
      }
     ]
-   }
+   },
+   "sub": "mit Bulgur, Petersilie & Zitrone"
   },
   "since": "2026-11-02",
   "short": "Mercimek Köftesi",
@@ -22307,7 +22433,8 @@
       "do": "Mit Sesam garnieren und mit Saté-Soße servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Paprika & Erdnuss-Dip"
   },
   "since": "2026-11-02",
   "short": "Sommerrollen",
@@ -22442,7 +22569,8 @@
       "do": "Mit Salz und Tabasco abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit weißen Bohnen & Endivie"
   },
   "since": "2026-11-02",
   "short": "Pasta e fagioli",
@@ -22561,7 +22689,8 @@
       "do": "Suppe grob pürieren, mit Liquid Smoke, Salz und Pfeffer abschmecken und mit Würstchen, Zwiebel-Pickles und Petersilie servieren."
      }
     ]
-   }
+   },
+   "sub": "mit veganen Wiener Würstchen"
   },
   "since": "2026-11-02",
   "short": "Rauchige Erbsensuppe",
@@ -22683,7 +22812,9 @@
       "do": "Alles in Schalen anrichten, Avocado frisch aufschneiden und mit Mayo, Sesam, Kräutern, Chili und Limette servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Avocado & Mais",
+   "short": "Burrito-Bowl"
   },
   "since": "2026-11-02",
   "short": "Räuchertofu-Burrito-Bowl",
@@ -22812,7 +22943,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Essiggurken, Radieschen & Senf"
   },
   "since": "2026-11-02",
   "short": "Cremiger Kartoffelsalat",
@@ -22928,7 +23060,8 @@
       "do": "Nudeln, Bohnen, Gemüse und Dressing mischen, die Hirtenblock-Alternative darüberbröseln und in Boxen füllen."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Mais & Limetten-Dressing"
   },
   "since": "2026-11-02",
   "short": "Mexikanischer Nudelsalat",
@@ -23075,7 +23208,8 @@
       "do": "Gulasch mit Salz, Pfeffer und gewürfelten Essiggurken abschmecken, mit veganer Sauerrahm-Alternative und Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojaschnetzeln, Sauerkraut & Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Szegediner Gulasch",
@@ -23312,11 +23446,12 @@
       "do": "Mit Frühlingszwiebeln, Koriander, Jalapeños und Limette servieren."
      }
     ]
-   }
+   },
+   "sub": "mit schwarzen Bohnen, Mais & Reis"
   },
   "since": "2026-11-02",
   "short": "Ofen-Enchiladas",
-  "sub": "mit Sojahack, Bohnen & Limetten-Joghurt",
+  "sub": "mit Sojahack, Bohnen & Limetten-Sojajoghurt",
   "style": "einfach",
   "swaps": [
    [
@@ -23445,7 +23580,8 @@
       "do": "Nudeln und Brokkoli unterheben und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Cashew-Soße & Brokkoli"
   },
   "since": "2026-11-02",
   "short": "Mac & Cheese",
@@ -23580,7 +23716,8 @@
       "do": "Nudeln abgießen, mit Soße und Auberginen mischen und mit Mandel-Frischcreme und Basilikum servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Aubergine & Mandel-Frischcreme"
   },
   "since": "2026-11-02",
   "short": "Pasta alla Norma",
@@ -23732,7 +23869,9 @@
       "do": "Bällchen in der Soße kurz ziehen lassen, mit Spaghetti und Basilikum servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Spaghetti in Tomatensoße",
+   "short": "Bohnen-Walnuss-Bällchen"
   },
   "since": "2026-11-02",
   "short": "Bohnen-Soja-Bällchen",
@@ -23877,7 +24016,8 @@
       "do": "Mit Zitronensaft abschmecken, Lorbeer und Schale entfernen, mit Petersilie und Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Erbsen, Champignons & Reis"
   },
   "since": "2026-11-02",
   "short": "Seitan-Frikassee",
@@ -23997,7 +24137,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Erbsen, Gurken & Kresse"
   },
   "since": "2026-11-02",
   "short": "Tofu-Eiersalat-Wraps",
@@ -24105,7 +24246,8 @@
       "do": "Kurz abkühlen lassen und portionieren."
      }
     ]
-   }
+   },
+   "sub": "mit Blaubeeren, Banane & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Baked Oats",
@@ -24237,7 +24379,8 @@
       "do": "Abkühlen lassen und je 4 Muffins pro Portion verpacken."
      }
     ]
-   }
+   },
+   "sub": "mit Paprika, Zucchini & Spinat"
   },
   "since": "2026-11-02",
   "short": "Kichererbsen-Muffins",
@@ -24342,7 +24485,9 @@
       "do": "Mit Nussmus, restlichem Ahornsirup, Beeren und Kokosraspeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Nussmus, Beeren & Kokosraspeln",
+   "short": "Fluffige Pancakes"
   },
   "since": "2026-11-02",
   "short": "Seidentofu-Pancakes",
@@ -24575,7 +24720,8 @@
       "do": "Mit Kokosraspeln und Minze garnieren und sofort trinken."
      }
     ]
-   }
+   },
+   "sub": "mit Kokosmilch & Erdnussmus"
   },
   "since": "2026-11-02",
   "short": "Erdbeer-Bananen-Shake",
@@ -24668,7 +24814,8 @@
       "do": "Banane, Kakaonibs, Kakao, Cashews, Agave, Mandelmus, Hanfsamen, Sojadrink, Kokoswasser und Eiswürfel ca. 1 Min. cremig mixen."
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Mandelmus & Sojadrink"
   },
   "since": "2026-11-02",
   "short": "Kakao-Cashew-Shake",
@@ -24793,7 +24940,8 @@
       "do": "Pürieren, Petersilie unterrühren und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Sahne & Petersilie"
   },
   "since": "2026-11-02",
   "short": "Kartoffel-Möhren-Suppe",
@@ -24907,7 +25055,8 @@
       "do": "Abschmecken und mit Pesto und Käse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit weißen Bohnen, Pesto & Hartkäse"
   },
   "since": "2026-11-02",
   "short": "Minestrone",
@@ -25020,7 +25169,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Erbsen & Joghurt-Dressing"
   },
   "since": "2026-11-02",
   "short": "Nudelsalat",
@@ -25141,7 +25291,8 @@
       "do": "Reis mit Butter, Koriander und Limette auflockern und alles mit Crème fraîche anrichten."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Limettenreis & Avocado"
   },
   "since": "2026-11-02",
   "short": "Burrito-Bowl",
@@ -25260,7 +25411,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "vom Blech mit Feta & Sesam"
   },
   "since": "2026-11-02",
   "short": "Spinat-Feta-Börek",
@@ -25364,7 +25516,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Emmentaler & Röstzwiebeln"
   },
   "since": "2026-11-02",
   "short": "Käsespätzle-Auflauf",
@@ -25468,7 +25621,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Joghurt-Tzatziki & Eisbergsalat"
   },
   "since": "2026-11-02",
   "short": "Feta-Wraps",
@@ -25592,7 +25746,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Pak Choi & Sojasprossen"
   },
   "since": "2026-11-02",
   "short": "Pad Thai",
@@ -25733,7 +25888,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Spinat-Ricotta-Füllung & Béchamel"
   },
   "since": "2026-11-02",
   "short": "Cannelloni",
@@ -25866,7 +26022,8 @@
       "do": "Butter einrühren, abschmecken und mit Käse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Steinpilzen, Champignons & Hartkäse"
   },
   "since": "2026-11-02",
   "short": "Pilzrisotto",
@@ -25975,7 +26132,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Schmand, Ajvar & Emmentaler"
   },
   "since": "2026-11-02",
   "short": "Gemüse-Flammkuchen",
@@ -26087,7 +26245,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Reis & Feta"
   },
   "since": "2026-11-02",
   "short": "Gefüllte Zucchini",
@@ -26203,7 +26362,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Bohnen, Crème fraîche & Käse"
   },
   "since": "2026-11-02",
   "short": "Gemüse-Enchiladas",
@@ -26339,7 +26499,9 @@
       "do": "Knödel mit der Pilzsoße und übriger Petersilie servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Champignon-Rahm",
+   "short": "Semmelknödel"
   },
   "since": "2026-11-02",
   "short": "Quark-Semmelknödel",
@@ -26443,10 +26605,11 @@
       "min": 15
      }
     ]
-   }
+   },
+   "sub": "mit Vanillezucker"
   },
   "since": "2026-11-02",
-  "short": "Quark-Hafer-Waffeln",
+  "short": "Quark-Waffeln",
   "sub": "mit Skyr & Beeren",
   "style": "einfach"
  },
@@ -26533,7 +26696,8 @@
       "do": "In Zucker-Zimt wälzen und servieren."
      }
     ]
-   }
+   },
+   "sub": "aus Toastbrot mit Zimt & Zucker"
   },
   "since": "2026-11-02",
   "short": "Arme Ritter",
@@ -26634,7 +26798,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Birne, Rosinen & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Bircher-Müsli",
@@ -26736,7 +26901,8 @@
       "do": "Eigelb und Butter einrühren, Eischnee unterheben."
      }
     ]
-   }
+   },
+   "sub": "mit Vollmilch & Vanillezucker"
   },
   "since": "2026-11-02",
   "short": "Grießbrei",
@@ -26830,7 +26996,8 @@
       "do": "Mit Salz und Pfeffer abschmecken und auf Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Gewürzgurken auf Vollkornbrot"
   },
   "since": "2026-11-02",
   "short": "Eiersalat",
@@ -26933,7 +27100,9 @@
       "do": "Auskühlen lassen und in 8 Scheiben schneiden."
      }
     ]
-   }
+   },
+   "sub": "mit Walnüssen & Zimt",
+   "short": "Bananenbrot"
   },
   "since": "2026-11-02",
   "short": "Quark-Bananenbrot",
@@ -27064,7 +27233,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Brokkoli, Paprika & Sriracha"
   },
   "since": "2026-11-02",
   "short": "General Tso's Kichererbsen",
@@ -27181,7 +27351,8 @@
       "do": "Mit Erdnüssen, Sesam, Koriander und Zwiebelgrün bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Möhren, Erdnüssen & Koriander"
   },
   "since": "2026-11-02",
   "short": "Würzige Thai-Nudeln",
@@ -27305,7 +27476,8 @@
       "do": "Abschmecken, mit restlichem Öl schwenken, servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Mie-Nudeln, Möhren & Erdnussmus"
   },
   "since": "2026-11-02",
   "short": "Pak-Choi-Wokpfanne",
@@ -27416,7 +27588,8 @@
       "min": 4
      }
     ]
-   }
+   },
+   "sub": "mit Spaghetti, Paprika & Bambussprossen"
   },
   "since": "2026-11-02",
   "short": "Bami Goreng",
@@ -27521,7 +27694,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Weißkohl & Cheddar"
   },
   "since": "2026-11-02",
   "short": "Kartoffel-Weißkohl-Auflauf",
@@ -27640,7 +27814,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Sojasahne & veganer Reibeware"
   },
   "since": "2026-11-02",
   "short": "Kartoffel-Brokkoli-Auflauf",
@@ -27837,7 +28012,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Champignons, Sahne & Gouda"
   },
   "since": "2026-11-02",
   "short": "Wirsing-Schupfnudel-Auflauf",
@@ -27944,7 +28120,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Béchamel & Gouda"
   },
   "since": "2026-11-02",
   "short": "Blumenkohlauflauf",
@@ -28078,7 +28255,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Paprika & Cherrytomaten"
   },
   "since": "2026-11-02",
   "short": "Polenta-Auflauf",
@@ -28192,7 +28370,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten & Bulgur"
   },
   "since": "2026-11-02",
   "short": "Auberginen-Hüttenkäse-Pfanne",
@@ -28301,7 +28480,8 @@
       "do": "Mit Basilikum und Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Paprika, Oliven & Vollkornbrot"
   },
   "since": "2026-11-02",
   "short": "Hüttenkäse-Auflauf",
@@ -28491,7 +28671,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Quinoa, Süßkartoffel & Brokkoli"
   },
   "since": "2026-11-02",
   "short": "Buddha Bowl",
@@ -28622,7 +28803,8 @@
       "do": "Mit Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Salzkartoffeln & Senf"
   },
   "since": "2026-11-02",
   "short": "Soja-Frikadellen",
@@ -28726,7 +28908,8 @@
       "do": "Servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Gouda & Zwiebeln"
   },
   "since": "2026-11-02",
   "short": "Haferflocken-Käse-Bratlinge",
@@ -28826,7 +29009,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Avocado, Tomate & Knoblauch-Soße"
   },
   "since": "2026-11-02",
   "short": "Auberginen-Avocado-Burger",
@@ -28969,7 +29153,8 @@
       "do": "Reis mit der Tomatensoße mischen und mit den Bifteki servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Feta-Füllung & griechischem Tomatenreis"
   },
   "since": "2026-11-02",
   "short": "Soja-Bifteki",
@@ -29093,7 +29278,8 @@
       "do": "Servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sonnenblumenkernen & Curry"
   },
   "since": "2026-11-02",
   "short": "Grünkern-Pattys",
@@ -29206,7 +29392,8 @@
       "min": 12
      }
     ]
-   }
+   },
+   "sub": "mit Gouda, Petersilie & Thymian"
   },
   "since": "2026-11-02",
   "short": "Couscous-Bratlinge",
@@ -29336,7 +29523,8 @@
       "do": "Mit Dip, Salat und Fladenbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tahin-Dip, Gurke & Fladenbrot"
   },
   "since": "2026-11-02",
   "short": "Linsen-Falafel",
@@ -29448,7 +29636,8 @@
       "min": 15
      }
     ]
-   }
+   },
+   "sub": "mit Schnittlauch-Joghurt-Creme"
   },
   "since": "2026-11-02",
   "short": "Zucchini-Möhren-Puffer",
@@ -29560,7 +29749,8 @@
     "ahead": [
      "Frischkäse am Vortag ansetzen (24 Std. abtropfen lassen)."
     ]
-   }
+   },
+   "sub": "aus Quark & Schmand auf Vollkornbrot"
   },
   "since": "2026-11-02",
   "short": "Bresso selbst gemacht",
@@ -29685,7 +29875,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "auf Vollkornbrot mit getrockneten Tomaten"
   },
   "since": "2026-11-02",
   "short": "Linsen-Tomaten-Aufstrich",
@@ -29845,7 +30036,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Avocado-Creme & getrockneten Tomaten"
   },
   "since": "2026-11-02",
   "short": "Grillkäse-Bagel",
@@ -29961,7 +30153,8 @@
       "min": 10
      }
     ]
-   }
+   },
+   "sub": "mit mariniertem Tofu, Avocado & Rotkohl"
   },
   "since": "2026-11-02",
   "short": "Sushi-Sandwich",
@@ -30073,7 +30266,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Avocado, Zucchini & Paprika"
   },
   "since": "2026-11-02",
   "short": "Club Sandwich",
@@ -30223,7 +30417,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Büffelmozzarella & Kirschtomaten"
   },
   "since": "2026-11-02",
   "short": "Caprese-Avocado-Toast",
@@ -30355,7 +30550,8 @@
       "do": "Mit Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Zucchini & Aubergine"
   },
   "since": "2026-11-02",
   "short": "Süßkartoffel-Chili",
@@ -30474,7 +30670,8 @@
       "do": "Abschmecken, servieren."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Paprika & Kokosmilch"
   },
   "since": "2026-11-02",
   "short": "Süßkartoffel-Linsen-Curry",
@@ -30606,7 +30803,8 @@
       "do": "Abschmecken, servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Sojaschnetzeln, Kokosmilch & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Soja-Korma",
@@ -30740,7 +30938,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Süßkartoffel, Kichererbsen & Spinat"
   },
   "since": "2026-11-02",
   "short": "Ayurvedisches Curry",
@@ -30861,7 +31060,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Frühlingszwiebeln & Basmatireis"
   },
   "since": "2026-11-02",
   "short": "Tofu-Ananas-Curry",
@@ -30980,7 +31180,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Kokosmilch & Harissa"
   },
   "since": "2026-11-02",
   "short": "Kartoffelcurry",
@@ -31103,7 +31304,8 @@
       "do": "Abschmecken, auf Reis anrichten."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Möhren & Cashews"
   },
   "since": "2026-11-02",
   "short": "Grünkohlcurry",
@@ -31213,7 +31415,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Erdnuss-Soße & Basmatireis"
   },
   "since": "2026-11-02",
   "short": "Tofu-Mango-Curry",
@@ -31335,7 +31538,8 @@
       "do": "Mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, grünen Bohnen & Erdnüssen"
   },
   "since": "2026-11-02",
   "short": "Massaman Curry",
@@ -31465,7 +31669,8 @@
       "do": "Mit Koriander und Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Belugalinsen & Basmatireis"
   },
   "since": "2026-11-02",
   "short": "Dal Makhani",
@@ -31590,7 +31795,8 @@
       "do": "Reis, Gemüse und Dal anrichten."
      }
     ]
-   }
+   },
+   "sub": "mit roten Linsen, Gemüsecurry & Reis"
   },
   "since": "2026-11-02",
   "short": "Dal Bhat Tarkari",
@@ -31699,7 +31905,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Schmand, Harissa & Paprika"
   },
   "since": "2026-11-02",
   "short": "Dattel-Frischkäse-Dip",
@@ -31811,7 +32018,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Camembert, Frischkäse & Radieschen"
   },
   "since": "2026-11-02",
   "short": "Obatzter",
@@ -31916,7 +32124,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit getrockneten Tomaten & Frischkäse"
   },
   "since": "2026-11-02",
   "short": "Tomaten-Feta-Dip",
@@ -32094,7 +32303,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Feta, Knoblauch & Oregano"
   },
   "since": "2026-11-02",
   "short": "Auberginencreme",
@@ -32202,7 +32412,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Kakao, Datteln & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Schoko-Hummus",
@@ -32321,7 +32532,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Tahin & Kreuzkümmel"
   },
   "since": "2026-11-02",
   "short": "Rote-Bete-Hummus",
@@ -32450,7 +32662,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Orangen-Senf-Soße & Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Senfeier",
@@ -32573,7 +32786,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Salzkartoffeln"
   },
   "since": "2026-11-02",
   "short": "Spiegeleier & Rahmspinat",
@@ -32704,7 +32918,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Kartoffeln & Senf"
   },
   "since": "2026-11-02",
   "short": "Veganer Grünkohl",
@@ -32834,7 +33049,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Gurken & saurer Sahne"
   },
   "since": "2026-11-02",
   "short": "Soljanka",
@@ -32979,7 +33195,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Paprika & Ajvar"
   },
   "since": "2026-11-02",
   "short": "Quinoa-Kokos-Eintopf",
@@ -33115,7 +33332,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Sojaschnetzeln, Kartoffeln & Paprika"
   },
   "since": "2026-11-02",
   "short": "Bauerntopf",
@@ -33249,7 +33467,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, Paprika & Majoran"
   },
   "since": "2026-11-02",
   "short": "Kartoffelgulasch",
@@ -33366,7 +33585,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Baked Beans, Paprika & Reis"
   },
   "since": "2026-11-02",
   "short": "Chakalaka",
@@ -33507,7 +33727,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Aubergine & Couscous"
   },
   "since": "2026-11-02",
   "short": "Ratatouille",
@@ -33642,7 +33863,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit weißen Bohnen, Grünkohl & Fenchel"
   },
   "since": "2026-11-02",
   "short": "Ribollita",
@@ -33781,7 +34003,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Süßkartoffel & Fenchel"
   },
   "since": "2026-11-02",
   "short": "Marokkanischer Eintopf",
@@ -33895,7 +34118,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Vanille & Kürbiskernen"
   },
   "since": "2026-11-02",
   "short": "Kürbiskernöl-Parfait",
@@ -33997,7 +34221,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Sahne & Zitrone"
   },
   "since": "2026-11-02",
   "short": "Bananeneis",
@@ -34120,7 +34345,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Mandeln, Aprikosen & Datteln"
   },
   "since": "2026-11-02",
   "short": "Bananen-Müsliriegel",
@@ -34223,7 +34449,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Datteln, Kakao & Mandelmus"
   },
   "since": "2026-11-02",
   "short": "Mandel-Chia-Bällchen",
@@ -34328,7 +34555,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Mandeln & Schokolade"
   },
   "since": "2026-11-02",
   "short": "Cookie-Dough-Bällchen",
@@ -34444,7 +34672,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "japanisches Omelett mit Reis"
   },
   "since": "2026-11-02",
   "short": "Tamagoyaki",
@@ -34550,7 +34779,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Zwiebel & Thymian"
   },
   "since": "2026-11-02",
   "short": "Kartoffelrösti",
@@ -34677,7 +34907,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Rührtofu, Champignons & Paprika"
   },
   "since": "2026-11-02",
   "short": "Frühstücks-Bratkartoffeln",
@@ -34799,7 +35030,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit weißen Bohnen & Röstbrot"
   },
   "since": "2026-11-02",
   "short": "Boston Baked Beans",
@@ -34920,7 +35152,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Ei, Gewürzgurke & getrockneten Tomaten"
   },
   "since": "2026-11-02",
   "short": "Bauernfrühstück",
@@ -35047,7 +35280,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Bananen-Küchlein mit Zimtzucker"
   },
   "since": "2026-11-02",
   "short": "Banana Fritters",
@@ -35182,7 +35416,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Kapern & Mozzarella"
   },
   "since": "2026-11-02",
   "short": "Gefüllte Auberginen",
@@ -35321,7 +35556,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Walnüssen, Rosinen & Minzdip"
   },
   "since": "2026-11-02",
   "short": "Auberginen-Bulgur",
@@ -35447,7 +35683,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & Tomatensoße"
   },
   "since": "2026-11-02",
   "short": "Ricotta-Gnocchi",
@@ -35562,7 +35799,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Paprika & Basilikum"
   },
   "since": "2026-11-02",
   "short": "Gnocchi-Salat",
@@ -35744,7 +35982,8 @@
       "min": 20
      }
     ]
-   }
+   },
+   "sub": "aus Kartoffeln & Zwiebeln"
   },
   "since": "2026-11-02",
   "short": "Reibekuchen",
@@ -35843,7 +36082,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Pilzen & Rahmsoße"
   },
   "since": "2026-11-02",
   "short": "Schupfnudel-Lauch-Pfanne",
@@ -35974,7 +36214,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit mariniertem Tempeh"
   },
   "since": "2026-11-02",
   "short": "Rosenkohl-Bratkartoffeln",
@@ -36104,7 +36345,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "in Gemüsebrühe mit Schnittlauch"
   },
   "since": "2026-11-02",
   "short": "Kaspressknödel",
@@ -36234,7 +36476,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & brauner Butter"
   },
   "since": "2026-11-02",
   "short": "Spinatknödel",
@@ -36350,7 +36593,8 @@
       "do": "Auskühlen lassen."
      }
     ]
-   }
+   },
+   "sub": "mit Magerquark-Füllung & Kakao-Streuseln"
   },
   "since": "2026-11-02",
   "short": "Russischer Zupfkuchen",
@@ -36451,10 +36695,12 @@
     "ahead": [
      "Am Vortag die Masse im Tuch abtropfen lassen."
     ]
-   }
+   },
+   "sub": "aus Joghurt & Sahne mit Beerensauce",
+   "short": "Joghurt-Bombe"
   },
   "since": "2026-11-02",
-  "short": "Joghurt-Bombe",
+  "short": "Skyr-Bombe",
   "sub": "aus Skyr & Sahne mit Beerensauce",
   "style": "einfach",
   "swaps": [
@@ -36570,7 +36816,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Mandeln & Frischkäse-Frosting"
   },
   "since": "2026-11-02",
   "short": "Karottenkuchen",
@@ -36683,7 +36930,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Himbeeren & Haferstreuseln"
   },
   "since": "2026-11-02",
   "short": "Himbeer-Streusel-Muffins",
@@ -36798,7 +37046,8 @@
       "do": "Lösen und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Zartbitterschokolade"
   },
   "since": "2026-11-02",
   "short": "Lava-Muffins",
@@ -36922,7 +37171,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "aus Kidneybohnen & Hafer mit Schokolade"
   },
   "since": "2026-11-02",
   "short": "Bohnen-Brownies",
@@ -37050,7 +37300,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Soja-Gyros, Pilzen & Metaxa-Soße"
   },
   "since": "2026-11-02",
   "short": "Gyros-Nudelauflauf",
@@ -37174,7 +37425,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Aubergine & Tomatensoße"
   },
   "since": "2026-11-02",
   "short": "Gemüselasagne",
@@ -37297,7 +37549,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse, Crème fraîche & Mozzarella"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Wirsing-Lasagne",
@@ -37412,7 +37665,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Kernen, Walnüssen & Beeren"
   },
   "since": "2026-11-02",
   "short": "Honig-Granola",
@@ -37504,7 +37758,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Chiasamen & Kokosraspeln"
   },
   "since": "2026-11-02",
   "short": "Beeren-Smoothie-Bowl",
@@ -37608,7 +37863,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Himbeeren, Banane & Walnüssen"
   },
   "since": "2026-11-02",
   "short": "Quinoa-Frühstück",
@@ -37716,7 +37972,8 @@
     "ahead": [
      "Am Vorabend ansetzen"
     ]
-   }
+   },
+   "sub": "mit Passionsfrucht, Chia & Leinsamen"
   },
   "since": "2026-11-02",
   "short": "Overnight Oats Mango",
@@ -37840,7 +38097,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Röst-Kichererbsen & Hummus"
   },
   "since": "2026-11-02",
   "short": "Ofen-Süßkartoffeln",
@@ -37956,7 +38214,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Kichererbsen, Quinoa & Avocado"
   },
   "since": "2026-11-02",
   "short": "Ofen-Blumenkohl",
@@ -38055,7 +38314,8 @@
       "do": "In Stücke schneiden, mit Beeren servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Butter & Beeren"
   },
   "since": "2026-11-02",
   "short": "Finnischer Ofenpfannkuchen",
@@ -38157,7 +38417,8 @@
       "min": 20
      }
     ]
-   }
+   },
+   "sub": "mit Möhre, Zucchini & Röstzwiebeln"
   },
   "since": "2026-11-02",
   "short": "Herzhafte Gemüsewaffeln",
@@ -38268,7 +38529,8 @@
       "do": "Mit Beeren servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Mandeldrink & Beeren"
   },
   "since": "2026-11-02",
   "short": "Buchweizen-Pancakes",
@@ -38386,7 +38648,8 @@
     "ahead": [
      "Kartoffeln am Vortag als Pellkartoffeln ca. 20 Min. kochen"
     ]
-   }
+   },
+   "sub": "aus Kartoffeln & Quark mit Rosinen"
   },
   "since": "2026-11-02",
   "short": "Quarkkeulchen",
@@ -38493,7 +38756,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Tomate, Chili & Petersilie"
   },
   "since": "2026-11-02",
   "short": "Aglio e olio",
@@ -38595,7 +38859,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Kräuter-Räuchertofu & Hafersahne"
   },
   "since": "2026-11-02",
   "short": "Zitronenspaghetti",
@@ -38688,7 +38953,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Knoblauch & Basilikum"
   },
   "since": "2026-11-02",
   "short": "Spaghetti kalte Tomatensoße",
@@ -38800,7 +39066,8 @@
       "min": 10
      }
     ]
-   }
+   },
+   "sub": "mit Brokkoli, Bohnen & Champignons"
   },
   "since": "2026-11-02",
   "short": "Tortellini-Pfanne",
@@ -38920,7 +39187,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "mit Champignons, Hartkäse & Schmand"
   },
   "since": "2026-11-02",
   "short": "One-Pot-Pilz-Spaghetti",
@@ -39035,7 +39303,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit grünen Bohnen, Kirschtomaten & Kräutern"
   },
   "since": "2026-11-02",
   "short": "Bohnen-Nudel-Pfanne",
@@ -39144,7 +39413,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit cremiger Kürbissoße & Paprika"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Spaghetti",
@@ -39248,7 +39518,8 @@
       "do": "Garnieren."
      }
     ]
-   }
+   },
+   "sub": "One Pot mit Paprika, Kokosmilch & Erdnüssen"
   },
   "since": "2026-11-02",
   "short": "Kokos-Curry-Pasta",
@@ -39342,7 +39613,8 @@
       "min": 15
      }
     ]
-   }
+   },
+   "sub": "mit Kartöffelchen, Tomaten & Hartkäse"
   },
   "since": "2026-11-02",
   "short": "Grüner Spargel",
@@ -39436,7 +39708,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Feta & Basilikum"
   },
   "since": "2026-11-02",
   "short": "Tomaten-Zucchini-Pfanne",
@@ -39547,7 +39820,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Paprika, Aubergine & Schafskäse"
   },
   "since": "2026-11-02",
   "short": "Bulgur-Gemüse-Pfanne",
@@ -39668,7 +39942,8 @@
       "min": 10
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Mais & Reis"
   },
   "since": "2026-11-02",
   "short": "Mexikanische Gemüsepfanne",
@@ -39777,7 +40052,8 @@
       "min": 4
      }
     ]
-   }
+   },
+   "sub": "mit Feta, Paprika & Kräutern"
   },
   "since": "2026-11-02",
   "short": "Hirse-Paprika-Pfanne",
@@ -39894,7 +40170,8 @@
       "do": "Mit Schnittlauch-Schmand servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Pilzen, Paprika & Schnittlauch-Schmand"
   },
   "since": "2026-11-02",
   "short": "Maultaschen-Pfanne",
@@ -40019,7 +40296,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, Zwiebeln & Harissa"
   },
   "since": "2026-11-02",
   "short": "Grüne-Bohnen-Harissa-Topf",
@@ -40144,7 +40422,8 @@
       "min": 15
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Paprika & Tomaten"
   },
   "since": "2026-11-02",
   "short": "Kritharaki-Gemüsepfanne",
@@ -40271,7 +40550,8 @@
       "do": "Bestreichen, bestreuen, heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Knoblauch-Schmand-Creme & Käse"
   },
   "since": "2026-11-02",
   "short": "Lángos",
@@ -40399,7 +40679,8 @@
       "do": "Toppen und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Mozzarella & Rucola"
   },
   "since": "2026-11-02",
   "short": "Fladenbrot-Pizza Napoli",
@@ -40525,7 +40806,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Paprika, Zwiebeln & Harissa"
   },
   "since": "2026-11-02",
   "short": "Knoblauch-Pilz-Pizza",
@@ -40656,7 +40938,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit veganem Hack, Tomate & Ajvar"
   },
   "since": "2026-11-02",
   "short": "Veggie-Hack-Pide",
@@ -40759,7 +41042,8 @@
       "do": "Mit Sojajoghurt, Schokoraspeln und Agavendicksaft servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Birne, Sojajoghurt & Banane"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Schoko-Porridge",
@@ -40883,7 +41167,8 @@
       "do": "Mit Banane und Walnüssen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kokos, Banane & Walnüssen"
   },
   "since": "2026-11-02",
   "short": "Quinoa-Porridge",
@@ -40990,7 +41275,8 @@
       "do": "Ahornsirup und Zimt unterrühren, mit Obst und Mandeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Zimt, Banane, Beeren & Mandeln"
   },
   "since": "2026-11-02",
   "short": "Buchweizen-Porridge",
@@ -41095,11 +41381,12 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Sahne & Vollmilchschokolade"
   },
   "since": "2026-11-02",
   "short": "Schoko-Pudding",
-  "sub": "mit Skyr, Zartbitter & Himbeeren",
+  "sub": "mit Skyr, Zartbitter & Kakao",
   "style": "einfach",
   "swaps": [
    [
@@ -41207,7 +41494,8 @@
       "do": "Mit Zimtzucker servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Vanille & Zimtzucker"
   },
   "since": "2026-11-02",
   "short": "Milchreis",
@@ -41303,7 +41591,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Quark-Mascarpone-Creme"
   },
   "since": "2026-11-02",
   "short": "Himbeer-Spekulatius-Dessert",
@@ -41396,7 +41685,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "aus Quark, mit Erdbeersoße"
   },
   "since": "2026-11-02",
   "short": "Spaghettieis-Dessert",
@@ -41534,7 +41824,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Ajvar, Crème fraîche & Gouda"
   },
   "since": "2026-11-02",
   "short": "Paprika-Ajvar-Quiche",
@@ -41676,7 +41967,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & saurer Sahne"
   },
   "since": "2026-11-02",
   "short": "Zucchini-Feta-Quiche",
@@ -41805,7 +42097,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Raclettekäse & Quittengelee"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Raclettekuchen",
@@ -41932,7 +42225,8 @@
       "do": "Petersilie unterheben."
      }
     ]
-   }
+   },
+   "sub": "mit Erbsen, Paprika & Ajvar"
   },
   "since": "2026-11-02",
   "short": "Djuvec-Reis",
@@ -42057,7 +42351,8 @@
       "do": "Abschmecken und mit Tortillas und Chilisoße servieren."
      }
     ]
-   }
+   },
+   "sub": "mit schwarzen Bohnen, Paprika & Tortillas"
   },
   "since": "2026-11-02",
   "short": "Gallo Pinto",
@@ -42195,7 +42490,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Spinat & Paprika"
   },
   "since": "2026-11-02",
   "short": "Jambalaya",
@@ -42312,7 +42608,8 @@
       "do": "Butter, Hartkäse, Zitrone und Petersilie unterrühren."
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & Petersilie"
   },
   "since": "2026-11-02",
   "short": "Zitronenrisotto",
@@ -42437,7 +42734,8 @@
       "do": "Crème fraîche und Hartkäse unterrühren, mit Kresse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Crème fraîche, Hartkäse & Kresse"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Risotto",
@@ -42557,7 +42855,8 @@
       "do": "Butter, Hartkäse und Meerrettich unterrühren und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Hartkäse & Meerrettich"
   },
   "since": "2026-11-02",
   "short": "Rote-Bete-Risotto",
@@ -42688,7 +42987,8 @@
       "do": "Abschmecken und mit Feta servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten & Kümmel-Feta"
   },
   "since": "2026-11-02",
   "short": "Graupenrisotto",
@@ -42813,7 +43113,8 @@
       "do": "Rucola, Basilikum und Pinienkerne unterheben."
      }
     ]
-   }
+   },
+   "sub": "mit Rucola, Pinienkernen & Tomaten"
   },
   "since": "2026-11-02",
   "short": "Pesto-Nudelsalat",
@@ -42924,7 +43225,8 @@
       "do": "Gemüse mit Vinaigrette mischen, Brot und Basilikum unterheben, mit Hartkäse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kirschtomaten, Basilikum & Hartkäse"
   },
   "since": "2026-11-02",
   "short": "Spargel-Brotsalat",
@@ -43036,7 +43338,8 @@
       "do": "Frühlingszwiebeln und Petersilie untermischen und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Petersilie, Frühlingszwiebeln & Zitrone"
   },
   "since": "2026-11-02",
   "short": "Kisir",
@@ -43153,7 +43456,8 @@
       "do": "Couscous mit Dressing und Gemüse mischen und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Paprika, Mais & Currypaste"
   },
   "since": "2026-11-02",
   "short": "Couscous-Salat",
@@ -43262,7 +43566,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit getrockneten Tomaten & Feta"
   },
   "since": "2026-11-02",
   "short": "Kichererbsensalat",
@@ -43360,7 +43665,8 @@
       "do": "Alles mit dem Dressing mischen und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Cashews, Rosinen & Paprika"
   },
   "since": "2026-11-02",
   "short": "Reissalat",
@@ -43470,7 +43776,8 @@
       "do": "Alles mischen und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Feta, Oliven & Gurke"
   },
   "since": "2026-11-02",
   "short": "Kritharaki-Salat",
@@ -43579,7 +43886,8 @@
       "do": "Alles mischen, ziehen lassen und mit Koriander bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Gurke, Möhre & Ingwer-Soja-Dressing"
   },
   "since": "2026-11-02",
   "short": "Edamame-Salat",
@@ -43714,7 +44022,8 @@
       "do": "Rucola untermischen."
      }
     ]
-   }
+   },
+   "sub": "mit Feta, Rucola & Balsamico-Senf-Dressing"
   },
   "since": "2026-11-02",
   "short": "Graupensalat",
@@ -43864,7 +44173,8 @@
       "do": "Gut gekühlt servieren."
      }
     ]
-   }
+   },
+   "sub": "mit türkischem Joghurt"
   },
   "since": "2026-11-02",
   "short": "Ayran",
@@ -43944,7 +44254,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Banane & Orangensaft"
   },
   "since": "2026-11-02",
   "short": "Nektarinen-Trauben-Smoothie",
@@ -44025,7 +44336,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Orangensaft & Haferflocken"
   },
   "since": "2026-11-02",
   "short": "Beeren-Smoothie",
@@ -44108,7 +44420,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Joghurt & Orangensaft"
   },
   "since": "2026-11-02",
   "short": "Mango-Bananen-Smoothie",
@@ -44184,7 +44497,8 @@
       "do": "Mit Eis servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Joghurt"
   },
   "since": "2026-11-02",
   "short": "Lassi",
@@ -44264,7 +44578,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Orangensaft"
   },
   "since": "2026-11-02",
   "short": "Bananen-Kiwi-Smoothie",
@@ -44344,7 +44659,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Orangensaft & Mandelmus"
   },
   "since": "2026-11-02",
   "short": "Spinat-Smoothie",
@@ -44423,7 +44739,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Haferdrink, Kaffee & Kakao"
   },
   "since": "2026-11-02",
   "short": "Banana-Coffee-Shake",
@@ -44509,7 +44826,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "mit Orange, Müsli & Honig"
   },
   "since": "2026-11-02",
   "short": "Buttermilch-Smoothie",
@@ -44627,7 +44945,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Sonnenblumenkernen, Sesam & Leinsamen"
   },
   "since": "2026-11-02",
   "short": "Kerniges Knäckebrot",
@@ -44733,7 +45052,8 @@
       "do": "Mit Tomaten belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Knoblauch & Oregano"
   },
   "since": "2026-11-02",
   "short": "Bruschetta",
@@ -44857,7 +45177,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Feta-Füllung & Sesam"
   },
   "since": "2026-11-02",
   "short": "Türkische Hefeteilchen",
@@ -44967,7 +45288,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Gouda & Tomaten"
   },
   "since": "2026-11-02",
   "short": "Zucchini-Pizza-Happen",
@@ -45105,7 +45427,8 @@
       "do": "Etwas abkühlen lassen; je 2 Teilchen pro Portion."
      }
     ]
-   }
+   },
+   "sub": "mit Spinat, Zwiebeln & Sumach"
   },
   "since": "2026-11-02",
   "short": "Spinat-Fatayer",
@@ -45204,7 +45527,8 @@
       "do": "Sojasauce und Edamame zugeben, durchschwenken und 1 Min. ziehen lassen."
      }
     ]
-   }
+   },
+   "sub": "in der Schote, mit Ingwer, Knoblauch & Chili"
   },
   "since": "2026-11-02",
   "short": "Würzige Edamame",
@@ -45353,7 +45677,8 @@
       "do": "Mit dem Minz-Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kartoffeln, Erbsen & Minz-Dip"
   },
   "since": "2026-11-02",
   "short": "Ofen-Samosas",
@@ -45471,7 +45796,8 @@
       "do": "Kurz abkühlen lassen; je 2 Muffins pro Portion."
      }
     ]
-   }
+   },
+   "sub": "mit Quark, Ei & Rosmarin"
   },
   "since": "2026-11-02",
   "short": "Tomaten-Feta-Muffins",
@@ -45588,7 +45914,8 @@
       "do": "Etwas abkühlen lassen; je 3 Schnecken pro Portion."
      }
     ]
-   }
+   },
+   "sub": "mit Kräutern, Ei & Gouda"
   },
   "since": "2026-11-02",
   "short": "Hüttenkäse-Schnecken",
@@ -45718,7 +46045,9 @@
       "do": "Mit Chilisauce servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kohl, Sprossen & Glasnudeln",
+   "short": "Frühlingsrollen"
   },
   "since": "2026-11-02",
   "short": "Ofen-Frühlingsrollen",
@@ -45821,7 +46150,8 @@
       "do": "Kurz abkühlen lassen, halbieren, mit Quarkcreme füllen und bestreichen, mit Banane, Heidelbeeren und Cranberrys belegen."
      }
     ]
-   }
+   },
+   "sub": "mit Banane, Heidelbeeren & Quarkcreme"
   },
   "since": "2026-11-02",
   "short": "Quark-Mug-Cake",
@@ -45939,7 +46269,8 @@
       "do": "Tomate, Spätzle und Spinat unterschwenken, abschmecken und mit Pinienkernen servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Champignons, Sahne & Pinienkernen"
   },
   "since": "2026-11-02",
   "short": "Spinat-Spätzle-Pfanne",
@@ -46061,7 +46392,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Champignons, Gouda & Schmelzkäse"
   },
   "since": "2026-11-02",
   "short": "Spätzle-Spitzkohl-Auflauf",
@@ -46212,7 +46544,8 @@
       "do": "Strudel kurz ruhen lassen und in 4 Stücke schneiden."
      }
     ]
-   }
+   },
+   "sub": "mit Zucchini, Karotten & Gouda"
   },
   "since": "2026-11-02",
   "short": "Quinoa-Gemüse-Strudel",
@@ -46352,7 +46685,8 @@
       "do": "10 Min. ruhen lassen und in 4 Stücke schneiden."
      }
     ]
-   }
+   },
+   "sub": "mit Karotten & Sahneguss"
   },
   "since": "2026-11-02",
   "short": "Weißkohl-Feta-Strudel",
@@ -46488,7 +46822,8 @@
       "do": "Zitronengras entfernen, abschmecken, über die Nudeln schöpfen und mit Koriander bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Pilzen & Mie-Nudeln"
   },
   "since": "2026-11-02",
   "short": "Thai-Kokos-Suppe",
@@ -46626,7 +46961,8 @@
       "do": "Nudeln und Toppings in Schalen verteilen, mit heißer Brühe aufgießen und mit Basilikum, Limette, Hoisin und Sriracha servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tofu, Sprossen & Basilikum"
   },
   "since": "2026-11-02",
   "short": "Pho",
@@ -46747,7 +47083,8 @@
       "do": "Mit Croutons und Schmand servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Hüttenkäse-Füllung, Croutons & Schmand"
   },
   "since": "2026-11-02",
   "short": "Wareniki",
@@ -46881,7 +47218,8 @@
       "do": "Mit Reis und Gurkensalat anrichten."
      }
     ]
-   }
+   },
+   "sub": "mit Reis & Gurkensalat"
   },
   "since": "2026-11-02",
   "short": "Knuspriger Sesam-Tofu",
@@ -46994,7 +47332,9 @@
       "do": "Mit dem Tofu-Röstzwiebel-Mix anrichten."
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Ingwer & Röstzwiebeln",
+   "short": "Zucchininudeln"
   },
   "since": "2026-11-02",
   "short": "Zucchini-Linsen-Spaghetti",
@@ -47116,7 +47456,8 @@
       "do": "Petersilie unterrühren, Kartoffeln abgießen und mit dem Ragout servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Zwetschgen, Räuchertofu & Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Champignon-Tofu-Ragout",
@@ -47232,7 +47573,8 @@
       "do": "Nudeln unterheben, erhitzen und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Weißkohl & Kümmel"
   },
   "since": "2026-11-02",
   "short": "Krautfleckerl",
@@ -47354,7 +47696,8 @@
       "do": "Mit der Soße bestreichen und mit Mayonnaise beträufeln."
      }
     ]
-   }
+   },
+   "sub": "Kohl-Pfannkuchen mit Mais & Mayo"
   },
   "since": "2026-11-02",
   "short": "Okonomiyaki",
@@ -47479,7 +47822,8 @@
       "do": "Dünn abschneiden und mit Salsa in Tortillas servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tortillas & Ananas-Salsa"
   },
   "since": "2026-11-02",
   "short": "Pilz-Schawarma al Pastor",
@@ -47589,7 +47933,8 @@
       "do": "In 4 Stücke teilen und warm servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Feta & Thymian"
   },
   "since": "2026-11-02",
   "short": "Gefülltes Fladenbrot",
@@ -47697,7 +48042,8 @@
       "do": "Pita mit Kohl, Tomate, Gyros und Tzatziki füllen."
      }
     ]
-   }
+   },
+   "sub": "im Pita mit Tzatziki & Krautsalat"
   },
   "since": "2026-11-02",
   "short": "Halloumi-Gyros",
@@ -47812,7 +48158,8 @@
       "do": "Fein pürieren und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Kokos, Ingwer & Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Kürbis-Karotten-Suppe",
@@ -47918,7 +48265,8 @@
       "do": "Mit Salz, Chili und Kurkuma abschmecken und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten & Kurkuma"
   },
   "since": "2026-11-02",
   "short": "Rote-Linsen-Kokos-Suppe",
@@ -48024,7 +48372,8 @@
       "do": "Sahne einrühren, salzen, pfeffern, Dill darüberstreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Räuchertofu, Sahne & Dill"
   },
   "since": "2026-11-02",
   "short": "Schwedische Sommersuppe",
@@ -48133,7 +48482,8 @@
       "do": "Umrühren und eiskalt servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Paprika & Olivenöl"
   },
   "since": "2026-11-02",
   "short": "Gazpacho Andaluz",
@@ -48246,7 +48596,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Meerrettich & Kräuterfrischkäse"
   },
   "since": "2026-11-02",
   "short": "Grüne Erbsensuppe",
@@ -48378,7 +48729,8 @@
       "do": "Abschmecken und mit Schmand und Dill servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Weißkohl, Schmand & Dill"
   },
   "since": "2026-11-02",
   "short": "Borschtsch",
@@ -48493,7 +48845,8 @@
       "do": "Mit Eivierteln und den warmen Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kefir, Gurke, Ei & Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Kalte Rote-Bete-Suppe",
@@ -48620,7 +48973,8 @@
       "do": "Verquirlte Eier in dünnem Strahl einrühren, süß-sauer abschmecken, Frühlingszwiebel zugeben und über den Glasnudeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Eierflocken, Bambus & Glasnudeln"
   },
   "since": "2026-11-02",
   "short": "Süß-sauer-scharfe Suppe",
@@ -48750,7 +49104,8 @@
       "do": "Abschmecken und Petersilie unterrühren."
      }
     ]
-   }
+   },
+   "sub": "griechische Bohnensuppe mit Tomaten"
   },
   "since": "2026-11-02",
   "short": "Fasolada",
@@ -48852,7 +49207,8 @@
       "do": "Pürieren und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "cremig, mit Kartoffeln"
   },
   "since": "2026-11-02",
   "short": "Brokkolisuppe",
@@ -48971,7 +49327,8 @@
       "do": "Mit Schnittlauch bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Basilikum & Schnittlauch"
   },
   "since": "2026-11-02",
   "short": "Tofu-Kartoffel-Erbsen-Pfanne",
@@ -49090,7 +49447,8 @@
       "do": "Tortillas mit restlichem Dressing bestreichen, füllen, aufrollen und halbieren."
      }
     ]
-   }
+   },
+   "sub": "mit Knusper-Tofu, Croutons & Hartkäse"
   },
   "since": "2026-11-02",
   "short": "Caesar-Salad-Wraps",
@@ -49234,7 +49592,8 @@
       "do": "Tortillas erwärmen, belegen und einrollen."
      }
     ]
-   }
+   },
+   "sub": "mit Ofen-Falafel, Feta & Dattel-Dip"
   },
   "since": "2026-11-02",
   "short": "Falafel-Wraps",
@@ -49348,7 +49707,8 @@
       "do": "Tortilla-Chips erst vor dem Essen darüberbröseln."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Schmand & Gouda"
   },
   "since": "2026-11-02",
   "short": "Tacosalat",
@@ -49463,7 +49823,8 @@
       "do": "Mit Puderzucker bestäuben und lauwarm servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Hafer-Streuseln"
   },
   "since": "2026-11-02",
   "short": "Rhabarber-Crumble",
@@ -49588,7 +49949,8 @@
       "do": "Mohn mit Puderzucker mischen, Margarine schmelzen. Knödel mit reichlich Margarine übergießen und mit Mohnzucker bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Powidl & Mohn"
   },
   "since": "2026-11-02",
   "short": "Vegane Germknödel",
@@ -49704,7 +50066,8 @@
       "do": "Knödel in den Bröseln wälzen, mit Zimtzucker bestreuen und mit Erdbeeren servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Butterbröseln, Zimtzucker & Erdbeeren"
   },
   "since": "2026-11-02",
   "short": "Topfenknödel",
@@ -49828,7 +50191,8 @@
       "do": "Abkühlen lassen und in 4 Stücke schneiden."
      }
     ]
-   }
+   },
+   "sub": "mit Magerquark, Grießcreme & Rosinen"
   },
   "since": "2026-11-02",
   "short": "Topfenstrudel",
@@ -49932,7 +50296,8 @@
       "do": "Vom Herd ziehen, Senf einrühren, mit Salz und Pfeffer abschmecken. Eier halbieren, in die Soße legen und mit den Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Salzkartoffeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50051,7 +50416,8 @@
       "do": "Kräuter unterrühren, Eier achteln und in der Soße kurz erwärmen. Mit den Kartoffeln servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Dill, Petersilie & Pellkartoffeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50162,7 +50528,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "österreichisch, mit grünem Salat"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50284,7 +50651,8 @@
       "do": "Kartoffeln pellen und mit der Grünen Soße servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Eiern & Pellkartoffeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50387,7 +50755,8 @@
       "do": "Mit den Röstzwiebeln bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "Schweizer Art mit Bergkäse & Röstzwiebeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50514,7 +50883,8 @@
       "do": "Mit Salz, Pfeffer und Rosenpaprika abschmecken, Lorbeerblatt entfernen."
      }
     ]
-   }
+   },
+   "sub": "mit Champignons & Paprika"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50634,7 +51004,8 @@
       "do": "Sahne und Kräuter unterrühren und mit Cayenne, Muskat, Salz und Pfeffer abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Möhren, Kümmel & Sahne"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50747,7 +51118,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Schmand & Curry"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50871,7 +51243,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Paprika & Knoblauch-Joghurt"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -50987,7 +51360,8 @@
       "do": "Kartoffeln abgießen und mit den Schnitzeln servieren."
      }
     ]
-   }
+   },
+   "sub": "paniert, mit Kartoffeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51096,7 +51470,8 @@
       "do": "Nudeln abgießen, mit der Soße mischen und nach Belieben mit Hartkäse bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit frischen Tomaten & Sahne"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51221,7 +51596,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Blätterteig, Pinienkerne & Cherrytomaten"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51355,7 +51731,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Bohnen, Zucchini & Sesam"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51474,7 +51851,8 @@
       "do": "Nudeln untermischen und mit Hartkäse servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Tomaten, Tagliatelle & Hartkäse"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51606,7 +51984,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "asiatisch mit Spitzkohl & Mu-Err"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -51749,7 +52128,8 @@
       "do": "Mit Limettensaft und Zucker abschmecken und mit Cashews bestreuen."
      }
     ]
-   }
+   },
+   "sub": "Kokosmilch, Rosinen & geröstete Cashews"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -51874,7 +52254,8 @@
       "do": "Basilikum und Tomatenmark unterrühren, abschmecken und mit den Spaghetti servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Staudensellerie & Spaghetti"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52011,7 +52392,8 @@
       "do": "Pflanzerl mit den Senfmöhren servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Senfmöhren"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52123,7 +52505,8 @@
       "min": 10
      }
     ]
-   }
+   },
+   "sub": "mit Bergkäse & Salat"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52266,7 +52649,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Brokkoli, Möhren & Käse überbacken"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52386,7 +52770,8 @@
       "do": "Pikant abschmecken, Lorbeer entfernen und mit Baguette servieren."
      }
     ]
-   }
+   },
+   "sub": "Kidney, weiße Bohnen & Paprika"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52519,7 +52904,8 @@
       "do": "Mit Erdnüssen und Koriander garniert servieren."
      }
     ]
-   }
+   },
+   "sub": "rote Currypaste & Erdnüsse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -52631,7 +53017,8 @@
       "do": "Gnocchi in der Soße schwenken und mit Hartkäse bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Weißwein-Frischkäse-Soße"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52738,7 +53125,8 @@
       "do": "Mit Salz und Pfeffer abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Champignons & Zwiebeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52862,7 +53250,8 @@
       "do": "Mit der Kräutersoße und Blattsalat anrichten."
      }
     ]
-   }
+   },
+   "sub": "paniert, mit Kräutersoße & Blattsalat"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -52991,7 +53380,8 @@
       "do": "Mit Halloumi und Kresse garniert servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Kidneybohnen, Kartoffeln & Paprika"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53100,7 +53490,8 @@
       "do": "Burger mit Paprika, Halloumi, Rucola und Zwiebeln belegen und schließen."
      }
     ]
-   }
+   },
+   "sub": "marinierter Halloumi, Grillpaprika & Rucola"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53211,7 +53602,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "mit Cherrytomaten & doppelt Mozzarella"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53349,7 +53741,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "Pilz-Bohnen-Füllung, Guacamole & Schmand"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53467,7 +53860,8 @@
       "do": "Mit Frühlingszwiebeln bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Brokkoli, Erbsen & Paprika"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53582,7 +53976,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Weißwein-Sahne & Hartkäse"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53694,7 +54089,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Tomaten, Sahne & Thymian"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53820,7 +54216,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Rigatoni, Cherrytomaten & Basilikum"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -53929,7 +54326,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "mit Rosmarin, Sahne & Käse"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -54043,7 +54441,8 @@
       "do": "Feta unterheben, erwärmen und mit dem Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "süß-sauer mit Paprika & Reis"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -54147,7 +54546,8 @@
       "do": "Champignons mit dem Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "Feta-Frischkäse-Creme & Basmatireis"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -54266,7 +54666,8 @@
       "do": "Mit Baguette servieren."
      }
     ]
-   }
+   },
+   "sub": "Aubergine, Zucchini, Paprika & Gouda"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -54425,7 +54826,8 @@
       "do": "Paneer unterheben, mit Koriander bestreuen und mit Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "hausgemachter Paneer, Cashew-Soße & Reis"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -54554,7 +54956,8 @@
       "do": "Reis in Tassen drücken, auf Teller stürzen, mit Sesam bestreuen und das Curry daneben anrichten."
      }
     ]
-   }
+   },
+   "sub": "Zucchini, Lauch, Paprika & Reis"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -54672,7 +55075,8 @@
       "do": "Spinat und Tofu unterrühren und mit Sesam bestreut servieren."
      }
     ]
-   }
+   },
+   "sub": "mit glasiertem Tofu, Spinat & Sesam"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -54783,7 +55187,8 @@
       "do": "Hoisin- und Austernsauce unterrühren und abschmecken."
      }
     ]
-   }
+   },
+   "sub": "mit Shiitake, frittiertem Tofu & Hoisin"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -54919,7 +55324,8 @@
       "do": "Etwa ⅓ stampfen, auf der Tahinsoße anrichten, mit Petersilie, Gurke garnieren und servieren."
      }
     ]
-   }
+   },
+   "sub": "ägyptische Favabohnen mit Tahinsoße"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55045,7 +55451,8 @@
       "do": "In Salatblättern anrichten und mit Fladenbrot servieren."
      }
     ]
-   }
+   },
+   "sub": "Linsen-Bulgur-Laibchen, Salat & Fladenbrot"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55172,7 +55579,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "gefüllte Ofen-Auberginen mit Tomaten"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55318,7 +55726,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Safranreis, Räuchertofu & Erbsen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55434,7 +55843,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "Stängelkohl, getrocknete Tomaten & Hartkäse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55549,7 +55959,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Buchweizennudeln, Wirsing, Kartoffeln & Käse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55647,7 +56058,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "Spaghetti in Käse-Pfeffer-Creme"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55759,7 +56171,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Wirsing, weiße Bohnen & Ciabatta"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -55881,7 +56294,8 @@
       "do": "Abschmecken und servieren."
      }
     ]
-   }
+   },
+   "sub": "Kohl, Kartoffeln & Möhren"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56003,7 +56417,8 @@
       "do": "Couscous in Teller geben, Eintopf darüber verteilen, mit Petersilie bestreuen servieren."
      }
     ]
-   }
+   },
+   "sub": "Kichererbsen, Süßkartoffel & Couscous"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56166,7 +56581,8 @@
       "do": "Alles in Schalen anrichten und mit Sojajoghurt und Mandeln garnieren."
      }
     ]
-   }
+   },
+   "sub": "Schmor-Aubergine, Hirse & Avocado-Minz-Salat"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56315,7 +56731,8 @@
       "do": "Mit dem Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "Omelett, Glasnudeln & Erdnussdip"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56455,7 +56872,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Tortillas, Bohnen, Mais & Käse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56566,7 +56984,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Gemüsefüllung mit Paprika & Zucchini"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -56681,7 +57100,9 @@
       "do": "Brot, Oliven und Kräuter unterheben und sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Brotsalat mit Sumach, Minze & Oliven",
+   "short": "Fattoush"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -56792,7 +57213,9 @@
       "do": "Mit dem Reis servieren."
      }
     ]
-   }
+   },
+   "sub": "Paprika-Tomaten-Gemüse mit Reis",
+   "short": "Letscho"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -56886,7 +57309,8 @@
       "do": "Herd aus, Käse, Butter und Pfeffer unterrühren und servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Bergkäse & Butter"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -57022,7 +57446,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Joghurt-Mürbeteig, Gemüse & Käseguss"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57174,7 +57599,8 @@
       "do": "Mit Zitronensaft abschmecken und mit Sojajoghurt und Koriander servieren."
      }
     ]
-   }
+   },
+   "sub": "Auberginen-Kartoffel-Curry mit Sojajoghurt"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57298,7 +57724,8 @@
       "do": "Nudeln mit der Soße toppen und mit Gurke garnieren."
      }
     ]
-   }
+   },
+   "sub": "Nudeln mit schwarzer Bohnensoße & Gemüse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57431,7 +57858,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Süßkartoffel-Glasnudeln, Seitan & Gemüse"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57563,7 +57991,8 @@
       "do": "In Stücke schneiden und heiß mit dem Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "Yachaejeon mit Soja-Chili-Dip"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57672,7 +58101,8 @@
       "do": "Sesamöl unterrühren und mit Frühlingszwiebelgrün servieren."
      }
     ]
-   }
+   },
+   "sub": "One-Pot-Reis mit Mais, Karotte & Tofu"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57778,7 +58208,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "geschmorte Tomaten, Tofu & Jasminreis"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -57897,7 +58328,8 @@
       "do": "Mit Jasminreis servieren."
      }
     ]
-   }
+   },
+   "sub": "Thai-Basilikum-Tofu-Hack mit Jasminreis"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -58040,7 +58472,8 @@
       "do": "Nudeln abgießen, Schmorgemüse darauf verteilen und mit Koriander bestreuen."
      }
     ]
-   }
+   },
+   "sub": "Xinjiang-Schmorgericht mit Bandnudeln"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -58154,7 +58587,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "One Pot mit Räuchertofu & Pak Choi"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -58274,7 +58708,8 @@
       "do": "Brotchips, Gemüse, Soße, Pinienkerne und Kräuter schichten und mit Sumach bestreuen."
      }
     ]
-   }
+   },
+   "sub": "Brotchips, Kichererbsen & Joghurt-Tahin-Soße"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -58387,7 +58822,8 @@
       "do": "Mit angerührter Stärke binden."
      }
     ]
-   }
+   },
+   "sub": "geschmorter Weißkohl mit Kümmel & Räuchertofu"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -58498,7 +58934,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Champignons, Lauch, Crème fraîche & Nudeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -58608,7 +59045,8 @@
       "min": 3
      }
     ]
-   }
+   },
+   "sub": "Bohnen, Kokosmilch & Erdnussmus"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -58716,7 +59154,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "weiße Bohnen, Walnüsse & Balsamico"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -58817,7 +59256,8 @@
       "min": 2
      }
     ]
-   }
+   },
+   "sub": "cremige Walnuss-Soße & Hartkäse"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -58914,7 +59354,8 @@
       "min": 5
      }
     ]
-   }
+   },
+   "sub": "und Salzkartoffeln"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -59052,7 +59493,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Kartoffeln, Paprika, Bohnen & Schmand"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -59176,7 +59618,8 @@
       "do": "Gemüse auf dem Reis anrichten, mit Koriander und Zitronensaft servieren."
      }
     ]
-   }
+   },
+   "sub": "Ofen-Blumenkohl, Karotten & Kichererbsen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59280,7 +59723,8 @@
       "do": "Mit Pfeffer, Chiliflocken und dem Brot servieren."
      }
     ]
-   }
+   },
+   "sub": "Salbei-Tomaten-Bohnen mit geröstetem Brot"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59406,7 +59850,8 @@
       "do": "Reis, Gemüse und Tofu-Katsu in Schalen anrichten und mit Tonkatsu-Sauce toppen."
      }
     ]
-   }
+   },
+   "sub": "Panko-Tofu, Spitzkohl & Tonkatsu-Sauce"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59521,7 +59966,8 @@
       "do": "Mit Erdnüssen, Koriander und Limette servieren."
      }
     ]
-   }
+   },
+   "sub": "Reisnudeln, Tofu & Gemüse in Thai-Curry"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59645,7 +60091,8 @@
       "do": "Mit Koriander oder Petersilie bestreuen und servieren."
      }
     ]
-   }
+   },
+   "sub": "Eier in Paprika-Tomaten-Soße"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59746,7 +60193,8 @@
       "do": "Auf Teller verteilen und mit Paprikapulver bestreuen."
      }
     ]
-   }
+   },
+   "sub": "mit Zwiebel und Paprikapulver"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -59849,7 +60297,8 @@
       "do": "Sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Würziger Käse-Senf-Toast aus Wales"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -59957,7 +60406,8 @@
       "do": "Lauwarm servieren."
      }
     ]
-   }
+   },
+   "sub": "Englisches Teegebäck, lauwarm"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -60073,7 +60523,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Schnell, ohne Hefe, mit Vanille"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -60188,7 +60639,8 @@
       "min": 1
      }
     ]
-   }
+   },
+   "sub": "Kartoffel-Omelett, innen cremig"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -60307,7 +60759,8 @@
       "do": "Pfannkuchen mithilfe des Backpapiers von der schmalen Seite her aufrollen, in Stücke schneiden und mit dem Kräuterschmand servieren."
      }
     ]
-   }
+   },
+   "sub": "vom Blech, mit Kräuterdip"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -60432,7 +60885,8 @@
       "do": "Gemüseschmarrn mit dem Knoblauchdip servieren."
      }
     ]
-   }
+   },
+   "sub": "Herzhafter Schmarrn mit Pilzen & Zucchini"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -60562,7 +61016,8 @@
       "do": "Gallo Pinto mit Spiegelei und je 1 EL Sauerrahm servieren."
      }
     ]
-   }
+   },
+   "sub": "Reis & schwarze Bohnen aus Costa Rica"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -60652,7 +61107,8 @@
       "do": "Zum Schluss mit Honig, Vanille und einer Prise Salz abschmecken."
      }
     ]
-   }
+   },
+   "sub": "Mit Milch, Rosinen und Honig"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -60760,7 +61216,8 @@
       "do": "Omeletts zur Hälfte mit Tomaten belegen, salzen, pfeffern, mit Schnittlauch bestreuen, zusammenklappen und servieren."
      }
     ]
-   }
+   },
+   "sub": "Überbacken, mit Tomaten gefüllt"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -60847,7 +61304,8 @@
       "do": "In eine Schüssel füllen und mit Nüssen, Mango und Erdbeeren garniert servieren."
      }
     ]
-   }
+   },
+   "sub": "mit Beeren, Hafer und Nüssen"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -60965,7 +61423,8 @@
       "do": "In Scheiben schneiden und servieren."
      }
     ]
-   }
+   },
+   "sub": "Schnelles Brot ohne Hefe"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -61079,7 +61538,8 @@
       "do": "Toasts mit der Guacamole bestreichen, die Pilze darauf verteilen und nach Belieben mit Sesam bestreuen."
      }
     ]
-   }
+   },
+   "sub": "Guacamole-Toast mit Sojasaucen-Pilzen"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -61199,7 +61659,8 @@
       "do": "Auf einem Gitter knusprig halten und mit einem Dip nach Wahl servieren."
      }
     ]
-   }
+   },
+   "sub": "Indisches gefülltes Fladenbrot"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -61317,7 +61778,8 @@
       "do": "Pickert warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Kartoffel-Hefe-Pfannkuchen mit Rosinen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -61425,7 +61887,8 @@
       "do": "Noch einmal umrühren und in Schalen füllen."
      }
     ]
-   }
+   },
+   "sub": "Cremiger Haferbrei mit Puddingpulver"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -61535,7 +61998,8 @@
       "do": "Warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Knuspriges Käse-Sandwich mit Spinat"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -61681,7 +62145,8 @@
       "do": "Pitabrote kurz toasten, je mit 1 EL Tahin bestreichen und mit Salat, Auberginen und Kichererbsen füllen. Mit Zhoug, Sojajoghurt und den eingelegten Zwiebeln toppen."
      }
     ]
-   }
+   },
+   "sub": "Pita mit Aubergine, Kichererbsen & Zhoug"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -61816,7 +62281,8 @@
       "do": "Porridge mit Kompott, gerösteten Nüssen und Leinöl warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Gerösteter Hafer, Chia und Birnenkompott"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -61921,7 +62387,8 @@
       "do": "Heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "Nur Linsen, Wasser und Gewürze"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -62040,7 +62507,8 @@
       "do": "Süßkartoffeln mit Frischkäse bestreichen, mit Bohnen und Brokkoli belegen, mit eingelegten Zwiebeln, Pfeffer, Salz und Limettenzesten toppen und sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Süßkartoffel statt Brot, mit Bohnen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -62143,7 +62611,8 @@
       "do": "Waffeln heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "Vollkornwaffeln mit Frühlingszwiebeln"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -62273,7 +62742,8 @@
       "do": "Pancakes mit dem Tofu-Miso-Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "Knusprig, mit würzigem Räuchertofu-Dip"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -62413,7 +62883,8 @@
       "do": "Pfannkuchen mit Spinat und Pinienkernen füllen und servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Pinienkernen und cremigem Spinat"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -62523,7 +62994,8 @@
       "do": "Kurz auf Küchenpapier abtropfen lassen, in Stücke schneiden und warm oder kalt servieren."
      }
     ]
-   }
+   },
+   "sub": "Knusprig, mit Cheddar und Mozzarella"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -62627,7 +63099,8 @@
       "do": "Warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Hauchdünne Teigtaschen aus der Pfanne"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -62741,7 +63214,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Überbacken, mit Petersilie"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -62851,7 +63325,8 @@
       "do": "Heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "Gebackener Feta mit Knoblauch"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -62948,7 +63423,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Fingerfood mit Balsamico"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -63054,7 +63530,8 @@
       "do": "Warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Käse und Haferflocken gebunden"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -63168,7 +63645,8 @@
       "do": "Auf Küchenpapier abtropfen lassen und warm oder kalt servieren."
      }
     ]
-   }
+   },
+   "sub": "Frittiert, mit Kichererbsenmehl"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -63279,7 +63757,8 @@
       "do": "Rucola als Nest anrichten, Halloumi und Tomaten darauf geben, mit der Marinade beträufeln und sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Limetten-Knoblauch-Marinade"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -63383,7 +63862,8 @@
       "do": "Mit Fleur de Sel bestreuen, mit der Knoblauch-Basilikum-Paste bestreichen und warm oder kalt servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Knoblauch-Basilikum-Öl"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -63529,7 +64009,8 @@
       "do": "Warm oder kalt servieren."
      }
     ]
-   }
+   },
+   "sub": "Quark-Öl-Teig, 24 Stück"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -63654,7 +64135,8 @@
       "do": "In eine Schüssel geben, eine Mulde mit etwas Olivenöl füllen und mit den gehackten Walnüssen garnieren."
      }
     ]
-   }
+   },
+   "sub": "Syrischer Walnuss-Paprika-Dip"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -63749,7 +64231,9 @@
       "do": "Tomate fein würfeln (wässriges Inneres entfernen) und auf der Guacamole verteilen."
      }
     ]
-   }
+   },
+   "sub": "Mit Limette, Jalapeño und Koriander",
+   "short": "Guacamole"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -63877,7 +64361,8 @@
       "do": "Falafel mit dem Tahin-Joghurt servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Haferflocken, im Ofen gebacken"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64009,7 +64494,8 @@
       "do": "Spieße mit Sesam, Koriander und Frühlingszwiebeln bestreuen und mit Limettenspalten und der Saté-Soße servieren."
      }
     ]
-   }
+   },
+   "sub": "Im Ofen gebacken, mit Thai-Erdnusssoße"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64129,7 +64615,8 @@
       "do": "Warm oder kalt mit der restlichen Sojasauce als Dip servieren."
      }
     ]
-   }
+   },
+   "sub": "Knusprig gebratene japanische Reisbällchen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64261,7 +64748,8 @@
       "do": "In mundgerechte Stücke schneiden und heiß mit der Dipsauce servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Sojasaucen-Chili-Dip"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64388,7 +64876,8 @@
       "do": "Warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Überbacken, mit Cashew-Bohnen-Creme"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64509,7 +64998,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Im Ofen gebacken, Füllung wie Spanakopita"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64628,7 +65118,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Blätterteig-Dreiecke mit Spinat und Dill"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -64723,7 +65214,8 @@
       "do": "Dip in kleine Schälchen füllen und je 2 Gemüsesticks von jeder Sorte hineinstecken."
      }
     ]
-   }
+   },
+   "sub": "Bunte Rohkost im Dip-Becher"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -64829,7 +65321,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Schattenmorellen und Beeren, schnell gemacht"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -64939,7 +65432,8 @@
       "do": "Mit Puderzucker bestäuben und warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Französischer Kirsch-Ofenpfannkuchen"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -65034,7 +65528,8 @@
       "do": "Auf Küchenpapier abtropfen lassen und warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Klassiker aus dem Fett, mit mehr Quark"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -65135,7 +65630,8 @@
       "do": "Eiscreme auf Teller verteilen, je 2 Birnenhälften dazulegen, mit der heißen Kuvertüre übergießen und mit Sahne servieren."
      }
     ]
-   }
+   },
+   "sub": "Vanille-Birnen mit heißer Schokolade"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -65265,7 +65761,8 @@
       "do": "Sahne steif schlagen und zum Kuchen servieren."
      }
     ]
-   }
+   },
+   "sub": "Klebriger schwedischer Schokoladenkuchen"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -65423,7 +65920,8 @@
       "do": "Mit Puderzucker bestäuben und servieren."
      }
     ]
-   }
+   },
+   "sub": "Überbackene Quark-Pfannkuchen aus Wien"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -65528,7 +66026,8 @@
       "do": "Fruchtsoße, Brösel und Creme abwechselnd in 4 Dessertgläser schichten."
      }
     ]
-   }
+   },
+   "sub": "Schichtdessert mit Beerensoße und Biskuit"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -65647,7 +66146,8 @@
       "do": "In Dessertschälchen servieren."
      }
     ]
-   }
+   },
+   "sub": "Mohn-Brötchen-Dessert für Weihnachten"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -65783,7 +66283,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Bayerischer Blechkuchen mit Zwetschgen"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -65892,7 +66393,8 @@
       "do": "Heiß servieren – innen bleibt das Soufflé weich und flüssig."
      }
     ]
-   }
+   },
+   "sub": "Mit Zimt, heiß serviert"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -66009,7 +66511,8 @@
       "do": "Heiß oder kalt servieren, z. B. mit Kompott."
      }
     ]
-   }
+   },
+   "sub": "Goldbraun gebraten, z. B. mit Kompott"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -66092,7 +66595,8 @@
       "do": "Mandarinen mit dem Mixer kurz unterquirlen – sie dürfen dabei ruhig kleiner werden."
      }
     ]
-   }
+   },
+   "sub": "Klassiker in 10 Minuten"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -66208,7 +66712,8 @@
       "do": "Sahne steif schlagen, auf das Baiser streichen und mit den Früchten belegen."
      }
     ]
-   }
+   },
+   "sub": "Baiser-Torte aus Australien"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -66338,7 +66843,8 @@
       "do": "Mit Puderzucker bestäuben und warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Brötchen-Kirsch-Auflauf"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -66346,7 +66852,7 @@
  {
   "name": "Schichtdessert mit Weintrauben & Cookies",
   "short": "Trauben-Schichtdessert",
-  "sub": "Quark-Mascarpone-Creme mit Cookie-Bröseln",
+  "sub": "Quark-Skyr-Creme mit Cookie-Bröseln",
   "category": "dessert",
   "servings": 8,
   "kcal": 458,
@@ -66437,7 +66943,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Quark-Mascarpone-Creme mit Cookie-Bröseln"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -66530,7 +67037,8 @@
       "do": "Sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Cremig aus der Eismaschine"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -66638,7 +67146,8 @@
       "do": "Warm servieren."
      }
     ]
-   }
+   },
+   "sub": "Luftig mit Eischnee und Mineralwasser"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -66737,7 +67246,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Weihnachtliches Schichtdessert mit Quark"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -66830,7 +67340,8 @@
       "do": "Früchte klein schneiden und unter die Creme mischen oder abwechselnd in Schalen schichten. Mit Fruchtstücken verzieren."
      }
     ]
-   }
+   },
+   "sub": "Österreichische Quarkcreme mit Obst"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -66926,7 +67437,8 @@
       "do": "In Gläser füllen und mit Beeren und Kokosraspeln garnieren."
      }
     ]
-   }
+   },
+   "sub": "Ohne Kochen, mit Banane gesüßt"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -67049,7 +67561,8 @@
       "passive": true
      }
     ]
-   }
+   },
+   "sub": "Mit Haferflocken und Schokostückchen"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -67158,7 +67671,8 @@
       "do": "Mit Himbeersirup, Pistazien, Kokosraspeln, Kardamom und Rosenblüten getoppt servieren."
      }
     ]
-   }
+   },
+   "sub": "Levantinischer Pudding mit Pistazien"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -67166,7 +67680,7 @@
  {
   "name": "Zitronen-Schichtdessert mit Skyr & Granola",
   "short": "Zitronen-Schichtdessert",
-  "sub": "Lemon-Curd-Pudding, Joghurt und Knusper",
+  "sub": "Lemon-Curd-Pudding, Skyr und Knusper",
   "category": "dessert",
   "servings": 4,
   "kcal": 270,
@@ -67265,7 +67779,8 @@
       "do": "Gläser abwechselnd mit Granola, Joghurt und Pudding füllen und mit Beeren und Minze garnieren."
      }
     ]
-   }
+   },
+   "sub": "Lemon-Curd-Pudding, Joghurt und Knusper"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -67371,7 +67886,8 @@
       "do": "Auf 3 Gläser verteilen, mit Kokosraspeln und Minze garnieren und sofort servieren oder kühlen."
      }
     ]
-   }
+   },
+   "sub": "Schnell, fruchtig, mit Sahnehaube"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -67477,7 +67993,8 @@
       "do": "In Gläser füllen und mit Beeren und Kokosraspeln garnieren."
      }
     ]
-   }
+   },
+   "sub": "Luftige Puddingcreme im Glas"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -67577,7 +68094,8 @@
       "do": "In Gläser füllen, mit je einer Erdbeere garnieren und sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Mit Banane und Orangensaft"
   },
   "style": "einfach",
   "since": "2026-11-09"
@@ -67662,7 +68180,8 @@
       "do": "Mit den Johannisbeerrispen garnieren und servieren."
      }
     ]
-   }
+   },
+   "sub": "Zweifarbig geschichtet"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -67754,7 +68273,8 @@
       "do": "Auf Gläser verteilen und nach Belieben mit gerösteten Mandelblättchen bestreuen."
      }
     ]
-   }
+   },
+   "sub": "Cremig, mit Honig und Mandeln"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -67837,7 +68357,8 @@
       "do": "Mit der Milch auffüllen, verrühren und mit einem Strohhalm servieren."
      }
     ]
-   }
+   },
+   "sub": "Banane, Zartbitter und Ahornsirup"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -67916,7 +68437,8 @@
       "do": "In Gläser füllen und servieren."
      }
     ]
-   }
+   },
+   "sub": "Indischer Joghurtdrink mit Erdbeeren"
   },
   "style": "einfach",
   "since": "2026-11-09",
@@ -68006,7 +68528,8 @@
       "do": "Nach Belieben mit einem Schuss Amaretto verfeinern und mit Strohhalm servieren."
      }
     ]
-   }
+   },
+   "sub": "Aufgeschäumter Instantkaffee auf Eis"
   },
   "style": "besonders",
   "since": "2026-11-09"
@@ -68123,7 +68646,8 @@
       "do": "Eiswürfel in Gläser geben, zur Hälfte mit Tee füllen und mit dem Milchschaum aufgießen."
      }
     ]
-   }
+   },
+   "sub": "Selbst gewürzter Chai auf Eis"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -68232,7 +68756,8 @@
       "do": "Mit Ahornsirup süßen und heiß servieren."
      }
     ]
-   }
+   },
+   "sub": "Kurkuma-Ingwer-Latte, wärmend"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -68320,7 +68845,8 @@
       "do": "Mit Eiswürfeln in Gläser füllen, mit Kokosraspeln bestreuen und sofort servieren."
      }
     ]
-   }
+   },
+   "sub": "Piña-Colada-Art, alkoholfrei"
   },
   "style": "besonders",
   "since": "2026-11-09",
@@ -68418,7 +68944,8 @@
       "do": "In Tassen füllen und mit je 1 EL Sahne und Schokoraspeln garnieren."
      }
     ]
-   }
+   },
+   "sub": "Mit 70-%-Schokolade und Sahnehaube"
   },
   "style": "einfach",
   "since": "2026-11-09"

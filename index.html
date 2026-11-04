@@ -3891,7 +3891,7 @@ function journeySheet(kind, arg){
       </div>
       ${avoidHit(r) ? `<div class="pill warn">${avoidHit(r)[0] === "§" ? `Braucht ${esc(DEV_NEED[avoidHit(r)])} – fehlt in deiner Küche` : `Enthält „${esc(avoidHit(r))}“ (deine Unverträglichkeiten)`}</div>` : ""}
       ${!ctxM && !(swapCand && swapCand.name === r.name) ? planRecHtml(r) : ""}
-      <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>${reweCart(r)}
+      <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div>${cookAhead(r).length ? `<div class="aheadbox"><b>Vorher erledigen</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
       <ol class="rsteps">${(ns => cookSteps(r).map(x => `<li${ns && !ns.has(x.do) ? ` class="pp"` : ""}>${ns && !ns.has(x.do) ? `<span class="ppt">💪 Protein+</span> ` : ""}${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join(""))(r.normal && r.variant !== "normal" ? new Set(cookSteps(recNormalOf(r)).map(x => x.do)) : null)}</ol>
@@ -3934,6 +3934,7 @@ let recQMemo = {q: null, m: new Map()};
 const recQScore = (r, q) => { q = fold(q.trim()); if (recQMemo.q !== q || recQMemo.r !== recipes) recQMemo = {q, r: recipes, m: new Map()};
   let v = recQMemo.m.get(r.name); if (v == null) { v = Math.max(sugScore((r.short || "") + " " + r.name, q) * 2, sugScore(r.ingredients.join(" "), q), sugScore([CAT[catOf(r)], r.category === "mittag" || r.category === "abend" ? "mittagessen abendessen" : "", r.style === "besonders" ? "besonders ausgefallen speziell" : r.style === "einfach" ? "einfach alltag" : "", veganOk(r) ? "vegan" : ""].join(" "), q)); recQMemo.m.set(r.name, v); } return v; };
 const recTitle = r => r.short || r.name;
+const recFull = r => r?.variant === "normal" ? [r.short || r.name, r.sub].filter(Boolean).join(" ") : r?.name || "";
 // ---------- Zufall ohne Wiederholung + Blättern im Rezeptblatt ----------
 // Je Auswahl (Kategorie + Filter) merkt sich das Gerät, was schon gezeigt wurde; erst wenn alle durch sind, beginnt eine neue Runde
 let recNav = null;  // {f: Filter, hist: [Namen], i: Position, round: neue Runde begonnen}
@@ -3977,8 +3978,6 @@ function recDiffHtml(r){ const d = recDiff(r); if (!d) return ""; const hi = r.v
     ...d.chg.map(([n, h]) => `<span>${esc(ingNm(h))} ${esc(ingSplit(n)[0] || "–")} → ${esc(ingSplit(h)[0] || "–")}</span>`), ...d.gone.map(l => `<span class="dgone">${esc(ingNm(l))}</span>`)];
   if (!it.length) return "";
   return `<div class="rdiff small"><b>${hi ? "💪 Anders als Normal:" : "💪 Protein+ wäre:"}</b>${it.join("")}</div>`; }
-// REWE-Rezepte: auf rewe.de lassen sich alle Zutaten des Rezepts direkt in den Warenkorb legen
-const reweCart = r => /(^|\.)rewe\.de$/.test(srcHost(r.source)) ? `<a class="btn small" href="${esc(r.source)}" target="_blank" rel="noopener">🛒 Zutaten bei REWE in den Warenkorb ↗</a><div class="small muted">Öffnet das Original auf rewe.de – dort „Zutaten in den Warenkorb“ (Mengen wie im Original${r.normal && r.variant !== "normal" ? ", ohne die Protein+-Zutaten" : ""}).</div>` : "";
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
 // Minimierter Kochmodus: Pille über der Navigation, Timer läuft weiter, antippen holt das Blatt zurück
@@ -3997,7 +3996,7 @@ function cookHtml(name){
   const r = recipeByName(name); if (!r) return "";
   if (!cook || cook.name !== name) cook = {name, step: -1, serv: r.servings || 1, left: 0, run: false};
   const close = `<span class="shr"><button class="btn ghost" type="button" data-act="cookMin">Schließen</button></span>`, f = cook.serv / (r.servings || 1), CS = cookSteps(r), n = CS.length;
-  let h = `<div class="sh"><div><div class="lab">Kochen · ${cook.step < 0 ? "Zutaten" : `Schritt ${cook.step + 1} von ${n}`}</div><h2>${esc(r.name)}</h2></div>${close}</div><div class="shopbar"><div class="fill" style="width:${(cook.step + 1) / n * 100}%"></div></div>`;
+  let h = `<div class="sh"><div><div class="lab">Kochen · ${cook.step < 0 ? "Zutaten" : `Schritt ${cook.step + 1} von ${n}`}</div><h2>${esc(recFull(r))}</h2></div>${close}</div><div class="shopbar"><div class="fill" style="width:${(cook.step + 1) / n * 100}%"></div></div>`;
   if (cook.step < 0) {
     h += `<div class="mhead"><span>Portionen</span><span class="stepper"><button type="button" class="btn small" data-cookserv="-1" aria-label="Weniger">−</button><b>${cook.serv}</b><button type="button" class="btn small" data-cookserv="1" aria-label="Mehr">＋</button></span></div>
       <ul class="cookings">${r.ingredients.map(l => `<li>${esc(scaleLine(l, f))}</li>`).join("")}</ul>
@@ -4324,7 +4323,7 @@ function mealInfo(n){
   if (n && typeof n === "object") return {name: n.name || "Eigenes Essen", kcal: num(n.kcal) || 0, protein: num(n.protein) || 0, own: true};
   if (n === "away") return {name: mealPlan.away.name, kcal: mealPlan.away.kcal, protein: mealPlan.away.protein};
   if (n === "skip") return {name: "ausgelassen", kcal: 0, protein: 0};
-  const r = recipeNutri(recipeByName(n)); return r ? {name: r.name, kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
+  const r = recipeNutri(recipeByName(n)); return r ? {name: recFull(recipeByName(n)), kcal: r.kcal, protein: r.protein} : {name: n, kcal: 0, protein: 0};
 }
 // Nährwerte als Text; eigene Einträge ohne Angaben zeigen keine 0-Werte
 const nutTxt = i => i?.own && !i.kcal && !i.protein ? "ohne Werte" : `${i?.kcal ?? 0} kcal · ${fmtQ(i?.protein ?? 0)} g P`;
@@ -5575,7 +5574,7 @@ function shopHtml(){
     if (shopRecent[0] !== cx.n) { shopRecent = [cx.n, ...shopRecent.filter(n => n !== cx.n)].slice(0, 6); lsSet("shopRecent", shopRecent); }
     const recent = shopRecent.filter(n => n !== cx.n && recipeByName(n));
     if (recent.length) h += `<div class="chips sm recentrec"><span class="small muted">Zuletzt:</span>${recent.map(n => `<button type="button" data-shoprec="${esc(n)}">${esc(n.split(/ mit | & |,/)[0])}</button>`).join("")}</div>`;
-    h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(cx.n)}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept${shopFromReste ? " · ohne deine Reste" : ""}</span></span><span class="go">›</span></button>
+    h += `<div class="card"><button type="button" class="lrow menu" data-sheet="shoprec">${mealThumb(cx.n)}<span class="lmain"><b>${esc(recFull(r))}</b><span class="small muted">${r.servings} Portion${r.servings > 1 ? "en" : ""} pro Rezept${shopFromReste ? " · ohne deine Reste" : ""}</span></span><span class="go">›</span></button>
       <div class="actions"><button class="btn small" type="button" data-recipe="${esc(cx.n)}">📖 Rezept ansehen</button><button class="btn small ghost" type="button" data-sheet="shoprec">Anderes Gericht</button><button class="btn small ghost" type="button" data-shoprandom aria-label="Zufälliges Gericht">🎲</button></div>
       <div class="mhead"><span>Menge: <b>${shopMul}× Rezept</b> <span class="small muted">· ergibt ${shopMul * (r.servings || 1)} Portion${shopMul * (r.servings || 1) > 1 ? "en" : ""}</span></span><div class="actions"><button class="btn small" type="button" data-shopmul="-1" aria-label="Weniger">−</button><button class="btn small" type="button" data-shopmul="1" aria-label="Mehr">+</button></div></div></div>`; }
   else h += `<div class="calnav shopnav"><button type="button" data-shopnav="-1" aria-label="Zurück">‹</button><div class="ttl">${esc(cx.title)}</div><button type="button" data-shopnav="1" aria-label="Weiter">›</button></div>`;
