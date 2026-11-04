@@ -1229,13 +1229,13 @@ let tmr = null, tmrInt = null;
 const REP_STEPS = {
   "mob:knietest": [["Runter", 3, "hin"], ["Hoch", 1, "back"], ["Stehen", 1, "pause"]],
   // Hinweg ist ein eigener Schritt; „Halten“ dauert genau die Haltezeit (DOSE.hold bzw. Einstellung), die 0-Sekunde zählt mit
-  "mob:tiltlie": [["Einrollen", 1, "hin"], ["Halten", 0, "hold"], ["Lösen", 2, "back"]],
-  "mob:tilt": [["Einrollen", 2, "hin"], ["Halten", 0, "hold"], ["Lösen", 2, "back"]],  // Einrollen im Video 2,8 s
+  "mob:tiltlie": [["Halten", 0, "hold", 1], ["Lösen", 2, "back"]], // 4. Wert: Sekunden der Bewegung in die Halteposition, laufen im Halten mit (keine eigene Ansage)
+  "mob:tilt": [["Halten", 0, "hold", 2], ["Lösen", 2, "back"]],  // Einrollen im Video 2,8 s
   "mob:glutebr": [["Hoch", 1, "hin"], ["Halten", 0, "hold"], ["Runter", 2, "back"]],
   "mob:deadbug": [["Strecken", 2, "hin"], ["Halten", 0, "hold"], ["Zurück", 2, "back"]],
   "mob:shrug30": [["Hoch", 1, "hin"], ["Halten", 0, "hold"], ["Ablassen", 2, "back"]]};
 const holdRun = h => Math.max(0, h - ZERO_SEC); // Countdown so, dass Halten inkl. der 0-Sekunde genau h Sekunden dauert
-function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k]) => ({l, s: k === "hold" ? holdRun(d.hold || 1) : s, k}));
+function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s, k, i]) => ({l, s: k === "hold" ? holdRun(d.hold || 1) + (i || 0) : s, k, ...(i ? {in: i} : {})}));
   const tp = (d.tempo || "").match(/^(\d+)-(\d+)-(\d+)-(\d+)/), hin = Math.max(1, tp ? +tp[3] : 1), st = [{l: "Halten", s: hin + d.hold, k: "hold", in: hin}, {l: "Zurück", s: Math.max(1, tp ? +tp[1] : 2), k: "back"}];
   if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
 const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
@@ -3221,7 +3221,7 @@ function gcMediaMount(){ const box = document.getElementById("gcMediaBox"); if (
 const gcSetIdx = id => { const a = setsObj()[id] || []; let i = 0; while (doneSet(a[i])) i++; return i; };
 // Ansagen: KI-Stimme (vorab erzeugte Neural-Sätze voice/<f|s>/<id>.mp3, Index voice/index.json, Erzeugung tools/voicegen.py) oder Gerätestimme; fehlt ein Satz oder das Netz → Gerätestimme
 let ttsKind = ["f", "s", "dev"].includes(lsGet("ttsKind")) ? lsGet("ttsKind") : "f", ttsVoice = lsGet("ttsVoice") || "", ttsRate = +lsGet("ttsRate") || 1;
-const TTS_KI = [["f", "Florian"], ["s", "Seraphina"]], V_PRE = ["Tipp für den nächsten Satz: ", "Übung geschafft. Als Nächstes ", "Weiter mit "];
+const TTS_KI = [["f", "Conrad"], ["s", "Katja"]], V_PRE = ["Tipp für den nächsten Satz: ", "Übung geschafft. Als Nächstes ", "Weiter mit "];
 let vIdx = null, vIdxP = null, vSeq = 0, vSrcs = [];
 const vBuf = new Map();
 function ensureVoice(){ if (vIdx) return Promise.resolve(vIdx); return vIdxP ||= fetch("voice/index.json").then(r => r.json()).then(j => vIdx = j).catch(() => (vIdxP = null)); }
