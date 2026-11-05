@@ -130,7 +130,8 @@ details.rprice summary{cursor:pointer;font-size:14px;list-style:none}details.rpr
 details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{margin-top:6px}
 .rsteps{padding-left:22px;margin:8px 0}.rsteps li{margin:8px 0;line-height:1.45}
 .rsteps li.pp{border-left:3px solid var(--good);padding-left:8px;margin-left:-11px}.ppt{font-size:11px;font-weight:700;color:var(--good);white-space:nowrap}
-.rdiff{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline;line-height:1.5}.rdiff span{padding:1px 7px;border-radius:6px;background:var(--sunk)}.rdiff .dadd{background:var(--good-soft);color:var(--good)}.rdiff .dgone{text-decoration:line-through;color:var(--muted)}
+.rdiff{border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:14px}.rdiff summary{display:flex;justify-content:space-between;gap:8px;align-items:center;cursor:pointer;list-style:none}.rdiff summary::-webkit-details-marker{display:none}.rdiff .good{color:var(--good)}
+.rdg{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;margin-top:8px;line-height:1.4}.rdl{font-weight:700;white-space:nowrap;color:var(--muted)}
 .ppw{color:var(--good);font-weight:700}
 .ingg .ir.pp{box-shadow:inset 3px 0 0 var(--good)}.ingg .ir.gone{color:var(--muted);text-decoration:line-through}.ingg .ppn{font-size:12px;color:var(--good);font-weight:600}
 .recnav{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:2px 0 6px}.recnav .mid{flex:1;text-align:center;line-height:1.25}
@@ -3895,7 +3896,7 @@ function journeySheet(kind, arg){
       <div class="btnrow two"><button class="btn primary" type="button" data-cook="${esc(r.name)}">▶ Kochen</button><button class="btn" type="button" data-recshop="${esc(r.name)}">🛒 Einkaufen</button></div>
       <div id="ingTab">${ingTable(r)}</div>
       <div class="lab sec">Zubereitung</div>${cookAhead(r).length ? `<div class="aheadbox"><b>Vorher erledigen</b><ul>${cookAhead(r).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
-      <ol class="rsteps">${(ns => cookSteps(r).map(x => `<li${ns && !ns.has(x.do) ? ` class="pp"` : ""}>${ns && !ns.has(x.do) ? `<span class="ppt">💪 Protein+</span> ` : ""}${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join(""))(r.normal && r.variant !== "normal" ? new Set(cookSteps(recNormalOf(r)).map(x => x.do)) : null)}</ol>
+      <ol class="rsteps">${cookSteps(r).map(x => `<li>${esc(x.do)}${x.min ? ` <span class="small muted">· ${x.min} min</span>` : ""}${x.meanwhile ? `<div class="mw small">⏳ Währenddessen: ${esc(x.meanwhile)}</div>` : ""}</li>`).join("")}</ol>
       <div class="rinfo">${devLine(r)}${r.shelfLife ? `<div class="small"><b>Haltbarkeit:</b> ${esc(r.shelfLife)}</div>` : ""}${r.note && !srcLink(r).includes("srcrow") ? `<div class="small muted">${esc(r.note)}</div>` : ""}${r.imgOrig ? `<div class="small muted">Foto: ${esc(srcHost(r.source) || "Originalrezept")}</div>` : ""}${!r.imgOrig && r.imgCredit ? `<div class="small muted">Symbolfoto: ${esc(r.imgCredit.artist)}, <a href="${esc(r.imgCredit.url)}" target="_blank" rel="noopener">${esc(r.imgCredit.license)}</a>, ${/flickr/.test(r.imgCredit.url) ? "Flickr" : "Wikimedia Commons"}</div>` : ""}</div>`;
   }
   return null;
@@ -3941,6 +3942,10 @@ const recFull = r => r?.variant === "normal" ? [r.short || r.name, r.sub].filter
 // ---------- Zufall ohne Wiederholung + Blättern im Rezeptblatt ----------
 // Je Auswahl (Kategorie + Filter) merkt sich das Gerät, was schon gezeigt wurde; erst wenn alle durch sind, beginnt eine neue Runde
 let recNav = null;  // {f: Filter, hist: [Namen], i: Position, round: neue Runde begonnen}
+let recBrowseVar = null;  // zuletzt im Rezept gewählte Fassung (high|normal); gilt beim Blättern/Zufall für die nächsten Rezepte
+function recApplyVar(n){ const r = recipeByName(n); if (!recBrowseVar || !(r?._base || r)?.normal || recModeOf(n) === recBrowseVar) return;
+  const o = Object.assign({}, FOOD().recVar); if (recBrowseVar === (recHigh() ? "high" : "normal")) delete o[n]; else o[n] = recBrowseVar;
+  saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); }
 const recSeenKey = f => JSON.stringify(Object.keys(REC_F0).map(k => f[k]));
 function recDraw(f, skip){ const pool = recipesFiltered(f).map(r => r.name); if (!pool.length) return null;
   const all = lsGet("recSeen") || {}, k = recSeenKey(f), ex = new Set(skip), inP = new Set(pool); let seen = (all[k] || []).filter(n => inP.has(n)), round = false;
@@ -3953,7 +3958,7 @@ function recNavGo(dir){ if (!recNav) return; let n;
   else if (recNav.i < recNav.hist.length - 1) n = recNav.hist[++recNav.i];
   else { const d = recDraw(recNav.f, recNav.hist); if (!d) return; n = d.n; recNav.round = d.round; recNav.hist.push(n); recNav.i = recNav.hist.length - 1; }
   sheet.classList.remove("slnext", "slprev"); void sheet.offsetWidth; sheet.classList.add(dir > 0 ? "slnext" : "slprev"); setTimeout(() => sheet.classList.remove("slnext", "slprev"), 260);
-  openSheet("recipe", n); sheet.scrollTop = 0; }
+  recApplyVar(n); openSheet("recipe", n); sheet.scrollTop = 0; }
 function recNavHtml(r){ if (!recNav || recNav.hist[recNav.i] !== r.name) recNav = {f: Object.assign({}, REC_F0, {cat: catOf(r)}), hist: [r.name], i: 0};
   const f = recNav.f, n = recipesFiltered(f).length, ex = Object.keys(REC_F0).filter(k => k !== "cat" && JSON.stringify(f[k]) !== JSON.stringify(REC_F0[k])).map(k => k === "q" ? `„${f.q}“` : k === "ing" ? "Zutat" : REC_FLABEL[k]?.[f[k]] || "").filter(Boolean);
   return `<div class="recnav"><button type="button" class="btn small" data-recnav="-1" ${recNav.i ? "" : "disabled"} aria-label="Vorheriges Rezept">‹</button><span class="mid small muted">🎲 ${esc(CAT[f.cat] || "Rezepte")}${ex.length ? " · " + ex.map(esc).join(" · ") : ""} · ${n}<br>${recNav.round && recNav.i === recNav.hist.length - 1 ? "Alle gesehen – neue Runde" : "wischen oder tippen"}</span><button type="button" class="btn small primary" data-recnav="1" aria-label="Nächstes Zufallsrezept">Nächstes ›</button></div>`; }
@@ -3985,11 +3990,17 @@ function ppWords(r){ const b = r._base || r, mk = ppMemo.get(b); if (mk && mk.p 
 function ppMark(r, txt){ const ws = r && r.normal && r.variant !== "normal" ? ppWords(r) : null; if (!ws || !txt) return esc(txt || "");
   return String(txt).split(/([A-Za-zÄÖÜäöüß]+)/).map((t, i) => { if (i % 2 === 0) return esc(t); const st = ppStem(t); return ws.some(w => st === w || (w.length > 4 && (st.endsWith(w) || st.startsWith(w)))) ? `<span class="ppw">${esc(t)}</span>` : esc(t); }).join(""); }
 const ppNote = p => p.t === "add" ? "＋ Protein+" : p.t === "swap" ? `statt ${esc(ingSplit(p.from)[0] ? ingSplit(p.from)[0] + " " : "")}${esc(ingNm(p.from))}` : `Normal: ${esc(ingSplit(p.from)[0] || "–")}`;
-function recDiffHtml(r){ const d = recDiff(r); if (!d) return ""; const hi = r.variant !== "normal";
-  const it = [...d.add.map(l => `<span class="dadd">＋ ${esc(ingSplit(l)[0] ? ingSplit(l)[0] + " " : "")}${esc(ingNm(l))}</span>`), ...d.swap.map(([n, h]) => `<span>${esc(ingNm(h))} statt ${esc(ingNm(n))}</span>`),
-    ...d.chg.map(([n, h]) => `<span>${esc(ingNm(h))} ${esc(ingSplit(n)[0] || "–")} → ${esc(ingSplit(h)[0] || "–")}</span>`), ...d.gone.map(l => `<span class="dgone">${esc(ingNm(l))}</span>`)];
-  if (!it.length) return "";
-  return `<div class="rdiff small"><b>${hi ? "💪 Anders als Normal:" : "💪 Protein+ wäre:"}</b>${it.join("")}</div>`; }
+// Unterschiede geordnet und zugeklappt: Kopfzeile = Protein-Plus und Anzahl, aufgeklappt je Art eine Zeile
+function recDiffHtml(r){ const d = recDiff(r); if (!d) return ""; const b = r._base || r, hi = r.variant !== "normal";
+  const am = l => ingSplit(l)[0], nm = l => esc(ingNm(l)), amt = l => am(l) ? ` <span class="muted">${esc(am(l))}</span>` : "";
+  const less = d.chg.filter(([n, h]) => (amtNum(h) ?? 0) < (amtNum(n) ?? 0)), more = d.chg.filter(x => !less.includes(x));
+  const G = [["＋ Dazu", d.add.map(l => nm(l) + amt(l))], ["⇄ Getauscht", d.swap.map(([n, h]) => `${nm(h)} <span class="muted">statt</span> ${nm(n)}`)],
+    ["↓ Weniger", less.map(([n, h]) => `${nm(h)} <span class="muted">${esc(am(n) || "–")} → ${esc(am(h) || "–")}</span>`)], ["↑ Mehr", more.map(([n, h]) => `${nm(h)} <span class="muted">${esc(am(n) || "–")} → ${esc(am(h) || "–")}</span>`)],
+    ["− Weg", d.gone.map(l => nm(l))]].filter(([, a]) => a.length);
+  if (!G.length) return "";
+  const n = G.reduce((a, [, x]) => a + x.length, 0);
+  return `<details class="rdiff" ${keepOpen("rdiff")}><summary><span>💪 ${hi ? "Unterschied zu Normal" : "Was Protein+ ändert"}</span><span class="muted small">${n} ⌄</span></summary>
+    <div class="rdg">${G.map(([l, a]) => `<span class="rdl">${l}</span><span>${a.join(" · ")}</span>`).join("")}</div></details>`; }
 // ---------- Kochmodus: Schritt für Schritt, Portionen umrechnen, Timer bei Zeitangaben ----------
 let cook = null, cookInt = null, cookMin = false, cookSwitch = null;
 // Minimierter Kochmodus: Pille über der Navigation, Timer läuft weiter, antippen holt das Blatt zurück
@@ -4773,9 +4784,14 @@ function bioPicker(f){
     <div class="actions"><button class="btn small" type="button" data-biopreset="25">Nur kleine Aufschläge (≤ 25 %)</button><button class="btn ghost small" type="button" data-biopreset="0">Keine</button></div>
     ${rows.map(([pr, d]) => `<label class="check small"><input type="checkbox" data-bioitem="${pr.id}" ${sel.has(pr.id) ? "checked" : ""}><span>${esc(pr.name)} <span class="muted">· ${eur(pr.prices[st])} → Bio ${eur(pr.bio[st])} (${d >= 0 ? "+" : ""}${d} %)</span></span></label>`).join("")}</details>`;
 }
-function bioAlt(pr, share){
-  const st = FOOD().store || "aldi"; if (st === "min" || ownOf(pr)[st] || pr.bio?.[st] == null || pr.prices?.[st] == null) return "";
-  return bioUse(pr) ? ` <button type="button" class="biob on" data-biotoggle="${pr.id}">Bio ✓ · konv. ${eur(share * pr.prices[st])}</button>` : ` <button type="button" class="biob" data-biotoggle="${pr.id}">Bio ${eur(share * pr.bio[st])}</button>`;
+// Bio-Alternative je Artikel: im angezeigten Markt; bei „günstigster Markt“ der günstigste Bio-Preis (mit Markt)
+function bioAlt(pr, share, st){
+  st = st || FOOD().store || "aldi"; if (!pr?.bio) return "";
+  let bst = st, bp = pr.bio[st];
+  if (st === "min") { const b = Object.entries(pr.bio).filter(([, v]) => v != null).sort((a, b) => a[1] - b[1])[0]; if (!b) return ""; [bst, bp] = b; }
+  if (bp == null || ownOf(pr)[bst]) return "";
+  const conv = st === "min" ? Math.min(...Object.values(pr.prices || {}).filter(v => v != null)) : pr.prices?.[st], wo = st === "min" ? ` (${STORES[bst] || bst})` : "";
+  return bioUse(pr) ? ` <button type="button" class="biob on" data-biotoggle="${pr.id}">Bio ✓${wo}${conv != null && isFinite(conv) ? ` · konv. ${eur(share * conv)}` : ""}</button>` : ` <button type="button" class="biob" data-biotoggle="${pr.id}">Bio ${eur(share * bp)}${wo}</button>`;
 }
 const isEst = (pr, st) => { if (pr.my) return !!pr.priceEst; if (st === "min") { const ps = Object.assign({}, pr.prices || {}, bioUse(pr) ? pr.bio || {} : {}), own = ownOf(pr); for (const [k, o] of Object.entries(own)) if (o?.price != null) ps[k] = o.price;
     const best = Object.entries(ps).filter(([, v]) => v != null).sort((a, b) => a[1] - b[1])[0]; return !!best && !own[best[0]] && !(bioUse(pr) && pr.bio?.[best[0]] != null) && (pr.est || []).includes(best[0]); }
@@ -5609,12 +5625,12 @@ function shopHtml(){
       ${shopKind === "weg" ? `<div class="mhead small" style="margin-top:6px"><span class="muted">${esc(STORES[wSt] || "")}: ${aisleOf(wSt).map(g => esc(g.split(" ")[0])).join(" › ")}</span><button class="btn ghost small" type="button" data-sheet="aisle" data-v="${wSt}">✎ Reihenfolge</button></div>` : ""}</div>
     ${shopScope === "gericht" || !P ? "" : `<div><div class="lab">🔁 Grundeinkäufe <span class="muted small">jede Woche auf der Liste</span></div>${(FOOD().staples || []).length ? `<div class="chips sm">${FOOD().staples.map(id => prodById(id)).filter(Boolean).map(pr => `<button type="button" class="fchip" data-staple="${pr.id}">${esc(prodLabel(pr))} ✕</button>`).join("")}</div>` : `<div class="small muted">Noch keine. In Mehr › Zutaten ein Produkt öffnen › „🔁 Jede Woche kaufen“.</div>`}</div>`}
     <label class="check small"><input type="checkbox" id="shopHide" ${hide ? "checked" : ""}><span>Erledigtes ausblenden</span></label>
-    ${P ? `<label class="check small"><input type="checkbox" id="shopBio" ${bio ? "checked" : ""}><span>Bio-Preis je Artikel zeigen</span></label>` : ""}
+    ${P ? `<label class="check small"><input type="checkbox" id="shopBio" ${bio ? "checked" : ""}><span>Bio-Preis je Artikel zeigen <span class="muted">(bekannt für ${prices.products.filter(p => p.bio && Object.keys(p.bio).length).length} von ${prices.products.length} Produkten)</span></span></label>` : ""}
     ${shopScope === "gericht" ? "" : `<label class="check small"><input type="checkbox" id="shopSrc" ${src ? "checked" : ""}><span>Zeigen, für welches Gericht</span></label>
     <details class="small" ${keepOpen("recs")}><summary>${recs.length} Gericht${recs.length === 1 ? "" : "e"} in dieser Liste · ${esc(cx.note)}</summary><div class="shoprecs">${recs.map(r => `<button type="button" class="shoprec" data-recipe="${esc(r.n)}">${mealThumb(r.n)}<span><b>${esc(r.n)}</b><br><span class="muted">${fmtQ(r.cnt)} Portion${r.cnt !== 1 ? "en" : ""}${shopScope === "woche" ? ` · ${r.f === 0.5 ? "halbes" : r.f.toLocaleString("de-DE") + "×"} Rezept (ergibt ${r.f * r.serv})` : ""}</span></span></button>`).join("")}</div></details>`}</div></details>`;
   // Eine Zeile je Artikel: Name, darunter Kaufmenge und Bedarf, Preis rechts
   const row = i => { const p = P && i.pr && priceOf(i.pr, st0) != null ? i.share * priceOf(i.pr, st0) : null, dn = done.has(i.key);
-    return `<label class="shopi ${dn ? "done" : ""} ${prodImgOn() ? "pi" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${dn ? "checked" : ""}>${prodImg(i.pr)}<span class="shopt"><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<span class="small muted"><span class="buy">${esc(i.buy)}</span> · Bedarf ${esc(i.need)}${ownOf(i.pr)[st0] ? ` · <span class="tag">dein Preis</span>` : ""}${P && bio ? bioAlt(i.pr, i.share) : ""}</span>` : ""}${src && shopScope !== "gericht" ? `<span class="small muted">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>` : ""}</span>${p != null ? `<span class="shopp">${eur(p)}${isEst(i.pr, st0) ? `<span class="muted">*</span>` : ""}</span>` : ""}</label>`; };
+    return `<label class="shopi ${dn ? "done" : ""} ${prodImgOn() ? "pi" : ""}" data-swipe="shop"><input type="checkbox" data-shop="${esc(i.key)}" ${dn ? "checked" : ""}>${prodImg(i.pr)}<span class="shopt"><b>${i.pr ? esc(i.name) : (i.q != null ? fmtQ(i.q) + (i.unit ? " " + esc(i.unit) : "") + " " : "") + esc(i.name)}</b>${i.pr ? `<span class="small muted"><span class="buy">${esc(i.buy)}</span> · Bedarf ${esc(i.need)}${ownOf(i.pr)[st0] ? ` · <span class="tag">dein Preis</span>` : ""}${P && bio ? bioAlt(i.pr, i.share, st0) : ""}</span>` : ""}${src && shopScope !== "gericht" ? `<span class="small muted">für ${[...i.recipes].slice(0, 2).map(esc).join(", ")}${i.recipes.size > 2 ? ` +${i.recipes.size - 2}` : ""}</span>` : ""}</span>${p != null ? `<span class="shopp">${eur(p)}${isEst(i.pr, st0) ? `<span class="muted">*</span>` : ""}</span>` : ""}</label>`; };
   const sec = (t, a) => `<span>${esc(t)} <span class="n">· ${a.filter(i => !done.has(i.key)).length}</span></span>${P ? `<span class="n">${eur(shopSum(a, done))}</span>` : ""}`;
   for (const [g, a] of groups) { const vis = a.filter(i => !hide || !done.has(i.key)); if (!vis.length) continue;
     h += `<div class="shopsec">${sec(g, a)}</div><div class="shopg">${vis.map(row).join("")}</div>`; }
@@ -5927,7 +5943,7 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; const f = Object.assign({}, recFilter, {cat: recFilter.cat !== "alle" ? recFilter.cat : "haupt"}), d = recDraw(f, []); if (!d) return toast("Keine passenden Rezepte"); recNav = {f, hist: [d.n], i: 0, round: d.round}; openSheet("recipe", d.n); return; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; const f = Object.assign({}, recFilter, {cat: recFilter.cat !== "alle" ? recFilter.cat : "haupt"}), d = recDraw(f, []); if (!d) return toast("Keine passenden Rezepte"); recNav = {f, hist: [d.n], i: 0, round: d.round}; recApplyVar(d.n); openSheet("recipe", d.n); return; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
     const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; { const r0 = recipeByName(rc2.dataset.recipe); if (r0) recNav = {f: Object.assign({}, rc2.closest("#recRes") ? recFilter : REC_F0, {cat: catOf(r0)}), hist: [r0.name], i: 0}; } openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
@@ -6017,7 +6033,7 @@ async function onClick(e){
   if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
   const rvb = t.closest("[data-recvar]"); if (rvb) { const o = Object.assign({}, FOOD().recVar), nm = rvb.dataset.rn; if (rvb.dataset.recvar === (recHigh() ? "high" : "normal")) delete o[nm]; else o[nm] = rvb.dataset.recvar;
-    saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); if (sheet.open) renderSheet(); render(); return; }
+    saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); recBrowseVar = rvb.dataset.recvar; if (sheet.open) renderSheet(); render(); return; }
   const zUpd = () => { const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); };
   const zs = t.closest("[data-zsort]"); if (zs) { zSort = zs.dataset.zsort; lsSet("zSort", zSort); zUpd(); return; }
   const zsb = t.closest("[data-zst]"); if (zsb) { const def = FOOD().store && FOOD().store !== "min" ? FOOD().store : "aldi"; let L = (zStores || [def]).slice(); const k = zsb.dataset.zst;
