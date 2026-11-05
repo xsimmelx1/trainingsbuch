@@ -345,7 +345,7 @@ details.slim > .card{margin:0;border:0;border-top:1px solid var(--line);border-r
 .ddrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0}.ddrow>.btn,.ddm>summary{width:100%;min-width:0}
 .ddm{position:relative}.ddm>summary{list-style:none;cursor:pointer;justify-content:center}.ddm>summary::-webkit-details-marker{display:none}.ddm[open] .ddc{display:inline-block;transform:rotate(180deg)}
 .ddlist{position:absolute;z-index:30;top:calc(100% + 4px);left:0;min-width:100%;width:max-content;max-width:min(300px,86vw);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.28);padding:4px;display:flex;flex-direction:column}
-.ddm.right .ddlist{left:auto;right:0}
+.ddm.right .ddlist{left:auto;right:0}.ddlist{max-height:55vh;overflow-y:auto}
 .ddlist button{text-align:left;font:inherit;color:var(--ink);background:none;border:0;border-radius:8px;padding:10px 12px;min-height:44px;cursor:pointer}.ddlist button:hover,.ddlist button:focus-visible{background:var(--sunk)}.ddlist button:disabled{color:var(--muted);cursor:default}.planrec{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:6px 10px;margin:4px 0}.planrec>span:first-child{grid-column:1/-1}.planrec .chips.sm button{min-height:34px}
 [data-act=foodUndo],[data-act=foodRedo]{font-size:22px;line-height:1;min-width:44px;min-height:40px;padding:0 6px}
 .subhead.sub{justify-content:flex-start}.subhead .back{width:38px;height:38px;padding:0;font-size:20px}
@@ -3904,7 +3904,9 @@ function journeySheet(kind, arg){
 const PLAN_SLOT = {fruehstueck: ["fr"], mittag: ["mi", "ab"], abend: ["ab", "mi"], snack: ["sn"], shake: ["sn"]};
 function planRecHtml(r){ const ks = PLAN_SLOT[r.category] || ["mi", "ab"], t = todayIso(), days = [[t, "Heute"], [addDays(t, 1), "Morgen"]];
   const it = (d, l, k, eat) => `<button type="button" data-planrec="${d}|${k}" ${eat ? `data-eat="1" ` : ""}data-v="${esc(r.name)}">${l} · ${esc(MEAL_SHORT[k])}</button>`;
-  return `<div class="actions ddrow">${ddMenu("Gegessen", ks.map(k => it(t, "Heute", k, true)).join(""))}${ddMenu("📅 Einplanen", days.map(([d, l]) => ks.map(k => it(d, l, k)).join("")).join(""), "right")}</div>`; }
+  // Gegessen auch nachtragen: heute und die sechs Tage davor
+  const past = [0, 1, 2, 3, 4, 5, 6].map(i => { const d = addDays(t, -i); return [d, i === 0 ? "Heute" : i === 1 ? "Gestern" : i === 2 ? "Vorgestern" : fmt(d)]; });
+  return `<div class="actions ddrow">${ddMenu("Gegessen", past.map(([d, l]) => ks.map(k => it(d, l, k, true)).join("")).join(""))}${ddMenu("📅 Einplanen", days.map(([d, l]) => ks.map(k => it(d, l, k)).join("")).join(""), "right")}</div>`; }
 // Aufklapp-Menü: Knopf mit ▾, Liste darunter; schließt beim Tippen daneben
 const ddMenu = (label, items, cls = "") => `<details class="ddm ${cls}"><summary class="btn">${label} <span class="ddc">▾</span></summary><div class="ddlist">${items}</div></details>`;
 let sheetQuiz = null;
