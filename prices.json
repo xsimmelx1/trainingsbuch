@@ -1,6 +1,6 @@
 {
-"date": "2026-10-23",
-"note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten.",
+"date": "2026-11-05",
+"note": "Recherchierte Richtpreise (regulär, Eigenmarke), keine Live-Daten. Ergänzt 2026-11-05 mit Open Prices (Open Food Facts).",
 "products": [
 {
 "id": "mangold",
@@ -435,20 +435,18 @@
 "match": "\\bbier\\b",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 0.99,
+"rewe": 1.29,
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.79,
-"netto": 0.79,
+"netto": 0.55,
 "penny": 0.79,
 "edeka": 0.87
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -464,7 +462,7 @@
 "prices": {
 "rewe": 1.86,
 "lidl": 1.49,
-"aldi": 1.49,
+"aldi": 1.9,
 "kaufland": 1.49,
 "netto": 1.49,
 "penny": 1.49,
@@ -473,7 +471,6 @@
 "est": [
 "rewe",
 "lidl",
-"aldi",
 "kaufland",
 "netto",
 "penny",
@@ -493,7 +490,7 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 0.99,
+"netto": 0.5,
 "penny": 0.99,
 "edeka": 1.09
 },
@@ -502,7 +499,6 @@
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -595,7 +591,7 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 1.61,
-"lidl": 1.29,
+"lidl": 1.49,
 "aldi": 1.29,
 "kaufland": 1.29,
 "netto": 1.29,
@@ -604,7 +600,6 @@
 },
 "est": [
 "rewe",
-"lidl",
 "aldi",
 "kaufland",
 "netto",
@@ -625,7 +620,7 @@
 "lidl": 1.99,
 "aldi": 1.99,
 "kaufland": 1.99,
-"netto": 1.99,
+"netto": 1.12,
 "penny": 1.99,
 "edeka": 2.19
 },
@@ -634,7 +629,6 @@
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -702,21 +696,23 @@
 "prices": {
 "rewe": 1.49,
 "lidl": 1.19,
-"aldi": 1.19,
+"aldi": 0.99,
 "kaufland": 1.19,
-"netto": 1.19,
+"netto": 1.38,
 "penny": 1.19,
-"edeka": 1.31
+"edeka": 1.38
 },
 "est": [
 "rewe",
 "lidl",
-"aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
-]
+"penny"
+],
+"bio": {
+"rewe": 1.98,
+"lidl": 2.18,
+"edeka": 2.58
+}
 },
 {
 "id": "spaetzle",
@@ -731,18 +727,19 @@
 "aldi": 1.49,
 "kaufland": 1.49,
 "netto": 1.49,
-"penny": 1.49,
-"edeka": 1.64
+"penny": 1.89,
+"edeka": 1.5
 },
 "est": [
 "rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
-]
+"netto"
+],
+"bio": {
+"edeka": 2.06
+}
 },
 {
 "id": "lasagneplatten",
@@ -779,7 +776,7 @@
 "match": "milchreis|risotto-?reis|rundkornreis|sushi-?reis|arborio",
 "group": "Getreide & Nudeln",
 "prices": {
-"rewe": 1.61,
+"rewe": 1.99,
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29,
@@ -788,7 +785,6 @@
 "edeka": 1.42
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
@@ -859,20 +855,18 @@
 "match": "tortilla-?chips|nachos",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.61,
+"rewe": 0.99,
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29,
-"netto": 1.29,
+"netto": 0.79,
 "penny": 1.29,
 "edeka": 1.42
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -1103,7 +1097,7 @@
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29,
-"netto": 1.29,
+"netto": 1.37,
 "penny": 1.29,
 "edeka": 1.42
 },
@@ -1112,7 +1106,6 @@
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -1155,20 +1148,18 @@
 "prices": {
 "rewe": 0.36,
 "lidl": 0.29,
-"aldi": 0.29,
+"aldi": 0.44,
 "kaufland": 0.29,
 "netto": 0.29,
 "penny": 0.29,
-"edeka": 0.32
+"edeka": 0.79
 },
 "est": [
 "rewe",
 "lidl",
-"aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1208,21 +1199,16 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 2.49,
-"lidl": 1.99,
-"aldi": 1.99,
-"kaufland": 1.99,
-"netto": 1.99,
+"lidl": 1.69,
+"aldi": 1.0,
+"kaufland": 1.91,
+"netto": 1.25,
 "penny": 1.99,
-"edeka": 2.19
+"edeka": 2.39
 },
 "est": [
 "rewe",
-"lidl",
-"aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1234,7 +1220,7 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 0.99,
+"rewe": 0.49,
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.79,
@@ -1243,7 +1229,6 @@
 "edeka": 0.87
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
@@ -1407,12 +1392,15 @@
 "est": [
 "rewe",
 "lidl",
-"aldi",
 "kaufland",
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 1.99,
+"netto": 2.29
+}
 },
 {
 "id": "gruenkern",
@@ -1477,7 +1465,7 @@
 "rewe": 1.61,
 "lidl": 1.29,
 "aldi": 1.29,
-"kaufland": 1.29,
+"kaufland": 0.99,
 "netto": 1.29,
 "penny": 1.29,
 "edeka": 1.42
@@ -1486,7 +1474,6 @@
 "rewe",
 "lidl",
 "aldi",
-"kaufland",
 "netto",
 "penny",
 "edeka"
@@ -1500,22 +1487,18 @@
 "match": "maultasche",
 "group": "Getreide & Nudeln",
 "prices": {
-"rewe": 2.49,
-"lidl": 1.99,
+"rewe": 2.03,
+"lidl": 1.79,
 "aldi": 1.99,
 "kaufland": 1.99,
-"netto": 1.99,
+"netto": 2.29,
 "penny": 1.99,
-"edeka": 2.19
+"edeka": 1.14
 },
 "est": [
-"rewe",
-"lidl",
 "aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1594,7 +1577,10 @@
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"aldi": 1.69
+}
 },
 {
 "id": "spekulatius",
@@ -1605,19 +1591,17 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 1.61,
-"lidl": 1.29,
+"lidl": 1.59,
 "aldi": 1.29,
 "kaufland": 1.29,
-"netto": 1.29,
+"netto": 1.99,
 "penny": 1.29,
 "edeka": 1.42
 },
 "est": [
 "rewe",
-"lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -1657,23 +1641,22 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 2.24,
+"rewe": 1.79,
 "lidl": 1.79,
 "aldi": 1.79,
 "kaufland": 1.79,
-"netto": 1.79,
+"netto": 1.99,
 "penny": 1.79,
-"edeka": 1.97
+"edeka": 1.79
 },
 "est": [
-"rewe",
 "lidl",
-"aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
-]
+"penny"
+],
+"bio": {
+"netto": 2.3
+}
 },
 {
 "id": "muesli",
@@ -1684,22 +1667,23 @@
 "group": "Getreide & Nudeln",
 "prices": {
 "rewe": 2.49,
-"lidl": 1.99,
-"aldi": 1.99,
+"lidl": 1.94,
+"aldi": 2.09,
 "kaufland": 1.99,
-"netto": 1.99,
+"netto": 1.79,
 "penny": 1.99,
 "edeka": 2.19
 },
 "est": [
 "rewe",
-"lidl",
-"aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 4.18,
+"edeka": 4.29
+}
 },
 {
 "id": "blaetterteig",
@@ -1715,7 +1699,7 @@
 "kaufland": 1.29,
 "netto": 1.29,
 "penny": 1.29,
-"edeka": 1.42
+"edeka": 0.95
 },
 "est": [
 "rewe",
@@ -1723,8 +1707,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1790,21 +1773,17 @@
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 1.24,
-"lidl": 0.99,
+"lidl": 0.79,
 "aldi": 0.99,
-"kaufland": 0.99,
-"netto": 0.99,
+"kaufland": 0.79,
+"netto": 0.79,
 "penny": 0.99,
-"edeka": 1.09
+"edeka": 0.79
 },
 "est": [
 "rewe",
-"lidl",
 "aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1898,8 +1877,8 @@
 "prices": {
 "rewe": 1.86,
 "lidl": 1.49,
-"aldi": 1.49,
-"kaufland": 1.49,
+"aldi": 1.24,
+"kaufland": 1.24,
 "netto": 1.49,
 "penny": 1.49,
 "edeka": 1.64
@@ -1907,8 +1886,6 @@
 "est": [
 "rewe",
 "lidl",
-"aldi",
-"kaufland",
 "netto",
 "penny",
 "edeka"
@@ -1954,7 +1931,7 @@
 "kaufland": 0.69,
 "netto": 0.69,
 "penny": 0.69,
-"edeka": 0.76
+"edeka": 0.53
 },
 "est": [
 "rewe",
@@ -1962,8 +1939,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -1974,23 +1950,21 @@
 "match": "schlagsahne|^sahne\\b|^süße sahne",
 "group": "Milchprodukte & Eier",
 "prices": {
-"rewe": 1.24,
-"lidl": 0.99,
+"rewe": 1.32,
+"lidl": 0.89,
 "aldi": 0.99,
-"kaufland": 0.99,
-"netto": 0.99,
-"penny": 0.99,
-"edeka": 1.09
+"kaufland": 1.2,
+"netto": 0.89,
+"penny": 0.89,
+"edeka": 0.89
 },
 "est": [
-"rewe",
 "lidl",
-"aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
+"aldi"
+],
+"bio": {
+"rewe": 1.19
+}
 },
 {
 "id": "roestzwiebeln",
@@ -2001,20 +1975,18 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.49,
+"rewe": 1.19,
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19,
-"netto": 1.19,
+"netto": 1.29,
 "penny": 1.19,
 "edeka": 1.31
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -2115,7 +2087,7 @@
 "kaufland": 1.49,
 "netto": 1.49,
 "penny": 1.49,
-"edeka": 1.64
+"edeka": 1.89
 },
 "est": [
 "rewe",
@@ -2123,8 +2095,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -2135,22 +2106,19 @@
 "match": "buttermilch",
 "group": "Milchprodukte & Eier",
 "prices": {
-"rewe": 0.86,
+"rewe": 0.59,
 "lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69,
 "netto": 0.69,
-"penny": 0.69,
-"edeka": 0.76
+"penny": 0.59,
+"edeka": 0.59
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
+"netto"
 ]
 },
 {
@@ -2188,22 +2156,23 @@
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 1.86,
-"lidl": 1.49,
+"lidl": 1.09,
 "aldi": 1.49,
 "kaufland": 1.49,
-"netto": 1.49,
+"netto": 0.93,
 "penny": 1.49,
-"edeka": 1.64
+"edeka": 1.09
 },
 "est": [
 "rewe",
-"lidl",
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
-]
+"penny"
+],
+"bio": {
+"rewe": 1.39
+}
 },
 {
 "id": "gewuerzgurken",
@@ -2213,23 +2182,22 @@
 "match": "gewürzgurke|essiggurke|gurkenwasser|cornichon",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.61,
+"rewe": 0.69,
 "lidl": 1.29,
 "aldi": 1.29,
-"kaufland": 1.29,
+"kaufland": 1.19,
 "netto": 1.29,
 "penny": 1.29,
-"edeka": 1.42
+"edeka": 1.26
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
-"kaufland",
-"netto",
-"penny",
-"edeka"
-]
+"penny"
+],
+"bio": {
+"rewe": 2.49
+}
 },
 {
 "id": "asianudeln",
@@ -2239,20 +2207,16 @@
 "match": "reisnudel|glasnudel|mie-?nudel|udon|soba",
 "group": "Getreide & Nudeln",
 "prices": {
-"rewe": 1.86,
+"rewe": 0.89,
 "lidl": 1.49,
-"aldi": 1.49,
-"kaufland": 1.49,
-"netto": 1.49,
+"aldi": 0.89,
+"kaufland": 3.49,
+"netto": 0.99,
 "penny": 1.49,
 "edeka": 1.64
 },
 "est": [
-"rewe",
 "lidl",
-"aldi",
-"kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -2377,7 +2341,7 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 0.99,
+"netto": 0.66,
 "penny": 0.99,
 "edeka": 1.09
 },
@@ -2386,7 +2350,6 @@
 "lidl",
 "aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -2406,7 +2369,7 @@
 "aldi": 1.69,
 "kaufland": 1.69,
 "netto": 1.69,
-"penny": 1.69,
+"penny": 1.98,
 "edeka": 1.86
 },
 "est": [
@@ -2415,7 +2378,6 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
 "edeka"
 ]
 },
@@ -2431,18 +2393,16 @@
 "lidl": 0.79,
 "aldi": 0.79,
 "kaufland": 0.79,
-"netto": 0.79,
+"netto": 0.82,
 "penny": 0.79,
-"edeka": 0.87
+"edeka": 0.82
 },
 "est": [
 "rewe",
 "lidl",
 "aldi",
 "kaufland",
-"netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -2575,7 +2535,11 @@
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 1.49,
+"netto": 1.35
+}
 },
 {
 "id": "linsenGruen",
@@ -2591,7 +2555,7 @@
 "kaufland": 1.79,
 "netto": 1.79,
 "penny": 1.79,
-"edeka": 1.97
+"edeka": 2.79
 },
 "est": [
 "rewe",
@@ -2599,8 +2563,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -2665,7 +2628,7 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 2.49,
+"rewe": 1.69,
 "lidl": 1.99,
 "aldi": 1.99,
 "kaufland": 1.99,
@@ -2674,7 +2637,6 @@
 "edeka": 2.19
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
 "kaufland",
@@ -2751,7 +2713,7 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 0.99,
+"netto": 0.84,
 "penny": 0.99,
 "edeka": 1.09
 },
@@ -2852,19 +2814,16 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.61,
-"lidl": 1.29,
+"rewe": 0.99,
+"lidl": 0.99,
 "aldi": 1.29,
-"kaufland": 1.29,
+"kaufland": 0.99,
 "netto": 1.29,
 "penny": 1.29,
 "edeka": 1.42
 },
 "est": [
-"rewe",
-"lidl",
 "aldi",
-"kaufland",
 "netto",
 "penny",
 "edeka"
@@ -2932,20 +2891,16 @@
 "piece": 25,
 "group": "Brot & Backwaren",
 "prices": {
-"rewe": 1.24,
-"lidl": 0.99,
-"aldi": 0.99,
+"rewe": 0.79,
+"lidl": 0.79,
+"aldi": 0.79,
 "kaufland": 0.99,
-"netto": 0.99,
+"netto": 0.89,
 "penny": 0.99,
 "edeka": 1.09
 },
 "est": [
-"rewe",
-"lidl",
-"aldi",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -2959,7 +2914,7 @@
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 2.11,
-"lidl": 1.69,
+"lidl": 1.79,
 "aldi": 1.69,
 "kaufland": 1.69,
 "netto": 1.69,
@@ -2968,7 +2923,6 @@
 },
 "est": [
 "rewe",
-"lidl",
 "aldi",
 "kaufland",
 "netto",
@@ -2984,19 +2938,17 @@
 "match": "artischocke",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 2.49,
+"rewe": 1.75,
 "lidl": 1.99,
 "aldi": 1.99,
-"kaufland": 1.99,
+"kaufland": 2.16,
 "netto": 1.99,
 "penny": 1.99,
 "edeka": 2.19
 },
 "est": [
-"rewe",
 "lidl",
 "aldi",
-"kaufland",
 "netto",
 "penny",
 "edeka"
@@ -3014,7 +2966,7 @@
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.29,
-"netto": 1.29,
+"netto": 1.59,
 "penny": 1.29,
 "edeka": 1.42
 },
@@ -3026,7 +2978,10 @@
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 2.31
+}
 },
 {
 "id": "burgerbroetchen",
@@ -3199,7 +3154,7 @@
 "lidl": 0.47,
 "aldi": 0.47,
 "kaufland": 0.49,
-"netto": 0.47,
+"netto": 0.33,
 "penny": 0.47,
 "edeka": 0.49
 },
@@ -3252,15 +3207,13 @@
 "lidl": 0.39,
 "aldi": 0.4,
 "kaufland": 0.44,
-"netto": 0.4,
-"penny": 0.4,
+"netto": 0.39,
+"penny": 0.39,
 "edeka": 0.49
 },
 "est": [
 "aldi",
 "kaufland",
-"netto",
-"penny",
 "edeka"
 ]
 },
@@ -3791,15 +3744,13 @@
 "rewe": 0.79,
 "lidl": 0.49,
 "aldi": 0.49,
-"kaufland": 0.49,
+"kaufland": 0.39,
 "netto": 0.5,
-"penny": 0.5,
+"penny": 0.49,
 "edeka": 0.79
 },
 "est": [
-"kaufland",
 "netto",
-"penny",
 "edeka"
 ]
 },
@@ -3900,7 +3851,7 @@
 "kaufland": 1.59,
 "netto": 1.51,
 "penny": 1.51,
-"edeka": 1.59
+"edeka": 1.99
 },
 "est": [
 "rewe",
@@ -3908,8 +3859,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -4090,17 +4040,15 @@
 "prices": {
 "rewe": 0.99,
 "lidl": 0.69,
-"aldi": 0.7,
+"aldi": 0.69,
 "kaufland": 0.84,
 "netto": 0.7,
-"penny": 0.7,
+"penny": 0.69,
 "edeka": 0.99
 },
 "est": [
-"aldi",
 "kaufland",
 "netto",
-"penny",
 "edeka"
 ]
 },
@@ -4275,7 +4223,7 @@
 "fresh": true,
 "prices": {
 "rewe": 1.0,
-"lidl": 0.95,
+"lidl": 0.55,
 "aldi": 0.95,
 "kaufland": 1.0,
 "netto": 0.95,
@@ -4283,7 +4231,6 @@
 "edeka": 1.0
 },
 "est": [
-"lidl",
 "aldi",
 "kaufland",
 "netto",
@@ -4435,7 +4382,7 @@
 "group": "Brot & Backwaren",
 "fresh": true,
 "prices": {
-"rewe": 0.49,
+"rewe": 0.29,
 "lidl": 0.19,
 "aldi": 0.39,
 "kaufland": 0.39,
@@ -4445,7 +4392,6 @@
 },
 "est": [
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ]
@@ -4541,7 +4487,7 @@
 "fresh": true,
 "prices": {
 "rewe": 0.59,
-"lidl": 0.29,
+"lidl": 0.39,
 "aldi": 0.3,
 "kaufland": 0.44,
 "netto": 0.3,
@@ -4711,7 +4657,10 @@
 "aldi",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 1.39
+}
 },
 {
 "id": "sambal",
@@ -4972,14 +4921,13 @@
 "prices": {
 "rewe": 1.49,
 "lidl": 0.99,
-"aldi": 1.29,
+"aldi": 1.11,
 "kaufland": 1.24,
 "netto": 1.29,
 "penny": 1.29,
 "edeka": 1.35
 },
 "est": [
-"aldi",
 "kaufland",
 "netto",
 "penny",
@@ -5023,13 +4971,12 @@
 "lidl": 1.99,
 "aldi": 0.74,
 "kaufland": 1.66,
-"netto": 0.86,
+"netto": 0.65,
 "penny": 1.33,
-"edeka": 1.79
+"edeka": 0.99
 },
 "est": [
-"lidl",
-"edeka"
+"lidl"
 ]
 },
 {
@@ -5041,12 +4988,12 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 1.59,
-"lidl": 0.79,
-"aldi": 0.79,
+"lidl": 0.99,
+"aldi": 0.99,
 "kaufland": 0.99,
 "netto": 0.99,
 "penny": 0.92,
-"edeka": 1.49
+"edeka": 0.8
 }
 },
 {
@@ -5077,11 +5024,11 @@
 "match": "studentenfutter|nussmischung",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.69,
+"rewe": 2.29,
 "lidl": 1.69,
-"aldi": 1.69,
+"aldi": 1.92,
 "kaufland": 2.29,
-"netto": 2.39,
+"netto": 2.33,
 "penny": 2.29,
 "edeka": 2.49
 }
@@ -5094,16 +5041,15 @@
 "match": "orangensaft|o-saft",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.39,
+"rewe": 2.45,
 "lidl": 1.39,
 "aldi": 1.0,
 "kaufland": 1.99,
-"netto": 1.29,
+"netto": 2.49,
 "penny": 1.49,
 "edeka": 0.93
 },
 "est": [
-"netto",
 "penny"
 ]
 },
@@ -5143,8 +5089,8 @@
 "rewe": 0.99,
 "lidl": 0.79,
 "aldi": 0.79,
-"kaufland": 0.59,
-"netto": 0.59,
+"kaufland": 0.79,
+"netto": 1.29,
 "penny": 0.59,
 "edeka": 0.89
 },
@@ -5165,7 +5111,7 @@
 "jar": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.49,
+"rewe": 2.18,
 "lidl": 0.84,
 "aldi": 1.29,
 "kaufland": 1.17,
@@ -5221,6 +5167,9 @@
 "netto": 2.65,
 "penny": 1.99,
 "edeka": 1.93
+},
+"bio": {
+"netto": 2.69
 }
 },
 {
@@ -5246,7 +5195,8 @@
 ],
 "bio": {
 "rewe": 3.07,
-"aldi": 2.65
+"aldi": 2.51,
+"edeka": 2.09
 }
 },
 {
@@ -5259,7 +5209,7 @@
 "prices": {
 "rewe": 2.49,
 "lidl": 2.49,
-"aldi": 2.5,
+"aldi": 2.29,
 "kaufland": 2.92,
 "netto": 2.49,
 "penny": 2.49,
@@ -5268,7 +5218,10 @@
 "est": [
 "netto",
 "penny"
-]
+],
+"bio": {
+"rewe": 2.99
+}
 },
 {
 "id": "oliven",
@@ -5283,7 +5236,7 @@
 "lidl": 1.14,
 "aldi": 1.21,
 "kaufland": 1.99,
-"netto": 1.21,
+"netto": 1.76,
 "penny": 1.09,
 "edeka": 1.59
 },
@@ -5318,7 +5271,10 @@
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 3.29
+}
 },
 {
 "id": "tkSpinat",
@@ -5358,7 +5314,7 @@
 "match": "schwarze bohnen",
 "group": "Hülsenfrüchte",
 "prices": {
-"rewe": 1.49,
+"rewe": 1.35,
 "lidl": 0.99,
 "aldi": 0.79,
 "kaufland": 1.49,
@@ -5416,7 +5372,7 @@
 "lidl": 0.78,
 "aldi": 0.78,
 "kaufland": 0.78,
-"netto": 0.97,
+"netto": 1.24,
 "penny": 0.78,
 "edeka": 0.99
 },
@@ -5427,7 +5383,8 @@
 ],
 "bio": {
 "rewe": 1.24,
-"aldi": 0.78
+"aldi": 0.78,
+"netto": 0.97
 }
 },
 {
@@ -5439,17 +5396,16 @@
 "match": "kichererbse(?!n-?mehl)",
 "group": "Hülsenfrüchte",
 "prices": {
-"rewe": 0.59,
+"rewe": 0.53,
 "lidl": 0.59,
 "aldi": 0.53,
 "kaufland": 0.53,
-"netto": 0.69,
+"netto": 0.66,
 "penny": 0.59,
 "edeka": 0.69
 },
 "est": [
 "kaufland",
-"netto",
 "edeka"
 ],
 "bio": {
@@ -5492,7 +5448,7 @@
 "match": "kokosmilch",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.19,
+"rewe": 1.49,
 "lidl": 1.19,
 "aldi": 1.19,
 "kaufland": 1.19,
@@ -5531,7 +5487,8 @@
 "edeka"
 ],
 "bio": {
-"rewe": 1.39
+"rewe": 1.39,
+"netto": 0.95
 }
 },
 {
@@ -5556,8 +5513,9 @@
 "penny"
 ],
 "bio": {
-"rewe": 2.19,
-"edeka": 1.31
+"rewe": 1.31,
+"edeka": 1.31,
+"aldi": 1.27
 }
 },
 {
@@ -5568,7 +5526,7 @@
 "match": "veganes hack|chorizo",
 "group": "Tofu & Soja",
 "prices": {
-"rewe": 3.29,
+"rewe": 2.21,
 "lidl": 2.24,
 "aldi": 2.24,
 "kaufland": 2.24,
@@ -5689,18 +5647,16 @@
 "match": "hartkäse",
 "group": "Milchprodukte & Eier",
 "prices": {
-"rewe": 2.99,
+"rewe": 3.29,
 "lidl": 1.99,
-"aldi": 2.99,
+"aldi": 3.17,
 "kaufland": 2.49,
 "netto": 3.22,
 "penny": 2.39,
 "edeka": 3.22
 },
 "est": [
-"rewe",
 "lidl",
-"aldi",
 "kaufland",
 "penny"
 ]
@@ -5736,7 +5692,7 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.19,
-"aldi": 1.19,
+"aldi": 0.99,
 "kaufland": 1.19,
 "netto": 1.19,
 "penny": 1.19,
@@ -5747,7 +5703,8 @@
 ],
 "bio": {
 "rewe": 1.98,
-"aldi": 1.98
+"aldi": 1.98,
+"lidl": 2.18
 }
 },
 {
@@ -5826,7 +5783,7 @@
 "penny"
 ],
 "bio": {
-"rewe": 1.65,
+"rewe": 3.3,
 "aldi": 1.45
 }
 },
@@ -5843,14 +5800,13 @@
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 0.85,
+"netto": 0.6,
 "penny": 0.99,
 "edeka": 0.99
 },
 "est": [
 "lidl",
 "kaufland",
-"netto",
 "penny",
 "edeka"
 ],
@@ -5896,8 +5852,8 @@
 "prices": {
 "rewe": 0.69,
 "lidl": 0.69,
-"aldi": 0.69,
-"kaufland": 0.55,
+"aldi": 0.68,
+"kaufland": 0.54,
 "netto": 0.95,
 "penny": 0.69,
 "edeka": 1.03
@@ -5906,7 +5862,7 @@
 "lidl"
 ],
 "bio": {
-"rewe": 1.19
+"rewe": 1.17
 }
 },
 {
@@ -5931,7 +5887,8 @@
 ],
 "bio": {
 "rewe": 0.65,
-"aldi": 0.65
+"aldi": 0.75,
+"lidl": 0.65
 }
 },
 {
@@ -5978,7 +5935,8 @@
 "bio": {
 "rewe": 0.95,
 "aldi": 0.95,
-"kaufland": 2.49
+"kaufland": 2.49,
+"lidl": 0.95
 }
 },
 {
@@ -6040,7 +5998,7 @@
 "kaufland": 0.99,
 "netto": 1.0,
 "penny": 1.49,
-"edeka": 1.7
+"edeka": 1.22
 },
 "est": [
 "kaufland",
@@ -6091,7 +6049,6 @@
 "edeka": 2.51
 },
 "est": [
-"kaufland",
 "penny"
 ],
 "bio": {
@@ -6134,7 +6091,7 @@
 "group": "Milchprodukte & Eier",
 "prices": {
 "rewe": 1.29,
-"lidl": 1.29,
+"lidl": 1.25,
 "aldi": 1.29,
 "kaufland": 1.29,
 "netto": 1.29,
@@ -6145,7 +6102,7 @@
 "kaufland"
 ],
 "bio": {
-"rewe": 1.86
+"rewe": 1.81
 }
 },
 {
@@ -6162,12 +6119,14 @@
 "kaufland": 0.79,
 "netto": 0.85,
 "penny": 0.85,
-"edeka": 0.95
+"edeka": 0.85
 },
 "bio": {
 "rewe": 1.15,
 "aldi": 1.15,
-"edeka": 1.25
+"edeka": 1.25,
+"lidl": 1.25,
+"penny": 1.25
 }
 },
 {
@@ -6205,15 +6164,17 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.43,
-"aldi": 1.19,
+"aldi": 1.49,
 "kaufland": 1.19,
 "netto": 1.03,
 "penny": 1.49,
 "edeka": 1.19
 },
 "bio": {
-"rewe": 2.19,
-"aldi": 2.89
+"rewe": 2.69,
+"aldi": 2.89,
+"lidl": 2.12,
+"edeka": 2.99
 }
 },
 {
@@ -6224,8 +6185,8 @@
 "match": "harzer",
 "group": "Milchprodukte & Eier",
 "prices": {
-"rewe": 1.99,
-"lidl": 1.72,
+"rewe": 1.89,
+"lidl": 1.0,
 "aldi": 1.99,
 "kaufland": 1.29,
 "netto": 2.24,
@@ -6257,7 +6218,8 @@
 ],
 "bio": {
 "rewe": 1.29,
-"aldi": 1.29
+"aldi": 1.29,
+"edeka": 0.78
 }
 },
 {
@@ -6294,7 +6256,7 @@
 "lidl": 1.05,
 "aldi": 1.19,
 "kaufland": 1.19,
-"netto": 1.05,
+"netto": 1.29,
 "penny": 1.19,
 "edeka": 1.19
 },
@@ -6326,7 +6288,7 @@
 "edeka"
 ],
 "bio": {
-"rewe": 3.98,
+"rewe": 2.29,
 "kaufland": 4.58
 }
 },
@@ -6394,9 +6356,9 @@
 "prices": {
 "rewe": 0.99,
 "lidl": 0.99,
-"aldi": 0.89,
+"aldi": 0.75,
 "kaufland": 0.69,
-"netto": 0.99,
+"netto": 1.42,
 "penny": 0.89,
 "edeka": 0.89
 },
@@ -6417,13 +6379,14 @@
 "lidl": 0.59,
 "aldi": 0.69,
 "kaufland": 0.69,
-"netto": 0.6,
+"netto": 0.69,
 "penny": 0.69,
 "edeka": 0.89
 },
 "bio": {
 "rewe": 0.85,
-"lidl": 0.85
+"lidl": 0.85,
+"aldi": 0.85
 }
 },
 {
@@ -6434,17 +6397,17 @@
 "match": "(langkorn|vollkorn|basmati|jasmin|parboiled)?reis(?!-?essig|- oder)\\b|basmati",
 "group": "Getreide & Nudeln",
 "prices": {
-"rewe": 1.39,
+"rewe": 2.49,
 "lidl": 1.59,
-"aldi": 1.39,
+"aldi": 1.99,
 "kaufland": 1.39,
-"netto": 1.59,
+"netto": 2.29,
 "penny": 1.39,
 "edeka": 1.39
 },
 "bio": {
 "rewe": 3.79,
-"aldi": 4.5
+"aldi": 4.7
 }
 },
 {
@@ -6458,10 +6421,10 @@
 "rewe": 0.99,
 "lidl": 0.94,
 "aldi": 0.94,
-"kaufland": 0.99,
+"kaufland": 0.69,
 "netto": 0.94,
 "penny": 0.94,
-"edeka": 0.99
+"edeka": 1.66
 },
 "bio": {
 "rewe": 3.65
@@ -6471,8 +6434,7 @@
 "aldi",
 "kaufland",
 "netto",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -6500,7 +6462,8 @@
 "rewe": 0.85,
 "aldi": 1.45,
 "netto": 1.29,
-"edeka": 0.85
+"edeka": 0.85,
+"lidl": 0.85
 }
 },
 {
@@ -6517,7 +6480,7 @@
 "kaufland": 1.98,
 "netto": 1.29,
 "penny": 1.29,
-"edeka": 1.99
+"edeka": 2.79
 },
 "est": [
 "lidl",
@@ -6567,7 +6530,7 @@
 "match": "vollkornbrot|sauerteigbrot|\\bbrot\\b",
 "group": "Brot & Backwaren",
 "prices": {
-"rewe": 1.19,
+"rewe": 1.4,
 "lidl": 0.89,
 "aldi": 1.32,
 "kaufland": 1.99,
@@ -6580,7 +6543,9 @@
 ],
 "bio": {
 "rewe": 2.19,
-"aldi": 1.32
+"aldi": 1.32,
+"netto": 1.29,
+"edeka": 1.56
 }
 },
 {
@@ -6637,7 +6602,7 @@
 "pantry": true,
 "group": "Getreide & Nudeln",
 "prices": {
-"rewe": 0.59,
+"rewe": 0.79,
 "lidl": 0.59,
 "aldi": 0.59,
 "kaufland": 0.59,
@@ -6650,7 +6615,8 @@
 "edeka"
 ],
 "bio": {
-"rewe": 0.85
+"rewe": 0.85,
+"edeka": 0.85
 }
 },
 {
@@ -6661,7 +6627,7 @@
 "match": "beere(?!n?e?ssig)",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 2.69,
+"rewe": 3.49,
 "lidl": 2.69,
 "aldi": 3.29,
 "kaufland": 3.49,
@@ -6674,7 +6640,8 @@
 ],
 "bio": {
 "rewe": 9.47,
-"aldi": 9.22
+"aldi": 9.22,
+"netto": 9.47
 }
 },
 {
@@ -6687,9 +6654,9 @@
 "loose": true,
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.29,
+"rewe": 1.99,
 "lidl": 1.29,
-"aldi": 1.19,
+"aldi": 1.29,
 "kaufland": 1.29,
 "netto": 1.29,
 "penny": 1.0,
@@ -6697,8 +6664,10 @@
 },
 "bio": {
 "rewe": 1.99,
-"lidl": 1.79,
-"kaufland": 1.99
+"lidl": 1.99,
+"kaufland": 1.99,
+"aldi": 1.69,
+"penny": 1.99
 }
 },
 {
@@ -6715,7 +6684,7 @@
 "lidl": 0.99,
 "aldi": 1.49,
 "kaufland": 1.69,
-"netto": 1.49,
+"netto": 1.39,
 "penny": 0.86,
 "edeka": 1.49
 },
@@ -6723,7 +6692,7 @@
 "edeka"
 ],
 "bio": {
-"rewe": 1.99,
+"rewe": 1.19,
 "netto": 1.79
 }
 },
@@ -6739,14 +6708,13 @@
 "prices": {
 "rewe": 1.79,
 "lidl": 1.79,
-"aldi": 1.99,
+"aldi": 1.49,
 "kaufland": 1.99,
-"netto": 2.29,
+"netto": 1.45,
 "penny": 1.39,
 "edeka": 1.79
 },
 "est": [
-"aldi",
 "edeka"
 ],
 "bio": {
@@ -6762,12 +6730,12 @@
 "match": "gurke",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.11,
-"lidl": 0.79,
+"rewe": 0.95,
+"lidl": 0.66,
 "aldi": 0.79,
-"kaufland": 0.79,
-"netto": 0.99,
-"penny": 0.66,
+"kaufland": 0.69,
+"netto": 0.89,
+"penny": 0.55,
 "edeka": 0.89
 },
 "est": [
@@ -6775,7 +6743,8 @@
 ],
 "bio": {
 "rewe": 1.19,
-"kaufland": 1.29
+"kaufland": 1.29,
+"lidl": 0.79
 }
 },
 {
@@ -6789,10 +6758,10 @@
 "group": "Obst & Gemüse",
 "prices": {
 "rewe": 0.9,
-"lidl": 0.5,
-"aldi": 0.65,
+"lidl": 0.49,
+"aldi": 0.59,
 "kaufland": 0.9,
-"netto": 0.6,
+"netto": 0.59,
 "penny": 0.75,
 "edeka": 0.99
 },
@@ -6816,18 +6785,20 @@
 "loose": true,
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.25,
+"rewe": 0.99,
 "lidl": 1.25,
-"aldi": 0.95,
+"aldi": 1.75,
 "kaufland": 1.5,
-"netto": 1.99,
+"netto": 1.89,
 "penny": 0.95,
-"edeka": 1.49
+"edeka": 1.25
 },
 "est": [
-"lidl",
-"edeka"
-]
+"lidl"
+],
+"bio": {
+"aldi": 1.99
+}
 },
 {
 "id": "zwiebeln",
@@ -6838,11 +6809,11 @@
 "match": "zwiebel(?!n? ?-?frühling)|rote zwiebel|schalotte",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 0.86,
+"rewe": 1.15,
 "lidl": 0.86,
 "aldi": 0.93,
 "kaufland": 0.99,
-"netto": 0.7,
+"netto": 0.5,
 "penny": 0.85,
 "edeka": 0.99
 },
@@ -6869,17 +6840,16 @@
 "kaufland": 1.21,
 "netto": 1.49,
 "penny": 0.99,
-"edeka": 0.99
+"edeka": 1.94
 },
 "est": [
 "lidl",
 "aldi",
 "kaufland",
-"penny",
-"edeka"
+"penny"
 ],
 "bio": {
-"rewe": 1.78,
+"rewe": 1.32,
 "netto": 1.49
 }
 },
@@ -6892,19 +6862,16 @@
 "match": "möhre|karotte",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 0.93,
+"rewe": 1.89,
 "lidl": 0.93,
-"aldi": 1.29,
-"kaufland": 0.99,
+"aldi": 1.59,
+"kaufland": 2.01,
 "netto": 0.9,
 "penny": 0.6,
-"edeka": 0.99
+"edeka": 1.99
 },
 "est": [
-"lidl",
-"aldi",
-"kaufland",
-"edeka"
+"lidl"
 ],
 "bio": {
 "rewe": 1.69
@@ -6932,7 +6899,8 @@
 ],
 "bio": {
 "rewe": 3.45,
-"aldi": 2.39
+"aldi": 2.39,
+"kaufland": 3.32
 }
 },
 {
@@ -6944,18 +6912,21 @@
 "piece": 400,
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.59,
+"rewe": 1.49,
 "lidl": 1.11,
-"aldi": 1.11,
+"aldi": 1.49,
 "kaufland": 1.79,
-"netto": 1.69,
+"netto": 1.29,
 "penny": 0.99,
-"edeka": 1.49
+"edeka": 1.39
 },
 "est": [
-"lidl",
-"edeka"
-]
+"lidl"
+],
+"bio": {
+"rewe": 3.15,
+"lidl": 1.86
+}
 },
 {
 "id": "champignons",
@@ -6972,7 +6943,7 @@
 "kaufland": 2.54,
 "netto": 1.99,
 "penny": 1.58,
-"edeka": 1.99
+"edeka": 2.86
 },
 "est": [
 "lidl",
@@ -7053,7 +7024,9 @@
 ],
 "bio": {
 "rewe": 0.79,
-"netto": 0.49
+"netto": 0.49,
+"lidl": 0.49,
+"aldi": 0.49
 }
 },
 {
@@ -7114,13 +7087,13 @@
 "match": "waln[uü]",
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 2.99,
-"lidl": 2.49,
+"rewe": 3.99,
+"lidl": 2.4,
 "aldi": 2.19,
 "kaufland": 2.99,
 "netto": 2.49,
 "penny": 2.59,
-"edeka": 2.49
+"edeka": 2.99
 },
 "est": [
 "penny"
@@ -7140,15 +7113,15 @@
 "group": "Vorrat & Gewürze",
 "prices": {
 "rewe": 3.19,
-"lidl": 2.49,
+"lidl": 3.0,
 "aldi": 2.19,
-"kaufland": 1.92,
+"kaufland": 3.49,
 "netto": 2.89,
 "penny": 2.89,
-"edeka": 2.49
+"edeka": 3.32
 },
 "bio": {
-"rewe": 3.19,
+"rewe": 2.39,
 "lidl": 2.29,
 "aldi": 2.19
 }
@@ -7171,7 +7144,8 @@
 "edeka": 1.59
 },
 "bio": {
-"rewe": 3.5
+"rewe": 3.5,
+"aldi": 2.9
 }
 },
 {
@@ -7183,7 +7157,7 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.89,
+"rewe": 2.0,
 "lidl": 1.39,
 "aldi": 1.39,
 "kaufland": 1.39,
@@ -7196,7 +7170,10 @@
 "kaufland",
 "netto",
 "penny"
-]
+],
+"bio": {
+"rewe": 2.99
+}
 },
 {
 "id": "bruehe",
@@ -7232,17 +7209,19 @@
 "prices": {
 "rewe": 3.98,
 "lidl": 2.99,
-"aldi": 3.29,
+"aldi": 2.69,
 "kaufland": 2.69,
 "netto": 4.0,
 "penny": 2.69,
-"edeka": 3.65
+"edeka": 2.69
 },
 "est": [
 "lidl"
 ],
 "bio": {
-"rewe": 3.95
+"rewe": 3.64,
+"lidl": 7.98,
+"netto": 3.99
 }
 },
 {
@@ -7313,7 +7292,9 @@
 "rewe": 0.9,
 "aldi": 0.9,
 "netto": 0.9,
-"edeka": 0.9
+"edeka": 0.9,
+"kaufland": 0.9,
+"penny": 0.9
 }
 },
 {
@@ -7368,7 +7349,8 @@
 "penny"
 ],
 "bio": {
-"rewe": 3.58
+"rewe": 3.58,
+"edeka": 3.58
 }
 },
 {
@@ -7391,8 +7373,10 @@
 "bio": {
 "rewe": 0.9,
 "aldi": 0.9,
-"netto": 0.9,
-"edeka": 0.9
+"netto": 0.95,
+"edeka": 0.9,
+"kaufland": 0.9,
+"penny": 0.9
 }
 },
 {
@@ -7404,11 +7388,11 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.19,
+"rewe": 0.99,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 0.99,
-"netto": 0.85,
+"netto": 0.84,
 "penny": 0.99,
 "edeka": 1.39
 },
@@ -7451,7 +7435,7 @@
 "lidl": 0.89,
 "aldi": 0.89,
 "kaufland": 0.89,
-"netto": 0.99,
+"netto": 1.29,
 "penny": 1.09,
 "edeka": 0.89
 },
@@ -7473,14 +7457,15 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 0.99,
-"aldi": 1.49,
+"aldi": 1.39,
 "kaufland": 1.29,
 "netto": 1.19,
 "penny": 0.69,
 "edeka": 0.69
 },
 "bio": {
-"rewe": 1.69
+"rewe": 1.79,
+"edeka": 1.11
 },
 "piece": 170
 },
@@ -7517,17 +7502,18 @@
 "match": "joghurt",
 "group": "Milchprodukte & Eier",
 "prices": {
-"rewe": 0.79,
+"rewe": 0.9,
 "lidl": 0.79,
 "aldi": 0.79,
-"kaufland": 0.9,
+"kaufland": 1.19,
 "netto": 0.79,
 "penny": 0.79,
-"edeka": 0.59
+"edeka": 1.29
 },
 "bio": {
-"rewe": 1.15,
-"aldi": 1.15
+"rewe": 1.39,
+"aldi": 1.15,
+"edeka": 1.19
 }
 },
 {
@@ -7542,9 +7528,9 @@
 "lidl": 1.11,
 "aldi": 1.11,
 "kaufland": 1.49,
-"netto": 1.49,
+"netto": 0.79,
 "penny": 0.79,
-"edeka": 1.29
+"edeka": 0.99
 },
 "est": [
 "lidl",
@@ -7562,15 +7548,14 @@
 "prices": {
 "rewe": 1.19,
 "lidl": 1.19,
-"aldi": 0.89,
+"aldi": 0.59,
 "kaufland": 1.05,
 "netto": 0.78,
 "penny": 0.59,
-"edeka": 1.19
+"edeka": 0.99
 },
 "est": [
-"lidl",
-"edeka"
+"lidl"
 ],
 "piece": 300
 },
@@ -7582,18 +7567,17 @@
 "match": "feldsalat|salat-?mix|salatmischung|rucola|kopfsalat|romana|blattsalat|eisbergsalat|rucola|römersalat|salatherz|gemischte[rn]? salat|pflücksalat|^salat$|^salat\\b",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.59,
+"rewe": 1.49,
 "lidl": 0.99,
 "aldi": 0.99,
 "kaufland": 1.29,
 "netto": 1.19,
 "penny": 1.19,
-"edeka": 1.19
+"edeka": 1.22
 },
 "est": [
 "lidl",
-"kaufland",
-"edeka"
+"kaufland"
 ],
 "bio": {
 "rewe": 2.38,
@@ -7634,7 +7618,7 @@
 "lidl": 0.69,
 "aldi": 0.69,
 "kaufland": 0.69,
-"netto": 0.69,
+"netto": 0.34,
 "penny": 0.44,
 "edeka": 0.59
 },
@@ -7685,7 +7669,7 @@
 "kaufland": 3.06,
 "netto": 2.08,
 "penny": 2.99,
-"edeka": 4.04
+"edeka": 2.5
 },
 "est": [
 "lidl",
@@ -7759,9 +7743,9 @@
 "prices": {
 "rewe": 0.59,
 "lidl": 0.69,
-"aldi": 0.86,
+"aldi": 0.59,
 "kaufland": 0.49,
-"netto": 0.59,
+"netto": 0.69,
 "penny": 0.65,
 "edeka": 0.69
 },
@@ -7779,20 +7763,23 @@
 "pantry": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.69,
+"rewe": 1.99,
 "lidl": 1.69,
 "aldi": 1.69,
 "kaufland": 1.69,
-"netto": 1.49,
+"netto": 0.66,
 "penny": 1.49,
 "edeka": 1.69
 },
 "est": [
 "kaufland",
-"netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"rewe": 2.49,
+"aldi": 1.17
+}
 },
 {
 "id": "pinienkerne",
@@ -7879,7 +7866,7 @@
 "jar": true,
 "group": "Vorrat & Gewürze",
 "prices": {
-"rewe": 1.79,
+"rewe": 3.18,
 "lidl": 1.79,
 "aldi": 0.89,
 "kaufland": 1.29,
@@ -7941,7 +7928,11 @@
 "netto",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"aldi": 2.99,
+"kaufland": 2.99
+}
 },
 {
 "id": "bulgur",
@@ -7978,7 +7969,7 @@
 "prices": {
 "rewe": 3.99,
 "lidl": 2.54,
-"aldi": 1.99,
+"aldi": 1.89,
 "kaufland": 2.29,
 "netto": 2.29,
 "penny": 2.29,
@@ -7986,7 +7977,6 @@
 },
 "est": [
 "lidl",
-"aldi",
 "netto",
 "penny",
 "edeka"
@@ -8007,7 +7997,7 @@
 "kaufland": 1.97,
 "netto": 1.97,
 "penny": 1.99,
-"edeka": 2.15
+"edeka": 1.97
 },
 "est": [
 "lidl",
@@ -8029,7 +8019,7 @@
 "lidl": 1.29,
 "aldi": 1.29,
 "kaufland": 1.49,
-"netto": 0.81,
+"netto": 1.54,
 "penny": 1.29,
 "edeka": 1.35
 },
@@ -8052,16 +8042,15 @@
 "prices": {
 "rewe": 2.19,
 "lidl": 1.99,
-"aldi": 1.11,
+"aldi": 1.79,
 "kaufland": 1.79,
 "netto": 1.49,
 "penny": 1.19,
-"edeka": 2.09
+"edeka": 1.99
 },
 "est": [
 "lidl",
-"kaufland",
-"edeka"
+"kaufland"
 ]
 },
 {
@@ -8102,16 +8091,20 @@
 "lidl": 1.19,
 "aldi": 1.27,
 "kaufland": 1.27,
-"netto": 1.49,
+"netto": 1.27,
 "penny": 1.19,
-"edeka": 1.25
+"edeka": 1.17
 },
 "est": [
 "lidl",
 "kaufland",
 "penny",
 "edeka"
-]
+],
+"bio": {
+"aldi": 1.29,
+"netto": 1.29
+}
 },
 {
 "id": "zuckerschoten",
@@ -8148,11 +8141,11 @@
 "piece": 180,
 "loose": true,
 "prices": {
-"rewe": 1.79,
+"rewe": 2.29,
 "lidl": 1.95,
 "aldi": 1.49,
 "kaufland": 2.99,
-"netto": 1.99,
+"netto": 1.69,
 "penny": 2.99,
 "edeka": 2.29
 },
@@ -8171,7 +8164,7 @@
 "loose": true,
 "prices": {
 "rewe": 3.99,
-"lidl": 2.49,
+"lidl": 4.65,
 "aldi": 2.65,
 "kaufland": 3.99,
 "netto": 2.49,
@@ -8179,7 +8172,6 @@
 "edeka": 3.49
 },
 "est": [
-"lidl",
 "netto",
 "penny",
 "edeka"
@@ -8193,17 +8185,16 @@
 "match": "trauben",
 "group": "Obst & Gemüse",
 "prices": {
-"rewe": 1.89,
+"rewe": 2.49,
 "lidl": 1.99,
 "aldi": 1.99,
 "kaufland": 2.49,
 "netto": 1.89,
 "penny": 1.59,
-"edeka": 2.29
+"edeka": 2.3
 },
 "est": [
-"lidl",
-"edeka"
+"lidl"
 ]
 },
 {
@@ -8220,12 +8211,11 @@
 "kaufland": 1.79,
 "netto": 1.99,
 "penny": 1.49,
-"edeka": 2.61
+"edeka": 1.66
 },
 "est": [
 "lidl",
-"kaufland",
-"edeka"
+"kaufland"
 ]
 },
 {
@@ -8241,7 +8231,7 @@
 "lidl": 1.79,
 "aldi": 1.98,
 "kaufland": 1.99,
-"netto": 2.36,
+"netto": 2.38,
 "penny": 1.98,
 "edeka": 1.88
 },
@@ -8249,7 +8239,10 @@
 "lidl",
 "kaufland",
 "edeka"
-]
+],
+"bio": {
+"rewe": 3.32
+}
 },
 {
 "id": "miso",
@@ -8285,7 +8278,7 @@
 "match": "hummus",
 "group": "Hülsenfrüchte",
 "prices": {
-"rewe": 0.79,
+"rewe": 0.99,
 "lidl": 0.96,
 "aldi": 0.99,
 "kaufland": 0.99,
@@ -8295,7 +8288,10 @@
 },
 "est": [
 "kaufland"
-]
+],
+"bio": {
+"lidl": 1.19
+}
 },
 {
 "id": "rosinen",
@@ -8309,14 +8305,13 @@
 "lidl": 1.29,
 "aldi": 1.25,
 "kaufland": 1.25,
-"netto": 1.29,
+"netto": 0.67,
 "penny": 1.29,
 "edeka": 1.29
 },
 "est": [
 "lidl",
 "kaufland",
-"netto",
 "penny"
 ]
 },
@@ -8380,7 +8375,7 @@
 "pantry": true,
 "prices": {
 "rewe": 2.75,
-"lidl": 2.25,
+"lidl": 3.5,
 "aldi": 2.75,
 "kaufland": 2.75,
 "netto": 2.75,
@@ -8433,7 +8428,10 @@
 },
 "est": [
 "penny"
-]
+],
+"bio": {
+"netto": 2.49
+}
 },
 {
 "id": "sprossen",
@@ -8496,7 +8494,7 @@
 "lidl": 0.89,
 "aldi": 0.85,
 "kaufland": 0.85,
-"netto": 0.85,
+"netto": 0.84,
 "penny": 0.93,
 "edeka": 0.9
 },
@@ -8520,14 +8518,13 @@
 "kaufland": 0.86,
 "netto": 0.8,
 "penny": 0.99,
-"edeka": 1.04
+"edeka": 0.65
 },
 "est": [
 "lidl",
 "aldi",
 "kaufland",
-"penny",
-"edeka"
+"penny"
 ]
 },
 {
@@ -8544,14 +8541,13 @@
 "aldi": 1.64,
 "kaufland": 2.49,
 "netto": 2.29,
-"penny": 2.49,
+"penny": 3.27,
 "edeka": 3.14
 },
 "est": [
 "lidl",
 "kaufland",
 "netto",
-"penny",
 "edeka"
 ]
 },
@@ -8566,14 +8562,13 @@
 "prices": {
 "rewe": 0.29,
 "lidl": 0.29,
-"aldi": 0.29,
-"kaufland": 0.35,
+"aldi": 0.28,
+"kaufland": 0.69,
 "netto": 0.28,
 "penny": 0.29,
 "edeka": 0.35
 },
 "est": [
-"kaufland",
 "edeka"
 ]
 },
@@ -8989,7 +8984,7 @@
 "prices": {
 "rewe": 0.99,
 "lidl": 0.79,
-"aldi": 0.79,
+"aldi": 0.89,
 "kaufland": 0.89,
 "netto": 0.99,
 "penny": 0.81,
@@ -8997,7 +8992,6 @@
 },
 "est": [
 "lidl",
-"aldi",
 "kaufland",
 "penny",
 "edeka"
@@ -9167,7 +9161,7 @@
 "group": "Brot & Backwaren",
 "fresh": true,
 "prices": {
-"rewe": 0.19,
+"rewe": 0.29,
 "lidl": 0.19,
 "aldi": 0.19,
 "netto": 0.19,

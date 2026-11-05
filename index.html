@@ -134,7 +134,7 @@ details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{marg
 .rdg{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;margin-top:8px;line-height:1.4}.rdl{font-weight:700;white-space:nowrap;color:var(--muted)}
 .ppw{color:var(--good);font-weight:700}
 .ingg .ir.pp{box-shadow:inset 3px 0 0 var(--good)}.ingg .ir.gone{color:var(--muted);text-decoration:line-through}.ingg .ppn{font-size:12px;color:var(--good);font-weight:600}
-.recnav{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:2px 0 6px}.recnav .mid{flex:1;text-align:center;line-height:1.25}
+.recnav{margin:2px 0 6px}.recnav .ttl{line-height:1.25;font-weight:600}.recnav .ttl .muted{font-weight:400}
 #sheet.slnext .rhero,#sheet.slnext .recnav~*{animation:slnext .22s ease-out}#sheet.slprev .rhero,#sheet.slprev .recnav~*{animation:slprev .22s ease-out}
 @keyframes slnext{from{opacity:.2;transform:translateX(36px)}to{opacity:1;transform:none}}@keyframes slprev{from{opacity:.2;transform:translateX(-36px)}to{opacity:1;transform:none}}
 .rinfo{display:flex;flex-direction:column;gap:8px;margin-top:8px}
@@ -3961,7 +3961,8 @@ function recNavGo(dir){ if (!recNav) return; let n;
   recApplyVar(n); openSheet("recipe", n); sheet.scrollTop = 0; }
 function recNavHtml(r){ if (!recNav || recNav.hist[recNav.i] !== r.name) recNav = {f: Object.assign({}, REC_F0, {cat: catOf(r)}), hist: [r.name], i: 0};
   const f = recNav.f, n = recipesFiltered(f).length, ex = Object.keys(REC_F0).filter(k => k !== "cat" && JSON.stringify(f[k]) !== JSON.stringify(REC_F0[k])).map(k => k === "q" ? `„${f.q}“` : k === "ing" ? "Zutat" : REC_FLABEL[k]?.[f[k]] || "").filter(Boolean);
-  return `<div class="recnav"><button type="button" class="btn small" data-recnav="-1" ${recNav.i ? "" : "disabled"} aria-label="Vorheriges Rezept">‹</button><span class="mid small muted">🎲 ${esc(CAT[f.cat] || "Rezepte")}${ex.length ? " · " + ex.map(esc).join(" · ") : ""} · ${n}<br>${recNav.round && recNav.i === recNav.hist.length - 1 ? "Alle gesehen – neue Runde" : "wischen oder tippen"}</span><button type="button" class="btn small primary" data-recnav="1" aria-label="Nächstes Zufallsrezept">Nächstes ›</button></div>`; }
+  // gleiche Pfeil-Leiste wie Tag/Woche (calnav), Mitte: woraus gezogen wird
+  return `<div class="calnav recnav"><button type="button" data-recnav="-1" ${recNav.i ? "" : "disabled"} aria-label="Vorheriges Rezept">‹</button><div class="ttl small">🎲 ${esc(CAT[f.cat] || "Rezepte")}${ex.length ? " · " + ex.map(esc).join(" · ") : ""} · ${n}<div class="muted">${recNav.round && recNav.i === recNav.hist.length - 1 ? "Alle gesehen – neue Runde" : "wischen oder tippen"}</div></div><button type="button" data-recnav="1" aria-label="Nächstes Zufallsrezept">›</button></div>`; }
 // Protein+ gegenüber Normal: gleiche Zutat = gleicher Name (ohne Menge und Klammern); Tausche stehen im Rezept (swaps), sonst gleiche Produkt-Zuordnung
 const ING_AMT = /^((?:ca\.\s*)?[\d½¼¾.,\/–-]+\s*(?:g|kg|ml|l|EL|TL|Stück|Dosen?|Gläser|Glas|Bund|Handvoll|Pck\.?|Becher|Scheiben?|Prisen?|Zehen?|Stiele?|Zweige?)?)\s+(.+)$/;
 const ingSplit = l => { const m = String(l).match(ING_AMT); return m ? [m[1], m[2]] : ["", String(l)]; };
