@@ -106,7 +106,7 @@
    "sub": "mit Mandeldrink, Kaffee & Chiasamen"
   },
   "short": "Overnight Oats Mocha",
-  "sub": "mit Skyr, Kaffee & Zartbitterschokolade",
+  "sub": "mit Skyr, Espresso & Beeren",
   "style": "einfach",
   "swaps": [
    [
@@ -1642,7 +1642,7 @@
    "sub": "mit Spinat, getrockneten Tomaten & Sahne"
   },
   "short": "Marry-Me-Linsen",
-  "sub": "mit Räuchertofu, Spinat & Sahne",
+  "sub": "mit Räuchertofu, Spinat & Kochsahne",
   "style": "einfach"
  },
  {
@@ -23451,7 +23451,7 @@
   },
   "since": "2026-11-02",
   "short": "Ofen-Enchiladas",
-  "sub": "mit Sojahack, Bohnen & Limetten-Sojajoghurt",
+  "sub": "mit Sojahack, Bohnen & Limetten-Joghurt",
   "style": "einfach",
   "swaps": [
    [
@@ -26609,7 +26609,7 @@
    "sub": "mit Vanillezucker"
   },
   "since": "2026-11-02",
-  "short": "Quark-Waffeln",
+  "short": "Quark-Hafer-Waffeln",
   "sub": "mit Skyr & Beeren",
   "style": "einfach"
  },
@@ -36700,7 +36700,7 @@
    "short": "Joghurt-Bombe"
   },
   "since": "2026-11-02",
-  "short": "Skyr-Bombe",
+  "short": "Joghurt-Bombe",
   "sub": "aus Skyr & Sahne mit Beerensauce",
   "style": "einfach",
   "swaps": [
@@ -41386,7 +41386,7 @@
   },
   "since": "2026-11-02",
   "short": "Schoko-Pudding",
-  "sub": "mit Skyr, Zartbitter & Kakao",
+  "sub": "mit Skyr, Zartbitter & Himbeeren",
   "style": "einfach",
   "swaps": [
    [
@@ -66852,7 +66852,7 @@
  {
   "name": "Schichtdessert mit Weintrauben & Cookies",
   "short": "Trauben-Schichtdessert",
-  "sub": "Quark-Skyr-Creme mit Cookie-Bröseln",
+  "sub": "Quark-Mascarpone-Creme mit Cookie-Bröseln",
   "category": "dessert",
   "servings": 8,
   "kcal": 458,
@@ -67680,7 +67680,7 @@
  {
   "name": "Zitronen-Schichtdessert mit Skyr & Granola",
   "short": "Zitronen-Schichtdessert",
-  "sub": "Lemon-Curd-Pudding, Skyr und Knusper",
+  "sub": "Lemon-Curd-Pudding, Joghurt und Knusper",
   "category": "dessert",
   "servings": 4,
   "kcal": 270,
