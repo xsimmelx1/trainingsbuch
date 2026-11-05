@@ -131,6 +131,7 @@ details.rprice[open] summary::after{content:" ⌄"}details.rprice .storecmp{marg
 .rsteps{padding-left:22px;margin:8px 0}.rsteps li{margin:8px 0;line-height:1.45}
 .rsteps li.pp{border-left:3px solid var(--good);padding-left:8px;margin-left:-11px}.ppt{font-size:11px;font-weight:700;color:var(--good);white-space:nowrap}
 .rdiff{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline;line-height:1.5}.rdiff span{padding:1px 7px;border-radius:6px;background:var(--sunk)}.rdiff .dadd{background:var(--good-soft);color:var(--good)}.rdiff .dgone{text-decoration:line-through;color:var(--muted)}
+.ppw{color:var(--good);font-weight:700}
 .ingg .ir.pp{box-shadow:inset 3px 0 0 var(--good)}.ingg .ir.gone{color:var(--muted);text-decoration:line-through}.ingg .ppn{font-size:12px;color:var(--good);font-weight:600}
 .recnav{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:2px 0 6px}.recnav .mid{flex:1;text-align:center;line-height:1.25}
 #sheet.slnext .rhero,#sheet.slnext .recnav~*{animation:slnext .22s ease-out}#sheet.slprev .rhero,#sheet.slprev .recnav~*{animation:slprev .22s ease-out}
@@ -3873,7 +3874,7 @@ function journeySheet(kind, arg){
   if (kind === "recipe") {
     const r = recipes.find(x => x.name === arg); if (!r) return close;
     const ctxM = recipeCtx ? (() => { const [d, k] = recipeCtx.split("|"); return mealsFor(d).find(m => m.k === k && m.name === r.name) && {d, k, ate: !!(dayObj(d)?.ate || {})[k]}; })() : null;
-    return `<div class="sh"><div><h2>${esc(recTitle(r))}</h2>${r.sub ? `<div class="small muted rsub">${esc(r.sub)}</div>` : ""}</div><span class="shr">${(() => { const sc = swapCand && swapCand.name === r.name ? swapCand.ctx : ctxM ? `${ctxM.d}|${ctxM.k}` : null;
+    return `<div class="sh"><div><h2>${ppMark(r, recTitle(r))}</h2>${r.sub ? `<div class="small muted rsub">${ppMark(r, r.sub)}</div>` : ""}</div><span class="shr">${(() => { const sc = swapCand && swapCand.name === r.name ? swapCand.ctx : ctxM ? `${ctxM.d}|${ctxM.k}` : null;
       return sc ? `<button type="button" class="favb dice" data-random="meal" data-v="${sc}" data-cur="${esc(mealsFor(sc.split("|")[0]).find(m => m.k === sc.split("|")[1])?.name || "")}" data-skip="${esc(r.name)}" aria-label="Zufällig austauschen" title="Zufällig austauschen">🎲</button>`
         : ""; })()}${favBtn(r.name)}${close}</span></div>
       ${!ctxM && !(swapCand && swapCand.name === r.name) ? recNavHtml(r) : ""}
@@ -3972,6 +3973,15 @@ function recDiff(r){ const b = r._base || r; if (!b.normal) return null; const m
   for (const l of addL) { out.add.push(l); out.line.set(l, {t: "add"}); } out.gone = gone;
   diffMemo.set(b, out); return out; }
 const ingNm = l => ingSplit(l)[1].replace(/\s*\([^)]*\)/g, "").trim();
+// Protein+-Titel: Wörter grün, die nur in Protein+ vorkommen (dazu oder statt), z. B. „Skyr“-Bombe; Normal bleibt unmarkiert
+const ppStem = w => { w = fold(w.toLowerCase()); return w.length > 4 ? w.replace(/(en|er|n|e|s)$/, "") : w; };
+let ppMemo = new WeakMap();
+function ppWords(r){ const b = r._base || r, mk = ppMemo.get(b); if (mk && mk.p === !!prices) return mk.v; const d = recDiff(b); let out = null;
+  if (d) { const W = l => (ingNm(l).match(/[A-Za-zÄÖÜäöüß]+/g) || []).filter(w => w.length > 2).map(ppStem), nW = new Set((b.normal.ingredients || []).flatMap(W));
+    out = [...new Set([...d.add, ...d.swap.map(x => x[1])].flatMap(W))].filter(w => w.length > 3 && !nW.has(w)); if (!out.length) out = null; }
+  ppMemo.set(b, {p: !!prices, v: out}); return out; }
+function ppMark(r, txt){ const ws = r && r.normal && r.variant !== "normal" ? ppWords(r) : null; if (!ws || !txt) return esc(txt || "");
+  return String(txt).split(/([A-Za-zÄÖÜäöüß]+)/).map((t, i) => { if (i % 2 === 0) return esc(t); const st = ppStem(t); return ws.some(w => st === w || (w.length > 4 && (st.endsWith(w) || st.startsWith(w)))) ? `<span class="ppw">${esc(t)}</span>` : esc(t); }).join(""); }
 const ppNote = p => p.t === "add" ? "＋ Protein+" : p.t === "swap" ? `statt ${esc(ingSplit(p.from)[0] ? ingSplit(p.from)[0] + " " : "")}${esc(ingNm(p.from))}` : `Normal: ${esc(ingSplit(p.from)[0] || "–")}`;
 function recDiffHtml(r){ const d = recDiff(r); if (!d) return ""; const hi = r.variant !== "normal";
   const it = [...d.add.map(l => `<span class="dadd">＋ ${esc(ingSplit(l)[0] ? ingSplit(l)[0] + " " : "")}${esc(ingNm(l))}</span>`), ...d.swap.map(([n, h]) => `<span>${esc(ingNm(h))} statt ${esc(ingNm(n))}</span>`),
@@ -4029,7 +4039,7 @@ function cookWithHtml(){
 }
 // Eine Rezeptkarte überall: Bild, kurzer Titel, Untertitel, Protein · Zeit · Preis
 const CAT_IC = {fruehstueck: "🥣", mittag: "🍲", abend: "🍲", snack: "🥕", shake: "🥤", dessert: "🍰"};
-const recCard = r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${CAT_IC[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${esc(recTitle(r))}</span>${r.sub ? `<span class="rs">${esc(r.sub)}</span>` : ""}<span class="rm"><span class="nutri"><b>${recipeNutri(r).protein} g</b> P · </span>${r.activeMin ?? r.timeMin} min${showPrices() && prices ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
+const recCard = r => `<button type="button" class="rcard" data-recipe="${esc(r.name)}">${r.img || r.imgOrig ? recImgTag(r, "") : `<span class="noimg">${CAT_IC[r.category] || "🍴"}</span>`}<span class="rt">${isFav(r.name) ? "★ " : ""}${ppMark(r, recTitle(r))}</span>${r.sub ? `<span class="rs">${ppMark(r, r.sub)}</span>` : ""}<span class="rm"><span class="nutri"><b>${recipeNutri(r).protein} g</b> P · </span>${r.activeMin ?? r.timeMin} min${showPrices() && prices ? " · " + eur(recipeCost(r).portion) : ""}</span></button>`;
 const recGrid = list => `<div class="rgrid">${list.map(recCard).join("")}</div>`;
 // Filter-Blatt: Gruppen mit Einfachwahl; Sortierung gehört dazu
 const REC_FGROUPS = () => [["Sammlung", "set", [["", "Alle"], ["fav", "★ Favoriten"], ["week", "📅 Diese Woche"], ["neu", "🆕 Neu"]]], ["Zeit (aktiv)", "time", [[0, "Egal"], [20, "≤ 20 min"], [40, "≤ 40 min"]]], ["Aufwand", "diff", [["", "Egal"], ["leicht", "Leicht"], ["mittel", "Mittel"], ["aufwendig", "Aufwendig"]]], ["Stil", "style", [["", "Egal"], ["einfach", "🍽 Einfach (Alltag)"], ["besonders", "✨ Besonders (mal was Neues)"]]], ["Warm oder kalt", "temp", [["", "Egal"], ["warm", "🔥 Warm"], ["kalt", "❄️ Kalt"]]],
