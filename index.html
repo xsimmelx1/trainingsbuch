@@ -6375,12 +6375,12 @@ const sdrEnd = () => { if (!sdr?.on) { sdr = null; return; } const {dy, t} = sdr
   if (dy > Math.min(140, sheet.offsetHeight * 0.25) || (fast && dy > 40)) { sheet.style.transform = "translateY(100%)"; setTimeout(() => { sheet.style.transition = "none"; sheet.style.transform = ""; clearInterval(guideTimer); closeSheet(); }, 170); }
   else { sheet.style.transform = ""; setTimeout(() => { sheet.style.transition = ""; }, 200); } };
 sheet.addEventListener("touchend", sdrEnd); sheet.addEventListener("touchcancel", sdrEnd);
-// Rezeptblatt: seitlich wischen blättert im Zufall – nach rechts = nächstes Rezept, nach links = vorheriges
+// Rezeptblatt: seitlich wischen blättert im Zufall – nach links = nächstes Rezept, nach rechts = vorheriges
 let rsw = null;
 const hScroll = el => { for (; el && el !== sheet; el = el.parentElement) if (el.scrollWidth > el.clientWidth + 2 && /(auto|scroll)/.test(getComputedStyle(el).overflowX)) return true; return false; };
 sheet.addEventListener("touchstart", e => { rsw = sheetKind === "recipe" && e.touches.length === 1 && sheet.querySelector(".recnav") && !e.target.closest("input,textarea,select,video,iframe,.ddm[open]") && !hScroll(e.target) ? {x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now()} : null; }, {passive: true});
 sheet.addEventListener("touchend", e => { if (!rsw) return; const c = e.changedTouches[0], dx = c.clientX - rsw.x, dy = c.clientY - rsw.y, dt = Date.now() - rsw.t; rsw = null;
-  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && dt < 900) recNavGo(dx > 0 ? 1 : -1); }, {passive: true});
+  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2 && dt < 900) recNavGo(dx < 0 ? 1 : -1); }, {passive: true});
 sheet.addEventListener("pointercancel", () => { shd = null; });
 for (const el of [view, sheet]) { el.addEventListener("click", onClick); el.addEventListener("input", onInput); el.addEventListener("change", onChange); }
 // Suchfelder: Lupe/Enter schließt die Tastatur; ✕ leert; „zuletzt gesucht“ füllt ohne Tastatur; beim Tippen Feld nach oben, damit die Treffer über der Tastatur stehen
