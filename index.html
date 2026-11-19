@@ -2803,14 +2803,14 @@ function renderToday(){
   view.innerHTML = h + `</div>`;
   const tl = view.querySelector(".tline"), tn = tl?.querySelector(".next, .tnow"); if (tn && tl.scrollWidth > tl.clientWidth) tl.scrollLeft = tn.offsetLeft - tl.offsetLeft - tl.clientWidth / 2 + tn.offsetWidth / 2;
 }
-// Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern, gestrichelt = geplant); Tipp öffnet den Tag
+// Wochenstreifen: Ring je Tag (voll = Kraft, grün = Bouldern / Yoga, gestrichelt = geplant); Tipp öffnet den Tag
 function weekStrip(mo){
   mo = mo || monday(selDate); const t = todayIso(); let n = 0;
   for (let i = 0; i < 7; i++) if (isStrength(store.days[addDays(mo, i)])) n++;
   const g = weekTarget();
   let h = `<div class="lab sec wsh"><span>Diese Woche · ${g ? `${n}/${g} Einheiten` : `${n} ${n === 1 ? "Einheit" : "Einheiten"} · Pause`}</span><a href="#t=kalender">Kalender ›</a></div><div class="weekstrip" aria-label="Diese Woche">`; n = 0;
-  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p0 = planFor(d), off = !!p0 && inPause(d), p = off ? null : p0, s = isStrength(day), b = day?.boulder?.done, miss = !!p && !s && d < t; if (s) n++;
-    h += `<button type="button" class="${s ? "done" : b ? "bould" : miss ? "miss" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}${off && !s ? ", Einheit entfallen (Pause)" : miss ? ", Einheit verpasst" : ""}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : ""}</span><span class="tm">${miss ? "verpasst" : !s && p?.start ? p.start : off && !s ? "Pause" : ""}</span></button>`; }
+  for (let i = 0; i < 7; i++) { const d = addDays(mo, i), day = store.days[d], p0 = planFor(d), off = !!p0 && inPause(d), p = off ? null : p0, s = isStrength(day), b = day?.boulder?.done, y = !b && (day?.cardio || []).some(c => c.type === "yoga"), miss = !!p && !s && d < t; if (s) n++;
+    h += `<button type="button" class="${s ? "done" : b || y ? "bould" : miss ? "miss" : p ? "plan" : ""} ${d === t ? "today" : ""} ${d === selDate ? "sel" : ""}" data-goday="${d}" aria-label="${fmt(d)}${y && !s ? ", Yoga" : ""}${off && !s ? ", Einheit entfallen (Pause)" : miss ? ", Einheit verpasst" : ""}"><b>${WD[parse(d).getDay()]}</b><span class="ring">${s ? "✓" : b ? "B" : y ? "Y" : ""}</span><span class="tm">${miss ? "verpasst" : !s && p?.start ? p.start : off && !s ? "Pause" : ""}</span></button>`; }
   return h + `</div>`;
 }
 function gapBanner(){
@@ -3947,12 +3947,14 @@ function recApplyVar(n){ const r = recipeByName(n); if (!recBrowseVar || !(r?._b
   const o = Object.assign({}, FOOD().recVar); if (recBrowseVar === (recHigh() ? "high" : "normal")) delete o[n]; else o[n] = recBrowseVar;
   saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); }
 const recSeenKey = f => JSON.stringify(Object.keys(REC_F0).map(k => f[k]));
-function recDraw(f, skip){ const pool = recipesFiltered(f).map(r => r.name); if (!pool.length) return null;
-  const all = lsGet("recSeen") || {}, k = recSeenKey(f), ex = new Set(skip), inP = new Set(pool); let seen = (all[k] || []).filter(n => inP.has(n)), round = false;
+// Ziehen ohne Wiederholung: je Schlüssel merkt sich das Gerät die gezeigten Namen; erst wenn alle durch sind, beginnt eine neue Runde
+function drawFresh(k, pool, skip = []){ if (!pool.length) return null;
+  const all = lsGet("recSeen") || {}, ex = new Set(skip), inP = new Set(pool); let seen = (all[k] || []).filter(n => inP.has(n)), round = false;
   let cand = pool.filter(n => !ex.has(n) && !seen.includes(n));
   if (!cand.length) { round = true; seen = []; cand = pool.filter(n => n !== skip[skip.length - 1]); if (!cand.length) cand = pool; }
   const n = cand[Math.floor(Math.random() * cand.length)]; seen.push(n); delete all[k]; all[k] = seen; const ks = Object.keys(all); for (const x of ks.slice(0, Math.max(0, ks.length - 15))) delete all[x];
   lsSet("recSeen", all); return {n, round, total: pool.length, left: cand.length - 1}; }
+const recDraw = (f, skip) => drawFresh(recSeenKey(f), recipesFiltered(f).map(r => r.name), skip);
 function recNavGo(dir){ if (!recNav) return; let n;
   if (dir < 0) { if (recNav.i <= 0) return; n = recNav.hist[--recNav.i]; }
   else if (recNav.i < recNav.hist.length - 1) n = recNav.hist[++recNav.i];
@@ -4603,6 +4605,14 @@ function altMeals(k, curName){
   const nu = r => recipeNutri(r), score = r => Math.abs(nu(r).kcal - ref.kcal) / 8 + Math.abs(nu(r).protein - ref.protein);
   return recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && recPlanOk(r) && nu(r).protein >= minP && recipeOk(r, re)).sort((a, b) => score(a) - score(b)).slice(0, 8);
 }
+// Würfel beim Tauschen: aus allen passenden Gerichten des Slots mit ähnlichen Kalorien (±25 %, bei wenig Auswahl weiter), nicht nur den 8 nächsten
+function mealDrawPool(k, curName){
+  const sl = mealPlan.slots.find(x => x.k === k), ref = mealInfo(curName), minP = minProt(k), re = avoidRe(), nu = r => recipeNutri(r), main = k === "mi" || k === "ab";
+  const base = recipes.filter(r => sl.cats.includes(r.category) && r.name !== curName && recPlanOk(r) && nu(r).protein >= minP && recipeOk(r, re) && (!main || !mealTempF || r.temp === mealTempF || r.temp === "beides"));
+  if (!ref.kcal) return base;
+  for (const tol of [.25, .5]) { const p = base.filter(r => Math.abs(nu(r).kcal - ref.kcal) <= ref.kcal * tol); if (p.length >= 20) return p; }
+  return base;
+}
 let mealQ = "";
 function mealSheet(arg){
   const [d, k] = arg.split("|"), m = mealsFor(d).find(x => x.k === k); if (!m || m.own) return `<div class="sh"><h2>Eigenes Essen</h2><button class="btn ghost" type="button" data-act="closeSheet">Schließen</button></div>`;
@@ -4867,7 +4877,22 @@ const cardioKcal = c => { const kg = num(lastWeight()) || 74, kmK = {lauf: 1, ge
   return c.km > 0 && kmK && (c.type === "lauf" || !cSec(c)) ? Math.round(kmK * kg * c.km) : Math.round((CARDIO[c.type]?.[2] || 6) * 3.5 * kg / 200 * cMin(c)); };
 const durTxt = c => c.sec ? fmtDur(c.sec) : c.min ? `${c.min} min` : "";
 const cardioTxt = c => `${CARDIO[c.type]?.[0] || "🏃"} ${[durTxt(c), c.km ? `${fmtQ(c.km)} km` : "", pace(c)].filter(Boolean).join(" · ")}${c.feel ? ` · ${c.feel}` : ""}`;
+// Yoga, solange das SC-Gelenk nicht freigegeben ist: kein Stütz auf den Händen, nichts über Kopf, keine Hände hinter dem Rücken
+const YOGA_SC = {
+  kurs: "Yin, Restorative oder sanftes Hatha mit Schwerpunkt Hüfte und Beine. Nicht: Vinyasa, Power, Ashtanga oder Flow – die bestehen fast nur aus Stütz. Der Lehrkraft vorher sagen: „Schlüsselbeingelenk überlastet, kein Stütz auf den Händen, nichts über Kopf.“",
+  ok: [["Hüfte", "Taube in Rückenlage (Figur 4), tiefer Ausfallschritt mit Händen auf dem Knie, Schmetterling, Glückliches Baby"],
+    ["Stehend", "Krieger 2, Dreieck, Seitwinkel, Stuhl und Baum – Hände an der Hüfte oder vor der Brust, Arme nie über Schulterhöhe"],
+    ["Rücken", "Drehung im Liegen, Brücke mit Armen locker neben dem Körper, Katze-Kuh im Sitzen, Beckenkippen in Rückenlage"],
+    ["Ruhig", "Vorbeuge im Sitzen, Kindhaltung mit Armen neben dem Körper, Beine an die Wand, Endentspannung"]],
+  no: "Herabschauender Hund, Plank, Chaturanga, Kobra und heraufschauender Hund mit Druck auf die Hände, Seitstütz, Vierfüßler, Krähe und andere Armbalancen, Rad, umgekehrter Tisch, Kopf- und Schulterstand, Sonnengruß, Arme lange über Kopf (Krieger 1), Adler- und Kuhgesicht-Arme, Hände hinter dem Rücken verschränken.",
+  pain: "Am Schlüsselbein 0–2/10 ist okay. Ab 3/10 die Haltung verlassen, nicht nur abschwächen."
+};
+const yogaScHtml = () => `<details class="slim" open><summary><span>🧘 Yoga, das dein SC-Gelenk schont</span><span class="muted">bis zur Freigabe</span></summary><div class="setbody small">
+  <div>${esc(YOGA_SC.kurs)}</div><div class="lab">Geht gut</div><ul>${YOGA_SC.ok.map(([h, t]) => `<li><b>${h}:</b> ${esc(t)}</li>`).join("")}</ul>
+  <div class="lab">Bis zur Freigabe weglassen</div><div>${esc(YOGA_SC.no)}</div><div class="muted">${esc(YOGA_SC.pain)}</div></div></details>`;
+let cardioTypeSet = false;  // ohne eigene Wahl: vor der SC-Freigabe Yoga statt Bouldern vorauswählen
 function cardioSheet(d){
+  if (!cardioTypeSet && cardioType === "boulder" && !S().scCleared) cardioType = "yoga";
   const day = d === cur?.date ? cur : dayObj(d), list = day?.cardio || [], close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   if (trk || trkDone) return `<div class="sh"><h2>Aufzeichnung</h2>${close}</div>${trkHtml()}`;
   return `<div class="sh"><h2>Aktivität · ${fmt(d)}</h2>${close}</div>
@@ -4880,6 +4905,8 @@ function cardioSheet(d){
       <details class="small"><summary>Mehr (Anstrengung, Notiz)</summary><div class="chips">${["locker", "mittel", "hart"].map(f => `<button type="button" data-cafeel="${f}" aria-pressed="${cardioFeel === f}">${f}</button>`).join("")}</div>
       <div class="field"><label for="caNote">Notiz</label><input type="text" id="caNote" placeholder="Strecke, Knie, Wetter …"></div></details>
       <button class="btn primary big" type="button" data-act="cardioSave" data-v="${d}">Eintragen</button>
+      ${cardioType === "boulder" && !S().scCleared ? `<div class="banner bad small">Bouldern belastet das Schlüsselbeingelenk stark: bis zur Arztfreigabe weglassen.</div>` : ""}
+      ${cardioType === "yoga" && !S().scCleared ? yogaScHtml() : ""}
       ${cardioType === "boulder" && S().mode !== "pause" ? info("Bouldern zählt für den Trainingsplan (kein Oberkörper am selben und am nächsten Tag) und bringt abends den Shake.") : cardioType === "lauf" || cardioType === "geh" ? info("Knie: nach dem Laufen auf die Ampel achten – liegt der Schmerz am nächsten Morgen über 2/10, die nächste Einheit kürzer oder als Gehen.") : ""}</div>`;
 }
 let cardioType = "boulder", cardioFeel = "";
@@ -5836,7 +5863,8 @@ function planHtml(){
     <li><b>Grundregel:</b> Oberarm unter Schulterhöhe, Ellbogen neben oder vor dem Körper. Nichts drücken (auch keine Liegestütz), nicht hängen, keine schwere Last an hängenden Armen oder auf den Schultern.</li>
     <li><b>Geht:</b> Scott-, Kabel-, Hammer- und Band-Curls, Pushdowns (auch einarmig, auch mit Band), Handgelenk- und Reverse-Curls, Rudern mit Ellbogen bis zur Rumpflinie, Außenrotation am Körper, Dead Bug, Pallof Press leicht, Beinpresse, Beinstrecker, Beinbeuger, Hip Thrust, Rückenstrecker mit verschränkten Armen, Wadenheben sitzend.</li>
     <li><b>Mit Vorsicht, nicht im Modus:</b> Skull Crusher bis zur Stirn, Kickbacks, Konzentrations-Curl, leichte Farmer's Walks, KH an der Seite bei Split Squats.</li>
-    <li><b>Nicht bis zur Abklärung:</b> Dips, Bankdrücken, Liegestütz, JM-Press, Überkopf-Trizeps, Klimmzüge und Latzug, Bayesian- und Schrägbank-Curl, Seitheben, Shrugs, Face Pulls, Plank und Stütz, Bouldern.</li>
+    <li><b>Nicht bis zur Abklärung:</b> Dips, Bankdrücken, Liegestütz, JM-Press, Überkopf-Trizeps, Klimmzüge und Latzug, Bayesian- und Schrägbank-Curl, Seitheben, Shrugs, Face Pulls, Plank und Stütz, Bouldern, Vinyasa- und Power-Yoga.</li>
+    <li><b>Yoga:</b> ${esc(YOGA_SC.kurs.split(" Nicht:")[0])} Haltungsliste unter Heute › Aktivität › 🧘 Yoga.</li>
     <li><b>Dosis:</b> je Bizeps und Trizeps 6–10 Sätze pro Woche auf 2 Einheiten, 10–20 Wdh., 1–2 Wdh. Reserve. In den ersten 2 Wochen 2 Sätze pro Übung, damit sich die Ellbogensehnen gewöhnen.</li>
     <li><b>Schmerz:</b> am Schlüsselbein oder Schultereck 0–2/10 okay. Ab 3/10 die Übung wechseln, nicht nur leichter machen. Am nächsten Morgen muss es wieder wie vorher sein.</li>
     <li><b>Zuhause:</b> Für den Trizeps gibt es ohne Widerstandsband keine schonende Übung. Ein Band-Set (leicht bis mittel) lohnt sich.</li>
@@ -5944,8 +5972,10 @@ async function onClick(e){
     if (k === "knee1on" || k === "knee1off") { saveSettings({knee1: k === "knee1on"}); toast(k === "knee1on" ? "Knie-Phase 1 aktiv – Beineinheiten sind jetzt die schonenden Varianten" : "Zurück zu den normalen Beineinheiten"); render(); return; }
     if (k.startsWith("lesson:")) { sheetQuiz = null; openSheet("lesson", k.slice(7)); } else openSheet(k); return; }
   const gq = t.closest("[data-quiz]"); if (gq) { sheetQuiz = Number(gq.dataset.quiz); renderSheet(); return; }
-  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; const f = Object.assign({}, recFilter, {cat: recFilter.cat !== "alle" ? recFilter.cat : "haupt"}), d = recDraw(f, []); if (!d) return toast("Keine passenden Rezepte"); recNav = {f, hist: [d.n], i: 0, round: d.round}; recApplyVar(d.n); openSheet("recipe", d.n); return; } const are = avoidRe(), pool0 = rnd.dataset.random === "meal" ? (() => { const kk = rnd.dataset.v.split("|")[1]; return favFirst(kk === "mi" || kk === "ab" ? mainAlts(kk, rnd.dataset.cur) : altMeals(kk, rnd.dataset.cur)); })() : (recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle" ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered()), pool = pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip).length ? pool0.filter(r => r.name !== rnd.dataset.cur && r.name !== rnd.dataset.skip) : pool0; if (!pool.length) return toast("Keine passenden Rezepte");
-    const r = pool[Math.floor(Math.random() * pool.length)]; recipeCtx = rnd.dataset.random === "meal" ? null : recipeCtx; if (rnd.dataset.random === "meal") { swapCand = {ctx: rnd.dataset.v, name: r.name}; } openSheet("recipe", r.name); return; }
+  const rnd = t.closest("[data-random]"); if (rnd) { if (rnd.dataset.random === "rec") { recipeCtx = null; swapCand = null; const f = Object.assign({}, recFilter, {cat: recFilter.cat !== "alle" ? recFilter.cat : "haupt"}), d = recDraw(f, []); if (!d) return toast("Keine passenden Rezepte"); recNav = {f, hist: [d.n], i: 0, round: d.round}; recApplyVar(d.n); openSheet("recipe", d.n); return; } const are = avoidRe(), meal = rnd.dataset.random === "meal", kk = meal ? rnd.dataset.v.split("|")[1] : "", list = !meal && recShelves && !recActive().length && !recFilter.q && recFilter.cat === "alle";
+    const pool = meal ? mealDrawPool(kk, rnd.dataset.cur) : list ? recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt") : recipesFiltered();
+    const d = drawFresh(meal ? "meal|" + mealPlan.slots.find(x => x.k === kk).cats.slice().sort().join() : list ? "list|haupt" : recSeenKey(recFilter), pool.map(r => r.name), [rnd.dataset.cur, rnd.dataset.skip].filter(Boolean)); if (!d) return toast("Keine passenden Rezepte");
+    recipeCtx = meal ? null : recipeCtx; if (meal) swapCand = {ctx: rnd.dataset.v, name: d.n}; openSheet("recipe", d.n); return; }
   const rc2 = t.closest("[data-recipe]"); if (rc2) { recipeCtx = rc2.dataset.rctx || null; swapCand = null; { const r0 = recipeByName(rc2.dataset.recipe); if (r0) recNav = {f: Object.assign({}, rc2.closest("#recRes") ? recFilter : REC_F0, {cat: catOf(r0)}), hist: [r0.name], i: 0}; } openSheet("recipe", rc2.dataset.recipe); return; }
   const gg = t.closest("[data-go]"); if (gg) { const g = gg.dataset.go; if (sheet.open) { sheetKind = null; sheet.close(); } if (g === "einkauf" || g === "essen" || g === "rezepte") { essenView = g === "essen" ? "plan" : g; go("essen"); return; }
     if (g === "messen" || g === "fotos") { sub.fortschritt = "messen"; go("fortschritt"); if (g === "fotos") document.getElementById("photos")?.scrollIntoView({block:"start"}); } else { sub.mehr = g; go("mehr"); } return; }
@@ -6022,7 +6052,7 @@ async function onClick(e){
     saveFood({aisle: A}); renderSheet(); renderMore(); return; }
   const sk2 = t.closest("[data-shopkind]"); if (sk2) { shopKind = sk2.dataset.shopkind; lsSet("shopKind", shopKind); renderMore(); return; }
   const sn = t.closest("[data-shopnav]"); if (sn) { const v = Number(sn.dataset.shopnav); if (shopScope === "tag") shopDay = addDays(shopDay || todayIso(), v); else essenMon = addDays(shopWeek(), v * 7); renderMore(); return; }
-  if (t.closest("[data-shoprandom]")) { const are = avoidRe(), pool = recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt" && r.name !== shopRec); const pick = pool[Math.floor(Math.random() * pool.length)]; if (pick) { shopRec = pick.name; shopMul = 1; shopFromReste = false; renderMore(); toast("🎲 " + pick.name); } return; }
+  if (t.closest("[data-shoprandom]")) { const are = avoidRe(), pool = recipes.filter(r => recipeOk(r, are) && catOf(r) === "haupt"), pick = recipeByName(drawFresh("shop", pool.map(r => r.name), [shopRec].filter(Boolean))?.n); if (pick) { shopRec = pick.name; shopMul = 1; shopFromReste = false; renderMore(); toast("🎲 " + pick.name); } return; }
   if (t.closest("[data-recshop]")) { shopScope = "gericht"; shopRec = t.closest("[data-recshop]").dataset.recshop; shopMul = 1; shopFromReste = false; closeSheet(); essenView = "einkauf"; go("essen"); return; }
   const srp = t.closest("[data-shoprec]"); if (srp) { shopFromReste = false; shopRec = srp.dataset.shoprec; shopMul = 1; srQ = ""; if (sheet.open) closeSheet(); renderMore(); return; }
   const sm = t.closest("[data-shopmul]"); if (sm) { shopMul = Math.max(1, Math.min(6, shopMul + Number(sm.dataset.shopmul))); renderMore(); return; }
@@ -6069,7 +6099,7 @@ async function onClick(e){
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") && !t.hasAttribute("data-hclose") ? t : null;
   if (mzb || mzo) { const v = (mzb || mzo).dataset.mobzoom; mobZoom = v === "close" ? null : Number(v); renderSheet(); return; }
   const md = t.closest("[data-mobdone]"); if (md) { const k = md.dataset.mobdone; cur.mobility[k] = !cur.mobility[k]; touch(); try { navigator.vibrate && navigator.vibrate(20); } catch {} if (cur.mobility[k] && mobZoom < MOBILITY.length - 1) mobZoom++; else if (cur.mobility[k]) mobZoom = null; renderSheet(); return; }
-  const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
+  const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; cardioTypeSet = true; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
   const cfe = t.closest("[data-cafeel]"); if (cfe) { cardioFeel = cardioFeel === cfe.dataset.cafeel ? "" : cfe.dataset.cafeel; sheet.querySelectorAll("[data-cafeel]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cafeel === cardioFeel)); return; }
   const cmn = t.closest("[data-camin]"); if (cmn) { const el = sheet.querySelector("#caMin"); if (el) el.value = cmn.dataset.camin; sheet.querySelectorAll("[data-camin]").forEach(b => b.setAttribute("aria-pressed", b === cmn)); return; }
   const tkb = t.closest("[data-trk]"); if (tkb) { const c = tkb.dataset.trk;
