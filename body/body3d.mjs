@@ -106,8 +106,16 @@ export async function mount(el, opt = {}) {
   const mk = new THREE.Group(); scene.add(mk);
   const mkGeo = new THREE.SphereGeometry(1, 16, 12), mkMat = new Map();
   const matFor = (n, old) => { const k = n + "|" + (old ? 1 : 0); if (!mkMat.has(k)) mkMat.set(k, new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL((1 - n / 10) * .33, .9, .5), transparent: true, opacity: old ? .35 : .95, depthTest: false })); return mkMat.get(k); };
-  function setMarkers(list = []) { mk.clear(); for (const m of list) { if (!m.pt) continue; const n = Math.max(0, Math.min(10, m.n || 0)), s = new THREE.Mesh(mkGeo, matFor(n, m.old));
-    s.scale.setScalar(.01 + .0015 * n); s.position.fromArray(m.pt); s.renderOrder = 5; s.userData = m; mk.add(s); } dirty = true; }
+  // Punkte aus älteren Modellständen auf die Oberfläche setzen: nächste Ecke des gespeicherten Körperteils, sonst des ganzen Modells (max. 15 cm)
+  const snapMemo = new Map();
+  function snap(pt, en){ const key = pt.join(",") + "|" + (en || ""); if (snapMemo.has(key)) return snapMemo.get(key);
+    const p = en && byEn[en], r = p && range[p.i], cand = r ? [[r.ln, r.v]] : ["muscle", "bone", "cartilage", "skin"].filter(l => layers[l]).map(l => [l, null]);
+    let best = null, bd = Infinity;
+    for (const [ln, idx] of cand) { const L = layerVerts(ln); if (!L) continue; const xyz = L.xyz, n = idx ? idx.length : xyz.length / 3;
+      for (let q = 0; q < n; q++) { const j = (idx ? idx[q] : q) * 3, dx = xyz[j] - pt[0], dy = xyz[j + 1] - pt[1], dz = xyz[j + 2] - pt[2], d = dx * dx + dy * dy + dz * dz; if (d < bd) { bd = d; best = [xyz[j], xyz[j + 1], xyz[j + 2]]; } } }
+    const dist = Math.sqrt(bd), out = best && dist > 0.004 && dist < 0.15 ? best : pt; snapMemo.set(key, out); return out; }
+  function setMarkers(list = []) { mk.clear(); for (const m of list) { if (!m.pt) continue; const n = Math.max(0, Math.min(10, m.n || 0)), s = new THREE.Mesh(mkGeo, matFor(n, m.old)), at = snap(m.pt, m.part);
+    s.scale.setScalar(.01 + .0015 * n); s.position.fromArray(at); s.renderOrder = 5; s.userData = m; mk.add(s); } dirty = true; }
   setMarkers(opt.markers || []);
   // Beschriftung
   let labelMode = "auto", lastLbl = "";
@@ -117,7 +125,7 @@ export async function mount(el, opt = {}) {
     const scr = pos => { v.fromArray(pos).project(cam); return v.z > 1 || Math.abs(v.x) > 1.02 || Math.abs(v.y) > 1.02 ? null : [(v.x + 1) / 2 * W(), (1 - v.y) / 2 * H()]; };
     const push = (pos, txt, cls, force) => { const s = scr(pos); if (!s) return; if (!force && placed.some(([x, y]) => Math.abs(x - s[0]) < 80 && Math.abs(y - s[1]) < 17)) return; placed.push(s); out.push(`<span class="${cls}" style="left:${s[0]}px;top:${s[1]}px">${txt}</span>`); };
     const vis = ln => layers[ln]?.mesh.visible, mOpaque = vis("muscle") && layers.muscle.mesh.material.opacity >= 1;
-    for (const s of mk.children) if (s.userData.label) push(s.userData.pt, esc(s.userData.label), "lb pain", true);
+    for (const s of mk.children) if (s.userData.label) push(s.position.toArray(), esc(s.userData.label), "lb pain", true);
     if (labelMode !== "off") { for (const p of sel) push(parts[p].c, esc(parts[p].de), "lb sel", true); for (const p of rel.slice(0, 12)) push(parts[p].c, esc(parts[p].de), "lb rel"); }
     if (labelMode === "all") { const camDir = new THREE.Vector3(); cam.getWorldDirection(camDir);
       const cand = big.filter(i => { const p = parts[i]; if (!vis(p.layer) || (mOpaque && (p.layer === "bone" || p.layer === "cartilage" || p.layer === "insertion")) || /disc/i.test(p.en)) return false; const d = new THREE.Vector3().fromArray(p.c).sub(cam.position);
