@@ -1110,6 +1110,45 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .b3labels .lb.rel{background:#6a4fe0}
 .b3helpbtn{display:block;margin-top:12px}.b3help p{margin:6px 0}
 .b3list .lrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.b3list .lmain{display:flex;flex-direction:column;min-width:0}.b3form h3{margin:2px 0 6px}.num10 button{min-width:34px}
+#mkUi{position:fixed;inset:0;pointer-events:none;z-index:90}
+#mkUi>*:not(#mkBox){pointer-events:auto}
+#mkBox{position:fixed;border:2.5px solid var(--accent);border-radius:9px;box-shadow:0 0 0 9999px rgba(0,0,0,.14);transition:left .12s,top .12s,width .12s,height .12s;pointer-events:none}
+#mkBar{position:fixed;bottom:calc(var(--nav-h) + 10px + env(safe-area-inset-bottom,0px));left:8px;right:8px;display:flex;flex-direction:column-reverse;align-items:center;gap:6px;pointer-events:none!important}
+#mkBar>*{pointer-events:auto}
+#mkBar.top{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 8px);flex-direction:column}
+dialog[open] #mkBar:not(.top){bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
+.mkbtns{display:flex;gap:4px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:0 4px 16px rgba(0,0,0,.22);max-width:100%;overflow-x:auto}
+.mkbtns button{border:0;background:none;font-weight:600;font-size:14px;padding:7px 11px;border-radius:999px;min-height:38px;white-space:nowrap;position:relative}
+.mkbtns button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink,#fff)}
+.mkn{position:absolute;top:2px;right:2px;min-width:16px;height:16px;border-radius:8px;background:var(--warn);color:#fff;font-size:10px;line-height:16px;padding:0 3px}
+.mkhint{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:5px 10px;font-size:13px;box-shadow:0 3px 10px rgba(0,0,0,.15);max-width:420px;text-align:center}
+.mkhint.bad{color:var(--bad);border-color:var(--bad)}
+#mkPanel{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:640px;max-height:56vh;overflow:auto;overscroll-behavior:contain;background:var(--surface);color:var(--ink);border-top:3px solid var(--accent);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.28);padding:10px 14px calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:9px}
+#mkPanel.top{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 8px);border-top:0;border-bottom:3px solid var(--accent);border-radius:0 0 16px 16px;max-height:50vh}
+#mkPanel[hidden],#mkDraw[hidden],#mkBox[hidden],#mkBar[hidden]{display:none}
+.mkh{display:flex;align-items:center;gap:6px}.mkh b{flex:1;font-family:var(--f-display);font-size:19px}
+.mkx{border:0;background:var(--sunk);border-radius:50%;width:32px;height:32px;font-size:15px}
+.mksel{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;background:var(--sunk);border-radius:10px;padding:7px 9px;font-size:13px}
+.mksel>span:first-child{flex:1 1 180px;min-width:0;overflow-wrap:anywhere}
+.mkud{display:flex;gap:4px}.mkud button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:4px 8px;font-size:13px;font-weight:600}
+.mkchips{display:flex;flex-wrap:wrap;gap:5px}.mkchips button{border:1px solid var(--line);background:none;border-radius:999px;padding:4px 11px;font-size:13px}
+.mkchips button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink,#fff);border-color:var(--accent)}
+#mkPanel textarea{width:100%}
+.mkimg{display:flex;gap:10px;align-items:center}.mkimg img{height:96px;border-radius:8px;border:1px solid var(--line)}.mkimg span{display:flex;flex-direction:column;gap:6px}
+.mkact{display:grid;grid-template-columns:1fr 2fr;gap:8px}
+.mkit{border:1px solid var(--line);border-radius:12px;padding:9px 11px;display:flex;flex-direction:column;gap:4px}
+.mkith{display:flex;gap:8px;align-items:center}.mkst{font-size:11px;font-weight:700;text-transform:uppercase;border-radius:6px;padding:1px 7px;background:var(--warn-soft);color:var(--warn)}
+.mkst.ok{background:var(--good-soft);color:var(--good)}.mkst.q{background:var(--sunk);color:var(--accent)}.mkst.w{background:var(--sunk);color:var(--muted)}
+.mkre{background:var(--good-soft);border-radius:8px;padding:5px 8px;font-size:14px}
+.mkitb{display:flex;gap:6px;flex-wrap:wrap}.mkimgv img{max-width:100%;border-radius:8px;border:1px solid var(--line)}
+.mkdone summary{cursor:pointer;font-weight:600;padding:4px 0}.mkdone .mkit{margin-top:6px}
+#mkDraw{position:fixed;inset:0;background:#000;touch-action:none;z-index:3}
+#mkDraw canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.mkdt{position:absolute;left:8px;right:8px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap}
+.mkdt.top{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 10px)}
+.mkdt button{border:0;border-radius:999px;background:rgba(20,20,20,.82);color:#fff;font-weight:600;padding:8px 13px;min-height:40px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.mkdt button.ok{background:var(--accent);color:#fff}
+.mkdt .sw{width:34px;height:34px;min-height:0;padding:0;border:3px solid rgba(255,255,255,.55)}.mkdt .sw[aria-pressed="true"]{border-color:#fff;outline:2px solid #000}
 </style>
 </head>
 <body>
@@ -4913,7 +4952,7 @@ function catalogHtmlOwn(){
     <div class="catgrid">${list.map(([id, e]) => `<button type="button" class="catc" data-sheet="tech" data-v="${id}">${exThumb(id, e.img) ? `<img src="${exThumb(id, e.img)}" alt="" loading="lazy" decoding="async"${e.img ? "" : ' class="vthumbimg"'}>` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.name)}</b><span class="small muted">${esc(catMus(e))}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${inPlan.has(id) ? " · im Plan" : ""}</span></span></button>`).join("")}</div>`;
 }
 const MORE = [["Nachschlagen"], ["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Preise, Märkte, Rezepte, Vorrat"], ["go:rezepte", "🍲", "Rezepte", "Alle Rezepte, Filter, Favoriten"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["sheet:body", "📍", "Körperkarte", "3D: genau antippen, wo es wehtut · Knochen, Muskeln, Sehnen"],
-  ["Einstellungen"], ["setup:training", "📋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
+  ["Einstellungen"], ["setup:training", "📋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"], ["Feedback"], ["mark:on", "✏️", "Markieren & Feedback", "Karte oder Schritt antippen, Änderung notieren, einzeichnen"]];
 // Gesamtsuche oben in Mehr: Rezepte, Zutaten, Übungen, Wissen, Einstellungen – je Gruppe die besten 5
 let allQ = "";
 const SET_FIND = [["setup", "training", "📋 Training & Plan", "Start Routine Zeiten Modus Pause Freigaben Ausstattung Haltezeiten Stimme Ansagen Tempo"], ["essenset", "", "🍽 Essen-Einstellungen", "Ziel kcal Protein Mahlzeiten Zeiten Meal Prep vegan High Protein Normal Rezepte Unverträglichkeiten Einkauf Markt Budget Bio Anzeige"], ["setup", "app", "🔔 Erinnerungen & App", "Push Benachrichtigung Erinnerung Kalender Abo Verbindung Token GitHub"]];
@@ -4932,7 +4971,7 @@ function allResHtml(){ const q = fold(allQ.trim()); if (q.length < 2) return "";
 function renderMore(){
   if (tab === "essen") return renderEssen();
   const s = sub.mehr || "menu";
-  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2>${searchBox("allQ", allQ, "🔎 Alles durchsuchen", "Alles durchsuchen")}<div id="allRes">${allResHtml()}</div><div class="lrows" id="moreMenu" ${allQ.trim().length >= 2 ? "hidden" : ""}>${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : k.startsWith("sheet:") ? `data-sheet="${k.slice(6)}"` : k.startsWith("go:") ? `data-go="${k.slice(3)}"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0. Videos: YouTube (jeweiliger Kanal), MuscleWiki. Körperkarte: Z-Anatomy (CC BY-SA 4.0) auf Basis von BodyParts3D (© The Database Center for Life Science); three.js (MIT).</div>`; return; }
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2>${searchBox("allQ", allQ, "🔎 Alles durchsuchen", "Alles durchsuchen")}<div id="allRes">${allResHtml()}</div><div class="lrows" id="moreMenu" ${allQ.trim().length >= 2 ? "hidden" : ""}>${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : k.startsWith("sheet:") ? `data-sheet="${k.slice(6)}"` : k.startsWith("go:") ? `data-go="${k.slice(3)}"` : k.startsWith("mark:") ? `data-markon="1"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0. Videos: YouTube (jeweiliger Kanal), MuscleWiki. Körperkarte: Z-Anatomy (CC BY-SA 4.0) auf Basis von BodyParts3D (© The Database Center for Life Science); three.js (MIT).</div>`; return; }
   const title = s === "setup" ? "Einstellungen" : s === "essenset" ? "Essen-Einstellungen" : (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
   view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
@@ -7320,6 +7359,160 @@ if ("serviceWorker" in navigator) { const hadSW = !!navigator.serviceWorker.cont
     try { const v = ((await (await fetch("sw.js?t=" + Date.now(), {cache: "no-store"})).text()).match(/const CACHE = "([^"]+)"/) || [])[1];
       if (v && !(await caches.has(v))) await navigator.serviceWorker.register("sw.js?v=" + v); } catch {} };
   document.addEventListener("visibilitychange", swCheck); setTimeout(swCheck, 4000); setInterval(swCheck, 300000); navigator.serviceWorker.addEventListener("message", e => { if (e.data && e.data.url) location.hash = new URL(e.data.url, location.href).hash; }); }
+// ---------- Markieren & Feedback: Karte/Schritt antippen, Änderung notieren, auf Bildschirmfoto einzeichnen → data/feedback/ im Daten-Repo ----------
+const H2C = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+SRI[H2C] = "sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==";
+const FB_IDX = "data/feedback/index.json", FB_KINDS = ["Fehler", "Text", "Aussehen", "Weglassen", "Idee"];
+const MK = {on: false, pick: true, el: null, sel: "", tapEl: null, info: null, img: null, kind: "", text: "", view: null, list: null, err: "", busy: false, msg: "", del: null, pos: "bottom"};
+const mkUi = document.createElement("div"); mkUi.id = "mkUi"; mkUi.innerHTML = `<div id="mkBox" hidden></div><div id="mkBar"></div><div id="mkPanel" hidden></div><div id="mkDraw" hidden></div>`;
+const $mk = id => mkUi.querySelector("#" + id);
+const mkPend = () => { try { return JSON.parse(localStorage.getItem(LS + "fbPend") || "[]"); } catch { return []; } };
+const mkPendSet = q => { try { localStorage.setItem(LS + "fbPend", JSON.stringify(q)); return true; } catch { return false; } };
+// Im offenen Blatt (modaler Dialog) ist der Rest der Seite gesperrt: die Markier-Leiste muss dann im Dialog hängen
+const mkMount = () => { if (!MK.on) return; const h = sheet.open ? sheet : document.body; if (mkUi.parentNode !== h) h.appendChild(mkUi); };
+new MutationObserver(() => { mkMount(); mkBoxPos(); }).observe(sheet, {attributes: true, attributeFilter: ["open"]});
+const mkInUi = t => !!(t && t.closest && t.closest("#mkUi"));
+const mkRoot = e => e === document.body || e === sheet || e === document.documentElement;
+const mkSame = (a, b) => { const r = a.getBoundingClientRect(), q = b.getBoundingClientRect(); return Math.abs(r.width - q.width) < 3 && Math.abs(r.height - q.height) < 3; };
+// Vom angetippten Element zum nächsten sichtbaren Block (kein Inline-Text, nicht winzig)
+function mkPick(t){ for (let e = t; e && !mkRoot(e); e = e.parentElement) { const cs = getComputedStyle(e), r = e.getBoundingClientRect(); if (!/^(inline|contents)$/.test(cs.display) && r.height >= 20 && r.width >= 36) return e; } return t; }
+function mkUp(e){ for (let p = e.parentElement; p && !mkRoot(p) && p.id !== "sheetBody"; p = p.parentElement) if (!mkSame(p, e)) return p; return e; }
+function mkDown(e){ const kid = x => [...x.children].find(c => c.contains(MK.tapEl) && c.getClientRects().length) || [...x.children].find(c => c.getClientRects().length);
+  let k = kid(e); while (k && mkSame(k, e) && k.firstElementChild) k = kid(k) || null; return k || e; }
+// CSS-Pfad ab #view bzw. #sheetBody: findet das Element nach einem Neuzeichnen wieder und sagt mir später, wo es im Code sitzt
+function mkPath(el){ const p = []; for (let e = el; e && !mkRoot(e); e = e.parentElement) { if (e.id) { p.unshift("#" + CSS.escape(e.id)); break; }
+    let s = e.tagName.toLowerCase(); const c = [...e.classList].slice(0, 2); if (c.length) s += "." + c.map(x => CSS.escape(x)).join(".");
+    const sib = e.parentElement ? [...e.parentElement.children].filter(x => x.tagName === e.tagName) : []; if (sib.length > 1) s += `:nth-of-type(${sib.indexOf(e) + 1})`; p.unshift(s); }
+  return p.join(" > "); }
+function mkLabel(el){ const t = (el.innerText || el.getAttribute("alt") || el.getAttribute("aria-label") || el.value || "").replace(/\s+/g, " ").trim();
+  const k = el.matches(".card") ? "Karte" : el.matches(".exrow,.pv") ? "Übungszeile" : el.matches("button,.btn,a") ? "Button" : el.matches("li") ? "Listenpunkt" : el.matches("h1,h2,h3,h4,.ptitle") ? "Überschrift" : el.matches("img,video,canvas,svg") ? "Bild" : el.matches("details") ? "Aufklappbereich" : el.matches("summary") ? "Aufklapp-Titel" : el.matches("input,textarea,select") ? "Eingabe" : el.matches("p,label,span,b,small,.small") ? "Text" : "Bereich";
+  return k + (t ? ": " + t.slice(0, 80) + (t.length > 80 ? "…" : "") : ""); }
+function mkView(){ return {tab, sub: sub[tab] || null, hash: location.hash || null, sheet: sheet.open ? sheetKind : null, arg: sheet.open && sheetArg != null ? String(typeof sheetArg === "object" ? JSON.stringify(sheetArg) : sheetArg).slice(0, 200) : null, date: selDate}; }
+function mkSelect(el){ MK.el = el; MK.sel = mkPath(el); const r = el.getBoundingClientRect();
+  MK.info = {label: mkLabel(el), path: MK.sel, text: (el.innerText || "").replace(/\n{3,}/g, "\n\n").trim().slice(0, 500), html: el.outerHTML.replace(/\s+/g, " ").slice(0, 1500), rect: [r.left, r.top, r.width, r.height].map(Math.round)};
+  MK.view = mkView(); MK.hinted = true; mkPanel("edit");
+  if (r.top < 70 || r.bottom > innerHeight * .44) { el.style.scrollMarginTop = "76px"; el.scrollIntoView({block: "start", behavior: "smooth"}); setTimeout(mkBoxPos, 450); } mkBoxPos(); }
+function mkBoxPos(){ const b = $mk("mkBox"); if (!b) return; let e = MK.el;
+  if (e && !e.isConnected && MK.sel) { try { e = MK.el = document.querySelector(MK.sel); } catch { e = MK.el = null; } }
+  if (!MK.on || !e || !e.getClientRects().length || !$mk("mkDraw").hidden) { b.hidden = true; return; }
+  const r = e.getBoundingClientRect(); b.hidden = false; Object.assign(b.style, {left: r.left - 3 + "px", top: r.top - 3 + "px", width: r.width + 6 + "px", height: r.height + 6 + "px"}); }
+addEventListener("scroll", () => { if (MK.el) requestAnimationFrame(mkBoxPos); }, {capture: true, passive: true});
+addEventListener("resize", () => { if (MK.el) mkBoxPos(); });
+setInterval(() => { if (MK.on && MK.el) mkBoxPos(); }, 700);
+// Im Modus „Markieren“ erreicht kein Tippen die App: kein Umschalten, kein Wischen, keine Tastatur
+const mkTake = e => MK.on && MK.pick && !mkInUi(e.target);
+for (const ev of ["pointerdown", "mousedown", "touchstart", "dblclick", "contextmenu", "pointerup", "mouseup", "touchend"])
+  addEventListener(ev, e => { if (!mkTake(e)) return; e.stopPropagation(); e.stopImmediatePropagation(); if (!/^touch/.test(ev)) e.preventDefault(); }, {capture: true, passive: false});
+addEventListener("click", e => { if (!mkTake(e)) return; e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); MK.tapEl = e.target; const el = mkPick(e.target); if (!mkRoot(el)) mkSelect(el); }, true);
+addEventListener("click", e => { if (e.target.closest && e.target.closest("[data-markon]")) mkStart(); });
+addEventListener("online", () => mkFlush());
+for (const ev of ["pointerdown", "touchstart", "input", "change", "keydown", "keyup"]) mkUi.addEventListener(ev, e => e.stopPropagation());
+
+function mkStart(){ MK.on = true; MK.pick = true; lsSet("markOn", true); mkMount(); mkBar(); mkFlush(); }
+function mkStop(){ MK.on = false; lsSet("markOn", false); mkReset(); mkUi.remove(); $mk("mkPanel").hidden = true; $mk("mkBox").hidden = true; }
+function mkBar(){ const n = mkPend().length, d = !$mk("mkDraw").hidden; $mk("mkBar").hidden = d; $mk("mkBar").classList.toggle("top", !!MK.mode && MK.pos !== "top");
+  $mk("mkBar").innerHTML = `<div class="mkbtns"><button type="button" data-mk="pick" aria-pressed="${MK.pick}">👆 Markieren</button><button type="button" data-mk="use" aria-pressed="${!MK.pick}">🖐 Bedienen</button><button type="button" data-mk="draw" aria-label="Ganzen Bildschirm einzeichnen" title="Einzeichnen">🖍</button><button type="button" data-mk="list" aria-label="Meine Markierungen" title="Meine Markierungen">☰${n ? `<span class="mkn">${n}</span>` : ""}</button><button type="button" data-mk="off" aria-label="Markieren beenden" title="Beenden">✕</button></div>`
+  + (MK.busy ? `<div class="mkhint">${esc(MK.busy === true ? "Sende …" : MK.busy)}</div>` : MK.err ? `<div class="mkhint bad">Nicht gesendet (${esc(MK.err)}). Bleibt gespeichert und geht beim nächsten Mal raus.</div>` : n && !token ? `<div class="mkhint">${n} gespeichert, geht raus, sobald die App verbunden ist.</div>` : MK.pick && !MK.hinted ? `<div class="mkhint">Tippe eine Karte, einen Schritt oder einen Text an.</div>` : !MK.pick ? `<div class="mkhint">App normal bedienen, dann wieder 👆 Markieren.</div>` : ""); }
+function mkPanel(mode){ const p = $mk("mkPanel"); mkKeepText(); if (mode !== undefined) MK.mode = mode;
+  mkBar(); if (!MK.mode) { p.hidden = true; return; } p.hidden = false; p.classList.toggle("top", MK.pos === "top");
+  if (MK.mode === "edit") p.innerHTML = `<div class="mkh"><b>${MK.info ? "Markiert" : "Ganzer Bildschirm"}</b><button type="button" class="mkx" data-mk="pos" aria-label="Fenster oben/unten" title="Fenster oben/unten">⇅</button><button type="button" class="mkx" data-mk="cancel" aria-label="Schließen">✕</button></div>
+    ${MK.info ? `<div class="mksel"><span>${esc(MK.info.label)}</span><span class="mkud"><button type="button" data-mk="up" title="Größeren Bereich wählen">▲ größer</button><button type="button" data-mk="down" title="Kleineren Bereich wählen">▼ kleiner</button></span></div>` : ""}
+    <div class="mkchips">${FB_KINDS.map(k => `<button type="button" data-mk="kind" data-v="${k}" aria-pressed="${MK.kind === k}">${k}</button>`).join("")}</div>
+    <textarea id="mkTxt" rows="3" placeholder="Was soll anders sein? z. B. „Text kürzer“, „Button weiter nach oben“, „falsche Übung“">${esc(MK.text)}</textarea>
+    ${MK.img ? `<div class="mkimg"><img src="${MK.img}" alt="Deine Zeichnung"><span><button type="button" class="btn small" data-mk="draw">🖍 Neu zeichnen</button><button type="button" class="btn ghost small" data-mk="noimg">Bild weg</button></span></div>` : `<button type="button" class="btn" data-mk="draw">🖍 Auf Bildschirmfoto einzeichnen</button>`}
+    ${MK.msg ? `<div class="small" style="color:var(--bad)">${esc(MK.msg)}</div>` : ""}
+    <div class="mkact"><button type="button" class="btn ghost" data-mk="cancel">Abbrechen</button><button type="button" class="btn primary" data-mk="save">Speichern</button></div>`;
+  else p.innerHTML = mkListHtml(); }
+const mkKeepText = () => { const t = $mk("mkTxt"); if (t) MK.text = t.value; };
+const mkReset = () => { MK.el = null; MK.info = null; MK.img = null; MK.text = ""; MK.kind = ""; MK.msg = ""; MK.mode = null; const t = $mk("mkTxt"); if (t) t.value = ""; };
+function mkListHtml(){ const q = mkPend(), all = MK.list;
+  const card = (n, wait) => `<div class="mkit"><div class="mkith"><span class="mkst ${wait ? "w" : n.status === "erledigt" ? "ok" : n.status === "frage" ? "q" : ""}">${wait ? "wartet auf Sync" : esc(n.status || "offen")}</span><span class="small muted">${esc(new Date(n.at).toLocaleString("de-DE", {day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"}))}${n.kind ? " · " + esc(n.kind) : ""}</span></div>
+    ${n.el ? `<div class="small muted">${esc(n.el.label)}</div>` : `<div class="small muted">Ganzer Bildschirm${n.view?.sheet ? " · Blatt " + esc(n.view.sheet) : " · " + esc(n.view?.tab || "")}</div>`}
+    ${n.text ? `<div>${esc(n.text)}</div>` : ""}${n.reply ? `<div class="mkre"><b>Antwort:</b> ${esc(n.reply)}</div>` : ""}
+    <div class="mkitb">${n.img ? `<button type="button" class="btn ghost small" data-mk="img" data-v="${esc(n.id)}" data-w="${wait ? 1 : ""}">🖼 Zeichnung</button>` : ""}<button type="button" class="btn ghost small" data-mk="del" data-v="${esc(n.id)}" data-w="${wait ? 1 : ""}">${MK.del === n.id ? "Wirklich löschen?" : "Löschen"}</button></div><div class="mkimgv" id="mkv-${esc(n.id)}"></div></div>`;
+  const items = (all || []).slice().sort((a, b) => b.at < a.at ? -1 : 1), open = items.filter(n => n.status !== "erledigt"), done = items.filter(n => n.status === "erledigt");
+  return `<div class="mkh"><b>Meine Markierungen</b><button type="button" class="mkx" data-mk="pos" aria-label="Fenster oben/unten">⇅</button><button type="button" class="mkx" data-mk="cancel" aria-label="Schließen">✕</button></div>
+    ${q.length ? q.slice().reverse().map(x => card(x.n, true)).join("") : ""}
+    ${all == null ? `<div class="small muted">${token ? "Lade …" : "App ist nicht verbunden: nur die Einträge dieses Geräts."}</div>` : !open.length && !q.length ? `<div class="small muted">Keine offenen Markierungen.</div>` : open.map(n => card(n)).join("")}
+    ${done.length ? `<details class="mkdone"><summary>Erledigt (${done.length})</summary>${done.map(n => card(n)).join("")}</details>` : ""}
+    ${MK.err ? `<div class="small" style="color:var(--bad)">${esc(MK.err)}</div>` : ""}`; }
+async function mkLoadList(){ MK.list = null; mkPanel("list"); if (!token) return;
+  try { const {data} = await getFile(FB_IDX); MK.list = (data && data.items) || []; } catch (e) { MK.list = []; MK.err = e.message; }
+  if (MK.mode === "list") mkPanel(); }
+async function mkSave(){ mkKeepText(); const text = MK.text.trim();
+  if (!text && !MK.img) { MK.msg = "Schreib kurz, was anders sein soll, oder zeichne es ein."; return mkPanel(); }
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+  const n = {id, at: new Date().toISOString(), status: "offen", kind: MK.kind || null, text, view: MK.view || mkView(), el: MK.info, vp: [innerWidth, innerHeight], img: MK.img ? `data/feedback/${id}.jpg` : null};
+  const q = mkPend(); q.push({n, img: MK.img || null});
+  if (!mkPendSet(q)) { q[q.length - 1] = {n: Object.assign(n, {img: null, note: "Bild war zu groß für den Gerätespeicher"}), img: null}; if (!mkPendSet(q)) { MK.msg = "Gerätespeicher voll, nicht gespeichert."; return mkPanel(); } }
+  mkReset(); mkPanel(); mkBoxPos(); mkFlush(); }
+async function mkFlush(){ if (MK.busy || !token || !navigator.onLine || !mkPend().length) return mkBar(); MK.busy = true; MK.err = ""; mkBar();
+  try { for (let q = mkPend(); q.length; q = mkPend()) { const it = q[0];
+      if (it.img) { const r = await gh(`contents/${it.n.img}`, {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify({message: "Markierung: Zeichnung", content: it.img.split(",")[1], branch: CFG.branch})});
+        if (!r.ok && r.status !== 422) throw new Error(`${r.status} beim Bild`); }
+      await updateFile(FB_IDX, d => ({items: [...((d && d.items) || []).filter(x => x.id !== it.n.id), it.n]}), "Markierung: " + (it.n.text || "Zeichnung").replace(/\s+/g, " ").slice(0, 60));
+      mkPendSet(mkPend().filter(x => x.n.id !== it.n.id)); if (MK.list) MK.list = [...MK.list.filter(x => x.id !== it.n.id), it.n]; } }
+  catch (e) { MK.err = e.message; } finally { MK.busy = false; mkBar(); if (MK.mode === "list") mkPanel(); } }
+async function mkDel(id, wait){ if (MK.del !== id) { MK.del = id; return mkPanel(); } MK.del = null;
+  if (wait) { mkPendSet(mkPend().filter(x => x.n.id !== id)); mkBar(); return mkPanel(); }
+  try { const it = (MK.list || []).find(x => x.id === id); await updateFile(FB_IDX, d => ({items: ((d && d.items) || []).filter(x => x.id !== id)}), "Markierung gelöscht");
+    MK.list = (MK.list || []).filter(x => x.id !== id);
+    if (it && it.img) { const r = await gh(`contents/${it.img}?ref=${CFG.branch}`); if (r.ok) { const j = await r.json(); await gh(`contents/${it.img}`, {method: "DELETE", headers: {"Content-Type": "application/json"}, body: JSON.stringify({message: "Markierung gelöscht: Zeichnung", sha: j.sha, branch: CFG.branch})}); } } }
+  catch (e) { MK.err = e.message; } mkPanel(); }
+async function mkShowImg(id, wait){ const box = $mk("mkv-" + id); if (!box) return; if (box.innerHTML) { box.innerHTML = ""; return; }
+  let src = wait ? (mkPend().find(x => x.n.id === id) || {}).img : null;
+  if (!wait) { const it = (MK.list || []).find(x => x.id === id); box.innerHTML = `<div class="small muted">Lade …</div>`;
+    try { const r = await gh(`contents/${it.img}?ref=${CFG.branch}`, {headers: {Accept: "application/vnd.github.raw"}}); if (!r.ok) throw new Error(r.status); src = URL.createObjectURL(await r.blob()); } catch (e) { box.innerHTML = `<div class="small" style="color:var(--bad)">Bild nicht ladbar (${esc(e.message)})</div>`; return; } }
+  box.innerHTML = src ? `<img src="${src}" alt="Zeichnung">` : ""; }
+
+// ---- Zeichnen: Bildschirmfoto des sichtbaren Bereichs (ohne Markier-Leiste), darauf mit dem Finger malen ----
+const MKD = {base: null, strokes: [], col: "#e0262b", cv: null, s: 1, cur: null};
+async function mkShot(){ const W = innerWidth, H = innerHeight, s = MKD.s = Math.min(2, Math.max(1.25, devicePixelRatio || 1));
+  try { await loadScript(H2C);
+    const c = await html2canvas(document.body, {x: scrollX, y: scrollY, width: W, height: H, windowWidth: W, windowHeight: H, scale: s, useCORS: true, logging: false, imageTimeout: 4000,
+      backgroundColor: getComputedStyle(document.body).backgroundColor, ignoreElements: el => el.id === "mkUi",
+      onclone: doc => { const d = doc.getElementById("sheet"); if (!sheet.open || !d) return; // im Klon ist das Blatt kein modaler Dialog mehr: Lage und Abdunklung nachbauen
+        const bd = doc.createElement("div"); bd.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998"; d.before(bd);
+        d.style.position = "fixed"; d.style.inset = "0"; d.style.zIndex = "9999"; }});
+    return c; }
+  catch (e) { const c = document.createElement("canvas"); c.width = W * s; c.height = H * s; const g = c.getContext("2d"); g.fillStyle = getComputedStyle(document.body).backgroundColor || "#eee"; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = "#777"; g.font = `${16 * s}px sans-serif`; g.textAlign = "center"; g.fillText("Kein Bildschirmfoto möglich (offline?)", c.width / 2, 40 * s); return c; } }
+async function mkDrawOpen(){ mkKeepText(); const box = $mk("mkBox"), p = $mk("mkPanel"), bar = $mk("mkBar"); box.hidden = true; p.hidden = true; bar.innerHTML = `<div class="mkhint">Bildschirmfoto …</div>`;
+  await new Promise(r => requestAnimationFrame(() => setTimeout(r, 30)));
+  const shot = await mkShot(), s = MKD.s; MKD.base = document.createElement("canvas"); MKD.base.width = shot.width; MKD.base.height = shot.height; const g = MKD.base.getContext("2d"); g.drawImage(shot, 0, 0);
+  if (MK.el && MK.el.isConnected) { const r = MK.el.getBoundingClientRect(); g.save(); g.strokeStyle = "#1D5BB8"; g.lineWidth = 3 * s; g.setLineDash([8 * s, 5 * s]); g.strokeRect((r.left - 3) * s, (r.top - 3) * s, (r.width + 6) * s, (r.height + 6) * s); g.restore(); }
+  MKD.strokes = []; const d = $mk("mkDraw");
+  d.innerHTML = `<canvas></canvas><div class="mkdt ${MK.dtTop ? "top" : ""}">${["#e0262b", "#f5b400", "#1D5BB8", "#ffffff"].map(c => `<button type="button" class="sw" data-mkd="col" data-v="${c}" style="background:${c}" aria-label="Farbe" aria-pressed="${MKD.col === c}"></button>`).join("")}<button type="button" data-mkd="undo" aria-label="Rückgängig">↶</button><button type="button" data-mkd="clear">Leeren</button><button type="button" data-mkd="flip" aria-label="Leiste oben/unten">⇅</button><button type="button" data-mkd="cancel">Abbrechen</button><button type="button" class="ok" data-mkd="done">Fertig</button></div>`;
+  MKD.cv = d.querySelector("canvas"); MKD.cv.width = MKD.base.width; MKD.cv.height = MKD.base.height; d.hidden = false; mkBar(); mkRedraw(); }
+function mkRedraw(){ const g = MKD.cv.getContext("2d"); g.drawImage(MKD.base, 0, 0); g.lineCap = "round"; g.lineJoin = "round";
+  for (const st of MKD.strokes) { g.strokeStyle = st.c; g.lineWidth = 4.5 * MKD.s; g.beginPath(); st.p.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); if (st.p.length === 1) g.lineTo(st.p[0][0] + .1, st.p[0][1]); g.stroke(); } }
+const mkPt = e => { const r = MKD.cv.getBoundingClientRect(); return [(e.clientX - r.left) * MKD.cv.width / r.width, (e.clientY - r.top) * MKD.cv.height / r.height]; };
+$mk("mkDraw").addEventListener("pointerdown", e => { if (e.target !== MKD.cv) return; e.preventDefault(); MKD.cv.setPointerCapture(e.pointerId); MKD.cur = {c: MKD.col, p: [mkPt(e)]}; MKD.strokes.push(MKD.cur); mkRedraw(); });
+$mk("mkDraw").addEventListener("pointermove", e => { if (!MKD.cur) return; e.preventDefault(); for (const ce of (e.getCoalescedEvents ? e.getCoalescedEvents() : [e])) MKD.cur.p.push(mkPt(ce)); mkRedraw(); });
+for (const ev of ["pointerup", "pointercancel"]) $mk("mkDraw").addEventListener(ev, () => { MKD.cur = null; });
+$mk("mkDraw").addEventListener("click", e => { const b = e.target.closest("[data-mkd]"); if (!b) return; e.stopPropagation(); const a = b.dataset.mkd;
+  if (a === "col") { MKD.col = b.dataset.v; b.parentNode.querySelectorAll(".sw").forEach(x => x.setAttribute("aria-pressed", x === b)); return; }
+  if (a === "undo") { MKD.strokes.pop(); return mkRedraw(); } if (a === "clear") { MKD.strokes = []; return mkRedraw(); }
+  if (a === "flip") { MK.dtTop = !MK.dtTop; b.parentNode.classList.toggle("top", MK.dtTop); return; }
+  if (a === "done") { if (!MKD.strokes.length && !MK.info) { MK.msg = ""; } MK.img = mkJpeg(); if (!MK.info) MK.view = mkView(); }
+  $mk("mkDraw").hidden = true; $mk("mkDraw").innerHTML = ""; mkBar(); mkPanel(MK.mode || (a === "done" ? "edit" : null)); mkBoxPos(); });
+function mkJpeg(){ const W = MKD.cv.width, H = MKD.cv.height, k = Math.min(1, 1300 / H), c = document.createElement("canvas"); c.width = Math.round(W * k); c.height = Math.round(H * k); c.getContext("2d").drawImage(MKD.cv, 0, 0, c.width, c.height);
+  try { return c.toDataURL("image/jpeg", .72); } catch { return null; } }
+
+mkUi.addEventListener("click", e => { const b = e.target.closest("[data-mk]"); e.stopPropagation(); if (!b) return; const a = b.dataset.mk; MK.msg = "";
+  if (a === "pick" || a === "use") { MK.pick = a === "pick"; return mkBar(); }
+  if (a === "off") { mkKeepText(); return mkStop(); }
+  if (a === "draw") return mkDrawOpen();
+  if (a === "list") return MK.mode === "list" ? mkPanel(null) : (mkFlush(), mkLoadList());
+  if (a === "cancel") { if (MK.mode === "list") return mkPanel(null); mkReset(); mkPanel(); mkBoxPos(); return; }
+  if (a === "pos") { MK.pos = MK.pos === "top" ? "bottom" : "top"; return mkPanel(); }
+  if (a === "up" || a === "down") { if (MK.el && MK.el.isConnected) { mkKeepText(); const el = a === "up" ? mkUp(MK.el) : mkDown(MK.el); if (el !== MK.el) mkSelect(el); } return; }
+  if (a === "kind") { MK.kind = MK.kind === b.dataset.v ? "" : b.dataset.v; return mkPanel(); }
+  if (a === "noimg") { MK.img = null; return mkPanel(); }
+  if (a === "save") return mkSave();
+  if (a === "del") return mkDel(b.dataset.v, !!b.dataset.w);
+  if (a === "img") return mkShowImg(b.dataset.v, !!b.dataset.w); });
+if (lsGet("markOn")) setTimeout(mkStart, 0);
 readHash();
 const c0 = lsGet("cache"); if (c0) Object.assign(store, c0);
 render();
