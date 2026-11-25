@@ -1057,7 +1057,18 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .b3labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .b3labels .lb{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:600;line-height:1.3;color:#fff;background:rgba(0,0,0,.6);padding:1px 6px;border-radius:6px;white-space:nowrap}
 .b3labels .lb.sel{background:#e0a72a;color:#151515}.b3labels .lb.pain{background:#c0392b}
-.b3load{padding:24px;text-align:center}.b3chips{margin-top:6px}.b3form h3{margin:2px 0 6px}.num10 button{min-width:34px}
+.b3load{padding:24px;text-align:center}.b3chips{margin-top:6px}
+.b3bar{display:flex;flex-direction:column;gap:8px;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.b3row{display:flex;align-items:center;gap:8px;min-width:0}
+.b3lab{flex:none;width:62px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.b3scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-width:0}.b3scroll::-webkit-scrollbar{display:none}
+.b3grid{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
+.b3scroll button,.b3grid button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:7px 8px;font:inherit;font-size:13px;line-height:1.2;white-space:nowrap}
+.b3grid button{white-space:normal;text-align:center}
+.b3scroll button[aria-pressed="true"],.b3grid button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.b3seg{flex:1;margin:0}.b3info h3,.b3form h3{margin:2px 0 4px}.b3rels .lab{margin-top:8px}.b3rel button{font-size:12px}
+.b3labels .lb.rel{background:#1f7fa0}
+.b3list .lrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.b3list .lmain{display:flex;flex-direction:column;min-width:0}.b3form h3{margin:2px 0 6px}.num10 button{min-width:34px}
 </style>
 </head>
 <body>
@@ -1367,49 +1378,74 @@ function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || (isR
   return "_"; }
 let hurtOpen = null, hurtWhere = null;
 const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1] || key) : key);
-// ---------- Körperkarte 3D (Wunsch 2026-11-25): Stelle antippen, Schmerzart, Stärke, wann – gespeichert je Tag in day.bodyPain ----------
-// Modell: BodyParts3D, © The Database Center for Life Science, CC BY 4.0 (body/body.glb, aufbereitet mit tools in fitness/research). Anzeige: three.js (MIT), body/body3d.mjs
-let B3 = null, b3Pick = null, b3Form = null, b3Busy = false;
-const b3Opt = {layers: {skin: true, fascia: false, muscle: true, bone: true, band: true}, xray: false, labels: "auto", hist: true, view: "vorn"};
+// ---------- Körperkarte 3D (Wunsch 2026-11-25): antippen = auswählen, nochmal antippen = Schmerz eintragen; Mehrfachauswahl; Zusammengehöriges ----------
+// Modell: Z-Anatomy (CC BY-SA 4.0, Basis BodyParts3D © DBCLS), body/body.glb + parts.json; Anzeige body/body3d.mjs (three.js, MIT). Einträge: day.bodyPain
+let B3 = null, b3Busy = false, b3Sel = [], b3Pt = null, b3Joint = null, b3Form = null;
+const b3Opt = {layers: {skin: true, fascia: false, muscle: true, bone: true, band: true, ins: false}, xray: false, labels: "auto", hist: true, view: "vorn", multi: false, showRel: true};
 const PAIN_KIND = [["stechend", "stechend"], ["dumpf", "dumpf"], ["ziehend", "ziehend"], ["brennend", "brennend"], ["pochend", "pochend"], ["druck", "Druckschmerz"], ["steif", "steif"], ["kribbeln", "Kribbeln / Taubheit"]];
 const PAIN_WHEN = [["ruhe", "in Ruhe"], ["last", "bei Belastung"], ["bewegung", "bei bestimmter Bewegung"], ["nacht", "nachts"], ["morgen", "morgens"]];
-const B3_VIEWS = [["vorn", "Vorn"], ["hinten", "Hinten"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
+const B3_VIEWS = [["ganz", "⟲ Ganz"], ["vorn", "Vorn"], ["hinten", "Hinten"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
+const B3_LAYERS = [["skin", "Haut"], ["fascia", "Faszien"], ["muscle", "Muskeln"], ["bone", "Knochen"], ["band", "Sehnen & Bänder"], ["ins", "Ursprung & Ansatz"]];
+const B3_TYPE = {muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band / Gelenk", tendon: "Sehne / Schleimbeutel", insertion: "Ursprung / Ansatz (Sehnenansatz)", skin: "Hautregion", fascia: "Faszie"};
 const b3Today = () => Object.entries(cur.bodyPain || {}).map(([id, e]) => ({id, ...e}));
+const b3P = i => B3?.parts[i];
+const b3Names = () => b3Sel.map(i => b3P(i)?.de || "").filter(Boolean);
 function b3Markers(){ const out = b3Today().map(e => ({pt: e.pt, n: e.n, label: `${e.label} ${e.n}/10`}));
   if (b3Opt.hist) for (let i = 1; i <= 14; i++) { const d = addDays(selDate, -i), day = store.days[d]; for (const e of Object.values(day?.bodyPain || {})) out.push({pt: e.pt, n: e.n, old: true}); }
   return out; }
-function b3Flags(p, f){ const out = [], chest = /pector|stern|manubrium|xiphoid|rib|costal|clavic|SC-Gelenk/i.test(p.en + " " + (p.joint || ""));
+function b3Flags(f){ const out = [], txt = b3Sel.map(i => b3P(i)?.en || "").join(" "), chest = /pector|stern|manubrium|xiphoid|rib|costal|clavic/i.test(txt);
   if (f.kind.has("kribbeln")) out.push("Kribbeln oder Taubheit (besonders im Arm): am selben Tag ärztlich abklären – das kann ein Nerv sein.");
-  if (chest && (f.kind.has("druck") || f.kind.has("brennend")) && !p.joint) out.push("Druck oder Enge in der Brust mit Ausstrahlung in Arm oder Kiefer, Atemnot oder Schweißausbruch: sofort 112. Druckschmerz an der Brustwand schließt einen Herzinfarkt nicht aus.");
+  if (chest && !b3Joint && (f.kind.has("druck") || f.kind.has("brennend"))) out.push("Druck oder Enge in der Brust mit Ausstrahlung in Arm oder Kiefer, Atemnot oder Schweißausbruch: sofort 112. Druckschmerz an der Brustwand schließt einen Herzinfarkt nicht aus.");
   if (f.when.has("nacht") || f.when.has("ruhe")) out.push("Nacht- oder Ruheschmerz, der über Wochen bleibt: ärztlich abklären (Red Flag aus deinem Plan).");
   return out; }
-function b3CtlHtml(){ const c = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${l}</button>`, L = b3Opt.layers;
-  return `<div class="chips b3chips">${B3_VIEWS.map(([k, l]) => c("data-b3view", k, l, b3Opt.view === k)).join("")}</div>
-    <div class="chips b3chips"><span class="chiplab">Ebenen</span>${c("data-b3layer", "skin", "Haut", L.skin)}${c("data-b3layer", "fascia", "Faszien", L.fascia)}${c("data-b3layer", "muscle", "Muskeln", L.muscle)}${c("data-b3xray", "1", "Muskeln durchsichtig", b3Opt.xray)}${c("data-b3layer", "bone", "Knochen", L.bone)}${c("data-b3layer", "band", "Sehnen, Ansätze, Bänder, Knorpel", L.band)}</div>
-    <div class="chips b3chips"><span class="chiplab">Beschriftung</span>${c("data-b3lab", "off", "Aus", b3Opt.labels === "off")}${c("data-b3lab", "auto", "Auswahl", b3Opt.labels === "auto")}${c("data-b3lab", "all", "Alle", b3Opt.labels === "all")}${c("data-b3hist", "1", "Letzte 14 Tage", b3Opt.hist)}</div>`; }
+function b3Color(){ if (!B3) return; const rel = b3Opt.showRel && b3Sel.length ? [...new Set(b3Sel.flatMap(i => B3.relations(i).flatMap(g => g.ids)))] : []; B3.setSel(b3Sel, rel); }
+function b3CtlHtml(){ const btn = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${!!on}">${l}</button>`, L = b3Opt.layers;
+  return `<div class="b3bar">
+    <div class="b3row"><span class="b3lab">Ansicht</span><div class="b3scroll">${B3_VIEWS.map(([k, l]) => btn("data-b3view", k, l, b3Opt.view === k)).join("")}</div></div>
+    <div class="b3row"><span class="b3lab">Ebenen</span><div class="b3grid">${B3_LAYERS.map(([k, l]) => btn("data-b3layer", k, (L[k] ? "✓ " : "") + l, L[k])).join("")}</div></div>
+    <div class="b3row"><span class="b3lab">Optionen</span><div class="b3grid">${btn("data-b3xray", 1, "Muskeln durchsichtig", b3Opt.xray)}${btn("data-b3multi", 1, "Mehrfachauswahl", b3Opt.multi)}${btn("data-b3hist", 1, "Letzte 14 Tage", b3Opt.hist)}</div></div>
+    <div class="b3row"><span class="b3lab">Namen</span><div class="seg b3seg">${[["off", "Aus"], ["auto", "Auswahl"], ["all", "Alle"]].map(([k, l]) => btn("data-b3lab", k, l, b3Opt.labels === k)).join("")}</div></div></div>`; }
+function b3RelHtml(){ if (!B3 || !b3Sel.length) return ""; const i = b3Sel[b3Sel.length - 1], groups = B3.relations(i); if (!groups.length) return `<div class="small muted">Keine Zusammenhänge im Modell hinterlegt.</div>`;
+  return groups.map(g => `<div class="lab">${esc(g.title)}</div><div class="chips b3rel">${g.ids.slice(0, 24).map(j => `<button type="button" data-b3sel="${j}">${esc(b3P(j)?.de || "")}</button>`).join("")}${g.ids.length > 24 ? `<span class="small muted">+${g.ids.length - 24}</span>` : ""}</div>`).join(""); }
 function b3PanelHtml(){ let h = "";
-  if (b3Pick && b3Form) { const p = b3Pick, f = b3Form, flags = b3Flags(p, f), name = p.joint ? `${p.joint}` : p.de;
-    h += `<div class="card b3form"><div class="lab">${p.joint ? `${esc(p.de)} · ` : ""}${esc({muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band / Gelenk", tendon: "Sehne / Muskelansatz", skin: "Hautregion", fascia: "Faszie"}[p.layer] || "")}</div><h3>${esc(name)}</h3>
+  if (b3Form) { const f = b3Form, flags = b3Flags(f), names = b3Names();
+    h += `<div class="card b3form"><div class="lab">Schmerz eintragen</div><h3>${esc(b3Joint || (names.length > 2 ? names.slice(0, 2).join(", ") + ` +${names.length - 2}` : names.join(", ")))}</h3>
       <div class="lab">Was für ein Schmerz?</div><div class="chips">${PAIN_KIND.map(([k, l]) => `<button type="button" data-b3kind="${k}" aria-pressed="${f.kind.has(k)}">${l}</button>`).join("")}</div>
       <div class="lab">Wie stark? (0–10)</div><div class="chips num10">${[...Array(11).keys()].map(n => `<button type="button" data-b3n="${n}" aria-pressed="${f.n === n}">${n}</button>`).join("")}</div>
       <div class="lab">Wann?</div><div class="chips">${PAIN_WHEN.map(([k, l]) => `<button type="button" data-b3when="${k}" aria-pressed="${f.when.has(k)}">${l}</button>`).join("")}</div>
       <input id="b3mv" class="inp" type="text" maxlength="80" placeholder="Bei welcher Bewegung? (freiwillig)" value="${esc(f.mv)}">
       ${flags.map(t => `<div class="warnb small">${esc(t)}</div>`).join("")}
-      <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Abbrechen</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`; }
-  else h += `<div class="small muted">Tippe auf die Stelle, die wehtut. Ein Finger dreht, zwei Finger zoomen und verschieben. Unter dem Antippen liegt das, was du gerade siehst – für Tieferes Muskeln ausblenden oder durchsichtig schalten.</div>`;
+      <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Zurück</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`; }
+  else if (b3Sel.length) { const p = b3P(b3Sel[b3Sel.length - 1]);
+    h += `<div class="card b3info">${b3Joint ? `<div class="lab">📍 ${esc(b3Joint)}</div>` : ""}
+      ${b3Sel.length > 1 ? `<div class="chips">${b3Sel.map(i => `<button type="button" data-b3unsel="${i}" aria-pressed="true">${esc(b3P(i)?.de || "")} ✕</button>`).join("")}</div>` : `<h3>${esc(p?.de || "")}</h3>`}
+      <div class="small muted">${esc([B3_TYPE[p?.layer] || "", p?.grpDe && !p.kind ? p.grpDe : ""].filter(Boolean).join(" · "))}</div>
+      <div class="actions"><button class="btn primary" type="button" data-act="b3pain">Schmerz eintragen</button><button class="btn ${b3Opt.showRel ? "" : "ghost"}" type="button" data-b3rel="1" aria-pressed="${b3Opt.showRel}">${b3Opt.showRel ? "✓ " : ""}Zusammengehöriges</button></div>
+      <div class="small muted">${b3Opt.multi ? "Mehrfachauswahl: weitere Teile antippen fügt sie hinzu, nochmal antippen nimmt sie raus." : "Nochmal auf dieselbe Stelle tippen öffnet direkt die Schmerz-Eingabe."}</div>
+      ${b3Opt.showRel ? `<div class="b3rels">${b3RelHtml()}</div><div class="small muted">Blau im Modell: zusammengehörig · Orange: ausgewählt. Antippen in der Liste wählt aus.</div>` : ""}</div>`; }
+  else h += `<div class="small muted">Tippe auf die Stelle, die wehtut: Das Teil wird ausgewählt und die Drehmitte springt dorthin. Nochmal tippen = Schmerz eintragen. Ein Finger dreht, zwei Finger zoomen und verschieben.</div>`;
   const list = b3Today();
-  if (list.length) h += `<div class="lab sec">${selDate === todayIso() ? "Heute" : fmt(selDate)} eingetragen</div><div class="lrows">${list.map(e => `<div class="lrow"><span class="lmain"><b>${esc(e.label)} · ${e.n}/10</b><span class="small muted">${esc([e.kind.map(k => PAIN_KIND.find(x => x[0] === k)?.[1] || k).join(", "), e.when.map(k => PAIN_WHEN.find(x => x[0] === k)?.[1] || k).join(", "), e.mv].filter(Boolean).join(" · "))} · ${esc(e.t)}</span></span><button class="btn small ghost" type="button" data-b3del="${esc(e.id)}" aria-label="Löschen">✕</button></div>`).join("")}</div>`;
-  return h + `<div class="small muted" style="margin-top:12px">Modell: Z-Anatomy, CC BY-SA 4.0 (auf Basis von BodyParts3D, © The Database Center for Life Science). Namen: Deutsch, sonst Latein (Terminologia Anatomica).</div>`; }
+  if (list.length) h += `<div class="lab sec">${selDate === todayIso() ? "Heute" : fmt(selDate)} eingetragen</div><div class="lrows b3list">${list.map(e => `<div class="lrow"><span class="lmain"><b>${esc(e.label)} · ${e.n}/10</b><span class="small muted">${esc([e.kind.map(k => PAIN_KIND.find(x => x[0] === k)?.[1] || k).join(", "), e.when.map(k => PAIN_WHEN.find(x => x[0] === k)?.[1] || k).join(", "), e.mv].filter(Boolean).join(" · "))} · ${esc(e.t)}</span></span><button class="btn small ghost" type="button" data-b3del="${esc(e.id)}" aria-label="Löschen">✕</button></div>`).join("")}</div>`;
+  return h + `<div class="small muted" style="margin-top:12px">Modell: Z-Anatomy, CC BY-SA 4.0 (auf Basis von BodyParts3D, © The Database Center for Life Science). Namen: Deutsch, sonst Latein (Terminologia Anatomica). Viele Sehnen sind Teil des Muskelmodells; eigene Sehnen-Objekte gibt es vor allem an Hand, Fuß und Knie.</div>`; }
 function b3Update(){ const c = document.getElementById("b3ctl"), p = document.getElementById("b3panel"); if (c) c.innerHTML = b3CtlHtml(); if (p) p.innerHTML = b3PanelHtml(); }
-function b3Apply(){ if (!B3) return; const L = b3Opt.layers; B3.setLayer("skin", L.skin); B3.setLayer("fascia", L.fascia); B3.setLayer("muscle", L.muscle); B3.setLayer("bone", L.bone); for (const k of ["cartilage", "ligament", "tendon"]) B3.setLayer(k, L.band);
-  B3.setMuscleOpacity(b3Opt.xray ? .35 : 1); B3.setLabels(b3Opt.labels); B3.setMarkers(b3Markers()); }
+function b3Apply(){ if (!B3) return; const L = b3Opt.layers; B3.setLayer("skin", L.skin); B3.setLayer("fascia", L.fascia); B3.setLayer("muscle", L.muscle); B3.setLayer("bone", L.bone);
+  for (const k of ["cartilage", "ligament", "tendon"]) B3.setLayer(k, L.band); B3.setLayer("insertion", L.ins);
+  B3.setMuscleOpacity(b3Opt.xray ? .35 : 1); B3.setLabels(b3Opt.labels); B3.setMarkers(b3Markers()); b3Color(); }
+const b3NewForm = () => ({kind: new Set(), n: null, when: new Set(), mv: ""});
+function b3OnPick(p, pt, joint){
+  if (!p) { if (!b3Opt.multi) { b3Sel = []; b3Form = null; b3Joint = null; } b3Color(); b3Update(); return; }
+  const i = p.i;
+  if (b3Opt.multi) { b3Sel = b3Sel.includes(i) ? b3Sel.filter(x => x !== i) : [...b3Sel, i]; b3Pt = b3Pt || pt; b3Joint = b3Joint || joint; b3Form = null; }
+  else if (b3Sel.length === 1 && b3Sel[0] === i) b3Form = b3Form || b3NewForm(); // zweiter Tipp auf dasselbe Teil
+  else { b3Sel = [i]; b3Pt = pt; b3Joint = joint; b3Form = null; B3?.focus(pt); }
+  b3Color(); b3Update(); }
 async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B3 || b3Busy) return; b3Busy = true; el.innerHTML = `<div class="small muted b3load">3D-Modell wird geladen (ca. 3 MB) …</div>`;
   try { const m = await import("./body/body3d.mjs"), el2 = document.getElementById("b3"); if (!el2 || !sheet.open || sheetKind !== "body") return; el2.innerHTML = "";
     // das Blatt kann beim Laden neu gezeichnet worden sein: immer ins aktuelle Element
-    const mounted = await m.mount(el2, {view: b3Opt.view, markers: b3Markers(), onPick: (p, pt, joint) => { b3Pick = p ? {fma: p.fma || p.en, de: p.de, en: p.en, layer: p.layer, g: p.g, pt, joint} : null; b3Form = b3Pick ? {kind: new Set(), n: null, when: new Set(), mv: ""} : null; b3Update(); }});
+    const mounted = await m.mount(el2, {view: b3Opt.view, markers: b3Markers(), onPick: b3OnPick});
     if (!el2.isConnected || !sheet.open) { mounted.dispose(); return; } B3 = mounted; b3Apply();
   } catch (e) { el.innerHTML = `<div class="warnb small">3D-Ansicht nicht möglich (${esc(e?.message || e)}).</div>`; } finally { b3Busy = false; } }
-function b3Close(){ if (B3) { try { B3.dispose(); } catch {} B3 = null; } b3Pick = null; b3Form = null; }
+function b3Close(){ if (B3) { try { B3.dispose(); } catch {} B3 = null; } b3Sel = []; b3Form = null; b3Joint = null; b3Pt = null; }
 function hurtHtml(key){
   const e = EX[key], mb = isRtKey(key) ? rtItem(key) : null, pat = hurtPattern(key);
   let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>
@@ -3801,7 +3837,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
       <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>${setsChooserHtml()}`;
-  } else if (sheetKind === "body") { h += `<div class="sh"><div><div class="lab">Wo tut es weh?</div><h2>Körperkarte</h2></div>${close}</div><div id="b3" class="b3wrap"></div><div id="b3ctl">${b3CtlHtml()}</div><div id="b3panel">${b3PanelHtml()}</div>`; setTimeout(b3Mount, 0);
+  } else if (sheetKind === "body") { h += `<div class="sh"><div><div class="lab">Wo tut es weh?</div><h2>Körperkarte</h2></div>${close}</div><div id="b3" class="b3wrap"></div><div id="b3panel">${b3PanelHtml()}</div><div id="b3ctl">${b3CtlHtml()}</div>`; setTimeout(b3Mount, 0);
   } else if (sheetKind === "setwiz") { if (!wiz) wiz = wizNew(); h += wizHtml(close);
   } else if (sheetKind === "mwex") { h += mwExHtml(sheetArg, close);
   } else if (sheetKind === "tech") {
@@ -6323,8 +6359,12 @@ async function onClick(e){
   const b3v = t.closest("[data-b3view]"); if (b3v) { b3Opt.view = b3v.dataset.b3view; B3?.view(b3Opt.view); b3Update(); return; }
   const b3l = t.closest("[data-b3layer]"); if (b3l) { const k = b3l.dataset.b3layer; b3Opt.layers[k] = !b3Opt.layers[k]; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3xray]")) { b3Opt.xray = !b3Opt.xray; if (b3Opt.xray) b3Opt.layers.muscle = true; b3Apply(); b3Update(); return; }
+  if (t.closest("[data-b3multi]")) { b3Opt.multi = !b3Opt.multi; if (!b3Opt.multi && b3Sel.length > 1) b3Sel = b3Sel.slice(-1); b3Form = null; b3Color(); b3Update(); return; }
+  if (t.closest("[data-b3rel]")) { b3Opt.showRel = !b3Opt.showRel; b3Color(); b3Update(); return; }
   const b3b = t.closest("[data-b3lab]"); if (b3b) { b3Opt.labels = b3b.dataset.b3lab; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3hist]")) { b3Opt.hist = !b3Opt.hist; b3Apply(); b3Update(); return; }
+  const b3s = t.closest("[data-b3sel]"); if (b3s && B3) { const i = Number(b3s.dataset.b3sel), p = b3P(i); if (b3Opt.multi) { if (!b3Sel.includes(i)) b3Sel = [...b3Sel, i]; } else { b3Sel = [i]; b3Joint = null; b3Pt = p?.c; B3.focus(p.c); } b3Form = null; b3Color(); b3Update(); return; }
+  const b3u = t.closest("[data-b3unsel]"); if (b3u) { const i = Number(b3u.dataset.b3unsel); b3Sel = b3Sel.filter(x => x !== i); b3Color(); b3Update(); return; }
   const b3k = t.closest("[data-b3kind]"); if (b3k && b3Form) { const k = b3k.dataset.b3kind; b3Form.kind.has(k) ? b3Form.kind.delete(k) : b3Form.kind.add(k); b3Update(); return; }
   const b3w = t.closest("[data-b3when]"); if (b3w && b3Form) { const k = b3w.dataset.b3when; b3Form.when.has(k) ? b3Form.when.delete(k) : b3Form.when.add(k); b3Update(); return; }
   const b3n = t.closest("[data-b3n]"); if (b3n && b3Form) { b3Form.n = Number(b3n.dataset.b3n); b3Update(); return; }
@@ -6571,10 +6611,12 @@ async function onClick(e){
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
-    if (a === "b3cancel") { b3Pick = null; b3Form = null; B3?.highlight(null); b3Update(); return; }
-    if (a === "b3save" && b3Pick && b3Form?.n != null) { const id = Date.now().toString(36), p = b3Pick, f = b3Form, now = new Date();
-      const e = {t: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, part: p.fma, label: p.joint || p.de.split(" · ")[0], de: p.de, layer: p.layer, pt: p.pt, kind: [...f.kind], n: f.n, when: [...f.when], mv: f.mv.trim()};
-      cur.bodyPain = Object.assign({}, cur.bodyPain, {[id]: e}); touch(); b3Pick = null; b3Form = null; B3?.highlight(null); B3?.setMarkers(b3Markers()); b3Update(); return; }
+    if (a === "b3cancel") { b3Form = null; b3Update(); return; }
+    if (a === "b3pain" && b3Sel.length) { b3Form = b3NewForm(); b3Update(); return; }
+    if (a === "b3save" && b3Sel.length && b3Form?.n != null) { const id = Date.now().toString(36), f = b3Form, now = new Date(), names = b3Names(), ps = b3Sel.map(i => b3P(i));
+      const e = {t: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, part: ps[0]?.en, parts: ps.map(p => p.en), label: b3Joint || (names.length > 2 ? names.slice(0, 2).map(x => x.split(" · ")[0]).join(", ") + ` +${names.length - 2}` : names.map(x => x.split(" · ")[0]).join(", ")),
+        de: names.join(", "), layer: ps[0]?.layer, pt: b3Pt || ps[0]?.c, kind: [...f.kind], n: f.n, when: [...f.when], mv: f.mv.trim(), joint: b3Joint || undefined};
+      cur.bodyPain = Object.assign({}, cur.bodyPain, {[id]: e}); touch(); b3Form = null; b3Sel = []; b3Joint = null; b3Pt = null; b3Color(); B3?.setMarkers(b3Markers()); b3Update(); return; }
     if (a === "wizOpen") { wiz = wizNew(); openSheet("setwiz"); return; }
     if (a === "wizNext" && wiz) { wiz.step = Math.min(3, wiz.step + 1); renderSheet(); sheet.scrollTop = 0; return; }
     if (a === "wizBack" && wiz) { wiz.step = Math.max(1, wiz.step - 1); renderSheet(); sheet.scrollTop = 0; return; }
