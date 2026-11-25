@@ -1156,6 +1156,11 @@ function mobAlt(k){ // Hinweis, wenn für eine Routine-Übung das Zubehör fehlt
 const mobFinished = (day, d) => mobCount(day, d) >= mobTotal(d) || !!day?.mobility?._done;
 const mobSkipped = day => !!day?.mobility?._skip && !mobCount(day) && !day?.mobility?._done;
 const mobCount = (day, d) => day?.mobility ? (d < MOB_SINCE ? MOB_OLD : MOBILITY.map(m => m[0]).filter(k => !mobOpt(k, d))).filter(k => day.mobility[k]).length : 0;
+// Zählung je Routine (mob = Morgenroutine, reha = Schulter-Reha); die mob*-Funktionen bleiben für Altstellen
+const rtTotal = (r, d) => r === "mob" ? mobTotal(d) : REHA.filter(([k]) => !rehaSkip(k, d)).length;
+const rtCount = (r, day, d) => r === "mob" ? mobCount(day, d) : day?.reha ? REHA.map(m => m[0]).filter(k => !rehaSkip(k, d) && day.reha[k]).length : 0;
+const rtFinished = (r, day, d) => rtCount(r, day, d) >= rtTotal(r, d) || !!day?.[RTS[r].day]?._done;
+const rtSkipped = (r, day) => !!day?.[RTS[r].day]?._skip && !rtCount(r, day) && !day?.[RTS[r].day]?._done;
 let mobZoom = null;
 // ---------- Muskelkarte: vereinfachte Figur vorn/hinten, Bereiche nach den Muskelschlüsseln der Übungen ----------
 const MUSCLE_LABEL = Object.assign(Object.fromEntries(MUSCLES), {hipflex: "Hüftbeuger", vordS: "Vord. Schulter"});
@@ -1223,7 +1228,7 @@ const MOB_INFO = {
 const GUIDE = {k2c: {sec: 25, rounds: 2, label: "Runde", side: true}, rkc: {stop: true, rounds: 2, label: "Durchgang"}, hipflexor: {sec: 30, rounds: 4, label: "Runde", side: true}, rectfem: {sec: 30, rounds: 4, label: "Runde", side: true}};
 let guide = {end: 0, start: 0, acc: 0, round: 0}, guideTimer = null;
 function guideTick(){
-  const el = document.getElementById("gT"), [k] = MOBILITY[sheetArg] || [], g = GUIDE[k];
+  const el = document.getElementById("gT"), [k] = RL()[sheetArg] || [], g = GUIDE[k];
   if (!el || !g || sheetKind !== "mobguide") { clearInterval(guideTimer); guide.end = 0; return; }
   if (g.stop) { el.textContent = fmtDur(guide.acc + (guide.end ? (Date.now() - guide.start) / 1000 : 0)); return; }
   const left = (guide.end - Date.now()) / 1000; el.textContent = fmtDur(Math.max(0, Math.ceil(left)));
@@ -1248,7 +1253,7 @@ function repSteps(key, d){ if (REP_STEPS[key]) return REP_STEPS[key].map(([l, s,
   if (tp && +tp[2] > 0) st.push({l: "Pause", s: +tp[2], k: "pause"}); return st; }
 const repSecs = c => c.steps.reduce((a, x) => a + x.s + ZERO_SEC, 0);
 function timerCfg(key){
-  const k = key.startsWith("mob:") ? key.slice(4) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
+  const k = isRtKey(key) ? rtId(key) : null, g = k && GUIDE[k], d = DOSE[key] || {}, m = (d.dose || "").match(/^(\d+)(?:–\d+)?\s*×\s*(\d+)/);
   if (k && AUTO_CFG[k]) return AUTO_CFG[k]; // geführter Ablauf auch beim Selbst-Starten (z. B. Knie-Test)
   if (g) return g.stop ? {mode: "stop", rounds: g.rounds || 1, side: false, rest: d.rest || 30} : {mode: "count", sec: holdRun(g.sec), rounds: g.rounds, side: !!g.side, rest: d.rest || 0};
   if (d.hold >= 10) return {mode: "count", sec: holdRun(d.hold), rounds: (m ? +m[1] : 1) * (d.perSide ? 2 : 1), side: !!d.perSide, rest: d.rest || 0};
@@ -1264,12 +1269,12 @@ const stopEst = key => key === "mob:rkc" ? mobHoldSec("rkc") : STOP_EST;
 const PREP_SEC = 10, SWITCH_SEC = 10, NEXT_SEC = 12; // genug Zeit zum Hinlegen, Aufstehen, Seite wechseln
 const ZERO_SEC = 1; // jede Phase zeigt am Ende eine volle Sekunde lang 0, erst dann kommt die nächste
 let autoCarry = 0; // Übergangszeit, die an den Vorlauf der nächsten Übung angehängt wird (deren Video ist dann schon zu sehen)
-function autoCfg(key){ const k = key.startsWith("mob:") ? key.slice(4) : null; return (k && AUTO_CFG[k]) || timerCfg(key); }
+function autoCfg(key){ const k = isRtKey(key) ? rtId(key) : null; return (k && AUTO_CFG[k]) || timerCfg(key); }
 // Dauer einer Übung im Durchlauf (ohne Vorbereitung) und Rest der Routine ab Übung i
 function autoSecs(key){ const c = autoCfg(key), Z = ZERO_SEC, per = c.mode === "reps" ? c.reps * repSecs(c) : c.mode === "stop" ? stopEst(key) : c.sec + Z; return c.rounds * per + (c.rounds - 1) * ((c.side ? SWITCH_SEC : (c.rest || 10)) + Z); }
 // Dauer der ganzen Morgenroutine in Minuten (wie durchgetaktet: Vorlauf, Übung, Wechsel); gilt für Texte, Kalender und Planer
 const mobMin = (d = todayIso()) => Math.round(MOBILITY.filter(([k]) => !mobSkip(k, d)).reduce((t, [k]) => t + PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC, 0) / 60);
-function autoLeft(i){ let t = 0; for (let j = Math.max(0, i); j < MOBILITY.length; j++) { const k = MOBILITY[j][0]; if ((cur.mobility[k] && j !== i) || mobSkip(k, selDate)) continue; t += PREP_SEC + ZERO_SEC + autoSecs("mob:" + k) + NEXT_SEC; } return t; }
+function autoLeft(i){ let t = 0; const L = RL(), D = RD(); for (let j = Math.max(0, i); j < L.length; j++) { const k = L[j][0]; if ((D[k] && j !== i) || rtSkip(k, selDate)) continue; t += PREP_SEC + ZERO_SEC + autoSecs(RTS[rtk].pre + k) + NEXT_SEC; } return t; }
 // Nächste offene Übung ab Blatt-Index – als Kurzname
 const mobShort = t => t.split(":")[0].split(/\s\d+(?:–\d+)?\s*×/)[0].split(" (")[0].split(",")[0].trim();
 function tmrRemain(t){ if (!t) return 0; const Z = ZERO_SEC, per = t.mode === "reps" ? t.reps * repSecs(t) : t.mode === "stop" ? stopEst(t.key) : t.sec + Z, gap = (t.side ? SWITCH_SEC : (t.rest || 10)) + Z, left = Math.max(0, t.left + Z);
@@ -1335,7 +1340,7 @@ const HURT = {
   sonst: {label: "Sonstiges", stop: "Bei scharfem oder zunehmendem Schmerz: beenden, Alternative wählen und abends im Abendcheck notieren.", tips: {
     _: ["Gewicht und Bewegungsumfang verkleinern, Tempo langsam.", "Technik-Checkliste unten durchgehen und einen Satz filmen.", "Tritt es beim nächsten Mal wieder auf: Übung tauschen und im Verlauf notieren."]}}};
 // Bewegungsmuster aus Schlüssel und Name
-function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || MOBILITY.find(([m]) => "mob:" + m === key)?.[1] || "")).toLowerCase();
+function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || (isRtKey(key) ? rtItem(key)?.[1] : "") || "")).toLowerCase();
   if (/hipflexor|rectfem|k2c|dehn|stretch/.test(s)) return "stretch";
   if (/plank|deadbug|dead bug|pallof|abroller|ab-roller|rkc|suitcase|tilt|becken/.test(s)) return "core";
   if (/curl|skull|pushdown|kickback|hammer|wrist|trizeps|bizeps/.test(s)) return "arm";
@@ -1347,9 +1352,9 @@ function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || MOBI
   if (/rdl|hinge|deadlift|kreuz|hip|bridge|glute|thrust|backext|rückenstreck|pullthrough|nordic/.test(s)) return "hinge";
   return "_"; }
 let hurtOpen = null, hurtWhere = null;
-const exName = key => EX[key]?.name || (key?.startsWith("mob:") ? mobShort(MOBILITY.find(([m]) => m === key.slice(4))?.[1] || key) : key);
+const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1] || key) : key);
 function hurtHtml(key){
-  const e = EX[key], mb = key.startsWith("mob:") ? MOBILITY.find(([m]) => m === key.slice(4)) : null, pat = hurtPattern(key);
+  const e = EX[key], mb = isRtKey(key) ? rtItem(key) : null, pat = hurtPattern(key);
   let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>
     <div class="lab">Wo?</div><div class="chips">${Object.entries(HURT).map(([k, r]) => `<button type="button" data-hwhere="${k}" aria-pressed="${hurtWhere === k}">${esc(r.label)}</button>`).join("")}</div>`;
   if (!hurtWhere) return h + `<div class="small muted">Stelle antippen – dann siehst du, was oft dahintersteckt und worauf du achten solltest.</div>`;
@@ -1357,13 +1362,13 @@ function hurtHtml(key){
   h += `<div class="warnb"><b>Zuerst:</b> ${esc(r.stop)}</div><div class="lab">Woran es oft liegt · worauf achten</div><ul class="hurtl">${tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
   if (cues.length || d?.breath || d?.tempo) h += `<div class="lab">Technik-Checkliste für diese Übung</div><ul class="hurtl">${cues.map(c => `<li>${esc(c)}</li>`).join("")}${d?.tempo ? `<li>Tempo: ${esc(d.tempo)}</li>` : ""}${d?.breath ? `<li>Atmung: ${esc(d.breath)}</li>` : ""}</ul>`;
   const logged = (cur.hurt || []).some(x => x.ex === key && x.where === hurtWhere);
-  h += `${mb && mobAlt(key.slice(4)) ? `<div class="small muted">Alternative laut Plan: ${esc(mobAlt(key.slice(4)))}</div>` : ""}
+  h += `${mb && (rtOf(key) === "reha" ? rehaAlt : mobAlt)(rtId(key)) ? `<div class="small muted">Alternative laut Plan: ${esc((rtOf(key) === "reha" ? rehaAlt : mobAlt)(rtId(key)))}</div>` : ""}
     <div class="actions">${e && altOptions(key).length ? `<button type="button" class="btn" data-sheet="alt" data-v="${esc(key)}">⇄ Alternative wählen</button>` : ""}<button type="button" class="btn ${logged ? "" : "primary"}" data-hlog="${esc(key)}" ${logged ? "disabled" : ""}>${logged ? "✓ Notiert" : "📝 Für den Abendcheck notieren"}</button></div>
     <div class="small muted">Notiert werden Übung und Stelle für heute. Abends im Abendcheck dazu die Skala ausfüllen.</div>`;
   return h; }
-function autoNextName(){ const nx = MOBILITY.slice(sheetArg + 1).find(([k]) => !cur.mobility[k]); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
+function autoNextName(){ const nx = RL().slice(sheetArg + 1).find(([k]) => !RD()[k] && !rtSkip(k, selDate)); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
-  if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && key.startsWith("mob:") && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
+  if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && isRtKey(key) && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
     tmr = Object.assign({key, round: 0, rep: 0, step: 0, run: false, left: c.mode === "count" ? c.sec : c.mode === "reps" ? c.steps[0].s : 0, acc: 0, phase: "hold"}, c);
     if (auto) { Object.assign(tmr, {auto: true, phase: "prep", left: PREP_SEC + autoCarry, fresh: autoCarry > 0, run: true, last: Date.now()}); autoCarry = 0; tmrInt = setInterval(tmrTick, 250); } }
   return `<div class="gtimer" id="tmr">${tmrInner()}</div>`;
@@ -1372,7 +1377,7 @@ function tmrInner(){
   const t = tmr, side = t.side ? (t.round % 2 ? " · rechts" : " · links") : "";
   const pause = ["prep", "switch", "next"].includes(t.phase);
   const head = t.phase === "prep" ? (t.fresh ? "Jetzt diese Übung – Position einnehmen" : "Bereit machen · Position einnehmen") : t.phase === "switch" ? (t.side ? "Seite wechseln" : "Kurze Pause") : t.phase === "next" ? `Gleich: ${esc(autoNextName())}` :
-    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr${t.key.startsWith("mob:") ? ` · Ziel ${stopEst(t.key)} s` : ""}`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.steps[t.step].l}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
+    t.mode === "stop" ? (t.done ? `Fertig · ${t.rounds} ${t.rounds === 1 ? "Satz" : "Sätze"}` : `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Stoppuhr${isRtKey(t.key) ? ` · Ziel ${stopEst(t.key)} s` : ""}`) : t.mode === "reps" ? `Satz ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side} · Wdh. ${Math.min(t.rep + 1, t.reps)}/${t.reps} · ${t.steps[t.step].l}` : `Runde ${Math.min(t.round + 1, t.rounds)}/${t.rounds}${side}`;
   const stopRun = t.mode === "stop" && !pause, val = stopRun ? t.acc : t.left;
   return `<div class="lab">${head}</div><div class="gt ${pause ? "muted" : ""}" id="tmrT">${fmtDur(Math.max(0, stopRun ? val : Math.ceil(val)))}</div>
     ${t.times?.length ? `<div class="small muted">Bisher: ${t.times.map((x, i) => `Satz ${i + 1} ${fmtDur(x)}`).join(" · ")}</div>` : ""}
@@ -1426,8 +1431,8 @@ function tmrTick(){
 }
 // Übung im automatischen Ablauf fertig: gleich zur nächsten wechseln, die Pause läuft dort als Vorlauf weiter
 function autoAdvance(){ clearInterval(tmrInt); say(tmr?.mode === "reps" ? "Nächste Übung" : "Lösen. Nächste Übung"); if (tmr) tmr.run = false; autoCarry = NEXT_SEC; guideNext(true); }
-function guideNext(done){ const [k] = MOBILITY[sheetArg] || []; if (!k) return; if (done) { cur.mobility[k] = true; touch(); }
-  let j = sheetArg + 1; while (j < MOBILITY.length && (cur.mobility[MOBILITY[j][0]] || mobSkip(MOBILITY[j][0], selDate))) j++; sheetArg = j; if (j >= MOBILITY.length && autoFlow) { autoFlow = false; if (tab !== "training") releaseWake(); } renderSheet(); sheet.scrollTop = 0; }
+function guideNext(done){ const L = RL(), [k] = L[sheetArg] || []; if (!k) return; if (done) { RD()[k] = true; touch(); }
+  let j = sheetArg + 1; while (j < L.length && (RD()[L[j][0]] || rtSkip(L[j][0], selDate))) j++; sheetArg = j; if (j >= L.length && autoFlow) { autoFlow = false; if (tab !== "training") releaseWake(); } renderSheet(); sheet.scrollTop = 0; }
 function tmrCmd(c){
   const t = tmr; if (!t) return;
   if (c === "toggle") { audioReady(); try { speechSynthesis.getVoices(); } catch {} t.run = !t.run; t.started = true; t.last = Date.now(); clearInterval(tmrInt); if (t.run) tmrInt = setInterval(tmrTick, 250);
@@ -1436,7 +1441,7 @@ function tmrCmd(c){
   else if (c === "skip") { if (["prep", "switch", "next"].includes(t.phase)) t.left = -ZERO_SEC; }
   else if (c === "voice") { gcVoice = !gcVoice; lsSet("coachVoice", gcVoice); if (!gcVoice) sayStop(); }
   else if (c === "set") { if (t.mode !== "stop" || t.done) return; const sec = Math.round(t.acc); (t.times = t.times || []).push(sec); t.acc = 0; t.round++;
-    if (t.key.startsWith("mob:")) { cur.mobSec = Object.assign({}, cur.mobSec, {[t.key.slice(4)]: t.times.slice()}); touch(); }
+    if (isRtKey(t.key)) { const sk = RTS[rtOf(t.key)].sec; cur[sk] = Object.assign({}, cur[sk], {[rtId(t.key)]: t.times.slice()}); touch(); }
     const more = t.round < t.rounds; if (!more) { t.round = t.rounds - 1; t.done = true; }
     chime(); // Zeiten stehen unter „Bisher“
     if (t.auto && !more) return autoAdvance();
@@ -1461,6 +1466,67 @@ const MOB_PAUSE = new Set(["rkc", "shrug30"]); // belasten das Schlüsselbein: i
 const mobOpt = (k, d) => MOB_OPT.has(k) || mobSkip(k, d);
 const mobSkip = (k, d) => MOB_PAUSE.has(k) && (inPause(d) || schonOn() && d >= todayIso()); // im Ablauf und in der Dauer übersprungen
 const mobNext = () => MOBILITY.findIndex(([k]) => !cur.mobility[k] && !mobSkip(k, selDate));
+// ---------- Schulter-Reha (Physio 2026-11-25): zweite geführte Routine, Übungen und Clips von MuscleWiki ----------
+// Physio: nach vorn gezogene Schultern belasten das SC-Gelenk → Außenrotatoren („die kleinen Muskeln“) kräftigen.
+// Phase 1 (bis zur Freigabe): Ellbogen am Körper, nichts über Brusthöhe. Phase 2 ab settings.scCleared.
+const REHA_SINCE = "2026-11-25";
+const REHA = [["rotmob","Schulter drehen ohne Last: 1 × 8 je Seite, Ellbogen am Körper, Unterarm langsam nach außen und innen","mw_rotmob"],
+  ["eriso","Außenrotation isometrisch am Türrahmen: 2 × 30 s je Seite, Handrücken drückt mit 60–70 % gegen den Rahmen","hw_extrot"],
+  ["er1","Außenrotation mit Band auf Ellbogenhöhe: 2 × 12 je Seite. Ellbogen am Rumpf (Handtuch dazwischen), 2 s zurück","mw_er1"],
+  ["er2","Außenrotation, Band unter dem Fuß: 2 × 10 je Seite. Ellbogen 45° nach vorn und 90° gebeugt, 2 s zurück","mw_er2"],
+  ["er3","Außenrotation, Arm 90° abgespreizt: 2 × 10 je Seite, nur schmerzfrei","mw_er3"],
+  ["wallang","Wandengel: 2 × 6. Rücken, Ellbogen und Handgelenke an der Wand, erst nur bis Schulterhöhe","mw_wallang"],
+  ["serplank","Serratus-Unterarmstütz: 2 × 20 s. Ellbogen in den Boden drücken, Schulterblätter auseinanderschieben","mw_serplank"],
+  ["serpunch","Serratus-Kreuzschlag in Rückenlage: 1 × 8 je Seite, erst ohne Kurzhantel","mw_serpunch"],
+  ["thor","Brustwirbelsäule beugen und strecken im Vierfüßlerstand: 1 × 6 langsam","mw_thor"]];
+const REHA_ID = Object.fromEntries(REHA.map(m => [m[0], m[2]]));
+for (const m of REHA) m[2] = null; // Feld 3 ist wie bei MOBILITY die Illustration; Reha zeigt stattdessen das MuscleWiki-Vorschaubild
+// Vorschaubilder (öffentliches MuscleWiki-CDN, nur verlinkt): Dateistamm des Videos, Frontansicht
+const REHA_OG = {rotmob: "Recovery-shoulder-external-internal-rotation-standing-mobility", er1: "Recovery-rotator-cuff-external-rotations-1-standing", er2: "Recovery-rotator-cuff-external-rotations-2-standing", er3: "Recovery-rotator-cuff-external-rotations-3-standing", wallang: "Recovery-wall-angels", serplank: "Recovery-seratus-activation-1-plank-isometric", serpunch: "Recovery-seratus-activation-cross-punch-supine", thor: "Recovery-thoracic-flexion-and-extensions-mobility"};
+const rehaThumb = k => REHA_OG[k] ? `https://media.musclewiki.com/media/uploads/og-male-${REHA_OG[k]}-front.jpg` : k === "eriso" && EX.hw_extrot?.img ? isrc(EX.hw_extrot.img, EX.hw_extrot.img.startsWith("r/") ? 1 : 0) : null;
+const REHA_PH = {er3: 2, wallang: 2, serplank: 2, serpunch: 2, thor: 2}; // ohne Eintrag: Phase 1
+const REHA_PHMAX = {er2: 1}; // nur bis zu dieser Phase: in Phase 2 übernimmt er3
+const REHA_BAND = new Set(["er1", "er2", "er3"]);
+const REHA_MW = {rotmob: "shoulder-external-internal-rotation", er1: "rotator-cuff-external-rotations-1", er2: "rotator-cuff-external-rotations-2", er3: "rotator-cuff-external-rotations-3", wallang: "wall-angels", serplank: "serratus-activation-plank", serpunch: "serratus-activation-cross-punch", thor: "thoracic-flexion-and-extensions"};
+const rehaPhase = () => S().scCleared ? 2 : 1;
+const rehaNoBand = () => !!(S().reha || {}).noBand;
+const rehaLocked = k => (REHA_PH[k] || 1) > rehaPhase() || (REHA_PHMAX[k] || 9) < rehaPhase();
+const rehaSkip = (k, d) => rehaLocked(k) || (k === "eriso" ? !rehaNoBand() : REHA_BAND.has(k) && rehaNoBand());
+function rehaAlt(k){
+  if (rehaLocked(k)) return (REHA_PH[k] || 1) > rehaPhase() ? "Ab der Arztfreigabe (Phase 2) – bis dahin gesperrt." : "Nur in Phase 1 – jetzt übernimmt die Außenrotation mit 90°.";
+  if (k === "eriso") return rehaNoBand() ? "Ersatz, solange kein Band da ist." : "Nur ohne Band – mit Band übersprungen.";
+  if (REHA_BAND.has(k) && rehaNoBand()) return "Kein Band: übersprungen, dafür die Türrahmen-Variante.";
+  if (REHA_BAND.has(k)) return "Im Gym geht dasselbe am Kabelzug.";
+  return "";
+}
+const REHA_INFO = {
+  rotmob: {m: {hintS: .5}, why: "Lockert das Schultergelenk in Außen- und Innenrotation ohne Last und wärmt die Rotatorenmanschette für die Bandübungen auf."},
+  eriso: {m: {hintS: 1}, why: "Halten statt Bewegen: Die Außenrotatoren arbeiten, das Schlüsselbein bleibt ruhig. Ersatz, solange kein Band da ist."},
+  er1: {m: {hintS: 1}, why: "Kräftigt die Außenrotatoren (Infraspinatus, Teres minor), also die „kleinen Muskeln“, die der Physio meint. Sie halten den Oberarmkopf zentriert und arbeiten gegen die nach vorn gezogene Schulter. Der Ellbogen bleibt am Körper, deshalb keine Last am SC-Gelenk."},
+  er2: {m: {hintS: 1}, why: "Dieselben Muskeln mit leicht nach vorn genommenem Arm, näher an der Haltung am Schreibtisch."},
+  er3: {m: {hintS: 1, obTrap: .5}, why: "Außenrotation mit 90° abgespreiztem Arm: Die Rotatorenmanschette arbeitet in der Stellung, die später für Überkopf und Bouldern gebraucht wird. Erst nach der Freigabe."},
+  wallang: {m: {obTrap: 1, ruecken: .5}, why: "Trainiert Haltung und Schulterblattbewegung: Brustwirbelsäule aufrichten, Schulterblätter nach oben drehen. Die Arme zuerst nur bis Schulterhöhe."},
+  serplank: {m: {obTrap: 1, rumpf: .5}, why: "Aktiviert den vorderen Sägemuskel (Serratus), der das Schulterblatt am Brustkorb hält und nach oben dreht. Stütz auf den Armen, deshalb erst nach der Freigabe."},
+  serpunch: {m: {obTrap: 1}, why: "Serratus ohne Stütz: Das Schulterblatt wird nach vorn geschoben (Protraktion). Zuerst ohne Gewicht."},
+  thor: {m: {ruecken: .5, rumpf: .5}, why: "Bewegt die Brustwirbelsäule. Eine steife, runde BWS zieht die Schultern nach vorn."}};
+REP_STEPS["reha:rotmob"] = [["Außen", 2, "hin"], ["Innen", 2, "back"]];
+AUTO_CFG.rotmob = {mode: "reps", steps: repSteps("reha:rotmob", {}), reps: 8, rounds: 2, side: true, rest: 0};
+// Aktive Routine: Morgenroutine und Schulter-Reha teilen Blatt, Timer, Clips und Ansage
+let rtk = "mob";
+const RTS = {mob: {pre: "mob:", day: "mobility", sec: "mobSec", title: "Morgenroutine", icon: "🧘", done: "Guter Start in den Tag."},
+  reha: {pre: "reha:", day: "reha", sec: "rehaSec", title: "Schulter-Reha", icon: "💪", done: "Gut für deine Schultern."}};
+const RL = () => rtk === "reha" ? REHA : MOBILITY;
+const RD = () => cur[RTS[rtk].day] || (cur[RTS[rtk].day] = {});
+const isRtKey = key => /^(mob|reha):/.test(key || "");
+const rtOf = key => (key || "").startsWith("reha:") ? "reha" : "mob";
+const rtId = key => key.slice(key.indexOf(":") + 1);
+const rtSkip = (k, d) => rtk === "reha" ? rehaSkip(k, d) : mobSkip(k, d);
+const rtItem = key => (rtOf(key) === "reha" ? REHA : MOBILITY).find(([m]) => m === rtId(key));
+const rtNext = () => RL().findIndex(([k]) => !RD()[k] && !rtSkip(k, selDate));
+const rtAlt = k => rtk === "reha" ? rehaAlt(k) : mobAlt(k);
+const rtInfo = k => (rtk === "reha" ? REHA_INFO : MOB_INFO)[k];
+const rtMin = (r, d = todayIso()) => { const L = r === "reha" ? REHA : MOBILITY, sk = r === "reha" ? rehaSkip : mobSkip; return Math.round(L.filter(([k]) => !sk(k, d)).reduce((t, [k]) => t + PREP_SEC + ZERO_SEC + autoSecs(RTS[r].pre + k) + NEXT_SEC, 0) / 60); };
+const rehaMin = d => rtMin("reha", d);
 // Einheitliche Illustrationen: RepDB Free (repdb.co), Namensnennung Pflicht; ohne Eintrag bleibt das Foto
 const RDB = {"mob:k2c":"knee-to-chest-stretch","legpress":"leg-press","rdl":"romanian-deadlift","legext":"leg-extension","seatedcurl":"seated-leg-curl","calfstand":"standing-calf-raise","rowchest":"chest-supported-db-row","inclinedb":"incline-db-press","latneutral":"v-bar-lat-pulldown","cablelat":"cable-lateral-raise","facepull":"face-pull","cableshrug":"db-shrug","bayesian":"cable-curl","pushdown":"tricep-pushdown","extrot":"cable-external-rotation","hipthrust":"hip-thrust","bss":"bulgarian-split-squat","lyingcurl":"leg-curl","abduction":"hip-abduction","calfseated":"seated-calf-raise","chinneutral":"neutral-grip-pull-ups","cablerow":"seated-cable-row","chestpress":"chest-press-machine","dblateral":"lateral-raise","revfly":"machine-reverse-fly","skull":"skull-crusher","abroller":"ab-wheel-rollout","onearmrow":"single-arm-db-row","pushup":"incline-push-ups","dblathome":"lateral-raise","dbshrug":"db-shrug","spidercurl":"spider-curl","legext45":"leg-extension","abduction30":"hip-abduction","glutebridge":"glute-bridge","hw_squat":"box-squat","hw_bss":"bulgarian-split-squat","hw_slrdl":"single-leg-romanian-deadlift","hw_slidecurl":"ball-leg-curl","hw_calf":"single-leg-calf-raise","hw_tablerow":"inverted-row","hw_doorrow":"trx-row","hw_latraise":"lateral-raise","hw_shrug":"db-shrug","hw_curl":"inverted-row","hw_hipthrust":"single-leg-glute-bridge","hw_abd":"side-lying-hip-abduction","alt_goblet":"goblet-squat","alt_smithsquat":"smith-machine-squat","alt_dbrdl":"dumbbell-romanian-deadlift","alt_pullthrough":"cable-pull-through","alt_backext":"back-extension","alt_sllegext":"single-leg-extension","alt_nordic":"nordic-hamstring-curl","alt_plank":"plank","alt_dbrow":"single-arm-db-row","alt_machrow":"chest-supported-machine-row","alt_cablepress":"cable-chest-press","alt_inclpush":"incline-push-ups","alt_floorpress":"dumbbell-floor-press","alt_1armpd":"one-arm-lat-pulldown","alt_assistchin":"assisted-pull-ups","alt_sapd":"straight-arm-pulldown","alt_lylat":"side-lying-lateral-raise","alt_machlat":"plate-loaded-lateral-raise","alt_smithshrug":"smith-machine-shrug","alt_hammer":"cable-hammer-curl","alt_bbbridge":"barbell-glute-bridge","alt_htmachine":"smith-machine-hip-thrust","alt_glutekick":"cable-kickback","alt_revlunge":"reverse-lunge","alt_smithsplit":"smith-machine-split-squat","alt_cableabd":"banded-standing-hip-abduction","alt_suitcase":"suitcase-carry","mob:glutebr":"glute-bridge","mob:rkc":"plank","mob:hipflexor":"kneeling-hip-flexor-stretch","mob:shrug30":"db-shrug","hw_latiso":"lateral-raise","hw_extrot":"cable-external-rotation","wallsit":"wall-sit","alt_birddog":"bird-dog"};
 Object.assign(RDB, {cablecurl:"cable-curl", onearmpd:"tricep-pushdown", wristcurl:"db-reverse-wrist-curl", hw_bandcurl:"banded-standing-curl", hw_bandpushdown:"tricep-pushdown", hw_bandhammer:"cable-hammer-curl"});
@@ -1539,6 +1605,7 @@ function mergeDay(srv, loc){
   out.sets = Object.assign({}, srv.sets || {}, loc.sets || {});
   out.antag = Object.assign({}, srv.antag || {}, loc.antag || {});
   out.mobility = Object.assign({}, srv.mobility || {}, loc.mobility || {});
+  if (srv.reha || loc.reha) out.reha = Object.assign({}, srv.reha || {}, loc.reha || {});
   out.meals = Object.assign({}, srv.meals || {}, loc.meals || {});
   out.ate = Object.assign({}, srv.ate || {}, loc.ate || {});
   out.ownDel = [...new Set([...(srv.ownDel || []), ...(loc.ownDel || [])])];
@@ -1676,7 +1743,7 @@ function setMode(m){ const s = S(), was = s.mode || "normal"; if (m === was) ret
   if (m === "pause" && !open) ps.push({from: t}); else if (m !== "pause" && open) { if (open.from >= t) ps.splice(ps.indexOf(open), 1); else open.to = addDays(t, -1); }
   saveSettings({mode: m, pauses: ps}); replanSoon(); }
 // Feste Zeiten der Routinen (Einstellungen › Training & Plan); der Planer liest dieselben Werte
-const ROUTINE_DEF = {mob: "07:30", pain: "21:45"};
+const ROUTINE_DEF = {mob: "07:30", reha: "18:00", pain: "21:45"};
 const routineAt = k => { const v = (S().routineTimes || {})[k]; return /^([01]\d|2[0-3]):[0-5]\d$/.test(v || "") ? v : ROUTINE_DEF[k]; };
 // Zyklus: Pausentage zählen nicht mit (offene Pause bis heute) – gleiche Rechnung im Planer (cycle_days/week_no)
 const pauseEnd = p => p.to || todayIso();
@@ -2268,10 +2335,10 @@ function applyDeep(){
   history.replaceState(null, "", `#d=${selDate}`); openSheet(k, a);
 }
 function readHash(){
-  const k = location.hash.match(/[#&]([wmpc])=(\d{4}-\d{2}-\d{2})/);
+  const k = location.hash.match(/[#&]([wmpcr])=(\d{4}-\d{2}-\d{2})/);
   if (k) { const typ = k[1], dte = k[2]; cur = null; deep = null;
     if (typ === "c") { selDate = todayIso(); tab = "heute"; deep = ["checkin", dte]; }
-    else { selDate = dte; tab = typ === "w" ? "training" : "heute"; if (typ === "w") { woSession = null; openEx = null; } else deep = [typ === "m" ? "mob" : "pain"]; }
+    else { selDate = dte; tab = typ === "w" ? "training" : "heute"; if (typ === "w") { woSession = null; openEx = null; } else deep = [typ === "m" ? "mob" : typ === "r" ? "reha" : "pain"]; }
     return; }
   const e = location.hash.match(/[#&]e=(\d{4}-\d{2}-\d{2})/); if (e) { tab = "essen"; essenView = "plan"; essenMon = monday(e[1]); essenDay = e[1]; openDays = {mo: essenMon, set: new Set([e[1]])}; return; }
   const m = location.hash.match(/d=(\d{4}-\d{2}-\d{2})/); if (m) { selDate = m[1]; tab = "heute"; cur = null; }
@@ -2286,7 +2353,7 @@ function readHash(){
 // Finger/Ellbogen sind nur nach dem Bouldern relevant (Überlastung von Ringbändern und Ellbogen)
 const climbed = d => { const day = d === cur?.date ? cur : store.days[d]; return !!(day?.boulder?.done || (day?.cardio || []).some(c => c.type === "boulder")); };
 function blankDay(d){ return {date:d, session:defaultSession(d), sets:{}, boulder:{done:false,min:null}, mobility:{}, pain:{sc:null,knee:null,finger:null,kneeTest:null}, weight:null, sleep:null, note:""}; }
-function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur._seenReset = d?.resetAt || null; cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.boulder = cur.boulder || {done:false};
+function loadCur(){ const d = store.days[selDate]; cur = Object.assign(blankDay(selDate), d ? JSON.parse(JSON.stringify(d)) : {}); cur._seenReset = d?.resetAt || null; cur.pain = cur.pain || {}; cur.sets = cur.sets || {}; cur.mobility = cur.mobility || {}; cur.reha = cur.reha || {}; cur.boulder = cur.boulder || {done:false};
   if (d?.session && !d.sessAt && !d.startedAt && !loggedSets(d)) cur.session = defaultSession(selDate);  // alte, nur abgeleitete Einheit folgt dem aktuellen Plan
   dirty = false; }
 function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveTimer); saveTimer = setTimeout(saveCur, 1200); }
@@ -2367,7 +2434,7 @@ function applyMobHold(mh){ mobHoldRef = mh;
     d.hold = n; d.dose = rep(o.dose); d.tempo = o.tempo && n !== o.sec ? rep(o.tempo).replace(/^[\d-]+\s*\((.*)\)$/, "$1") : o.tempo; mb[1] = rep(o.txt); if (GUIDE[k]) GUIDE[k].sec = n; } }
 for (const id of IMG_NONE) { if (id.startsWith("mob:")) { const mb = MOBILITY.find(x => x[0] === id.slice(4)); if (mb) mb[2] = null; } else if (EX[id]) EX[id].img = null; }
 // Vorschaubild: Illustration/Foto, sonst Standbild aus dem Erklärvideo
-const exThumb = (key, img) => img ? isrc(img, img.startsWith("r/") ? 1 : 0) : VIDS?.[key]?.video ? `https://i.ytimg.com/vi/${encodeURIComponent(VIDS[key].video)}/mqdefault.jpg` : null;
+const exThumb = (key, img) => img ? isrc(img, img.startsWith("r/") ? 1 : 0) : key?.startsWith("reha:") ? rehaThumb(rtId(key)) : VIDS?.[key]?.video ? `https://i.ytimg.com/vi/${encodeURIComponent(VIDS[key].video)}/mqdefault.jpg` : null;
 const animHtml = (img, alt, hint) => img ? `<span class="anim"><img src="${isrc(img, 0)}" alt="${esc(alt)}" loading="lazy" decoding="async"><img class="b" src="${isrc(img, 1)}" alt="" loading="lazy" decoding="async">${hint ? `<span class="hint">${hint}</span>` : ""}</span>` : "";
 // Erklärvideos je Übung (videos.json); Player lädt erst nach Tipp, über youtube-nocookie
 let VIDS = null, vidsReady = null;
@@ -2398,14 +2465,14 @@ let techTab = "anl", techFor = null;
 // Ohne Wahl: Routine mit eigenem Clip = Video, sonst Illustration (Übersicht)
 let vidPref = lsGet("vidPref"), realOpen = null;
 // Morgenroutine: eigener Ein-Wiederholungs-Clip (privates Repo) statt YouTube, Halten = Standbild, Lösen = Bewegung im Takt des Timers
-const mobClipId = key => { if (!key.startsWith("mob:") || !GCM) return null; const id = MOB_ID[key.slice(4)]; const f = id && gcHasClip(id) && gcFollow(id); return f && (f.ph?.length || timerCfg(key).mode !== "reps") ? id : null; };
+const mobClipId = key => { if (!isRtKey(key) || !GCM) return null; const id = (rtOf(key) === "reha" ? REHA_ID : MOB_ID)[rtId(key)]; const f = id && gcHasClip(id) && gcFollow(id); return f && (f.ph?.length || timerCfg(key).mode !== "reps") ? id : null; };
 let mobClipObj = null, mobDataReady = false; // Coach-Daten und Clip-Liste einmal laden, dann Blatt neu zeichnen
 // Zeitpunkte im Clip: Haltephase oben (bzw. gestreckt) ist das Standbild, der Rest ist die Bewegung zwischen zwei Halten
 // Clip in Abschnitte teilen: Halteposition (Standbild), Hinweg dorthin, Rückweg und Ruheposition (Standbild vor dem Hinweg)
 function mobClipMap(id){ const fo = gcFollow(id), ph = fo?.ph || [];
   if (!ph.length) { const len = fo.t1 - fo.t0; return {hold: len / 2, start: len / 2, hin: null, back: null, len}; }
   let s = 0; const seg = ph.map(([l, d]) => { const x = {l, s, d: +d, e: s + +d}; s += +d; return x; }), n = seg.length, len = s;
-  const H = seg.find(x => /(oben|gestreckt|eingerollt).*halten/i.test(x.l)) || [...seg].reverse().find(x => /halten/i.test(x.l)); if (!H) return null;
+  const H = seg.find(x => /(oben|gestreckt|eingerollt|außen|vorne).*halten/i.test(x.l)) || [...seg].reverse().find(x => /halten/i.test(x.l)); if (!H) return null;
   const hi = seg.indexOf(H), isRest = x => x !== H && /halten|dehnung|hohlkreuz/i.test(x.l), ri = seg.findIndex(isRest);
   let hin, back, start;
   if (ri >= 0) { // Kreislauf: Halten → Rückweg → Ruhe → Hinweg → Halten
@@ -2439,11 +2506,11 @@ function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!
   v.loop = false; v.playbackRate = Math.min(3, Math.max(0.2, (r[1] - r[0]) / Math.max(0.5, t.left + ZERO_SEC)));
   try { v.currentTime = r[0] * k; } catch {} v._stopAt = r[1] * k; v.play().catch(() => {}); clipWatch(v); }
 function motionHtml(key, img, alt, still){
-  const own = mobClipId(key);
-  if (own && vidPref !== false) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
+  const own = mobClipId(key), og = !img && key.startsWith("reha:") ? exThumb(key, null) : null;
+  if (own && vidPref !== false) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : og ? `<img src="${esc(og)}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
   const c = clipOf(key);
   if (c && (vidPref === true || !img)) return `<div class="exhero">${clipHtml(key)}${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
-  return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : ""}${own ? `<button type="button" class="herobtn" data-real="vid">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="vid">▶ So sieht's echt aus</button>` : ""}</div>`;
+  return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : og ? `<span class="anim still"><img src="${esc(og)}" alt="${esc(alt)}" decoding="async"></span>` : ""}${own ? `<button type="button" class="herobtn" data-real="vid">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="vid">▶ So sieht's echt aus</button>` : ""}</div>`;
 }
 // Schleife: am Ende des Ausschnitts zurück zum Anfang (YouTube-Iframe-API per postMessage)
 window.addEventListener("message", ev => {
@@ -2541,6 +2608,7 @@ const ciAt = d => parse(d).getDay() === 1 ? "19:30" : (store.plan.extras || []).
 function dayEvents(d, focus = todayFocus){
   const ev = [], st = trainState(), pl = planFor(d), mc = mobCount(cur, d), mt = mobTotal(d);
   { const sk = mobSkipped(cur); ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", sub: sk ? "ausgelassen" : `${mobMin(d)} min · ${mc}/${mt}`, done: mobFinished(cur, d) || sk, skip: sk, act: `data-sheet="mob"`, cta: mc ? "Weiter" : "Starten"}); }
+  if (d >= REHA_SINCE) { const sk = rtSkipped("reha", cur), rc = rtCount("reha", cur, d), rn = rtTotal("reha", d); ev.push({k: "reha", t: routineAt("reha"), icon: "💪", short: "Reha", title: "Schulter-Reha", sub: sk ? "ausgelassen" : `${rtMin("reha", d)} min · ${rc}/${rn}`, done: rtFinished("reha", cur, d) || sk, skip: sk, act: `data-sheet="reha"`, cta: rc ? "Weiter" : "Starten"}); }
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
     ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: st === "bereit" && d < todayIso() ? "nicht gemacht" : `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Zum Training", train: true}); }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(d)) if (m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time || "", icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: !m.own && typeof m.name === "string" && recipeByName(m.name) ? recTitle(recipeByName(m.name)) : m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
@@ -2567,7 +2635,7 @@ const ppRow = p => `<div class="pp"><span>${hmStr(Math.max(0, p.t))}</span><span
 function nextBlock(d, all){
   const ev = all.filter(e => e.t), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
   // Mahlzeiten sind keine Aufgaben: nur kommende zählen (verpasste der letzten 2 h bleiben unten abhakbar). Aufgaben bleiben offen, bis sie erledigt sind.
-  const win = e => e.meal ? 30 : e.train ? (trainState() === "läuft" ? 24 * 60 : 120) : e.k === "mob" ? 240 : 24 * 60;
+  const win = e => e.meal ? 30 : e.train ? (trainState() === "läuft" ? 24 * 60 : 120) : e.k === "mob" || e.k === "reha" ? 240 : 24 * 60;
   const nx = ev.find(e => !e.done && hm(e.t) + win(e) >= nm), preps = dayPreps(d, ev).filter(p => p.t >= nm - 30);
   const overdue = ev.filter(e => !e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm);
   const missed = ev.filter(e => e.meal && !e.done && e !== nx && hm(e.t) + win(e) < nm && nm - hm(e.t) <= 120);
@@ -2577,7 +2645,7 @@ function nextBlock(d, all){
     const stat = e.skip ? "ausgelassen" : e.done ? "erledigt" : e === nx ? "als Nächstes" : miss ? "offen" : past ? "vorbei" : "später";
     return (i === nowAt ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : "") + `<button type="button" role="listitem" class="${e.done ? "done" : ""} ${e === nx ? "next" : ""} ${miss ? "miss" : ""} ${!e.done && past && !miss && e !== nx ? "past" : ""}" ${act} aria-label="${e.t} ${esc(e.title)}: ${stat}"><b>${e.t}</b><span class="ti">${e.skip ? "✕" : e.done ? "✓" : e.icon}</span><span class="tn">${esc(e.short || e.title)}</span>${e === nx ? `<span class="ts">${hm(e.t) - nm > 30 ? "nächstes" : "jetzt"}</span>` : miss ? `<span class="ts">offen</span>` : ""}</button>`; }).join("")}${nowAt < 0 ? `<span class="tnow" aria-hidden="true"><i>${hmStr(nm)}</i></span>` : ""}</div>`;
   let h = `<div class="lab sec">Tagesablauf</div>` + line;
-  const odHtml = (overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : e.k === "mob" && !mobCount(cur) ? `<button type="button" class="btn ghost small odx" data-act="mobSkip" aria-label="Morgenroutine heute ausgelassen">✕</button>` : ""}</span>`).join("")}</div>` : "")
+  const odHtml = (overdue.length ? `<div class="odline small"><span class="muted">Noch offen:</span>${overdue.map(e => `<span class="odit"><button type="button" class="btn ghost small" ${e.act}>${e.icon} ${esc(e.title)}</button>${e.train && !cur?.startedAt ? `<button type="button" class="btn ghost small odx" data-act="trainDrop" aria-label="Training für heute entfernen">✕</button>` : e.k === "mob" && !mobCount(cur) ? `<button type="button" class="btn ghost small odx" data-act="mobSkip" aria-label="Morgenroutine heute ausgelassen">✕</button>` : e.k === "reha" && !rtCount("reha", cur) ? `<button type="button" class="btn ghost small odx" data-act="rehaSkip" aria-label="Schulter-Reha heute ausgelassen">✕</button>` : ""}</span>`).join("")}</div>` : "")
     + missed.map(e => { const m = e.meal; return `<div class="odline small"><span class="muted">${e.t} ${esc(m.label)}:</span><button type="button" class="linkbtn" ${mealOpenAttr(d, m)}>${esc(e.title)}</button><span class="odit"><button type="button" class="btn ghost small" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${skipBtn(d, m, "btn ghost small odx")}</span></div>`; }).join("");
   if (!nx) return h + odHtml + (overdue.length ? "" : `<div class="nowc"><b>Für heute ist alles erledigt ✓</b><div class="small muted">${restInfo().next || "Erholung gehört zum Plan."}</div></div>`);
   const mins = hm(nx.t) - nm, mine = preps.filter(p => p.for === nx.k || (!p.for && p.t <= nm + 120)), other = preps.filter(p => !mine.includes(p)), m = nx.meal;
@@ -2585,7 +2653,7 @@ function nextBlock(d, all){
   if (nx.train) h += `<div class="lab sec">Als Nächstes · ${lab}</div><div class="nowbig">${heroCard(true)}</div>`;
   else h += `<div class="lab sec">Als Nächstes</div><div class="nowc nextc" ${m ? mealSw(d, m) : ""}><div class="nowh tap" ${m ? mealOpenAttr(d, m) : nx.act || ""}><span class="nowi">${m ? mealThumb(m.name) : nx.icon}</span><div><div class="lab">${lab}</div><b>${esc(nx.title)}</b><div class="small muted">${nx.sub || ""}</div></div></div>
     ${mine.length ? `<div class="pps">${mine.map(p => `<div class="pp ${p.t <= nm ? "due" : ""}"><span>${hmStr(Math.max(0, p.t))}</span><span>${p.icon} ${esc(p.txt)}</span></div>`).join("")}</div>` : ""}
-    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${m.own ? "" : `<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Anderes Rezept planen">⇄</button>`}` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>${nx.k === "mob" && !mobCount(cur) ? `<button class="btn ghost" type="button" data-act="mobSkip">✕ Heute ausgelassen</button>` : ""}`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
+    <div class="actions">${m ? `<button class="btn primary" type="button" data-ate="${m.k}" data-d="${d}">✓ Gegessen</button>${m.own ? "" : `<button class="btn" type="button" data-sheet="other" data-v="${d}|${m.k}">✎ Schon was anderes gegessen</button><button class="btn ghost" type="button" data-sheet="meal" data-v="${d}|${m.k}" aria-label="Anderes Rezept planen">⇄</button>`}` : `<button class="btn primary" type="button" ${nx.act}>${esc(nx.cta)}</button>${nx.k === "mob" && !mobCount(cur) ? `<button class="btn ghost" type="button" data-act="mobSkip">✕ Heute ausgelassen</button>` : nx.k === "reha" && !rtCount("reha", cur) ? `<button class="btn ghost" type="button" data-act="rehaSkip">✕ Heute ausgelassen</button>` : ""}`}</div>${m ? restPick(d, m) + skipBtn(d, m, "btn ghost small") : ""}</div>`;
   h += odHtml;
   if (other.length) h += `<div class="lab sec">Später vorbereiten</div><div class="pps card">${other.map(ppRow).join("")}</div>`;
   return h;
@@ -2781,7 +2849,7 @@ let warmOpen = false, clearArmed = 0;
 const dropArm = {armed: null, t: null}; // Doppeltipp-Zustand für „Heute nicht trainieren“
 view.addEventListener("toggle", e => { if (e.target?.classList?.contains("warm")) warmOpen = e.target.open; }, true);
 function renderToday(){
-  ensureCur(); if (token && S().mobMin !== mobMin()) saveSettings({mobMin: mobMin()});  // Dauer von heute (in der Pause ohne Plank/Shrug) – der Planer nutzt sie
+  ensureCur(); if (token && S().mobMin !== mobMin()) saveSettings({mobMin: mobMin()}); if (token && S().rehaMin !== rehaMin()) saveSettings({rehaMin: rehaMin()});  // Dauer von heute (in der Pause ohne Plank/Shrug) – der Planer nutzt sie
   if (!mealPlan || !recipes) ensureMeals().then(() => { if (tab === "heute") renderToday(); }).catch(() => {});
   const t = todayIso(), isToday = selDate === t, pastD = selDate < t, pz = S().mode === "pause", food = !!(mealPlan && recipes);
   let h = `<div data-swipe="day"><div class="dayhead"><div class="nav"><button type="button" data-day="-1" aria-label="Vorheriger Tag">‹</button></div>
@@ -2836,6 +2904,17 @@ const HOME_PLUS = {chinneutral:"chinneutral",latneutral:"chinneutral",cablelat:"
 const homeDefault = id => HOME_PLUS[id] && gearOk(HOME_PLUS[id]) ? HOME_PLUS[id] : id in HOME ? HOME[id] : (HOME_OK.has(id) ? id : null);
 const prefMap = () => (atHome() ? S().altPrefHome : S().altPref) || {};
 const swapKey = () => atHome() ? "swapHome" : "swap";
+// Schulter-Reha: Dosierung (nach DOSE, damit die Konstante schon steht)
+Object.assign(DOSE, {
+  "reha:rotmob": {dose: "1 × 8 je Seite, langsam: 2 s nach außen, 2 s nach innen", tempo: null, hold: null, perSide: true, rest: 0, breath: "Ruhig weiteratmen", why: REHA_INFO.rotmob.why},
+  "reha:eriso": {dose: "2 × 30 s je Seite mit ca. 60–70 % Kraft", tempo: null, hold: 30, perSide: true, rest: 20, breath: "Beim Halten ruhig weiteratmen, nicht pressen", why: REHA_INFO.eriso.why},
+  "reha:er1": {dose: "2 × 12 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er1.why},
+  "reha:er2": {dose: "2 × 10 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er2.why},
+  "reha:er3": {dose: "2 × 10 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er3.why},
+  "reha:wallang": {dose: "2 × 6 Wdh., oben 1 s halten, 2 s ablassen", tempo: "2-0-2-1 (2 s ablassen, 2 s hoch, 1 s halten)", hold: 1, perSide: false, rest: 30, breath: "Beim Hochschieben ausatmen", why: REHA_INFO.wallang.why},
+  "reha:serplank": {dose: "2 × 20 s halten", tempo: null, hold: 20, perSide: false, rest: 30, breath: "Ruhig weiteratmen", why: REHA_INFO.serplank.why},
+  "reha:serpunch": {dose: "1 × 8 Wdh. je Seite, vorn 1 s halten", tempo: "2-0-1-1 (2 s zurück, 1 s nach vorn, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Schieben ausatmen", why: REHA_INFO.serpunch.why},
+  "reha:thor": {dose: "1 × 6 Wdh., in jeder Endstellung 2 s halten", tempo: "2-0-2-2 (2 s zurück, 2 s runden, 2 s halten)", hold: 2, perSide: false, rest: 0, breath: "Beim Runden ausatmen", why: REHA_INFO.thor.why}});
 // SC-Schmerz ≥ 3: Ersatz in dieser Reihenfolge (erste, die nicht schon in der Einheit vorkommt); leer = entfällt (SC)
 const SC_RED = {inclinedb:["alt_floorpress","alt_inclpush"],chestpress:["alt_floorpress","alt_inclpush"],chinneutral:["cablerow","alt_machrow","alt_dbrow","hw_tablerow","onearmrow"],latneutral:["cablerow","alt_machrow","alt_dbrow","hw_tablerow","onearmrow"],abroller:["deadbug","alt_birddog","alt_plank"],pushup:["pushupplus","alt_inclpush"],closepushup:["hw_bandpushdown","pushdown","pushupplus"],landmine:[],bayesian:["cablecurl","preacher","alt_hammer","spidercurl"],inclinecurl:["preacher","cablecurl","alt_hammer","spidercurl"],skull:["pushdown","onearmpd","hw_bandpushdown"],alt_kickback:["pushdown","onearmpd","hw_bandpushdown"],alt_suitcase:["deadbug","alt_plank"]};
 // Modus „Schonen“: immer ersetzen (ohne Schmerzschwelle). Drücken, Überkopf/Hängen, Seitheben, Shrugs, Arme auf Schulterhöhe, Stütz auf den Armen, Last an hängenden Armen oder auf den Schultern
@@ -3477,6 +3556,7 @@ function varRowHtml(id){ const l = varLadder(id); if (!l || l.length < 2) return
 let sheetHist = false;
 addEventListener("popstate", () => { if (sheetHist && sheet.open) { sheetHist = false; closeSheet(true); } });
 function openSheet(kind, arg){
+  if (kind === "reha") { rtk = "reha"; kind = "mob"; } else if (kind === "mob") rtk = "mob";
   if (/^mob/.test(kind)) vWarm();
   if (kind === "cook") cookMin = false; else if (sheet.open && sheetKind === "cook" && cook) cookMin = true;
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
@@ -3493,33 +3573,33 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
-    { const left = Math.ceil(autoLeft(mobNext()) / 60), part = mobCount(cur, selDate) > 0 && left < mobMin(selDate);
-    h += `<div class="sh"><h2>Morgenroutine · ${mobMin(selDate)} min</h2>${close}</div><div class="btnrow two"><button class="btn primary big" type="button" data-guide="auto"><b>⏱ Automatisch</b><span class="small">${part ? `noch ≈ ${left} min` : "läuft von selbst"}</span></button><button class="btn big" type="button" data-guide="start"><b>▶ Selbst starten</b><span class="small">Timer je Übung antippen</span></button></div><div class="small muted">Automatisch: Ansage, Übung, Pause und Wechsel laufen nacheinander durch. Selbst starten: du startest jeden Timer und gehst im eigenen Tempo weiter.</div>`; }
-    h += `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
-    MOBILITY.forEach(([k, t, img], i) => { h += `<div class="mobi ${cur.mobility[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${cur.mobility[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb("mob:" + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb("mob:" + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${mobAlt(k) ? `<br><span class="small muted">${esc(mobAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
-    h += `<button class="btn ${mobFinished(cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${mobFinished(cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
-    if (!mobCount(cur) && !cur.mobility._done) { const dl = selDate === todayIso() ? "Heute ausgelassen" : "Ausgelassen";
-      h += mobSkipped(cur) ? `<div class="small muted">${dl}.</div><button class="btn ghost" type="button" data-act="mobSkip">↺ Doch nicht ausgelassen</button>` : `<button class="btn ghost" type="button" data-act="mobSkip">✕ ${dl}</button>`; }
-    if (mobZoom != null) { const [k, t, img] = MOBILITY[mobZoom], g = GUIDE[k];
-      h += `<div class="zoomov" data-mobzoom="close"><div class="zoomcard" role="dialog" aria-label="${esc(t)}"><div class="zh"><span class="lab">Übung ${mobZoom + 1} von ${MOBILITY.length}</span><button type="button" class="btn ghost small" data-mobzoom="close" aria-label="Schließen">✕</button></div>
-        ${motionHtml("mob:" + k, img, t, false)}${IMG_NOTE["mob:" + k] && img ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE["mob:" + k])}</div>` : ""}<div class="zt">${esc(t)}</div>${mobAlt(k) ? `<div class="warnb small">${esc(mobAlt(k))}</div>` : ""}${doseHtml("mob:" + k)}${gearHtml("mob:" + k, true)}<div id="tmrSlot"></div>
-        ${videoHtml("mob:" + k, "")}
-        ${MOB_INFO[k] ? `<div class="whyb"><div class="lab">Wofür gut</div><div>${esc(MOB_INFO[k].why)}</div></div>${muscleMap(MOB_INFO[k].m, "mob:" + k)}` : ""}
+    { const left = Math.ceil(autoLeft(rtNext()) / 60), part = rtCount(rtk, cur, selDate) > 0 && left < rtMin(rtk, selDate);
+    h += `<div class="sh"><h2>${RTS[rtk].title} · ${rtMin(rtk, selDate)} min</h2>${close}</div><div class="btnrow two"><button class="btn primary big" type="button" data-guide="auto"><b>⏱ Automatisch</b><span class="small">${part ? `noch ≈ ${left} min` : "läuft von selbst"}</span></button><button class="btn big" type="button" data-guide="start"><b>▶ Selbst starten</b><span class="small">Timer je Übung antippen</span></button></div><div class="small muted">Automatisch: Ansage, Übung, Pause und Wechsel laufen nacheinander durch. Selbst starten: du startest jeden Timer und gehst im eigenen Tempo weiter.</div>`; }
+    h += rtk === "reha" ? `<label class="check"><input type="checkbox" id="rehaNoBand" ${rehaNoBand() ? "checked" : ""}><span>Kein Band zur Hand: Türrahmen-Variante statt Bandübungen</span></label><div class="small muted">Phase ${rehaPhase()}${rehaPhase() === 1 ? " bis zur Arztfreigabe: Ellbogen am Körper, nichts über Brusthöhe" : ": nur schmerzfrei steigern (SC ≤ 2/10)"}. Videos: MuscleWiki.</div>` : `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
+    RL().forEach(([k, t, img], i) => { h += `<div class="mobi ${RD()[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${RD()[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb(RTS[rtk].pre + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb(RTS[rtk].pre + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${rtAlt(k) ? `<br><span class="small muted">${esc(rtAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
+    h += `<button class="btn ${rtFinished(rtk, cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${rtFinished(rtk, cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
+    if (!rtCount(rtk, cur) && !RD()._done) { const dl = selDate === todayIso() ? "Heute ausgelassen" : "Ausgelassen";
+      h += rtSkipped(rtk, cur) ? `<div class="small muted">${dl}.</div><button class="btn ghost" type="button" data-act="${rtk === "reha" ? "rehaSkip" : "mobSkip"}">↺ Doch nicht ausgelassen</button>` : `<button class="btn ghost" type="button" data-act="${rtk === "reha" ? "rehaSkip" : "mobSkip"}">✕ ${dl}</button>`; }
+    if (mobZoom != null) { const [k, t, img] = RL()[mobZoom], g = GUIDE[k];
+      h += `<div class="zoomov" data-mobzoom="close"><div class="zoomcard" role="dialog" aria-label="${esc(t)}"><div class="zh"><span class="lab">Übung ${mobZoom + 1} von ${RL().length}</span><button type="button" class="btn ghost small" data-mobzoom="close" aria-label="Schließen">✕</button></div>
+        ${motionHtml(RTS[rtk].pre + k, img, t, false)}${IMG_NOTE[RTS[rtk].pre + k] && img ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[RTS[rtk].pre + k])}</div>` : ""}<div class="zt">${esc(t)}</div>${rtAlt(k) ? `<div class="warnb small">${esc(rtAlt(k))}</div>` : ""}${doseHtml(RTS[rtk].pre + k)}${gearHtml(RTS[rtk].pre + k, true)}<div id="tmrSlot"></div>
+        ${videoHtml(RTS[rtk].pre + k, "")}
+        ${rtInfo(k) ? `<div class="whyb"><div class="lab">Wofür gut</div><div>${esc(rtInfo(k).why)}</div></div>${muscleMap(rtInfo(k).m, RTS[rtk].pre + k)}` : ""}
         ${k === "knietest" ? `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}` : ""}
-        <div class="actions"><button type="button" class="btn big" data-tmrin="mob:${k}">⏱ Timer</button><button type="button" class="btn primary big" data-mobdone="${k}">${cur.mobility[k] ? "✓ Erledigt" : "Erledigt"}</button></div><button type="button" class="btn ghost small" data-hurt="mob:${k}">😣 Tut was weh?</button>
-        <div class="zn"><button type="button" class="btn ghost small" data-mobzoom="${Math.max(0, mobZoom - 1)}" ${mobZoom === 0 ? "disabled" : ""}>‹ Vorherige</button><button type="button" class="btn ghost small" data-mobzoom="${Math.min(MOBILITY.length - 1, mobZoom + 1)}" ${mobZoom === MOBILITY.length - 1 ? "disabled" : ""}>Nächste ›</button></div></div></div>`; }
+        <div class="actions"><button type="button" class="btn big" data-tmrin="${RTS[rtk].pre}${k}">⏱ Timer</button><button type="button" class="btn primary big" data-mobdone="${k}">${RD()[k] ? "✓ Erledigt" : "Erledigt"}</button></div><button type="button" class="btn ghost small" data-hurt="${RTS[rtk].pre}${k}">😣 Tut was weh?</button>
+        <div class="zn"><button type="button" class="btn ghost small" data-mobzoom="${Math.max(0, mobZoom - 1)}" ${mobZoom === 0 ? "disabled" : ""}>‹ Vorherige</button><button type="button" class="btn ghost small" data-mobzoom="${Math.min(RL().length - 1, mobZoom + 1)}" ${mobZoom === RL().length - 1 ? "disabled" : ""}>Nächste ›</button></div></div></div>`; }
   } else if (sheetKind === "hurt") { h += `<div class="hurtcard">${hurtHtml(sheetArg)}</div>`;
   } else if (sheetKind === "mobguide") {
-    const i = sheetArg, N = MOBILITY.filter(([k]) => !mobSkip(k, selDate)).length, pos = MOBILITY.slice(0, i).filter(([k]) => !mobSkip(k, selDate)).length;
-    if (i >= MOBILITY.length) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">🧘</div><div>${mobCount(cur, selDate)}/${mobTotal(selDate)} Übungen erledigt. Guter Start in den Tag.</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>`; }
-    else { const [k, txt, img] = MOBILITY[i], g = GUIDE[k];
-      h += `<div class="sh"><div><div class="lab">Morgenroutine · ${Math.min(pos + 1, N)}/${N}${autoFlow ? " · automatisch" : ""}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
-        <div class="shopbar"><div class="fill" style="width:${pos / N * 100}%"></div></div>${motionHtml("mob:" + k, img, txt, false)}<div>${esc(txt)}</div>`;
-      h += timerHtml("mob:" + k);
+    const i = sheetArg, N = RL().filter(([k]) => !rtSkip(k, selDate)).length, pos = RL().slice(0, i).filter(([k]) => !rtSkip(k, selDate)).length;
+    if (i >= RL().length) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">${RTS[rtk].icon}</div><div>${rtCount(rtk, cur, selDate)}/${rtTotal(rtk, selDate)} Übungen erledigt. ${RTS[rtk].done}</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>`; }
+    else { const [k, txt, img] = RL()[i], g = GUIDE[k];
+      h += `<div class="sh"><div><div class="lab">${RTS[rtk].title} · ${Math.min(pos + 1, N)}/${N}${autoFlow ? " · automatisch" : ""}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
+        <div class="shopbar"><div class="fill" style="width:${pos / N * 100}%"></div></div>${motionHtml(RTS[rtk].pre + k, img, txt, false)}<div>${esc(txt)}</div>`;
+      h += timerHtml(RTS[rtk].pre + k);
       if (k === "knietest") h += `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}`;
-      if (mobAlt(k)) h += `<div class="warnb small">${esc(mobAlt(k))}</div>`;
-      h += doseHtml("mob:" + k) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml("mob:" + k, "")}</details>`;
-      h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div><button type="button" class="btn ghost small" data-hurt="mob:${k}">😣 Tut was weh?</button>`; }
+      if (rtAlt(k)) h += `<div class="warnb small">${esc(rtAlt(k))}</div>`;
+      h += doseHtml(RTS[rtk].pre + k) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml(RTS[rtk].pre + k, "")}</details>`;
+      h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div><button type="button" class="btn ghost small" data-hurt="${RTS[rtk].pre}${k}">😣 Tut was weh?</button>`; }
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
@@ -3531,6 +3611,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
       <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>`;
+  } else if (sheetKind === "mwex") { h += mwExHtml(sheetArg, close);
   } else if (sheetKind === "tech") {
     const e = EX[sheetArg];
     if (techFor !== sheetArg) { techFor = sheetArg; techTab = "anl"; realOpen = null; }
@@ -4131,13 +4212,72 @@ function gearPicker(keys, q = "Was hast du heute da?", noHint){
   const hg = gearHome();
   return `<div class="gearpick"><div class="lab">${q}</div><div class="chips">${keys.map(k => `<button type="button" data-gear="${k}" aria-pressed="${!!hg[k]}">${hg[k] ? "✓ " : ""}${esc(GEAR[k])}</button>`).join("")}</div>${noHint ? "" : `<div class="small muted">Fehlt etwas, tauscht die App die Übung gegen eine passende Alternative.</div>`}</div>`;
 }
+// ---------- MuscleWiki-Katalog (2026-11-25): 1.985 Übungen, Daten nur im privaten Repo (data/mw/catalog.json), per Token geladen ----------
+// Videos und Vorschaubilder werden vom öffentlichen MuscleWiki-CDN gestreamt (nicht gespeichert). Tags sc/knee/home aus tools/mw_build.py.
+let MW = null, mwReady = null, mwErr = "", mwView = 0;
+const MW_CDN = "https://media.musclewiki.com/media/uploads/";
+const mwVid = f => MW_CDN + "videos/branded/" + f;
+const mwOg = f => f ? MW_CDN + "og-" + f.replace(/(_[A-Za-z0-9]{7})?\.mp4$/, "") + ".jpg" : "";
+const MW_MG = [["brust", "Brust", /chest|pector/i], ["schulter", "Schultern", /shoulder|deltoid/i], ["trapez", "Trapez & Nacken", /trap|neck/i], ["lat", "Latissimus", /\blats?\b/i], ["ruecken", "Unterer Rücken", /lower ?back/i],
+  ["bizeps", "Bizeps", /bicep/i], ["trizeps", "Trizeps", /tricep/i], ["unterarm", "Unterarme", /forearm|wrist|grip/i], ["bauch", "Bauch", /abdom|oblique/i], ["quad", "Quadrizeps", /quad|rectus femoris/i],
+  ["ham", "Beinbeuger", /hamstring/i], ["po", "Gesäß", /glute/i], ["wade", "Waden", /calves|calf|gastro|soleus|tibialis/i], ["huefte", "Hüfte & Adduktoren", /thigh|groin|hip|adduct|abduct/i]];
+const MW_DIFF = {Beginner: "Anfänger", Novice: "Einsteiger", Intermediate: "Mittel", Advanced: "Fortgeschritten"};
+const mwGroups = e => MW_MG.filter(([, , re]) => [...(e.mp || []), ...(e.ms || [])].some(m => re.test(m)));
+const mwMain = e => (MW_MG.find(([, , re]) => (e.mp || []).some(m => re.test(m))) || mwGroups(e)[0] || [, ""])[1];
+// „Geht jetzt“: Schonen/Pause → keine Last am Schultergürtel; ohne Freigabe → höchstens leicht; Knie-Phase 1 → kein Springen
+const mwScMax = () => schonOn() || S().mode === "pause" ? 0 : S().scCleared ? 2 : 1;
+const mwOk = e => (e.sc ?? 2) <= mwScMax() && (!S().knee1 || (e.knee ?? 0) < 2);
+const mwScTxt = e => e.sc === 2 && !S().scCleared ? "belastet das SC-Gelenk – erst nach Freigabe" : e.sc === 1 && (schonOn() || S().mode === "pause") ? "leichte Last am Schultergürtel – im Modus Schonen weglassen" : "";
+const ensureMw = () => mwReady = mwReady || (async () => {
+  if (!token) { mwErr = "Der Katalog liegt im privaten Datenspeicher – dafür muss die App verbunden sein."; return; }
+  try {
+    const ls = await gh(`contents/data/mw?ref=${CFG.branch}`); if (!ls.ok) throw ls.status;
+    const f = (await ls.json()).find(x => x.name === "catalog.json"); if (!f) throw "fehlt";
+    const key = `https://mw.local/catalog-${f.sha}.json`; let c = null, j = null;
+    try { c = await caches.open("tb-mw"); const hit = await c.match(key); if (hit) j = await hit.json(); } catch {}
+    if (!j) { const r = await gh(`contents/data/mw/catalog.json?ref=${CFG.branch}`, {headers: {Accept: "application/vnd.github.raw+json"}}); if (!r.ok) throw r.status; const t = await r.text(); j = JSON.parse(t);
+      try { await c?.put(key, new Response(t, {headers: {"Content-Type": "application/json"}})); for (const k of await c.keys()) if (k.url !== key) await c.delete(k); } catch {} }
+    MW = {ex: j.ex, by: new Map(j.ex.map(e => [e.s, e]))}; mwErr = "";
+  } catch (e) { mwErr = "Katalog konnte nicht geladen werden (" + e + ")."; mwReady = null; }
+})();
+function mwCatalogHtml(){
+  if (!MW) { ensureMw().then(() => { if (tab === "mehr" && sub.mehr === "uebungen") renderMore(); }); return `<div class="card small muted">${mwErr ? esc(mwErr) : "Katalog wird geladen …"}</div>`; }
+  const q = catF.q, list = MW.ex.filter(e => (!q || qHit(e.n + " " + e.en + " " + (e.alt || []).join(" "), q)) && (!catF.mm || mwGroups(e).some(g => g[0] === catF.mm))
+    && (!catF.eq || e.cat === catF.eq) && (!catF.ok || mwOk(e)) && (!catF.where || (catF.where === "home" ? e.home : !e.home)));
+  const cats = [...MW.ex.reduce((m, e) => m.set(e.cat, (m.get(e.cat) || 0) + 1), new Map())].filter(([c]) => c).sort((a, b) => b[1] - a[1]);
+  const deOf = c => MW.ex.find(e => e.cat === c)?.catDe || c, chip = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${l}</button>`;
+  return `<div class="card">${searchBox("catQ", catF.q, "🔎 Name, auch englisch", "Übungen suchen")}
+    <div class="chips"><span class="chiplab">Filter</span>${chip("data-catok", "1", "Geht jetzt", !!catF.ok)}${chip("data-catw", "", "Überall", !catF.where)}${chip("data-catw", "home", "Zuhause", catF.where === "home")}${chip("data-catw", "gym", "Gym", catF.where === "gym")}</div>
+    <div class="chips"><span class="chiplab">Muskeln</span>${chip("data-catmm", "", "Alle", !catF.mm)}${MW_MG.map(([k, l]) => chip("data-catmm", k, esc(l), catF.mm === k)).join("")}</div>
+    <div class="chips"><span class="chiplab">Gerät</span>${chip("data-cateq", "", "Alle", !catF.eq)}${cats.map(([c]) => chip("data-cateq", esc(c), esc(deOf(c)), catF.eq === c)).join("")}</div>
+    <div class="small muted">${list.length} von ${MW.ex.length} Übungen · Videos und Anleitungen: MuscleWiki${catF.ok ? ` · „Geht jetzt“ nach Modus${S().scCleared ? "" : " und SC-Ampel"}` : ""}</div></div>
+  <div class="catgrid">${list.slice(0, catF.n || 60).map(e => `<button type="button" class="catc" data-sheet="mwex" data-v="${esc(e.s)}">${e.vm?.[0] ? `<img src="${esc(mwOg(e.vm[0]))}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.n)}</b><span class="small muted">${esc([mwMain(e), e.catDe || e.cat].filter(Boolean).join(" · "))}${e.sc === 2 && !S().scCleared ? " · SC" : ""}</span></span></button>`).join("")}</div>
+  ${list.length > (catF.n || 60) ? `<button type="button" class="btn ghost" data-catmore="1">Weitere ${Math.min(60, list.length - (catF.n || 60))} zeigen</button>` : ""}`;
+}
+function mwExHtml(slug, close){
+  const e = MW?.by.get(slug); if (!e) { if (!MW) ensureMw().then(() => { if (sheet.open && sheetKind === "mwex") renderSheet(); }); return `<div class="sh"><h2>Übung</h2>${close}</div><div class="small muted">${MW ? "Nicht im Katalog." : mwErr ? esc(mwErr) : "Katalog wird geladen …"}</div>`; }
+  const v = e.vm?.[Math.min(mwView, (e.vm?.length || 1) - 1)], warn = mwScTxt(e), knee = S().knee1 && e.knee === 2 ? "Sprung-/Stoßbelastung – in Knie-Phase 1 weglassen." : "";
+  const vars = [...(e.varOf ? [e.varOf] : []), ...(e.vars || [])].map(s => MW.by.get(s)).filter(Boolean);
+  return `<div class="sh"><div><div class="lab">MuscleWiki · ${esc(e.catDe || e.cat || "")}${e.diff ? " · " + esc(MW_DIFF[e.diff] || e.diff) : ""}</div><h2>${esc(e.n)}</h2></div>${close}</div>
+    ${v ? `<div class="exhero"><div class="vclip"><video src="${esc(mwVid(v))}" poster="${esc(mwOg(e.vm[0]))}" muted loop playsinline autoplay preload="auto" disablepictureinpicture style="width:100%;height:100%;object-fit:contain"></video></div></div>` : ""}
+    ${e.vm?.length > 1 ? `<div class="seg">${e.vm.map((x, i) => `<button type="button" data-mwview="${i}" aria-pressed="${i === mwView}">${/side/i.test(x) ? "Seite" : /front/i.test(x) ? "Vorn" : "Ansicht " + (i + 1)}</button>`).join("")}</div>` : ""}
+    ${warn || knee ? `<div class="warnb small">${esc([warn, knee].filter(Boolean).join(" "))}</div>` : ""}
+    <ol class="steps">${(e.steps || []).map(s => `<li>${esc(s)}</li>`).join("")}</ol>
+    <div class="small muted">${esc([mwGroups(e).map(g => g[1]).join(", "), e.force ? ({Push: "Drücken", Pull: "Ziehen", Hold: "Halten"}[e.force] || e.force) : "", e.en].filter(Boolean).join(" · "))}</div>
+    ${vars.length ? `<div class="lab">Varianten</div><div class="chips">${vars.map(x => `<button type="button" data-sheet="mwex" data-v="${esc(x.s)}">${esc(x.n)}</button>`).join("")}</div>` : ""}
+    <div class="actions">${e.yt ? `<a class="btn ghost" href="${esc(e.yt.replace("/embed/", "/watch?v=").replace(/\?si=.*$/, ""))}" target="_blank" rel="noopener">▶ Ausführliches Video</a>` : ""}<a class="btn ghost" href="https://musclewiki.com/de-de/exercise/${encodeURIComponent(e.s)}" target="_blank" rel="noopener">Auf MuscleWiki ›</a></div>`;
+}
 // ---------- Übungskatalog ----------
-const catF = {q: "", m: "", where: "", plan: false};
+const catF = {q: "", m: "", where: "", plan: false, src: "", mm: "", eq: "", ok: false, n: 60};
 // Körperregionen statt einzelner Muskeln, damit die Filterleiste ohne Wischen auskommt
 const REGIONS = [["brust", "Brust", ["brust"]], ["ruecken", "Rücken", ["ruecken"]], ["schulter", "Schultern", ["seitlS", "hintS", "vordS", "obTrap"]], ["arme", "Arme", ["bizeps", "trizeps"]], ["beine", "Beine", ["quad", "waden"]], ["po", "Po & Beinrückseite", ["gh"]], ["rumpf", "Rumpf", ["rumpf", "hipflex"]]];
 // Untertitel: Hauptmuskeln (Anteil ≥ 1), sonst der größte Anteil; „Mobilität“ nur ohne Muskelangabe
 const catMus = e => { const ks = Object.keys(e.m || {}).filter(k => e.m[k] > 0).sort((a, b) => e.m[b] - e.m[a]); return ks.length ? (ks.filter(k => e.m[k] >= 1).length ? ks.filter(k => e.m[k] >= 1) : ks.slice(0, 1)).map(k => MUSCLE_LABEL[k] || k).join(", ") : "Mobilität"; };
 function catalogHtml(){
+  const srcSw = `<div class="seg" style="margin-bottom:8px"><button type="button" data-catsrc="" aria-pressed="${!catF.src}">Meine Übungen</button><button type="button" data-catsrc="mw" aria-pressed="${catF.src === "mw"}">MuscleWiki${MW ? " · " + MW.ex.length : ""}</button></div>`;
+  if (catF.src === "mw") return srcSw + mwCatalogHtml();
+  return srcSw + catalogHtmlOwn(); }
+function catalogHtmlOwn(){
   const inPlan = new Set(SEQ.flatMap(b => SESS[variantOf(b, todayIso())]?.ex || [])), home = id => HOME_OK.has(id) || id.startsWith("hw_");
   const list = Object.entries(EX).filter(([id, e]) => qHit(e.name + " " + (e.q || ""), catF.q)
     && (!catF.m || (REGIONS.find(r => r[0] === catF.m)?.[2] || []).some(k => (e.m || {})[k])) && (!catF.where || (catF.where === "home" ? home(id) : !id.startsWith("hw_"))) && (!catF.plan || inPlan.has(id)))
@@ -4205,6 +4345,8 @@ function calEntries(d, noMeals){
   for (const x of (store.plan.extras || [])) if (x.date === d) out.push({tm:x.start, en:x.end, title: prepOff() ? "Wochen-Check-in" : "Wochen-Check-in & Meal Prep", kind:"routine", done: !!store.checkins[monday(d)], go:`#c=${monday(d)}`});
   const mob = mobCount(day, d), mobN = mobTotal(d), pain = painLogged(day);
   if (d >= t || mob || mobSkipped(day)) out.push({tm: routineAt("mob"), en: hmStr(hm(routineAt("mob")) + mobMin(d)), title:"Morgenroutine", kind:"routine", done: mobFinished(day, d), skip: mobSkipped(day), part: mob && mob < mobN ? `${mob}/${mobN}` : "", go:`#m=${d}`});
+  { const rh = rtCount("reha", day, d), rhN = rtTotal("reha", d), rs = rtSkipped("reha", day);
+    if (d >= REHA_SINCE && (d >= t || rh || rs)) out.push({tm: routineAt("reha"), en: hmStr(hm(routineAt("reha")) + rtMin("reha", d)), title:"Schulter-Reha", kind:"routine", done: rtFinished("reha", day, d), skip: rs, part: rh && rh < rhN ? `${rh}/${rhN}` : "", go:`#r=${d}`}); }
   if (d >= t || pain) out.push({tm: routineAt("pain"), en: hmStr(hm(routineAt("pain")) + 5), title:"Abendcheck", kind:"routine", done: !!pain, go:`#p=${d}`});
   return out.sort((a, b) => (a.tm || "00:00").localeCompare(b.tm || "00:00"));
 }
@@ -4236,10 +4378,10 @@ function calMonth(d){
   return h + `</div><div class="small muted"><span class="lg tr"></span> Krafteinheit (✓ erledigt) &nbsp; <span class="lg bo"></span> Bouldern &nbsp; <span class="lg mk"></span> Deload/Messtag${S().pauses?.length ? " · P = entfallen (Pause)" : ""} · Tag antippen für die Tagesansicht.</div>`;
 }
 // Kalender-Abo: welche Einträge drinstehen und wann der Kalender erinnert (Minuten vorher, null = keine). Ohne Einstellung wie bisher.
-const CAL_KINDS = [["train", "Training"], ["mob", "Morgenroutine"], ["pain", "Abendcheck"], ["checkin", "Wochen-Check-in"], ["marker", "Mess- & Deload-Tage"]];
+const CAL_KINDS = [["train", "Training"], ["mob", "Morgenroutine"], ["reha", "Schulter-Reha"], ["pain", "Abendcheck"], ["checkin", "Wochen-Check-in"], ["marker", "Mess- & Deload-Tage"]];
 const CAL_REM = [[null, "ohne Erinnerung"], [0, "zum Start"], [5, "5 min vorher"], [10, "10 min vorher"], [15, "15 min vorher"], [30, "30 min vorher"], [60, "1 h vorher"]];
 function calPref(k){ const p = (S().calPrefs || {})[k], pp = S().pushPrefs || {};
-  const def = {train: 30, mob: pp.morning !== false ? 0 : null, pain: pp.pain !== false ? 0 : null, checkin: pp.checkin !== false ? 15 : null, marker: null}[k];
+  const def = {train: 30, mob: pp.morning !== false ? 0 : null, reha: pp.reha !== false ? 0 : null, pain: pp.pain !== false ? 0 : null, checkin: pp.checkin !== false ? 15 : null, marker: null}[k];
   return {on: p?.on !== false, rem: p && "rem" in p ? p.rem : def}; }
 const calPrefsHtml = () => `<h3 class="sub3">Was im Kalender steht</h3>${info("Haken weg: der Eintrag verschwindet beim nächsten Abgleich aus dem Kalender. Die Erinnerung gilt je Eintragsart.")}
   <div class="calprefs">${CAL_KINDS.map(([k, l]) => { const p = calPref(k); return `<div class="calpref"><label class="check"><input type="checkbox" data-calon="${k}" ${p.on ? "checked" : ""}><span>${l}</span></label>${k === "marker" ? `<span class="small muted">ganztägig</span>` : `<select data-calrem="${k}" ${p.on ? "" : "disabled"} aria-label="Erinnerung für ${l}">${CAL_REM.map(([v, t]) => `<option value="${v ?? ""}" ${p.rem === v ? "selected" : ""}>${t}</option>`).join("")}</select>`}</div>`; }).join("")}</div>`;
@@ -5901,7 +6043,7 @@ function dpSet(id, v){
 }
 function setupHtml(){
   const s = S(), standalone = matchMedia("(display-mode: standalone)").matches;
-  return `<details class="slim setgrp" data-keep="set:training" ${shopOpen.has("set:training") ? "open" : ""}><summary><span>🏋 Training & Plan</span><span class="muted">Start ${s.startDate ? fmt(s.startDate) : "–"} · Modus ${(s.mode || "normal")[0].toUpperCase() + (s.mode || "normal").slice(1)}${s.scCleared ? "" : " · SC-Ampel aktiv"}${s.knee1 ? " · Knie-Phase 1" : ""} · Zeiten ${routineAt("mob")}/${routineAt("pain")}</span></summary><div class="setbody">
+  return `<details class="slim setgrp" data-keep="set:training" ${shopOpen.has("set:training") ? "open" : ""}><summary><span>🏋 Training & Plan</span><span class="muted">Start ${s.startDate ? fmt(s.startDate) : "–"} · Modus ${(s.mode || "normal")[0].toUpperCase() + (s.mode || "normal").slice(1)}${s.scCleared ? "" : " · SC-Ampel aktiv"}${s.knee1 ? " · Knie-Phase 1" : ""} · Zeiten ${routineAt("mob")}/${routineAt("reha")}/${routineAt("pain")}</span></summary><div class="setbody">
     <div class="card"><h2>Plan</h2>
     <div class="grid2"><div class="field"><label>Start Woche 1</label>${datePick("stDate", s.startDate || todayIso())}<div class="small muted">wird auf Montag gerundet</div></div><div class="field"><label for="htIn">Größe (cm)</label><input type="text" inputmode="numeric" id="htIn" value="${esc(s.height ?? 175)}"></div></div>
     <label class="check"><input type="checkbox" id="scClr" ${s.scCleared?"checked":""}><span><b>SC-Gelenk ärztlich freigegeben</b></span></label>
@@ -5909,18 +6051,18 @@ function setupHtml(){
 
     <div class="lab">Modus</div><div class="seg modeseg" id="modeSeg">${MODES.map(m => `<button type="button" data-mode="${m}" aria-pressed="${(s.mode||"normal")===m}">${m[0].toUpperCase()+m.slice(1)}</button>`).join("")}</div><div class="small muted">${esc(MODE_INFO[s.mode || "normal"])}</div></div>
     <div class="card"><h2>Routine-Zeiten</h2><div class="small muted">Gilt für Heute, Kalender, Kalender-Abo und Erinnerungen. Training wird nicht über die Morgenroutine gelegt.</div>
-      <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
+      <div class="slotlist">${[["mob", "🧘 Morgenroutine", 5, 11], ["reha", "💪 Schulter-Reha", 6, 22], ["pain", "📝 Abendcheck", 18, 22]].map(([k, l, h0, h1]) => `<div class="slotrow rtrow"><span class="slotname">${l}</span>${rtPick(k, l.replace(/^\S+\s/, ""), h0, h1)}</div>`).join("")}</div>
       <div class="small muted">Essenszeiten: <button type="button" class="linkbtn" data-sub2="essenset" data-setopen="ziel">Essen › Ziel & Mahlzeiten</button></div>
       ${info("Der Abendcheck dauert 30 s und blockiert nichts. Push-Erinnerungen kommen über GitHub-Zeitpläne und können sich um bis zu eine Stunde verspäten; der Wecker im Kalender-Abo kommt pünktlich. Spätester Abendcheck 22:55, damit die Erinnerung noch vor Mitternacht ankommt.")}
-      ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Auf ${ROUTINE_DEF.mob} / ${ROUTINE_DEF.pain} zurücksetzen</button>` : ""}</div>
+      ${S().routineTimes ? `<button class="btn ghost small" type="button" id="rtReset">Auf ${ROUTINE_DEF.mob} / ${ROUTINE_DEF.reha} / ${ROUTINE_DEF.pain} zurücksetzen</button>` : ""}</div>
     <div class="card"><h2>Haltezeiten der Morgenroutine</h2><div class="small muted">Sekunden je Halten; Timer, Texte und Dauer der Routine richten sich danach.</div>
       <div class="slotlist">${MOB_HOLD_KEYS.map(k => { const n = mobHoldSec(k), o = MOB_HOLD0[k].sec, nm = mobShort(MOB_HOLD0[k].txt) + (k === "rkc" ? " (Ziel je Satz)" : ""); return `<div class="slotrow rtrow"><span class="slotname">${esc(nm)}${n !== o ? ` <span class="small muted">· Plan ${o} s</span>` : ""}</span><span class="stepper"><button type="button" class="btn small" data-mhold="${k}" data-d="-1" aria-label="${esc(nm)} kürzer" ${n <= mobHoldMin(k) ? "disabled" : ""}>−</button><b>${n} s</b><button type="button" class="btn small" data-mhold="${k}" data-d="1" aria-label="${esc(nm)} länger" ${n >= mobHoldMax(k) ? "disabled" : ""}>＋</button></span></div>`; }).join("")}</div>
       ${Object.keys(S().mobHold || {}).length ? `<button class="btn ghost small" type="button" id="mhReset">Standard</button>` : ""}</div>
     <div class="card" id="ttsCard">${ttsHtml()}</div>
     <div class="card"><h2>Ausstattung zuhause</h2>${gearPicker(GEAR_HOME, "Was hast du zuhause?")}</div></div></details>
-  <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${(store.push.subs || []).length ? `${Object.values(Object.assign({morning: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 4 Erinnerungen an` : "Push noch nicht aktiviert"}${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
+  <details class="slim setgrp" data-keep="set:app" ${shopOpen.has("set:app") ? "open" : ""}><summary><span>🔔 Erinnerungen & App</span><span class="muted">${(store.push.subs || []).length ? `${Object.values(Object.assign({morning: true, reha: true, evening: true, pain: true, checkin: true}, s.pushPrefs || {})).filter(Boolean).length} von 5 Erinnerungen an` : "Push noch nicht aktiviert"}${standalone ? " · installiert" : ""}</span></summary><div class="setbody">
     <div class="card"><h2>Erinnerungen</h2><div class="small muted">Welche Push-Nachrichten du bekommst. Wecker im Kalender stellst du unter Kalender-Abo ein.</div>
-    ${[["morning",`Morgen: Routine und Tagesplan (${routineAt("mob")})`],["evening","Abend: Training noch nicht eingetragen (ab 20:15)"],["pain",`Abendcheck (${routineAt("pain")})`],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
+    ${[["morning",`Morgen: Routine und Tagesplan (${routineAt("mob")})`],["reha",`Schulter-Reha (${routineAt("reha")})`],["evening","Abend: Training noch nicht eingetragen (ab 20:15)"],["pain",`Abendcheck (${routineAt("pain")})`],["checkin","Sonntag: Wochen-Check-in"]].map(([k, l]) => `<label class="check"><input type="checkbox" data-pushpref="${k}" ${(s.pushPrefs || {})[k] !== false ? "checked" : ""}><span>${l}</span></label>`).join("")}</div>
     <div class="card"><h2>App & Push</h2>${standalone ? `<div class="small">Läuft als installierte App ✓</div>` : `<div class="small">Chrome-Menü ⋮ → <b>App installieren</b>, dann vom Startbildschirm öffnen.</div>`}
     <div class="actions"><button class="btn primary" id="pushOn" type="button" ${token ? "" : "disabled"}>Push aktivieren</button><button class="btn" id="pushTest" type="button">Test</button><span class="small muted" id="pushMsg"></span></div></div></div></details>
   <details class="slim setgrp" data-keep="set:cal" ${shopOpen.has("set:cal") ? "open" : ""}><summary><span>📅 Kalender-Abo</span><span class="muted">Training und Essen in deinem Kalender</span></summary><div class="setbody">
@@ -6061,7 +6203,7 @@ async function onClick(e){
   const mhb = t.closest("[data-mhold]"); if (mhb || t.id === "mhReset") { let o = null;
     if (mhb) { const k = mhb.dataset.mhold, n = Math.min(mobHoldMax(k), Math.max(mobHoldMin(k), mobHoldSec(k) + Number(mhb.dataset.d) * mobHoldStep(k))); o = Object.assign({}, S().mobHold); if (n === MOB_HOLD0[k].sec) delete o[k]; else o[k] = n; if (!Object.keys(o).length) o = null; }
     saveSettings({mobHold: o}); tmr = null; if (S().mobMin !== mobMin()) { saveSettings({mobMin: mobMin()}); replanSoon(); } render(); return; }
-  if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
+  if (t.id === "rtReset") { saveSettings({routineTimes: null}); replanSoon(); toast(`Standardzeiten: ${ROUTINE_DEF.mob}, ${ROUTINE_DEF.reha} und ${ROUTINE_DEF.pain} Uhr`); render(); return; }
   const acw = t.closest("[data-acw]"); if (acw) { acPick(acw); return; }
   const rvb = t.closest("[data-recvar]"); if (rvb) { const o = Object.assign({}, FOOD().recVar), nm = rvb.dataset.rn; if (rvb.dataset.recvar === (recHigh() ? "high" : "normal")) delete o[nm]; else o[nm] = rvb.dataset.recvar;
     saveFood({recVar: Object.keys(o).length ? o : null}); recVarSync(); recBrowseVar = rvb.dataset.recvar; if (sheet.open) renderSheet(); render(); return; }
@@ -6098,7 +6240,7 @@ async function onClick(e){
   const pv = t.closest("[data-play]"); if (pv) { playVideo(pv.dataset.play, pv.dataset.t != null ? Number(pv.dataset.t) : undefined); return; }
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") && !t.hasAttribute("data-hclose") ? t : null;
   if (mzb || mzo) { const v = (mzb || mzo).dataset.mobzoom; mobZoom = v === "close" ? null : Number(v); renderSheet(); return; }
-  const md = t.closest("[data-mobdone]"); if (md) { const k = md.dataset.mobdone; cur.mobility[k] = !cur.mobility[k]; touch(); try { navigator.vibrate && navigator.vibrate(20); } catch {} if (cur.mobility[k] && mobZoom < MOBILITY.length - 1) mobZoom++; else if (cur.mobility[k]) mobZoom = null; renderSheet(); return; }
+  const md = t.closest("[data-mobdone]"); if (md) { const k = md.dataset.mobdone, D = RD(); D[k] = !D[k]; touch(); try { navigator.vibrate && navigator.vibrate(20); } catch {} if (D[k] && mobZoom < RL().length - 1) mobZoom++; else if (D[k]) mobZoom = null; renderSheet(); return; }
   const cty = t.closest("[data-catype]"); if (cty) { cardioType = cty.dataset.catype; cardioTypeSet = true; const mv = sheet.querySelector("#caMin")?.value || ""; renderSheet(); const el = sheet.querySelector("#caMin"); if (el) el.value = mv; return; }
   const cfe = t.closest("[data-cafeel]"); if (cfe) { cardioFeel = cardioFeel === cfe.dataset.cafeel ? "" : cfe.dataset.cafeel; sheet.querySelectorAll("[data-cafeel]").forEach(b => b.setAttribute("aria-pressed", b.dataset.cafeel === cardioFeel)); return; }
   const cmn = t.closest("[data-camin]"); if (cmn) { const el = sheet.querySelector("#caMin"); if (el) el.value = cmn.dataset.camin; sheet.querySelectorAll("[data-camin]").forEach(b => b.setAttribute("aria-pressed", b === cmn)); return; }
@@ -6116,10 +6258,10 @@ async function onClick(e){
   const tin = t.closest("[data-tmrin]"); if (tin) { const slot = document.getElementById("tmrSlot") || tin.closest(".exbody")?.querySelector(".tmrslot"); if (slot && !slot.innerHTML) { slot.innerHTML = timerHtml(tin.dataset.tmrin); tin.remove(); slot.scrollIntoView({block: "center", behavior: "smooth"}); } return; }
   const gd0 = t.closest("[data-guide]"); if (gd0) { const a = gd0.dataset.guide; clearInterval(guideTimer); guide = {end: 0, start: 0, acc: 0, round: 0};
     if (a === "at") { mobZoom = null; openSheet("mobguide", Number(gd0.dataset.v)); return; }
-    if (a === "start" || a === "auto") { autoFlow = a === "auto"; if (autoFlow) { audioReady(); requestWake(); } tmr = null; const i = mobNext(); openSheet("mobguide", i < 0 ? 0 : i); return; }
-    if (a === "back") { let j = sheetArg - 1; while (j > 0 && mobSkip(MOBILITY[j][0], selDate)) j--; sheetArg = Math.max(0, j); renderSheet(); return; }
+    if (a === "start" || a === "auto") { autoFlow = a === "auto"; if (autoFlow) { audioReady(); requestWake(); } tmr = null; const i = rtNext(); openSheet("mobguide", i < 0 ? 0 : i); return; }
+    if (a === "back") { let j = sheetArg - 1; while (j > 0 && rtSkip(RL()[j][0], selDate)) j--; sheetArg = Math.max(0, j); renderSheet(); return; }
     guideNext(a === "done"); return; }
-  const gt = t.closest("[data-gt]"); if (gt) { const g = GUIDE[MOBILITY[sheetArg][0]];
+  const gt = t.closest("[data-gt]"); if (gt) { const g = GUIDE[RL()[sheetArg][0]];
     if (guide.end) { if (g.stop) guide.acc += (Date.now() - guide.start) / 1000; guide.end = 0; clearInterval(guideTimer); }
     else { guide.start = Date.now(); guide.end = g.stop ? 1 : Date.now() + g.sec * 1000; clearInterval(guideTimer); guideTimer = setInterval(guideTick, 250); }
     renderSheet(); guideTick(); return; }
@@ -6160,6 +6302,12 @@ async function onClick(e){
   const cw2 = t.closest("[data-catw]"); if (cw2) { catF.where = cw2.dataset.catw; renderMore(); return; }
   const cm2 = t.closest("[data-catm]"); if (cm2) { catF.m = cm2.dataset.catm; renderMore(); return; }
   if (t.closest("[data-catp]")) { catF.plan = !catF.plan; renderMore(); return; }
+  const csr = t.closest("[data-catsrc]"); if (csr) { catF.src = csr.dataset.catsrc; catF.n = 60; renderMore(); return; }
+  const cmm = t.closest("[data-catmm]"); if (cmm) { catF.mm = cmm.dataset.catmm; catF.n = 60; renderMore(); return; }
+  const ceq = t.closest("[data-cateq]"); if (ceq) { catF.eq = ceq.dataset.cateq; catF.n = 60; renderMore(); return; }
+  if (t.closest("[data-catok]")) { catF.ok = !catF.ok; catF.n = 60; renderMore(); return; }
+  if (t.closest("[data-catmore]")) { catF.n = (catF.n || 60) + 60; renderMore(); return; }
+  const mwv = t.closest("[data-mwview]"); if (mwv) { mwView = Number(mwv.dataset.mwview); renderSheet(); return; }
   const fc = t.closest("[data-focus]"); if (fc) { todayFocus = fc.dataset.focus; lsSet("todayFocus4", todayFocus); renderToday(); return; }
   if (t.id === "shopReset") { lsSet(shopCtx().key, []); renderMore(); return; }
   if (t.id === "shopShare") { const txt = shopText(); if (navigator.share) navigator.share({title: "Einkaufsliste", text: txt}).catch(() => {}); else { try { await navigator.clipboard.writeText(txt); t.textContent = "Kopiert ✓"; } catch {} } return; }
@@ -6198,9 +6346,9 @@ async function onClick(e){
       const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min: min > 0 ? min : null, km: kmOk ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min: min || null, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
       const nxt = planFor(addDays(d, 1)); cardioFeel = ""; if (cardioType === "boulder" && nxt && /^ok/.test(nxt.session)) toast("Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf"); renderSheet(); render(); return; }
-    if (a === "mobFinishClose") { cur.mobility = Object.assign({}, cur.mobility, {_done: true}); touch(); closeSheet(); return; }
-    if (a === "mobSkip") { cur.mobility = Object.assign({}, cur.mobility); if (cur.mobility._skip) { delete cur.mobility._skip; clr("mobility._skip"); } else cur.mobility._skip = true; touch(); if (sheet.open) renderSheet(); render(); return; }
-    if (a === "mobFinish") { cur.mobility = Object.assign({}, cur.mobility); if (mobFinished(cur, selDate) && cur.mobility._done) { delete cur.mobility._done; clr("mobility._done"); } else cur.mobility._done = true; touch(); renderSheet(); render(); return; }
+    if (a === "mobFinishClose") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk], {_done: true}); touch(); closeSheet(); return; }
+    if (a === "mobSkip" || a === "rehaSkip") { rtk = a === "rehaSkip" ? "reha" : "mob"; const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (cur[dk]._skip) { delete cur[dk]._skip; clr(dk + "._skip"); } else cur[dk]._skip = true; touch(); if (sheet.open) renderSheet(); render(); return; }
+    if (a === "mobFinish") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (rtFinished(rtk, cur, selDate) && cur[dk]._done) { delete cur[dk]._done; clr(dk + "._done"); } else cur[dk]._done = true; touch(); renderSheet(); render(); return; }
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
@@ -6311,7 +6459,8 @@ function onInput(e){
 async function onChange(e){
   const t = e.target;
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
-  if (t.dataset.mob) { cur.mobility[t.dataset.mob] = t.checked; if (cur.mobility._skip) { delete cur.mobility._skip; clr("mobility._skip"); } touch(); return; }
+  if (t.dataset.mob) { const D = RD(), dk = RTS[rtk].day; D[t.dataset.mob] = t.checked; if (D._skip) { delete D._skip; clr(dk + "._skip"); } touch(); return; }
+  if (t.id === "rehaNoBand") { saveSettings({reha: Object.assign({}, S().reha, {noBand: t.checked})}); tmr = null; if (S().rehaMin !== rehaMin()) saveSettings({rehaMin: rehaMin()}); replanSoon(); renderSheet(); render(); return; }
   if (t.id === "wIn" || t.id === "slIn") { saveCur(); return; }
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]);
     const y = window.scrollY; renderMore(); window.scrollTo(0, y); return; } // abgehakt bleibt an seiner Stelle, die Liste springt nicht
@@ -6373,7 +6522,7 @@ async function onChange(e){
     saveSettings({calPrefs: Object.assign({}, S().calPrefs, {[k]: p})}); replanSoon(); toast(token ? "Gespeichert · der Kalender folgt in ein paar Minuten" : "Gespeichert"); render(); return; }
   if (t.dataset.rth || t.dataset.rtm) { const k = t.dataset.rth || t.dataset.rtm, box = t.closest(".ftpick"), v = `${String(box.querySelector("[data-rth]").value).padStart(2, "0")}:${String(box.querySelector("[data-rtm]").value).padStart(2, "0")}`;
     const rt = Object.assign({}, S().routineTimes, {[k]: v}); saveSettings({routineTimes: rt}); replanSoon();
-    toast(`${k === "mob" ? "Morgenroutine" : "Abendcheck"}: ${v} Uhr${token ? " · Kalender und Plan folgen in ein paar Minuten" : ""}`); render(); return; }
+    toast(`${k === "mob" ? "Morgenroutine" : k === "reha" ? "Schulter-Reha" : "Abendcheck"}: ${v} Uhr${token ? " · Kalender und Plan folgen in ein paar Minuten" : ""}`); render(); return; }
 }
 for (const el of [document.querySelector("header.top"), document.getElementById("syncLine")]) el.addEventListener("click", onClick);
 // Wischgesten: Mahlzeit rechts = gegessen, links = ausgelassen; Einkauf = abhaken; Heute = Tag wechseln

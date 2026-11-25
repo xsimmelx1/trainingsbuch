@@ -74,7 +74,8 @@ BUFFER = 20             # Puffer vor/nach Terminen (Weg zum Gym)
 WINDOWS = [(17, 0, 20, 45), (12, 0, 14, 30), (19, 0, 21, 15), (7, 0, 9, 30), (9, 30, 17, 0)]
 HORIZON = 14
 # Feste Zeiten der Routinen (in der App unter Einstellungen › Training & Plan einstellbar)
-ROUTINE_DEF = {"mob": "07:30", "pain": "21:45"}
+ROUTINE_DEF = {"mob": "07:30", "reha": "18:00", "pain": "21:45"}
+REHA_SINCE = dt.date(2026, 11, 25)  # Schulter-Reha (Physio), wie REHA_SINCE in der App
 
 
 def routine_at(settings, k):
@@ -86,6 +87,17 @@ def mob_min(settings):
     """Dauer der Morgenroutine; die App rechnet sie aus den Übungen und schreibt sie nach settings.mobMin."""
     v = settings.get("mobMin")
     return int(v) if isinstance(v, (int, float)) and 5 <= v <= 60 else 15
+
+
+def reha_min(settings):
+    """Dauer der Schulter-Reha; die App schreibt sie nach settings.rehaMin."""
+    v = settings.get("rehaMin")
+    return int(v) if isinstance(v, (int, float)) and 3 <= v <= 60 else 12
+
+
+def reha_done(day):
+    r = (day or {}).get("reha") or {}
+    return any(v for k, v in r.items() if not k.startswith("_")) or bool(r.get("_done") or r.get("_skip"))
 
 
 def hm_add(hm, minutes):
@@ -378,7 +390,7 @@ def cal_pref(settings, k):
     """Kalender-Einstellung je Eintragsart: (im Kalender?, Erinnerung in Minuten vorher oder None). Ohne Einstellung wie bisher."""
     p = (settings.get("calPrefs") or {}).get(k) or {}
     pp = settings.get("pushPrefs") or {}
-    default = {"train": 30, "mob": 0 if pp.get("morning") is not False else None, "pain": 0 if pp.get("pain") is not False else None,
+    default = {"train": 30, "mob": 0 if pp.get("morning") is not False else None, "reha": 0 if pp.get("reha") is not False else None, "pain": 0 if pp.get("pain") is not False else None,
                "checkin": 15 if pp.get("checkin") is not False else None, "marker": None}[k]
     rem = p["rem"] if "rem" in p else default
     ok = isinstance(rem, (int, float)) and not isinstance(rem, bool) and 0 <= rem <= 1440
@@ -409,8 +421,8 @@ def build_ics(now, settings, plan, extras, past):
             L.extend(["BEGIN:VALARM", "ACTION:DISPLAY", f"TRIGGER:-PT{alarm}M", "DESCRIPTION:" + ics_escape(summary), "END:VALARM"])
         L.append("END:VEVENT")
 
-    (on_train, rem_train), (on_mob, rem_mob), (on_pain, rem_pain), (on_check, rem_check), (on_mark, _) = (
-        cal_pref(settings, k) for k in ("train", "mob", "pain", "checkin", "marker"))
+    (on_train, rem_train), (on_mob, rem_mob), (on_reha, rem_reha), (on_pain, rem_pain), (on_check, rem_check), (on_mark, _) = (
+        cal_pref(settings, k) for k in ("train", "mob", "reha", "pain", "checkin", "marker"))
     for p in (past + plan) if on_train else []:
         d = dt.date.fromisoformat(p["date"])
         if not p.get("done") and paused_day(settings, d):
@@ -422,12 +434,15 @@ def build_ics(now, settings, plan, extras, past):
         ev(f"train-{p['date']}", f"Training: {title}", desc, f"{SITE}#w={p['date']}",
            utc(d, p["start"]), utc(d, p["end"]), alarm=None if past_day else rem_train)
     today = now.date()
-    mob, pain = routine_at(settings, "mob"), routine_at(settings, "pain")
+    mob, pain, reha = routine_at(settings, "mob"), routine_at(settings, "pain"), routine_at(settings, "reha")
     for i in range(HORIZON):
         d = today + dt.timedelta(days=i)
         if on_mob:
             ev(f"morning-{d}", f"Morgenroutine {mob_min(settings)} min", "Routine in der App abhaken und Schlaf eintragen (Gewicht nur am Gym-Wiegetag).",
                f"{SITE}#m={d}", utc(d, mob), utc(d, hm_add(mob, mob_min(settings))), alarm=rem_mob)
+        if on_reha and d >= REHA_SINCE:
+            ev(f"reha-{d}", f"Schulter-Reha {reha_min(settings)} min", "Außenrotation und Schulterblatt: geführt in der App, mit Timer und Video.",
+               f"{SITE}#r={d}", utc(d, reha), utc(d, hm_add(reha, reha_min(settings))), alarm=rem_reha)
         if on_pain:
             ev(f"pain-{d}", "Abendcheck (30 s)", "Kurzer Abendcheck in der App.", f"{SITE}#p={d}", utc(d, pain), utc(d, hm_add(pain, 5)), alarm=rem_pain)
     for x in extras if on_check else []:
@@ -1088,6 +1103,12 @@ def main():
     for i in range(HORIZON + 1):
         a = dt.datetime.combine(today + dt.timedelta(days=i), dt.time(mh, mm), TZ)
         busy.append((a, a + dt.timedelta(minutes=mob_min(settings))))
+    # Schulter-Reha ebenso (kurz, aber fest)
+    rh, rm = map(int, routine_at(settings, "reha").split(":"))
+    for i in range(HORIZON + 1):
+        a = dt.datetime.combine(today + dt.timedelta(days=i), dt.time(rh, rm), TZ)
+        if a.date() >= REHA_SINCE:
+            busy.append((a, a + dt.timedelta(minutes=reha_min(settings))))
     # Heute: bereits erledigte oder laufende Einheit behalten statt umzuplanen
     old_today = next((p for p in old_plan.get("days", []) if p["date"] == today.isoformat()), None)
     # behalten nur, wenn heute wirklich trainiert wurde oder das Training läuft – eine verpasste Einheit rutscht sonst nicht nach
@@ -1159,6 +1180,10 @@ def main():
                 body = "Gestern ausgefallen. Die Einheit liegt jetzt auf dem nächsten freien Tag."
         once(f"morning-{tday}", {"title": f"Guten Morgen: {mob_min(settings)} min Routine", "body": (body + " " + coaching(settings, today)).strip(),
                                  "url": f"{SITE}#m={tday}", "tag": f"m-{tday}", "action": "Öffnen"})
+    reha = routine_at(settings, "reha")
+    if today >= REHA_SINCE and reha <= hm < hm_add(reha, 180) and not reha_done(day):
+        once(f"reha-{tday}", {"title": f"Schulter-Reha: {reha_min(settings)} min", "body": "Außenrotation mit Band (oder am Türrahmen). Läuft geführt mit Timer und Video.",
+                              "url": f"{SITE}#r={tday}", "tag": f"r-{tday}", "action": "Starten"})
     p_eve = p_today or (None if pause else next((p for p in past if p["date"] == tday), None))  # auch eine heute herausgefallene Einheit nachfragen
     if "20:15" <= hm < "23:30" and p_eve and hm >= p_eve.get("end", "00:00") and not is_strength(day):
         once(f"evening-{tday}", {"title": "Noch keine Einheit eingetragen",
