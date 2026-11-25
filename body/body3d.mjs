@@ -18,7 +18,7 @@ export async function mount(el, opt = {}) {
   const parts = await (await fetch(new URL("./parts.json", import.meta.url))).json();
   const W = () => el.clientWidth, H = () => el.clientHeight;
   let dirty = true; // neu zeichnen nötig
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setSize(W(), H());
   el.appendChild(renderer.domElement);
   const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(35, W() / H(), 0.02, 20);

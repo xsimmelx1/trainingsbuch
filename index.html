@@ -7467,16 +7467,22 @@ async function mkShowImg(id, wait){ const box = $mk("mkv-" + id); if (!box) retu
 
 // ---- Zeichnen: Bildschirmfoto des sichtbaren Bereichs (ohne Markier-Leiste), darauf mit dem Finger malen ----
 const MKD = {base: null, strokes: [], col: "#e0262b", cv: null, s: 1, cur: null};
+// html2canvas 1.4 kennt nur rgb/hsl/hex: color(), oklab(), lab() … (z. B. aus color-mix) im Klon in rgba umrechnen, sonst bricht das Foto ab
+const mkCvt = (() => { const c = document.createElement("canvas"); c.width = c.height = 1; const g = c.getContext("2d", {willReadFrequently: true}), m = new Map();
+  return v => { if (m.has(v)) return m.get(v); g.clearRect(0, 0, 1, 1); g.fillStyle = "rgba(0,0,0,0)"; g.fillStyle = v; g.fillRect(0, 0, 1, 1); const d = g.getImageData(0, 0, 1, 1).data, r = `rgba(${d[0]},${d[1]},${d[2]},${+(d[3] / 255).toFixed(3)})`; m.set(v, r); return r; }; })();
+const MK_CF = /\b(?:color|oklab|oklch|lab|lch|color-mix)\((?:[^()]|\([^()]*\))*\)/g, MK_CP = ["color", "background-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "outline-color", "text-decoration-color", "box-shadow", "text-shadow", "background-image", "fill", "stroke"];
+function mkFixColors(doc){ const w = doc.defaultView; for (const el of doc.querySelectorAll("*")) { const cs = w.getComputedStyle(el);
+  for (const pr of MK_CP) { const v = cs.getPropertyValue(pr); if (v && /(?:color|oklab|oklch|lab|lch)\(/.test(v)) el.style.setProperty(pr, v.replace(MK_CF, mkCvt), "important"); } } }
 async function mkShot(){ const W = innerWidth, H = innerHeight, s = MKD.s = Math.min(2, Math.max(1.25, devicePixelRatio || 1));
   try { await loadScript(H2C);
     const c = await html2canvas(document.body, {x: scrollX, y: scrollY, width: W, height: H, windowWidth: W, windowHeight: H, scale: s, useCORS: true, logging: false, imageTimeout: 4000,
       backgroundColor: getComputedStyle(document.body).backgroundColor, ignoreElements: el => el.id === "mkUi",
-      onclone: doc => { const d = doc.getElementById("sheet"); if (!sheet.open || !d) return; // im Klon ist das Blatt kein modaler Dialog mehr: Lage und Abdunklung nachbauen
+      onclone: doc => { mkFixColors(doc); const d = doc.getElementById("sheet"); if (!sheet.open || !d) return; // im Klon ist das Blatt kein modaler Dialog mehr: Lage und Abdunklung nachbauen
         const bd = doc.createElement("div"); bd.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998"; d.before(bd);
         d.style.position = "fixed"; d.style.inset = "0"; d.style.zIndex = "9999"; }});
     return c; }
-  catch (e) { const c = document.createElement("canvas"); c.width = W * s; c.height = H * s; const g = c.getContext("2d"); g.fillStyle = getComputedStyle(document.body).backgroundColor || "#eee"; g.fillRect(0, 0, c.width, c.height);
-    g.fillStyle = "#777"; g.font = `${16 * s}px sans-serif`; g.textAlign = "center"; g.fillText("Kein Bildschirmfoto möglich (offline?)", c.width / 2, 40 * s); return c; } }
+  catch (e) { console.warn("Bildschirmfoto", e); const c = document.createElement("canvas"); c.width = W * s; c.height = H * s; const g = c.getContext("2d"); g.fillStyle = getComputedStyle(document.body).backgroundColor || "#eee"; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = "#777"; g.font = `${16 * s}px sans-serif`; g.textAlign = "center"; g.fillText(navigator.onLine ? "Kein Bildschirmfoto möglich" : "Kein Bildschirmfoto (offline)", c.width / 2, 40 * s); g.fillText("Zeichne trotzdem oder beschreib es im Text", c.width / 2, 66 * s); return c; } }
 async function mkDrawOpen(){ mkKeepText(); const box = $mk("mkBox"), p = $mk("mkPanel"), bar = $mk("mkBar"); box.hidden = true; p.hidden = true; bar.innerHTML = `<div class="mkhint">Bildschirmfoto …</div>`;
   await new Promise(r => requestAnimationFrame(() => setTimeout(r, 30)));
   const shot = await mkShot(), s = MKD.s; MKD.base = document.createElement("canvas"); MKD.base.width = shot.width; MKD.base.height = shot.height; const g = MKD.base.getContext("2d"); g.drawImage(shot, 0, 0);
