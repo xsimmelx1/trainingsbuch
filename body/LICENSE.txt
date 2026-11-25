@@ -1,5 +1,8 @@
-body.glb / parts.json: abgeleitet aus BodyParts3D (isa_BP3D_4.0_obj_99), vereinfacht und in Ebenen zusammengefasst.
-"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International"
-https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html  (Lizenz laut Datenbank seit 2025-02-27: CC BY 4.0;
-die OBJ-Kopfzeilen nennen noch die frühere CC BY-SA 2.1 Japan)
-Deutsche Bezeichnungen: eigene Übersetzung. Anzeige: three.js (MIT, siehe ../vendor/three/LICENSE).
+body.glb / parts.json: abgeleitet aus Z-Anatomy (Startup.blend, https://github.com/Z-Anatomy/Models-of-human-anatomy),
+vereinfacht, in Ebenen zusammengefasst und benannt.
+Lizenz dieses abgeleiteten Modells: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+Namensnennung:
+  "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
+  "BodyParts3D, (c) The Database Center for Life Science" (Grundlage von Z-Anatomy)
+Lateinische Bezeichnungen: Terminologia Anatomica (TA2.csv aus Z-Anatomy). Deutsche Bezeichnungen: eigene Übersetzung.
+Anzeige: three.js (MIT, siehe ../vendor/three/LICENSE).
