@@ -38,9 +38,11 @@ PUBLIC_TITLE = {"beineA": "Beine A", "okA": "Oberkörper A", "beineB": "Beine B"
                 "notfallK": "Kurz-Einheit", "reduziertK": "Ganzkörper", "okAs": "Oberkörper A", "okBs": "Oberkörper B"}
 EXERCISES = {  # Namen wie in der App (EX.name)
     "beineA": ["Beinpresse / Hack Squat", "Rumänisches Kreuzheben", "Beinstrecker", "Sitzender Beinbeuger", "Wadenheben stehend", "Dead Bug"],
-    "okA": ["Brustgestütztes Rudern", "KH-Schrägbank 15–30°, Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben bis 90°", "Face Pull (Ende in Außenrotation)", "Kabel-Shrug, 30° abgespreizt", "Bayesian Curl am Kabel", "Trizeps-Pushdown"],
+    "okA": ["Brustgestütztes Rudern", "KH-Schrägbank 15–30°, Neutralgriff", "Latzug Neutralgriff", "Kabel-Seitheben bis 90°", "Face Pull (Ende in Außenrotation)", "Kabel-Shrug, 30° abgespreizt", "Kabel-Curl stehend", "Trizeps-Pushdown", "Kabel-Außenrotation"],
     "beineB": ["Hip Thrust", "Bulgarian Split Squat", "Liegender Beinbeuger", "Hüftabduktion Maschine", "Step-Downs 10→20 cm", "Wadenheben sitzend", "Pallof Press"],
-    "okB": ["Klimmzug Neutralgriff", "Kabelrudern sitzend", "Brustpresse Maschine/Kabel", "Landmine Press halbkniend", "KH-Seitheben", "Reverse Fly Maschine", "Serratus Punch am Kabel", "Kabel-Shrug, 30° abgespreizt", "Skull Crusher", "Ab-Roller kniend, kurzer Weg"],
+    "okB": ["Klimmzug Neutralgriff", "Kabelrudern sitzend", "Brustpresse Maschine/Kabel", "Landmine Press halbkniend", "KH-Seitheben", "Reverse Fly Maschine", "Serratus Punch am Kabel", "Kabel-Shrug, 30° abgespreizt", "Skull Crusher", "Scott-Curl (SZ oder Maschine)", "Ab-Roller kniend, kurzer Weg", "Kabel-Außenrotation"],
+    "okAs": ["Kabelrudern sitzend", "Einarmiges Kabelrudern, Neutralgriff", "Kabel-Außenrotation", "Scott-Curl (SZ oder Maschine)", "Trizeps-Pushdown", "Hammer-Curl am Seil", "Reverse Wrist Curls"],
+    "okBs": ["Rudern an der Maschine", "Einarmiges KH-Rudern", "Kabel-Curl stehend", "Einarmiger Pushdown", "Reverse Curl am Kabel", "Handgelenk-Curls", "Kabel-Außenrotation", "Beinabsenken liegend"],
     "notfall": ["Bulgarian Split Squat", "Rumänisches Kreuzheben", "Latzug Neutralgriff", "Brustpresse Maschine/Kabel", "KH-Seitheben"],
     "reduziert": ["Beinpresse / Hack Squat", "Rumänisches Kreuzheben", "Latzug Neutralgriff", "Brustgestütztes Rudern", "Brustpresse Maschine/Kabel", "Kabel-Seitheben bis 90°", "Kabel-Shrug, 30° abgespreizt"],
 }
