@@ -496,6 +496,9 @@ ol.steps li::before{content:counter(st);display:grid;place-items:center;width:26
 .altrow img,.altrow .noimg{width:72px;height:54px;object-fit:contain;border-radius:8px;background:#dcf0fa;display:grid;place-items:center}
 .altrow .at{display:flex;flex-direction:column;gap:2px}
 .altrow .at b{font-size:15px}
+.dosebox.fold summary{list-style:none;cursor:pointer;display:block}.dosebox.fold summary::-webkit-details-marker{display:none}.dosebox.fold .dmore{float:right;font-size:12px;color:var(--accent)}.dosebox.fold[open] .dmore{opacity:.6}
+.guidebar{position:sticky;bottom:0;z-index:3;margin:10px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);box-shadow:0 -6px 14px rgba(0,0,0,.18)}
+.guidehero .exhero{max-height:34vh}.guidehero .exhero img,.guidehero .exhero video,.guidehero .exhero iframe{max-height:34vh}
 .dosebox{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:8px 12px;display:flex;flex-direction:column;gap:3px}
 .dosebox .dz{font-weight:700;font-size:15px;line-height:1.35}
 .dosebox.sm{padding:6px 10px}
@@ -1064,6 +1067,12 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .wzscroll button b{font-weight:600}.wzscroll button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .wzwhy{display:block;font-size:12px;line-height:1.3;color:var(--muted);margin-top:2px}.wzwhy.sw{color:var(--accent)}
 .wzss{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:0 6px;background:var(--line);vertical-align:1px}.wzlist{margin-top:8px}
+.ssnote{margin-top:2px;line-height:1.35}.ssnote .wzss{margin-right:4px}
+.wzob{border:0;background:none;padding:0;font:inherit;text-align:left;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.wzorig{display:flex;gap:10px;align-items:flex-start;margin:4px 0 8px 0;padding:10px;border:1px dashed var(--line);border-radius:10px;background:var(--surface)}
+.wzorig img,.wzorig .noimg{flex:none;width:64px;height:64px;border-radius:8px;object-fit:cover;display:grid;place-items:center;background:var(--bg)}.wzot{min-width:0;display:flex;flex-direction:column;gap:3px}.wzot .btn{align-self:flex-start;margin-top:4px}
+.wzlist2{display:flex;flex-direction:column;gap:6px}.wzchip{width:100%;text-align:left;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;font:inherit;font-size:13px}.wzchip .ok{color:var(--accent);float:right}
+.wzctx{margin:6px 0 10px;padding:10px 12px;border-radius:10px;border-left:3px solid var(--accent);background:var(--surface)}
 .b3box{position:relative}.b3box.form .b3wrap{height:24vh;min-height:150px}
 .b3pill{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;gap:6px;min-height:44px;padding:5px 5px 5px 12px;border-radius:12px;background:rgba(16,21,20,.9);color:#fff;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
 .b3pill.hint{justify-content:center;padding:6px 12px;min-height:0;background:rgba(16,21,20,.6);color:#d6e2df;pointer-events:none;font-size:12px;left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
@@ -1188,6 +1197,7 @@ Object.assign(EX, {
   hw_pullapart:{name:"Band Pull-Apart",type:"k",sets:2,reps:"15–20",hi:20,m:{hintS:1},q:"band pull apart",cue:["Arme auf Brusthöhe, leicht gebeugt","Band bis zur Brust auseinanderziehen, Schulterblätter zusammen","Schultern bleiben unten"]},
   hw_banderot:{name:"Band-Außenrotation",type:"k",sets:2,reps:"12–15",hi:15,m:{hintS:.5},q:"band external rotation",cue:["Ellbogen 90° am Körper, Handtuch dazwischen","Nach außen drehen, 1 s halten, 3 s zurück","Leichtes Band – sauber statt schwer"]},
   hw_bandpulldown:{name:"Band-Latzug kniend",type:"i",sets:3,reps:"12–15",hi:15,m:{ruecken:1,bizeps:.5},q:"band kneeling lat pulldown",cue:["Band oben in der Tür verankern, knien","Ellbogen nach unten zur Hüfte ziehen","Arme über Kopf: erst nach der SC-Freigabe"]},
+  hw_trisiso:{name:"Trizeps-Isometrie am Tisch",type:"i",sets:3,reps:"5 × 10 s",m:{trizeps:1},q:"isometric triceps extension table",cue:["Aufrecht am Tisch sitzen, Oberarm am Körper, Ellbogen 90°","Kleinfingerseite der Faust drückt 10 s mit ca. 70 % Kraft nach unten auf die Tischplatte","Schulter bleibt locker unten, ruhig weiteratmen – kein Druck aufs Schlüsselbein"]},
   hw_bandpallof:{name:"Band-Pallof-Press",type:"k",sets:2,reps:"8–10/Seite",m:{rumpf:1},q:"band pallof press",cue:["Band seitlich auf Brusthöhe","Arme nach vorn strecken, Rumpf dreht nicht mit","2 s vorn halten"]},
 });
 const SESS = {
@@ -1577,9 +1587,9 @@ function hurtHtml(key){
 // Ende-Bildschirm: übersprungene Übungen mit Grund; fehlte nur das Band → direkt weitermachen
 function rtSkippedHtml(){ const sk = RL().filter(([k]) => rtSkip(k, selDate)); if (!sk.length) return "";
   const band = rtk === "reha" && rehaNoBand() && sk.some(([k]) => REHA_BAND.has(k) && !rehaLocked(k));
-  const nm = t => t.split(":")[0], lock = rtk === "reha" ? sk.filter(([k]) => (REHA_PH[k] || 1) > rehaPhase()) : [], rest = sk.filter(x => !lock.includes(x));
+  const nm = t => t.split(":")[0], lock = rtk === "reha" ? sk.filter(([k]) => (REHA_PH[k] || 1) > rehaPhase()) : [], lockLbl = rehaPhase() === 1 ? "Ab der Arztfreigabe:" : "Ab Phase 3 (kommt automatisch):", rest = sk.filter(x => !lock.includes(x));
   return `<div class="card"><div class="lab">Heute nicht dabei</div>${rest.map(([k, t]) => `<div class="small"><b>${esc(nm(t))}</b> · <span class="muted">${esc(rtk === "reha" ? rehaAlt(k) : "übersprungen")}</span></div>`).join("")}
-    ${lock.length ? `<div class="small"><b>Ab der Arztfreigabe:</b> <span class="muted">${esc(lock.map(([, t]) => nm(t)).join(" · "))}</span></div>` : ""}
+    ${lock.length ? `<div class="small"><b>${lockLbl}</b> <span class="muted">${esc(lock.map(([, t]) => nm(t)).join(" · "))}</span></div>` : ""}
     ${band ? `<button class="btn primary" type="button" data-act="rehaBandGo">💪 Band ist da – Bandübungen jetzt machen</button>` : ""}</div>`; }
 function autoNextName(){ const nx = RL().slice(sheetArg + 1).find(([k]) => !RD()[k] && !rtSkip(k, selDate)); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
@@ -1686,6 +1696,7 @@ const mobNext = () => MOBILITY.findIndex(([k]) => !cur.mobility[k] && !mobSkip(k
 // Phase 1 (bis zur Freigabe): Ellbogen am Körper, nichts über Brusthöhe. Phase 2 ab settings.scCleared.
 const REHA_SINCE = "2026-11-25";
 const REHA = [["chintuck","Kinn-Rückzug im Liegen: 1 × 10, je 5 s halten. Hinterkopf bleibt am Boden, nur leicht nicken, vorderer Hals bleibt weich",null],
+  ["chinlift","Kopf anheben mit Kinn-Rückzug: 1 × 8, Kinn eingezogen, Kopf 1 cm abheben, 8 s halten. Nur schmerzfrei",null],
   ["bwsroll","BWS-Streckung über Handtuchrolle: 1 × 6, je 3 s strecken. Rolle quer unter der Brustwirbelsäule, Arme vor der Brust verschränkt, Becken am Boden",null],
   ["rotmob","Schulter drehen ohne Last: 1 × 8 je Seite, Ellbogen am Körper, Unterarm langsam nach außen und innen","mw_rotmob"],
   ["scapset","Schulterblatt-Spannung im Stand: 1 × 8, je 5 s mit 30–50 % Kraft. Schlüsselbeine breit, Schulterblätter sanft nach hinten, Handflächen nach außen",null],
@@ -1694,32 +1705,42 @@ const REHA = [["chintuck","Kinn-Rückzug im Liegen: 1 × 10, je 5 s halten. Hint
   ["er2","Außenrotation, Band unter dem Fuß: 2 × 10 je Seite. Ellbogen 45° nach vorn und 90° gebeugt, 2 s zurück","mw_er2"],
   ["er3","Außenrotation, Arm 90° abgespreizt: 2 × 10 je Seite, nur schmerzfrei","mw_er3"],
   ["wallang","Wandengel: 2 × 6. Rücken, Ellbogen und Handgelenke an der Wand, erst nur bis Schulterhöhe","mw_wallang"],
-  ["serplank","Serratus-Unterarmstütz: 2 × 20 s. Ellbogen in den Boden drücken, Schulterblätter auseinanderschieben","mw_serplank"],
   ["serpunch","Serratus-Kreuzschlag in Rückenlage: 1 × 8 je Seite, erst ohne Kurzhantel","mw_serpunch"],
-  ["thor","Brustwirbelsäule beugen und strecken im Vierfüßlerstand: 1 × 6 langsam","mw_thor"]];
+  ["wallpush","Wand-Liegestütz mit Plus: 2 × 10. Hände schulterbreit auf Brusthöhe, Ellbogen ca. 45° am Körper, oben den Brustkorb 2 s aus den Händen schieben",null],
+  ["serplank","Serratus-Unterarmstütz: 2 × 20 s. Ellbogen in den Boden drücken, Schulterblätter auseinanderschieben","mw_serplank"],
+  ["ys","Y-Heben in Bauchlage: 2 × 8, oben 2 s halten. Daumen nach oben, Stirn auf einem Handtuch, nur schmerzfrei",null],
+  ["thor","Brustwirbelsäule beugen und strecken im Vierfüßlerstand: 1 × 6 langsam","mw_thor"],
+  ["pecmin","Brustdehnung an der Wandkante (freiwillig): 2 × 30 s je Seite. Arm 90° an der Kante, nicht höher, Dehnung höchstens 3/10",null]];
 const REHA_ID = Object.fromEntries(REHA.map(m => [m[0], m[2]]));
 for (const m of REHA) m[2] = null; // Feld 3 ist wie bei MOBILITY die Illustration; Reha zeigt stattdessen das MuscleWiki-Vorschaubild
 // Vorschaubilder (öffentliches MuscleWiki-CDN, nur verlinkt): Dateistamm des Videos, Frontansicht
-const REHA_OG = {chintuck: "Recovery-chin-tucks-supine", bwsroll: "Recovery-thoracic-extensions-foam-roller", scapset: "Recovery-intrascapular-muscle-contraction-isometric", rotmob: "Recovery-shoulder-external-internal-rotation-standing-mobility", er1: "Recovery-rotator-cuff-external-rotations-1-standing", er2: "Recovery-rotator-cuff-external-rotations-2-standing", er3: "Recovery-rotator-cuff-external-rotations-3-standing", wallang: "Recovery-wall-angels", serplank: "Recovery-seratus-activation-1-plank-isometric", serpunch: "Recovery-seratus-activation-cross-punch-supine", thor: "Recovery-thoracic-flexion-and-extensions-mobility"};
+const REHA_OG = {chinlift: "Recovery-cervical-flexion-2-supine-isometric", wallpush: "Bodyweight-bodyweight-wall-pushup", ys: "Recovery-ys", pecmin: "chest-stretch-variation-1", chintuck: "Recovery-chin-tucks-supine", bwsroll: "Recovery-thoracic-extensions-foam-roller", scapset: "Recovery-intrascapular-muscle-contraction-isometric", rotmob: "Recovery-shoulder-external-internal-rotation-standing-mobility", er1: "Recovery-rotator-cuff-external-rotations-1-standing", er2: "Recovery-rotator-cuff-external-rotations-2-standing", er3: "Recovery-rotator-cuff-external-rotations-3-standing", wallang: "Recovery-wall-angels", serplank: "Recovery-seratus-activation-1-plank-isometric", serpunch: "Recovery-seratus-activation-cross-punch-supine", thor: "Recovery-thoracic-flexion-and-extensions-mobility"};
 const rehaThumb = k => REHA_OG[k] ? `https://media.musclewiki.com/media/uploads/og-male-${REHA_OG[k]}-front.jpg` : k === "eriso" ? ytThumb("hw_extrot") : null;
-const REHA_PH = {er2: 2, er3: 2, wallang: 2, serplank: 2, serpunch: 2, thor: 2}; // ohne Eintrag: Phase 1
-const REHA_PHMAX = {er1: 1, bwsroll: 1, scapset: 1}; // nur bis zu dieser Phase: in Phase 2 übernehmen er2/er3, thor und Wandengel
+// Phase 1 bis zur Freigabe · Phase 2 ab Freigabe · Phase 3 automatisch: ≥ 4 Wochen nach der Freigabe und SC 14 Tage ≤ 1/10 (Recherche 13b-reha)
+const REHA_PH = {er2: 2, er3: 3, wallang: 2, serplank: 3, serpunch: 2, thor: 2, wallpush: 2, ys: 3, pecmin: 3, chinlift: 3}; // ohne Eintrag: Phase 1
+const REHA_PHMAX = {er1: 1, bwsroll: 1, scapset: 1, chintuck: 2, serpunch: 2, wallpush: 2, er2: 2}; // nur bis zu dieser Phase: danach übernehmen die nächsten Übungen
 const REHA_BAND = new Set(["er1", "er2", "er3"]);
-const REHA_MW = {chintuck: "laying-chin-tucks", bwsroll: "thoracic-extensions-foam-roller", scapset: "intrascapular-muscle-contraction", rotmob: "shoulder-external-internal-rotation", er1: "rotator-cuff-external-rotations-1", er2: "rotator-cuff-external-rotations-2", er3: "rotator-cuff-external-rotations-3", wallang: "wall-angels", serplank: "serratus-activation-plank", serpunch: "serratus-activation-cross-punch", thor: "thoracic-flexion-and-extensions"};
-const rehaPhase = () => S().scCleared ? 2 : 1;
+const REHA_MW = {chinlift: "cervical-flexion-2-supine-isometric", wallpush: "bodyweight-wall-pushup", ys: "ys", pecmin: "chest-stretch-variation-one", chintuck: "laying-chin-tucks", bwsroll: "thoracic-extensions-foam-roller", scapset: "intrascapular-muscle-contraction", rotmob: "shoulder-external-internal-rotation", er1: "rotator-cuff-external-rotations-1", er2: "rotator-cuff-external-rotations-2", er3: "rotator-cuff-external-rotations-3", wallang: "wall-angels", serplank: "serratus-activation-plank", serpunch: "serratus-activation-cross-punch", thor: "thoracic-flexion-and-extensions"};
+const rehaP3Date = () => { const at = S().scClearedAt; return at ? addDays(at.slice(0, 10), 28) : null; };
+const rehaPhase = () => { if (!S().scCleared) return 1; const d3 = rehaP3Date(); if (!d3 || todayIso() < d3) return 2;
+  let mx = 0; for (let i = 0; i < 14; i++) { const d = addDays(todayIso(), -i), day = d === cur?.date ? cur : store.days?.[d]; mx = Math.max(mx, day?.pain?.sc ?? 0); } return mx <= 1 ? 3 : 2; };
 const rehaNoBand = () => !!(S().reha || {}).noBand;
 const rehaLocked = k => (REHA_PH[k] || 1) > rehaPhase() || (REHA_PHMAX[k] || 9) < rehaPhase();
 const rehaDayCfg = d => { const r = (d && (d === cur?.date ? cur : store.days?.[d]))?.reha || {}; return {ph: r._ph ?? rehaPhase(), nb: r._nb ?? rehaNoBand()}; };
 const rehaLockedAt = (k, ph) => (REHA_PH[k] || 1) > ph || (REHA_PHMAX[k] || 9) < ph;
 const rehaSkip = (k, d) => { const c = rehaDayCfg(d); return rehaLockedAt(k, c.ph) || (k === "eriso" ? !c.nb : REHA_BAND.has(k) && c.nb); };
 function rehaAlt(k){
-  if (rehaLocked(k)) return (REHA_PH[k] || 1) > rehaPhase() ? "Ab der Arztfreigabe (Phase 2) – bis dahin gesperrt." : "Nur in Phase 1 – jetzt übernehmen die nächsten Übungen.";
+  if (rehaLocked(k)) { const ph = REHA_PH[k] || 1; if (ph > rehaPhase()) return ph === 2 ? "Ab der Arztfreigabe (Phase 2) – bis dahin gesperrt." : "Ab Phase 3 – kommt automatisch 4 Wochen nach der Freigabe, wenn das SC 2 Wochen ruhig war (≤ 1/10)."; return `Nur bis Phase ${REHA_PHMAX[k]} – jetzt übernehmen die nächsten Übungen.`; }
   if (k === "eriso") return rehaNoBand() ? "Ersatz, solange kein Band da ist." : "Nur ohne Band – mit Band übersprungen.";
   if (REHA_BAND.has(k) && rehaNoBand()) return "Kein Band: übersprungen, dafür die Türrahmen-Variante.";
   if (REHA_BAND.has(k)) return "Im Gym geht dasselbe am Kabelzug.";
   return "";
 }
 const REHA_INFO = {
+  chinlift: {m: {rumpf: .5}, why: "Steigerung des Kinn-Rückzugs: Die tiefen Halsbeuger halten den Kopf gegen die Schwerkraft. Erst in Phase 3, weil beim Kopfheben der Kopfnicker am Brustbein und Schlüsselbein zieht."},
+  wallpush: {m: {brust: .5, obTrap: .5}, why: "Geringste Stützlast für Brust und Serratus (Physio: Brust zu schwach). Kurzer Weg und Ellbogen nah am Körper schonen das SC. Vorstufe zum Unterarmstütz."},
+  ys: {m: {obTrap: 1, hintS: .5}, why: "Gezielt für den unteren Trapez, der die Schulterblätter nach hinten-unten zieht – Gegenspieler der nach vorn gezogenen Schultern. Arm über 90°, deshalb erst Phase 3."},
+  pecmin: {m: {brust: .5}, why: "Dehnt den kleinen Brustmuskel, der bei nach vorn gezogenen Schultern meist zu kurz ist. Erst wenn das SC ruhig ist, weil die Stellung das Gelenk vorn aufdehnt."},
   chintuck: {m: {rumpf: .5}, why: "Trainiert die tiefen Halsbeuger gegen die Nackenverspannung. Nur nicken, der Hinterkopf bleibt am Boden und der vordere Hals weich – so zieht der Kopfnicker nicht am SC-Gelenk."},
   bwsroll: {m: {ruecken: .5}, why: "Streckt die Brustwirbelsäule ohne Armheben und ohne Stütz. Eine runde, steife BWS zieht die Schultern nach vorn. Anders als im MuscleWiki-Video: Arme vor der Brust, Becken bleibt am Boden."},
   scapset: {m: {ruecken: .5, hintS: .5}, why: "Schulterblätter ohne Last setzen – gegen die nach vorn gezogenen Schultern, die der Physio beschrieben hat. Handflächen nach außen nimmt die Außenrotation mit."},
@@ -2077,7 +2098,7 @@ Object.assign(EX, {
   hw_bandpushdown:{name:"Band-Pushdown an der Stange",type:"i",sets:3,reps:"15–20",hi:20,m:{trizeps:1},q:"resistance band tricep pushdown",cue:["Band über die Klimmzugstange oder in einen Türanker","Leicht vor der Stange stehen, Ellbogen am Rumpf","Unten 1 s halten, langsam zurück"]},
   hw_bandhammer:{name:"Band-Hammer-Curl",type:"i",sets:2,reps:"15–20",hi:20,m:{bizeps:1},q:"resistance band hammer curl",cue:["Band unter den Füßen, Daumen zeigen nach oben","Ellbogen am Körper","Langsam ablassen"]},
   hw_packcurl:{name:"Rucksack-Hammer-Curl",type:"i",sets:3,reps:"15–25",hi:25,m:{bizeps:1},q:"backpack hammer curl",cue:["Rucksack mit Büchern oder Wasserflaschen am Tragegriff","Daumen oben, Ellbogen am Körper","3 s ablassen"]},
-  hw_towelcurl:{name:"Handtuch-Curl isometrisch",type:"k",sets:3,reps:"20–30 s",m:{bizeps:.5},q:"isometric towel bicep curl",cue:["Auf die Mitte eines Handtuchs stellen, Enden greifen","Ellbogen 90° am Körper, mit ca. 80 % Kraft hochziehen","Ruhig weiteratmen, nicht pressen"]},
+  hw_towelcurl:{name:"Handtuch-Curl isometrisch",type:"i",sets:3,reps:"20–30 s",m:{bizeps:1},q:"isometric towel bicep curl",cue:["Auf die Mitte eines Handtuchs stellen, Enden greifen","Ellbogen 90° am Körper, mit ca. 80 % Kraft hochziehen","Ruhig weiteratmen, nicht pressen"]},
 });
 const HOME = {legpress:"hw_squat",legpress60:"hw_squat",bss:"hw_bss",rdl:"hw_slrdl",legext:"wallsit",legext45:"wallsit",seatedcurl:"hw_slidecurl",lyingcurl:"hw_slidecurl",calfstand:"hw_calf",calfseated:"hw_calf",rowchest:"hw_tablerow",cablerow:"hw_tablerow",onearmrow:"hw_tablerow",inclinedb:"alt_inclpush",chestpress:"alt_inclpush",latneutral:"hw_doorrow",chinneutral:"hw_doorrow",cablelat:"hw_latraise",dblateral:"hw_latraise",dblathome:"hw_latraise",facepull:"ytw",revfly:"ytw",cableshrug:"hw_shrug",dbshrug:"hw_shrug",bayesian:"hw_curl",inclinecurl:"hw_curl",spidercurl:"hw_curl",pushdown:"closepushup",skull:"closepushup",hipthrust:"hw_hipthrust",abduction:"hw_abd",abduction30:"hw_abd",pallof:"sideplank",landmine:null,serratus:"pushupplus",extrot:"hw_extrot",revwrist:null,abroller:"deadbug",preacher:"hw_bandcurl",cablecurl:"hw_bandcurl",alt_hammer:"hw_bandhammer",onearmpd:"hw_bandpushdown",alt_revcurl:"hw_bandhammer",wristcurl:null};
 SESS_CHOICES.splice(SESS_CHOICES.indexOf("okBhome"), 1);
@@ -2545,14 +2566,17 @@ Object.assign(DOSE, {"preacher":{"dose":"3 × 8–12 Wdh., 3 s ablassen, unten n
   "hw_towelcurl":{"dose":"3 × 20–30 s mit ca. 80 % Kraft","tempo":null,"hold":25,"perSide":false,"rest":60,"breath":"Ruhig weiteratmen, nicht pressen","why":"Isometrisches Ziehen füllt die Lücke, wenn weder Band noch Gewicht da sind."}});
 Object.assign(MX, {"preacher":{"bizeps":1,"unterarm":0.25},"cablecurl":{"bizeps":1,"unterarm":0.25},"onearmpd":{"trizeps":1},"wristcurl":{"unterarm":1},"hw_bandcurl":{"bizeps":1,"unterarm":0.25},"hw_bandpushdown":{"trizeps":1},"hw_bandhammer":{"bizeps":1,"unterarm":1},"hw_packcurl":{"bizeps":1,"unterarm":1},"hw_towelcurl":{"bizeps":1,"unterarm":0.5}});
 const restFor = id => DOSE[id]?.rest || REST[EX[id]?.type] || 90;
-function doseHtml(key, small, nn, rir){
+function doseHtml(key, small, nn, rir, fold){
   const d0 = DOSE[key] || (small === "mini" && EX[key] ? {dose: `${EX[key].sets} × ${EX[key].reps}`} : null); if (!d0) return "";
   const ph = phaseOf(weekNo(selDate) ?? 0), d = Object.assign({}, d0);
   if (ph.c <= 2 || ph.deload) d.dose = d.dose.replace(/[;,]? ?(letzter Satz )?(mit )?Myo-Reps[^;]*/i, "");  // Myo-Reps erst ab RIR ≤ 1
   if (EX[key] && /^\d+ ×/.test(d.dose)) d.dose = d.dose.replace(/^\d+ ×/, (nn ?? setsFor(key, weekNo(selDate) ?? 0)) + " ×");
   const meta = [d.tempo ? `Tempo ${esc(d.tempo)}` : "", d.rest ? `Pause ${d.rest >= 120 && d.rest % 60 === 0 ? d.rest / 60 + " min" : d.rest + " s"}` : ""].filter(Boolean).join(" · ");
   if (small === "mini") return `<div class="dosebox mini"><div class="dz">${esc(d.dose)}</div><div class="small muted">${[rir ? "RIR " + esc(rir) : "", d.tempo ? "Tempo " + esc(d.tempo.replace(/\s*\(.*$/, "")) : "", d.rest ? "Pause " + (d.rest >= 120 && d.rest % 60 === 0 ? d.rest / 60 + " min" : d.rest + " s") : ""].filter(Boolean).join(" · ")}</div></div>`;
-  return `<div class="dosebox${small ? " sm" : ""}"><div class="dz">🎯 ${esc(d.dose)}</div>${meta ? `<div class="small muted">${meta}</div>` : ""}${!small && d.breath ? `<div class="small">🌬 ${esc(d.breath)}</div>` : ""}${!small && d.why ? `<div class="small muted">${esc(d.why)}</div>` : ""}</div>`;
+  const more = `${!small && d.breath ? `<div class="small">🌬 ${esc(d.breath)}</div>` : ""}${!small && d.why ? `<div class="small muted">${esc(d.why)}</div>` : ""}`;
+  // eingeklappt (geführter Ablauf): nur Dosis + Takt sichtbar, Atmung und „wofür“ auf Antippen
+  if (fold && more) return `<details class="dosebox fold${small ? " sm" : ""}"><summary><span class="dz">🎯 ${esc(d.dose)}</span>${meta ? `<span class="small muted"> · ${meta}</span>` : ""}<span class="dmore">Info ▾</span></summary>${more}</details>`;
+  return `<div class="dosebox${small ? " sm" : ""}"><div class="dz">🎯 ${esc(d.dose)}</div>${meta ? `<div class="small muted">${meta}</div>` : ""}${more}</div>`;
 }
 let restEnd = 0, restTimer = null, clockTimer = null, wakeLock = null;
 // Sprunglinks aus Kalender und Push: w = Training des Tages, m = Morgenroutine, p = Schmerz-Log, c = Check-in der Woche
@@ -3160,6 +3184,10 @@ const prefMap = () => (atHome() ? S().altPrefHome : S().altPref) || {};
 const swapKey = () => atHome() ? "swapHome" : "swap";
 // Schulter-Reha: Dosierung (nach DOSE, damit die Konstante schon steht)
 Object.assign(DOSE, {
+  "reha:chinlift": {dose: "1 × 8 Wdh., je 8 s halten", tempo: null, hold: 8, perSide: false, rest: 0, breath: "Beim Halten ruhig weiteratmen", why: REHA_INFO.chinlift.why},
+  "reha:wallpush": {dose: "2 × 10 Wdh., oben 2 s Plus halten", tempo: "2-0-1-2 (2 s zur Wand, 1 s zurück, 2 s Plus halten)", hold: 2, perSide: false, rest: 30, breath: "Beim Wegschieben ausatmen", why: REHA_INFO.wallpush.why},
+  "reha:ys": {dose: "2 × 8 Wdh., oben 2 s halten", tempo: "2-0-1-2 (2 s ablassen, 1 s heben, 2 s halten)", hold: 2, perSide: false, rest: 30, breath: "Beim Heben ausatmen", why: REHA_INFO.ys.why},
+  "reha:pecmin": {dose: "2 × 30 s je Seite halten", tempo: null, hold: 30, perSide: true, rest: 10, breath: "Ruhig weiteratmen, Dehnung höchstens 3/10", why: REHA_INFO.pecmin.why},
   "reha:chintuck": {dose: "1 × 10 Wdh., je 5 s halten", tempo: null, hold: 5, perSide: false, rest: 0, breath: "Vorher 3 ruhige Atemzüge in den Bauch, beim Halten weiteratmen", why: REHA_INFO.chintuck.why},
   "reha:bwsroll": {dose: "1 × 6 Wdh., je 3 s strecken", tempo: null, hold: 3, perSide: false, rest: 0, breath: "Beim Strecken ausatmen", why: REHA_INFO.bwsroll.why},
   "reha:scapset": {dose: "1 × 8 Wdh., je 5 s halten mit 30–50 % Kraft", tempo: null, hold: 5, perSide: false, rest: 0, breath: "Beim Halten ruhig weiteratmen", why: REHA_INFO.scapset.why},
@@ -3307,7 +3335,7 @@ function renderTraining(){
     if (!e_) h += `<div class="card"><b>${esc(EX[id].name)}</b><div class="small muted">${offTxt(id)}</div></div>`;
     else if (exSkipped(id)) h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ausgelassen</div><h2 class="fxname skipped">${esc(EX[e_].name)}</h2></div></div><div class="card"><div class="small muted">Ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""} – zählt nicht in die offenen Sätze.</div><button class="btn" type="button" data-exskip="${id}">↺ Doch machen</button></div>`;
     else { const n = nSets(id, w, sk), dn = doneCount(id, w, sk);
-      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2></div>${dn < n ? `<button class="btn ghost small" type="button" data-exskip="${id}">Auslassen</button>` : ""}</div>` + exBody(id, n, w); }
+      h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2>${ssNote(sk, id)}</div>${dn < n ? `<button class="btn ghost small" type="button" data-exskip="${id}">Auslassen</button>` : ""}</div>` + exBody(id, n, w); }
     h += `</div>`;
     if (SESS[sk]?.cool) h += coolHtml(SESS[sk].cool);
     view.innerHTML = h; startClock(); return;
@@ -3320,7 +3348,7 @@ function renderTraining(){
     if (exSkipped(id)) { h += `<div class="exrow complete"><button type="button" class="exsum" data-open="${id}"><span class="st">–</span><span></span><span class="nm">${esc(EX[e_].name)}<br><span class="muted small">ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""}</span></span><span></span></button></div>`; continue; }
     homeId = id; const e = EX[e_], n = nSets(id, w, sk), dn = doneCount(id, w, sk), complete = dn >= n, isOpen = openEx === id;
     const topKg = Math.max(0, ...doneSetsOf(id).map(x => num(x.kg) || 0));
-    h += `<div class="exrow ${isOpen ? "cur" : ""} ${complete ? "complete" : ""}"><div class="exhead"><button type="button" class="exsum" data-open="${id}" aria-expanded="${isOpen}"><span class="st">${complete ? "✓" : dn || ""}</span><span class="exth">${(th => th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : "")(THUMB_YT[e_] ? ytThumb(e_) : e.img ? isrc(e.img, 0) : exThumb(e_, null))}</span><span class="nm">${esc(e.name)}${e_ !== (atHome() ? homeDefault(id) : id) ? ` <span class="tag">Alternative</span>` : ""}</span><span class="pr">${dn}/${n}${topKg ? ` · ${dec(topKg)} kg` : ""}</span></button></div>`;
+    h += `<div class="exrow ${isOpen ? "cur" : ""} ${complete ? "complete" : ""}"><div class="exhead"><button type="button" class="exsum" data-open="${id}" aria-expanded="${isOpen}"><span class="st">${complete ? "✓" : dn || ""}</span><span class="exth">${(th => th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : "")(THUMB_YT[e_] ? ytThumb(e_) : e.img ? isrc(e.img, 0) : exThumb(e_, null))}</span><span class="nm">${esc(e.name)}${SESS[sk]?.ss?.[id] ? ` <span class="wzss" title="Supersatz: abwechselnd mit der Partnerübung">${esc(SESS[sk].ss[id])}</span>` : ""}${e_ !== (atHome() ? homeDefault(id) : id) ? ` <span class="tag">Alternative</span>` : ""}</span><span class="pr">${dn}/${n}${topKg ? ` · ${dec(topKg)} kg` : ""}</span></button></div>`;
     if (isOpen) h += exBody(id, n, w);
     h += `</div>`;
   }
@@ -3346,7 +3374,8 @@ const WZ_T = [["ganz", "Ganzkörper"], ["oben", "Oberkörper"], ["beine", "Beine
 const WZ_FG = {ganz: ["ruecken", "brust", "quad", "po", "rumpf"], oben: ["ruecken", "brust", "schulter", "arme"], beine: ["quad", "po", "waden"], push: ["brust", "schulter", "arme"], pull: ["ruecken", "arme"], arme: ["arme"], rumpf: ["rumpf"], knie: ["po", "quad"], pflege: ["schulter"]};
 const WZ_FM = {push: ["brust", "trizeps", "seitlS", "vordS", "hintS", "obTrap"], pull: ["ruecken", "bizeps", "hintS", "obTrap"]};
 const GYM_OF = {hw_slrdl: "alt_dbrdl", hw_slidecurl: "lyingcurl", hw_bss: "bss", hw_squat: "legpress", hw_hipthrust: "hipthrust", hw_calf: "calfstand", hw_tablerow: "cablerow", hw_doorrow: "cablerow", hw_abd: "abduction", hw_dbcurl: "cablecurl", hw_bandface: "facepull", hw_banderot: "extrot", hw_extrot: "extrot", hw_bandpulldown: "latneutral", hw_bandpushdown: "pushdown", hw_bandpallof: "pallof", hw_bandhammer: "alt_hammer", hw_bandcurl: "cablecurl", hw_pullapart: "facepull"};
-const wizNew = () => ({step: 1, t: null, free: false, tpl: null, alt: {}, off: new Set(), pfl: false, g: new Set(), min: 45, where: cur.where === "home" ? "home" : "gym", drop: new Set(), cut: 0, cool: false, name: "", saved: null});
+let wizCtx = null, sheetRet = null; // Übungsblatt aus dem Assistenten: Zeilen-Info (Original/Grund) und Rückweg
+const wizNew = () => ({step: 1, t: null, free: false, tpl: null, alt: {}, off: new Set(), keepIn: new Set(), orig: null, rowInfo: {}, pfl: false, g: new Set(), min: 45, where: cur.where === "home" ? "home" : "gym", drop: new Set(), cut: 0, cool: false, name: "", saved: null});
 const wizSchon = () => schonOn() || S().mode === "pause";
 // Zeit je Satz: ~40 s Arbeit + Pause wie bei den Creators (Grundübung ~2 min, Isolation ~75 s, Rumpf ~45 s); im Supersatz teilen sich zwei Übungen die Pause; + 6 min Aufwärmen
 const WZ_REST = {c: 120, i: 75, k: 45};
@@ -3367,18 +3396,19 @@ function wizWhy(id, where){ const e = EX[id]; if (!e) return "nicht in der App";
   if (S().knee1 && (e.m?.quad || 0) >= 1 && !KNEE_QUAD_OK.has(id)) return "Knie-Phase 1";
   return ""; }
 // Vorlage → Zeilen: Original, App-Übung, Ersatzkette (Zuhause/Geräte/SC/Knie), Alternativen zum Durchschalten
-function tplRows(tp, where, A = {}, off = new Set()){
-  const rows = [], used = new Set();
-  tp.ex.forEach(([g, h, orig, st, reps, ss, why], i) => {
+function tplRows(tp, where, A = {}, off = new Set(), keepIn = new Set()){
+  const rows = new Array(tp.ex.length), used = new Set();
+  const order = tp.ex.map((_, i) => i).sort((a, b) => (A[a] ? 1 : 0) - (A[b] ? 1 : 0));
+  for (const i of order) { const [g, h, orig, st, reps, ss, why] = tp.ex[i]; (() => {
     const base = where === "home" ? (h || homeDefault(g) || g) : (g?.startsWith("hw_") ? GYM_OF[g] || g : g), hd = where === "home" ? homeDefault(base) : null;
     const pool = [base, ...(where === "home" ? [hd, ...(GEAR_FALLBACK[base] || []), ...(HOME_ALTS[base] || []), ...(HOME_ALTS[hd] || [])] : (ALTS[base] || []).map(x => x[0])), ...(SCHON_RED[base] || []), ...(SC_RED[base] || [])];
     const okAll = [...new Set(pool)].filter(id => id && EX[id] && wizOk(id, where)), ok = okAll.filter(id => !used.has(id));
     const lo = Math.max(2, Math.min(4, st?.[0] ?? EX[base]?.sets ?? 3)), hi = Math.max(lo, Math.min(4, st?.[1] ?? lo));
-    const r = {i, base, orig: orig || EX[base]?.name || base, map: why, ss: /^[A-Z]\d?$/.test(ss || "") ? ss[0] : null, lo, hi, n: lo, ok, off: off.has(i)};
-    if (!ok.length) { r.drop = okAll.length ? "schon in der Einheit" : wizWhy(base, where) || "keine passende Übung"; rows.push(r); return; }
+    const r = {i, keep: keepIn.has(i), base, orig: orig || EX[base]?.name || base, map: why, ss: /^[A-Z]\d?$/.test(ss || "") ? ss[0] : null, lo, hi, n: lo, ok, off: off.has(i)};
+    if (!ok.length) { r.drop = okAll.length ? "schon in der Einheit" : wizWhy(base, where) || "keine passende Übung"; rows[i] = r; return; }
     r.k = (A[i] || 0) % ok.length; r.id = ok[r.k]; used.add(r.id);
     if (r.id !== base) r.why = wizWhy(base, where) || (A[i] ? "deine Wahl" : used.has(base) ? "Original schon in der Einheit" : "ähnliche Übung");
-    rows.push(r); });
+    rows[i] = r; })(); }
   return rows; }
 const tplAct = rows => rows.filter(r => r.id && !r.off && !r.cutT);
 // an die Zeit anpassen: erst Sätze (Rumpf, Isolation, dann Grundübungen auf 2), dann hinten kürzen (mind. 4 Übungen); zu kurz: Sätze bis zum oberen Ende
@@ -3386,7 +3416,7 @@ function tplFit(rows, min){
   const est = () => wizMin(tplAct(rows)), floor = min <= 20 ? 3 : 4;
   for (const r of tplAct(rows)) r.n = min >= 60 ? r.hi : r.lo;
   for (const ty of ["k", "i", "c"]) for (const r of [...tplAct(rows)].reverse()) { if (est() <= min + 4) break; if (EX[r.id].type === ty && r.n > 2) r.n = 2; }
-  while (est() > min + 4 && tplAct(rows).length > floor) { const act = tplAct(rows).filter(x => !x.keep), r = [...act].reverse().find(x => EX[x.id].type !== "c") || act.at(-1); if (!r) break; r.cutT = true; }
+  while (est() > min + 4 && tplAct(rows).filter(x => !x.keep).length > floor) { const act = tplAct(rows).filter(x => !x.keep), r = [...act].reverse().find(x => EX[x.id].type !== "c") || act.at(-1); if (!r) break; r.cutT = true; }
   for (const cap of ["hi", "max"]) for (const r of tplAct(rows)) while (est() < min - 6 && r.n < (cap === "hi" ? r.hi : 4)) r.n++;
   return est(); }
 // fällt zu viel weg (z. B. SC-Schonen): mit erlaubten Übungen derselben Muskelgruppen auffüllen
@@ -3413,10 +3443,10 @@ function wizCool(groups){ const cool = ["2–3 min locker gehen oder radeln, ruh
 function wizTplBuild(){
   const w = wiz, L = recentLoad(selDate), list = tplFor(w.t).map(tp => ({tp, s: tplScore(tp, w.where, w.min, L)})).sort((x, y) => y.s - x.s);
   const sel = list.find(x => x.tp.id === w.tpl) || list[0]; if (!sel) return {list, rows: [], picks: [], est: 0, groups: [], L, legs: false, cool: [], title: ""};
-  const tp = sel.tp, rows = tplRows(tp, w.where, w.alt, w.off); tplFit(rows, w.min); tplFill(rows, w.t, w.where, w.pfl, w.off, w.min); const est = tplFit(rows, w.min), act = tplAct(rows);
+  const tp = sel.tp, rows = tplRows(tp, w.where, w.alt, w.off, w.keepIn); tplFit(rows, w.min); tplFill(rows, w.t, w.where, w.pfl, w.off, w.min); const est = tplFit(rows, w.min), act = tplAct(rows);
   for (const r of act) r.ss2 = r.ss && act.some(x => x !== r && x.ss === r.ss) ? r.ss : null;
   const groups = [...new Set(act.map(r => sgOfMus(mainMus(r.id))).filter(Boolean))]; if (act.some(r => PFLEGE.includes(r.id))) groups.push("pflege");
-  return {list, tp, rows, picks: act.map(r => ({id: r.id, n: r.n, g: sgOfMus(mainMus(r.id)) || "pflege"})), est, groups, L, legs: groups.some(g => SG_LOW.includes(g)), cool: wizCool(groups),
+  return {list, tp, rows, picks: act.map(r => ({id: r.id, n: r.n, g: sgOfMus(mainMus(r.id)) || "pflege", ss: r.ss2 || null})), est, groups, L, legs: groups.some(g => SG_LOW.includes(g)), cool: wizCool(groups),
     title: tp.plan ? tp.t : `${WZ_T.find(x => x[0] === w.t)?.[1] || "Set"} · ${tplBy(tp.by)}`}; }
 // Kurzname des Creators für den Titel: „Jeff Nippard“ → Nippard, „Jeremy Ethier / Built With Science“ → Ethier, „Athlean-X (Jeff Cavaliere)“ → Athlean-X
 const tplBy = by => { const n = String(by || "").split(/ \/ | \(/)[0].trim(); return /Rehab|Athlean|^RP\b/.test(n) ? n : n.split(" ").pop(); };
@@ -3489,7 +3519,7 @@ function wizHtml(close){
       ${w.free ? `<div class="chips"><span class="chiplab">Schnell</span>${SG_PRESET.map(([l, gs]) => chip("data-wizpre", l, l, gs.every(g => w.g.has(g)) && w.g.size === gs.length)).join("")}</div>
       <div class="chips">${SG.map(([g, l]) => { const v = sgLoad(g, L); return chip("data-wizg", g, l, w.g.has(g), g !== "pflege" && v >= 4 ? "· erholt sich" : g !== "pflege" && v >= 1 ? "· kürzlich" : ""); }).join("")}</div>` : ""}
       <div class="lab">Wie lange?</div><div class="seg">${[20, 30, 45, 60].map(m => `<button type="button" data-wizmin="${m}" aria-pressed="${w.min === m}">${m} min</button>`).join("")}</div>
-      <button class="btn primary big" type="button" data-act="wizNext" ${(w.free ? w.g.size : w.t) ? "" : "disabled"}>Weiter ›</button>`;
+      <div class="actions"><button class="btn ghost big" type="button" data-act="wizClose">‹ Zurück</button><button class="btn primary big" type="button" data-act="wizNext" ${(w.free ? w.g.size : w.t) ? "" : "disabled"}>Weiter ›</button></div>`;
   } else if (w.step === 2) {
     h += `<div class="seg"><button type="button" data-wizwhere="gym" aria-pressed="${w.where === "gym"}">Gym</button><button type="button" data-wizwhere="home" aria-pressed="${w.where === "home"}">Zuhause</button></div>
       ${w.where === "home" ? gearDayHtml() : `<div class="small muted">Im Gym nimmt die App Maschinen, Kabel und Hanteln.</div>`}
@@ -3526,26 +3556,41 @@ function wizTplHtml(){
     <div class="small">${b.rows.filter(r => !r.add).length - drop.length} von ${b.rows.filter(r => !r.add).length} Übungen übernommen${rep0 ? ` · ${rep0} ersetzt` : ""}${drop.length ? ` · ${drop.length} ${drop.length > 1 ? "entfallen" : "entfällt"}` : ""}${tp.skip ? ` · ${tp.skip} nicht übernommen (Sprung, Dehnen oder ungünstig fürs SC)` : ""}</div>
     ${tp.u ? `<a class="linkbtn small" href="${esc(tp.u)}" target="_blank" rel="noopener">▶ Original ansehen</a>` : ""}</div>`;
   if (b.list.length > 1) h += `<div class="lab">Andere Vorlagen</div><div class="wzscroll">${b.list.slice(0, 10).map(({tp: x}) => `<button type="button" data-wiztpl="${esc(x.id)}" aria-pressed="${x.id === tp.id}"><b>${esc(x.plan ? x.t : x.t.replace(/\s*\(.*?\)\s*$/, ""))}</b><br><span class="small muted">${esc(x.by)}${x.w === "home" ? " · zuhause" : ""}</span></button>`).join("")}</div>`;
-  h += `<div class="lab">${act.length} Übungen · ca. ${b.est} min</div><div class="small">🔥 Aufwärmen (ca. 5 min) steht oben in der Einheit.</div>
+  w.rowInfo = {}; for (const r of b.rows) w.rowInfo[String(r.i)] = {id: r.id, base: r.base, orig: r.orig, why: r.why, map: r.map, add: r.add, drop: r.drop};
+  const origOpen = r => String(w.orig) === String(r.i) ? wzOrigHtml(r) : "";
+  h += `<div class="lab">${act.length} Übungen · ca. ${b.est} min</div><div class="small">🔥 Aufwärmen (ca. 5 min) steht oben in der Einheit. Bild antippen: Technik und Video.</div>
     <div class="pvlist">${act.map((r, j) => { const e = EX[r.id], mg = w.where === "home" ? missingGear(r.id) : [], th = exThumb(r.id, e.img);
-      const sub = r.add ? `<span class="wzwhy sw">ergänzt · ${esc(r.add)}</span>` : r.why ? `<span class="wzwhy sw">statt ${esc(r.orig)} · ${esc(r.why)}</span>` : r.orig && r.orig !== e.name ? `<span class="wzwhy">${esc(r.orig)}${r.map ? " · " + esc(r.map) : ""}</span>` : "";
-      return `<div class="pv"><button type="button" class="pvimg" data-sheet="tech" data-v="${r.id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${j + 1}</span>`}</button>
+      const sub = r.add ? `<span class="wzwhy sw">ergänzt · ${esc(r.add)}</span>` : r.why ? `<button type="button" class="wzwhy sw wzob" data-wizorig="${esc(String(r.i))}" aria-expanded="${String(w.orig) === String(r.i)}">statt ${esc(r.orig)} · ${esc(r.why)} ${String(w.orig) === String(r.i) ? "▴" : "▾"}</button>` : r.orig && r.orig !== e.name ? `<span class="wzwhy">${esc(r.orig)}${r.map ? " · " + esc(r.map) : ""}</span>` : "";
+      return `${j ? "" : ""}<div class="pv"><button type="button" class="pvimg" data-sheet="tech" data-v="${r.id}" data-wizrow="${esc(String(r.i))}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${j + 1}</span>`}</button>
         <span class="pvt"><b>${esc(e.name)}</b>${r.ss2 ? ` <span class="wzss">${esc(r.ss2)}</span>` : ""}<br><span class="small muted"><span class="num">${r.n} × ${esc(e.reps)}</span>${mg.length ? ` · <span class="bad">fehlt: ${esc(mg.map(k => GEAR[k]).join(", "))}</span>` : ""}</span>${sub}</span>
-        <span class="pvact">${r.ok.length > 1 ? `<button class="btn small ghost" type="button" data-wizcyc="${r.i}" aria-label="Andere Übung (${r.k + 1}/${r.ok.length})" title="${r.k + 1}/${r.ok.length}">⇄</button>` : ""}<button class="btn small ghost" type="button" data-wizoff="${r.i}" aria-label="Entfernen">✕</button></span></div>`; }).join("")}</div>`;
+        <span class="pvact">${r.ok.length > 1 ? `<button class="btn small ghost" type="button" data-wizcyc="${r.i}" aria-label="Andere Übung (${r.k + 1}/${r.ok.length})" title="${r.k + 1}/${r.ok.length}">⇄</button>` : ""}<button class="btn small ghost" type="button" data-wizoff="${r.i}" aria-label="Entfernen">✕</button></span></div>${origOpen(r)}`; }).join("")}</div>`;
   if (act.some(r => r.ss2)) h += `<div class="small muted">Gleicher Buchstabe = Supersatz: beide Übungen abwechselnd, Pause erst nach dem Paar.</div>`;
-  if (drop.length) h += `<div class="small muted wzlist">Entfällt: ${drop.map(r => `${esc(r.orig)} (${esc(r.drop)})`).join(" · ")}</div>`;
-  if (cut.length) h += `<div class="small muted wzlist">Für ${w.min} min weggelassen: ${cut.map(r => esc(EX[r.id].name)).join(" · ")}</div>`;
-  if (offr.length || Object.keys(w.alt).length) h += `<button type="button" class="linkbtn small" data-act="wizReset">↺ Vorlage zurücksetzen</button>`;
+  const offAdd = [...w.off].filter(x => typeof x === "string" && EX[x.slice(2)]);
+  if (drop.length) h += `<div class="lab sec">Entfällt</div><div class="wzlist2">${drop.map(r => `<button type="button" class="wzchip" data-wizorig="${esc(String(r.i))}" aria-expanded="${String(w.orig) === String(r.i)}">${esc(r.orig)} <span class="muted">· ${esc(r.drop)}</span></button>${origOpen(r)}`).join("")}</div>`;
+  if (cut.length) h += `<div class="lab sec">Für ${w.min} min weggelassen</div><div class="wzlist2">${cut.map(r => `<button type="button" class="wzchip" data-wizkeep="${esc(String(r.i))}">${esc(EX[r.id].name)} <span class="ok">＋ wieder rein</span></button>`).join("")}</div>`;
+  if (offr.length || offAdd.length) h += `<div class="lab sec">Von dir entfernt</div><div class="wzlist2">${offr.map(r => `<button type="button" class="wzchip" data-wizon="${esc(String(r.i))}">${esc(EX[r.id].name)} <span class="ok">↺ zurückholen</span></button>`).join("")}${offAdd.map(x => `<button type="button" class="wzchip" data-wizon="${esc(x)}">${esc(EX[x.slice(2)].name)} <span class="ok">↺ zurückholen</span></button>`).join("")}</div>`;
+  if (offr.length || offAdd.length || Object.keys(w.alt).length || w.keepIn.size) h += `<button type="button" class="linkbtn small" data-act="wizReset">↺ Vorlage zurücksetzen</button>`;
   h += `<label class="check small"><input type="checkbox" id="wizCool" ${w.cool ? "checked" : ""}><span>🧊 Abwärmen anzeigen (3–5 min, freiwillig)</span></label>
     <div class="lab">Name</div><input id="wizName" class="inp" type="text" maxlength="40" placeholder="${esc(b.title)}" value="${esc(w.name)}">
     <button class="btn primary big" type="button" data-act="wizGo" ${act.length ? "" : "disabled"}>▶ Jetzt trainieren</button>
     <div class="actions"><button class="btn ghost" type="button" data-act="wizBack">‹ Zurück</button><button class="btn ${w.saved ? "" : "ghost"}" type="button" data-act="wizSave" ${act.length && !w.saved ? "" : "disabled"}>${w.saved ? "✓ Gespeichert" : "💾 Als Set speichern"}</button></div>`;
   return h; }
+// Mini-Vorschau: was in der Vorlage stand, warum ersetzt/entfallen, Original ansehen
+function wzOrigHtml(r){ const be = EX[r.base], th = be ? exThumb(r.base, be.img) : null;
+  return `<div class="wzorig">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">?</span>`}<div class="wzot"><div class="small muted">In der Vorlage</div><b>${esc(r.orig)}</b>
+    ${be && be.name !== r.orig ? `<div class="small">In der App: ${esc(be.name)}</div>` : ""}<div class="small">${r.drop ? "Entfällt" : "Ersetzt"}, weil: ${esc(r.drop || r.why || "")}</div>${r.map ? `<div class="small muted">${esc(r.map)}</div>` : ""}
+    ${be ? `<button type="button" class="btn small" data-sheet="tech" data-v="${r.base}" data-wizrow="${esc(String(r.i))}">Original ansehen ›</button>` : ""}</div></div>`; }
+function wzCtxHtml(id){ const c = wizCtx; if (!c || c.shown !== id) return "";
+  if (c.id === id && c.why) return `<div class="wzctx"><span class="small muted">Im Set statt</span> <b>${esc(c.orig)}</b><div class="small">${esc(c.why)}</div>${EX[c.base] && c.base !== id ? `<button type="button" class="linkbtn small" data-sheet="tech" data-v="${c.base}">Original ansehen ›</button>` : ""}</div>`;
+  if (c.id === id && c.add) return `<div class="wzctx small">Im Set ergänzt (${esc(c.add)}), weil von der Vorlage zu wenig übrig blieb.</div>`;
+  if (c.base === id && c.id !== id) return `<div class="wzctx small"><b>Original aus der Vorlage.</b> ${c.drop ? `Entfällt heute: ${esc(c.drop)}` : `Im Set ersetzt durch ${esc(EX[c.id]?.name || "")}: ${esc(c.why || "")}`}</div>`;
+  if (c.orig && c.orig !== EX[id]?.name) return `<div class="wzctx small">In der Vorlage: ${esc(c.orig)}${c.map ? ` · ${esc(c.map)}` : ""}</div>`;
+  return ""; }
 function wizSet(){ const w = wiz, b = w.free ? wizBuild() : wizTplBuild();
-  return {id: w.saved || Date.now().toString(36), title: (w.name.trim() || b.title).slice(0, 40), groups: w.free ? [...w.g] : b.groups, min: w.min, where: w.where, ex: b.picks.map(p => p.id), sets: Object.fromEntries(b.picks.map(p => [p.id, p.n])), legs: b.legs, cool: w.cool ? b.cool : null,
+  return {id: w.saved || Date.now().toString(36), title: (w.name.trim() || b.title).slice(0, 40), groups: w.free ? [...w.g] : b.groups, min: w.min, where: w.where, ex: b.picks.map(p => p.id), sets: Object.fromEntries(b.picks.map(p => [p.id, p.n])), legs: b.legs, cool: w.cool ? b.cool : null, ss: Object.fromEntries(b.picks.filter(p => p.ss).map(p => [p.id, p.ss])),
     tpl: !w.free && b.tp ? {id: b.tp.id, by: b.tp.by, t: b.tp.t, u: b.tp.u || null} : null}; }
 const kneeSafe = id => !S().knee1 || (EX[id]?.m?.quad || 0) < 1 || KNEE_QUAD_OK.has(id) ? id : [...(ALTS[id] || []).map(x => x[0]), ...(HOME_ALTS[id] || []), "legpress60", "wallsit"].find(a => EX[a] && KNEE_QUAD_OK.has(a)) || id;
-function regSet(s){ if (!s?.id) return; SESS["set:" + s.id] = {title: s.title, where: s.where === "home" ? "Zuhause" : "Gym", ex: [...new Set((s.ex || []).filter(id => EX[id]).map(kneeSafe))], sets: s.sets || {}, custom: true, legs: !!s.legs, cool: s.cool || null}; }
+function regSet(s){ if (!s?.id) return; SESS["set:" + s.id] = {title: s.title, where: s.where === "home" ? "Zuhause" : "Gym", ex: [...new Set((s.ex || []).filter(id => EX[id]).map(kneeSafe))], sets: s.sets || {}, custom: true, legs: !!s.legs, cool: s.cool || null, ss: s.ss && Object.keys(s.ss).length ? s.ss : null}; }
 function regSets(){ for (const s of S().customSets || []) regSet(s); for (const d of Object.values(store.days || {})) if (d?.customSet) regSet(d.customSet); if (cur?.customSet) regSet(cur.customSet); }
 function setGo(s){ regSet(s); if (cur.skipEx) { for (const k of Object.keys(cur.skipEx)) clr("skipEx." + k); delete cur.skipEx; }
   cur.customSet = s; cur.session = "set:" + s.id; cur.sessAt = Date.now(); cur.where = s.where; touch(); saveCur(); wiz = null; if (sheet.open) { sheetKind = null; sheet.close(); } woSession = null; openEx = null; go("training"); }
@@ -3632,11 +3677,19 @@ function checkSet(id, base, i){
   if (!woSession && (!cur.startedAt || (first && Date.now() - Date.parse(cur.startedAt) > 90 * 60000))) { cur.startedAt = new Date().toISOString(); requestWake(); }
   touch();
   try { navigator.vibrate && navigator.vibrate(25); } catch {}
+  // Supersatz: nach dem Satz direkt zur Partnerübung (15 s Wechsel), volle Pause erst nach dem Paar
+  const ssM = SESS[sk]?.ss || {}, ssL = ssM[base];
+  if (ssL) { const pair = exList(sk).filter(x => ssM[x] === ssL && eff(x)), dn = doneCount(base, w, sk), behind = pair.find(x => x !== base && doneCount(x, w, sk) < Math.min(dn, nSets(x, w, sk)));
+    if (behind) { startRest(15); openEx = behind; renderTraining(); return; }
+    const nxt = pair.find(x => doneCount(x, w, sk) < nSets(x, w, sk)); if (nxt) openEx = nxt; }
   const others = exList(sk).some(x => x !== base && eff(x) && doneCount(x, w, sk) < nSets(x, w, sk));
   if (doneCount(base, w, sk) < nSets(base, w, sk) || setsObj()[id].some(x => x.base === base && x.added && !doneSet(x)) || others) startRest(restFor(id));
   if (EX[id].type === "k" && doneCount(base, w, sk) >= nSets(base, w, sk)) { const ids = exList(sk), nx = ids.find(x => x !== base && eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)); if (nx) openEx = nx; }
   renderTraining();
 }
+// Supersatz-Hinweis im Training: Partnerübung(en) und Ablauf
+function ssNote(sk, id){ const m = SESS[sk]?.ss || {}, L = m[id]; if (!L) return ""; const mates = exList(sk).filter(x => x !== id && m[x] === L && eff(x)).map(x => EX[eff(x)]?.name).filter(Boolean);
+  return mates.length ? `<div class="small ssnote"><span class="wzss">${esc(L)}</span> Supersatz mit <b>${esc(mates.join(", "))}</b>: abwechselnd, 15 s Wechsel, volle Pause erst nach dem Paar</div>` : ""; }
 function finishWorkout(){
   const sk = woSession || cur.session;
   if (woSession) { woSession = null; woKeep = null; saveCur(); go("heute"); return; }
@@ -4049,16 +4102,23 @@ function varRowHtml(id){ const l = varLadder(id); if (!l || l.length < 2) return
   return `<div class="varhead small muted"><span>‹ leichter</span><b>Varianten</b><span>schwerer ›</span></div><div class="varrow" id="varRow">${l.map((x, i) => { const e = EX[x], th = exThumb(x, e.img), gate = e.gate && !S().scCleared;
     return `<button type="button" class="varc ${x === id ? "cur" : ""}" ${x === id ? 'aria-current="true"' : `data-sheet="tech" data-v="${x}"`}>${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${i + 1}</span>`}<span class="lv">${x === id ? "Diese" : i < ci ? "leichter" : "schwerer"}${gate ? " · nach Freigabe" : ""}</span><b>${esc(e.name)}</b></button>`; }).join("")}</div>${(() => { const base = techStack[0]; return tab === "training" && base && base !== id && altOptions(base).some(([x]) => x === id) && !scRed(id) ? `<button type="button" class="btn small primary" data-alt="${id}" data-base="${base}">⇄ Heute diese statt ${esc(EX[base].name)}</button>` : ""; })()}`; }
 let sheetHist = false;
-addEventListener("popstate", () => { if (sheetHist && sheet.open) { sheetHist = false; closeSheet(true); } });
+addEventListener("popstate", () => { if (!(sheetHist && sheet.open)) return;
+  const stay = () => { try { history.pushState({sheet: 1}, ""); } catch {} };
+  if (sheetKind === "tech" && techStack.length) { stay(); const prev = techStack.pop(); sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; return; }
+  if (sheetKind === "tech" && sheetRet) { stay(); const r = sheetRet; sheetRet = null; openSheet(r.kind, r.arg); if (r.top != null) setTimeout(() => { sheet.scrollTop = r.top; }, 0); return; }
+  if (sheetKind === "tech" && b3Ret) { stay(); openSheet("body"); return; }
+  if (sheetKind === "setwiz" && wiz && wiz.step > 1) { stay(); wiz.step--; renderSheet(); sheet.scrollTop = 0; return; }
+  sheetHist = false; closeSheet(true); });
 function openSheet(kind, arg){
   if (kind !== "body" && B3) b3Close();
   if (kind === "reha") { rtk = "reha"; kind = "mob"; } else if (kind === "mob") rtk = "mob";
   if (/^mob/.test(kind)) vWarm();
   if (kind === "cook") cookMin = false; else if (sheet.open && sheetKind === "cook" && cook) cookMin = true;
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
+  if (kind === "tech" && sheet.open && sheetKind === "setwiz") sheetRet = {kind: "setwiz", top: sheet.scrollTop}; else if (kind !== "tech") { sheetRet = kind === "setwiz" ? sheetRet : null; if (kind !== "setwiz") wizCtx = null; }
   if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
   if (kind === "meal" && (sheetKind !== "meal" || sheetArg !== arg)) mealQ = ""; sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); sheet.style.transform = ""; renderSheet(); if (!sheet.open) { const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) { if (a.matches(".qbox input")) addRecentQ(a.id, a.value); a.blur(); } else { const q = qInput(document.querySelector(".qbox input:not(:placeholder-shown)")); if (q && !sheet.contains(q)) addRecentQ(q.id, q.value); } sheet.showModal(); } else sheet.scrollTop = 0; }
-function closeSheet(fromPop){ if (sheetKind === "cook" && cook) cookMin = true; b3Ret = null; sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); cookPaint(); }
+function closeSheet(fromPop){ if (sheetKind === "cook" && cook) cookMin = true; b3Ret = null; sheetRet = null; wizCtx = null; sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); cookPaint(); }
 let sheetTarget = null;
 // Nur einen Teil des Blatts neu zeichnen (z. B. Reiter), damit laufende Videos nicht neu laden
 function renderSheetPart(sel){
@@ -4071,7 +4131,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
   if (sheetKind === "mob") {
     { const left = Math.ceil(autoLeft(rtNext()) / 60), part = rtCount(rtk, cur, selDate) > 0 && left < rtMin(rtk, selDate);
     h += `<div class="sh"><h2>${RTS[rtk].title} · ${rtMin(rtk, selDate)} min</h2>${close}</div><div class="btnrow two"><button class="btn primary big" type="button" data-guide="auto"><b>⏱ Automatisch</b><span class="small">${part ? `noch ≈ ${left} min` : "läuft von selbst"}</span></button><button class="btn big" type="button" data-guide="start"><b>▶ Selbst starten</b><span class="small">Timer je Übung antippen</span></button></div><div class="small muted">Automatisch: Ansage, Übung, Pause und Wechsel laufen nacheinander durch. Selbst starten: du startest jeden Timer und gehst im eigenen Tempo weiter.</div>`; }
-    h += rtk === "reha" ? `<label class="check"><input type="checkbox" id="rehaNoBand" ${rehaNoBand() ? "checked" : ""}><span>Kein Band zur Hand: Türrahmen-Variante statt Bandübungen</span></label><div class="small muted">Phase ${rehaPhase()}${rehaPhase() === 1 ? " bis zur Arztfreigabe: Ellbogen am Körper, nichts über Brusthöhe" : ": nur schmerzfrei steigern (SC ≤ 2/10)"}. Videos: MuscleWiki.</div>` : `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
+    h += rtk === "reha" ? `<label class="check"><input type="checkbox" id="rehaNoBand" ${rehaNoBand() ? "checked" : ""}><span>Kein Band zur Hand: Türrahmen-Variante statt Bandübungen</span></label><div class="small muted">Phase ${rehaPhase()}${rehaPhase() === 1 ? " bis zur Arztfreigabe: Ellbogen am Körper, nichts über Brusthöhe" : rehaPhase() === 2 ? `: nur schmerzfrei steigern (SC ≤ 2/10). Phase 3 kommt automatisch${rehaP3Date() ? " frühestens am " + fmt(rehaP3Date()) : ""}, wenn das SC 2 Wochen ruhig war` : ": Überkopf schmerzfrei erlaubt, weiter nur schmerzfrei steigern"}. Videos: MuscleWiki.</div>` : `<details class="small"><summary>Zubehör heute ändern</summary>${gearPicker(["kh", "gewicht", "matte", "handtuch", "sofa"])}</details>`;
     RL().forEach(([k, t, img], i) => { h += `<div class="mobi ${RD()[k] ? "done" : ""}"><input type="checkbox" data-mob="${k}" ${RD()[k] ? "checked" : ""} aria-label="${esc(t)} erledigt"><button type="button" class="mobopen" data-mobzoom="${i}">${img ? `<span class="mobimg">${animHtml(img, t)}</span>` : exThumb(RTS[rtk].pre + k, null) ? `<span class="mobimg"><span class="anim"><img src="${exThumb(RTS[rtk].pre + k, null)}" alt=""></span></span>` : ""}<span>${esc(t)}${rtAlt(k) ? `<br><span class="small muted">${esc(rtAlt(k))}</span>` : ""}</span><span class="go">›</span></button></div>`; });
     h += `<button class="btn ${rtFinished(rtk, cur, selDate) ? "" : "primary"} big" type="button" data-act="mobFinish">${rtFinished(rtk, cur, selDate) ? "✓ Routine abgeschlossen" : "Routine abschließen"}</button>`;
     if (!rtCount(rtk, cur) && !RD()._done) { const dl = selDate === todayIso() ? "Heute ausgelassen" : "Ausgelassen";
@@ -4090,12 +4150,12 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
     if (i >= RL().length) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">${RTS[rtk].icon}</div><div>${rtCount(rtk, cur, selDate)}/${rtTotal(rtk, selDate)} Übungen erledigt. ${RTS[rtk].done}</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>${rtSkippedHtml()}`; }
     else { const [k, txt, img] = RL()[i], g = GUIDE[k];
       h += `<div class="sh"><div><div class="lab">${RTS[rtk].title} · ${Math.min(pos + 1, N)}/${N}${autoFlow ? " · automatisch" : ""}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
-        <div class="shopbar"><div class="fill" style="width:${pos / N * 100}%"></div></div>${motionHtml(RTS[rtk].pre + k, img, txt, false)}<div>${esc(txt)}</div>`;
+        <div class="shopbar"><div class="fill" style="width:${pos / N * 100}%"></div></div><div class="guidehero">${motionHtml(RTS[rtk].pre + k, img, txt, false)}</div><div>${esc(txt)}</div>`;
       h += timerHtml(RTS[rtk].pre + k);
       if (k === "knietest") h += `<div class="lab">Schmerz 0–10</div>${scaleHtml("knee","kneeTest",cur.pain.kneeTest)}`;
       if (rtAlt(k)) h += `<div class="warnb small">${esc(rtAlt(k))}</div>`;
-      h += doseHtml(RTS[rtk].pre + k) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml(RTS[rtk].pre + k, "")}</details>`;
-      h += `<div class="actions"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div><button type="button" class="btn ghost small" data-hurt="${RTS[rtk].pre}${k}">😣 Tut was weh?</button>`; }
+      h += doseHtml(RTS[rtk].pre + k, false, undefined, undefined, true) + `<details class="small"><summary>🎬 Video zur Übung</summary>${videoHtml(RTS[rtk].pre + k, "")}</details>`;
+      h += `<div class="actions guidebar"><button class="btn ghost big" type="button" data-guide="back" ${i === 0 ? "disabled" : ""}>‹ Zurück</button><button class="btn ghost big" type="button" data-guide="skip">Überspringen</button><button class="btn primary big" type="button" data-guide="done">✓ Erledigt</button></div><button type="button" class="btn ghost small" data-hurt="${RTS[rtk].pre}${k}">😣 Tut was weh?</button>`; }
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
@@ -4118,7 +4178,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
     const still = e.img && RDB_STILL.has(e.img), home = HOME_OK.has(sheetArg) || sheetArg.startsWith("hw_");
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
     const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
-    h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : b3Ret ? `<button type="button" class="backlink" data-act="b3ret">‹ Zurück zur Körperkarte</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
+    h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : b3Ret ? `<button type="button" class="backlink" data-act="b3ret">‹ Zurück zur Körperkarte</button>` : sheetRet?.kind === "setwiz" ? `<button type="button" class="backlink" data-act="sheetRet">‹ Zurück zum Set</button>` : ""}${sheetRet?.kind === "setwiz" ? wzCtxHtml(sheetArg) : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}<button type="button" class="xc hurtbtn" data-hurt="${esc(sheetArg)}">😣 Tut weh?</button></div>
       ${varRowHtml(sheetArg)}${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
       ${e.img || clipOf(sheetArg) || mwSlugOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && !(vidPref === true && clipOf(sheetArg)) ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
@@ -4691,10 +4751,11 @@ const EQUIP = {legpress:["beinpresse"],rdl:["langhantel"],legext:["maschine"],se
   hw_squat:["stuhl"],hw_bss:["sofa"],hw_slrdl:[],hw_slidecurl:["handtuch"],hw_calf:["stufe"],hw_tablerow:["tisch"],hw_doorrow:["tuer","handtuch"],hw_latraise:["gewicht"],hw_latiso:["wand"],hw_shrug:["gewicht"],hw_towelshrug:["handtuch"],hw_curl:["tisch"],hw_hipthrust:["sofa"],hw_abd:["matte"],hw_extrot:["tuer"],
   alt_goblet:["kh"],alt_smithsquat:["multipresse"],alt_dbrdl:["kh"],alt_pullthrough:["kabel"],alt_backext:["maschine"],alt_sllegext:["maschine"],alt_nordic:["sofa","matte"],alt_standcurl:["maschine"],alt_lpcalf:["beinpresse"],alt_plank:["matte"],alt_birddog:["matte"],alt_dbrow:["kh","bank"],alt_machrow:["maschine"],alt_cablepress:["kabel"],alt_inclpush:["erhoehung"],alt_floorpress:["kh","matte"],alt_1armpd:["kabel"],alt_assistchin:["maschine"],alt_sapd:["kabel"],alt_lylat:["kh","bank"],alt_machlat:["maschine"],alt_dbrevfly:["kh"],alt_smithshrug:["multipresse"],alt_hammer:["kabel"],alt_kickback:["kh","bank"],alt_bbbridge:["langhantel"],alt_htmachine:["maschine"],alt_glutekick:["kabel"],alt_revlunge:["kh"],alt_smithsplit:["multipresse"],alt_cableabd:["kabel"],alt_suitcase:["kh"],alt_dbpunch:["kh","matte"],alt_sidelyer:["kh","handtuch"],alt_revcurl:["kabel"],preacher:["maschine"],cablecurl:["kabel"],onearmpd:["kabel"],wristcurl:["kh","bank"],hw_bandcurl:["band"],hw_bandpushdown:["band"],hw_bandhammer:["band"],hw_packcurl:["gewicht"],hw_towelcurl:["handtuch"],
   "mob:knietest":[],"mob:tiltlie":["matte"],"mob:tilt":[],"mob:glutebr":["matte"],"mob:rkc":["matte"],"mob:deadbug":["matte"],"mob:hipflexor":["matte"],"mob:rectfem":[],"mob:shrug30":["kh"]};
-Object.assign(EQUIP, {"reha:er1": ["band", "tuer"], "reha:er2": ["band"], "reha:er3": ["band", "tuer"], "reha:eriso": ["tuer", "handtuch"], "reha:bwsroll": ["handtuch", "matte"], "reha:chintuck": ["matte"], "reha:wallang": ["wand"], "reha:serplank": ["matte"], "reha:serpunch": ["matte"], "reha:thor": ["matte"], cablefly: ["kabel"], ohtri: ["kabel"], adduction: ["maschine"], cablecrunch: ["kabel"], curlup: ["matte"], revcrunch: ["matte"], hw_dbcurl: ["kh"], hw_bandface: ["band", "tuer"], hw_pullapart: ["band"], hw_banderot: ["band", "tuer"], hw_bandpulldown: ["band", "tuer"], hw_bandpallof: ["band", "tuer"]});
-for (const id of ["curlup", "revcrunch", "alt_goblet", "alt_dbrdl", "alt_revlunge", "alt_dbrevfly", "alt_suitcase", "alt_sidelyer", "hw_dbcurl", "hw_bandface", "hw_pullapart", "hw_banderot", "hw_bandpulldown", "hw_bandpallof"]) HOME_OK.add(id);
+Object.assign(EQUIP, {hw_trisiso: ["tisch"], "reha:wallpush": ["wand"], "reha:ys": ["matte", "handtuch"], "reha:chinlift": ["matte"], "reha:pecmin": ["wand"], "reha:er1": ["band", "tuer"], "reha:er2": ["band"], "reha:er3": ["band", "tuer"], "reha:eriso": ["tuer", "handtuch"], "reha:bwsroll": ["handtuch", "matte"], "reha:chintuck": ["matte"], "reha:wallang": ["wand"], "reha:serplank": ["matte"], "reha:serpunch": ["matte"], "reha:thor": ["matte"], cablefly: ["kabel"], ohtri: ["kabel"], adduction: ["maschine"], cablecrunch: ["kabel"], curlup: ["matte"], revcrunch: ["matte"], hw_dbcurl: ["kh"], hw_bandface: ["band", "tuer"], hw_pullapart: ["band"], hw_banderot: ["band", "tuer"], hw_bandpulldown: ["band", "tuer"], hw_bandpallof: ["band", "tuer"]});
+for (const id of ["curlup", "revcrunch", "alt_goblet", "alt_dbrdl", "alt_revlunge", "alt_dbrevfly", "alt_suitcase", "alt_sidelyer", "hw_dbcurl", "hw_bandface", "hw_pullapart", "hw_banderot", "hw_bandpulldown", "hw_bandpallof", "hw_trisiso"]) HOME_OK.add(id);
+TRI_S.push("hw_trisiso"); SCHON_RED.closepushup.push("hw_trisiso"); // Trizeps zuhause ohne Band und ohne Stütz
 // Zuhause ohne passendes Zubehör: Ersatz in dieser Reihenfolge
-const GEAR_FALLBACK = {hw_dbcurl:["hw_bandcurl","hw_packcurl","hw_curl"], hw_bandface:["hw_extrot","ytw"], hw_banderot:["hw_extrot"], hw_pullapart:["ytw","hw_extrot"], hw_bandpulldown:["hw_doorrow","hw_tablerow"], hw_bandpallof:["sideplank","deadbug"], alt_goblet:["hw_squat"], alt_dbrdl:["hw_slrdl"], alt_revlunge:["hw_bss","stepdown"], alt_dbrevfly:["ytw"], alt_suitcase:["deadbug"], alt_sidelyer:["hw_extrot"], onearmrow:["hw_tablerow"], spidercurl:["hw_curl"], inclinecurl:["hw_curl"], revwrist:["hw_curl"], alt_dbrow:["hw_tablerow"], alt_kickback:["closepushup"], alt_lylat:["hw_latiso"], bss:["hw_bss"], hw_shrug:["hw_towelshrug","ytw","pushupplus"], dbshrug:["hw_shrug","hw_towelshrug","ytw","pushupplus"], hw_latraise:["hw_latiso"], dblathome:["hw_latraise","hw_latiso"], hw_tablerow:["hw_doorrow"], hw_doorrow:["hw_tablerow"], hw_curl:["hw_doorrow"], hw_bss:["hw_squat"], hw_hipthrust:["glutebridge"], hw_squat:["wallsit"], hw_calf:["hw_slrdl"], hw_slidecurl:["glutebridge"], alt_nordic:["glutebridge"], alt_inclpush:["pushupplus"], pushup:["pushupplus"], closepushup:["pushupplus"], abroller:["alt_plank"], hw_bandcurl:["hw_packcurl","hw_towelcurl","hw_curl"], hw_bandhammer:["hw_packcurl","hw_towelcurl","hw_curl"], hw_packcurl:["hw_towelcurl","hw_curl"], hw_towelcurl:["hw_curl"]};
+const GEAR_FALLBACK = {hw_bandpushdown:["hw_trisiso"], hw_dbcurl:["hw_bandcurl","hw_packcurl","hw_curl"], hw_bandface:["hw_extrot","ytw"], hw_banderot:["hw_extrot"], hw_pullapart:["ytw","hw_extrot"], hw_bandpulldown:["hw_doorrow","hw_tablerow"], hw_bandpallof:["sideplank","deadbug"], alt_goblet:["hw_squat"], alt_dbrdl:["hw_slrdl"], alt_revlunge:["hw_bss","stepdown"], alt_dbrevfly:["ytw"], alt_suitcase:["deadbug"], alt_sidelyer:["hw_extrot"], onearmrow:["hw_tablerow"], spidercurl:["hw_curl"], inclinecurl:["hw_curl"], revwrist:["hw_curl"], alt_dbrow:["hw_tablerow"], alt_kickback:["closepushup"], alt_lylat:["hw_latiso"], bss:["hw_bss"], hw_shrug:["hw_towelshrug","ytw","pushupplus"], dbshrug:["hw_shrug","hw_towelshrug","ytw","pushupplus"], hw_latraise:["hw_latiso"], dblathome:["hw_latraise","hw_latiso"], hw_tablerow:["hw_doorrow"], hw_doorrow:["hw_tablerow"], hw_curl:["hw_doorrow"], hw_bss:["hw_squat"], hw_hipthrust:["glutebridge"], hw_squat:["wallsit"], hw_calf:["hw_slrdl"], hw_slidecurl:["glutebridge"], alt_nordic:["glutebridge"], alt_inclpush:["pushupplus"], pushup:["pushupplus"], closepushup:["pushupplus"], abroller:["alt_plank"], hw_bandcurl:["hw_packcurl","hw_towelcurl","hw_curl"], hw_bandhammer:["hw_packcurl","hw_towelcurl","hw_curl"], hw_packcurl:["hw_towelcurl","hw_curl"], hw_towelcurl:["hw_curl"]};
 const gearHome = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {}, cur?.gear || {});
 const gearStd = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {});
 // Wand und Erhöhung (Wand/Sofa) gibt es immer; Gym-Geräte zuhause nie
@@ -6664,6 +6725,9 @@ async function onClick(e){
   if (t.closest("[data-wizfree]") && wiz) { wiz.free = !wiz.free; if (wiz.free) wiz.t = null; wiz.saved = null; renderSheet(); return; }
   const wztp = t.closest("[data-wiztpl]"); if (wztp && wiz) { wiz.tpl = wztp.dataset.wiztpl; wiz.alt = {}; wiz.off = new Set(); wiz.saved = null; renderSheet(); return; }
   const wzc = t.closest("[data-wizcyc]"); if (wzc && wiz) { const i = wzc.dataset.wizcyc; wiz.alt[i] = (wiz.alt[i] || 0) + 1; wiz.saved = null; renderSheet(); return; }
+  const wzr = t.closest("[data-wizorig]"); if (wzr && wiz) { const v = wzr.dataset.wizorig; wiz.orig = String(wiz.orig) === v ? null : v; renderSheet(); return; }
+  const wzk = t.closest("[data-wizkeep]"); if (wzk && wiz) { const v = wzk.dataset.wizkeep; wiz.keepIn.add(/^\d+$/.test(v) ? Number(v) : v); wiz.saved = null; renderSheet(); return; }
+  const wzn = t.closest("[data-wizon]"); if (wzn && wiz) { const v = wzn.dataset.wizon; wiz.off.delete(/^\d+$/.test(v) ? Number(v) : v); wiz.saved = null; renderSheet(); return; }
   const wzo = t.closest("[data-wizoff]"); if (wzo && wiz) { const v = wzo.dataset.wizoff; wiz.off.add(/^\d+$/.test(v) ? Number(v) : v); wiz.saved = null; renderSheet(); return; }
   if (t.closest("[data-wizpfl]") && wiz) { wiz.pfl = true; wiz.off = new Set([...wiz.off].filter(x => typeof x !== "string" || !PFLEGE.includes(x.slice(2)))); wiz.saved = null; renderSheet(); return; }
   const wzs = t.closest("[data-wizswap]"); if (wzs && wiz) { const [a0, b0] = wzs.dataset.wizswap.split("|"); wiz.g.delete(a0); wiz.g.add(b0); wiz.saved = null; renderSheet(); return; }
@@ -6918,7 +6982,9 @@ async function onClick(e){
     if (a === "wizOpen") { wiz = wizNew(); openSheet("setwiz"); return; }
     if (a === "wizNext" && wiz) { wiz.step = Math.min(3, wiz.step + 1); renderSheet(); sheet.scrollTop = 0; return; }
     if (a === "wizBack" && wiz) { wiz.step = Math.max(1, wiz.step - 1); renderSheet(); sheet.scrollTop = 0; return; }
-    if (a === "wizReset" && wiz) { wiz.drop = new Set(); wiz.cut = 0; wiz.alt = {}; wiz.off = new Set(); wiz.pfl = false; wiz.saved = null; renderSheet(); return; }
+    if (a === "wizReset" && wiz) { wiz.drop = new Set(); wiz.cut = 0; wiz.alt = {}; wiz.off = new Set(); wiz.keepIn = new Set(); wiz.orig = null; wiz.pfl = false; wiz.saved = null; renderSheet(); return; }
+    if (a === "wizClose") { closeSheet(); return; }
+    if (a === "sheetRet") { const r = sheetRet; sheetRet = null; if (r) { openSheet(r.kind, r.arg); if (r.top != null) setTimeout(() => { sheet.scrollTop = r.top; }, 0); } return; }
     if (a === "wizSave" && wiz) { const s = wizSet(); saveSettings({customSets: [...(S().customSets || []).filter(x => x.id !== s.id), s]}); wiz.saved = s.id; regSet(s); renderSheet(); return; }
     if (a === "wizGo" && wiz) { setGo(wizSet()); return; }
     if (a === "setSession") { if (v !== cur.session && cur.skipEx) { for (const k of Object.keys(cur.skipEx)) clr("skipEx." + k); delete cur.skipEx; } cur.session = v; cur.sessAt = Date.now(); touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
@@ -6941,8 +7007,8 @@ async function onClick(e){
     if (a === "dayDeload") { if (cur.deload) { delete cur.deload; clr("deload"); } else cur.deload = true; touch(); renderSheet(); render(); return; }
     if (a === "retrySync") { Object.keys(pending).forEach(flushDay); loadAll().then(() => render()); return; }
     if (a === "booked") { saveSettings({onboard:Object.assign({}, S().onboard, {arzt:true})}); render(); if (sheet.open) renderSheet(); return; }
-    if (a === "clear") { if (clearArmed !== 1) { clearArmed = 1; setTimeout(() => { clearArmed = 0; }, 4000); toast("Nochmal tippen: Arztfreigabe bestätigen – das ändert den ganzen Plan"); return; } clearArmed = 0; saveSettings({scCleared:true}); if (sheet.open) renderSheet(); render(); return; }
-    if (a === "unclear") { saveSettings({scCleared:false}); render(); return; }
+    if (a === "clear") { if (clearArmed !== 1) { clearArmed = 1; setTimeout(() => { clearArmed = 0; }, 4000); toast("Nochmal tippen: Arztfreigabe bestätigen – das ändert den ganzen Plan"); return; } clearArmed = 0; saveSettings({scCleared:true, scClearedAt: S().scClearedAt || todayIso()}); if (sheet.open) renderSheet(); render(); return; }
+    if (a === "unclear") { saveSettings({scCleared:false, scClearedAt: null}); render(); return; }
     if (a === "delset") { const arr = setsObj()[v], base = ac.dataset.base || v; if (arr) { const {rows} = slotRows(base, v, 0), i = rows.at(-1); if (i != null) { if (i >= arr.length - 1) { arr.length = Math.min(arr.length, i); while (arr.length && !meaningful(arr.at(-1))) arr.pop(); } else arr[i] = {}; } } touch(); renderTraining(); return; }
     if (a === "begin") { cur.where = cur.where || "gym"; cur.startedAt = new Date().toISOString(); if (cur.finishedAt) clr("finishedAt"); delete cur.finishedAt; openEx = null; requestWake(); touch(); saveCur(); renderTraining(); return; }
     if (a === "resume") { delete cur.finishedAt; clr("finishedAt"); touch(); saveCur(); woSession = null; if (sheet.open) { sheetKind = null; sheet.close(); } requestWake(); go("training"); return; }
@@ -7087,7 +7153,7 @@ async function onChange(e){
     uploadPhoto(photoDate, pos, f).then(() => { photoMsg = "Foto gespeichert ✓"; }, e => { photoMsg = `Nicht gespeichert: ${e.message}`; }).then(() => renderProgress()); return; }
   if (t.dataset.dpp) { const w = t.closest("[data-dp]"), q = k => Number(w.querySelector(`[data-dpp="${k}"]`).value), y = q("y"), m = q("m"), d = Math.min(q("d"), new Date(y, m, 0).getDate()); dpSet(w.dataset.dp, `${y}-${pad(m)}-${pad(d)}`); return; }
   if (t.id === "htIn") { const v = num(t.value); if (v) saveSettings({height:v}); return; }
-  if (t.id === "scClr") { saveSettings({scCleared:t.checked}); return; }
+  if (t.id === "scClr") { saveSettings({scCleared:t.checked, scClearedAt: t.checked ? (S().scClearedAt || todayIso()) : null}); return; }
   if (t.id === "kn1") { saveSettings({knee1:t.checked}); return; }
   if (t.dataset.calon || t.dataset.calrem) { const k = t.dataset.calon || t.dataset.calrem, p = calPref(k);
     if (t.dataset.calon) p.on = t.checked; else p.rem = t.value === "" ? null : +t.value;
@@ -7162,7 +7228,8 @@ document.addEventListener("click", e => { const a = e.target.closest?.("[data-al
 document.addEventListener("click", e => { const c = e.target.closest?.("[data-qclear],[data-qset]"); if (!c) return; const inp = qInput(c); if (!inp) return; e.stopPropagation(); if (c.dataset.qset != null) { addRecentQ(inp.id, c.dataset.qset); qFire(inp, c.dataset.qset); } else qFire(inp, ""); }, true);
 document.addEventListener("focusin", e => { const t = e.target; if (!t.matches?.(".qbox input")) return; setTimeout(() => { if (document.activeElement === t) t.closest(".qbox").scrollIntoView({block: "start", behavior: "smooth"}); }, 350); });
 // Ein Blatt gibt beim Schließen den Fokus an das Suchfeld zurück – dann ginge die Tastatur wieder auf
-sheet.addEventListener("close", () => { b3Close(); b3Ret = null; const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) a.blur(); });
+document.addEventListener("click", e => { const r = e.target.closest?.("[data-wizrow]"); if (r && wiz) wizCtx = Object.assign({}, wiz.rowInfo?.[r.dataset.wizrow] || {}, {shown: r.dataset.v}); }, true);
+sheet.addEventListener("close", () => { b3Close(); b3Ret = null; sheetRet = null; const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) a.blur(); });
 addEventListener("hashchange", () => { if (dirty) saveCur(); hideActToast(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
 let todayAtHide = todayIso();

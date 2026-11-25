@@ -1782,5 +1782,34 @@
    }
   ],
   "note": "Kopf bleibt liegen, anderes Bein entspannt lang."
+ },
+ "curlup": {
+  "video": "I_drRVYlHbc",
+  "title": "The McGill Curl-Up",
+  "channel": "Prime Health Co.",
+  "lang": "en",
+  "fit": "exakt"
+ },
+ "hw_towelcurl": {
+  "video": "9L8aFaIyV-I",
+  "title": "Bicep Curl - Towel Isometrics",
+  "channel": "Ryan Leibreich",
+  "lang": "en",
+  "fit": "exakt"
+ },
+ "hw_towelshrug": {
+  "video": "8itKrPVJ5Es",
+  "title": "Shrugs With Isometric Hold",
+  "channel": "Mindful Motion LA",
+  "lang": "en",
+  "fit": "ähnlich",
+  "note": "Im Video ohne Handtuch – gleiche Bewegung: Schultern hochziehen und oben halten."
+ },
+ "hw_trisiso": {
+  "video": "rkSLRO2Ie5A",
+  "title": "How To Do an Isometric Tricep Extension",
+  "channel": "Medbridge",
+  "lang": "en",
+  "fit": "exakt"
  }
 }
