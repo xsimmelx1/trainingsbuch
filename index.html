@@ -1052,6 +1052,12 @@ img[src*="media.musclewiki.com"]{object-fit:cover!important;object-view-box:inse
 .exhero .anim:has(img[src*="media.musclewiki.com"]){aspect-ratio:4/3}
 .vclip.own:has(video[data-clipid^="mw_"]),.vclip:has(video[src*="media.musclewiki.com"]){aspect-ratio:4/3}
 video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(video[data-clipid^="mw_"]) .vposter{object-fit:cover!important;object-view-box:inset(0 16% 0 16%)}
+.b3wrap{position:relative;height:56vh;min-height:320px;border-radius:12px;overflow:hidden;background:#141a19;touch-action:none}
+.b3wrap canvas{display:block;width:100%;height:100%}
+.b3labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.b3labels .lb{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:600;line-height:1.3;color:#fff;background:rgba(0,0,0,.6);padding:1px 6px;border-radius:6px;white-space:nowrap}
+.b3labels .lb.sel{background:#e0a72a;color:#151515}.b3labels .lb.pain{background:#c0392b}
+.b3load{padding:24px;text-align:center}.b3chips{margin-top:6px}.b3form h3{margin:2px 0 6px}.num10 button{min-width:34px}
 </style>
 </head>
 <body>
@@ -1361,11 +1367,54 @@ function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || (isR
   return "_"; }
 let hurtOpen = null, hurtWhere = null;
 const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1] || key) : key);
+// ---------- Körperkarte 3D (Wunsch 2026-11-25): Stelle antippen, Schmerzart, Stärke, wann – gespeichert je Tag in day.bodyPain ----------
+// Modell: BodyParts3D, © The Database Center for Life Science, CC BY 4.0 (body/body.glb, aufbereitet mit tools in fitness/research). Anzeige: three.js (MIT), body/body3d.mjs
+let B3 = null, b3Pick = null, b3Form = null, b3Busy = false;
+const b3Opt = {layers: {skin: true, muscle: true, bone: true, band: true}, xray: false, labels: "auto", hist: true, view: "vorn"};
+const PAIN_KIND = [["stechend", "stechend"], ["dumpf", "dumpf"], ["ziehend", "ziehend"], ["brennend", "brennend"], ["pochend", "pochend"], ["druck", "Druckschmerz"], ["steif", "steif"], ["kribbeln", "Kribbeln / Taubheit"]];
+const PAIN_WHEN = [["ruhe", "in Ruhe"], ["last", "bei Belastung"], ["bewegung", "bei bestimmter Bewegung"], ["nacht", "nachts"], ["morgen", "morgens"]];
+const B3_VIEWS = [["vorn", "Vorn"], ["hinten", "Hinten"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
+const b3Today = () => Object.entries(cur.bodyPain || {}).map(([id, e]) => ({id, ...e}));
+function b3Markers(){ const out = b3Today().map(e => ({pt: e.pt, n: e.n, label: `${e.label} ${e.n}/10`}));
+  if (b3Opt.hist) for (let i = 1; i <= 14; i++) { const d = addDays(selDate, -i), day = store.days[d]; for (const e of Object.values(day?.bodyPain || {})) out.push({pt: e.pt, n: e.n, old: true}); }
+  return out; }
+function b3Flags(p, f){ const out = [], chest = /pector|stern|manubrium|xiphoid|rib|costal|clavic|SC-Gelenk/i.test(p.en + " " + (p.joint || ""));
+  if (f.kind.has("kribbeln")) out.push("Kribbeln oder Taubheit (besonders im Arm): am selben Tag ärztlich abklären – das kann ein Nerv sein.");
+  if (chest && (f.kind.has("druck") || f.kind.has("brennend")) && !p.joint) out.push("Druck oder Enge in der Brust mit Ausstrahlung in Arm oder Kiefer, Atemnot oder Schweißausbruch: sofort 112. Druckschmerz an der Brustwand schließt einen Herzinfarkt nicht aus.");
+  if (f.when.has("nacht") || f.when.has("ruhe")) out.push("Nacht- oder Ruheschmerz, der über Wochen bleibt: ärztlich abklären (Red Flag aus deinem Plan).");
+  return out; }
+function b3CtlHtml(){ const c = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${l}</button>`, L = b3Opt.layers;
+  return `<div class="chips b3chips">${B3_VIEWS.map(([k, l]) => c("data-b3view", k, l, b3Opt.view === k)).join("")}</div>
+    <div class="chips b3chips"><span class="chiplab">Ebenen</span>${c("data-b3layer", "skin", "Haut", L.skin)}${c("data-b3layer", "muscle", "Muskeln", L.muscle)}${c("data-b3xray", "1", "Muskeln durchsichtig", b3Opt.xray)}${c("data-b3layer", "bone", "Knochen", L.bone)}${c("data-b3layer", "band", "Sehnen, Bänder, Knorpel", L.band)}</div>
+    <div class="chips b3chips"><span class="chiplab">Beschriftung</span>${c("data-b3lab", "off", "Aus", b3Opt.labels === "off")}${c("data-b3lab", "auto", "Auswahl", b3Opt.labels === "auto")}${c("data-b3lab", "all", "Alle", b3Opt.labels === "all")}${c("data-b3hist", "1", "Letzte 14 Tage", b3Opt.hist)}</div>`; }
+function b3PanelHtml(){ let h = "";
+  if (b3Pick && b3Form) { const p = b3Pick, f = b3Form, flags = b3Flags(p, f), name = p.joint ? `${p.joint}` : p.de;
+    h += `<div class="card b3form"><div class="lab">${p.joint ? `${esc(p.de)} · ` : ""}${esc({muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band", tendon: "Sehne", skin: "Haut"}[p.layer] || "")}</div><h3>${esc(name)}</h3>
+      <div class="lab">Was für ein Schmerz?</div><div class="chips">${PAIN_KIND.map(([k, l]) => `<button type="button" data-b3kind="${k}" aria-pressed="${f.kind.has(k)}">${l}</button>`).join("")}</div>
+      <div class="lab">Wie stark? (0–10)</div><div class="chips num10">${[...Array(11).keys()].map(n => `<button type="button" data-b3n="${n}" aria-pressed="${f.n === n}">${n}</button>`).join("")}</div>
+      <div class="lab">Wann?</div><div class="chips">${PAIN_WHEN.map(([k, l]) => `<button type="button" data-b3when="${k}" aria-pressed="${f.when.has(k)}">${l}</button>`).join("")}</div>
+      <input id="b3mv" class="inp" type="text" maxlength="80" placeholder="Bei welcher Bewegung? (freiwillig)" value="${esc(f.mv)}">
+      ${flags.map(t => `<div class="warnb small">${esc(t)}</div>`).join("")}
+      <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Abbrechen</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`; }
+  else h += `<div class="small muted">Tippe auf die Stelle, die wehtut. Ein Finger dreht, zwei Finger zoomen und verschieben. Unter dem Antippen liegt das, was du gerade siehst – für Tieferes Muskeln ausblenden oder durchsichtig schalten.</div>`;
+  const list = b3Today();
+  if (list.length) h += `<div class="lab sec">${selDate === todayIso() ? "Heute" : fmt(selDate)} eingetragen</div><div class="lrows">${list.map(e => `<div class="lrow"><span class="lmain"><b>${esc(e.label)} · ${e.n}/10</b><span class="small muted">${esc([e.kind.map(k => PAIN_KIND.find(x => x[0] === k)?.[1] || k).join(", "), e.when.map(k => PAIN_WHEN.find(x => x[0] === k)?.[1] || k).join(", "), e.mv].filter(Boolean).join(" · "))} · ${esc(e.t)}</span></span><button class="btn small ghost" type="button" data-b3del="${esc(e.id)}" aria-label="Löschen">✕</button></div>`).join("")}</div>`;
+  return h + `<div class="small muted" style="margin-top:12px">Modell: BodyParts3D, © The Database Center for Life Science, CC BY 4.0. Sehnen und Bänder sind im Modell nur teilweise einzeln enthalten; die Sehnen großer Muskeln gehören zum jeweiligen Muskel.</div>`; }
+function b3Update(){ const c = document.getElementById("b3ctl"), p = document.getElementById("b3panel"); if (c) c.innerHTML = b3CtlHtml(); if (p) p.innerHTML = b3PanelHtml(); }
+function b3Apply(){ if (!B3) return; const L = b3Opt.layers; B3.setLayer("skin", L.skin); B3.setLayer("muscle", L.muscle); B3.setLayer("bone", L.bone); for (const k of ["cartilage", "ligament", "tendon"]) B3.setLayer(k, L.band);
+  B3.setMuscleOpacity(b3Opt.xray ? .35 : 1); B3.setLabels(b3Opt.labels); B3.setMarkers(b3Markers()); }
+async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B3 || b3Busy) return; b3Busy = true; el.innerHTML = `<div class="small muted b3load">3D-Modell wird geladen (ca. 2,5 MB) …</div>`;
+  try { const m = await import("./body/body3d.mjs"), el2 = document.getElementById("b3"); if (!el2 || !sheet.open || sheetKind !== "body") return; el2.innerHTML = "";
+    // das Blatt kann beim Laden neu gezeichnet worden sein: immer ins aktuelle Element
+    const mounted = await m.mount(el2, {view: b3Opt.view, markers: b3Markers(), onPick: (p, pt, joint) => { b3Pick = p ? {fma: p.fma, de: p.de, en: p.en, layer: p.layer, g: p.g, pt, joint} : null; b3Form = b3Pick ? {kind: new Set(), n: null, when: new Set(), mv: ""} : null; b3Update(); }});
+    if (!el2.isConnected || !sheet.open) { mounted.dispose(); return; } B3 = mounted; b3Apply();
+  } catch (e) { el.innerHTML = `<div class="warnb small">3D-Ansicht nicht möglich (${esc(e?.message || e)}).</div>`; } finally { b3Busy = false; } }
+function b3Close(){ if (B3) { try { B3.dispose(); } catch {} B3 = null; } b3Pick = null; b3Form = null; }
 function hurtHtml(key){
   const e = EX[key], mb = isRtKey(key) ? rtItem(key) : null, pat = hurtPattern(key);
   let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>
     <div class="lab">Wo?</div><div class="chips">${Object.entries(HURT).map(([k, r]) => `<button type="button" data-hwhere="${k}" aria-pressed="${hurtWhere === k}">${esc(r.label)}</button>`).join("")}</div>`;
-  if (!hurtWhere) return h + `<div class="small muted">Stelle antippen – dann siehst du, was oft dahintersteckt und worauf du achten solltest.</div>`;
+  if (!hurtWhere) return h + `<div class="small muted">Stelle antippen – dann siehst du, was oft dahintersteckt und worauf du achten solltest.</div><button class="btn ghost small" type="button" data-sheet="body">📍 Genauer auf der Körperkarte zeigen</button>`;
   const r = HURT[hurtWhere], tips = [...(r.tips[pat] || []), ...r.tips._], cues = e?.cue || [], d = DOSE[key];
   h += `<div class="warnb"><b>Zuerst:</b> ${esc(r.stop)}</div><div class="lab">Woran es oft liegt · worauf achten</div><ul class="hurtl">${tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
   if (cues.length || d?.breath || d?.tempo) h += `<div class="lab">Technik-Checkliste für diese Übung</div><ul class="hurtl">${cues.map(c => `<li>${esc(c)}</li>`).join("")}${d?.tempo ? `<li>Tempo: ${esc(d.tempo)}</li>` : ""}${d?.breath ? `<li>Atmung: ${esc(d.breath)}</li>` : ""}</ul>`;
@@ -1614,6 +1663,7 @@ function mergeDay(srv, loc){
   out.antag = Object.assign({}, srv.antag || {}, loc.antag || {});
   out.mobility = Object.assign({}, srv.mobility || {}, loc.mobility || {});
   if (srv.reha || loc.reha) out.reha = Object.assign({}, srv.reha || {}, loc.reha || {});
+  if (srv.bodyPain || loc.bodyPain) out.bodyPain = Object.assign({}, srv.bodyPain || {}, loc.bodyPain || {});
   out.meals = Object.assign({}, srv.meals || {}, loc.meals || {});
   out.ate = Object.assign({}, srv.ate || {}, loc.ate || {});
   out.ownDel = [...new Set([...(srv.ownDel || []), ...(loc.ownDel || [])])];
@@ -2356,7 +2406,8 @@ function readHash(){
     else if (["einkauf","rezepte"].includes(k)) { tab = "essen"; essenView = k; }
     else if (["messen","checkin","verlauf","uebersicht"].includes(k)) { tab = "fortschritt"; sub.fortschritt = k === "verlauf" ? "uebersicht" : k; }
     else if (["kalender","plan","setup","essenset","menu","uebungen","zutaten"].includes(k)) { tab = "mehr"; sub.mehr = k; }
-    else if (k === "routine") { selDate = todayIso(); tab = "heute"; cur = null; deep = ["mob"]; } }
+    else if (k === "routine") { selDate = todayIso(); tab = "heute"; cur = null; deep = ["mob"]; }
+    else if (k === "koerper") { tab = "heute"; deep = ["body"]; } }
 }
 // Finger/Ellbogen sind nur nach dem Bouldern relevant (Überlastung von Ringbändern und Ellbogen)
 const climbed = d => { const day = d === cur?.date ? cur : store.days[d]; return !!(day?.boulder?.done || (day?.cardio || []).some(c => c.type === "boulder")); };
@@ -3693,6 +3744,7 @@ function varRowHtml(id){ const l = varLadder(id); if (!l || l.length < 2) return
 let sheetHist = false;
 addEventListener("popstate", () => { if (sheetHist && sheet.open) { sheetHist = false; closeSheet(true); } });
 function openSheet(kind, arg){
+  if (kind !== "body" && B3) b3Close();
   if (kind === "reha") { rtk = "reha"; kind = "mob"; } else if (kind === "mob") rtk = "mob";
   if (/^mob/.test(kind)) vWarm();
   if (kind === "cook") cookMin = false; else if (sheet.open && sheetKind === "cook" && cook) cookMin = true;
@@ -3706,7 +3758,7 @@ function renderSheetPart(sel){
   const tmp = document.createElement("div"); sheetTarget = tmp; try { renderSheet(); } finally { sheetTarget = null; }
   for (const s0 of sel) { const a = sheetBody.querySelector(s0), b = tmp.querySelector(s0); if (a && b) a.innerHTML = b.innerHTML; else if (!a || !b) return renderSheet(); }
 }
-function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = document.getElementById("varRow"), c = r?.querySelector(".varc.cur"); if (r && c) r.scrollLeft = c.offsetLeft - r.offsetLeft - (r.clientWidth - c.clientWidth) / 2; }, 0); sheet.classList.toggle("full", ["mob", "mobguide"].includes(sheetKind)); if ((sheetKind === "mobguide" || sheetKind === "mob") && !mobDataReady) { mobDataReady = true; Promise.all([ensureCoachData(), ensureClips()]).then(() => { if (sheet.open && (sheetKind === "mobguide" || sheetKind === "mob")) renderSheet(); }); }
+function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySelector("#b3 canvas")) { b3Update(); return; } b3Close(); } setTimeout(hookClips, 0); setTimeout(() => { const r = document.getElementById("varRow"), c = r?.querySelector(".varc.cur"); if (r && c) r.scrollLeft = c.offsetLeft - r.offsetLeft - (r.clientWidth - c.clientWidth) / 2; }, 0); sheet.classList.toggle("full", ["mob", "mobguide", "body"].includes(sheetKind)); if ((sheetKind === "mobguide" || sheetKind === "mob") && !mobDataReady) { mobDataReady = true; Promise.all([ensureCoachData(), ensureClips()]).then(() => { if (sheet.open && (sheetKind === "mobguide" || sheetKind === "mob")) renderSheet(); }); }
   const close = `<button class="btn ghost" type="button" data-act="closeSheet">Schließen</button>`;
   let h = `<div class="grab"></div>` + (restEnd && tab === "training" ? `<div class="restmini">⏱ Pause <b id="restMiniT">${fmtDur(Math.max(0, (restEnd - Date.now()) / 1000))}</b></div>` : "");
   if (sheetKind === "mob") {
@@ -3740,6 +3792,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   } else if (sheetKind === "pain") {
     h += `<div class="sh"><h2>Abendcheck</h2>${close}</div>
       <div class="lab">SC-Gelenk / Schlüsselbein</div>${scaleHtml("sc","sc",cur.pain.sc)}
+      <button class="btn ghost small" type="button" data-sheet="body" style="align-self:flex-start">📍 Auf der Körperkarte zeigen, wo genau${Object.keys(cur.bodyPain || {}).length ? ` · ${Object.keys(cur.bodyPain).length} eingetragen` : ""}</button>
       <div class="lab">Knie <span class="small muted">(optional)</span></div>${scaleHtml("knee","knee",cur.pain.knee)}
       ${climbed(selDate) || climbed(addDays(selDate, -1)) || cur.pain.finger != null ? `<div class="lab">Finger / Ellbogen <span class="small muted">(nach dem Bouldern)</span></div>${scaleHtml("knee","finger",cur.pain.finger)}` : ""}
       ${info(`Erledigt, sobald SC eingetragen ist. SC: 0–2 grün · ${S().mode === "pause" ? "3 gelb · über 3 rot – der Verlauf zeigt, ob die Pause wirkt" : "3 Übung tauschen · über 3 rot"}. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.`)}
@@ -3748,6 +3801,7 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
       <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>${setsChooserHtml()}`;
+  } else if (sheetKind === "body") { h += `<div class="sh"><div><div class="lab">Wo tut es weh?</div><h2>Körperkarte</h2></div>${close}</div><div id="b3" class="b3wrap"></div><div id="b3ctl">${b3CtlHtml()}</div><div id="b3panel">${b3PanelHtml()}</div>`; setTimeout(b3Mount, 0);
   } else if (sheetKind === "setwiz") { if (!wiz) wiz = wizNew(); h += wizHtml(close);
   } else if (sheetKind === "mwex") { h += mwExHtml(sheetArg, close);
   } else if (sheetKind === "tech") {
@@ -4429,7 +4483,7 @@ function catalogHtmlOwn(){
       <div class="small muted">${list.length} Übungen · antippen für Technik, Hinweise und Video</div></div>
     <div class="catgrid">${list.map(([id, e]) => `<button type="button" class="catc" data-sheet="tech" data-v="${id}">${exThumb(id, e.img) ? `<img src="${exThumb(id, e.img)}" alt="" loading="lazy" decoding="async"${e.img ? "" : ' class="vthumbimg"'}>` : `<span class="noimg">🏋</span>`}<span class="ct"><b>${esc(e.name)}</b><span class="small muted">${esc(catMus(e))}${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${inPlan.has(id) ? " · im Plan" : ""}</span></span></button>`).join("")}</div>`;
 }
-const MORE = [["Nachschlagen"], ["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Preise, Märkte, Rezepte, Vorrat"], ["go:rezepte", "🍲", "Rezepte", "Alle Rezepte, Filter, Favoriten"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"],
+const MORE = [["Nachschlagen"], ["uebungen", "🏋", "Übungen", "Alle Übungen mit Bild, Technik und Video"], ["zutaten", "🥕", "Zutaten", "Preise, Märkte, Rezepte, Vorrat"], ["go:rezepte", "🍲", "Rezepte", "Alle Rezepte, Filter, Favoriten"], ["plan", "📖", "Regeln & Wissen", "Planlogik, Warnzeichen, Wiedereinstieg"], ["kalender", "📅", "Kalender", "Tag, Woche, Monat · Essen einblenden"], ["sheet:body", "📍", "Körperkarte", "3D: genau antippen, wo es wehtut · Knochen, Muskeln, Sehnen"],
   ["Einstellungen"], ["setup:training", "📋", "Training & Plan", "Start, Routine-Zeiten, Modus, Freigaben, Ausstattung"], ["essenset", "🍽", "Essen", "Ziel, Mahlzeiten, Einkauf, Anzeige"], ["setup:app", "🔔", "Erinnerungen & App", "Push, Kalender-Abo, Verbindung"]];
 // Gesamtsuche oben in Mehr: Rezepte, Zutaten, Übungen, Wissen, Einstellungen – je Gruppe die besten 5
 let allQ = "";
@@ -4449,7 +4503,7 @@ function allResHtml(){ const q = fold(allQ.trim()); if (q.length < 2) return "";
 function renderMore(){
   if (tab === "essen") return renderEssen();
   const s = sub.mehr || "menu";
-  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2>${searchBox("allQ", allQ, "🔎 Alles durchsuchen", "Alles durchsuchen")}<div id="allRes">${allResHtml()}</div><div class="lrows" id="moreMenu" ${allQ.trim().length >= 2 ? "hidden" : ""}>${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : k.startsWith("go:") ? `data-go="${k.slice(3)}"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0. Videos: YouTube (jeweiliger Kanal).</div>`; return; }
+  if (s === "menu") { view.innerHTML = `<h2 class="ptitle">Mehr</h2>${searchBox("allQ", allQ, "🔎 Alles durchsuchen", "Alles durchsuchen")}<div id="allRes">${allResHtml()}</div><div class="lrows" id="moreMenu" ${allQ.trim().length >= 2 ? "hidden" : ""}>${MORE.map(([k, i, t, d]) => !i ? `<div class="lab sec">${k}</div>` : `<button type="button" class="lrow menu" ${k.startsWith("setup:") ? `data-sub="setup" data-setopen="${k.slice(6)}"` : k.startsWith("sheet:") ? `data-sheet="${k.slice(6)}"` : k.startsWith("go:") ? `data-go="${k.slice(3)}"` : `data-sub="${k}"`}><span class="mdot static">${i}</span><span class="lmain"><b>${t}</b><span class="small muted">${d}</span></span><span class="go">›</span></button>`).join("")}</div><div class="small muted" style="margin-top:16px">Übungsbilder: <a href="https://repdb.co" target="_blank" rel="noopener">Exercise data by RepDB (repdb.co)</a>, free-exercise-db (gemeinfrei), Wikimedia Commons; Knie-Test: RickyBennison, CC BY-SA 4.0. Videos: YouTube (jeweiliger Kanal), MuscleWiki. Körperkarte: BodyParts3D, © The Database Center for Life Science, CC BY 4.0; three.js (MIT).</div>`; return; }
   const title = s === "setup" ? "Einstellungen" : s === "essenset" ? "Essen-Einstellungen" : (MORE.find(m => m[0] === s) || [, , "Mehr"])[2];
   view.innerHTML = `<div class="subhead sub"><button type="button" class="btn ghost small back" data-sub="menu" aria-label="Zurück zu Mehr">‹</button><h2 class="ptitle">${esc(title)}</h2></div><div id="moreBody"></div>`;
   const b = document.getElementById("moreBody");
@@ -6266,6 +6320,15 @@ async function onClick(e){
   const ak = t.closest("[data-altkeep]"); if (ak) { const base = ak.dataset.base, id = eff(base), pkey = atHome() ? "altPrefHome" : "altPref", pref = Object.assign({}, S()[pkey]), std = atHome() ? homeDefault(base) : base;
     if (ak.dataset.altkeep === "1") { if (id !== std) pref[base] = id; else delete pref[base]; } if (JSON.stringify(pref) !== JSON.stringify(S()[pkey] || {})) saveSettings({[pkey]: pref});
     altAsk = null; sheetKind = null; sheet.close(); renderTraining(); return; }
+  const b3v = t.closest("[data-b3view]"); if (b3v) { b3Opt.view = b3v.dataset.b3view; B3?.view(b3Opt.view); b3Update(); return; }
+  const b3l = t.closest("[data-b3layer]"); if (b3l) { const k = b3l.dataset.b3layer; b3Opt.layers[k] = !b3Opt.layers[k]; b3Apply(); b3Update(); return; }
+  if (t.closest("[data-b3xray]")) { b3Opt.xray = !b3Opt.xray; if (b3Opt.xray) b3Opt.layers.muscle = true; b3Apply(); b3Update(); return; }
+  const b3b = t.closest("[data-b3lab]"); if (b3b) { b3Opt.labels = b3b.dataset.b3lab; b3Apply(); b3Update(); return; }
+  if (t.closest("[data-b3hist]")) { b3Opt.hist = !b3Opt.hist; b3Apply(); b3Update(); return; }
+  const b3k = t.closest("[data-b3kind]"); if (b3k && b3Form) { const k = b3k.dataset.b3kind; b3Form.kind.has(k) ? b3Form.kind.delete(k) : b3Form.kind.add(k); b3Update(); return; }
+  const b3w = t.closest("[data-b3when]"); if (b3w && b3Form) { const k = b3w.dataset.b3when; b3Form.when.has(k) ? b3Form.when.delete(k) : b3Form.when.add(k); b3Update(); return; }
+  const b3n = t.closest("[data-b3n]"); if (b3n && b3Form) { b3Form.n = Number(b3n.dataset.b3n); b3Update(); return; }
+  const b3d = t.closest("[data-b3del]"); if (b3d) { const id = b3d.dataset.b3del, o = Object.assign({}, cur.bodyPain); delete o[id]; cur.bodyPain = o; clr("bodyPain." + id); touch(); B3?.setMarkers(b3Markers()); b3Update(); return; }
   const wzg = t.closest("[data-wizg]"); if (wzg && wiz) { const g = wzg.dataset.wizg; if (wiz.g.has(g)) wiz.g.delete(g); else wiz.g.add(g); wiz.saved = null; renderSheet(); return; }
   const wzp = t.closest("[data-wizpre]"); if (wzp && wiz) { wiz.g = new Set(SG_PRESET.find(x => x[0] === wzp.dataset.wizpre)[1]); wiz.saved = null; renderSheet(); return; }
   const wzm = t.closest("[data-wizmin]"); if (wzm && wiz) { wiz.min = Number(wzm.dataset.wizmin); wiz.cut = 0; renderSheet(); return; }
@@ -6508,6 +6571,10 @@ async function onClick(e){
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
+    if (a === "b3cancel") { b3Pick = null; b3Form = null; B3?.highlight(null); b3Update(); return; }
+    if (a === "b3save" && b3Pick && b3Form?.n != null) { const id = Date.now().toString(36), p = b3Pick, f = b3Form, now = new Date();
+      const e = {t: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, part: p.fma, label: p.joint || p.de.split(" · ")[0], de: p.de, layer: p.layer, pt: p.pt, kind: [...f.kind], n: f.n, when: [...f.when], mv: f.mv.trim()};
+      cur.bodyPain = Object.assign({}, cur.bodyPain, {[id]: e}); touch(); b3Pick = null; b3Form = null; B3?.highlight(null); B3?.setMarkers(b3Markers()); b3Update(); return; }
     if (a === "wizOpen") { wiz = wizNew(); openSheet("setwiz"); return; }
     if (a === "wizNext" && wiz) { wiz.step = Math.min(3, wiz.step + 1); renderSheet(); sheet.scrollTop = 0; return; }
     if (a === "wizBack" && wiz) { wiz.step = Math.max(1, wiz.step - 1); renderSheet(); sheet.scrollTop = 0; return; }
@@ -6613,6 +6680,7 @@ function onInput(e){
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
   if (t.id === "allQ") { allQ = t.value; const up = () => { const r = document.getElementById("allRes"), m = document.getElementById("moreMenu"); if (r) r.innerHTML = allResHtml(); if (m) m.hidden = allQ.trim().length >= 2; };
     if (!recipes || !prices) Promise.all([ensurePrices(), ensureMeals()]).then(up).catch(() => {}); clearTimeout(t._d); t._d = setTimeout(up, 150); return; }
+  if (t.id === "b3mv" && b3Form) { b3Form.mv = t.value; return; }
   if (t.id === "wizName" && wiz) { wiz.name = t.value; wiz.saved = null; return; }
   if (t.id === "catQ") { catF.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const had = document.activeElement === t; renderMore(); const q = document.getElementById("catQ"); if (q && had) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
   if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; const pos = t.selectionStart, had = document.activeElement === t; renderRecipes(); const q = document.getElementById("recQ"); if (q && q !== t) { q.replaceWith(t); if (had) { t.focus(); try { t.setSelectionRange(pos, pos); } catch {} } } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const res = document.getElementById("recRes"); if (!res) return renderRecipes(); const list = recipesFiltered(); res.innerHTML = list.length ? recGrid(list) : `<div class="empty small">Kein Rezept passt. Filter lockern?</div>`; const hd = document.getElementById("recHead"), rc = document.getElementById("recCat"); if (hd) hd.innerHTML = recHeadHtml(list); if (rc) rc.innerHTML = recCatsHtml(); }, 150); return; }
@@ -6754,7 +6822,7 @@ document.addEventListener("click", e => { const a = e.target.closest?.("[data-al
 document.addEventListener("click", e => { const c = e.target.closest?.("[data-qclear],[data-qset]"); if (!c) return; const inp = qInput(c); if (!inp) return; e.stopPropagation(); if (c.dataset.qset != null) { addRecentQ(inp.id, c.dataset.qset); qFire(inp, c.dataset.qset); } else qFire(inp, ""); }, true);
 document.addEventListener("focusin", e => { const t = e.target; if (!t.matches?.(".qbox input")) return; setTimeout(() => { if (document.activeElement === t) t.closest(".qbox").scrollIntoView({block: "start", behavior: "smooth"}); }, 350); });
 // Ein Blatt gibt beim Schließen den Fokus an das Suchfeld zurück – dann ginge die Tastatur wieder auf
-sheet.addEventListener("close", () => { const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) a.blur(); });
+sheet.addEventListener("close", () => { b3Close(); const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) a.blur(); });
 addEventListener("hashchange", () => { if (dirty) saveCur(); hideActToast(); if (sheet.open) { sheetKind = null; sheet.close(); } readHash(); render(); applyDeep(); });
 addEventListener("pagehide", () => { if (dirty) saveCur(); });
 let todayAtHide = todayIso();
