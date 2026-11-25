@@ -1044,6 +1044,14 @@ input[type=time],input[type=date]{min-height:44px;color:var(--ink);color-scheme:
 .wsh a{display:inline-flex;align-items:center;min-height:40px;padding:0 4px}
 .dlink{min-height:40px;padding:8px 0}
 .gev{min-height:38px;padding:2px 6px}
+/* MuscleWiki-Bilder und -Videos sind 16:9 mit kleiner Person in der Mitte: Rand abschneiden, Person größer (Wunsch 2026-11-25) */
+img[src*="media.musclewiki.com"]{object-fit:cover!important;object-view-box:inset(3% 21% 5% 21%)}
+.mobimg:has(img[src*="media.musclewiki.com"]){width:96px}
+.mobopen:has(img[src*="media.musclewiki.com"]){grid-template-columns:96px minmax(0,1fr) auto}
+.mobimg .anim:has(img[src*="media.musclewiki.com"]){aspect-ratio:1}
+.exhero .anim:has(img[src*="media.musclewiki.com"]){aspect-ratio:4/3}
+.vclip.own:has(video[data-clipid^="mw_"]),.vclip:has(video[src*="media.musclewiki.com"]){aspect-ratio:4/3}
+video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(video[data-clipid^="mw_"]) .vposter{object-fit:cover!important;object-view-box:inset(0 16% 0 16%)}
 </style>
 </head>
 <body>
@@ -2490,6 +2498,8 @@ function syncYt(t){ const f = document.querySelector("#sheet iframe[data-clip]")
 // Abschnitt genau über die Dauer des Timer-Schritts abspielen und am Ziel anhalten (nicht in die nächste Phase weiterlaufen)
 function clipWatch(v){ clearInterval(v._w); v._w = setInterval(() => { if (!v.isConnected || v._stopAt == null) return clearInterval(v._w); if (v.currentTime >= v._stopAt - 0.03) { v.pause(); v._stopAt = null; clearInterval(v._w); } }, 30); }
 function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!v || !v._map || !(v.duration > 0)) return; const mp = v._map, k = v.duration / mp.len;
+  // Selbst starten (kein Automatik-Ablauf): Video läuft einfach in Schleife, unabhängig vom Timer (Wunsch 2026-11-25)
+  if (!autoFlow) { if (v._tag !== "free") { v._tag = "free"; v._frozen = null; v._stopAt = null; clearInterval(v._w); v.loop = true; v.playbackRate = 1; v.play().catch(() => {}); } return; }
   const reps = t?.mode === "reps", kind = !t || ["prep", "switch", "next"].includes(t.phase) ? "start" : reps ? t.steps[t.step].k : "loop";
   const ph = !t || !t.run ? (t?.started && t.phase !== "prep" ? "freeze" : "still") : kind;
   const tag = ph + ":" + (t ? t.round + "/" + t.rep + "/" + t.step + "/" + t.phase : ""); if (!force && v._tag === tag) return;
