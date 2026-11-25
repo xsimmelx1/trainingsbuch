@@ -17,6 +17,7 @@ const VIEWS = { ganz: [0, 0.85, 3.1, 0, 0.82, 0], vorn: [0, 0.85, 3.1, 0, 0.82, 
 export async function mount(el, opt = {}) {
   const parts = await (await fetch(new URL("./parts.json", import.meta.url))).json();
   const W = () => el.clientWidth, H = () => el.clientHeight;
+  let dirty = true; // neu zeichnen nötig
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setSize(W(), H());
   el.appendChild(renderer.domElement);
@@ -55,7 +56,7 @@ export async function mount(el, opt = {}) {
         for (let k = 0; k < P.length; k += 3) { const dx = x - P[k], dy = y - P[k + 1], dz = z - P[k + 2], s = dx * dx + dy * dy + dz * dz; if (s < d2) { const o = best.get(p); if (o === undefined || s < o) best.set(p, s); break; } } } }
     return [...best].sort((a, b) => a[1] - b[1]).map(x => x[0]); }
   let sel = [], rel = [];
-  function setSel(s = [], r = []) { for (const p of [...sel, ...rel]) paint(p); sel = [...s]; rel = r.filter(p => !sel.includes(p)); for (const p of rel) paint(p, REL); for (const p of sel) paint(p, SEL); }
+  function setSel(s = [], r = []) { for (const p of [...sel, ...rel]) paint(p); sel = [...s]; rel = r.filter(p => !sel.includes(p)); for (const p of rel) paint(p, REL); for (const p of sel) paint(p, SEL); dirty = true; }
   // Gelenke ohne eigenes Teil am Schlüsselbein: SC (innen) und AC (außen)
   const joints = [];
   for (const [en, side] of [["Clavicle.r", "rechts"], ["Clavicle.l", "links"]]) { const p = parts.find(x => x.en === en), r = p && range[p.i]; if (!r) continue;
@@ -70,7 +71,7 @@ export async function mount(el, opt = {}) {
   const relCache = new Map(), SOFT = /bursa/i;
   function relations(i) { if (!relCache.has(i)) relCache.set(i, relations0(i)); return relCache.get(i); }
   function relations0(i) {
-    const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i).map(x => x.i))]; if (ids.length) out.push({ title, ids }); };
+    const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i).map(x => x.i))]; if (!ids.length) return; const o = out.find(g => g.title === title); if (o) o.ids = [...new Set([...o.ids, ...ids])]; else out.push({ title, ids }); };
     const near = (lns, d, max) => nearParts(i, lns, d, max).map(j => parts[j]);
     // Bänder, Sehnen, Knorpel, Schleimbeutel: woran sie liegen (Knochen, Muskeln) und was am selben Gelenk sitzt
     if (["tendon", "ligament", "cartilage"].includes(p.layer)) {
@@ -101,11 +102,13 @@ export async function mount(el, opt = {}) {
     return out; }
   // Markierungen (Schmerzpunkte)
   const mk = new THREE.Group(); scene.add(mk);
-  function setMarkers(list = []) { mk.clear(); for (const m of list) { const s = new THREE.Mesh(new THREE.SphereGeometry(.01 + .0015 * (m.n || 0), 16, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL((1 - Math.min(10, m.n || 0) / 10) * .33, .9, .5), transparent: true, opacity: m.old ? .35 : .95, depthTest: false }));
-    s.position.fromArray(m.pt); s.renderOrder = 5; s.userData = m; mk.add(s); } }
+  const mkGeo = new THREE.SphereGeometry(1, 16, 12), mkMat = new Map();
+  const matFor = (n, old) => { const k = n + "|" + (old ? 1 : 0); if (!mkMat.has(k)) mkMat.set(k, new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL((1 - n / 10) * .33, .9, .5), transparent: true, opacity: old ? .35 : .95, depthTest: false })); return mkMat.get(k); };
+  function setMarkers(list = []) { mk.clear(); for (const m of list) { if (!m.pt) continue; const n = Math.max(0, Math.min(10, m.n || 0)), s = new THREE.Mesh(mkGeo, matFor(n, m.old));
+    s.scale.setScalar(.01 + .0015 * n); s.position.fromArray(m.pt); s.renderOrder = 5; s.userData = m; mk.add(s); } dirty = true; }
   setMarkers(opt.markers || []);
   // Beschriftung
-  let labelMode = "auto";
+  let labelMode = "auto", lastLbl = "";
   const big = parts.filter(p => p.layer !== "skin" && p.g).map(p => p.i);
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   function labels() { const out = [], placed = [], v = new THREE.Vector3();
@@ -119,7 +122,7 @@ export async function mount(el, opt = {}) {
           const side = new THREE.Vector3(p.c[0], 0, p.c[2] - 0.03).dot(new THREE.Vector3(camDir.x, 0, camDir.z).normalize()); return d.dot(camDir) > 0 && d.length() < 2.6 && side < -0.03; })
         .map(i => [i, scr(parts[i].c)]).filter(x => x[1]).sort((a, b) => Math.hypot(a[1][0] - W() / 2, a[1][1] - H() / 2) - Math.hypot(b[1][0] - W() / 2, b[1][1] - H() / 2));
       for (const [i] of cand) { if (out.length > 22) break; push(parts[i].c, esc(parts[i].de.split(" · ")[0]), "lb"); } }
-    labelsEl.innerHTML = out.join(""); }
+    const html = out.join(""); if (html !== lastLbl) { lastLbl = html; labelsEl.innerHTML = html; } }
   // Kamera: Ansichten, sanftes Hinfahren zur angetippten Stelle (wird Drehmitte → Zoomen trifft das Ziel)
   const ky = (parts.find(p => p.en === "Clavicle.r")?.c[1] || 1.336) / 1.336;
   let anim = null;
@@ -128,9 +131,10 @@ export async function mount(el, opt = {}) {
   function focus(pt, dist) { const t = new THREE.Vector3(...pt), off = cam.position.clone().sub(ctl.target); const d = dist ?? Math.min(off.length(), 0.9); off.setLength(Math.max(0.25, d)); fly(t.clone().add(off).toArray(), t.toArray(), 300); }
   { const v = VIEWS[opt.view || "vorn"]; cam.position.set(v[0], v[1] * ky, v[2]); ctl.target.set(v[3], v[4] * ky, v[5]); ctl.update(); }
   // Antippen: Teil bestimmen (Ziehen zum Drehen ist kein Antippen); durch Haut, Faszien und Halshautmuskel hindurch
-  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); let down = null;
-  renderer.domElement.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY, Date.now()]; anim = null; });
-  renderer.domElement.addEventListener("pointerup", e => { if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 8 || Date.now() - down[2] > 600) return; const rc = renderer.domElement.getBoundingClientRect();
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); let down = null, ptrs = 0, multiT = false;
+  renderer.domElement.addEventListener("pointerdown", e => { ptrs++; if (ptrs > 1) multiT = true; else { multiT = false; down = [e.clientX, e.clientY, Date.now()]; } anim = null; });
+  renderer.domElement.addEventListener("pointercancel", () => { ptrs = Math.max(0, ptrs - 1); });
+  renderer.domElement.addEventListener("pointerup", e => { ptrs = Math.max(0, ptrs - 1); if (multiT) { if (!ptrs) { multiT = false; down = null; } return; } if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 8 || Date.now() - down[2] > 600) return; const rc = renderer.domElement.getBoundingClientRect();
     ndc.set((e.clientX - rc.left) / rc.width * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1); ray.setFromCamera(ndc, cam);
     const meshes = ["muscle", "tendon", "ligament", "insertion", "cartilage", "bone", "fascia", "skin"].map(l => layers[l]?.mesh).filter(m => m && m.visible);
     const hits = ray.intersectObjects(meshes, false), partOf = x => Object.values(layers).find(l => l.mesh === x.object).pa.getX(x.face.a);
@@ -138,15 +142,19 @@ export async function mount(el, opt = {}) {
     const hit = h0 && thin(h0) ? hits.find(x => !thin(x) && x.distance - h0.distance < 0.08) || h0 : h0;
     if (!hit) { opt.onPick?.(null); return; }
     const p = Math.round(partOf(hit)), pt = hit.point.toArray().map(x => +x.toFixed(4)); opt.onPick?.(parts[p], pt, jointAt(pt)); });
-  let alive = true; const ro = new ResizeObserver(() => { renderer.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix(); }); ro.observe(el);
-  let lt = 0; (function loop(t) { if (!alive) return; requestAnimationFrame(loop);
-    if (anim) { const k = Math.min(1, (t - anim.t0) / anim.ms), e = 1 - Math.pow(1 - k, 3); cam.position.lerpVectors(anim.p0, anim.p1, e); ctl.target.lerpVectors(anim.t0v, anim.t1, e); if (k >= 1) anim = null; }
-    ctl.update(); renderer.render(scene, cam); if (t - lt > 120) { lt = t; labels(); } })(0);
+  let alive = true; const ro = new ResizeObserver(() => { if (!W() || !H()) return; renderer.setSize(W(), H()); cam.aspect = W() / H(); cam.updateProjectionMatrix(); dirty = true; }); ro.observe(el);
+  // nur zeichnen, wenn sich Kamera oder Inhalt ändern (spart Akku); Beschriftung höchstens alle 120 ms
+  let lt = 0, lblDue = true; (function loop(t) { if (!alive) return; requestAnimationFrame(loop);
+    if (anim) { const k = Math.min(1, (t - anim.t0) / anim.ms), e = 1 - Math.pow(1 - k, 3); cam.position.lerpVectors(anim.p0, anim.p1, e); ctl.target.lerpVectors(anim.t0v, anim.t1, e); if (k >= 1) anim = null; dirty = true; }
+    if (ctl.update()) dirty = true;
+    if (dirty) { renderer.render(scene, cam); dirty = false; lblDue = true; }
+    if (lblDue && t - lt > 120) { lt = t; lblDue = false; labels(); } })(0);
   return {
     parts, joints, relations, view, focus, setSel, setMarkers,
-    setLayer(ln, on) { if (layers[ln]) layers[ln].mesh.visible = on; },
-    setMuscleOpacity(o) { const m = layers.muscle?.mesh.material; if (m) { m.transparent = o < 1; m.opacity = o; m.depthWrite = o >= 1; m.needsUpdate = true; } },
-    setLabels(mode) { labelMode = mode; },
-    dispose() { alive = false; ro.disconnect(); ctl.dispose(); renderer.dispose(); el.innerHTML = ""; },
+    setLayer(ln, on) { if (layers[ln]) layers[ln].mesh.visible = on; dirty = true; },
+    setMuscleOpacity(o) { const m = layers.muscle?.mesh.material; if (m) { m.transparent = o < 1; m.opacity = o; m.depthWrite = o >= 1; m.needsUpdate = true; } dirty = true; },
+    setLabels(mode) { labelMode = mode; dirty = true; },
+    // WebGL-Speicher wirklich freigeben (sonst sammeln sich Kontexte beim mehrmaligen Öffnen)
+    dispose() { alive = false; ro.disconnect(); ctl.dispose(); scene.traverse(o => { o.geometry?.dispose?.(); o.material?.dispose?.(); }); mkGeo.dispose(); for (const x of mkMat.values()) x.dispose(); renderer.dispose(); renderer.forceContextLoss(); el.innerHTML = ""; },
   };
 }
