@@ -1067,7 +1067,7 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .b3box{position:relative}.b3box.form .b3wrap{height:24vh;min-height:150px}
 .b3pill{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;gap:6px;min-height:44px;padding:5px 5px 5px 12px;border-radius:12px;background:rgba(16,21,20,.9);color:#fff;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
 .b3pill.hint{justify-content:center;padding:6px 12px;min-height:0;background:rgba(16,21,20,.6);color:#d6e2df;pointer-events:none;font-size:12px;left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
-.b3pn{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}.b3pn b,.b3pn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.b3pn span{font-size:11px;opacity:.72}
+.b3pn{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}.b3pill .b3pn{flex:1;min-width:0;height:auto;border:0;background:none;color:inherit;font:inherit;text-align:left;padding:0}.b3more1{opacity:.7;font-weight:400}.b3pn b,.b3pn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.b3pn span{font-size:11px;opacity:.72}
 .b3pill button{flex:none;min-width:38px;height:34px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:9px;padding:0 10px;font:inherit;font-size:13px}
 .b3pill button.pri{background:#e0a72a;border-color:#e0a72a;color:#151515;font-weight:600}.b3pill button[aria-pressed="true"]{background:#6a4fe0;border-color:#6a4fe0}
 .b3bar{display:flex;flex-direction:column;gap:6px;margin-top:8px}
@@ -1088,7 +1088,12 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .b3dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(127,127,127,.5)}
 .b3more{display:flex;flex-direction:column;gap:8px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .b3namrow{display:flex;align-items:center;gap:8px}.b3seg{flex:1;margin:0}
-.b3form h3{margin:0;font-size:16px}.b3rels{margin-top:10px}.b3rels>.lab{margin-bottom:4px}
+.b3form h3{margin:0;font-size:16px}
+.mwv .vclip{aspect-ratio:1/1;max-height:46vh;background:#fff;border-radius:12px;overflow:hidden}.mwv video{width:100%;height:100%;object-fit:contain}.mwvbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}.mwvbar .seg{margin:0}
+.b3det{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.b3det h3{margin:2px 0}.b3det .lab.sec{margin-top:12px}
+.b3note{margin-top:8px;padding:8px 10px;border-radius:9px;background:var(--bg)}
+.b3exl{display:flex;flex-direction:column;gap:6px}.b3ex{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;text-align:left}
+.b3ex img,.b3ex .noimg{flex:none;width:44px;height:44px;border-radius:8px;object-fit:cover;display:grid;place-items:center;background:var(--surface)}.b3ex b{display:block;font-size:14px;font-weight:600}.b3cat{margin-top:10px}.b3rels{margin-top:10px}.b3rels>.lab{margin-bottom:4px}
 .b3relh{display:flex;justify-content:space-between;gap:8px;width:100%;padding:9px 2px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:14px;text-align:left}
 .b3relh span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.b3relh span:last-child{flex:none}
 .b3rel{padding:8px 0}.b3rel button{font-size:12px}.b3selc{margin-top:10px}
@@ -1422,7 +1427,8 @@ const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1]
 // ---------- Körperkarte 3D (Wunsch 2026-11-25): antippen = auswählen, nochmal antippen = Schmerz eintragen; Mehrfachauswahl; Zusammengehöriges ----------
 // Modell: Z-Anatomy (CC BY-SA 4.0, Basis BodyParts3D © DBCLS), body/body.glb + parts.json; Anzeige body/body3d.mjs (three.js, MIT). Einträge: day.bodyPain
 let B3 = null, b3Busy = false, b3Sel = [], b3Pt = null, b3Joint = null, b3Form = null;
-const b3Opt = {layers: {skin: true, muscle: true, tendon: true, lig: true, bone: true, fascia: false, ins: false}, xray: false, labels: "auto", hist: true, view: "ganz", multi: false, showRel: false, relOpen: null, more: false, help: false};
+const b3Opt = {layers: {skin: false, muscle: true, tendon: true, lig: true, bone: true, fascia: false, ins: false}, xray: false, labels: "auto", hist: true, view: "ganz", multi: false, showRel: false, relOpen: null, more: false, help: false, info: false, exAll: false};
+let b3Ret = null; // Rückweg aus dem Übungsblatt: {sel, joint, pt}
 const PAIN_KIND = [["stechend", "stechend"], ["dumpf", "dumpf"], ["ziehend", "ziehend"], ["brennend", "brennend"], ["pochend", "pochend"], ["druck", "Druckschmerz"], ["steif", "steif"], ["kribbeln", "Kribbeln / Taubheit"]];
 const PAIN_WHEN = [["ruhe", "in Ruhe"], ["last", "bei Belastung"], ["bewegung", "bei bestimmter Bewegung"], ["nacht", "nachts"], ["morgen", "morgens"]];
 const B3_VIEWS = [["ganz", "Ganz"], ["hinten", "Hinten"], ["seite", "Seite"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
@@ -1431,6 +1437,50 @@ const B3_LAYERS = [["skin", "Haut", "#e9c2a6", ["skin"]], ["muscle", "Muskeln", 
 const B3_LAYERS2 = [["fascia", "Faszien", "#dfe6ee", ["fascia"]], ["ins", "Ansatzflächen", "#f0d27a", ["insertion"]]];
 const B3_TYPE = {muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band", tendon: "Sehne", insertion: "Ansatzfläche (Ursprung/Ansatz)", skin: "Hautregion", fascia: "Faszie"};
 const b3Type = p => !p ? "" : /bursa/i.test(p.en) ? "Schleimbeutel" : /intervertebral disc/i.test(p.en) ? "Bandscheibe" : /meniscus\.|meniscus$/i.test(p.en) ? "Meniskus" : /capsule/i.test(p.en) ? "Gelenkkapsel" : /membrane/i.test(p.en) ? "Membran" : /tooth|premolar|incisor|canine/i.test(p.en) ? "Zahn" : B3_TYPE[p.layer] || "";
+// [Muster auf englischen Namen/Gruppe, App-Muskel (EX.m) oder null, feste Übungen, MuscleWiki-Gruppe, Hinweis]
+const B3_MUS = [
+  [/pectoralis major/, "brust", null, "brust"],
+  [/pectoralis minor|subclavius/, null, ["facepull", "ytw", "serratus"], "brust", "Wird bei nach vorn gezogenen Schultern meist zu kurz: dehnen und den Gegenspieler (unterer Trapez, Serratus) kräftigen."],
+  [/clavicular part of deltoid/, "vordS", null, "schulter"], [/acromial part of deltoid/, "seitlS", null, "schulter"], [/spinal part of deltoid/, "hintS", null, "schulter"], [/deltoid/, "seitlS", null, "schulter"],
+  [/infraspinatus|teres minor|supraspinatus|subscapularis/, null, ["extrot", "hw_banderot", "hw_extrot", "alt_sidelyer", "facepull", "hw_bandface", "ytw", "revfly", "alt_dbrevfly", "hw_pullapart"], "schulter", "Rotatorenmanschette: dein Physio-Schwerpunkt (Außenrotation). Täglich auch in der Schulter-Reha."],
+  [/serratus anterior/, null, ["serratus", "pushupplus", "alt_dbpunch"], null, "Hält das Schulterblatt am Brustkorb – wichtig gegen nach vorn gezogene Schultern."],
+  [/descending part of trapezius/, "obTrap", null, "trapez"], [/trapezius|rhomboid/, null, ["facepull", "revfly", "rowchest", "cablerow", "alt_machrow", "ytw", "hw_pullapart", "hw_tablerow", "alt_dbrevfly"], "trapez", "Mittlerer und unterer Trapez sowie Rautenmuskeln ziehen die Schulterblätter zurück und nach unten."],
+  [/latissimus|teres major/, "ruecken", null, "lat"],
+  [/levator scapulae|sternocleidomastoid|scalen|splenius|semispinalis capitis|longus colli|longus capitis/, null, [], "trapez", "Nackenmuskeln: Kraftübungen sind hier nicht geplant – Kinn-Rückzug und Dehnen gehören in Reha und Morgenroutine."],
+  [/erector|iliocostalis|longissimus|spinalis|multifid|quadratus lumborum|rotatores/, null, ["alt_backext", "rdl", "alt_dbrdl", "hw_slrdl", "alt_birddog", "deadbug", "sideplank", "pallof"], "ruecken"],
+  [/biceps brachii|brachialis|brachioradialis|coracobrachialis/, "bizeps", null, "bizeps"], [/triceps brachii|anconeus/, "trizeps", null, "trizeps"],
+  [/carpi|digitorum|palmaris|pronator|supinator|pollicis|indicis|digiti minimi/, null, ["revwrist", "wristcurl", "alt_revcurl", "alt_hammer", "hw_bandhammer"], "unterarm"],
+  [/rectus abdominis|oblique|transversus abdominis|pyramidalis/, "rumpf", null, "bauch"],
+  [/gluteus medius|gluteus minimus|tensor fasciae/, null, ["abduction", "abduction30", "hw_abd", "alt_cableabd", "hipthrust", "bss", "hw_bss", "stepdown"], "po", "Seitlicher Gesäßmuskel: stabilisiert Becken und Knie."],
+  [/gluteus maximus|piriformis|gemell|obturator|quadratus femoris/, "gh", null, "po"],
+  [/biceps femoris|semitendinosus|semimembranosus/, null, ["seatedcurl", "lyingcurl", "hw_slidecurl", "alt_nordic", "alt_standcurl", "rdl", "alt_dbrdl", "hw_slrdl"], "ham"],
+  [/rectus femoris|vastus|articularis genus/, "quad", null, "quad"],
+  [/adductor|gracilis|pectineus/, null, ["adduction"], "huefte"], [/sartorius|psoas|iliacus/, "hipflex", null, "huefte"],
+  [/gastrocnemius|soleus|plantaris/, "waden", null, "wade"], [/tibialis|fibularis|peroneus|hallucis/, null, [], "wade"],
+];
+const b3Mus = p => { if (!p || !["muscle", "insertion", "tendon"].includes(p.layer)) return null; const t = `${p.en} ${p.grp || ""} ${p.grp2 || ""}`.toLowerCase(); return B3_MUS.find(([re]) => re.test(t)) || null; };
+// Übungen zum Muskel: gezielt (Hauptmuskel) und mittrainiert; gesperrte (SC/Knie) bleiben sichtbar, aber markiert
+function b3Ex(p){ const mm = b3Mus(p); if (!mm) return null; const [, key, ids] = mm, inPlan = new Set(Object.values(SESS).flatMap(x => x.ex || []));
+  const main = [], co = [];
+  if (ids) main.push(...ids.filter(id => EX[id]));
+  if (key) for (const [id, e] of Object.entries(EX)) { const v = e.m?.[key] || 0; if (v >= 1 && !main.includes(id)) main.push(id); else if (v > 0 && v < 1) co.push(id); }
+  const rank = id => (wizOk(id, "gym") || wizOk(id, "home") ? 0 : 2) + (inPlan.has(id) ? 0 : 1);
+  const sort = a => [...new Set(a)].sort((x, y) => rank(x) - rank(y));
+  return {main: sort(main), co: sort(co).filter(id => !main.includes(id)), mw: mm[3], note: mm[4]}; }
+function b3ExItem(id){ const e = EX[id], th = exThumb(id, e.img), lock = !wizOk(id, "gym") && !wizOk(id, "home") ? (wizWhy(id, "gym") || wizWhy(id, "home")) : "";
+  return `<button type="button" class="b3ex" data-b3ex="${id}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">🏋</span>`}<span><b>${esc(e.name)}</b><span class="small muted">${HOME_OK.has(id) || id.startsWith("hw_") ? "🏠 zuhause" : "🏋 Gym"}${lock ? ` · 🔒 ${esc(lock)}` : ""}</span></span></button>`; }
+function b3DetHtml(){ const p = b3P(b3Sel[b3Sel.length - 1]); if (!p) return "";
+  const x = b3Ex(p), [main, ...rest] = (p.de || "").split(" · "), lat = p.en.replace(/\.[a-z0-9]+$/i, "");
+  let h = `<div class="b3det"><div class="lab">${esc(b3Type(p))}${p.grpDe && p.grpDe !== main ? ` · ${esc(p.grpDe)}` : ""}${p.grp2De && p.grp2De !== p.grpDe ? ` · ${esc(p.grp2De)}` : ""}</div><h3>${esc(main)}</h3>${rest.length ? `<div class="small">${esc(rest.join(" · "))}</div>` : ""}<div class="small muted">${esc(lat)}</div>`;
+  if (x?.note) h += `<div class="small b3note">${esc(x.note)}</div>`;
+  if (x) { const lim = b3Opt.exAll ? 99 : 6;
+    if (x.main.length) h += `<div class="lab sec">Trainiert ihn gezielt</div><div class="b3exl">${x.main.slice(0, lim).map(b3ExItem).join("")}</div>`;
+    if (x.co.length) h += `<div class="lab sec">Trainiert ihn mit</div><div class="b3exl">${x.co.slice(0, lim).map(b3ExItem).join("")}</div>`;
+    if (x.main.length > 6 || x.co.length > 6) h += `<button type="button" class="linkbtn small" data-b3exall="1">${b3Opt.exAll ? "Weniger zeigen" : `Alle zeigen (${x.main.length + x.co.length})`}</button>`;
+    if (!x.main.length && !x.co.length && !x.note) h += `<div class="small muted">Dafür gibt es in der App keine eigene Übung.</div>`;
+    if (x.mw) h += `<button type="button" class="btn small b3cat" data-b3cat="${x.mw}">📚 Mehr im MuscleWiki-Katalog: ${esc(MW_MG.find(m => m[0] === x.mw)?.[1] || "")} ›</button>`; }
+  h += `<div class="lab sec">Zusammengehörig ${b3Opt.showRel ? `<span class="small muted">· violett im Modell</span>` : ""}</div>${b3RelHtml()}</div>`;
+  return h; }
 const b3Today = () => Object.entries(cur.bodyPain || {}).map(([id, e]) => ({id, ...e}));
 const b3P = i => B3?.parts[i];
 const b3Names = () => b3Sel.map(i => b3P(i)?.de || "").filter(Boolean);
@@ -1457,7 +1507,7 @@ function b3PillHtml(){ if (b3Form) return "";
   const [main, ...rest] = (p?.de || "").split(" · ");
   const title = b3Joint ? `📍 ${b3Joint}` : multi ? `${b3Sel.length} Teile ausgewählt` : main;
   const sub = multi ? names.map(x => x.split(" · ")[0]).join(", ") : [b3Joint ? p?.de : rest.join(" · "), b3Type(p)].filter(Boolean).join(" · ");
-  return `<div class="b3pill"><div class="b3pn"><b>${esc(title)}</b><span>${esc(sub)}</span></div>
+  return `<div class="b3pill"><button type="button" class="b3pn" data-b3info="1" aria-expanded="${b3Opt.info}"><b>${esc(title)} <span class="b3more1">${b3Opt.info ? "▾" : "›"}</span></b><span>${esc(sub)}${multi ? "" : b3Mus(p) ? " · Details & Übungen" : " · Details"}</span></button>
     <button type="button" data-b3rel="1" aria-pressed="${b3Opt.showRel}" aria-label="Zusammengehöriges zeigen" title="Zusammengehöriges">🔗</button>
     <button type="button" class="pri" data-act="b3pain">Schmerz</button><button type="button" data-b3clear="1" aria-label="Auswahl aufheben">✕</button></div>`; }
 function b3RelHtml(){ if (!B3 || !b3Sel.length) return ""; const groups = B3.relations(b3Sel[b3Sel.length - 1]);
@@ -1476,7 +1526,7 @@ function b3PanelHtml(){ let h = "";
       <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Zurück</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`;
     return h; }
   if (b3Sel.length > 1) h += `<div class="chips b3selc">${b3Sel.map(i => `<button type="button" data-b3unsel="${i}" aria-pressed="true">${esc((b3P(i)?.de || "").split(" · ")[0])} ✕</button>`).join("")}</div>`;
-  if (b3Opt.showRel && b3Sel.length) h += `<div class="b3rels"><div class="lab">Zusammengehörig mit ${esc((b3P(b3Sel[b3Sel.length - 1])?.de || "").split(" · ")[0])}</div>${b3RelHtml()}</div>`;
+  if ((b3Opt.info || b3Opt.showRel) && b3Sel.length) h += b3DetHtml();
   const list = b3Today();
   if (list.length) h += `<div class="lab sec">${selDate === todayIso() ? "Heute" : fmt(selDate)} eingetragen</div><div class="lrows b3list">${list.map(e => `<div class="lrow"><span class="lmain"><b>${esc(e.label)} · ${e.n}/10</b><span class="small muted">${esc([e.kind.map(k => PAIN_KIND.find(x => x[0] === k)?.[1] || k).join(", "), e.when.map(k => PAIN_WHEN.find(x => x[0] === k)?.[1] || k).join(", "), e.mv].filter(Boolean).join(" · "))} · ${esc(e.t)}</span></span><button class="btn small ghost" type="button" data-b3del="${esc(e.id)}" aria-label="Löschen">✕</button></div>`).join("")}</div>`;
   h += `<button type="button" class="linkbtn small b3helpbtn" data-b3help="1" aria-expanded="${b3Opt.help}">ⓘ Hinweise ${b3Opt.help ? "ausblenden" : "anzeigen"}</button>`;
@@ -1495,13 +1545,15 @@ function b3OnPick(p, pt, joint){
   const i = p.i;
   if (b3Opt.multi) { b3Sel = b3Sel.includes(i) ? b3Sel.filter(x => x !== i) : [...b3Sel, i]; b3Pt = b3Pt || pt; b3Joint = b3Joint || joint; b3Form = null; }
   else if (b3Sel.length === 1 && b3Sel[0] === i) { if (!b3Form) { b3Form = b3NewForm(); setTimeout(() => document.getElementById("b3box")?.scrollIntoView({block: "start"}), 0); } } // zweiter Tipp auf dasselbe Teil
-  else { b3Sel = [i]; b3Pt = pt; b3Joint = joint; b3Form = null; b3Opt.relOpen = null; B3?.focus(pt); }
+  else { b3Sel = [i]; b3Pt = pt; b3Joint = joint; b3Form = null; b3Opt.relOpen = null; b3Opt.exAll = false; B3?.focus(pt); }
   b3Color(); b3Update(); }
 async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B3 || b3Busy) return; b3Busy = true; el.innerHTML = `<div class="small muted b3load">3D-Modell wird geladen (ca. 2,5 MB) …</div>`;
   try { const m = await import("./body/body3d.mjs"), el2 = document.getElementById("b3"); if (!el2 || !sheet.open || sheetKind !== "body") return; el2.innerHTML = "";
     // das Blatt kann beim Laden neu gezeichnet worden sein: immer ins aktuelle Element
     const mounted = await m.mount(el2, {view: b3Opt.view, markers: b3Markers(), onPick: b3OnPick});
-    if (!el2.isConnected || !sheet.open) { mounted.dispose(); return; } B3 = mounted; b3Apply();
+    if (!el2.isConnected || !sheet.open) { mounted.dispose(); return; } B3 = mounted;
+    if (b3Ret) { b3Sel = b3Ret.sel.filter(i => B3.parts[i]); b3Joint = b3Ret.joint; b3Pt = b3Ret.pt; b3Opt.info = true; b3Ret = null; if (b3Pt) B3.focus(b3Pt); b3Update(); }
+    b3Apply();
   } catch (e) { el.innerHTML = `<div class="warnb small">3D-Ansicht nicht möglich (${esc(e?.message || e)}).</div>`; } finally { b3Busy = false; } }
 function b3Close(){ if (B3) { try { B3.dispose(); } catch {} B3 = null; } b3Sel = []; b3Form = null; b3Joint = null; b3Pt = null; }
 function hurtHtml(key){
@@ -2593,17 +2645,30 @@ const animHtml = (img, alt, hint) => img ? `<span class="anim"><img src="${isrc(
 // Erklärvideos je Übung (videos.json); Player lädt erst nach Tipp, über youtube-nocookie
 let VIDS = null, vidsReady = null;
 function ensureVideos(){ return vidsReady = vidsReady || fetch("videos.json").then(r => r.ok ? r.json() : {}).then(j => { VIDS = j; }).catch(() => { VIDS = {}; }).then(() => { try { if (sheet.open && sheetKind) renderSheet(); if (tab === "mehr") renderMore(); } catch {} }); }
+// Übung → MuscleWiki-Slug (Video kommt aus dem privaten Katalog, gestreamt vom MuscleWiki-CDN)
+const EX_MW = {"abduction":"machine-hip-abduction","abduction30":"machine-hip-abduction","abroller":"machine-roll-outs","adduction":"machine-hip-and-glute-adduction","alt_backext":"machine-45-degree-back-extension","alt_birddog":"bird-dog","alt_dbpunch":"serratus-activation-cross-punch","alt_dbrow":"dumbbell-row-unilateral","alt_floorpress":"dumbbell-floor-press","alt_hammer":"cable-rope-hammer-curl","alt_inclpush":"incline-push-up","alt_lpcalf":"machine-horizontal-leg-press-calf-raise","alt_machrow":"machine-neutral-row","alt_revcurl":"cable-bar-reverse-grip-curl","bss":"dumbbell-bulgarian-split-squat","cablecrunch":"cable-rope-kneeling-crunch","cablecurl":"cable-bar-curl","cablefly":"cable-pec-fly","cablelat":"cable-low-single-arm-lateral-raise","cablerow":"machine-seated-cable-row","cableshrug":"cable-30-degree-shrug","calfseated":"machine-seated-calf-raises","chestpress":"neutral-chest-press","chinneutral":"pull-ups","dblateral":"dumbbell-lateral-raise","dblathome":"dumbbell-single-arm-lateral-raise","dbshrug":"dumbbell-shrug","deadbug":"dead-bug","extrot":"cable-external-rotation","facepull":"machine-face-pulls","hipthrust":"barbell-hip-thrust","hw_abd":"abductor-leg-raise-side-lying","hw_bandcurl":"band-curl","hw_banderot":"rotator-cuff-external-rotations-1","hw_bandface":"band-face-pull","hw_bandhammer":"band-high-hammer-curl","hw_bandpallof":"band-pallof-press","hw_bandpulldown":"band-kneeling-pulldown","hw_bandpushdown":"band-single-arm-pushdown","hw_bss":"bulgarian-split-squat","hw_calf":"calf-raise-2d-unilateral-from-box","hw_dbcurl":"dumbbell-curl","hw_doorrow":"bodyweight-standing-inverted-row","hw_hipthrust":"bodyweight-single-leg-heels-elevated-hip-thrust","hw_latraise":"dumbbell-lateral-raise","hw_packcurl":"dumbbell-hammer-curl","hw_pullapart":"band-pull-apart","hw_shrug":"dumbbell-shrug","hw_slidecurl":"hamstring-curl-supine-bilateral-slider","hw_slrdl":"single-legged-romanian-deadlifts","hw_squat":"bodyweight-box-squat","hw_tablerow":"inverted-row","inclinedb":"dumbbell-neutral-incline-bench-press","landmine":"landmine-half-kneeling-single-arm-overhead-press","latneutral":"neutral-pulldown","legext":"machine-leg-extension","legext45":"machine-leg-extension","legpress":"machine-leg-press","legpress60":"machine-leg-press","lyingcurl":"machine-hamstring-curl","ohtri":"cable-rope-overhead-tricep-extension","onearmpd":"cable-single-arm-pushdown","onearmrow":"dumbbell-row-unilateral","pallof":"cable-pallof-press","preacher":"ez-bar-preacher-curl","pushdown":"cable-rope-pushdown","rdl":"barbell-romanian-deadlift","revcrunch":"reverse-crunch","revfly":"machine-reverse-fly","revwrist":"dumbbell-wrist-extension","rowchest":"machine-chest-supported-t-bar-row","seatedcurl":"machine-seated-leg-curl","sideplank":"elbow-side-plank","skull":"dumbbell-skullcrusher","stepdown":"bodyweight-step-down","wallsit":"wall-sit","wristcurl":"dumbbell-wrist-curl","ytw":"laying-ts"};
+const vidAlias = key => key?.startsWith("reha:") ? REHA_ID[rtId(key)] : null; // Reha-Übung = gleiche Bewegung wie diese Kraftübung
+const vidKey = key => VIDS?.[key]?.video ? key : VIDS?.[vidAlias(key)]?.video ? vidAlias(key) : null;
+const mwSlugOf = key => key?.startsWith("reha:") ? REHA_MW[rtId(key)] || EX_MW[vidAlias(key)] : key?.startsWith("mob:") ? null : EX_MW[key];
+const mwSide = {};
+function mwVideoHtml(slug, hero){ if (!slug) return "";
+  if (!MW) { if (!mwErr) ensureMw().then(() => { if (sheet.open) renderSheet(); }); return mwErr ? "" : `<div class="small muted">🎬 Video wird geladen …</div>`; }
+  const e = MW.by.get(slug); if (!e?.vm?.length) return ""; const k = Math.min(mwSide[slug] || 0, e.vm.length - 1);
+  return `<div class="vid mwv"><div class="vclip"><video src="${esc(mwVid(e.vm[k]))}" poster="${esc(mwOg(e.vm[0]))}" muted loop playsinline autoplay preload="metadata" disablepictureinpicture></video></div>
+    <div class="mwvbar">${e.vm.length > 1 ? `<div class="seg">${["Vorn", "Seite"].slice(0, e.vm.length).map((l, i) => `<button type="button" data-mwside="${esc(slug)}|${i}" aria-pressed="${k === i}">${l}</button>`).join("")}</div>` : ""}${hero ? "" : `<span class="small muted">🎬 MuscleWiki</span>`}</div></div>`; }
 function videoHtml(key, fallbackQ, noNote){
   if (!VIDS) { ensureVideos().then(() => { if (sheet.open) renderSheet(); }); return ""; }
-  const v = VIDS[key];
-  if (!v || !v.video) return fallbackQ ? ytLink(fallbackQ) : "";
+  const vk = vidKey(key), v = vk && VIDS[vk];
+  if (!v) { const q = fallbackQ || EX[key]?.q || EX[key]?.name || (isRtKey(key) ? exName(key) : "");
+    return mwVideoHtml(mwSlugOf(key)) + (q ? `<div class="small">${ytLink(q)}</div>` : ""); }
+  key = vk;
   return `<div class="vid" id="vid-${esc(key.replace(":", "_"))}"><button type="button" class="vthumb" data-play="${esc(key)}" aria-label="Video abspielen: ${esc(v.title || "")}"><img src="https://i.ytimg.com/vi/${esc(v.video)}/hqdefault.jpg" alt="" loading="lazy"><span class="vplay">▶</span></button>
     ${(v.markers || []).length || v.start ? `<div class="vmarks">${v.start ? `<button type="button" class="vm" data-play="${esc(key)}" data-t="${Number(v.start)}">▶ Übung ab ${mmss(v.start)}</button>` : ""}${(v.markers || []).filter(x => x.t !== v.start).map(x => `<button type="button" class="vm" data-play="${esc(key)}" data-t="${Number(x.t)}">${esc(x.label)} · ${mmss(x.t)}</button>`).join("")}</div>` : ""}
     <div class="small muted">🎬 ${esc(v.title || "Video")}${v.channel ? " · " + esc(v.channel) : ""}${v.lang === "de" ? " · Deutsch" : ""}${v.note && !noNote ? `<br>${esc(v.note)}` : ""}</div></div>`;
 }
 // Bewegungs-Clip: Ausführungsteil des Erklärvideos stumm in Schleife; Shorts ganz
 function clipOf(key){
-  const v = VIDS?.[key]; if (!v?.video) return null;
+  const v = VIDS?.[key] || VIDS?.[vidAlias(key)]; if (!v?.video) return null;
   const mk = (v.markers || []).find(x => /Ausführung|Demo/i.test(x.label)), short = v.dur && v.dur <= 75;
   // geprüfte Clip-Sekunde (Transkript + Einzelbilder) hat Vorrang
   const st = v.clip != null ? v.clip : short ? 0 : mk ? mk.t : (v.start || 0);
@@ -2636,8 +2701,12 @@ function mobClipMap(id){ const fo = gcFollow(id), ph = fo?.ph || [];
   const rng = g => g.length ? [g[0].s, g[g.length - 1].e < g[0].s ? len : g[g.length - 1].e] : null;
   return {hold: H.s + H.d / 2, start: start ? start.s + start.d / 2 : 0.04, hin: rng(hin), back: rng(back), len}; }
 function mobClipMount(){ const v = document.getElementById("mobClip"); if (!v || v._mounted) return; v._mounted = true; const id = v.dataset.clipid;
-  clipUrl(id).then(u => { if (!u) return; if (!v.isConnected) { URL.revokeObjectURL(u); return; } if (mobClipObj) try { URL.revokeObjectURL(mobClipObj); } catch {} mobClipObj = u;
-    v.addEventListener("loadedmetadata", () => { v._map = mobClipMap(id); v.classList.add("on"); syncClip(tmr, true); }, {once: true}); v.src = u; }).catch(() => {}); }
+  clipUrl(id).then(u => { if (!u) return ownClipFail(v); if (!v.isConnected) { URL.revokeObjectURL(u); return; } if (mobClipObj) try { URL.revokeObjectURL(mobClipObj); } catch {} mobClipObj = u;
+    v.addEventListener("loadedmetadata", () => { v._map = mobClipMap(id); v.classList.add("on"); syncClip(tmr, true); }, {once: true}); v.addEventListener("error", () => ownClipFail(v), {once: true}); v.src = u; }).catch(() => ownClipFail(v)); }
+// eigener Clip nicht ladbar (keine Verbindung/Anmeldung): stattdessen MuscleWiki- oder YouTube-Video, nie ein schwarzes Feld
+function ownClipFail(v){ const key = v?.dataset.key, box = v?.closest(".exhero"); if (!box || !key || !v.isConnected) return;
+  const mv = mwVideoHtml(mwSlugOf(key), true), c = clipOf(key);
+  box.innerHTML = mv || (c ? clipHtml(key) : `<div class="small muted">Eigener Clip gerade nicht ladbar.</div>${videoHtml(key, exName(key))}`); if (!mv && c) try { hookClips(); } catch {} }
 // YouTube-Ersatz (Übungen ohne eigenen Clip): steht, solange der Timer pausiert ist
 function syncYt(t){ const f = document.querySelector("#sheet iframe[data-clip]"); if (!f || !t) return; const play = !t.started || t.run; if (f._run === play) return; f._run = play;
   try { f.contentWindow.postMessage(JSON.stringify({event: "command", func: play ? "playVideo" : "pauseVideo", args: []}), "*"); } catch {} }
@@ -2663,9 +2732,10 @@ function syncClip(t, force){ const v = document.getElementById("mobClip"); if (!
   try { v.currentTime = r[0] * k; } catch {} v._stopAt = r[1] * k; v.play().catch(() => {}); clipWatch(v); }
 function motionHtml(key, img, alt, still){
   const own = mobClipId(key), og = !img && key.startsWith("reha:") ? exThumb(key, null) : null;
-  if (own && vidPref !== false) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : og ? `<img src="${esc(og)}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
+  if (own && vidPref !== false) return `<div class="exhero"><div class="vclip own">${img ? `<img src="${esc(isrc(img, 0))}" alt="" class="vposter">` : og ? `<img src="${esc(og)}" alt="" class="vposter">` : ""}<video id="mobClip" data-clipid="${esc(own)}" data-key="${esc(key)}" muted playsinline preload="auto" disablepictureinpicture></video></div>${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
   const c = clipOf(key);
   if (c && (vidPref === true || !img)) return `<div class="exhero">${clipHtml(key)}${img ? `<button type="button" class="herobtn" data-real="fig">🖼 Illustration</button>` : ""}</div>`;
+  if (!img && !og && !c && mwSlugOf(key)) { const mv = mwVideoHtml(mwSlugOf(key), true); if (mv) return `<div class="exhero">${mv}</div>`; }
   return `<div class="exhero">${img ? animHtml(img, alt).replace('class="anim"', `class="anim${still ? " still" : ""}"`) : og ? `<span class="anim still"><img src="${esc(og)}" alt="${esc(alt)}" decoding="async"></span>` : ""}${own ? `<button type="button" class="herobtn" data-real="vid">▶ Video im Takt</button>` : c ? `<button type="button" class="herobtn" data-real="vid">▶ So sieht's echt aus</button>` : ""}</div>`;
 }
 // Schleife: am Ende des Ausschnitts zurück zum Anfang (YouTube-Iframe-API per postMessage)
@@ -3950,7 +4020,7 @@ function openSheet(kind, arg){
   if (!sheet.open && !sheetHist) { try { history.pushState({sheet: 1}, ""); sheetHist = true; } catch {} } pendingConfirm = null; mobZoom = null;
   if (kind === "tech" && sheet.open && sheetKind === "tech" && sheetArg && sheetArg !== arg) techStack.push(sheetArg); else if (kind !== "tech" || !sheet.open) techStack = [];
   if (kind === "meal" && (sheetKind !== "meal" || sheetArg !== arg)) mealQ = ""; sheetKind = kind; sheetArg = arg; if (kind !== "meal") sheet.classList.remove("swapmode"); sheet.style.transform = ""; renderSheet(); if (!sheet.open) { const a = document.activeElement; if (a && /^(INPUT|TEXTAREA)$/.test(a.tagName)) { if (a.matches(".qbox input")) addRecentQ(a.id, a.value); a.blur(); } else { const q = qInput(document.querySelector(".qbox input:not(:placeholder-shown)")); if (q && !sheet.contains(q)) addRecentQ(q.id, q.value); } sheet.showModal(); } else sheet.scrollTop = 0; }
-function closeSheet(fromPop){ if (sheetKind === "cook" && cook) cookMin = true; sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); cookPaint(); }
+function closeSheet(fromPop){ if (sheetKind === "cook" && cook) cookMin = true; if (sheetKind !== "tech") b3Ret = null; sheet.classList.remove("swapmode"); techStack = []; if (sheet.open) sheet.close(); sheetKind = null; if (dirty) saveCur(); render(); cookPaint(); }
 let sheetTarget = null;
 // Nur einen Teil des Blatts neu zeichnen (z. B. Reiter), damit laufende Videos nicht neu laden
 function renderSheetPart(sel){
@@ -4010,10 +4080,10 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
     const still = e.img && RDB_STILL.has(e.img), home = HOME_OK.has(sheetArg) || sheetArg.startsWith("hw_");
     const prim = Object.keys(e.m || {}).filter(k => e.m[k] >= 1).map(k => MUSCLE_LABEL[k] || k);
     const back = techStack.length ? EX[techStack[techStack.length - 1]] : null;
-    h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
+    h += `${back ? `<button type="button" class="backlink" data-act="techBack">‹ Zurück zu ${esc(back.name)}</button>` : b3Ret ? `<button type="button" class="backlink" data-act="b3ret">‹ Zurück zur Körperkarte</button>` : ""}<div class="sh"><h2>${esc(e.name)}</h2>${close}</div>
       <div class="exchips"><span class="xc strong">${e.sets ? setsFor(sheetArg, weekNo(selDate) ?? 0) + " × " : ""}${esc(e.reps || "")}</span><span class="xc">${{c: "Grundübung", i: "Isolation", k: "Kontrolle & Stabilität"}[e.type] || "Übung"}</span><span class="xc">${home ? "🏠 Zuhause" : "🏋 Gym"}</span>${e.gate && !S().scCleared ? `<span class="xc gate">SC-Ampel${e.alt ? ": Ersatz " + esc(e.alt) : ""}</span>` : ""}<button type="button" class="xc hurtbtn" data-hurt="${esc(sheetArg)}">😣 Tut weh?</button></div>
       ${varRowHtml(sheetArg)}${doseHtml(sheetArg)}${gearHtml(sheetArg, atHome() || sheetArg.startsWith("hw_"))}${atHome() && missingGear(sheetArg).length ? `<div class="small warnb">Heute fehlt: ${missingGear(sheetArg).map(k => GEAR[k]).join(", ")}${gearSwap(sheetArg) !== sheetArg ? ` – im Training wird „${esc(EX[gearSwap(sheetArg)].name)}“ genommen` : ""}.</div>` : ""}
-      ${e.img || clipOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && !(vidPref === true && clipOf(sheetArg)) ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
+      ${e.img || clipOf(sheetArg) || mwSlugOf(sheetArg) ? `<div class="exvis">${motionHtml(sheetArg, e.img, e.name, still)}</div>` : ""}${IMG_NOTE[sheetArg] && e.img && !(vidPref === true && clipOf(sheetArg)) ? `<div class="small muted">ⓘ Bild weicht ab: ${esc(IMG_NOTE[sheetArg])}</div>` : ""}
       <div class="tabs3 ${hasHist ? "n4" : ""}" role="tablist" id="ttabs">${[["anl", "Anleitung"], ["mus", "Muskeln"], ["vid", "Video"], ...(hasHist ? [["ver", "Verlauf"]] : [])].map(([k, l]) => `<button type="button" role="tab" data-ttab="${k}" aria-selected="${techTab === k}">${l}</button>`).join("")}</div>
       <div id="ttabBody">${techTab === "anl" ? `${prim.length ? `<div class="whyb"><div class="lab">Wofür</div>Trainiert vor allem ${esc(prim.join(" und "))}.${MOB_INFO[sheetArg] ? " " + esc(MOB_INFO[sheetArg].why) : ""}</div>` : ""}
         <ol class="steps">${(e.cue || []).map(c => `<li>${esc(c)}</li>`).join("")}</ol>
@@ -6526,8 +6596,12 @@ async function onClick(e){
   if (t.closest("[data-b3xray]")) { b3Opt.xray = !b3Opt.xray; if (b3Opt.xray) b3Opt.layers.muscle = true; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3multi]")) { b3Opt.multi = !b3Opt.multi; if (!b3Opt.multi && b3Sel.length > 1) b3Sel = b3Sel.slice(-1); b3Form = null; b3Color(); b3Update(); return; }
   if (t.closest("[data-b3help]")) { b3Opt.help = !b3Opt.help; b3Update(); return; }
+  if (t.closest("[data-b3info]")) { b3Opt.info = !b3Opt.info; b3Update(); if (b3Opt.info) document.getElementById("b3panel")?.scrollIntoView({block: "start", behavior: "smooth"}); return; }
+  if (t.closest("[data-b3exall]")) { b3Opt.exAll = !b3Opt.exAll; b3Update(); return; }
+  const b3x = t.closest("[data-b3ex]"); if (b3x) { b3Ret = {sel: [...b3Sel], joint: b3Joint, pt: b3Pt}; openSheet("tech", b3x.dataset.b3ex); return; }
+  const b3c = t.closest("[data-b3cat]"); if (b3c) { catF.mm = b3c.dataset.b3cat; catF.src = "mw"; catF.q = ""; catF.n = 60; b3Ret = null; closeSheet(); sub.mehr = "uebungen"; go("mehr"); return; }
   const b3g = t.closest("[data-b3relg]"); if (b3g) { const g = b3g.dataset.b3relg; b3Opt.relOpen = b3Opt.relOpen === g ? null : g; b3Color(); b3Update(); return; }
-  if (t.closest("[data-b3rel]")) { b3Opt.showRel = !b3Opt.showRel; b3Opt.relOpen = null; b3Color(); b3Update(); return; }
+  if (t.closest("[data-b3rel]")) { b3Opt.showRel = !b3Opt.showRel; b3Opt.relOpen = null; if (b3Opt.showRel) b3Opt.info = true; b3Color(); b3Update(); return; }
   if (t.closest("[data-b3more]")) { b3Opt.more = !b3Opt.more; b3Update(); return; }
   if (t.closest("[data-b3clear]")) { b3Sel = []; b3Form = null; b3Joint = null; b3Pt = null; b3Opt.relOpen = null; b3Color(); b3Update(); return; }
   const b3b = t.closest("[data-b3lab]"); if (b3b) { b3Opt.labels = b3b.dataset.b3lab; b3Apply(); b3Update(); return; }
@@ -6671,6 +6745,7 @@ async function onClick(e){
   const tt = t.closest("[data-ttab]"); if (tt) { techTab = tt.dataset.ttab; renderSheetPart(["#ttabs", "#ttabBody"]); return; }
   const rl = t.closest("[data-real]"); if (rl) { vidPref = rl.dataset.real === "vid"; lsSet("vidPref", vidPref); renderSheet(); return; }
   const an = t.closest(".exvis .anim"); if (an) { an.classList.toggle("paused"); return; }
+  const mws = t.closest("[data-mwside]"); if (mws) { const [sl, i] = mws.dataset.mwside.split("|"); mwSide[sl] = Number(i); renderSheet(); return; }
   const pv = t.closest("[data-play]"); if (pv) { playVideo(pv.dataset.play, pv.dataset.t != null ? Number(pv.dataset.t) : undefined); return; }
   const mzb = t.closest("button[data-mobzoom]"), mzo = t.classList?.contains("zoomov") && !t.hasAttribute("data-hclose") ? t : null;
   if (mzb || mzo) { const v = (mzb || mzo).dataset.mobzoom; mobZoom = v === "close" ? null : Number(v); renderSheet(); return; }
@@ -6783,6 +6858,7 @@ async function onClick(e){
     if (a === "mobFinishClose") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk], {_done: true}); touch(); closeSheet(); return; }
     if (a === "mobSkip" || a === "rehaSkip") { rtk = a === "rehaSkip" ? "reha" : "mob"; const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (cur[dk]._skip) { delete cur[dk]._skip; clr(dk + "._skip"); } else cur[dk]._skip = true; touch(); if (sheet.open) renderSheet(); render(); return; }
     if (a === "mobFinish") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (rtFinished(rtk, cur, selDate) && cur[dk]._done) { delete cur[dk]._done; clr(dk + "._done"); } else cur[dk]._done = true; touch(); renderSheet(); render(); return; }
+    if (a === "b3ret") { openSheet("body"); return; }
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }

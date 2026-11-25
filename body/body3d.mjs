@@ -8,6 +8,7 @@ import { MeshoptDecoder } from "../vendor/three/meshopt_decoder.module.js";
 // Farben klar getrennt: Knochen elfenbein, Knorpel hellblau, Bänder grün, Sehnen silbern (glänzend); Auswahl orange, Zusammengehöriges violett
 const COL = { skin: 0xe9c2a6, bone: 0xeee3cc, muscle: 0xb5483f, cartilage: 0x8fc3e3, ligament: 0x5fae94, tendon: 0xc9d6ea, insertion: 0xf0d27a, fascia: 0xdfe6ee };
 const SEL = new THREE.Color(0xffb020), REL = new THREE.Color(0x7c5cff);
+const tint = (c, p, out) => { const h = ((p * 2654435761) >>> 0) / 4294967296; return out.copy(c).multiplyScalar(0.86 + h * 0.26); };
 // Ansichten für Schlüsselbeinhöhe 1,336 m angelegt; Höhen werden ans geladene Modell angepasst
 const VIEWS = { ganz: [0, 0.85, 3.1, 0, 0.82, 0], vorn: [0, 0.85, 3.1, 0, 0.82, 0], hinten: [0, 0.85, -3.1, 0, 0.82, 0], links: [3.1, 0.85, 0, 0, 0.82, 0], rechts: [-3.1, 0.85, 0, 0, 0.82, 0], seite: [-3.1, 0.85, 0.15, 0, 0.82, 0],
   schulter: [-0.3, 1.42, 0.75, -0.06, 1.3, 0.05], brust: [0, 1.32, 0.8, 0, 1.25, 0.08], nacken: [0, 1.48, -0.75, 0, 1.4, 0], ruecken: [0, 1.15, -1.45, 0, 1.12, 0],
@@ -27,18 +28,32 @@ export async function mount(el, opt = {}) {
   const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(new URL("./body.glb", import.meta.url).href);
   const layers = {}, labelsEl = document.createElement("div"); labelsEl.className = "b3labels"; el.appendChild(labelsEl);
   gltf.scene.traverse(o => { if (!o.isMesh) return; const name = o.name || o.parent?.name, g = o.geometry; g.computeVertexNormals();
-    const pa = g.getAttribute("_part"), n = g.getAttribute("position").count, col = new Float32Array(n * 3), c = new THREE.Color(COL[name] ?? 0xcccccc);
-    for (let i = 0; i < n; i++) c.toArray(col, i * 3);
+    const pa = g.getAttribute("_part"), n = g.getAttribute("position").count, col = new Float32Array(n * 3), c = new THREE.Color(COL[name] ?? 0xcccccc), t = new THREE.Color();
+    // Muskeln: jedes Teil leicht anders getönt, damit die Grenzen zwischen Muskeln sichtbar sind
+    for (let i = 0; i < n; i++) (name === "muscle" ? tint(c, Math.round(pa.getX(i)), t) : c).toArray(col, i * 3);
     g.setAttribute("color", new THREE.BufferAttribute(col, 3));
     const see = name === "skin" || name === "fascia";
-    o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: name === "tendon" ? .38 : name === "cartilage" ? .5 : .75, metalness: name === "tendon" ? .25 : 0, transparent: see, opacity: name === "skin" ? .28 : name === "fascia" ? .4 : 1, depthWrite: !see, side: see ? THREE.FrontSide : THREE.DoubleSide });
+    // Haut/Faszien halbdurchsichtig, aber mit Tiefenpuffer: überlappende Regionen dunkeln sich nicht gegenseitig ab (vorher dunkle Flecken)
+    o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: name === "tendon" ? .38 : name === "cartilage" ? .5 : .75, metalness: name === "tendon" ? .25 : 0, transparent: see, opacity: name === "skin" ? .22 : name === "fascia" ? .4 : 1, depthWrite: true, side: see ? THREE.FrontSide : THREE.DoubleSide });
     o.renderOrder = name === "skin" ? 3 : name === "fascia" ? 2 : 1; if (name === "fascia" || name === "insertion") o.visible = false;
     layers[name] = { mesh: o, pa, base: c };
   });
   scene.add(gltf.scene);
   // Ecken je Teil (die Kompression ordnet Ecken um)
   const range = {}; for (const [ln, L] of Object.entries(layers)) { const tmp = {}; for (let i = 0; i < L.pa.count; i++) { const p = Math.round(L.pa.getX(i)); (tmp[p] || (tmp[p] = [])).push(i); } for (const p in tmp) range[p] = { ln, v: Uint32Array.from(tmp[p]) }; }
-  function paint(p, color) { const r = range[p]; if (!r) return; const L = layers[r.ln], col = L.mesh.geometry.getAttribute("color"), c = color || L.base; for (const i of r.v) c.toArray(col.array, i * 3); col.needsUpdate = true; }
+  const tmpC = new THREE.Color();
+  function paint(p, color) { const r = range[p]; if (!r) return; const L = layers[r.ln], col = L.mesh.geometry.getAttribute("color"), c = color || (r.ln === "muscle" ? tint(L.base, +p, tmpC) : L.base); for (const i of r.v) c.toArray(col.array, i * 3); col.needsUpdate = true; }
+  // Nähe im Modell (Weltkoordinaten in Metern): welche Teile berühren ein Teil? Für Sehnen/Bänder/Schleimbeutel, die Z-Anatomy nicht mit Muskeln verknüpft
+  const lv = {};
+  function layerVerts(ln){ if (lv[ln]) return lv[ln]; const L = layers[ln]; if (!L) return null; const m = L.mesh, pos = m.geometry.getAttribute("position"), n = pos.count, xyz = new Float32Array(n * 3), ids = new Int32Array(n), v = new THREE.Vector3(); m.updateMatrixWorld();
+    for (let i = 0; i < n; i++) { v.fromBufferAttribute(pos, i).applyMatrix4(m.matrixWorld); xyz[i * 3] = v.x; xyz[i * 3 + 1] = v.y; xyz[i * 3 + 2] = v.z; ids[i] = Math.round(L.pa.getX(i)); } return lv[ln] = { xyz, ids }; }
+  function partPts(i, max){ const r = range[i]; if (!r) return null; const { xyz } = layerVerts(r.ln), step = Math.max(1, Math.floor(r.v.length / max)), P = [], bb = [1e9, 1e9, 1e9, -1e9, -1e9, -1e9];
+    for (let k = 0; k < r.v.length; k += step) { const j = r.v[k] * 3; for (let a = 0; a < 3; a++) { const x = xyz[j + a]; P.push(x); if (x < bb[a]) bb[a] = x; if (x > bb[a + 3]) bb[a + 3] = x; } } return { P, bb }; }
+  function nearParts(i, lns, d, max = 250){ const S = partPts(i, max); if (!S) return []; const { P, bb } = S, d2 = d * d, best = new Map();
+    for (const ln of lns) { const L = layerVerts(ln); if (!L) continue; const { xyz, ids } = L, n = ids.length;
+      for (let q = 0; q < n; q++) { const x = xyz[q * 3], y = xyz[q * 3 + 1], z = xyz[q * 3 + 2], p = ids[q]; if (p === i || x < bb[0] - d || x > bb[3] + d || y < bb[1] - d || y > bb[4] + d || z < bb[2] - d || z > bb[5] + d) continue;
+        for (let k = 0; k < P.length; k += 3) { const dx = x - P[k], dy = y - P[k + 1], dz = z - P[k + 2], s = dx * dx + dy * dy + dz * dz; if (s < d2) { const o = best.get(p); if (o === undefined || s < o) best.set(p, s); break; } } } }
+    return [...best].sort((a, b) => a[1] - b[1]).map(x => x[0]); }
   let sel = [], rel = [];
   function setSel(s = [], r = []) { for (const p of [...sel, ...rel]) paint(p); sel = [...s]; rel = r.filter(p => !sel.includes(p)); for (const p of rel) paint(p, REL); for (const p of sel) paint(p, SEL); }
   // Gelenke ohne eigenes Teil am Schlüsselbein: SC (innen) und AC (außen)
@@ -52,8 +67,18 @@ export async function mount(el, opt = {}) {
   const byGrp = {}, byBase = {}, byOn = {}, byEn = {}, key = (b, s) => b + "|" + (s || "");
   for (const p of parts) { byEn[p.en] = p; if (p.grp) (byGrp[p.grp] || (byGrp[p.grp] = [])).push(p); if (p.base) (byBase[key(p.base, p.side)] || (byBase[key(p.base, p.side)] = [])).push(p); if (p.on) (byOn[p.on] || (byOn[p.on] = [])).push(p); }
   const sameSide = (a, b) => !a.side || !b.side || a.side === b.side;
-  function relations(i) {
+  const relCache = new Map(), SOFT = /bursa/i;
+  function relations(i) { if (!relCache.has(i)) relCache.set(i, relations0(i)); return relCache.get(i); }
+  function relations0(i) {
     const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i).map(x => x.i))]; if (ids.length) out.push({ title, ids }); };
+    const near = (lns, d, max) => nearParts(i, lns, d, max).map(j => parts[j]);
+    // Bänder, Sehnen, Knorpel, Schleimbeutel: woran sie liegen (Knochen, Muskeln) und was am selben Gelenk sitzt
+    if (["tendon", "ligament", "cartilage"].includes(p.layer)) {
+      if (p.grp) add(p.grpDe, (byGrp[p.grp] || []).filter(x => sameSide(x, p)));
+      add(p.layer === "tendon" ? "Muskeln daran" : "Muskeln in der Nähe", near(["muscle"], 0.012).slice(0, 12));
+      add(SOFT.test(p.en) ? "Liegt an Knochen" : "Verbindet Knochen", near(["bone"], 0.01).slice(0, 6));
+      add("Bänder, Sehnen & Knorpel daneben", near(["ligament", "tendon", "cartilage"], 0.006).slice(0, 12));
+      return out; }
     if (p.kind) { // Ursprung/Ansatz → Muskel und Knochen
       add("Muskel", (byBase[key(p.base, p.side)] || []).filter(x => !x.kind));
       add("Knochen", [byEn[p.on]]);
@@ -61,7 +86,8 @@ export async function mount(el, opt = {}) {
       return out; }
     if (p.layer === "bone") { const ins = byOn[p.en] || [];
       add("Muskeln an diesem Knochen", ins.flatMap(x => (byBase[key(x.base, x.side)] || []).filter(y => !y.kind)));
-      add("Ansatzflächen am Knochen", ins); return out; }
+      add("Ansatzflächen am Knochen", ins);
+      add("Bänder, Knorpel & Sehnen am Knochen", near(["ligament", "cartilage", "tendon"], 0.005, 700).slice(0, 24)); return out; }
     const g = byGrp[p.grp] || [], isMuscleGrp = /muscle$/i.test(p.grp || "");
     if (isMuscleGrp) add(`Teile: ${p.grpDe}`, g.filter(x => sameSide(x, p)));
     else if (p.grp) add(p.grpDe, g.filter(x => sameSide(x, p)));
@@ -71,6 +97,7 @@ export async function mount(el, opt = {}) {
     const keys = [p.base, isMuscleGrp ? p.grp : null].filter(Boolean), ins = keys.flatMap(k => (byBase[key(k, p.side)] || []).filter(x => x.kind));
     add("Ursprung & Ansatz", ins);
     add("Knochen, an denen er ansetzt", ins.map(x => byEn[x.on]));
+    if (p.layer === "muscle") add("Sehnen, Bänder & Schleimbeutel daran", near(["tendon", "ligament"], 0.008).slice(0, 16));
     return out; }
   // Markierungen (Schmerzpunkte)
   const mk = new THREE.Group(); scene.add(mk);
