@@ -25,6 +25,8 @@ export async function mount(el, opt = {}) {
   scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.6)); const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(1, 2, 2); cam.add(dl); scene.add(cam);
   // Steuerung: ruhiger Zoom zum Finger hin, Verschieben in Bildschirmebene
   const ctl = new OrbitControls(cam, renderer.domElement);
+  ctl.addEventListener("change", () => { dirty = true; });
+  renderer.domElement.addEventListener("webglcontextrestored", () => { dirty = true; });
   Object.assign(ctl, { enableDamping: true, dampingFactor: 0.15, rotateSpeed: 0.65, zoomSpeed: 0.55, panSpeed: 0.8, screenSpacePanning: true, zoomToCursor: true, minDistance: 0.12, maxDistance: 4.5 });
   const gltf = await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(new URL("./body.glb", import.meta.url).href);
   const layers = {}, labelsEl = document.createElement("div"); labelsEl.className = "b3labels"; el.appendChild(labelsEl);
@@ -132,7 +134,7 @@ export async function mount(el, opt = {}) {
   { const v = VIEWS[opt.view || "vorn"]; cam.position.set(v[0], v[1] * ky, v[2]); ctl.target.set(v[3], v[4] * ky, v[5]); ctl.update(); }
   // Antippen: Teil bestimmen (Ziehen zum Drehen ist kein Antippen); durch Haut, Faszien und Halshautmuskel hindurch
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(); let down = null, ptrs = 0, multiT = false;
-  renderer.domElement.addEventListener("pointerdown", e => { ptrs++; if (ptrs > 1) multiT = true; else { multiT = false; down = [e.clientX, e.clientY, Date.now()]; } anim = null; });
+  renderer.domElement.addEventListener("pointerdown", e => { if (e.isPrimary) ptrs = 0; ptrs++; if (ptrs > 1) multiT = true; else { multiT = false; down = [e.clientX, e.clientY, Date.now()]; } anim = null; });
   renderer.domElement.addEventListener("pointercancel", () => { ptrs = Math.max(0, ptrs - 1); });
   renderer.domElement.addEventListener("pointerup", e => { ptrs = Math.max(0, ptrs - 1); if (multiT) { if (!ptrs) { multiT = false; down = null; } return; } if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 8 || Date.now() - down[2] > 600) return; const rc = renderer.domElement.getBoundingClientRect();
     ndc.set((e.clientX - rc.left) / rc.width * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1); ray.setFromCamera(ndc, cam);

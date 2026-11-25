@@ -1,5 +1,5 @@
 // Service Worker: Offline-Cache für die App-Hülle und Bilder, Empfang der Push-Erinnerungen.
-const CACHE = "tb-v251";
+const CACHE = "tb-v252";
 const SHELL = ["./", "index.html", "recipes.json", "mealplan.json", "prices.json", "zutaten-nw.json", "prodimg.json", "videos.json", "coach.json", "manifest.webmanifest", "icon-192.png", "badge-96.png"];
 
 self.addEventListener("install", e => {
@@ -18,7 +18,7 @@ self.addEventListener("fetch", e => {
   }
   if (url.pathname.includes("/body/") || url.pathname.includes("/vendor/")) {
     // 3D-Körperkarte (Modell ~2,5 MB) und three.js: online immer aktuell (Browser-Cache prüft nur), offline aus eigenem Cache, der Versionswechsel übersteht
-    e.respondWith(caches.open("tb-body").then(c => fetch(e.request).then(res => { if (res.ok) c.put(e.request, res.clone()); return res; }).catch(() => c.match(e.request).then(r => r || Response.error()))));
+    e.respondWith(caches.open("tb-body").then(c => fetch(e.request).then(res => { if (res.ok) { const cp = res.clone(), tag = r => r && (r.headers.get("etag") || r.headers.get("last-modified")); e.waitUntil(c.match(e.request).then(old => { if (!old || !tag(res) || tag(old) !== tag(res)) return c.put(e.request, cp); })); } return res; }).catch(() => c.match(e.request).then(r => r || Response.error()))));
     return;
   }
   if (url.pathname.includes("/img/")) {
