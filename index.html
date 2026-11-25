@@ -2361,7 +2361,7 @@ function touch(){ dirty = true; setSync("Ungespeichert …"); clearTimeout(saveT
 // Training zurücksetzen (Sätze, Zeiten); mit drop zusätzlich die Einheit verwerfen = zurück zum Plan, auch auf dem Server
 function trainClear(drop){
   stopRest(); releaseWake(); clearInterval(clockTimer);
-  cur.sets = {}; cur.antag = {}; delete cur.warm; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.swap; delete cur.swapHome; delete cur.skipEx; openEx = null; woSession = null;
+  cur.sets = {}; cur.antag = {}; delete cur.warm; cur.resetAt = new Date().toISOString(); delete cur.startedAt; delete cur.finishedAt; delete cur.where; delete cur.mixHome; delete cur.gear; delete cur.swap; delete cur.swapHome; delete cur.skipEx; openEx = null; woSession = null;
   // Entfernen = Tag bewusst trainingsfrei (auch an Plantagen); der Planer legt die Einheit beim nächsten Lauf neu. Zurück geht es über „Trotzdem trainieren“
   if (drop) { cur.session = "frei"; cur.sessAt = Date.now(); if (cur._clr) cur._clr = cur._clr.filter(x => x !== "session" && x !== "sessAt"); }
   dirty = true; saveCur(); }
@@ -2610,7 +2610,7 @@ function dayEvents(d, focus = todayFocus){
   { const sk = mobSkipped(cur); ev.push({k: "mob", t: routineAt("mob"), icon: "🧘", short: "Routine", title: "Morgenroutine", sub: sk ? "ausgelassen" : `${mobMin(d)} min · ${mc}/${mt}`, done: mobFinished(cur, d) || sk, skip: sk, act: `data-sheet="mob"`, cta: mc ? "Weiter" : "Starten"}); }
   if (d >= REHA_SINCE) { const sk = rtSkipped("reha", cur), rc = rtCount("reha", cur, d), rn = rtTotal("reha", d); ev.push({k: "reha", t: routineAt("reha"), icon: "💪", short: "Reha", title: "Schulter-Reha", sub: sk ? "ausgelassen" : `${rtMin("reha", d)} min · ${rc}/${rn}`, done: rtFinished("reha", cur, d) || sk, skip: sk, act: `data-sheet="reha"`, cta: rc ? "Weiter" : "Starten"}); }
   if (st !== "frei" && (pl || cur.session)) { const tt = pl?.start || "18:00", sess = SESS[cur.session] || SESS[variantOf(pl?.session, d)] || {};
-    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: st === "bereit" && d < todayIso() ? "nicht gemacht" : `${sess.where === "Zuhause" || atHome() ? "Zuhause" : "Gym"}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Zum Training", train: true}); }
+    ev.push({k: "train", t: tt, end: pl?.end, icon: "🏋", short: "Training", title: sess.title || "Training", sub: st === "bereit" && d < todayIso() ? "nicht gemacht" : `${sess.where === "Zuhause" ? "Zuhause" : whereLbl()}${pl?.end ? " · bis " + pl.end : ""}`, done: st === "fertig" || st === "leer", act: `data-act="start"`, cta: st === "läuft" ? "Weiter trainieren" : "▶ Zum Training", train: true}); }
   if (focus !== "training" && mealPlan && recipes) for (const m of mealsFor(d)) if (m.name !== "skip") ev.push({k: "meal:" + m.k, t: m.time || "", icon: "🍽", short: MEAL_SHORT[m.k] || "Essen", title: !m.own && typeof m.name === "string" && recipeByName(m.name) ? recTitle(recipeByName(m.name)) : m.info.name, sub: `${m.label} · <span class="nutri">${nutTxt(m.info)}</span>`, done: m.ate, meal: m});
   const wd0 = parse(d).getDay(); if (focus !== "training" && (wd0 === 0 || (wd0 === 1 && !store.checkins[monday(addDays(d, -7))]))) { const mo = wd0 === 0 ? monday(d) : monday(addDays(d, -7));
     ev.push({k: "ci", t: ciAt(d), icon: "📊", short: "Check-in", title: "Wochen-Check-in", sub: "10 min · Bilanz und nächste Woche", done: !!store.checkins[mo], act: `data-act="checkin" data-v="${mo}"`, cta: "Öffnen"}); }
@@ -2898,7 +2898,10 @@ const setsObj = () => woSession === "antag" ? (cur.antag = cur.antag || {}) : cu
 // Zuhause = nur Eigengewicht, Möbel, Treppe, Rucksack
 const HOME_OK = new Set(["chinneutral","dblathome","dbshrug","onearmrow","spidercurl","alt_floorpress","hw_towelshrug","hw_latraise","hw_squat","hw_bss","hw_slrdl","hw_slidecurl","hw_calf","hw_tablerow","hw_doorrow","hw_latiso","hw_shrug","hw_curl","hw_hipthrust","hw_abd","hw_extrot","deadbug","sideplank","ytw","pushupplus","wallsit","glutebridge","stepdown","alt_plank","alt_birddog","alt_inclpush","alt_nordic","pushup","closepushup","abroller","alt_kickback","hw_bandcurl","hw_bandpushdown","hw_bandhammer","hw_packcurl","hw_towelcurl"]);
 const HOME_ALTS = {hw_latraise:["hw_latiso","ytw"], hw_squat:["hw_bss","wallsit","stepdown"], hw_bss:["hw_squat","stepdown"], hw_slrdl:["hw_hipthrust","alt_nordic","hw_slidecurl"], wallsit:["hw_squat","hw_bss"], hw_slidecurl:["alt_nordic","hw_slrdl"], hw_calf:["stepdown"], hw_tablerow:["hw_doorrow","hw_curl"], hw_doorrow:["hw_tablerow"], pushup:["alt_inclpush","closepushup"], hw_latiso:["ytw"], ytw:["hw_latiso","hw_doorrow"], hw_shrug:["hw_latiso"], hw_curl:["hw_doorrow","hw_tablerow"], closepushup:["alt_inclpush","pushup"], hw_hipthrust:["glutebridge","hw_slrdl"], glutebridge:["hw_hipthrust"], hw_abd:["sideplank"], sideplank:["alt_plank","alt_birddog","deadbug"], deadbug:["alt_birddog","alt_plank","sideplank"], pushupplus:["alt_inclpush"], hw_extrot:["ytw"], stepdown:["hw_squat","wallsit"], alt_inclpush:["pushup"], hw_bandcurl:["hw_bandhammer","hw_packcurl","hw_towelcurl","hw_curl"], hw_bandhammer:["hw_bandcurl","hw_packcurl","hw_towelcurl"], hw_packcurl:["hw_towelcurl","hw_curl"], hw_towelcurl:["hw_packcurl","hw_curl"]};
-const atHome = () => (cur.where || "gym") === "home";
+let homeId = null; // Mix: Übung, für die gerade gerechnet/gezeichnet wird (pro Übung Gym oder Zuhause)
+const atHome = () => { const w = cur?.where || "gym"; return w === "home" || w === "mix" && !!(cur.mixHome || {})[homeId]; };
+const whereLbl = () => ({home: "Zuhause", mix: "Mix"})[cur?.where] || "Gym";
+const awayGear = () => cur?.where === "home" || cur?.where === "mix";
 // Mit Geräten zuhause zuerst die bessere Übung (Kurzhanteln, Klimmzugstange, Ab-Roller), sonst ohne Geräte
 const HOME_PLUS = {chinneutral:"chinneutral",latneutral:"chinneutral",cablelat:"dblathome",dblateral:"dblathome",cableshrug:"dbshrug",rowchest:"onearmrow",cablerow:"onearmrow",bayesian:"spidercurl",inclinecurl:"spidercurl",chestpress:"alt_floorpress",inclinedb:"alt_floorpress",abroller:"abroller"};
 const homeDefault = id => HOME_PLUS[id] && gearOk(HOME_PLUS[id]) ? HOME_PLUS[id] : id in HOME ? HOME[id] : (HOME_OK.has(id) ? id : null);
@@ -2940,11 +2943,11 @@ const effNat = id => { const v = (cur[swapKey()] || {})[id]; if (swapOk(v)) retu
 // Ganze Einheit auf einmal: keine Übung doppelt (sonst zählen zwei Planübungen dieselben Sätze)
 let effMemo = null;
 function effAll(){
-  const sk = woSession || cur.session, key = JSON.stringify([cur.date, sk, cur.where, cur.swap, cur.swapHome, prefMap(), scVal(), scHigh(), !!S().scCleared, schonOn(), atHome() ? gearHome() : 0]);
+  const sk = woSession || cur.session, key = JSON.stringify([cur.date, sk, cur.where, cur.swap, cur.swapHome, prefMap(), scVal(), scHigh(), !!S().scCleared, schonOn(), awayGear() ? gearHome() : 0, cur.mixHome || 0]);
   if (effMemo && effMemo.cur === cur && effMemo.key === key) return effMemo;
-  const ids = exList(sk), nat = Object.fromEntries(ids.map(x => [x, effNat(x)])), m0 = {}, m = {}, why = {}, auto = {}, used = new Set(ids.flatMap(x => [x, nat[x]]).filter(Boolean));
+  const ids = exList(sk), nat = Object.fromEntries(ids.map(x => (homeId = x, [x, effNat(x)]))), m0 = {}, m = {}, why = {}, auto = {}, used = new Set(ids.flatMap(x => [x, nat[x]]).filter(Boolean));
   const fits = a => EX[a] && (atHome() ? HOME_OK.has(a) && gearOk(a) : !a.startsWith("hw_")) && !used.has(a);
-  for (const x of ids) {
+  for (const x of ids) { homeId = x;
     let v = nat[x]; const own = swapOk((cur[swapKey()] || {})[x]);
     // was ohne heutigen Tausch gälte (für „zurück“ im ⇄-Blatt)
     if (own) { const p = prefMap()[x]; let a = p && EX[p] ? p : atHome() ? homeDefault(x) : x; if (a && scRed(a)) a = redList(a).find(fits) || null; if (a && atHome() && !gearOk(a)) a = (GEAR_FALLBACK[a] || []).find(fits) || a; auto[x] = a; }
@@ -2957,8 +2960,8 @@ function effAll(){
   }
   return effMemo = {cur, key, m0, m, why, auto};
 }
-const eff0 = id => { const r = effAll(); return id in r.m0 ? r.m0[id] : effNat(id); };
-const eff = id => { const r = effAll(); if (id in r.m) return r.m[id]; const e = effNat(id); return e && atHome() ? gearSwap(e) : e; };
+const eff0 = id => { const r = effAll(); homeId = id; return id in r.m0 ? r.m0[id] : effNat(id); };
+const eff = id => { const r = effAll(); homeId = id; if (id in r.m) return r.m[id]; const e = effNat(id); return e && atHome() ? gearSwap(e) : e; };
 const offTxt = id => ({sc: schonOn() ? "entfällt (Schulter schonen)" : "entfällt heute (SC)", push: "entfällt zuhause (schon Liegestütz in der Einheit)"})[effAll().why[id]] || "entfällt zuhause";
 // SC-Banner nur, wenn die Einheit eine betroffene Übung hat
 const scHit = sk => (schonOn() || !S().scCleared && scHigh()) && exList(sk).some(x => { const n = effNat(x); return !!n && scRed(n); });
@@ -2967,7 +2970,7 @@ const scNote = () => schonOn() ? SC_NOTE_S : SC_NOTE0;
 function altOptions(base){
   const reason = Object.fromEntries(ALTS[base] || []), sk = woSession || cur.session;
   // nichts anbieten, was eine andere Planübung der Einheit schon ist oder nutzt
-  const taken = new Set(exList(sk).filter(x => x !== base).flatMap(x => [x, eff(x), eff0(x)]));
+  const taken = new Set(exList(sk).filter(x => x !== base).flatMap(x => [x, eff(x), eff0(x)])); homeId = base;
   if (!atHome()) { const o = [[base, "Original aus dem Plan"], ...(ALTS[base] || []).filter(([i]) => !i.startsWith("hw_"))].filter(([i]) => !taken.has(i)), ce = eff(base), au = effAll().auto[base]; if (au && au !== ce && !o.some(([i]) => i === au)) o.unshift([au, "Standard für heute"]); if (ce && !o.some(([i]) => i === ce)) o.unshift([ce, "Heute eingesetzt"]); return o; }
   const main = homeDefault(base), out = [], seen = new Set();
   const add = (i, r) => { if (i && EX[i] && HOME_OK.has(i) && !seen.has(i) && !taken.has(i)) { seen.add(i); out.push([i, r]); } };
@@ -3014,8 +3017,9 @@ function renderTraining(){
     view.innerHTML = `<div class="card"><div class="lab">Bereit · ${fmt(selDate)}${pst ? ` · ${esc(pst)} Uhr` : ""}</div><h2>${esc(sess.title)}</h2>${lastK ? `<div class="small muted">Zuletzt am ${fmt(lastK)} · ${loggedSets(store.days[lastK])} Sätze</div>` : ""}
       ${scHit(sk) ? `<div class="small ${schonOn() ? "muted" : "scnote"}">${scNote()}</div>` : ""}
       <div class="lab">Wo trainierst du?</div>
-      <div class="seg"><button type="button" data-where="gym" aria-pressed="${where === "gym"}">Gym</button><button type="button" data-where="home" aria-pressed="${where === "home"}">Zuhause</button></div>
-      ${where === "home" ? gearPicker(["kh", "gewicht", "stange", "abroller", "band", "matte", "handtuch", "tisch", "tuer", "sofa", "stuhl", "stufe"], undefined, true) : ""}
+      <div class="seg"><button type="button" data-where="gym" aria-pressed="${where === "gym"}">Gym</button><button type="button" data-where="home" aria-pressed="${where === "home"}">Zuhause</button><button type="button" data-where="mix" aria-pressed="${where === "mix"}">Mix</button></div>
+      ${where === "mix" ? `<div class="small muted">Mix: bei jeder Übung 🏋 Gym oder 🏠 Zuhause antippen. Zuhause gelten die Hilfsmittel unten.</div>` : ""}
+      ${where !== "gym" ? gearDayHtml() : ""}
       <div class="lab">Deine Übungen</div>
       <div class="pvlist">${ids0.map((id, i) => previewRow(id, w, sk, i)).join("")}</div>
       <div class="small muted">Bild antippen: Technik und Video · ⇄ tauscht eine Übung. <a href="#t=uebungen">Alle Übungen ›</a></div>
@@ -3026,7 +3030,7 @@ function renderTraining(){
   const ids = exList(sk), cleared = !!S().scCleared, fin = !!cur.finishedAt && !woSession;
   if (!openEx || !ids.includes(openEx)) openEx = ids.find(id => eff(id) && doneCount(id, w, sk) < nSets(id, w, sk)) || ids[0];
   const clockTxt = !cur.startedAt || woSession ? "" : fin ? `beendet · ${fmtDur((Date.parse(cur.finishedAt) - Date.parse(cur.startedAt))/1000)}` : fmtDur((Date.now() - Date.parse(cur.startedAt))/1000);
-  let h = `<div class="wohead">${fin ? "" : `<button class="btn ghost woback" type="button" data-act="toHeute" aria-label="Zurück zu Heute">‹</button>`}<div class="wot"><h2>${esc(sess.title)}</h2><span class="small muted">${woSession ? "" : (atHome() ? "Zuhause" : "Gym") + " · "}<span class="clock" id="woClock">${clockTxt}</span></span></div>
+  let h = `<div class="wohead">${fin ? "" : `<button class="btn ghost woback" type="button" data-act="toHeute" aria-label="Zurück zu Heute">‹</button>`}<div class="wot"><h2>${esc(sess.title)}</h2><span class="small muted">${woSession ? "" : whereLbl() + " · "}<span class="clock" id="woClock">${clockTxt}</span></span></div>
     <span class="actions">${woSession ? "" : `<button class="btn ghost menu" type="button" data-sheet="trainmenu" aria-label="Optionen zum Training">⋯</button>`}${fin ? "" : `<button class="btn primary" type="button" data-act="finish">Beenden</button>`}</span></div>`;
   if (fin) { const pr = progress(sk); h += `<div class="finbar"><div><b>Beendet</b><div class="small">${pr.d} von ${pr.t} Sätzen</div></div></div>`; }
   if (scHit(sk)) h += `<div class="small ${schonOn() ? "muted" : "scnote"}">${scNote()}</div>`;
@@ -3052,7 +3056,7 @@ function renderTraining(){
     const e_ = eff(id);
     if (!e_) { h += `<div class="exrow complete"><div class="exsum"><span class="st">–</span><span></span><span class="nm">${esc(EX[id].name)}<br><span class="muted small">${offTxt(id)}</span></span><span></span></div></div>`; continue; }
     if (exSkipped(id)) { h += `<div class="exrow complete"><button type="button" class="exsum" data-open="${id}"><span class="st">–</span><span></span><span class="nm">${esc(EX[e_].name)}<br><span class="muted small">ausgelassen${doneCount(id, w, sk) ? ` nach ${doneCount(id, w, sk)} ${doneCount(id, w, sk) === 1 ? "Satz" : "Sätzen"}` : ""}</span></span><span></span></button></div>`; continue; }
-    const e = EX[e_], n = nSets(id, w, sk), dn = doneCount(id, w, sk), complete = dn >= n, isOpen = openEx === id;
+    homeId = id; const e = EX[e_], n = nSets(id, w, sk), dn = doneCount(id, w, sk), complete = dn >= n, isOpen = openEx === id;
     const topKg = Math.max(0, ...doneSetsOf(id).map(x => num(x.kg) || 0));
     h += `<div class="exrow ${isOpen ? "cur" : ""} ${complete ? "complete" : ""}"><div class="exhead"><button type="button" class="exsum" data-open="${id}" aria-expanded="${isOpen}"><span class="st">${complete ? "✓" : dn || ""}</span><span class="exth">${e.img ? `<img src="${isrc(e.img, 0)}" alt="" loading="lazy" decoding="async">` : ""}</span><span class="nm">${esc(e.name)}${e_ !== (atHome() ? homeDefault(id) : id) ? ` <span class="tag">Alternative</span>` : ""}</span><span class="pr">${dn}/${n}${topKg ? ` · ${dec(topKg)} kg` : ""}</span></button></div>`;
     if (isOpen) h += exBody(id, n, w);
@@ -3069,13 +3073,18 @@ function warmHtml(title){
     ["w2", legs ? "Korrektiv: Dead Bug und Glute Bridge" : scHigh() || S().mode === "pause" || schonOn() ? "Korrektiv: Push-up Plus an der Wand" : "Korrektiv: 30°-Shrug und Push-up Plus"], ["w3", ramp]], n = items.filter(([k]) => wm[k]).length;
   return `<details class="warm" ${warmOpen ? "open" : ""}><summary>🔥 Aufwärmen · ${n}/${items.length}${n < items.length ? ` <span class="small muted">· antippen</span>` : " ✓"}</summary>${items.map(([k, t]) => `<label class="check small"><input type="checkbox" data-warm="${k}" ${wm[k] ? "checked" : ""}><span>${esc(t)}</span></label>`).join("")}</details>`;
 }
+function gearDayHtml(){ // Hilfsmittel nur für diese Einheit; Standard kommt aus den Einstellungen
+  const hg = gearHome(), keys = GEAR_HOME, none = GEAR_TRAIN.every(k => !hg[k]), std = JSON.stringify(gearHome()) === JSON.stringify(gearStd());
+  return `<div class="gearpick"><div class="lab">Was hast du heute da?</div><div class="chips"><button type="button" data-gearset="none" aria-pressed="${none}">Ohne Hilfsmittel</button>${keys.map(k => `<button type="button" data-gearday="${k}" aria-pressed="${!!hg[k]}">${hg[k] ? "✓ " : ""}${esc(GEAR[k])}</button>`).join("")}</div>
+    <div class="small muted">${none ? "Nur Körpergewicht und was im Haushalt da ist (Tür, Tisch, Stuhl, Handtuch). " : ""}Fehlt etwas, tauscht die App die Übung.${std ? "" : ` <button type="button" class="linkbtn" data-gearset="std">Wie immer</button> · <button type="button" class="linkbtn" data-gearset="save">Als Standard merken</button>`}</div></div>`;
+}
 function previewRow(id, w, sk, i){
-  const e_ = eff(id);
+  const e_ = eff(id); homeId = id;
   if (!e_) return `<div class="pv off"><span class="pvimg"><span class="noimg">–</span></span><span class="pvt"><b>${esc(EX[id].name)}</b><br><span class="small muted">${offTxt(id)}</span></span><span></span></div>`;
   const e = EX[e_], nAlt = altOptions(id).length - 1, isAlt = e_ !== (atHome() ? homeDefault(id) : id), mg = atHome() ? missingGear(e_) : [];
   return `<div class="pv"><button type="button" class="pvimg" data-sheet="tech" data-v="${e_}" aria-label="Technik zu ${esc(e.name)}">${exThumb(e_, e.img) ? `<img src="${exThumb(e_, e.img)}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${i + 1}</span>`}</button>
     <span class="pvt"><b>${esc(e.name)}</b>${isAlt ? ` <span class="tag">Alternative</span>` : ""}<br><span class="small muted"><span class="num">${nSets(id, w, sk)} × ${esc(e.reps)}</span>${e.gate && !S().scCleared ? " · SC-Ampel" : ""}${mg.length ? ` · <span class="bad">fehlt: ${esc(mg.map(k => GEAR[k]).join(", "))}</span>` : ""}</span></span>
-    <span class="pvact">${nAlt > 0 ? `<button class="btn small pvalt" type="button" data-sheet="alt" data-v="${id}" aria-label="Alternativen zu ${esc(e.name)}">⇄ ${nAlt}</button>` : ""}</span></div>`;
+    <span class="pvact">${cur.where === "mix" ? `<button class="btn small ghost" type="button" data-mixhome="${id}" aria-label="${atHome() ? "Zuhause" : "Im Gym"} – antippen zum Wechseln">${atHome() ? "🏠" : "🏋"}</button>` : ""}${nAlt > 0 ? `<button class="btn small pvalt" type="button" data-sheet="alt" data-v="${id}" aria-label="Alternativen zu ${esc(e.name)}">⇄ ${nAlt}</button>` : ""}</span></div>`;
 }
 // Zeilen einer Planübung in setsObj()[id]: eigene Sätze (s.base bzw. alte ohne base), leere Plätze, dann neue Indizes
 function slotRows(base, id, n){
@@ -3088,13 +3097,13 @@ function slotRows(base, id, n){
   return {rows, other};
 }
 function exBody(base, n, w){
-  const id = eff(base), e = EX[id], rir = rirFor(id, w), sg = suggestion(id), mine = setsObj()[id] || [], cleared = !!S().scCleared;
+  const id = eff(base), e = EX[id], rir = rirFor(id, w), sg = suggestion(id), mine = setsObj()[id] || [], cleared = !!S().scCleared; homeId = base;
   const {rows, other} = slotRows(base, id, n), dn = doneSetsOf(base).length, allDone = dn >= n;
   const gsw = atHome() && eff0(base) !== id ? missingGear(eff0(base)) : [];
   const fin = !!cur.finishedAt && !woSession, nAlt = fin ? 0 : altOptions(base).length - 1, th = e.img ? isrc(e.img, 0) : exThumb(id, null);
   // Sätze, die schon unter einer anderen Variante dieser Übung liegen (Tausch mitten in der Übung)
   const oth = {}; for (const [x] of donePairs(base)) if (x !== id) oth[x] = (oth[x] || 0) + 1;
-  let h = `<div class="exbody">${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}
+  let h = `<div class="exbody">${cur.where === "mix" && !fin ? `<div class="seg mixseg"><button type="button" data-mixhome="${base}" aria-pressed="${!atHome()}">🏋 Gym</button><button type="button" data-mixhome="${base}" aria-pressed="${atHome()}">🏠 Zuhause</button></div>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}
     <div class="exsum2"><button type="button" class="exthumb" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : ""}<span>Technik ›</span></button>${doseHtml(id, "mini", n, rir)}</div>
     <div class="exacts">${dn < n && !fin ? `<button type="button" class="btn primary gcgo" data-gc="open" data-v="${base}">▶ Coach · Satz ${dn + 1}/${n}</button>` : ""}${nAlt > 0 ? `<button class="btn" type="button" data-sheet="alt" data-v="${base}" aria-label="Alternativen (${nAlt})">⇄ ${nAlt}</button>` : ""}${DOSE[id]?.hold ? `<button type="button" class="btn" data-tmrin="${id}" aria-label="Halte-Timer">⏱</button>` : ""}</div>
     ${DOSE[id]?.hold ? `<div class="tmrslot"></div>` : ""}${atHome() ? gearHtml(id, true) : ""}`;
@@ -4187,13 +4196,15 @@ function renderEssen(){ if (tab === "mehr") return renderMore(); view.innerHTML 
 const GEAR = {kh: "Kurzhanteln", gewicht: "Rucksack/Wasserflaschen", stange: "Klimmzugstange", abroller: "Ab-Roller", band: "Widerstandsband", matte: "Matte/Teppich", handtuch: "Handtuch", tisch: "Stabiler Tisch", tuer: "Tür/Türrahmen", sofa: "Sofa/Bank", stuhl: "Stuhl", stufe: "Stufe/Treppe", wand: "Wand", erhoehung: "Erhöhung (Bank, Tisch, Sofa)",
   beinpresse: "Beinpresse", maschine: "Gerät/Maschine", kabel: "Kabelzug", langhantel: "Langhantel", bank: "Hantelbank", multipresse: "Multipresse"};
 const GEAR_HOME = ["kh", "gewicht", "stange", "abroller", "band", "matte", "handtuch", "tisch", "tuer", "sofa", "stuhl", "stufe"];
+const GEAR_TRAIN = ["kh", "gewicht", "stange", "abroller", "band"]; // „Ohne Hilfsmittel“ schaltet nur diese ab, Haushalt (Tür, Tisch, Handtuch …) bleibt
 const EQUIP = {legpress:["beinpresse"],rdl:["langhantel"],legext:["maschine"],seatedcurl:["maschine"],calfstand:["maschine"],deadbug:["matte"],rowchest:["kh","bank"],inclinedb:["kh","bank"],latneutral:["kabel"],cablelat:["kabel"],facepull:["kabel"],cableshrug:["kabel"],bayesian:["kabel"],pushdown:["kabel"],pushupplus:["wand"],extrot:["kabel","handtuch"],revwrist:["kh","bank"],hipthrust:["langhantel","bank"],bss:["kh","bank"],lyingcurl:["maschine"],abduction:["maschine"],stepdown:["stufe"],calfseated:["maschine"],pallof:["kabel"],chinneutral:["stange"],cablerow:["kabel"],chestpress:["maschine"],landmine:["langhantel"],dblateral:["kh"],revfly:["maschine"],serratus:["kabel"],inclinecurl:["kh","bank"],skull:["langhantel","bank"],abroller:["abroller","matte"],onearmrow:["kh","bank"],pushup:["erhoehung"],dblathome:["kh"],dbshrug:["kh"],ytw:["matte"],spidercurl:["kh","bank"],closepushup:["erhoehung"],wallsit:["wand"],legext45:["maschine"],legpress60:["beinpresse"],abduction30:["maschine"],glutebridge:["matte"],sideplank:["matte"],
   hw_squat:["stuhl"],hw_bss:["sofa"],hw_slrdl:[],hw_slidecurl:["handtuch"],hw_calf:["stufe"],hw_tablerow:["tisch"],hw_doorrow:["tuer","handtuch"],hw_latraise:["gewicht"],hw_latiso:["wand"],hw_shrug:["gewicht"],hw_towelshrug:["handtuch"],hw_curl:["tisch"],hw_hipthrust:["sofa"],hw_abd:["matte"],hw_extrot:["tuer"],
   alt_goblet:["kh"],alt_smithsquat:["multipresse"],alt_dbrdl:["kh"],alt_pullthrough:["kabel"],alt_backext:["maschine"],alt_sllegext:["maschine"],alt_nordic:["sofa","matte"],alt_standcurl:["maschine"],alt_lpcalf:["beinpresse"],alt_plank:["matte"],alt_birddog:["matte"],alt_dbrow:["kh","bank"],alt_machrow:["maschine"],alt_cablepress:["kabel"],alt_inclpush:["erhoehung"],alt_floorpress:["kh","matte"],alt_1armpd:["kabel"],alt_assistchin:["maschine"],alt_sapd:["kabel"],alt_lylat:["kh","bank"],alt_machlat:["maschine"],alt_dbrevfly:["kh"],alt_smithshrug:["multipresse"],alt_hammer:["kabel"],alt_kickback:["kh","bank"],alt_bbbridge:["langhantel"],alt_htmachine:["maschine"],alt_glutekick:["kabel"],alt_revlunge:["kh"],alt_smithsplit:["multipresse"],alt_cableabd:["kabel"],alt_suitcase:["kh"],alt_dbpunch:["kh","matte"],alt_sidelyer:["kh","handtuch"],alt_revcurl:["kabel"],preacher:["maschine"],cablecurl:["kabel"],onearmpd:["kabel"],wristcurl:["kh","bank"],hw_bandcurl:["band"],hw_bandpushdown:["band"],hw_bandhammer:["band"],hw_packcurl:["gewicht"],hw_towelcurl:["handtuch"],
   "mob:knietest":[],"mob:tiltlie":["matte"],"mob:tilt":[],"mob:glutebr":["matte"],"mob:rkc":["matte"],"mob:deadbug":["matte"],"mob:hipflexor":["matte"],"mob:rectfem":[],"mob:shrug30":["kh"]};
 // Zuhause ohne passendes Zubehör: Ersatz in dieser Reihenfolge
 const GEAR_FALLBACK = {onearmrow:["hw_tablerow"], spidercurl:["hw_curl"], inclinecurl:["hw_curl"], revwrist:["hw_curl"], alt_dbrow:["hw_tablerow"], alt_kickback:["closepushup"], alt_lylat:["hw_latiso"], bss:["hw_bss"], hw_shrug:["hw_towelshrug","ytw","pushupplus"], dbshrug:["hw_shrug","hw_towelshrug","ytw","pushupplus"], hw_latraise:["hw_latiso"], dblathome:["hw_latraise","hw_latiso"], hw_tablerow:["hw_doorrow"], hw_doorrow:["hw_tablerow"], hw_curl:["hw_doorrow"], hw_bss:["hw_squat"], hw_hipthrust:["glutebridge"], hw_squat:["wallsit"], hw_calf:["hw_slrdl"], hw_slidecurl:["glutebridge"], alt_nordic:["glutebridge"], alt_inclpush:["pushupplus"], pushup:["pushupplus"], closepushup:["pushupplus"], abroller:["alt_plank"], hw_bandcurl:["hw_packcurl","hw_towelcurl","hw_curl"], hw_bandhammer:["hw_packcurl","hw_towelcurl","hw_curl"], hw_packcurl:["hw_towelcurl","hw_curl"], hw_towelcurl:["hw_curl"]};
-const gearHome = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {});
+const gearHome = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {}, cur?.gear || {});
+const gearStd = () => Object.assign(Object.fromEntries(GEAR_HOME.map(k => [k, true])), S().homeGear || {});
 // Wand und Erhöhung (Wand/Sofa) gibt es immer; Gym-Geräte zuhause nie
 const hasGear = k => k === "wand" || k === "erhoehung" ? true : k === "bank" ? !!(gearHome().sofa || gearHome().stuhl) : GEAR_HOME.includes(k) ? !!gearHome()[k] : false;
 const gearOk = id => (EQUIP[id] || []).every(hasGear);
@@ -6127,6 +6138,13 @@ async function onClick(e){
     if (ak.dataset.altkeep === "1") { if (id !== std) pref[base] = id; else delete pref[base]; } if (JSON.stringify(pref) !== JSON.stringify(S()[pkey] || {})) saveSettings({[pkey]: pref});
     altAsk = null; sheetKind = null; sheet.close(); renderTraining(); return; }
   const wh = t.closest("[data-where]"); if (wh) { cur.where = wh.dataset.where; openEx = null; touch(); renderTraining(); return; }
+  const mxh = t.closest("[data-mixhome]"); if (mxh) { const id = mxh.dataset.mixhome, o = Object.assign({}, cur.mixHome); if (o[id]) { delete o[id]; clr("mixHome." + id); } else o[id] = true; cur.mixHome = o; openEx = openEx || null; touch(); renderTraining(); return; }
+  const gdy = t.closest("[data-gearday]"); if (gdy) { const k = gdy.dataset.gearday, hg = gearHome(); cur.gear = Object.assign({}, cur.gear, {[k]: !hg[k]}); touch(); renderTraining(); return; }
+  const gst = t.closest("[data-gearset]"); if (gst) { const a = gst.dataset.gearset;
+    if (a === "none") { const allOff = GEAR_TRAIN.every(k => !gearHome()[k]); cur.gear = allOff ? {} : Object.assign({}, cur.gear, Object.fromEntries(GEAR_TRAIN.map(k => [k, false]))); if (allOff) clr("gear"); }
+    else if (a === "std") { cur.gear = {}; clr("gear"); }
+    else if (a === "save") saveSettings({homeGear: gearHome()});
+    touch(); renderTraining(); return; }
   const pdl = t.closest("[data-phdel]"); if (pdl) { const n = pdl.dataset.phdel;
     if (pendingConfirm !== "ph:" + n) { pendingConfirm = "ph:" + n; renderProgress(); return; }
     pendingConfirm = null; photoMsg = "Lösche …"; renderProgress();
