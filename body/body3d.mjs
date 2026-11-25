@@ -5,10 +5,11 @@ import { GLTFLoader } from "../vendor/three/GLTFLoader.js";
 import { OrbitControls } from "../vendor/three/OrbitControls.js";
 import { MeshoptDecoder } from "../vendor/three/meshopt_decoder.module.js";
 
-const COL = { skin: 0xe9c2a6, bone: 0xeee3cc, muscle: 0xb5483f, cartilage: 0x9cc7e0, ligament: 0xd8d0b8, tendon: 0xf5ecc8, insertion: 0xf0d27a, fascia: 0xdfe6ee };
-const SEL = new THREE.Color(0xffb020), REL = new THREE.Color(0x3fb6d8);
+// Farben klar getrennt: Knochen elfenbein, Knorpel hellblau, Bänder grün, Sehnen silbern (glänzend); Auswahl orange, Zusammengehöriges violett
+const COL = { skin: 0xe9c2a6, bone: 0xeee3cc, muscle: 0xb5483f, cartilage: 0x8fc3e3, ligament: 0x5fae94, tendon: 0xc9d6ea, insertion: 0xf0d27a, fascia: 0xdfe6ee };
+const SEL = new THREE.Color(0xffb020), REL = new THREE.Color(0x7c5cff);
 // Ansichten für Schlüsselbeinhöhe 1,336 m angelegt; Höhen werden ans geladene Modell angepasst
-const VIEWS = { ganz: [0, 0.85, 3.1, 0, 0.82, 0], vorn: [0, 0.85, 3.1, 0, 0.82, 0], hinten: [0, 0.85, -3.1, 0, 0.82, 0], links: [3.1, 0.85, 0, 0, 0.82, 0], rechts: [-3.1, 0.85, 0, 0, 0.82, 0],
+const VIEWS = { ganz: [0, 0.85, 3.1, 0, 0.82, 0], vorn: [0, 0.85, 3.1, 0, 0.82, 0], hinten: [0, 0.85, -3.1, 0, 0.82, 0], links: [3.1, 0.85, 0, 0, 0.82, 0], rechts: [-3.1, 0.85, 0, 0, 0.82, 0], seite: [-3.1, 0.85, 0.15, 0, 0.82, 0],
   schulter: [-0.3, 1.42, 0.75, -0.06, 1.3, 0.05], brust: [0, 1.32, 0.8, 0, 1.25, 0.08], nacken: [0, 1.48, -0.75, 0, 1.4, 0], ruecken: [0, 1.15, -1.45, 0, 1.12, 0],
   becken: [0, 0.9, 1.3, 0, 0.85, 0], knie: [-0.2, 0.45, 0.95, 0, 0.38, 0.05] };
 
@@ -30,7 +31,7 @@ export async function mount(el, opt = {}) {
     for (let i = 0; i < n; i++) c.toArray(col, i * 3);
     g.setAttribute("color", new THREE.BufferAttribute(col, 3));
     const see = name === "skin" || name === "fascia";
-    o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .75, metalness: 0, transparent: see, opacity: name === "skin" ? .28 : name === "fascia" ? .4 : 1, depthWrite: !see, side: see ? THREE.FrontSide : THREE.DoubleSide });
+    o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: name === "tendon" ? .38 : name === "cartilage" ? .5 : .75, metalness: name === "tendon" ? .25 : 0, transparent: see, opacity: name === "skin" ? .28 : name === "fascia" ? .4 : 1, depthWrite: !see, side: see ? THREE.FrontSide : THREE.DoubleSide });
     o.renderOrder = name === "skin" ? 3 : name === "fascia" ? 2 : 1; if (name === "fascia" || name === "insertion") o.visible = false;
     layers[name] = { mesh: o, pa, base: c };
   });
@@ -54,21 +55,21 @@ export async function mount(el, opt = {}) {
   function relations(i) {
     const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i).map(x => x.i))]; if (ids.length) out.push({ title, ids }); };
     if (p.kind) { // Ursprung/Ansatz → Muskel und Knochen
-      add("Gehört zum Muskel", (byBase[key(p.base, p.side)] || []).filter(x => !x.kind));
-      add("Liegt am Knochen", [byEn[p.on]]);
-      add("Weitere Ursprünge/Ansätze dieses Muskels", (byBase[key(p.base, p.side)] || []).filter(x => x.kind));
+      add("Muskel", (byBase[key(p.base, p.side)] || []).filter(x => !x.kind));
+      add("Knochen", [byEn[p.on]]);
+      add("Weitere Ansätze dieses Muskels", (byBase[key(p.base, p.side)] || []).filter(x => x.kind));
       return out; }
     if (p.layer === "bone") { const ins = byOn[p.en] || [];
-      add("Muskeln, die hier entspringen oder ansetzen", ins.flatMap(x => (byBase[key(x.base, x.side)] || []).filter(y => !y.kind)));
-      add("Ursprungs- und Ansatzflächen", ins); return out; }
+      add("Muskeln an diesem Knochen", ins.flatMap(x => (byBase[key(x.base, x.side)] || []).filter(y => !y.kind)));
+      add("Ansatzflächen am Knochen", ins); return out; }
     const g = byGrp[p.grp] || [], isMuscleGrp = /muscle$/i.test(p.grp || "");
-    if (isMuscleGrp) add(`Teile von: ${p.grpDe}`, g.filter(x => sameSide(x, p)));
-    else if (p.grp) add(`Gruppe: ${p.grpDe}`, g.filter(x => sameSide(x, p)));
+    if (isMuscleGrp) add(`Teile: ${p.grpDe}`, g.filter(x => sameSide(x, p)));
+    else if (p.grp) add(p.grpDe, g.filter(x => sameSide(x, p)));
     // übergeordnete Gruppe mit allen Untergruppen (z. B. Schultermuskeln = Deltamuskel + Rotatorenmanschette + großer Rundmuskel)
-    if (p.grp2) add(`Gruppe: ${p.grp2De}`, parts.filter(x => !x.kind && (x.grp === p.grp2 || x.grp2 === p.grp2) && x.grp !== p.grp && sameSide(x, p)));
+    if (p.grp2) add(p.grp2De, parts.filter(x => !x.kind && (x.grp === p.grp2 || x.grp2 === p.grp2) && x.grp !== p.grp && sameSide(x, p)));
     // Ursprung/Ansatz: zum Teil selbst, sonst zum ganzen Muskel (Köpfe teilen sich oft die Flächen)
     const keys = [p.base, isMuscleGrp ? p.grp : null].filter(Boolean), ins = keys.flatMap(k => (byBase[key(k, p.side)] || []).filter(x => x.kind));
-    add("Ursprung & Ansatz (Sehnenansätze)", ins);
+    add("Ursprung & Ansatz", ins);
     add("Knochen, an denen er ansetzt", ins.map(x => byEn[x.on]));
     return out; }
   // Markierungen (Schmerzpunkte)

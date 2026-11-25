@@ -1058,16 +1058,36 @@ video[data-clipid^="mw_"],video[src*="media.musclewiki.com"],.vclip.own:has(vide
 .b3labels .lb{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:600;line-height:1.3;color:#fff;background:rgba(0,0,0,.6);padding:1px 6px;border-radius:6px;white-space:nowrap}
 .b3labels .lb.sel{background:#e0a72a;color:#151515}.b3labels .lb.pain{background:#c0392b}
 .b3load{padding:24px;text-align:center}.b3chips{margin-top:6px}
-.b3bar{display:flex;flex-direction:column;gap:8px;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.b3row{display:flex;align-items:center;gap:8px;min-width:0}
-.b3lab{flex:none;width:62px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.b3box{position:relative}.b3box.form .b3wrap{height:24vh;min-height:150px}
+.b3pill{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;gap:6px;min-height:44px;padding:5px 5px 5px 12px;border-radius:12px;background:rgba(16,21,20,.9);color:#fff;font-size:13px;box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.b3pill.hint{justify-content:center;padding:6px 12px;min-height:0;background:rgba(16,21,20,.6);color:#d6e2df;pointer-events:none;font-size:12px;left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
+.b3pn{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}.b3pn b,.b3pn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.b3pn span{font-size:11px;opacity:.72}
+.b3pill button{flex:none;min-width:38px;height:34px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#fff;border-radius:9px;padding:0 10px;font:inherit;font-size:13px}
+.b3pill button.pri{background:#e0a72a;border-color:#e0a72a;color:#151515;font-weight:600}.b3pill button[aria-pressed="true"]{background:#6a4fe0;border-color:#6a4fe0}
+.b3bar{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 .b3scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;min-width:0}.b3scroll::-webkit-scrollbar{display:none}
-.b3grid{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
-.b3scroll button,.b3grid button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:7px 8px;font:inherit;font-size:13px;line-height:1.2;white-space:nowrap}
-.b3grid button{white-space:normal;text-align:center}
+.b3grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;min-width:0}
+.b3scroll button,.b3grid button{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:7px 10px;font:inherit;font-size:13px;line-height:1.2;white-space:nowrap}
+.b3grid button{white-space:normal;text-align:left}
 .b3scroll button[aria-pressed="true"],.b3grid button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.b3seg{flex:1;margin:0}.b3info h3,.b3form h3{margin:2px 0 4px}.b3rels .lab{margin-top:8px}.b3rel button{font-size:12px}
-.b3labels .lb.rel{background:#1f7fa0}
+.b3lays{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.b3lays button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:9px;padding:7px 6px;font:inherit;font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b3lays button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.b3lays button.b3morebtn{color:var(--accent);border-style:dashed}
+.b3form{margin-top:10px}.b3form .lab{margin:10px 0 5px}
+.b3n10{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:3px}.b3n10 button{height:34px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;font-size:13px;font-weight:600}
+.b3n10 button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips.b3sm{gap:5px}.chips.b3sm button{padding:6px 10px;font-size:13px}
+.b3form #b3mv{margin-top:10px}.b3form .actions{margin-top:10px}
+.b3dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(127,127,127,.5)}
+.b3more{display:flex;flex-direction:column;gap:8px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.b3namrow{display:flex;align-items:center;gap:8px}.b3seg{flex:1;margin:0}
+.b3form h3{margin:0;font-size:16px}.b3rels{margin-top:10px}.b3rels>.lab{margin-bottom:4px}
+.b3relh{display:flex;justify-content:space-between;gap:8px;width:100%;padding:9px 2px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:14px;text-align:left}
+.b3relh span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.b3relh span:last-child{flex:none}
+.b3rel{padding:8px 0}.b3rel button{font-size:12px}.b3selc{margin-top:10px}
+.b3labels .lb.rel{background:#6a4fe0}
+.b3helpbtn{display:block;margin-top:12px}.b3help p{margin:6px 0}
 .b3list .lrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px}.b3list .lmain{display:flex;flex-direction:column;min-width:0}.b3form h3{margin:2px 0 6px}.num10 button{min-width:34px}
 </style>
 </head>
@@ -1381,12 +1401,15 @@ const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1]
 // ---------- Körperkarte 3D (Wunsch 2026-11-25): antippen = auswählen, nochmal antippen = Schmerz eintragen; Mehrfachauswahl; Zusammengehöriges ----------
 // Modell: Z-Anatomy (CC BY-SA 4.0, Basis BodyParts3D © DBCLS), body/body.glb + parts.json; Anzeige body/body3d.mjs (three.js, MIT). Einträge: day.bodyPain
 let B3 = null, b3Busy = false, b3Sel = [], b3Pt = null, b3Joint = null, b3Form = null;
-const b3Opt = {layers: {skin: true, fascia: false, muscle: true, bone: true, band: true, ins: false}, xray: false, labels: "auto", hist: true, view: "vorn", multi: false, showRel: true};
+const b3Opt = {layers: {skin: true, muscle: true, tendon: true, lig: true, bone: true, fascia: false, ins: false}, xray: false, labels: "auto", hist: true, view: "ganz", multi: false, showRel: false, relOpen: null, more: false, help: false};
 const PAIN_KIND = [["stechend", "stechend"], ["dumpf", "dumpf"], ["ziehend", "ziehend"], ["brennend", "brennend"], ["pochend", "pochend"], ["druck", "Druckschmerz"], ["steif", "steif"], ["kribbeln", "Kribbeln / Taubheit"]];
 const PAIN_WHEN = [["ruhe", "in Ruhe"], ["last", "bei Belastung"], ["bewegung", "bei bestimmter Bewegung"], ["nacht", "nachts"], ["morgen", "morgens"]];
-const B3_VIEWS = [["ganz", "⟲ Ganz"], ["vorn", "Vorn"], ["hinten", "Hinten"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
-const B3_LAYERS = [["skin", "Haut"], ["fascia", "Faszien"], ["muscle", "Muskeln"], ["bone", "Knochen"], ["band", "Sehnen & Bänder"], ["ins", "Ursprung & Ansatz"]];
-const B3_TYPE = {muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band / Gelenk", tendon: "Sehne / Schleimbeutel", insertion: "Ursprung / Ansatz (Sehnenansatz)", skin: "Hautregion", fascia: "Faszie"};
+const B3_VIEWS = [["ganz", "Ganz"], ["hinten", "Hinten"], ["seite", "Seite"], ["schulter", "Schulter"], ["brust", "Brust/SC"], ["nacken", "Nacken"], ["ruecken", "Rücken"], ["becken", "Becken"], ["knie", "Knie"]];
+// Ebenen-Schalter: [Schlüssel, Name, Farbe wie in body3d.mjs, Modell-Ebenen]
+const B3_LAYERS = [["skin", "Haut", "#e9c2a6", ["skin"]], ["muscle", "Muskeln", "#b5483f", ["muscle"]], ["tendon", "Sehnen", "#c9d6ea", ["tendon"]], ["lig", "Bänder", "#5fae94", ["ligament"]], ["bone", "Knochen", "#eee3cc", ["bone", "cartilage"]]];
+const B3_LAYERS2 = [["fascia", "Faszien", "#dfe6ee", ["fascia"]], ["ins", "Ansatzflächen", "#f0d27a", ["insertion"]]];
+const B3_TYPE = {muscle: "Muskel", bone: "Knochen", cartilage: "Knorpel", ligament: "Band", tendon: "Sehne", insertion: "Ansatzfläche (Ursprung/Ansatz)", skin: "Hautregion", fascia: "Faszie"};
+const b3Type = p => !p ? "" : /bursa/i.test(p.en) ? "Schleimbeutel" : /intervertebral disc/i.test(p.en) ? "Bandscheibe" : /meniscus\.|meniscus$/i.test(p.en) ? "Meniskus" : /capsule/i.test(p.en) ? "Gelenkkapsel" : /membrane/i.test(p.en) ? "Membran" : /tooth|premolar|incisor|canine/i.test(p.en) ? "Zahn" : B3_TYPE[p.layer] || "";
 const b3Today = () => Object.entries(cur.bodyPain || {}).map(([id, e]) => ({id, ...e}));
 const b3P = i => B3?.parts[i];
 const b3Names = () => b3Sel.map(i => b3P(i)?.de || "").filter(Boolean);
@@ -1398,48 +1421,62 @@ function b3Flags(f){ const out = [], txt = b3Sel.map(i => b3P(i)?.en || "").join
   if (chest && !b3Joint && (f.kind.has("druck") || f.kind.has("brennend"))) out.push("Druck oder Enge in der Brust mit Ausstrahlung in Arm oder Kiefer, Atemnot oder Schweißausbruch: sofort 112. Druckschmerz an der Brustwand schließt einen Herzinfarkt nicht aus.");
   if (f.when.has("nacht") || f.when.has("ruhe")) out.push("Nacht- oder Ruheschmerz, der über Wochen bleibt: ärztlich abklären (Red Flag aus deinem Plan).");
   return out; }
-function b3Color(){ if (!B3) return; const rel = b3Opt.showRel && b3Sel.length ? [...new Set(b3Sel.flatMap(i => B3.relations(i).flatMap(g => g.ids)))] : []; B3.setSel(b3Sel, rel); }
-function b3CtlHtml(){ const btn = (attr, v, l, on) => `<button type="button" ${attr}="${v}" aria-pressed="${!!on}">${l}</button>`, L = b3Opt.layers;
-  return `<div class="b3bar">
-    <div class="b3row"><span class="b3lab">Ansicht</span><div class="b3scroll">${B3_VIEWS.map(([k, l]) => btn("data-b3view", k, l, b3Opt.view === k)).join("")}</div></div>
-    <div class="b3row"><span class="b3lab">Ebenen</span><div class="b3grid">${B3_LAYERS.map(([k, l]) => btn("data-b3layer", k, (L[k] ? "✓ " : "") + l, L[k])).join("")}</div></div>
-    <div class="b3row"><span class="b3lab">Optionen</span><div class="b3grid">${btn("data-b3xray", 1, "Muskeln durchsichtig", b3Opt.xray)}${btn("data-b3multi", 1, "Mehrfachauswahl", b3Opt.multi)}${btn("data-b3hist", 1, "Letzte 14 Tage", b3Opt.hist)}</div></div>
-    <div class="b3row"><span class="b3lab">Namen</span><div class="seg b3seg">${[["off", "Aus"], ["auto", "Auswahl"], ["all", "Alle"]].map(([k, l]) => btn("data-b3lab", k, l, b3Opt.labels === k)).join("")}</div></div></div>`; }
-function b3RelHtml(){ if (!B3 || !b3Sel.length) return ""; const i = b3Sel[b3Sel.length - 1], groups = B3.relations(i); if (!groups.length) return `<div class="small muted">Keine Zusammenhänge im Modell hinterlegt.</div>`;
-  return groups.map(g => `<div class="lab">${esc(g.title)}</div><div class="chips b3rel">${g.ids.slice(0, 24).map(j => `<button type="button" data-b3sel="${j}">${esc(b3P(j)?.de || "")}</button>`).join("")}${g.ids.length > 24 ? `<span class="small muted">+${g.ids.length - 24}</span>` : ""}</div>`).join(""); }
+function b3Color(){ if (!B3) return; const groups = b3Opt.showRel && b3Sel.length ? B3.relations(b3Sel[b3Sel.length - 1]) : [], open = groups.find(g => g.title === b3Opt.relOpen);
+  B3.setSel(b3Sel, open ? open.ids : [...new Set(groups.flatMap(g => g.ids))]); }
+function b3CtlHtml(){ if (b3Form) return ""; const btn = (attr, v, l, on, cls = "") => `<button type="button" ${attr}="${v}" aria-pressed="${!!on}"${cls ? ` class="${cls}"` : ""}>${l}</button>`, L = b3Opt.layers;
+  const lay = ([k, l, c]) => btn("data-b3layer", k, `<i class="b3dot" style="background:${c}"></i>${l}`, L[k]);
+  return `<div class="b3bar"><div class="b3scroll">${B3_VIEWS.map(([k, l]) => btn("data-b3view", k, l, b3Opt.view === k)).join("")}</div>
+    <div class="b3lays">${B3_LAYERS.map(lay).join("")}${btn("data-b3more", 1, b3Opt.more ? "Weniger ▴" : "Mehr ▾", false, "b3morebtn")}</div>
+    ${b3Opt.more ? `<div class="b3more"><div class="b3grid">${B3_LAYERS2.map(lay).join("")}${btn("data-b3xray", 1, "Muskeln durchsichtig", b3Opt.xray)}${btn("data-b3multi", 1, "Mehrere auswählen", b3Opt.multi)}${btn("data-b3hist", 1, "Alte Punkte (14 Tage)", b3Opt.hist)}</div>
+      <div class="b3namrow"><span class="small muted">Namen im Bild</span><div class="seg b3seg">${[["off", "Aus"], ["auto", "Auswahl"], ["all", "Alle"]].map(([k, l]) => btn("data-b3lab", k, l, b3Opt.labels === k)).join("")}</div></div></div>` : ""}</div>`; }
+// Leiste unten im 3D-Bild: was ausgewählt ist + die zwei wichtigen Knöpfe
+function b3PillHtml(){ if (b3Form) return "";
+  if (!b3Sel.length) return `<div class="b3pill hint">${b3Opt.multi ? "Mehrere auswählen: Teile nacheinander antippen" : "Tippe auf die Stelle, die wehtut"}</div>`;
+  const p = b3P(b3Sel[b3Sel.length - 1]), names = b3Names(), multi = b3Sel.length > 1;
+  const [main, ...rest] = (p?.de || "").split(" · ");
+  const title = b3Joint ? `📍 ${b3Joint}` : multi ? `${b3Sel.length} Teile ausgewählt` : main;
+  const sub = multi ? names.map(x => x.split(" · ")[0]).join(", ") : [b3Joint ? p?.de : rest.join(" · "), b3Type(p)].filter(Boolean).join(" · ");
+  return `<div class="b3pill"><div class="b3pn"><b>${esc(title)}</b><span>${esc(sub)}</span></div>
+    <button type="button" data-b3rel="1" aria-pressed="${b3Opt.showRel}" aria-label="Zusammengehöriges zeigen" title="Zusammengehöriges">🔗</button>
+    <button type="button" class="pri" data-act="b3pain">Schmerz</button><button type="button" data-b3clear="1" aria-label="Auswahl aufheben">✕</button></div>`; }
+function b3RelHtml(){ if (!B3 || !b3Sel.length) return ""; const groups = B3.relations(b3Sel[b3Sel.length - 1]);
+  if (!groups.length) return `<div class="small muted">Dazu ist im Modell nichts hinterlegt.</div>`;
+  return groups.map(g => { const open = b3Opt.relOpen === g.title;
+    return `<button type="button" class="b3relh" data-b3relg="${esc(g.title)}" aria-expanded="${open}"><span>${esc(g.title)}</span><span class="muted">${g.ids.length} ${open ? "▴" : "▾"}</span></button>
+      ${open ? `<div class="chips b3rel">${g.ids.slice(0, 30).map(j => `<button type="button" data-b3sel="${j}">${esc(b3P(j)?.de || "")}</button>`).join("")}${g.ids.length > 30 ? `<span class="small muted">+${g.ids.length - 30}</span>` : ""}</div>` : ""}`; }).join(""); }
 function b3PanelHtml(){ let h = "";
   if (b3Form) { const f = b3Form, flags = b3Flags(f), names = b3Names();
-    h += `<div class="card b3form"><div class="lab">Schmerz eintragen</div><h3>${esc(b3Joint || (names.length > 2 ? names.slice(0, 2).join(", ") + ` +${names.length - 2}` : names.join(", ")))}</h3>
-      <div class="lab">Was für ein Schmerz?</div><div class="chips">${PAIN_KIND.map(([k, l]) => `<button type="button" data-b3kind="${k}" aria-pressed="${f.kind.has(k)}">${l}</button>`).join("")}</div>
-      <div class="lab">Wie stark? (0–10)</div><div class="chips num10">${[...Array(11).keys()].map(n => `<button type="button" data-b3n="${n}" aria-pressed="${f.n === n}">${n}</button>`).join("")}</div>
-      <div class="lab">Wann?</div><div class="chips">${PAIN_WHEN.map(([k, l]) => `<button type="button" data-b3when="${k}" aria-pressed="${f.when.has(k)}">${l}</button>`).join("")}</div>
+    h += `<div class="b3form"><h3>${esc(b3Joint || (names.length > 2 ? names.slice(0, 2).join(", ") + ` +${names.length - 2}` : names.join(", ")))}</h3>
+      <div class="lab">Wie stark? (0–10)</div><div class="b3n10">${[...Array(11).keys()].map(n => `<button type="button" data-b3n="${n}" aria-pressed="${f.n === n}">${n}</button>`).join("")}</div>
+      <div class="lab">Wie fühlt es sich an?</div><div class="chips b3sm">${PAIN_KIND.map(([k, l]) => `<button type="button" data-b3kind="${k}" aria-pressed="${f.kind.has(k)}">${l}</button>`).join("")}</div>
+      <div class="lab">Wann?</div><div class="chips b3sm">${PAIN_WHEN.map(([k, l]) => `<button type="button" data-b3when="${k}" aria-pressed="${f.when.has(k)}">${l}</button>`).join("")}</div>
       <input id="b3mv" class="inp" type="text" maxlength="80" placeholder="Bei welcher Bewegung? (freiwillig)" value="${esc(f.mv)}">
       ${flags.map(t => `<div class="warnb small">${esc(t)}</div>`).join("")}
-      <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Zurück</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`; }
-  else if (b3Sel.length) { const p = b3P(b3Sel[b3Sel.length - 1]);
-    h += `<div class="card b3info">${b3Joint ? `<div class="lab">📍 ${esc(b3Joint)}</div>` : ""}
-      ${b3Sel.length > 1 ? `<div class="chips">${b3Sel.map(i => `<button type="button" data-b3unsel="${i}" aria-pressed="true">${esc(b3P(i)?.de || "")} ✕</button>`).join("")}</div>` : `<h3>${esc(p?.de || "")}</h3>`}
-      <div class="small muted">${esc([B3_TYPE[p?.layer] || "", p?.grpDe && !p.kind ? p.grpDe : ""].filter(Boolean).join(" · "))}</div>
-      <div class="actions"><button class="btn primary" type="button" data-act="b3pain">Schmerz eintragen</button><button class="btn ${b3Opt.showRel ? "" : "ghost"}" type="button" data-b3rel="1" aria-pressed="${b3Opt.showRel}">${b3Opt.showRel ? "✓ " : ""}Zusammengehöriges</button></div>
-      <div class="small muted">${b3Opt.multi ? "Mehrfachauswahl: weitere Teile antippen fügt sie hinzu, nochmal antippen nimmt sie raus." : "Nochmal auf dieselbe Stelle tippen öffnet direkt die Schmerz-Eingabe."}</div>
-      ${b3Opt.showRel ? `<div class="b3rels">${b3RelHtml()}</div><div class="small muted">Blau im Modell: zusammengehörig · Orange: ausgewählt. Antippen in der Liste wählt aus.</div>` : ""}</div>`; }
-  else h += `<div class="small muted">Tippe auf die Stelle, die wehtut: Das Teil wird ausgewählt und die Drehmitte springt dorthin. Nochmal tippen = Schmerz eintragen. Ein Finger dreht, zwei Finger zoomen und verschieben.</div>`;
+      <div class="actions"><button class="btn ghost" type="button" data-act="b3cancel">Zurück</button><button class="btn primary" type="button" data-act="b3save" ${f.n == null ? "disabled" : ""}>Eintragen</button></div></div>`;
+    return h; }
+  if (b3Sel.length > 1) h += `<div class="chips b3selc">${b3Sel.map(i => `<button type="button" data-b3unsel="${i}" aria-pressed="true">${esc((b3P(i)?.de || "").split(" · ")[0])} ✕</button>`).join("")}</div>`;
+  if (b3Opt.showRel && b3Sel.length) h += `<div class="b3rels"><div class="lab">Zusammengehörig mit ${esc((b3P(b3Sel[b3Sel.length - 1])?.de || "").split(" · ")[0])}</div>${b3RelHtml()}</div>`;
   const list = b3Today();
   if (list.length) h += `<div class="lab sec">${selDate === todayIso() ? "Heute" : fmt(selDate)} eingetragen</div><div class="lrows b3list">${list.map(e => `<div class="lrow"><span class="lmain"><b>${esc(e.label)} · ${e.n}/10</b><span class="small muted">${esc([e.kind.map(k => PAIN_KIND.find(x => x[0] === k)?.[1] || k).join(", "), e.when.map(k => PAIN_WHEN.find(x => x[0] === k)?.[1] || k).join(", "), e.mv].filter(Boolean).join(" · "))} · ${esc(e.t)}</span></span><button class="btn small ghost" type="button" data-b3del="${esc(e.id)}" aria-label="Löschen">✕</button></div>`).join("")}</div>`;
-  return h + `<div class="small muted" style="margin-top:12px">Modell: Z-Anatomy, CC BY-SA 4.0 (auf Basis von BodyParts3D, © The Database Center for Life Science). Namen: Deutsch, sonst Latein (Terminologia Anatomica). Viele Sehnen sind Teil des Muskelmodells; eigene Sehnen-Objekte gibt es vor allem an Hand, Fuß und Knie.</div>`; }
-function b3Update(){ const c = document.getElementById("b3ctl"), p = document.getElementById("b3panel"); if (c) c.innerHTML = b3CtlHtml(); if (p) p.innerHTML = b3PanelHtml(); }
-function b3Apply(){ if (!B3) return; const L = b3Opt.layers; B3.setLayer("skin", L.skin); B3.setLayer("fascia", L.fascia); B3.setLayer("muscle", L.muscle); B3.setLayer("bone", L.bone);
-  for (const k of ["cartilage", "ligament", "tendon"]) B3.setLayer(k, L.band); B3.setLayer("insertion", L.ins);
+  h += `<button type="button" class="linkbtn small b3helpbtn" data-b3help="1" aria-expanded="${b3Opt.help}">ⓘ Hinweise ${b3Opt.help ? "ausblenden" : "anzeigen"}</button>`;
+  if (b3Opt.help) h += `<div class="small muted b3help"><p>Antippen wählt ein Teil aus, die Drehmitte springt dorthin. Nochmal auf dasselbe Teil tippen öffnet die Schmerz-Eingabe. Ein Finger dreht, zwei Finger zoomen und verschieben.</p>
+    <p>Farben: Orange = ausgewählt, Violett = zusammengehörig (🔗). Knorpel und Bandscheiben sind hellblau und gehören zur Ebene Knochen.</p>
+    <p>Viele Sehnen sind im Modell Teil des Muskels. Eigene Sehnen gibt es vor allem an Hand, Fuß und Knie. Die Ansatzflächen (unter „Mehr“) zeigen, wo Muskeln am Knochen ansetzen.</p>
+    <p>Modell: Z-Anatomy, CC BY-SA 4.0 (auf Basis von BodyParts3D, © The Database Center for Life Science). Namen: Deutsch, sonst Latein (Terminologia Anatomica).</p></div>`;
+  return h; }
+function b3Update(){ const c = document.getElementById("b3ctl"), p = document.getElementById("b3panel"), q = document.getElementById("b3pill"), box = document.getElementById("b3box");
+  if (c) c.innerHTML = b3CtlHtml(); if (p) p.innerHTML = b3PanelHtml(); if (q) q.innerHTML = b3PillHtml(); box?.classList.toggle("form", !!b3Form); }
+function b3Apply(){ if (!B3) return; const L = b3Opt.layers; for (const [k, , , ml] of [...B3_LAYERS, ...B3_LAYERS2]) for (const m of ml) B3.setLayer(m, !!L[k]);
   B3.setMuscleOpacity(b3Opt.xray ? .35 : 1); B3.setLabels(b3Opt.labels); B3.setMarkers(b3Markers()); b3Color(); }
 const b3NewForm = () => ({kind: new Set(), n: null, when: new Set(), mv: ""});
 function b3OnPick(p, pt, joint){
   if (!p) { if (!b3Opt.multi) { b3Sel = []; b3Form = null; b3Joint = null; } b3Color(); b3Update(); return; }
   const i = p.i;
   if (b3Opt.multi) { b3Sel = b3Sel.includes(i) ? b3Sel.filter(x => x !== i) : [...b3Sel, i]; b3Pt = b3Pt || pt; b3Joint = b3Joint || joint; b3Form = null; }
-  else if (b3Sel.length === 1 && b3Sel[0] === i) b3Form = b3Form || b3NewForm(); // zweiter Tipp auf dasselbe Teil
-  else { b3Sel = [i]; b3Pt = pt; b3Joint = joint; b3Form = null; B3?.focus(pt); }
+  else if (b3Sel.length === 1 && b3Sel[0] === i) { if (!b3Form) { b3Form = b3NewForm(); setTimeout(() => document.getElementById("b3box")?.scrollIntoView({block: "start"}), 0); } } // zweiter Tipp auf dasselbe Teil
+  else { b3Sel = [i]; b3Pt = pt; b3Joint = joint; b3Form = null; b3Opt.relOpen = null; B3?.focus(pt); }
   b3Color(); b3Update(); }
-async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B3 || b3Busy) return; b3Busy = true; el.innerHTML = `<div class="small muted b3load">3D-Modell wird geladen (ca. 3 MB) …</div>`;
+async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B3 || b3Busy) return; b3Busy = true; el.innerHTML = `<div class="small muted b3load">3D-Modell wird geladen (ca. 2,5 MB) …</div>`;
   try { const m = await import("./body/body3d.mjs"), el2 = document.getElementById("b3"); if (!el2 || !sheet.open || sheetKind !== "body") return; el2.innerHTML = "";
     // das Blatt kann beim Laden neu gezeichnet worden sein: immer ins aktuelle Element
     const mounted = await m.mount(el2, {view: b3Opt.view, markers: b3Markers(), onPick: b3OnPick});
@@ -3837,7 +3874,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
       <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>${setsChooserHtml()}`;
-  } else if (sheetKind === "body") { h += `<div class="sh"><div><div class="lab">Wo tut es weh?</div><h2>Körperkarte</h2></div>${close}</div><div id="b3" class="b3wrap"></div><div id="b3panel">${b3PanelHtml()}</div><div id="b3ctl">${b3CtlHtml()}</div>`; setTimeout(b3Mount, 0);
+  } else if (sheetKind === "body") { h += `<div class="sh"><div><div class="lab">Wo tut es weh?</div><h2>Körperkarte</h2></div>${close}</div><div id="b3box" class="b3box${b3Form ? " form" : ""}"><div id="b3" class="b3wrap"></div><div id="b3pill">${b3PillHtml()}</div></div><div id="b3ctl">${b3CtlHtml()}</div><div id="b3panel">${b3PanelHtml()}</div>`; setTimeout(b3Mount, 0);
   } else if (sheetKind === "setwiz") { if (!wiz) wiz = wizNew(); h += wizHtml(close);
   } else if (sheetKind === "mwex") { h += mwExHtml(sheetArg, close);
   } else if (sheetKind === "tech") {
@@ -6360,10 +6397,14 @@ async function onClick(e){
   const b3l = t.closest("[data-b3layer]"); if (b3l) { const k = b3l.dataset.b3layer; b3Opt.layers[k] = !b3Opt.layers[k]; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3xray]")) { b3Opt.xray = !b3Opt.xray; if (b3Opt.xray) b3Opt.layers.muscle = true; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3multi]")) { b3Opt.multi = !b3Opt.multi; if (!b3Opt.multi && b3Sel.length > 1) b3Sel = b3Sel.slice(-1); b3Form = null; b3Color(); b3Update(); return; }
-  if (t.closest("[data-b3rel]")) { b3Opt.showRel = !b3Opt.showRel; b3Color(); b3Update(); return; }
+  if (t.closest("[data-b3help]")) { b3Opt.help = !b3Opt.help; b3Update(); return; }
+  const b3g = t.closest("[data-b3relg]"); if (b3g) { const g = b3g.dataset.b3relg; b3Opt.relOpen = b3Opt.relOpen === g ? null : g; b3Color(); b3Update(); return; }
+  if (t.closest("[data-b3rel]")) { b3Opt.showRel = !b3Opt.showRel; b3Opt.relOpen = null; b3Color(); b3Update(); return; }
+  if (t.closest("[data-b3more]")) { b3Opt.more = !b3Opt.more; b3Update(); return; }
+  if (t.closest("[data-b3clear]")) { b3Sel = []; b3Form = null; b3Joint = null; b3Pt = null; b3Opt.relOpen = null; b3Color(); b3Update(); return; }
   const b3b = t.closest("[data-b3lab]"); if (b3b) { b3Opt.labels = b3b.dataset.b3lab; b3Apply(); b3Update(); return; }
   if (t.closest("[data-b3hist]")) { b3Opt.hist = !b3Opt.hist; b3Apply(); b3Update(); return; }
-  const b3s = t.closest("[data-b3sel]"); if (b3s && B3) { const i = Number(b3s.dataset.b3sel), p = b3P(i); if (b3Opt.multi) { if (!b3Sel.includes(i)) b3Sel = [...b3Sel, i]; } else { b3Sel = [i]; b3Joint = null; b3Pt = p?.c; B3.focus(p.c); } b3Form = null; b3Color(); b3Update(); return; }
+  const b3s = t.closest("[data-b3sel]"); if (b3s && B3) { const i = Number(b3s.dataset.b3sel), p = b3P(i); if (b3Opt.multi) { if (!b3Sel.includes(i)) b3Sel = [...b3Sel, i]; } else { b3Sel = [i]; b3Joint = null; b3Pt = p?.c; b3Opt.relOpen = null; B3.focus(p.c); } b3Form = null; b3Color(); b3Update(); return; }
   const b3u = t.closest("[data-b3unsel]"); if (b3u) { const i = Number(b3u.dataset.b3unsel); b3Sel = b3Sel.filter(x => x !== i); b3Color(); b3Update(); return; }
   const b3k = t.closest("[data-b3kind]"); if (b3k && b3Form) { const k = b3k.dataset.b3kind; b3Form.kind.has(k) ? b3Form.kind.delete(k) : b3Form.kind.add(k); b3Update(); return; }
   const b3w = t.closest("[data-b3when]"); if (b3w && b3Form) { const k = b3w.dataset.b3when; b3Form.when.has(k) ? b3Form.when.delete(k) : b3Form.when.add(k); b3Update(); return; }
@@ -6612,7 +6653,7 @@ async function onClick(e){
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
     if (a === "b3cancel") { b3Form = null; b3Update(); return; }
-    if (a === "b3pain" && b3Sel.length) { b3Form = b3NewForm(); b3Update(); return; }
+    if (a === "b3pain" && b3Sel.length) { b3Form = b3NewForm(); b3Update(); document.getElementById("b3box")?.scrollIntoView({block: "start"}); return; }
     if (a === "b3save" && b3Sel.length && b3Form?.n != null) { const id = Date.now().toString(36), f = b3Form, now = new Date(), names = b3Names(), ps = b3Sel.map(i => b3P(i));
       const e = {t: `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`, part: ps[0]?.en, parts: ps.map(p => p.en), label: b3Joint || (names.length > 2 ? names.slice(0, 2).map(x => x.split(" · ")[0]).join(", ") + ` +${names.length - 2}` : names.map(x => x.split(" · ")[0]).join(", ")),
         de: names.join(", "), layer: ps[0]?.layer, pt: b3Pt || ps[0]?.c, kind: [...f.kind], n: f.n, when: [...f.when], mv: f.mv.trim(), joint: b3Joint || undefined};
