@@ -2561,7 +2561,7 @@ function renderHeader(){
   pill.className = "pill" + (ph.deload ? " warn" : "");
 }
 function render(){
-  recVarSync(); try { ensureWeekFreeze(); } catch {}
+  recVarSync(); try { ensureWeekFreeze(); } catch {} try { regSets(); } catch {}
   if (typeof applyNutri === "function") applyNutri();
   if (!token && !(tab === "mehr")) { tab = "mehr"; sub.mehr = "setup"; }
   document.querySelectorAll("nav.bottom button").forEach(b => b.setAttribute("aria-current", b.dataset.tab === tab ? "page" : "false"));
@@ -2595,7 +2595,7 @@ function heroCard(noCoach){
   if (st === "frei") {
     const nxt = variantOf(nextInSeq(selDate), selDate), ri = restInfo();
     h += `<div class="tb rest"><div class="tbm"><span class="pillst">Kein Training</span><b>${isToday ? "Heute ist trainingsfrei" : "Trainingsfreier Tag"}</b><div class="small muted">${esc(ri.why)}</div>${ri.next ? `<div class="small">${ri.next}</div>` : ""}</div></div>
-      ${S().mode === "pause" ? "" : `<button class="btn ghost small" type="button" data-act="setSession" data-v="${nxt}" data-then="start" style="align-self:flex-start">Trotzdem trainieren: ${esc(SESS[nxt].title)} ›</button>`}`;
+      <div class="actions">${S().mode === "pause" ? "" : `<button class="btn ghost small" type="button" data-act="setSession" data-v="${nxt}" data-then="start">Trotzdem trainieren: ${esc(SESS[nxt].title)} ›</button>`}<button class="btn small" type="button" data-act="wizOpen">🧩 Set erstellen</button></div>`;
   } else {
     const p = progress(sk), mins = Math.round(sess.ex.reduce((a, id) => a + setsFor(id, w, sess) * (restFor(id) + 40), 0) / 60 + 8);
     const pill = st === "bereit" ? `<span class="pillst plan">Geplant${plan && plan.start ? ` · ${plan.start} Uhr` : ""}</span>` : st === "läuft" ? `<span class="pillst run">Läuft</span>` : st === "leer" ? `<span class="pillst plan">Ohne Sätze beendet</span>` : `<span class="pillst done">Erledigt</span>`;
@@ -3013,10 +3013,12 @@ function renderTraining(){
     if (S().mode === "pause" && inPause(selDate)) { view.innerHTML = `<div class="card"><span class="pillst" style="align-self:flex-start">Trainingspause</span><h2>${selDate === todayIso() ? "Heute ist trainingsfrei" : `${fmt(selDate)} ist trainingsfrei`}</h2><div class="small muted">${esc(ri.why)}</div>
       <div class="lab sec">Trotzdem etwas tun?</div><div class="small">Im Modus <b>Schonen</b> trainierst du Rücken, Arme, Rumpf und Beine, ohne Schlüsselbein oder Schultereck zu belasten. Der Planer plant dann wieder 4 Einheiten pro Woche.</div>
       <button class="btn big" type="button" data-coach="modeSchon">🛡 Modus Schonen starten</button>
+      <button class="btn" type="button" data-act="wizOpen">🧩 Schonendes Set erstellen</button>
       <button class="btn ghost small" type="button" data-act="endPause" style="align-self:flex-start">Pause ganz beenden</button></div>`; return; }
     view.innerHTML = `<div class="card"><span class="pillst" style="align-self:flex-start">Kein Training</span><h2>${selDate === todayIso() ? "Heute ist trainingsfrei" : `${fmt(selDate)} ist trainingsfrei`}</h2><div class="small muted">${esc(ri.why)}</div>${ri.next ? `<div class="small">${ri.next}</div>` : ""}
       <div class="lab sec">Trotzdem trainieren?</div>
       <button class="btn big" type="button" data-act="setSession" data-v="${nxt}" data-then="start">${esc(SESS[nxt].title)} vorbereiten</button>
+      <button class="btn" type="button" data-act="wizOpen">🧩 Set erstellen</button>
       <button class="btn ghost" type="button" data-sheet="session">Andere Einheit wählen</button></div>`;
     return;
   }
@@ -3058,6 +3060,7 @@ function renderTraining(){
     else { const n = nSets(id, w, sk), dn = doneCount(id, w, sk);
       h += `<div class="fxhead"><div><div class="lab">Übung ${idx + 1} von ${ids.length} · ${dn}/${n} Sätze</div><h2 class="fxname">${esc(EX[e_].name)}</h2></div>${dn < n ? `<button class="btn ghost small" type="button" data-exskip="${id}">Auslassen</button>` : ""}</div>` + exBody(id, n, w); }
     h += `</div>`;
+    if (SESS[sk]?.cool) h += coolHtml(SESS[sk].cool);
     view.innerHTML = h; startClock(); return;
   }
   document.body.classList.remove("wo");
@@ -3073,11 +3076,126 @@ function renderTraining(){
     h += `</div>`;
   }
   h += `</div>`;
+  if (SESS[sk]?.cool) h += coolHtml(SESS[sk].cool);
   view.innerHTML = h;
   if (!fin) startClock(); else clearInterval(clockTimer);
 }
+// ---------- Set erstellen (Wunsch 2026-11-25): kurzer Assistent → eigenes Set aus den geprüften App-Übungen ----------
+// Regeln: nach harten Sätzen braucht ein Muskel ca. 48–72 h (Schoenfeld & Grgic 2018) · mindestens so viel ziehen wie drücken (Plan, Haltung)
+// · Grundübungen zuerst, Isolation danach, Rumpf zum Schluss · SC- und Knie-Regeln wie in den Planeinheiten · Abwärmen freiwillig (Van Hooren & Peake 2018)
+const SG = [["ruecken", "Rücken", ["ruecken"]], ["brust", "Brust", ["brust"]], ["schulter", "Schultern", ["seitlS", "hintS", "vordS", "obTrap"]], ["arme", "Arme", ["bizeps", "trizeps"]],
+  ["quad", "Beine vorn", ["quad"]], ["po", "Po & Beinrückseite", ["gh"]], ["waden", "Waden", ["waden"]], ["rumpf", "Rumpf", ["rumpf"]], ["pflege", "Schulter-Pflege", ["hintS"]]];
+const SG_PRESET = [["Oberkörper", ["ruecken", "brust", "schulter", "arme"]], ["Unterkörper", ["quad", "po", "waden", "rumpf"]], ["Ganzkörper", ["ruecken", "brust", "quad", "po", "rumpf"]]];
+const SG_BIG = ["quad", "po", "ruecken", "brust"], SG_UP = ["ruecken", "brust", "schulter", "arme"], SG_LOW = ["quad", "po", "waden"];
+const PFLEGE = ["extrot", "hw_extrot", "facepull", "ytw", "serratus", "pushupplus", "revfly", "alt_sidelyer"];
+const KNEE_QUAD_OK = new Set(["wallsit", "legext45", "legpress60", "stepdown"]);
+const sgOf = g => SG.find(x => x[0] === g) || [g, g, []];
+let wiz = null, setDelArm = null;
+const wizNew = () => ({step: 1, g: new Set(), min: 45, where: cur.where === "home" ? "home" : "gym", drop: new Set(), cut: 0, cool: false, name: "", saved: null});
+const wizSchon = () => schonOn() || S().mode === "pause";
+// gewichtete harte Sätze je Muskel in den 48 h vor dem Tag (heute schon Erledigtes zählt mit); Bouldern belastet Rücken und Bizeps
+function recentLoad(d){
+  const L = {}, add = (m, v) => L[m] = (L[m] || 0) + v;
+  for (const k of [addDays(d, -2), addDays(d, -1), d]) { const day = k === cur.date ? cur : store.days[k]; if (!day) continue;
+    for (const [id, arr] of Object.entries(day.sets || {})) { const n = (arr || []).filter(x => num(x.reps) != null || num(x.kg) != null).length; if (!n || !EX[id]) continue;
+      for (const [m, w] of Object.entries(EX[id].m || {})) add(m, n * w); }
+    if (k !== addDays(d, -2) && (day.boulder?.done || (day.cardio || []).some(c => c.type === "boulder"))) { add("ruecken", 6); add("bizeps", 3); } }
+  return L; }
+const sgLoad = (g, L) => Math.max(0, ...sgOf(g)[2].map(m => L[m] || 0));
+function wizOk(id, where){ const e = EX[id]; if (!e) return false;
+  if (where === "home" ? !(HOME_OK.has(id) || id.startsWith("hw_")) || !gearOk(id) : id.startsWith("hw_")) return false;
+  if (wizSchon() ? id in SCHON_RED : scRed(id) || (e.gate && !S().scCleared && scHigh())) return false;
+  if (S().knee1 && (e.m?.quad || 0) >= 1 && !KNEE_QUAD_OK.has(id)) return false;
+  return true; }
+function wizCands(g, where, L, planIds){
+  if (g === "pflege") return PFLEGE.filter(id => wizOk(id, where)).map(id => [id, /extrot/.test(id) ? 2 : 1]);
+  const mus = sgOf(g)[2];
+  return Object.keys(EX).filter(id => wizOk(id, where) && (g === "rumpf" ? EX[id].type === "k" : EX[id].type !== "k" || (EX[id].m?.[mus[0]] || 0) >= 1)).map(id => { const e = EX[id], m = e.m || {};
+    let s = Math.max(0, ...mus.map(k => m[k] || 0)); if (s < 1) return [id, 0];
+    s += (e.type === "c" ? .4 : e.type === "i" ? .2 : 0) + (e.prio ? .3 : 0) + (planIds.has(id) ? .3 : 0) + (lastPerf(id, addDays(selDate, 1)) ? .2 : 0);
+    for (const [k, w] of Object.entries(m)) if (!mus.includes(k) && (L[k] || 0) >= 4) s -= .4 * w; // belastet einen Muskel, der sich noch erholt
+    return [id, s]; }).filter(x => x[1] >= 1).sort((a, b) => b[1] - a[1]); }
+// gleiche Bewegung nicht zweimal (verschiedene IDs, gleicher Name oder Varianten derselben Übung)
+const fam = id => { const n = (EX[id]?.name || id).toLowerCase().replace(/\(.*?\)/g, "").trim(); return /push-up plus/.test(n) ? "plus" : /liegestütz/.test(n) ? "pushup" : /unter dem tisch/.test(n) ? "tablerow" : /beinpresse/.test(n) ? "legpress" : /beinstrecker/.test(n) ? "legext" : /abduktion/.test(n) ? "abd" : n; };
+function wizBuild(){
+  const w = wiz, L = recentLoad(selDate), planIds = new Set(SEQ.flatMap(b => SESS[variantOf(b, todayIso())]?.ex || [])), groups = [...w.g];
+  const target = Math.max(2, ({20: 4, 30: 5, 45: 6, 60: 8}[w.min] || 6) - w.cut);
+  const C = Object.fromEntries(groups.map(g => [g, wizCands(g, w.where, L, planIds).filter(([id]) => !w.drop.has(id))]));
+  const order = [...groups.filter(g => SG_BIG.includes(g)), ...groups.filter(g => !SG_BIG.includes(g))], picks = [], used = new Set();
+  // Sperre je Bewegung UND Hauptmuskel: Liegestütz (Brust) und enge Liegestütz (Trizeps) dürfen beide rein, zweimal Rudern unter dem Tisch für den Rücken nicht
+  const mainM = id => { const m = EX[id].m || {}; return Object.keys(m).sort((a, b) => m[b] - m[a])[0] || ""; }, key = id => fam(id) + "|" + mainM(id);
+  for (let round = 0; picks.length < target && round < 3; round++) for (const g of order) { if (picks.length >= target) break;
+    if (round > 0 && ["waden", "rumpf", "pflege"].includes(g)) continue;
+    const first = picks.find(p => p.g === g), list = C[g].filter(([id]) => !used.has(key(id))), top = id => { const m = EX[id].m || {}; return sgOf(g)[2].reduce((a, k) => (m[k] || 0) > (m[a] || 0) ? k : a, sgOf(g)[2][0]); };
+    // zweite Übung derselben Gruppe: zuerst der andere Muskel (z. B. Trizeps nach Bizeps), sonst anderer Übungstyp
+    const c = (first && (list.find(([id]) => top(id) !== top(first.id)) || list.find(([id]) => EX[id].type !== EX[first.id].type))) || list[0]; if (!c) continue;
+    picks.push({id: c[0], g}); used.add(key(c[0])); }
+  const rk = {c: 0, i: 1, k: 2}; picks.sort((a, b) => (rk[EX[a.id].type] ?? 1) - (rk[EX[b.id].type] ?? 1) || order.indexOf(a.g) - order.indexOf(b.g));
+  for (const p of picks) p.n = w.min >= 60 ? 3 : w.min >= 45 ? (EX[p.id].type === "c" ? 3 : 2) : 2;
+  const est = () => Math.round(picks.reduce((a, p) => a + p.n * (restFor(p.id) + 40), 0) / 60 + 6);
+  while (est() > w.min + 3 && picks.some(p => p.n > 2)) { const p = [...picks].reverse().find(x => x.n > 2); p.n--; }
+  while (est() > w.min + 3 && picks.length > 2) picks.pop();
+  const legs = groups.some(g => SG_LOW.includes(g)), cool = ["2–3 min locker gehen oder radeln, ruhig atmen"];
+  if (groups.includes("quad")) cool.push("Oberschenkel vorn im Stand, 30 s je Seite, nur so weit das Knie schmerzfrei bleibt");
+  if (groups.includes("po")) cool.push("Beinrückseite: Ferse auf eine Stufe, Rücken gerade nach vorn neigen, 30 s je Seite");
+  if (groups.includes("waden")) cool.push("Wade an der Wand, Ferse am Boden, 30 s je Seite");
+  if (groups.some(g => ["ruecken", "rumpf"].includes(g))) cool.push("Knie zur Brust im Liegen, ruhig atmen, 30 s");
+  return {picks, est: est(), legs, cool, title: wizTitle(groups, w.min), L}; }
+function wizTitle(groups, min){ const core = groups.filter(g => g !== "pflege"), pre = SG_PRESET.find(([, gs]) => gs.length === core.length && gs.every(g => core.includes(g)));
+  const ls = core.map(g => sgOf(g)[1]), base = pre ? pre[0] : ls.length > 2 ? ls.slice(0, 2).join(" + ") + ` +${ls.length - 2}` : ls.join(" + "); return base + (groups.includes("pflege") ? " + Pflege" : "") + ` · ${min} min`; }
+// Hinweise mit Begründung und Ein-Tipp-Korrektur
+function wizHints(L){
+  const gs = [...wiz.g], out = [], lab = g => sgOf(g)[1], d1 = addDays(selDate, 1);
+  const fresh = g => (SG_UP.includes(g) ? SG_LOW : SG_UP).find(x => !gs.includes(x) && sgLoad(x, L) < 2 && !(wizSchon() && ["brust", "schulter"].includes(x)));
+  for (const g of gs) { const v = sgLoad(g, L); if (v >= 4) { const f = fresh(g); out.push({t: `${lab(g)} hattest du in den letzten 48 h (ca. ${Math.round(v)} harte Sätze). Ein Muskel braucht danach etwa 48–72 h, bis er wieder voll leistet.`, btn: f ? [`${lab(g)} → ${lab(f)}`, `data-wizswap="${g}|${f}"`] : null}); } }
+  if (gs.some(g => g === "brust" || g === "schulter") && !gs.includes("ruecken")) out.push({t: "Du drückst, ziehst aber nicht. Bei nach vorn gezogenen Schultern gilt: mindestens so viel ziehen wie drücken.", btn: ["＋ Rücken", `data-wizg="ruecken"`]});
+  if (gs.includes("quad") && !gs.includes("po")) out.push({t: "Nur vordere Oberschenkel: Für Knie und Beckenstellung gehören Po und Beinrückseite dazu.", btn: ["＋ Po & Beinrückseite", `data-wizg="po"`]});
+  if (gs.some(g => SG_UP.includes(g)) && !gs.includes("pflege")) out.push({t: "Außenrotation dazu? Der Physio will die kleinen Schultermuskeln stärken – 2 Sätze am Ende reichen.", btn: ["＋ Schulter-Pflege", `data-wizg="pflege"`]});
+  if (!gs.includes("rumpf") && (L.rumpf || 0) < 1 && gs.length) out.push({t: "Rumpf war länger nicht dran – kurz zum Schluss hilft gegen das Hohlkreuz.", btn: ["＋ Rumpf", `data-wizg="rumpf"`]});
+  const tm = planFor(d1); if (tm && !inPause(d1)) { const ts = SESS[variantOf(tm.session, d1)], tmM = new Set((ts?.ex || []).flatMap(id => Object.keys(EX[id]?.m || {}).filter(k => EX[id].m[k] >= 1)));
+    const hit = gs.filter(g => g !== "pflege" && sgOf(g)[2].some(m => tmM.has(m))); if (hit.length && ts) out.push({t: `Morgen steht ${ts.title} im Plan und trifft ${hit.map(lab).join(", ")}. Lieber heute andere Muskeln, sonst fehlt morgen die Erholung.`}); }
+  if (wizSchon() && gs.some(g => g === "brust" || g === "schulter")) out.push({t: "Bis zur Freigabe sind Drücken, Seitheben, Überkopf und Stütz gesperrt (SC-Gelenk). Brust fällt weg, Schultern nur über Außenrotation."});
+  return out; }
+function wizHtml(close){
+  const w = wiz, L = recentLoad(selDate), chip = (attr, v, l, on, sub) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${l}${sub ? ` <span class="small muted">${sub}</span>` : ""}</button>`;
+  let h = `<div class="sh"><div><div class="lab">Set erstellen · ${w.step}/3</div><h2>${["Was willst du trainieren?", "Wo und womit?", "Dein Set"][w.step - 1]}</h2></div>${close}</div><div class="shopbar"><div class="fill" style="width:${w.step / 3 * 100}%"></div></div>`;
+  if (w.step === 1) {
+    h += `<div class="chips"><span class="chiplab">Schnell</span>${SG_PRESET.map(([l, gs]) => chip("data-wizpre", l, l, gs.every(g => w.g.has(g)) && w.g.size === gs.length)).join("")}</div>
+      <div class="chips">${SG.map(([g, l]) => { const v = sgLoad(g, L); return chip("data-wizg", g, l, w.g.has(g), g !== "pflege" && v >= 4 ? "· erholt sich" : g !== "pflege" && v >= 1 ? "· kürzlich" : ""); }).join("")}</div>
+      <div class="small muted">„erholt sich“: in den letzten 48 h hart trainiert. Ein Muskel braucht danach etwa 48–72 h.</div>
+      <div class="lab">Wie lange?</div><div class="seg">${[20, 30, 45, 60].map(m => `<button type="button" data-wizmin="${m}" aria-pressed="${w.min === m}">${m} min</button>`).join("")}</div>
+      <button class="btn primary big" type="button" data-act="wizNext" ${w.g.size ? "" : "disabled"}>Weiter ›</button>`;
+  } else if (w.step === 2) {
+    h += `<div class="seg"><button type="button" data-wizwhere="gym" aria-pressed="${w.where === "gym"}">Gym</button><button type="button" data-wizwhere="home" aria-pressed="${w.where === "home"}">Zuhause</button></div>
+      ${w.where === "home" ? gearDayHtml() : `<div class="small muted">Im Gym nimmt die App Maschinen, Kabel und Hanteln.</div>`}
+      <div class="actions"><button class="btn ghost big" type="button" data-act="wizBack">‹ Zurück</button><button class="btn primary big" type="button" data-act="wizNext">Set vorschlagen ›</button></div>`;
+  } else {
+    const b = wizBuild(), hints = wizHints(b.L), empty = [...w.g].filter(g => !b.picks.some(p => p.g === g));
+    h += hints.map(x => `<div class="warnb small">${esc(x.t)}${x.btn ? ` <button type="button" class="btn small" ${x.btn[1]}>${esc(x.btn[0])}</button>` : ""}</div>`).join("");
+    if (empty.length) h += `<div class="small muted">Keine passende Übung für ${empty.map(g => sgOf(g)[1]).join(", ")} (${w.where === "home" ? "Hilfsmittel oder " : ""}SC-/Knie-Regeln).</div>`;
+    h += `<div class="lab">${b.picks.length} Übungen · ca. ${b.est} min</div><div class="small">🔥 Aufwärmen (ca. 5 min) steht oben in der Einheit: locker warm, Korrektiv, Aufwärmsätze für die erste Übung.</div>
+      <div class="pvlist">${b.picks.map((p, i) => { const e = EX[p.id], mg = w.where === "home" ? missingGear(p.id) : [], th = exThumb(p.id, e.img);
+        return `<div class="pv"><button type="button" class="pvimg" data-sheet="tech" data-v="${p.id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : `<span class="noimg">${i + 1}</span>`}</button>
+          <span class="pvt"><b>${esc(e.name)}</b><br><span class="small muted"><span class="num">${p.n} × ${esc(e.reps)}</span> · ${esc(sgOf(p.g)[1])}${mg.length ? ` · <span class="bad">fehlt: ${esc(mg.map(k => GEAR[k]).join(", "))}</span>` : ""}</span></span>
+          <span class="pvact"><button class="btn small ghost" type="button" data-wizalt="${p.id}" aria-label="Andere Übung">⇄</button><button class="btn small ghost" type="button" data-wizdrop="${p.id}" aria-label="Entfernen">✕</button></span></div>`; }).join("")}</div>
+      ${w.cut > 0 || w.drop.size ? `<button type="button" class="linkbtn small" data-act="wizReset">↺ Vorschlag neu</button>` : ""}
+      <label class="check small"><input type="checkbox" id="wizCool" ${w.cool ? "checked" : ""}><span>🧊 Abwärmen anzeigen (3–5 min, freiwillig: beschleunigt die Erholung nicht messbar, tut aber vielen gut)</span></label>
+      <div class="lab">Name</div><input id="wizName" class="inp" type="text" maxlength="40" placeholder="${esc(b.title)}" value="${esc(w.name)}">
+      <button class="btn primary big" type="button" data-act="wizGo" ${b.picks.length ? "" : "disabled"}>▶ Jetzt trainieren</button>
+      <div class="actions"><button class="btn ghost" type="button" data-act="wizBack">‹ Zurück</button><button class="btn ${w.saved ? "" : "ghost"}" type="button" data-act="wizSave" ${b.picks.length && !w.saved ? "" : "disabled"}>${w.saved ? "✓ Gespeichert" : "💾 Als Set speichern"}</button></div>`;
+  }
+  return h; }
+function wizSet(){ const b = wizBuild(), w = wiz;
+  return {id: w.saved || Date.now().toString(36), title: (w.name.trim() || b.title).slice(0, 40), groups: [...w.g], min: w.min, where: w.where, ex: b.picks.map(p => p.id), sets: Object.fromEntries(b.picks.map(p => [p.id, p.n])), legs: b.legs, cool: w.cool ? b.cool : null}; }
+function regSet(s){ if (!s?.id) return; SESS["set:" + s.id] = {title: s.title, where: s.where === "home" ? "Zuhause" : "Gym", ex: (s.ex || []).filter(id => EX[id]), sets: s.sets || {}, custom: true, legs: !!s.legs, cool: s.cool || null}; }
+function regSets(){ for (const s of S().customSets || []) regSet(s); for (const d of Object.values(store.days || {})) if (d?.customSet) regSet(d.customSet); if (cur?.customSet) regSet(cur.customSet); }
+function setGo(s){ regSet(s); if (cur.skipEx) { for (const k of Object.keys(cur.skipEx)) clr("skipEx." + k); delete cur.skipEx; }
+  cur.customSet = s; cur.session = "set:" + s.id; cur.sessAt = Date.now(); cur.where = s.where; touch(); saveCur(); wiz = null; if (sheet.open) { sheetKind = null; sheet.close(); } woSession = null; openEx = null; go("training"); }
+const coolHtml = list => `<details class="warm"><summary>🧊 Abwärmen · freiwillig</summary>${list.map(t => `<div class="small">• ${esc(t)}</div>`).join("")}</details>`;
+const setsChooserHtml = () => { const ss = S().customSets || []; return `<div class="lab sec">Deine Sets</div>${ss.length ? `<div class="lrows">${ss.map(s => `<div class="lrow"><span class="lmain"><b>${esc(s.title)}</b><span class="small muted">${(s.ex || []).length} Übungen · ${s.where === "home" ? "Zuhause" : "Gym"}</span></span><button class="btn small" type="button" data-setgo="${esc(s.id)}">▶</button><button class="btn small ghost" type="button" data-setdel="${esc(s.id)}">${setDelArm === s.id ? "Wirklich löschen?" : "🗑"}</button></div>`).join("")}</div>` : `<div class="small muted">Noch keine gespeicherten Sets.</div>`}
+  <button class="btn" type="button" data-act="wizOpen">🧩 Set erstellen</button>`; };
 function warmHtml(title){
-  const legs = /Beine/.test(title), wm = cur.warm || {}, f = exList(woSession || cur.session).map(eff).find(x => x && EX[x].load), kg = f ? suggestion(f).kg : null;
+  const legs = /Beine/.test(title) || !!SESS[woSession || cur.session]?.legs, wm = cur.warm || {}, f = exList(woSession || cur.session).map(eff).find(x => x && EX[x].load), kg = f ? suggestion(f).kg : null;
   const ramp = kg > 0 ? `Aufwärmsätze ${esc(EX[f].name)}: ${[.4, .6, .8].map(p => dec(kgRound(f, kg * p, 0))).join(" / ")} kg × 8 / 5 / 3` : "Erste Übung: ein leichter Aufwärmsatz";
   const items = [["w1", "4–5 min locker warm: Ergometer/Rudergerät, zuhause marschieren oder Treppe (ohne Sprünge, Arme unter Schulterhöhe)"],
     ["w2", legs ? "Korrektiv: Dead Bug und Glute Bridge" : scHigh() || S().mode === "pause" || schonOn() ? "Korrektiv: Push-up Plus an der Wand" : "Korrektiv: 30°-Shrug und Push-up Plus"], ["w3", ramp]], n = items.filter(([k]) => wm[k]).length;
@@ -3629,7 +3747,8 @@ function renderSheet(){ setTimeout(hookClips, 0); setTimeout(() => { const r = d
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
-      <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>`;
+      <div class="small muted">Der Planer schiebt die Reihenfolge automatisch nach, wenn du tauschst.</div>${setsChooserHtml()}`;
+  } else if (sheetKind === "setwiz") { if (!wiz) wiz = wizNew(); h += wizHtml(close);
   } else if (sheetKind === "mwex") { h += mwExHtml(sheetArg, close);
   } else if (sheetKind === "tech") {
     const e = EX[sheetArg];
@@ -6147,14 +6266,23 @@ async function onClick(e){
   const ak = t.closest("[data-altkeep]"); if (ak) { const base = ak.dataset.base, id = eff(base), pkey = atHome() ? "altPrefHome" : "altPref", pref = Object.assign({}, S()[pkey]), std = atHome() ? homeDefault(base) : base;
     if (ak.dataset.altkeep === "1") { if (id !== std) pref[base] = id; else delete pref[base]; } if (JSON.stringify(pref) !== JSON.stringify(S()[pkey] || {})) saveSettings({[pkey]: pref});
     altAsk = null; sheetKind = null; sheet.close(); renderTraining(); return; }
+  const wzg = t.closest("[data-wizg]"); if (wzg && wiz) { const g = wzg.dataset.wizg; if (wiz.g.has(g)) wiz.g.delete(g); else wiz.g.add(g); wiz.saved = null; renderSheet(); return; }
+  const wzp = t.closest("[data-wizpre]"); if (wzp && wiz) { wiz.g = new Set(SG_PRESET.find(x => x[0] === wzp.dataset.wizpre)[1]); wiz.saved = null; renderSheet(); return; }
+  const wzm = t.closest("[data-wizmin]"); if (wzm && wiz) { wiz.min = Number(wzm.dataset.wizmin); wiz.cut = 0; renderSheet(); return; }
+  const wzw = t.closest("[data-wizwhere]"); if (wzw && wiz) { wiz.where = wzw.dataset.wizwhere; wiz.drop = new Set(); renderSheet(); return; }
+  const wzs = t.closest("[data-wizswap]"); if (wzs && wiz) { const [a0, b0] = wzs.dataset.wizswap.split("|"); wiz.g.delete(a0); wiz.g.add(b0); wiz.saved = null; renderSheet(); return; }
+  const wza = t.closest("[data-wizalt]"); if (wza && wiz) { wiz.drop.add(wza.dataset.wizalt); wiz.saved = null; renderSheet(); return; }
+  const wzd = t.closest("[data-wizdrop]"); if (wzd && wiz) { wiz.drop.add(wzd.dataset.wizdrop); wiz.cut++; wiz.saved = null; renderSheet(); return; }
+  const sgo = t.closest("[data-setgo]"); if (sgo) { const s = (S().customSets || []).find(x => x.id === sgo.dataset.setgo); if (s) setGo(s); return; }
+  const sdl = t.closest("[data-setdel]"); if (sdl) { const id = sdl.dataset.setdel; if (setDelArm === id) { saveSettings({customSets: (S().customSets || []).filter(x => x.id !== id)}); setDelArm = null; } else setDelArm = id; renderSheet(); return; }
   const wh = t.closest("[data-where]"); if (wh) { cur.where = wh.dataset.where; openEx = null; touch(); renderTraining(); return; }
   const mxh = t.closest("[data-mixhome]"); if (mxh) { const id = mxh.dataset.mixhome, o = Object.assign({}, cur.mixHome); if (o[id]) { delete o[id]; clr("mixHome." + id); } else o[id] = true; cur.mixHome = o; openEx = openEx || null; touch(); renderTraining(); return; }
-  const gdy = t.closest("[data-gearday]"); if (gdy) { const k = gdy.dataset.gearday, hg = gearHome(); cur.gear = Object.assign({}, cur.gear, {[k]: !hg[k]}); touch(); renderTraining(); return; }
+  const gdy = t.closest("[data-gearday]"); if (gdy) { const k = gdy.dataset.gearday, hg = gearHome(); cur.gear = Object.assign({}, cur.gear, {[k]: !hg[k]}); touch(); if (sheet.open && sheetKind === "setwiz") renderSheet(); else renderTraining(); return; }
   const gst = t.closest("[data-gearset]"); if (gst) { const a = gst.dataset.gearset;
     if (a === "none") { const allOff = GEAR_TRAIN.every(k => !gearHome()[k]); cur.gear = allOff ? {} : Object.assign({}, cur.gear, Object.fromEntries(GEAR_TRAIN.map(k => [k, false]))); if (allOff) clr("gear"); }
     else if (a === "std") { cur.gear = {}; clr("gear"); }
     else if (a === "save") saveSettings({homeGear: gearHome()});
-    touch(); renderTraining(); return; }
+    touch(); if (sheet.open && sheetKind === "setwiz") renderSheet(); else renderTraining(); return; }
   const pdl = t.closest("[data-phdel]"); if (pdl) { const n = pdl.dataset.phdel;
     if (pendingConfirm !== "ph:" + n) { pendingConfirm = "ph:" + n; renderProgress(); return; }
     pendingConfirm = null; photoMsg = "Lösche …"; renderProgress();
@@ -6380,6 +6508,12 @@ async function onClick(e){
     if (a === "techBack") { const prev = techStack.pop(); if (prev) { sheetArg = prev; techFor = prev; techTab = "anl"; realOpen = null; renderSheet(); sheet.scrollTop = 0; } return; }
     if (a === "start") { woSession = null; woKeep = null; go("training"); return; }
     if (a === "antag") { woSession = "antag"; openEx = null; go("training"); return; }
+    if (a === "wizOpen") { wiz = wizNew(); openSheet("setwiz"); return; }
+    if (a === "wizNext" && wiz) { wiz.step = Math.min(3, wiz.step + 1); renderSheet(); sheet.scrollTop = 0; return; }
+    if (a === "wizBack" && wiz) { wiz.step = Math.max(1, wiz.step - 1); renderSheet(); sheet.scrollTop = 0; return; }
+    if (a === "wizReset" && wiz) { wiz.drop = new Set(); wiz.cut = 0; renderSheet(); return; }
+    if (a === "wizSave" && wiz) { const s = wizSet(); saveSettings({customSets: [...(S().customSets || []).filter(x => x.id !== s.id), s]}); wiz.saved = s.id; regSet(s); renderSheet(); return; }
+    if (a === "wizGo" && wiz) { setGo(wizSet()); return; }
     if (a === "setSession") { if (v !== cur.session && cur.skipEx) { for (const k of Object.keys(cur.skipEx)) clr("skipEx." + k); delete cur.skipEx; } cur.session = v; cur.sessAt = Date.now(); touch(); saveCur(); if (sheet.open) { sheetKind = null; sheet.close(); } if (ac.dataset.then === "start" || tab === "training") { woSession = null; openEx = null; go("training"); } else render(); return; }
     if (a === "seenPhase") { saveSettings({seenPhase:v}); closeSheet(); return; }
     if (a === "lessonRead") { saveSettings({lessons:Object.assign({}, S().lessons, {[v]: todayIso()})}); renderSheet(); return; }
@@ -6479,6 +6613,7 @@ function onInput(e){
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
   if (t.id === "allQ") { allQ = t.value; const up = () => { const r = document.getElementById("allRes"), m = document.getElementById("moreMenu"); if (r) r.innerHTML = allResHtml(); if (m) m.hidden = allQ.trim().length >= 2; };
     if (!recipes || !prices) Promise.all([ensurePrices(), ensureMeals()]).then(up).catch(() => {}); clearTimeout(t._d); t._d = setTimeout(up, 150); return; }
+  if (t.id === "wizName" && wiz) { wiz.name = t.value; wiz.saved = null; return; }
   if (t.id === "catQ") { catF.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const had = document.activeElement === t; renderMore(); const q = document.getElementById("catQ"); if (q && had) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }, 250); return; }
   if (t.id === "recQ") { if (recShelves) { recShelves = false; recFilter.q = t.value; const pos = t.selectionStart, had = document.activeElement === t; renderRecipes(); const q = document.getElementById("recQ"); if (q && q !== t) { q.replaceWith(t); if (had) { t.focus(); try { t.setSelectionRange(pos, pos); } catch {} } } return; } recFilter.q = t.value; clearTimeout(t._d); t._d = setTimeout(() => { const res = document.getElementById("recRes"); if (!res) return renderRecipes(); const list = recipesFiltered(); res.innerHTML = list.length ? recGrid(list) : `<div class="empty small">Kein Rezept passt. Filter lockern?</div>`; const hd = document.getElementById("recHead"), rc = document.getElementById("recCat"); if (hd) hd.innerHTML = recHeadHtml(list); if (rc) rc.innerHTML = recCatsHtml(); }, 150); return; }
   if (/^m_/.test(t.id)) measDraft[t.id] = t.value;
@@ -6488,6 +6623,7 @@ async function onChange(e){
   const t = e.target;
   if (t.dataset.ob) { saveSettings({onboard:Object.assign({}, S().onboard, {[t.dataset.ob]: t.checked})}); renderSheet(); return; }
   if (t.dataset.mob) { const D = RD(), dk = RTS[rtk].day; D[t.dataset.mob] = t.checked; if (D._skip) { delete D._skip; clr(dk + "._skip"); } touch(); return; }
+  if (t.id === "wizCool" && wiz) { wiz.cool = t.checked; wiz.saved = null; return; }
   if (t.id === "rehaNoBand") { saveSettings({reha: Object.assign({}, S().reha, {noBand: t.checked})}); tmr = null; if (S().rehaMin !== rehaMin()) saveSettings({rehaMin: rehaMin()}); replanSoon(); renderSheet(); render(); return; }
   if (t.id === "wIn" || t.id === "slIn") { saveCur(); return; }
   if (t.dataset.shop != null) { const k = shopCtx().key, set = new Set(lsGet(k) || []); t.checked ? set.add(t.dataset.shop) : set.delete(t.dataset.shop); lsSet(k, [...set]);
