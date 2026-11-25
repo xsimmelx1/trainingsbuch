@@ -1569,6 +1569,13 @@ function hurtHtml(key){
     <div class="actions">${e && altOptions(key).length ? `<button type="button" class="btn" data-sheet="alt" data-v="${esc(key)}">⇄ Alternative wählen</button>` : ""}<button type="button" class="btn ${logged ? "" : "primary"}" data-hlog="${esc(key)}" ${logged ? "disabled" : ""}>${logged ? "✓ Notiert" : "📝 Für den Abendcheck notieren"}</button></div>
     <div class="small muted">Notiert werden Übung und Stelle für heute. Abends im Abendcheck dazu die Skala ausfüllen.</div>`;
   return h; }
+// Ende-Bildschirm: übersprungene Übungen mit Grund; fehlte nur das Band → direkt weitermachen
+function rtSkippedHtml(){ const sk = RL().filter(([k]) => rtSkip(k, selDate)); if (!sk.length) return "";
+  const band = rtk === "reha" && rehaNoBand() && sk.some(([k]) => REHA_BAND.has(k) && !rehaLocked(k));
+  const nm = t => t.split(":")[0], lock = rtk === "reha" ? sk.filter(([k]) => rehaLocked(k)) : [], rest = sk.filter(x => !lock.includes(x));
+  return `<div class="card"><div class="lab">Heute nicht dabei</div>${rest.map(([k, t]) => `<div class="small"><b>${esc(nm(t))}</b> · <span class="muted">${esc(rtk === "reha" ? rehaAlt(k) : "übersprungen")}</span></div>`).join("")}
+    ${lock.length ? `<div class="small"><b>Ab der Arztfreigabe:</b> <span class="muted">${esc(lock.map(([, t]) => nm(t)).join(" · "))}</span></div>` : ""}
+    ${band ? `<button class="btn primary" type="button" data-act="rehaBandGo">💪 Band ist da – Bandübungen jetzt machen</button>` : ""}</div>`; }
 function autoNextName(){ const nx = RL().slice(sheetArg + 1).find(([k]) => !RD()[k] && !rtSkip(k, selDate)); return nx ? mobShort(nx[1]) : "Routine geschafft"; }
 function timerHtml(key){
   if (!tmr || tmr.key !== key) { clearInterval(tmrInt); const auto = autoFlow && isRtKey(key) && sheetKind === "mobguide", c = auto ? autoCfg(key) : timerCfg(key);
@@ -1673,9 +1680,12 @@ const mobNext = () => MOBILITY.findIndex(([k]) => !cur.mobility[k] && !mobSkip(k
 // Physio: nach vorn gezogene Schultern belasten das SC-Gelenk → Außenrotatoren („die kleinen Muskeln“) kräftigen.
 // Phase 1 (bis zur Freigabe): Ellbogen am Körper, nichts über Brusthöhe. Phase 2 ab settings.scCleared.
 const REHA_SINCE = "2026-11-25";
-const REHA = [["rotmob","Schulter drehen ohne Last: 1 × 8 je Seite, Ellbogen am Körper, Unterarm langsam nach außen und innen","mw_rotmob"],
+const REHA = [["chintuck","Kinn-Rückzug im Liegen: 1 × 10, je 5 s halten. Hinterkopf bleibt am Boden, nur leicht nicken, vorderer Hals bleibt weich",null],
+  ["bwsroll","BWS-Streckung über Handtuchrolle: 1 × 6, je 3 s strecken. Rolle quer unter der Brustwirbelsäule, Arme vor der Brust verschränkt, Becken am Boden",null],
+  ["rotmob","Schulter drehen ohne Last: 1 × 8 je Seite, Ellbogen am Körper, Unterarm langsam nach außen und innen","mw_rotmob"],
+  ["scapset","Schulterblatt-Spannung im Stand: 1 × 8, je 5 s mit 30–50 % Kraft. Schlüsselbeine breit, Schulterblätter sanft nach hinten, Handflächen nach außen",null],
   ["eriso","Außenrotation isometrisch am Türrahmen: 2 × 30 s je Seite, Handrücken drückt mit 60–70 % gegen den Rahmen","hw_extrot"],
-  ["er1","Außenrotation mit Band auf Ellbogenhöhe: 2 × 12 je Seite. Ellbogen am Rumpf (Handtuch dazwischen), 2 s zurück","mw_er1"],
+  ["er1","Außenrotation mit Band auf Ellbogenhöhe: 2 × 15 je Seite. Ellbogen am Rumpf (Handtuch dazwischen), 2 s zurück","mw_er1"],
   ["er2","Außenrotation, Band unter dem Fuß: 2 × 10 je Seite. Ellbogen 45° nach vorn und 90° gebeugt, 2 s zurück","mw_er2"],
   ["er3","Außenrotation, Arm 90° abgespreizt: 2 × 10 je Seite, nur schmerzfrei","mw_er3"],
   ["wallang","Wandengel: 2 × 6. Rücken, Ellbogen und Handgelenke an der Wand, erst nur bis Schulterhöhe","mw_wallang"],
@@ -1685,24 +1695,27 @@ const REHA = [["rotmob","Schulter drehen ohne Last: 1 × 8 je Seite, Ellbogen am
 const REHA_ID = Object.fromEntries(REHA.map(m => [m[0], m[2]]));
 for (const m of REHA) m[2] = null; // Feld 3 ist wie bei MOBILITY die Illustration; Reha zeigt stattdessen das MuscleWiki-Vorschaubild
 // Vorschaubilder (öffentliches MuscleWiki-CDN, nur verlinkt): Dateistamm des Videos, Frontansicht
-const REHA_OG = {rotmob: "Recovery-shoulder-external-internal-rotation-standing-mobility", er1: "Recovery-rotator-cuff-external-rotations-1-standing", er2: "Recovery-rotator-cuff-external-rotations-2-standing", er3: "Recovery-rotator-cuff-external-rotations-3-standing", wallang: "Recovery-wall-angels", serplank: "Recovery-seratus-activation-1-plank-isometric", serpunch: "Recovery-seratus-activation-cross-punch-supine", thor: "Recovery-thoracic-flexion-and-extensions-mobility"};
-const rehaThumb = k => REHA_OG[k] ? `https://media.musclewiki.com/media/uploads/og-male-${REHA_OG[k]}-front.jpg` : k === "eriso" && EX.hw_extrot?.img ? isrc(EX.hw_extrot.img, EX.hw_extrot.img.startsWith("r/") ? 1 : 0) : null;
-const REHA_PH = {er3: 2, wallang: 2, serplank: 2, serpunch: 2, thor: 2}; // ohne Eintrag: Phase 1
-const REHA_PHMAX = {er2: 1}; // nur bis zu dieser Phase: in Phase 2 übernimmt er3
+const REHA_OG = {chintuck: "Recovery-chin-tucks-supine", bwsroll: "Recovery-thoracic-extensions-foam-roller", scapset: "Recovery-intrascapular-muscle-contraction-isometric", rotmob: "Recovery-shoulder-external-internal-rotation-standing-mobility", er1: "Recovery-rotator-cuff-external-rotations-1-standing", er2: "Recovery-rotator-cuff-external-rotations-2-standing", er3: "Recovery-rotator-cuff-external-rotations-3-standing", wallang: "Recovery-wall-angels", serplank: "Recovery-seratus-activation-1-plank-isometric", serpunch: "Recovery-seratus-activation-cross-punch-supine", thor: "Recovery-thoracic-flexion-and-extensions-mobility"};
+const rehaThumb = k => REHA_OG[k] ? `https://media.musclewiki.com/media/uploads/og-male-${REHA_OG[k]}-front.jpg` : k === "eriso" ? ytThumb("hw_extrot") : null;
+const REHA_PH = {er2: 2, er3: 2, wallang: 2, serplank: 2, serpunch: 2, thor: 2}; // ohne Eintrag: Phase 1
+const REHA_PHMAX = {er1: 1, bwsroll: 1, scapset: 1}; // nur bis zu dieser Phase: in Phase 2 übernehmen er2/er3, thor und Wandengel
 const REHA_BAND = new Set(["er1", "er2", "er3"]);
-const REHA_MW = {rotmob: "shoulder-external-internal-rotation", er1: "rotator-cuff-external-rotations-1", er2: "rotator-cuff-external-rotations-2", er3: "rotator-cuff-external-rotations-3", wallang: "wall-angels", serplank: "serratus-activation-plank", serpunch: "serratus-activation-cross-punch", thor: "thoracic-flexion-and-extensions"};
+const REHA_MW = {chintuck: "laying-chin-tucks", bwsroll: "thoracic-extensions-foam-roller", scapset: "intrascapular-muscle-contraction", rotmob: "shoulder-external-internal-rotation", er1: "rotator-cuff-external-rotations-1", er2: "rotator-cuff-external-rotations-2", er3: "rotator-cuff-external-rotations-3", wallang: "wall-angels", serplank: "serratus-activation-plank", serpunch: "serratus-activation-cross-punch", thor: "thoracic-flexion-and-extensions"};
 const rehaPhase = () => S().scCleared ? 2 : 1;
 const rehaNoBand = () => !!(S().reha || {}).noBand;
 const rehaLocked = k => (REHA_PH[k] || 1) > rehaPhase() || (REHA_PHMAX[k] || 9) < rehaPhase();
 const rehaSkip = (k, d) => rehaLocked(k) || (k === "eriso" ? !rehaNoBand() : REHA_BAND.has(k) && rehaNoBand());
 function rehaAlt(k){
-  if (rehaLocked(k)) return (REHA_PH[k] || 1) > rehaPhase() ? "Ab der Arztfreigabe (Phase 2) – bis dahin gesperrt." : "Nur in Phase 1 – jetzt übernimmt die Außenrotation mit 90°.";
+  if (rehaLocked(k)) return (REHA_PH[k] || 1) > rehaPhase() ? "Ab der Arztfreigabe (Phase 2) – bis dahin gesperrt." : "Nur in Phase 1 – jetzt übernehmen die nächsten Übungen.";
   if (k === "eriso") return rehaNoBand() ? "Ersatz, solange kein Band da ist." : "Nur ohne Band – mit Band übersprungen.";
   if (REHA_BAND.has(k) && rehaNoBand()) return "Kein Band: übersprungen, dafür die Türrahmen-Variante.";
   if (REHA_BAND.has(k)) return "Im Gym geht dasselbe am Kabelzug.";
   return "";
 }
 const REHA_INFO = {
+  chintuck: {m: {rumpf: .5}, why: "Trainiert die tiefen Halsbeuger gegen die Nackenverspannung. Nur nicken, der Hinterkopf bleibt am Boden und der vordere Hals weich – so zieht der Kopfnicker nicht am SC-Gelenk."},
+  bwsroll: {m: {ruecken: .5}, why: "Streckt die Brustwirbelsäule ohne Armheben und ohne Stütz. Eine runde, steife BWS zieht die Schultern nach vorn. Anders als im MuscleWiki-Video: Arme vor der Brust, Becken bleibt am Boden."},
+  scapset: {m: {ruecken: .5, hintS: .5}, why: "Schulterblätter ohne Last setzen – gegen die nach vorn gezogenen Schultern, die der Physio beschrieben hat. Handflächen nach außen nimmt die Außenrotation mit."},
   rotmob: {m: {hintS: .5}, why: "Lockert das Schultergelenk in Außen- und Innenrotation ohne Last und wärmt die Rotatorenmanschette für die Bandübungen auf."},
   eriso: {m: {hintS: 1}, why: "Halten statt Bewegen: Die Außenrotatoren arbeiten, das Schlüsselbein bleibt ruhig. Ersatz, solange kein Band da ist."},
   er1: {m: {hintS: 1}, why: "Kräftigt die Außenrotatoren (Infraspinatus, Teres minor), also die „kleinen Muskeln“, die der Physio meint. Sie halten den Oberarmkopf zentriert und arbeiten gegen die nach vorn gezogene Schulter. Der Ellbogen bleibt am Körper, deshalb keine Last am SC-Gelenk."},
@@ -1736,7 +1749,10 @@ Object.assign(RDB, {cablecurl:"cable-curl", onearmpd:"tricep-pushdown", wristcur
 const isrc = (img, i) => img.startsWith("r/") ? `img/${img}-${i}.webp` : `img/${img}-${i}.jpg`;
 const RDB_CREDIT = "Illustration: RepDB (repdb.co)";
 // Fachlich geprüft: diese Bilder zeigen Falsches oder für dich Verbotenes → kein Bild, stattdessen der echte Video-Ausschnitt
-const IMG_NONE = new Set(["stepdown", "landmine", "ytw", "legpress60", "mob:knietest", "mob:tiltlie", "mob:tilt"]);
+const IMG_NONE = new Set(["stepdown", "landmine", "ytw", "legpress60", "mob:knietest", "mob:tiltlie", "mob:tilt", "hw_extrot", "hw_doorrow", "hw_latiso", "hw_abd", "hw_slidecurl"]);
+// Illustration zeigte eine andere Übung (z. B. Türrahmen → Seitlage mit Hantel): Standbild aus dem passenden Video (geprüft 2026-11-25)
+const THUMB_YT = {hw_extrot: "NoNzQc3jLfA", hw_doorrow: "HtTDy-2GNTE", hw_latiso: "Y8LGg4_WUQA", hw_abd: "-rDiQXjeXO0", hw_slidecurl: "uHDLEITrSQU"};
+const ytThumb = id => THUMB_YT[id] ? `https://i.ytimg.com/vi/${THUMB_YT[id]}/mqdefault.jpg` : null;
 // Leichte Abweichung im Bild (Hinweis wird angezeigt)
 const IMG_NOTE = {"onearmpd": "Zeigt beidarmig mit Seil; du drückst einarmig mit Griff.", "wristcurl": "Zeigt Handrücken oben (Reverse); hier zeigen die Handflächen nach oben.", "hw_bandpushdown": "Zeigt den Kabelzug; zuhause hängt das Band über der Klimmzugstange.", "hw_bandhammer": "Zeigt das Seil am Kabel; zuhause stehst du auf dem Band.", "inclinedb": "KH-Schrägdrücken, aber Bank deutlich steiler (~45°) als 15–30° und Obergriff (Hantelscheiben frontal) statt Neutralgriff.", "cableshrug": "Zeigt KH-Shrug mit Armen eng am Körper statt Kabel-Shrug mit ~30° abgespreizten Armen;", "bayesian": "Zeigt normalen beidarmigen Stangen-Curl am Kabel, Gesicht/Seite zum Turm.", "pushupplus": "Foto: erhöhter Liegestütz an Box, unten (Brust an Box) -> oben gestreckt.", "dbshrug": "KH-Shrug mit Armen eng am Körper statt ~30° abgespreizt;", "legext45": "Beinstrecker 90° -> voll gestreckt (0°).", "hw_calf": "Einbeiniges Wadenheben flach auf dem Boden an einer Stange, ohne Stufe;", "hw_shrug": "KH-Shrug mit Armen eng am Körper statt Rucksack und ~30° abgespreizten Armen;", "hw_curl": "Inverted Row mit Obergriff.", "hw_hipthrust": "Einbeinige Glute Bridge vom Boden (Schultern am Boden) statt Hip Thrust mit Schulterblättern auf der Sofakante;", "alt_smithshrug": "Multipressen-Shrug mit Armen eng am Körper, nicht 30° seitlich;", "alt_htmachine": "Hip Thrust an der Multipresse (Stange in den Händen) statt Hip-Thrust-Maschine mit Gurt;", "mob:hipflexor": "Standbild aufrechter Halbkniestand.", "mob:shrug30": "KH-Shrug mit Armen eng am Körper statt ~30° abgespreizt;"};
 const RDB_STILL = new Set(["r/plank", "r/bench-couch-stretch", "r/side-plank", "r/wall-sit", "r/kneeling-hip-flexor-stretch", "r/suitcase-carry"]);
@@ -2640,7 +2656,7 @@ function applyMobHold(mh){ mobHoldRef = mh;
     d.hold = n; d.dose = rep(o.dose); d.tempo = o.tempo && n !== o.sec ? rep(o.tempo).replace(/^[\d-]+\s*\((.*)\)$/, "$1") : o.tempo; mb[1] = rep(o.txt); if (GUIDE[k]) GUIDE[k].sec = n; } }
 for (const id of IMG_NONE) { if (id.startsWith("mob:")) { const mb = MOBILITY.find(x => x[0] === id.slice(4)); if (mb) mb[2] = null; } else if (EX[id]) EX[id].img = null; }
 // Vorschaubild: Illustration/Foto, sonst Standbild aus dem Erklärvideo
-const exThumb = (key, img) => img ? isrc(img, img.startsWith("r/") ? 1 : 0) : key?.startsWith("reha:") ? rehaThumb(rtId(key)) : VIDS?.[key]?.video ? `https://i.ytimg.com/vi/${encodeURIComponent(VIDS[key].video)}/mqdefault.jpg` : null;
+const exThumb = (key, img) => THUMB_YT[key] ? ytThumb(key) : img ? isrc(img, img.startsWith("r/") ? 1 : 0) : key?.startsWith("reha:") ? rehaThumb(rtId(key)) : VIDS?.[key]?.video ? `https://i.ytimg.com/vi/${encodeURIComponent(VIDS[key].video)}/mqdefault.jpg` : null;
 const animHtml = (img, alt, hint) => img ? `<span class="anim"><img src="${isrc(img, 0)}" alt="${esc(alt)}" loading="lazy" decoding="async"><img class="b" src="${isrc(img, 1)}" alt="" loading="lazy" decoding="async">${hint ? `<span class="hint">${hint}</span>` : ""}</span>` : "";
 // Erklärvideos je Übung (videos.json); Player lädt erst nach Tipp, über youtube-nocookie
 let VIDS = null, vidsReady = null;
@@ -3135,9 +3151,12 @@ const prefMap = () => (atHome() ? S().altPrefHome : S().altPref) || {};
 const swapKey = () => atHome() ? "swapHome" : "swap";
 // Schulter-Reha: Dosierung (nach DOSE, damit die Konstante schon steht)
 Object.assign(DOSE, {
+  "reha:chintuck": {dose: "1 × 10 Wdh., je 5 s halten", tempo: null, hold: 5, perSide: false, rest: 0, breath: "Vorher 3 ruhige Atemzüge in den Bauch, beim Halten weiteratmen", why: REHA_INFO.chintuck.why},
+  "reha:bwsroll": {dose: "1 × 6 Wdh., je 3 s strecken", tempo: null, hold: 3, perSide: false, rest: 0, breath: "Beim Strecken ausatmen", why: REHA_INFO.bwsroll.why},
+  "reha:scapset": {dose: "1 × 8 Wdh., je 5 s halten mit 30–50 % Kraft", tempo: null, hold: 5, perSide: false, rest: 0, breath: "Beim Halten ruhig weiteratmen", why: REHA_INFO.scapset.why},
   "reha:rotmob": {dose: "1 × 8 je Seite, langsam: 2 s nach außen, 2 s nach innen", tempo: null, hold: null, perSide: true, rest: 0, breath: "Ruhig weiteratmen", why: REHA_INFO.rotmob.why},
   "reha:eriso": {dose: "2 × 30 s je Seite mit ca. 60–70 % Kraft", tempo: null, hold: 30, perSide: true, rest: 20, breath: "Beim Halten ruhig weiteratmen, nicht pressen", why: REHA_INFO.eriso.why},
-  "reha:er1": {dose: "2 × 12 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er1.why},
+  "reha:er1": {dose: "2 × 15 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er1.why},
   "reha:er2": {dose: "2 × 10 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er2.why},
   "reha:er3": {dose: "2 × 10 Wdh. je Seite, außen 1 s halten, 2 s zurück", tempo: "2-0-1-1 (2 s zurück, 1 s nach außen, 1 s halten)", hold: 1, perSide: true, rest: 20, breath: "Beim Drehen nach außen ausatmen", why: REHA_INFO.er3.why},
   "reha:wallang": {dose: "2 × 6 Wdh., oben 1 s halten, 2 s ablassen", tempo: "2-0-2-1 (2 s ablassen, 2 s hoch, 1 s halten)", hold: 1, perSide: false, rest: 30, breath: "Beim Hochschieben ausatmen", why: REHA_INFO.wallang.why},
@@ -4049,7 +4068,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
   } else if (sheetKind === "hurt") { h += `<div class="hurtcard">${hurtHtml(sheetArg)}</div>`;
   } else if (sheetKind === "mobguide") {
     const i = sheetArg, N = RL().filter(([k]) => !rtSkip(k, selDate)).length, pos = RL().slice(0, i).filter(([k]) => !rtSkip(k, selDate)).length;
-    if (i >= RL().length) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">${RTS[rtk].icon}</div><div>${rtCount(rtk, cur, selDate)}/${rtTotal(rtk, selDate)} Übungen erledigt. ${RTS[rtk].done}</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>`; }
+    if (i >= RL().length) { h += `<div class="sh"><h2>Routine geschafft ✓</h2>${close}</div><div class="sumhero"><div class="trophy">${RTS[rtk].icon}</div><div>${rtCount(rtk, cur, selDate)}/${rtTotal(rtk, selDate)} Übungen erledigt. ${RTS[rtk].done}</div><button class="btn primary big" type="button" data-act="mobFinishClose">Fertig</button></div>${rtSkippedHtml()}`; }
     else { const [k, txt, img] = RL()[i], g = GUIDE[k];
       h += `<div class="sh"><div><div class="lab">${RTS[rtk].title} · ${Math.min(pos + 1, N)}/${N}${autoFlow ? " · automatisch" : ""}</div><h2>${esc(txt.split(":")[0].split(" 1 ×")[0].split(" 2 ×")[0].split(",")[0])}</h2></div>${close}</div>
         <div class="shopbar"><div class="fill" style="width:${pos / N * 100}%"></div></div>${motionHtml(RTS[rtk].pre + k, img, txt, false)}<div>${esc(txt)}</div>`;
@@ -6855,6 +6874,8 @@ async function onClick(e){
       const d = v || selDate, e = {id: Date.now().toString(36), type: cardioType, min: min > 0 ? min : null, km: kmOk ? km : null, feel: cardioFeel || null, note: note || null}, f = day => { day.cardio = [...(day.cardio || []), e]; if (cardioType === "boulder") day.boulder = {done: true, min: min || null, at: Date.now()}; };
       if (cur && cur.date === d) { f(cur); touch(); } else editDay(d, f);
       const nxt = planFor(addDays(d, 1)); cardioFeel = ""; if (cardioType === "boulder" && nxt && /^ok/.test(nxt.session)) toast("Gebouldert · morgen ist Oberkörper geplant – der Planer verschiebt das beim nächsten Lauf"); renderSheet(); render(); return; }
+    if (a === "rehaBandGo") { saveSettings({reha: Object.assign({}, S().reha, {noBand: false})}); if (S().rehaMin !== rehaMin()) saveSettings({rehaMin: rehaMin()}); tmr = null; replanSoon();
+      const i = RL().findIndex(([k]) => !RD()[k] && !rtSkip(k, selDate)); sheetArg = i < 0 ? RL().length : i; renderSheet(); render(); return; }
     if (a === "mobFinishClose") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk], {_done: true}); touch(); closeSheet(); return; }
     if (a === "mobSkip" || a === "rehaSkip") { rtk = a === "rehaSkip" ? "reha" : "mob"; const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (cur[dk]._skip) { delete cur[dk]._skip; clr(dk + "._skip"); } else cur[dk]._skip = true; touch(); if (sheet.open) renderSheet(); render(); return; }
     if (a === "mobFinish") { const dk = RTS[rtk].day; cur[dk] = Object.assign({}, cur[dk]); if (rtFinished(rtk, cur, selDate) && cur[dk]._done) { delete cur[dk]._done; clr(dk + "._done"); } else cur[dk]._done = true; touch(); renderSheet(); render(); return; }
