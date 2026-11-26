@@ -5,7 +5,7 @@
   "channel": "Fitness First Germany",
   "lang": "de",
   "fit": "exakt",
-  "note": "Volle Tiefe, solange das Knie schmerzfrei bleibt.",
+  "note": "Im Video geht es tiefer. Du gehst in Knie-Phase 1 nur bis etwa 60° Kniebeugung und nie tiefer, als das Becken am Polster bleibt und das Knie höchstens 2/10 meldet.",
   "dur": 156,
   "markers": [
    {
@@ -69,7 +69,7 @@
   "lang": "en",
   "fit": "nah",
   "dur": 54,
-  "note": "Bei Knieschmerz nur zwischen 90° und 45° Beugung bewegen.",
+  "note": "Video und Loop zeigen die volle Bewegung. Für dich bei Knieschmerz: nur zwischen rechtwinkligem und halb gestrecktem Knie (90°–45°).",
   "clipVideo": "m0FOpMEgero",
   "clip": 4.1,
   "clipEnd": 7.1,
@@ -113,12 +113,8 @@
   "channel": "National Academy of Sports Medicine (NASM)",
   "lang": "en",
   "fit": "exakt",
-  "note": "Lendenwirbelsäule am Boden halten (wichtig bei Beckenkipp). Arme nur so weit zurückführen, wie die Schulter (SC) es schmerzfrei erlaubt.",
-  "dur": 30,
-  "clipVideo": "I9x8KzS_jKw",
-  "clip": 324.8,
-  "clipEnd": 331.8,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "note": "Unterer Rücken bleibt ruhig, kein Hohlkreuz. Im Video bewegen sich auch die Arme. Bis zur SC-Freigabe bleiben deine Arme senkrecht, nur die Beine bewegen sich.",
+  "dur": 30
  },
  "rowchest": {
   "video": "2ByilQ4NaAs",
@@ -210,7 +206,7 @@
   "channel": "Metta Physio",
   "lang": "en",
   "fit": "exakt",
-  "note": "Face Pull mit Außenrotation am Ende. Kein Übergang in ein Y über Kopf. Am Ende die Hände nicht über Kopfhöhe (kein Doppelbizeps-Posing).",
+  "note": "Face Pull mit Außendrehung am Ende: Ellbogen auf Schulterhöhe, Unterarme zeigen nach oben, Hände neben dem Kopf. Nicht weiter in ein Y über den Kopf.",
   "dur": 72,
   "clip": 3.3,
   "clipVideo": "qCTlaGin9dQ",
@@ -278,11 +274,7 @@
   "lang": "en",
   "fit": "exakt",
   "note": "Push-up Plus an der Wand (erhöht). An der Bank gleicher Ablauf. Arme beim 'Plus' gestreckt.",
-  "dur": 55,
-  "clip": 8.3,
-  "clipVideo": "RFbjeyq_ZPc",
-  "clipEnd": 11.1,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "dur": 55
  },
  "extrot": {
   "video": "MfxSKo5OsaM",
@@ -347,11 +339,7 @@
     "label": "Ausführung mit Gewicht"
    }
   ],
-  "start": 166,
-  "clip": 8.6,
-  "clipVideo": "NMR80AuGqxY",
-  "clipEnd": 14.4,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "start": 166
  },
  "bss": {
   "video": "or1frhkjBDc",
@@ -448,23 +436,19 @@
   "dur": 118,
   "markers": [
    {
-    "t": 12,
-    "label": "Setup"
+    "t": 32,
+    "label": "Stand und Aufbau"
    },
    {
-    "t": 49,
-    "label": "Ausführung"
-   },
-   {
-    "t": 60,
+    "t": 57,
     "label": "Häufige Fehler"
    },
    {
-    "t": 76,
-    "label": "Steigerung/Varianten"
+    "t": 79,
+    "label": "Steigerung"
    }
   ],
-  "start": 12,
+  "start": 32,
   "clipVideo": "P4394cXqs3E",
   "clip": 6.8,
   "clipEnd": 9.0,
@@ -476,7 +460,7 @@
   "channel": "Catalyst Athletics",
   "lang": "en",
   "fit": "exakt",
-  "note": "Ohne Zusatzgewicht bis zur Arztfreigabe; unten nicht passiv hängen.",
+  "note": "Erst nach der Arztfreigabe, anfangs ohne Zusatzgewicht. Unten nicht passiv hängen.",
   "dur": 44,
   "clip": 5.5,
   "clipVideo": "XWt6FQAK5wM",
@@ -512,7 +496,8 @@
   "clip": 10.0,
   "clipVideo": "UCXxvVItLoM",
   "clipEnd": 13.3,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "clipNote": "geprüfte Wiederholung (Coach)",
+  "note": "Im Video wird weiter nach hinten gezogen und 2 s gehalten. Du stoppst, wenn die Oberarme neben dem Rumpf sind, und hältst 1 s."
  },
  "chestpress": {
   "video": "VHIlmOPMWWs",
@@ -524,7 +509,8 @@
   "clipVideo": "65npK4Ijz1c",
   "clip": 1.6,
   "clipEnd": 4.4,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "clipNote": "geprüfte Wiederholung (Coach)",
+  "note": "Im Video sind die Ellbogen fast auf Schulterhöhe. Du hältst sie etwa 45° vom Körper und gehst nur zurück, bis sie neben dem Rumpf sind."
  },
  "landmine": {
   "video": "8xQQnsjzLhs",
@@ -604,7 +590,7 @@
     "label": "Ausführung"
    }
   ],
-  "note": "Ellbogen Richtung Decke, Stange zur Stirn bzw. hinter den Kopf.",
+  "note": "Ellbogen Richtung Decke, Stange zur Stirn, nicht hinter den Kopf. Im Video gerade Langhantel; mit SZ-Stange oder Kurzhanteln geht es gelenkschonender.",
   "dur": 14,
   "clipVideo": "l3rHYPtMUo8",
   "clipEnd": 7.8,
@@ -654,7 +640,7 @@
   "channel": "Calisthenicmovement",
   "lang": "en",
   "fit": "exakt",
-  "note": "Bis zur Arztfreigabe mit erhöhten Händen.",
+  "note": "Erst nach der Arztfreigabe, dann zuerst mit erhöhten Händen. Im Video geht die Brust tiefer, du nur bis die Ellbogen auf Rumpfhöhe sind.",
   "dur": 217,
   "markers": [
    {
@@ -754,7 +740,7 @@
   "channel": "Dr. Carl Baird",
   "lang": "en",
   "fit": "nah",
-  "note": "Je nach Knie 60–90° Beugung, so tief wie schmerzfrei.",
+  "note": "Du hältst flacher als im Video: 30–60° Kniebeugung, nur so tief wie ≤ 2/10.",
   "dur": 37,
   "clipVideo": "RG7z0P9qrLk",
   "clip": 3.1,
@@ -787,7 +773,7 @@
     "label": "Ausführung"
    }
   ],
-  "note": "Nur im oberen Bereich drücken, bis ca. 60° Kniebeugung. Füße hoch auf der Plattform.",
+  "note": "Nur im oberen Bereich drücken: anfangs bis 45° Kniebeugung, später bis 60°. Füße hoch auf der Plattform.",
   "dur": 41,
   "clipVideo": "FoPM1SroS9g",
   "clipEnd": 9.3,
@@ -1071,11 +1057,7 @@
   "lang": "en",
   "fit": "exakt",
   "note": "Nicht ins Hohlkreuz gehen.",
-  "dur": 39,
-  "clipVideo": "xyV2rF8ismg",
-  "clip": 26.5,
-  "clipEnd": 30.0,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "dur": 39
  },
  "alt_sllegext": {
   "video": "82IuSLk5zNc",
@@ -1095,7 +1077,7 @@
   "channel": "Squat University",
   "lang": "en",
   "fit": "exakt",
-  "note": "Nur so weit absenken, wie du es kontrollieren kannst, und dann weich abstützen.",
+  "note": "Erst nach der Arztfreigabe. Nur so weit absenken, wie du es kontrollieren kannst, dann mit den Händen weich abfangen.",
   "dur": 47,
   "clipVideo": "9TemDaazL8A",
   "clip": 6.5,
@@ -1199,7 +1181,8 @@
   "clipVideo": "_FrrYQxA6kc",
   "clip": 4.2,
   "clipEnd": 7.2,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "clipNote": "geprüfte Wiederholung (Coach)",
+  "note": "Das Video zieht weiter nach hinten. Bei dir im Modus Schonen: Ellbogen nur bis zur Rumpflinie."
  },
  "alt_cablepress": {
   "video": "sh92B-_2O48",
@@ -1207,7 +1190,7 @@
   "channel": "PureGym",
   "lang": "en",
   "fit": "nah",
-  "note": "Das Video zeigt die Standardtiefe. Für dich: nicht tief in die Dehnung ziehen (SC-Gelenk).",
+  "note": "Das Video zeigt die Standardausführung. Für dich: Hände vorn nicht zusammenführen und nicht tief in die Dehnung gehen (SC-Gelenk).",
   "dur": 15,
   "clipVideo": "sh92B-_2O48",
   "clip": 1.5,
@@ -1220,7 +1203,7 @@
   "channel": "Tom Morrison",
   "lang": "en",
   "fit": "exakt",
-  "note": "Für SC-Gelenk: Brust nur bis zur Kante, nicht tiefer.",
+  "note": "Für SC-Gelenk: anfangs nur bis die Ellbogen auf Rumpfhöhe sind, nicht bis zur Kante.",
   "dur": 61,
   "clipVideo": "yAbg3_pJKvw",
   "clip": 13.7,
@@ -1233,11 +1216,7 @@
   "channel": "Testosterone Nation",
   "lang": "en",
   "fit": "exakt",
-  "dur": 23,
-  "clipVideo": "qHCI9rK7HqM",
-  "clip": 25.0,
-  "clipEnd": 29.0,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "dur": 23
  },
  "alt_1armpd": {
   "video": "M9xUoJYtXtc",
@@ -1274,11 +1253,7 @@
   "lang": "en",
   "fit": "exakt",
   "note": "Unten nicht passiv hängen.",
-  "dur": 36,
-  "clipVideo": "bs02BThv4Lc",
-  "clip": 22.5,
-  "clipEnd": 26.1,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "dur": 36
  },
  "alt_sapd": {
   "video": "hAMcfubonDc",
@@ -1286,12 +1261,8 @@
   "channel": "Andrew Kwong (DeltaBolic)",
   "lang": "en",
   "fit": "exakt",
-  "note": "Für das SC-Gelenk erst ab Schulterhöhe starten.",
-  "dur": 10,
-  "clipVideo": "jLvqKgW-_G8",
-  "clip": 651.8,
-  "clipEnd": 654.6,
-  "clipNote": "geprüfte Wiederholung (Coach)"
+  "note": "Im Video rollen die Schultern am Start nach vorn und die Arme starten über Kopf. Du hältst die Schultern hinten und startest auf Schulterhöhe – erst nach der Freigabe.",
+  "dur": 10
  },
  "alt_lylat": {
   "video": "v7WRsQDjsEc",
@@ -1299,7 +1270,7 @@
   "channel": "Testosterone Nation",
   "lang": "en",
   "fit": "exakt",
-  "note": "Nur bis Schulterhöhe.",
+  "note": "Nur bis der Arm etwa 90° zum Rumpf steht.",
   "dur": 51,
   "clip": 10.0,
   "clipVideo": "KTSD2RtmPBA",
@@ -1526,7 +1497,7 @@
     "label": "Ausführung"
    }
   ],
-  "note": "Leichtes Gewicht (SC-Gelenk), aufrecht gehen, nicht zur Seite kippen.",
+  "note": "Im Video mit Kettlebell, mit Kurzhantel genauso. Leichtes Gewicht (SC-Gelenk), aufrecht gehen, nicht zur Seite kippen.",
   "dur": 28,
   "clipVideo": "IAa-5uP7tSY",
   "clipEnd": 7.0,
