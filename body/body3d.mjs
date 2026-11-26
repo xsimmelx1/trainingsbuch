@@ -44,6 +44,7 @@ export async function mount(el, opt = {}) {
   scene.add(gltf.scene);
   // Ecken je Teil (die Kompression ordnet Ecken um)
   const range = {}; for (const [ln, L] of Object.entries(layers)) { const tmp = {}; for (let i = 0; i < L.pa.count; i++) { const p = Math.round(L.pa.getX(i)); (tmp[p] || (tmp[p] = [])).push(i); } for (const p in tmp) range[p] = { ln, v: Uint32Array.from(tmp[p]) }; }
+  for (const p of parts) if (/epicranial aponeurosis/i.test(p.en) && range[p.i]) { const r = range[p.i], pos = layers[r.ln].mesh.geometry.getAttribute("position"), x = pos.getX(r.v[0]), y = pos.getY(r.v[0]), z = pos.getZ(r.v[0]); for (const i of r.v) pos.setXYZ(i, x, y, z); pos.needsUpdate = true; }
   const tmpC = new THREE.Color();
   function paint(p, color) { const r = range[p]; if (!r) return; const L = layers[r.ln], col = L.mesh.geometry.getAttribute("color"), c = color || (r.ln === "muscle" ? tint(L.base, +p, tmpC) : L.base); for (const i of r.v) c.toArray(col.array, i * 3); col.needsUpdate = true; }
   // Nähe im Modell (Weltkoordinaten in Metern): welche Teile berühren ein Teil? Für Sehnen/Bänder/Schleimbeutel, die Z-Anatomy nicht mit Muskeln verknüpft
