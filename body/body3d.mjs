@@ -72,9 +72,11 @@ export async function mount(el, opt = {}) {
   for (const p of parts) { byEn[p.en] = p; if (p.grp) (byGrp[p.grp] || (byGrp[p.grp] = [])).push(p); if (p.base) (byBase[key(p.base, p.side)] || (byBase[key(p.base, p.side)] = [])).push(p); if (p.on) (byOn[p.on] || (byOn[p.on] = [])).push(p); }
   const sameSide = (a, b) => !a.side || !b.side || a.side === b.side;
   const relCache = new Map(), SOFT = /bursa/i;
+  const HIDDEN_L = new Set(["skin", "fascia", "insertion"]);
   function relations(i) { if (!relCache.has(i)) relCache.set(i, relations0(i)); return relCache.get(i); }
   function relations0(i) {
-    const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i).map(x => x.i))]; if (!ids.length) return; const o = out.find(g => g.title === title); if (o) o.ids = [...new Set([...o.ids, ...ids])]; else out.push({ title, ids }); };
+    // ausgeblendete Ebenen (Haut, Faszien, Ansatzflächen) und die Kopfschwarte nicht als Zusammenhang anbieten: wären unsichtbar
+    const p = parts[i], out = [], add = (title, list) => { const ids = [...new Set(list.filter(x => x && x.i !== i && !HIDDEN_L.has(x.layer) && !/epicranial aponeurosis/i.test(x.en)).map(x => x.i))]; if (!ids.length) return; const o = out.find(g => g.title === title); if (o) o.ids = [...new Set([...o.ids, ...ids])]; else out.push({ title, ids }); };
     const near = (lns, d, max) => nearParts(i, lns, d, max).map(j => parts[j]);
     // Bänder, Sehnen, Knorpel, Schleimbeutel: woran sie liegen (Knochen, Muskeln) und was am selben Gelenk sitzt
     if (["tendon", "ligament", "cartilage"].includes(p.layer)) {

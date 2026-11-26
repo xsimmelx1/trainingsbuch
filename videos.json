@@ -1262,7 +1262,8 @@
   "lang": "en",
   "fit": "exakt",
   "note": "Im Video rollen die Schultern am Start nach vorn und die Arme starten über Kopf. Du hältst die Schultern hinten und startest auf Schulterhöhe – erst nach der Freigabe.",
-  "dur": 10
+  "dur": 10,
+  "noclip": true
  },
  "alt_lylat": {
   "video": "v7WRsQDjsEc",
