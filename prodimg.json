@@ -1816,5 +1816,1034 @@
   "via": "pick",
   "src": "https://img.rewe-static.de/8593938/33287098_digital-image.png?imwidth=240",
   "rewe": "Harry Steinofen Meisterbrötchen"
+ },
+ "mangold": {
+  "title": "File:Swiss Chard.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Swiss_Chard.jpg",
+  "license": "Public domain",
+  "artist": "",
+  "via": "de:Mangold"
+ },
+ "dickmilch": {
+  "title": "File:Latte 025.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Latte_025.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Kagor",
+  "via": "de:Dickmilch"
+ },
+ "paneer": {
+  "title": "File:Panir Paneer Indian cheese fresh.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Panir_Paneer_Indian_cheese_fresh.jpg",
+  "license": "CC BY 2.0 de",
+  "artist": "Sonja Pauen - Stanhopea",
+  "via": "de:Paneer"
+ },
+ "udonFrisch": {
+  "title": "File:Udon by udono.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Udon_by_udono.jpg",
+  "license": "CC BY 2.0",
+  "artist": "udono",
+  "via": "pick"
+ },
+ "favaTrocken": {
+  "title": "File:Liat Portal for Foodie Disorder - Dried Fava Beans with Cumin.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Dried_Fava_Beans_with_Cumin.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "HaJunkiyada",
+  "via": "pick"
+ },
+ "gruenesosse": {
+  "title": "File:Hernani - merluza en salsa verde.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hernani_-_merluza_en_salsa_verde.jpg",
+  "license": "CC0",
+  "artist": "Zarateman",
+  "via": "en:Green sauce"
+ },
+ "staengelkohl": {
+  "title": "File:Cimadirapa.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Cimadirapa.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Roberto sernicola",
+  "via": "de:Stängelkohl"
+ },
+ "radicchio": {
+  "title": "File:Trevisane1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Trevisane1.jpg",
+  "license": "Public domain",
+  "artist": "moi-même",
+  "via": "de:Radicchio"
+ },
+ "muerr": {
+  "title": "File:Hirneola auricula-judae (xndr) cropped.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hirneola_auricula-judae_(xndr)_cropped.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Hirneola_auricula-judae_(xndr).jpg: Svdmolen\nderivative work",
+  "via": "de:Judasohr"
+ },
+ "safran": {
+  "title": "File:Iran saffron threads.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Iran_saffron_threads.jpg",
+  "license": "Public domain",
+  "artist": "Rainer Zenz",
+  "via": "pick"
+ },
+ "biberSalca": {
+  "title": "File:Biber salçası.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Biber_sal%C3%A7as%C4%B1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Off-shell",
+  "via": "de:Paprikamark"
+ },
+ "fenchelsamen": {
+  "title": "File:Fennel seed.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fennel_seed.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Holly Cheng",
+  "via": "pick"
+ },
+ "furikake": {
+  "title": "File:Meshi 004.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Meshi_004.jpg",
+  "license": "CC0",
+  "artist": "Ocdp",
+  "via": "de:Furikake"
+ },
+ "tonkatsu": {
+  "title": "File:Ikarisoosu.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Ikarisoosu.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "Shinmaebashi",
+  "via": "en:Tonkatsu sauce"
+ },
+ "bier": {
+  "title": "File:Helles im Glas-Helles (pale beer).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Helles_im_Glas-Helles_(pale_beer).jpg",
+  "license": "Public domain",
+  "artist": "No machine-readable author provided. Flo422 assumed (based o",
+  "via": "de:Helles"
+ },
+ "sauerkirschen": {
+  "title": "File:Sauerkirschenfrucht Prunus cerasus 2.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Sauerkirschenfrucht_Prunus_cerasus_2.JPG",
+  "license": "CC BY-SA 2.5",
+  "artist": "böhringer friedrich",
+  "via": "pick"
+ },
+ "mandarinenDose": {
+  "title": "File:Liat Portal for Foodie Disorder - Mandarin segments.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Mandarin_segments.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "HaJunkiyada",
+  "via": "pick"
+ },
+ "vanilleeis": {
+  "title": "File:Petit gâteau with vanilla ice cream and caramel sauce, São Paulo.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Petit_g%C3%A2teau_with_vanilla_ice_cream_and_caramel_sauce,_S%C3%A3o_Paulo.jpg",
+  "license": "CC0",
+  "artist": "Wilfredor",
+  "via": "pick"
+ },
+ "pistazien": {
+  "title": "File:Pistachios in shells.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Pistachios_in_shells.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Madmaxmarchhare at English Wikipedia",
+  "via": "pick"
+ },
+ "lebkuchen": {
+  "title": "File:Nuernberger Lebkuchen 3183857869 0f3f7bcbe3.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Nuernberger_Lebkuchen_3183857869_0f3f7bcbe3.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "https://www.flickr.com/photos/charley1965/",
+  "via": "de:Lebkuchen"
+ },
+ "cookies": {
+  "title": "File:Choco chip cookie.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Choco_chip_cookie.png",
+  "license": "CC BY 2.5",
+  "artist": "brainloc on sxc.hu (Bob Smith)",
+  "via": "en:Chocolate chip cookie"
+ },
+ "worcester": {
+  "title": "File:Worcester Sauce 001.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Worcester_Sauce_001.jpg",
+  "license": "CC0",
+  "artist": "Ocdp",
+  "via": "en:Worcestershire sauce"
+ },
+ "rosenwasser": {
+  "title": "File:Rose syrup bottles.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Rose_syrup_bottles.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Sgconlaw",
+  "via": "pick"
+ },
+ "schlagcreme": {
+  "title": "File:And some whipped cream (4315201282).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:And_some_whipped_cream_(4315201282).jpg",
+  "license": "CC BY 2.0",
+  "artist": "jeffreyw",
+  "via": "de:Schlagsahne"
+ },
+ "speisequark": {
+  "title": "File:Skimmed milk quark on spoon.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Skimmed_milk_quark_on_spoon.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "SKopp",
+  "via": "de:Quark (Milchprodukt)"
+ },
+ "spaetzle": {
+  "title": "File:Zwiebelrostbraten mit Spätzle.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Zwiebelrostbraten_mit_Sp%C3%A4tzle.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "4028mdk09",
+  "via": "de:Spätzle"
+ },
+ "lasagneplatten": {
+  "title": "File:Lasagne.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Lasagne.png",
+  "license": "CC0",
+  "artist": "Popo le Chien",
+  "via": "de:Lasagne"
+ },
+ "rundkornreis": {
+  "title": "File:Milchreis.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Milchreis.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Alice Wiegand",
+  "via": "de:Milchreis"
+ },
+ "kaffee": {
+  "title": "File:Coffee cup surrounded by coffee beans.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Coffee_cup_surrounded_by_coffee_beans.jpg",
+  "license": "CC0",
+  "artist": "Petr Kratochvil",
+  "via": "de:Kaffee"
+ },
+ "zitronengras": {
+  "title": "File:Cymbopogon flexuosus (East Indian lemongrass), harvested stalks (SaatPilot).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cymbopogon_flexuosus_(East_Indian_lemongrass),_harvested_stalks_(SaatPilot).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Steffen Bauer (www.saatpilot.de)",
+  "via": "pick"
+ },
+ "tortillachips": {
+  "title": "File:4003 - Zermatt - Restaurant Weisshorn.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:4003_-_Zermatt_-_Restaurant_Weisshorn.JPG",
+  "license": "CC BY-SA 2.5",
+  "artist": "Andrew Bossi",
+  "via": "de:Tortilla-Chip"
+ },
+ "glutenpulver": {
+  "title": "File:Seitan Platter (4139727246).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Seitan_Platter_(4139727246).jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "Amy Stephenson from New York, USA",
+  "via": "en:Wheat gluten (food)"
+ },
+ "zimtzucker": {
+  "title": "File:Cinnamon Sugar.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Cinnamon_Sugar.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Ed! (Photography Gallery)",
+  "via": "en:Cinnamon sugar"
+ },
+ "weisskohl": {
+  "title": "File:Cabbage.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cabbage.jpg",
+  "license": "Public domain",
+  "artist": "Bill Tarpenning",
+  "via": "de:Weißkohl"
+ },
+ "spitzkohl": {
+  "title": "File:Spitzkohl-2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Spitzkohl-2.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
+  "via": "de:Spitzkohl"
+ },
+ "chinakohl": {
+  "title": "File:Napa cabbages.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Napa_cabbages.png",
+  "license": "CC0",
+  "artist": "Bayartai",
+  "via": "de:Chinakohl"
+ },
+ "fenchel": {
+  "title": "File:Fennel bulb from Brazil.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fennel_bulb_from_Brazil.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Mauro Cateb",
+  "via": "pick"
+ },
+ "rhabarber": {
+  "title": "File:Rheum rhabarbarum.2006-04-27.uellue.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Rheum_rhabarbarum.2006-04-27.uellue.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Dieter Weber (User:Uellue)",
+  "via": "en:Rhubarb"
+ },
+ "ananas": {
+  "title": "File:Ananaspflanze.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Ananaspflanze.jpg",
+  "license": "CC BY-SA 2.0 de",
+  "artist": "MrToto",
+  "via": "de:Ananas"
+ },
+ "nektarine": {
+  "title": "File:Nectarine.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Nectarine.jpg",
+  "license": "CC BY-SA 2.0 de",
+  "artist": "",
+  "via": "de:Nektarine"
+ },
+ "kiwi": {
+  "title": "File:Kiwi aka.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kiwi_aka.jpg",
+  "license": "CC BY-SA 2.5",
+  "artist": "André Karwath aka Aka",
+  "via": "de:Kiwifrucht"
+ },
+ "passionsfrucht": {
+  "title": "File:Cut and uncut passion fruits.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cut_and_uncut_passion_fruits.jpg",
+  "license": "CC0",
+  "artist": "Nana Pearls",
+  "via": "pick"
+ },
+ "datteln": {
+  "title": "File:Dates 10-8-09-101309 copy.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Dates_10-8-09-101309_copy.jpg",
+  "license": "Public domain",
+  "artist": "Loorie Cooper",
+  "via": "pick"
+ },
+ "puderzucker": {
+  "title": "File:PowderedSugar.png",
+  "url": "https://commons.wikimedia.org/wiki/File:PowderedSugar.png",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ɱ",
+  "via": "de:Puderzucker"
+ },
+ "hefe": {
+  "title": "File:Fresh yeast.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fresh_yeast.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "No machine-readable author provided. ElinorD assumed (based ",
+  "via": "pick"
+ },
+ "kuemmel": {
+  "title": "File:Caraway Seed.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Caraway_Seed.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "OttawaAC",
+  "via": "pick"
+ },
+ "meerrettich": {
+  "title": "File:Gemüsestand am Viktualienmarkt München 04.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Gem%C3%BCsestand_am_Viktualienmarkt_M%C3%BCnchen_04.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Kritzolina",
+  "via": "pick"
+ },
+ "graupen": {
+  "title": "File:Hordeum vulgare Gort.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hordeum_vulgare_Gort.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Rasbak",
+  "via": "de:Graupen"
+ },
+ "ketchup": {
+  "title": "File:Ketchup 20160918 181342 (cropped).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Ketchup_20160918_181342_(cropped).jpg",
+  "license": "CC BY 4.0",
+  "artist": "Kim Holger Kelting",
+  "via": "de:Tomatenketchup"
+ },
+ "gruenkern": {
+  "title": "File:Dinkelhalme Gruenkern.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Dinkelhalme_Gruenkern.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Hubert Berberich (HubiB)",
+  "via": "de:Grünkern"
+ },
+ "maiskoelbchen": {
+  "title": "File:Baby corn.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Baby_corn.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Jill Schenck",
+  "via": "en:Baby corn"
+ },
+ "tortellini": {
+  "title": "File:Tortellini Bolognesi.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Tortellini_Bolognesi.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Angelo.Muratore",
+  "via": "de:Tortellini"
+ },
+ "maultaschen": {
+  "title": "File:MaultascheEissele.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:MaultascheEissele.jpg",
+  "license": "CC0",
+  "artist": "Nikinator86",
+  "via": "de:Maultasche"
+ },
+ "hirseflocken": {
+  "title": "File:Millet flakes.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Millet_flakes.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Tiia Monto",
+  "via": "pick"
+ },
+ "hirse": {
+  "title": "File:MILLET grains India.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:MILLET_grains_India.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Nandhinikandhasamy",
+  "via": "pick"
+ },
+ "buchweizen": {
+  "title": "File:Boiled buckwheat groats.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Boiled_buckwheat_groats.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "V.Boldychev",
+  "via": "pick"
+ },
+ "spekulatius": {
+  "title": "File:Spekulatius four pieces of.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Spekulatius_four_pieces_of.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Zerohund",
+  "via": "de:Spekulatius"
+ },
+ "raclette": {
+  "title": "File:Raclette 20040817 140816.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Raclette_20040817_140816.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ka23 13",
+  "via": "en:Raclette"
+ },
+ "gelee": {
+  "title": "File:Marmeladesorten.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Marmeladesorten.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Alice Wiegand",
+  "via": "de:Konfitüre"
+ },
+ "muesli": {
+  "title": "File:Muesli.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Muesli.jpg",
+  "license": "CC BY-SA 2.5",
+  "artist": "Original description was: I, VirtualSteve took this photogra",
+  "via": "de:Müsli"
+ },
+ "blaetterteig": {
+  "title": "File:Making puff pastry (butter and Water dough ) 1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Making_puff_pastry_(butter_and_Water_dough_)_1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Roozitaa",
+  "via": "de:Blätterteig"
+ },
+ "fruehlingsrollenteig": {
+  "title": "File:Spring roll 001.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Spring_roll_001.jpg",
+  "license": "CC0",
+  "artist": "Ocdp",
+  "via": "de:Frühlingsrolle"
+ },
+ "tee": {
+  "title": "File:Cup of black tea.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Cup_of_black_tea.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "AntanO",
+  "via": "de:Schwarzer Tee"
+ },
+ "kefir": {
+  "title": "File:Kefir glass london feb 10.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kefir_glass_london_feb_10.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "secretlondon123",
+  "via": "de:Kefir"
+ },
+ "salsa": {
+  "title": "File:Various salsas.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Various_salsas.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Popo le Chien",
+  "via": "en:Salsa (sauce)"
+ },
+ "mohn": {
+  "title": "File:Poppy seeds.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Poppy_seeds.jpg",
+  "license": "Public domain",
+  "artist": "Odedr",
+  "via": "pick"
+ },
+ "bagel": {
+  "title": "File:Bagel with sesame 3.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Bagel_with_sesame_3.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Shisma",
+  "via": "de:Bagel"
+ },
+ "cranberrys": {
+  "title": "File:Cranberry bog.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cranberry_bog.jpg",
+  "license": "Public domain",
+  "artist": "Photo by Keith Weller",
+  "via": "de:Großfrüchtige Moosbeere"
+ },
+ "schmelzkaese": {
+  "title": "File:Schmelzkäse-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Schmelzk%C3%A4se-1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Rainer Z ...",
+  "via": "de:Schmelzkäse"
+ },
+ "sauerrahm": {
+  "title": "File:Milk heavy cream B.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Milk_heavy_cream_B.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Aleksey Pogrebnoj-Alexandroff",
+  "via": "de:Saure Sahne"
+ },
+ "schlagsahne": {
+  "title": "File:01 Mmm... Apple Crisp with Whipped Cream.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:01_Mmm..._Apple_Crisp_with_Whipped_Cream.jpg",
+  "license": "CC BY 2.0",
+  "artist": "jeffreyw",
+  "via": "en:Cream"
+ },
+ "roestzwiebeln": {
+  "title": "File:Röstzwiebeln.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:R%C3%B6stzwiebeln.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Daniel Naber",
+  "via": "de:Röstzwiebeln"
+ },
+ "puddingpulver": {
+  "title": "File:Griesmeelpudding met rode bessen saus.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Griesmeelpudding_met_rode_bessen_saus.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Takeaway",
+  "via": "de:Pudding"
+ },
+ "hanfsamen": {
+  "title": "File:Cannabis sativa.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cannabis_sativa.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "de:Benutzer:Michael_w",
+  "via": "de:Hanfsamen"
+ },
+ "kuerbiskernoel": {
+  "title": "File:Kuerbiskernoel-mit-Flasche.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Kuerbiskernoel-mit-Flasche.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Wolf32at",
+  "via": "de:Steirisches Kürbiskernöl"
+ },
+ "schupfnudeln": {
+  "title": "File:Schupfnudeln mit Sauerkraut-RZ.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Schupfnudeln_mit_Sauerkraut-RZ.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "MarkusHagenlocher",
+  "via": "de:Schupfnudeln"
+ },
+ "buttermilch": {
+  "title": "File:Buttermilk-(right)-and-Milk-(left).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Buttermilk-(right)-and-Milk-(left).jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Ukko-wc",
+  "via": "de:Buttermilch"
+ },
+ "sojajoghurt": {
+  "title": "File:Yoghurt and Soy Yoghurt red.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Yoghurt_and_Soy_Yoghurt_red.JPG",
+  "license": "CC BY 3.0 de",
+  "artist": "Feuerrabe",
+  "via": "de:Sojajoghurt"
+ },
+ "griechJoghurt": {
+  "title": "File:Labneh01.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Labneh01.jpg",
+  "license": "Public domain",
+  "artist": "No machine-readable author provided. Omernos~commonswiki ass",
+  "via": "en:Strained yogurt"
+ },
+ "gewuerzgurken": {
+  "title": "File:Polish style pickled cucumbers IMGP0464.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Polish_style_pickled_cucumbers_IMGP0464.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Nikodem Nijaki",
+  "via": "de:Gewürzgurke"
+ },
+ "asianudeln": {
+  "title": "File:Glasnudeln.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Glasnudeln.JPG",
+  "license": "Public domain",
+  "artist": "User ChiemseeMan on de.wikipedia",
+  "via": "de:Glasnudel"
+ },
+ "kichererbsenmehl": {
+  "title": "File:Gram flour AvL.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Gram_flour_AvL.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "AlexanderVanLoon",
+  "via": "en:Gram flour"
+ },
+ "paniermehl": {
+  "title": "File:2018-07-28-Paniermehl-9799.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2018-07-28-Paniermehl-9799.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Superbass",
+  "via": "de:Paniermehl"
+ },
+ "ahornsirup": {
+  "title": "File:Maple syrup.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Maple_syrup.jpg",
+  "license": "Public domain",
+  "artist": "User:Miguel Andrade",
+  "via": "de:Ahornsirup"
+ },
+ "hafersahne": {
+  "title": "File:Oat milk glass and bottles.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Oat_milk_glass_and_bottles.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Shisma",
+  "via": "de:Haferdrink"
+ },
+ "kapern": {
+  "title": "File:Capparis spinosa CBMen 01.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Capparis_spinosa_CBMen_01.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Donkey shot",
+  "via": "de:Kaper"
+ },
+ "reispapier": {
+  "title": "File:Liat Portal for Foodie Disorder - Homemade burekas with rice paper pastry.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Homemade_burekas_with_rice_paper_pastry.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "HaJunkiyada",
+  "via": "pick"
+ },
+ "sauerkraut": {
+  "title": "File:Sauerkraut Jar.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Sauerkraut_Jar.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Bdubay",
+  "via": "de:Sauerkraut"
+ },
+ "reibeware": {
+  "title": "File:Vegan Cheese Happy Cheese Cashew 2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Vegan_Cheese_Happy_Cheese_Cashew_2.jpg",
+  "license": "CC0",
+  "artist": "mangostaniko",
+  "via": "de:Veganer Käse"
+ },
+ "nussmus": {
+  "title": "File:Barney Almond Butter, Crunchy, 10 oz jar.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Barney_Almond_Butter,_Crunchy,_10_oz_jar.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Steven Pavlov",
+  "via": "pick"
+ },
+ "kokosraspeln": {
+  "title": "File:Starr 031209-0059 Cocos nucifera.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Starr_031209-0059_Cocos_nucifera.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Forest &amp; Kim Starr",
+  "via": "de:Kokosraspeln"
+ },
+ "yufka": {
+  "title": "File:Yufka.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Yufka.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "Maderibeyza",
+  "via": "en:Yufka"
+ },
+ "mandeldrink": {
+  "title": "File:Home-made almond milk, November 2012.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Home-made_almond_milk,_November_2012.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Amazing Almonds",
+  "via": "de:Mandelmilch"
+ },
+ "linsenGruen": {
+  "title": "File:Green Lentil - പരിപ്പ്.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Green_Lentil_-_%E0%B4%AA%E0%B4%B0%E0%B4%BF%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8D.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Shijan Kaakkara",
+  "via": "pick"
+ },
+ "dickeBohnen": {
+  "title": "File:Dried broad beans.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Dried_broad_beans.jpg",
+  "license": "CC0",
+  "artist": "Fumikas Sagisavas",
+  "via": "pick"
+ },
+ "harissa": {
+  "title": "File:هريسة دياري.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:%D9%87%D8%B1%D9%8A%D8%B3%D8%A9_%D8%AF%D9%8A%D8%A7%D8%B1%D9%8A.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ovva olfa",
+  "via": "en:Harissa"
+ },
+ "satesauce": {
+  "title": "File:LauPaSat Satay.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:LauPaSat_Satay.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "Jpatokal",
+  "via": "de:Erdnusssoße"
+ },
+ "asiasauce": {
+  "title": "File:OysterSauce2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:OysterSauce2.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Gossipguy",
+  "via": "en:Oyster sauce"
+ },
+ "chai": {
+  "title": "File:Milk Masala Tea.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Milk_Masala_Tea.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Gaurav Dhwaj Khadka",
+  "via": "pick"
+ },
+ "endivie": {
+  "title": "File:Endive-salad-vegetables-d00a1b.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Endive-salad-vegetables-d00a1b.jpg",
+  "license": "CC0",
+  "artist": "Unknown authorUnknown author",
+  "via": "pick"
+ },
+ "veganWuerstchen": {
+  "title": "File:Wurstplatte.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Wurstplatte.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Alice Wiegand",
+  "via": "en:Vegetarian sausage"
+ },
+ "frischcreme": {
+  "title": "File:B Frischkaese mit lauch und Manderinen 2016-01-25 11-04-22 - 0011.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:B_Frischkaese_mit_lauch_und_Manderinen_2016-01-25_11-04-22_-_0011.JPG",
+  "license": "CC0",
+  "artist": "Usien",
+  "via": "de:Frischkäse"
+ },
+ "kokoswasser": {
+  "title": "File:Kokosnussdrink.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kokosnussdrink.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Adrian Michael",
+  "via": "de:Kokoswasser"
+ },
+ "pesto": {
+  "title": "File:BasilkumPesto.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:BasilkumPesto.jpg",
+  "license": "Public domain",
+  "artist": "Flusel",
+  "via": "de:Pesto"
+ },
+ "salatcreme": {
+  "title": "File:Zaanse mayonaise.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Zaanse_mayonaise.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Kliek",
+  "via": "de:Mayonnaise"
+ },
+ "ricotta": {
+  "title": "File:Ricotte fresche.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Ricotte_fresche.jpg",
+  "license": "CC0",
+  "artist": "8w9d",
+  "via": "de:Ricotta"
+ },
+ "toastbrot": {
+  "title": "File:Toast-3.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Toast-3.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Rainer Z ...",
+  "via": "de:Toastbrot"
+ },
+ "mascarpone": {
+  "title": "File:Mascarpone 4.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Mascarpone_4.png",
+  "license": "CC BY-SA 4.0",
+  "artist": "Brodolò1",
+  "via": "de:Mascarpone"
+ },
+ "artischocken": {
+  "title": "File:Hummel auf Artischocke.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hummel_auf_Artischocke.jpg",
+  "license": "CC BY-SA 3.0 de",
+  "artist": "Frank Liebig",
+  "via": "de:Artischocke"
+ },
+ "tomatensosse": {
+  "title": "File:Fresh Tomato Sauce (Unsplash).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fresh_Tomato_Sauce_(Unsplash).jpg",
+  "license": "CC0",
+  "artist": "Dennis Klein klein2",
+  "via": "de:Tomatensauce"
+ },
+ "sambal": {
+  "title": "File:GT Sambal Oelek.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:GT_Sambal_Oelek.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "GeoTrinity",
+  "via": "de:Sambal"
+ },
+ "chiligewuerz": {
+  "title": "File:BolivianChilePowder2.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:BolivianChilePowder2.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "User JoeCarrasco on en.wikipedia",
+  "via": "de:Chilipulver"
+ },
+ "korianderPulver": {
+  "title": "File:Coriander Seeds.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Coriander_Seeds.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Sanjay Acharya",
+  "via": "pick"
+ },
+ "paprikapulver": {
+  "title": "File:Aleva paprika.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Aleva_paprika.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ljiljana Sundać",
+  "via": "pick"
+ },
+ "kalaNamak": {
+  "title": "File:KalaNamak.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:KalaNamak.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Hedonistin @ LowBudgetCooking ([1])",
+  "via": "de:Kala Namak"
+ },
+ "tkKraeuter": {
+  "title": "File:Küchenkräuter-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:K%C3%BCchenkr%C3%A4uter-1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
+  "via": "de:Küchenkräuter"
+ },
+ "kraeuterProvence": {
+  "title": "File:Herbesdeprovence.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Herbesdeprovence.jpg",
+  "license": "CC BY 2.0",
+  "artist": "",
+  "via": "de:Kräuter der Provence"
+ },
+ "gewuerzmix": {
+  "title": "File:Garammasalaphoto.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Garammasalaphoto.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Badagnani",
+  "via": "de:Garam Masala"
+ },
+ "gnocchi": {
+  "title": "File:Gnocchi di ricotta burro e salvia.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Gnocchi_di_ricotta_burro_e_salvia.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Paoletta S.",
+  "via": "en:Gnocchi"
+ },
+ "salz": {
+  "title": "File:Table salt with salt shaker V1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Table_salt_with_salt_shaker_V1.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Poyraz 72",
+  "via": "de:Speisesalz"
+ },
+ "kreuzkuemmel": {
+  "title": "File:Seeds of Cumin.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Seeds_of_Cumin.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Sanjay Acharya",
+  "via": "pick"
+ },
+ "pfeffer": {
+  "title": "File:Pfeffer-Gewürz.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Pfeffer-Gew%C3%BCrz.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Rainer Zenz",
+  "via": "de:Schwarzer Pfeffer"
+ },
+ "zimt": {
+  "title": "File:Canelle Cinnamomum burmanni Luc Viatour.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Canelle_Cinnamomum_burmanni_Luc_Viatour.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Luc Viatour",
+  "via": "pick"
+ },
+ "kurkuma": {
+  "title": "File:Curcuma longa roots.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Curcuma_longa_roots.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Simon A. Eugster",
+  "via": "pick"
+ },
+ "muskat": {
+  "title": "File:Nutmeg ready.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Nutmeg_ready.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Terrence Coombes",
+  "via": "pick"
+ },
+ "oregano": {
+  "title": "File:Oregano dried.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Oregano_dried.JPG",
+  "license": "Public domain",
+  "artist": "Miansari66",
+  "via": "pick"
+ },
+ "thymian": {
+  "title": "File:Thyme-Bundle.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Thyme-Bundle.jpg",
+  "license": "CC0",
+  "artist": "Evan-Amos",
+  "via": "pick"
+ },
+ "majoran": {
+  "title": "File:Herbesdeprovence.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Herbesdeprovence.jpg",
+  "license": "CC BY 2.0",
+  "artist": "",
+  "via": "pick"
+ },
+ "rosmarin": {
+  "title": "File:Rosemary sprigs on bush.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Rosemary_sprigs_on_bush.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "No machine-readable author provided. Erin Silversmith assume",
+  "via": "pick"
+ },
+ "lorbeer": {
+  "title": "File:Köhler's Medizinal-Pflanzen in naturgetreuen Abbildungen mit kurz erläuterndem Texte (Plate 1) BHL303564.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:K%C3%B6hler%27s_Medizinal-Pflanzen_in_naturgetreuen_Abbildungen_mit_kurz_erl%C3%A4uterndem_Texte_(Plate_1)_BHL303564.jpg",
+  "license": "Public domain",
+  "artist": "Brandt, Wilhelm; Gürke, M.; Köhler, F. E.; Pabst, G.; Schell",
+  "via": "de:Lorbeerblatt"
+ },
+ "nelke": {
+  "title": "File:2023 Goździki.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2023_Go%C5%BAdziki.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Jacek Halicki",
+  "via": "pick"
+ },
+ "backpulver": {
+  "title": "File:Backpulver RZ.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Backpulver_RZ.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Rainer Z ...",
+  "via": "de:Backpulver"
+ },
+ "vanille": {
+  "title": "File:Vanillezucker.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Vanillezucker.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "GeoTrinity",
+  "via": "en:Vanilla sugar"
+ },
+ "gochujang": {
+  "title": "File:Gochujang (chilli paste) 2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Gochujang_(chilli_paste)_2.jpg",
+  "license": "CC BY 4.0",
+  "artist": "온맘으로",
+  "via": "pick"
+ },
+ "chunjang": {
+  "title": "File:Chunjang danmuji yangpa kimchi.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Chunjang_danmuji_yangpa_kimchi.jpg",
+  "license": "CC BY 2.0",
+  "artist": "chomjong",
+  "via": "pick"
+ },
+ "flammkuchenteig": {
+  "title": "File:Tarte flambée alsacienne 514471722.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Tarte_flamb%C3%A9e_alsacienne_514471722.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Lulu Durand",
+  "via": "pick"
+ },
+ "tabasco": {
+  "title": "File:MRE Tabasco Sauce DSCF0043.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:MRE_Tabasco_Sauce_DSCF0043.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Ashley Pomeroy",
+  "via": "pick"
+ },
+ "hefeflocken": {
+  "title": "File:Hefeflocken Naturata.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hefeflocken_Naturata.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "myself/my spouse",
+  "via": "de:Hefeflocken"
+ },
+ "liquidSmoke": {
+  "title": "File:Liquid Smoke Spoonful.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liquid_Smoke_Spoonful.jpg",
+  "license": "CC0",
+  "artist": "Ll1324",
+  "via": "en:Liquid smoke"
+ },
+ "basilikum": {
+  "title": "File:Ocimum basilicum 001.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Ocimum_basilicum_001.JPG",
+  "license": "CC BY-SA 3.0",
+  "artist": "H. Zell",
+  "via": "de:Basilikum"
+ },
+ "petersilie": {
+  "title": "File:Liat Portal for Foodie Disorder - Parsley.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liat_Portal_for_Foodie_Disorder_-_Parsley.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "HaJunkiyada",
+  "via": "pick"
+ },
+ "schnittlauch": {
+  "title": "File:Allium schoenoprasum var alpinum.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Allium_schoenoprasum_var_alpinum.jpg",
+  "license": "CC BY 2.5",
+  "artist": "User:Tigerente",
+  "via": "de:Schnittlauch"
+ },
+ "koriander": {
+  "title": "File:Coriander 01.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Coriander_01.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "ShahadatHossain",
+  "via": "pick"
+ },
+ "dill": {
+  "title": "File:Illustration Anethum graveolens clean.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Illustration_Anethum_graveolens_clean.jpg",
+  "license": "Public domain",
+  "artist": "Illustration_Anethum_graveolens0.jpg: Prof. Dr. Otto Wilhelm",
+  "via": "en:Dill"
+ },
+ "minze": {
+  "title": "File:Mentha sp.001 - A Pobra do Caramiñal.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Mentha_sp.001_-_A_Pobra_do_Carami%C3%B1al.JPG",
+  "license": "CC BY-SA 4.0",
+  "artist": "Fernando Losada Rodríguez",
+  "via": "pick"
+ },
+ "kresse": {
+  "title": "File:MFG 0909a-Lepidium-sativum.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:MFG_0909a-Lepidium-sativum.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Malte",
+  "via": "de:Gartenkresse"
+ },
+ "frischeKraeuter": {
+  "title": "File:Küchenkräuter-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:K%C3%BCchenkr%C3%A4uter-1.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "No machine-readable author provided. Rainer Zenz assumed (ba",
+  "via": "de:Küchenkräuter"
  }
 }
