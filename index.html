@@ -285,7 +285,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
-.hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.hurtnote{align-self:flex-start;cursor:pointer;font:inherit;color:inherit;text-align:left;background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:5px 10px}.hmic{display:flex;flex-direction:column;gap:4px}.hmic .micbtn{margin-top:0}.hurtrow{display:flex;align-items:center;gap:8px;justify-content:space-between}#hurtNote{width:100%}.warnb.bad{background:color-mix(in srgb,var(--bad) 22%,transparent)}.btn.wide{width:100%}
+.hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.addsec{margin-top:12px}.addwhy{color:var(--warn)}.hurtnote{align-self:flex-start;cursor:pointer;font:inherit;color:inherit;text-align:left;background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:5px 10px}.hmic{display:flex;flex-direction:column;gap:4px}.hmic .micbtn{margin-top:0}.hurtrow{display:flex;align-items:center;gap:8px;justify-content:space-between}#hurtNote{width:100%}.warnb.bad{background:color-mix(in srgb,var(--bad) 22%,transparent)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -2821,7 +2821,7 @@ function exList(sk){ return withAdded(sk, sk === "antag" ? ANTAG : (SESS[sk] || 
 // Während der Einheit dazugenommene Übungen (cur.addEx: {[präfix + id]: {after, t}}) – nur für die laufende Einheit, eingeschoben nach „after“ oder ans Ende
 const addPre = sk => sk === "antag" ? "antag:" : "";
 function addedOf(sk){ let a, ws; try { a = cur && cur.addEx; ws = woSession; } catch { return []; } if (!a || sk !== (ws || cur.session)) return [];
-  const pre = addPre(sk); return Object.entries(a).filter(([k, v]) => v && (pre ? k.startsWith(pre) : !k.includes(":"))).map(([k, v]) => [k.slice(pre.length), v]).filter(([id]) => EX[id]).sort((x, y) => (x[1].t || 0) - (y[1].t || 0)); }
+  const pre = addPre(sk); return Object.entries(a).filter(([k, v]) => v && (pre ? k.startsWith(pre) : !k.includes(":"))).map(([k, v]) => [k.slice(pre.length), v]).filter(([id]) => EX[id] || (S().mwEx?.[id] && (mwxReg(id, S().mwEx[id]), EX[id]))).sort((x, y) => (x[1].t || 0) - (y[1].t || 0)); }
 function withAdded(sk, L){ const xs = addedOf(sk).filter(([id]) => !L.includes(id)); if (!xs.length) return L; const out = [...L], anc = {};
   for (const [id, v] of xs) { let p = v.after && out.includes(v.after) ? out.indexOf(v.after) + 1 : out.length; while (p < out.length && anc[out[p]] && anc[out[p]] === v.after) p++; out.splice(p, 0, id); anc[id] = v.after || "~"; } return out; }
 const isAdded = id => { try { const sk = woSession || cur.session; return !!(cur.addEx || {})[addPre(sk) + id]; } catch { return false; } };
@@ -3022,7 +3022,7 @@ function renderHeader(){
   pill.className = "pill" + (ph.deload ? " warn" : "");
 }
 function render(){
-  recVarSync(); try { ensureWeekFreeze(); } catch {} try { regSets(); } catch {}
+  recVarSync(); try { ensureWeekFreeze(); } catch {} try { regSets(); } catch {} try { mwxRegAll(); } catch {}
   if (typeof applyNutri === "function") applyNutri();
   if (!token && !(tab === "mehr")) { tab = "mehr"; sub.mehr = "setup"; }
   document.querySelectorAll("nav.bottom button").forEach(b => b.setAttribute("aria-current", b.dataset.tab === tab ? "page" : "false"));
@@ -3436,7 +3436,9 @@ function effAll(){
 function effAll0(sk, key){
   const ids = exList(sk), nat = Object.fromEntries(ids.map(x => (homeId = x, [x, effNat(x)]))), m0 = {}, m = {}, why = {}, auto = {}, taken = new Set(), used = new Set(ids.flatMap(x => [x, nat[x]]).filter(Boolean));
   const fits = a => EX[a] && (atHome() ? HOME_OK.has(a) && gearOk(a) : !a.startsWith("hw_")) && !used.has(a);
+  const added = new Set(addedOf(sk).map(([id]) => id));
   for (const x of ids) { homeId = x;
+    if (added.has(x)) { const sv = (cur[swapKey()] || {})[x], a = swapOk(sv) ? sv : x; m0[x] = m[x] = auto[x] = a; taken.add(a); used.add(a); continue; }
     let v = nat[x]; const own = swapOk((cur[swapKey()] || {})[x]);
     // was ohne heutigen Tausch gälte (für „zurück“ im ⇄-Blatt)
     if (own) { const p = prefMap()[x]; let a = p && EX[p] ? p : atHome() ? homeDefault(x) : x; if (a && scRed(a)) a = redList(a).find(fits) || null; if (a && atHome() && !gearOk(a)) a = (GEAR_FALLBACK[a] || []).find(fits) || a; auto[x] = a; }
@@ -3692,7 +3694,7 @@ function wizOk(id, where){ const e = EX[id]; if (!e) return false;
 function wizCands(g, where, L, planIds){
   if (g === "pflege") return PFLEGE.filter(id => wizOk(id, where)).map(id => [id, /extrot/.test(id) ? 2 : 1]);
   const mus = sgOf(g)[2];
-  return Object.keys(EX).filter(id => wizOk(id, where) && (g === "rumpf" ? EX[id].type === "k" : EX[id].type !== "k" || mus.some(k => (EX[id].m?.[k] || 0) >= 1))).map(id => { const e = EX[id], m = e.m || {};
+  return Object.keys(EX).filter(id => !EX[id].mwx && wizOk(id, where) && (g === "rumpf" ? EX[id].type === "k" : EX[id].type !== "k" || mus.some(k => (EX[id].m?.[k] || 0) >= 1))).map(id => { const e = EX[id], m = e.m || {};
     let s = Math.max(0, ...mus.map(k => m[k] || 0)); if (s < 1) return [id, 0];
     s += (e.type === "c" ? .4 : e.type === "i" ? .2 : 0) + (e.prio ? .3 : 0) + (planIds.has(id) ? .3 : 0) + (lastPerf(id, addDays(selDate, 1)) ? .2 : 0);
     for (const [k, w] of Object.entries(m)) if (!mus.includes(k) && (L[k] || 0) >= 4) s -= .4 * w; // belastet einen Muskel, der sich noch erholt
@@ -3863,7 +3865,7 @@ function exBody(base, n, w){
   const fin = !!cur.finishedAt && !woSession, nAlt = fin ? 0 : altOptions(base).length - 1, th = e.img ? isrc(e.img, 0) : exThumb(id, null);
   // Sätze, die schon unter einer anderen Variante dieser Übung liegen (Tausch mitten in der Übung)
   const oth = {}; for (const [x] of donePairs(base)) if (x !== id) oth[x] = (oth[x] || 0) + 1;
-  let h = `<div class="exbody">${cur.where === "mix" && !fin ? `<div class="seg mixseg"><button type="button" data-mixhome="${base}" data-v="gym" aria-pressed="${!atHome()}">🏋 Gym</button><button type="button" data-mixhome="${base}" data-v="home" aria-pressed="${atHome()}">🏠 Zuhause</button></div>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}
+  let h = `<div class="exbody">${cur.where === "mix" && !fin ? `<div class="seg mixseg"><button type="button" data-mixhome="${base}" data-v="gym" aria-pressed="${!atHome()}">🏋 Gym</button><button type="button" data-mixhome="${base}" data-v="home" aria-pressed="${atHome()}">🏠 Zuhause</button></div>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}${isAdded(base) && !fin ? (w => w ? `<div class="warnb small">⚠ Selbst dazugenommen: ${esc(w)}</div>` : "")(addWhy(id)) : ""}
     <div class="exsum2"><button type="button" class="exthumb" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : ""}<span>Technik ›</span></button>${doseHtml(id, "mini", n, rir)}</div>
     <div class="exacts">${dn < n && !fin ? `<button type="button" class="btn primary gcgo" data-gc="open" data-v="${base}">▶ Coach · Satz ${dn + 1}/${n}</button>` : ""}${nAlt > 0 ? `<button class="btn" type="button" data-sheet="alt" data-v="${base}" aria-label="Alternativen (${nAlt})">⇄ ${nAlt}</button>` : ""}${DOSE[id]?.hold ? `<button type="button" class="btn" data-tmrin="${id}" aria-label="Halte-Timer">⏱</button>` : ""}${fin ? "" : `<button type="button" class="btn" data-hurt="${id}" aria-label="Tut was weh?" title="Tut was weh?">😣</button>`}</div>
     ${hurtLine(id)}${DOSE[id]?.hold ? `<div class="tmrslot"></div>` : ""}${atHome() ? gearHtml(id, true) : ""}`;
@@ -3889,22 +3891,62 @@ function exBody(base, n, w){
   h += `<div class="actions"><button class="btn small" type="button" data-act="addset" data-v="${id}" data-base="${base}">+ Satz</button>${other + rows.length > n ? `<button class="btn ghost small" type="button" data-act="delset" data-v="${id}" data-base="${base}">− letzten Satz</button>` : ""}${allDone && !fin ? (nextOpenEx(base) ? `<button class="btn small" type="button" data-act="nextex" data-v="${base}">Nächste Übung ›</button>` : `<button class="btn small primary" type="button" data-act="finish">Einheit beenden</button>`) : ""}</div></div>`;
   return h;
 }
-// Übung dazunehmen: alle App-Übungen, die heute am Ort gehen und im aktuellen Modus erlaubt sind; Muskel-Filter + Suche
-let addQ = "", addMg = "", addPos = "after";
-function addCands(){ const sk = woSession || cur.session, L = exList(sk), inUse = new Set(L.flatMap(x => [x, eff(x)]).filter(Boolean)), wh = cur.where || "gym";
-  return Object.keys(EX).filter(id => !id.includes(":") && !inUse.has(id) && ownOk(id, EX[id]) && (wh === "home" ? HOME_OK.has(id) && gearOk(id) && homeDefault(id) === id : wh === "gym" ? !id.startsWith("hw_") : true)).sort((a, b) => a.startsWith("alt_") - b.startsWith("alt_")).filter((id, i, a) => a.findIndex(x => EX[x].name === EX[id].name) === i); }
-function addListHtml(){ const q = addQ.trim(), xs = addCands().filter(id => (!addMg || ownMg(EX[id], addMg, id)) && (!q || qHit(EX[id].name + " " + (EX[id].q || ""), q))).sort((a, b) => EX[a].name.localeCompare(EX[b].name, "de"));
-  if (!xs.length) return `<div class="small muted">Nichts gefunden${cur.where === "home" ? " – zuhause zählt nur, was mit deinem Zubehör geht" : ""}.</div>`;
-  const w = weekNo(selDate) ?? 0;
-  return xs.map(id => { const e = EX[id], th = e.img && !THUMB_YT[id] ? isrc(e.img, 0) : exThumb(id, null), mg = MW_MG.filter(g => ownMg(e, g[0], id)).map(g => g[1]).slice(0, 3).join(", ");
-    return `<button type="button" class="altopt" data-addex="${id}">${th ? `<span class="athumb"><span class="anim still"><img src="${th}" alt="" loading="lazy" decoding="async"></span></span>` : `<span class="athumb noimg"></span>`}<span><b>${esc(e.name)}</b><br><span class="small muted">${esc(mg || "")}${mg ? " · " : ""}${setsFor(id, w, null)} Sätze${sideEx(id) ? " · je Seite" : ""}</span></span></button>`; }).join(""); }
+// Übung dazunehmen (v268): alle App-Übungen – was heute passt zuerst, der Rest mit Grund – plus der ganze MuscleWiki-Katalog
+let addQ = "", addMg = "", addPos = "after", addMwN = 30;
+const MWX_LOAD = new Set(["Dumbbells", "Barbell", "Cables", "Kettlebells", "Machine", "Plate", "Smith-Machine", "Medicine-Ball", "Medicineball", "Vitruvian"]);
+const MWX_K = new Set(["Recovery", "Yoga", "Stretches", "Pilates", "Cardio"]);
+const MWX_SH = [[/front|anterior/i, "vordS", "vordSchulter"], [/lateral/i, "seitlS", "seitlSchulter"], [/rear|posterior/i, "hintS", "hintSchulter"]];
+// Katalog-Eintrag → kompakte Definition (liegt in settings.mwEx, damit Verlauf und Einheit auch ohne geladenen Katalog funktionieren)
+function mwxDef(e){ const side = /single|one[- ]arm|one[- ]leg|unilateral|einarmig|einbeinig/i.test((e.en || "") + " " + e.n), hold = e.force === "Hold", k = hold || MWX_K.has(e.cat);
+  const m = {}, mx = {}, put = (o, key, v) => { if (key) o[key] = Math.max(o[key] || 0, v); };
+  for (const [list, v] of [[e.mp || [], 1], [e.ms || [], .5]]) for (const mu of list) { const sh = /deltoid|shoulder/i.test(mu) && MWX_SH.find(([re]) => re.test(mu));
+    if (sh) { put(m, sh[1], v); put(mx, sh[2], v); continue; }
+    for (const [g, , re] of MW_MG) if (re.test(mu)) { put(m, (MG_OWN[g] || [])[0], v); put(mx, (MG_MX[g] || [])[0], v); } }
+  return {s: e.s, n: e.n, t: k ? "k" : e.mech === "Compound" ? "c" : "i", load: MWX_LOAD.has(e.cat) ? 1 : 0, side: side ? 1 : 0, hold: hold ? 1 : 0, m, mx, sc: e.sc ?? 2, knee: e.knee ?? 0, home: e.home ? 1 : 0}; }
+function mwxReg(id, d){ if (!d || EX[id]) return;
+  EX[id] = {name: d.n, type: d.t, sets: d.t === "k" ? 2 : 3, reps: (d.hold ? "20–30 s" : d.t === "k" ? "8–12" : "8–12") + (d.side ? "/Seite" : ""), hi: d.hold ? 30 : 12, load: d.load, m: d.m || {}, q: d.n, mwx: 1};
+  EX_MW[id] = d.s; if (d.mx && Object.keys(d.mx).length) MX[id] = d.mx; }
+function mwxRegAll(){ const o = S().mwEx; if (o) for (const id in o) mwxReg(id, o[id]); }
+function mwxAdd(slug){ const e = MW?.by.get(slug); if (!e) return null; const id = "mwx_" + slug, d = mwxDef(e);
+  if (JSON.stringify(S().mwEx?.[id]) !== JSON.stringify(d)) saveSettings({mwEx: Object.assign({}, S().mwEx, {[id]: d})}); mwxReg(id, d); return id; }
+// Warum passt eine Übung heute eigentlich nicht? ("" = passt)
+function addWhy(id, home = atHome()){ const e = EX[id]; if (!e) return "";
+  if (e.mwx) { const d = S().mwEx?.[id] || {}; return d.sc === 2 && !S().scCleared ? "belastet das SC-Gelenk – laut Plan erst nach Freigabe" : d.sc >= 1 && (schonOn() || S().mode === "pause") ? "leichte Last am Schultergürtel – im Modus Schonen eigentlich weglassen" : S().knee1 && d.knee === 2 ? "Sprung-/Stoßbelastung – in Knie-Phase 1 eigentlich weglassen" : home && !d.home ? "braucht Gym-Geräte" : ""; }
+  if (e.gate && !S().scCleared) return "SC-Ampel – laut Plan erst nach Freigabe";
+  if (scRed(id) || (S().mode === "pause" && id in SCHON_RED)) return schonOn() || S().mode === "pause" ? "belastet das SC – im Modus Schonen eigentlich gesperrt" : "heute SC-Schmerz ab 3 – eigentlich ersetzt";
+  if (S().knee1 && (e.m?.quad || 0) >= 1 && !KNEE_QUAD_OK.has(id)) return "Knie-Phase 1 – viel Last aufs Knie";
+  if (home) { if (!HOME_OK.has(id) && !id.startsWith("hw_")) return "eher fürs Gym"; const mg = missingGear(id); if (mg.length) return "fehlt: " + mg.map(k => GEAR[k] || k).join(", "); }
+  return ""; }
+function addCands(){ const sk = woSession || cur.session, L = exList(sk), inUse = new Set(L.flatMap(x => [x, eff(x)]).filter(Boolean)), home = (cur.where || "gym") === "home";
+  const ids = Object.keys(EX).filter(id => !id.includes(":") && !EX[id].mwx && !inUse.has(id)), why = {}; for (const id of ids) why[id] = addWhy(id, home);
+  ids.sort((a, b) => !!why[a] - !!why[b] || a.startsWith("alt_") - b.startsWith("alt_") || (home ? b.startsWith("hw_") - a.startsWith("hw_") : a.startsWith("hw_") - b.startsWith("hw_")));
+  return ids.filter((id, i, a) => a.findIndex(x => EX[x].name === EX[id].name) === i).map(id => [id, why[id]]); }
+function addItem(id, why, w){ const e = EX[id], th = e.img && !THUMB_YT[id] ? isrc(e.img, 0) : exThumb(id, null), mg = MW_MG.filter(g => ownMg(e, g[0], id)).map(g => g[1]).slice(0, 3).join(", ");
+  return `<button type="button" class="altopt" data-addex="${id}">${th ? `<span class="athumb"><span class="anim still"><img src="${th}" alt="" loading="lazy" decoding="async"></span></span>` : `<span class="athumb noimg"></span>`}<span><b>${esc(e.name)}</b><br><span class="small muted">${esc(mg || "")}${mg ? " · " : ""}${setsFor(id, w, null)} Sätze${sideEx(id) ? " · je Seite" : ""}</span>${why ? `<br><span class="small addwhy">⚠ ${esc(why)}</span>` : ""}</span></button>`; }
+function addListHtml(){ const q = addQ.trim(), w = weekNo(selDate) ?? 0, hit = id => (!addMg || ownMg(EX[id], addMg, id)) && (!q || qHit(EX[id].name + " " + (EX[id].q || ""), q));
+  const xs = addCands().filter(([id]) => hit(id)).sort((a, b) => EX[a[0]].name.localeCompare(EX[b[0]].name, "de")), ok = xs.filter(x => !x[1]), no = xs.filter(x => x[1]);
+  let h = `<div class="lab addsec">Passt heute · ${ok.length}</div>` + (ok.map(([id]) => addItem(id, "", w)).join("") || `<div class="small muted">Nichts gefunden.</div>`);
+  if (no.length) h += `<div class="lab addsec">Passt heute eigentlich nicht · ${no.length}</div>` + no.map(([id, why]) => addItem(id, why, w)).join("");
+  return h + addMwHtml(q); }
+function addMwHtml(q){
+  if (!MW) { if (!mwErr && token) ensureMw().then(() => { const b = document.getElementById("addList"); if (b && sheet.open && sheetKind === "addex") b.innerHTML = addListHtml(); });
+    return `<div class="lab addsec">MuscleWiki-Katalog</div><div class="small muted">${mwErr ? esc(mwErr) + " " + mwRetryBtn() : token ? "Katalog lädt …" : "Für den Katalog unter Mehr › Verbindung verbinden."}</div>`; }
+  const sk = woSession || cur.session, used = new Set(exList(sk).flatMap(x => [EX_MW[x], EX_MW[eff(x)]]).filter(Boolean)), own = new Set(Object.keys(EX).filter(id => !EX[id].mwx).map(id => EX_MW[id]).filter(Boolean));
+  const head = `<div class="lab addsec">MuscleWiki-Katalog · ${MW.ex.length} Übungen</div>`;
+  if (!q && !addMg) return head + `<div class="small muted">Suchen oder oben einen Muskel wählen – dann erscheinen hier die passenden Übungen aus dem ganzen Katalog.</div>`;
+  const home = (cur.where || "gym") === "home", warnOf = e => mwScTxt(e) || (S().knee1 && e.knee === 2 ? "Sprung-/Stoßbelastung – in Knie-Phase 1 weglassen" : "") || (home && !e.home ? "braucht Gym-Geräte" : "");
+  const xs = MW.ex.filter(e => !used.has(e.s) && !own.has(e.s) && (!addMg || mwGroups(e).some(g => g[0] === addMg)) && (!q || qHit((e.n || "") + " " + (e.en || "") + " " + (e.alt || []).join(" "), q))).map(e => [e, warnOf(e)]).sort((a, b) => !!a[1] - !!b[1] || a[0].n.localeCompare(b[0].n, "de"));
+  if (!xs.length) return head + `<div class="small muted">Nichts gefunden.</div>`;
+  return head + `<div class="small muted">${xs.length} Treffer</div>` + xs.slice(0, addMwN).map(([e, warn]) => { const th = e.vm?.[0] ? mwOg(e.vm[0]) : "", mn = mwMain(e);
+    return `<button type="button" class="altopt" data-addmw="${esc(e.s)}">${th ? `<span class="athumb"><span class="anim still"><img src="${esc(th)}" alt="" loading="lazy" decoding="async"></span></span>` : `<span class="athumb noimg"></span>`}<span><b>${esc(e.n)}</b><br><span class="small muted">${esc(mwCat(e))}${mn ? " · " + esc(mn) : ""}</span>${warn ? `<br><span class="small addwhy">⚠ ${esc(warn)}</span>` : ""}</span></button>`; }).join("")
+    + (xs.length > addMwN ? `<button type="button" class="btn small" data-addmore="1">Weitere ${Math.min(30, xs.length - addMwN)} zeigen</button>` : ""); }
 function addExSheet(anchor, close){ const sk = woSession || cur.session, L = exList(sk), ok = anchor && L.includes(anchor) && L.indexOf(anchor) < L.length - 1, an = ok ? EX[eff(anchor) || anchor]?.name : "";
   if (!ok && addPos === "after") addPos = "end";
   return `<div class="sh"><h2>Übung dazunehmen</h2>${close}</div>
     ${ok ? `<div class="seg"><button type="button" data-addpos="after" aria-pressed="${addPos === "after"}">Nach „${esc(an)}“</button><button type="button" data-addpos="end" aria-pressed="${addPos === "end"}">Ans Ende</button></div>` : `<div class="small muted">Kommt ans Ende der Einheit.</div>`}
     ${searchBox("addQ", addQ, "🔎 Übung suchen", "Übung suchen")}
     <div class="chips"><button type="button" data-addmg="" aria-pressed="${!addMg}">Alle</button>${MW_MG.map(g => `<button type="button" data-addmg="${g[0]}" aria-pressed="${addMg === g[0]}">${esc(g[1])}</button>`).join("")}</div>
-    <div class="small muted">${cur.where === "home" ? "Zuhause: nur was mit deinem Zubehör geht." : cur.where === "mix" ? "Mix: Gym- und Heimübungen." : "Gym-Übungen."}${schonOn() ? " Gesperrtes im Modus Schonen ist ausgeblendet." : ""} Gilt nur für heute.</div>
+    <div class="small muted">Oben, was heute${cur.where === "home" ? " zuhause mit deinem Zubehör" : ""} geht; darunter alles andere mit Grund. Gilt nur für heute.</div>
     <div id="addList" class="altlist">${addListHtml()}</div>`; }
 function exNav(d){ const ids = exList(woSession || cur.session), i = ids.indexOf(openEx), j = Math.max(0, Math.min(ids.length - 1, i + d)); if (j !== i) { openEx = ids[j]; renderTraining(); scrollTo(0, 0); } }
 function checkSet(id, base, i){
@@ -7230,11 +7272,12 @@ async function onClick(e){
     if (i >= 0) a[i] = ent; else a.push(ent); cur.hurt = a; touch(); hurtReset(); if (sheetKind === "hurt") closeSheet(); else { hurtOpen = null; renderSheet(); } return; }
   if (t.closest("[data-hclose]") && (t.hasAttribute("data-hclose") || !t.closest(".hurtcard"))) { if (sheetKind === "hurt") closeSheet(); else { hurtOpen = null; renderSheet(); } return; }
   const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); hurtOpen = null; altAsk = null; openSheet(sh.dataset.sheet, sh.dataset.v); return; }
-  const adx = t.closest("[data-addex]"); if (adx) { const id = adx.dataset.addex, sk = woSession || cur.session, anchor = sheetArg, L = exList(sk);
+  const amo = t.closest("[data-addmore]"); if (amo) { addMwN += 30; const b = document.getElementById("addList"); if (b) b.innerHTML = addListHtml(); return; }
+  const adx = t.closest("[data-addex], [data-addmw]"); if (adx) { const id = adx.dataset.addex || mwxAdd(adx.dataset.addmw), sk = woSession || cur.session, anchor = sheetArg, L = exList(sk); if (!id) return;
     cur.addEx = Object.assign({}, cur.addEx, {[addPre(sk) + id]: {after: addPos === "after" && anchor && L.includes(anchor) ? anchor : null, t: Date.now()}}); if (cur._clr) cur._clr = cur._clr.filter(x => x !== "addEx." + addPre(sk) + id && x !== "addEx");
     effMemo = null; touch(); saveCur(); addQ = ""; openEx = id; sheetKind = null; sheet.close(); renderTraining(); scrollTo(0, 0); return; }
   const adp = t.closest("[data-addpos]"); if (adp) { addPos = adp.dataset.addpos; renderSheet(); return; }
-  const adm = t.closest("[data-addmg]"); if (adm) { addMg = adm.dataset.addmg; for (const b of sheet.querySelectorAll("[data-addmg]")) b.setAttribute("aria-pressed", b === adm); const b = document.getElementById("addList"); if (b) b.innerHTML = addListHtml(); return; }
+  const adm = t.closest("[data-addmg]"); if (adm) { addMg = adm.dataset.addmg; addMwN = 30; for (const b of sheet.querySelectorAll("[data-addmg]")) b.setAttribute("aria-pressed", b === adm); const b = document.getElementById("addList"); if (b) b.innerHTML = addListHtml(); return; }
   const sdf = t.closest("[data-sidefirst]"); if (sdf) { const k = sdf.dataset.sidefirst.replace(/^(mob|reha):/, ""), o = Object.assign({}, S().sideFirst || {}); if (sdf.dataset.v === "r") o[k] = "r"; else delete o[k]; saveSettings({sideFirst: o}); renderTraining(); return; }
   const op = t.closest("[data-open]"); if (op) { openEx = document.body.classList.contains("wo") ? op.dataset.open : openEx === op.dataset.open ? null : op.dataset.open; renderTraining(); scrollTo(0, 0); return; }
   const xs = t.closest("[data-exskip]"); if (xs) { const id = xs.dataset.exskip, key = skipKey(id), on = !exSkipped(id), toggle = v => { if (v) cur.skipEx = Object.assign({}, cur.skipEx, {[key]: true}); else { const o = Object.assign({}, cur.skipEx); delete o[key]; cur.skipEx = o; clr("skipEx." + key); } touch(); saveCur(); };
@@ -7383,7 +7426,7 @@ function onInput(e){
   if (t.id === "zcQ") { zcQ = t.value; const r = document.getElementById("zcRes"); if (r) r.innerHTML = zcResHtml(); return; }
   if (t.id === "zQ") { zQ = t.value; const zb = document.getElementById("zBody"); if (zb) zb.innerHTML = zutatenHtml(); return; }
   if (t.id === "stQ") { stQ = t.value; renderSheetPart(["#stList"]); return; }
-  if (t.id === "addQ") { addQ = t.value; const b = document.getElementById("addList"); if (b) b.innerHTML = addListHtml(); return; }
+  if (t.id === "addQ") { addQ = t.value; addMwN = 30; const b = document.getElementById("addList"); if (b) b.innerHTML = addListHtml(); return; }
   if (t.dataset.ac) { acShow(t); if (t.dataset.ac !== "reste") return; }
   if (t.id === "allQ") { allQ = t.value; const up = () => { const r = document.getElementById("allRes"), m = document.getElementById("moreMenu"); if (r) r.innerHTML = allResHtml(); if (m) m.hidden = allQ.trim().length >= 2; };
     if (!recipes || !prices) Promise.all([ensurePrices(), ensureMeals()]).then(up).catch(() => {}); clearTimeout(t._d); t._d = setTimeout(up, 150); return; }
