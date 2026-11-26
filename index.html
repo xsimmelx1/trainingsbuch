@@ -285,7 +285,7 @@ details.zgd > summary .n{font-family:var(--f-num);font-size:13px;color:var(--mut
 .restpick{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.fridge .mhead{gap:10px}.fridge .mthumb{width:40px;height:40px}
 .setgrp > summary span:first-child{font-size:16px}.setbody{display:flex;flex-direction:column;gap:10px;padding:10px;border-top:1px solid var(--line)}.setbody > .card{margin:0}.setgrp{margin:8px 0}
 .rsing{display:flex;flex-direction:column;gap:2px;max-height:240px;overflow:auto}
-.hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.btn.wide{width:100%}
+.hurtl{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}.hurtcard{display:flex;flex-direction:column;gap:12px}.hurtbtn{cursor:pointer;font:inherit;background:var(--warn-soft);border-color:var(--warn)}.hurtnote{align-self:flex-start;cursor:pointer;font:inherit;color:inherit;text-align:left;background:var(--warn-soft);border:1px solid var(--warn);border-radius:10px;padding:5px 10px}.hmic{display:flex;flex-direction:column;gap:4px}.hmic .micbtn{margin-top:0}.hurtrow{display:flex;align-items:center;gap:8px;justify-content:space-between}#hurtNote{width:100%}.warnb.bad{background:color-mix(in srgb,var(--bad) 22%,transparent)}.btn.wide{width:100%}
 .gt{font-family:var(--f-num);font-size:44px;font-weight:700}.gt.muted{color:var(--muted)}.btnrow.two .btn.big{line-height:1.2;padding:10px 8px}.btnrow.two .btn.big .small{font-weight:400;opacity:.8}
 .ptitle{margin:4px 0 0}
 .subhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1497,7 +1497,35 @@ function hurtPattern(key){ const s = ((key || "") + " " + (EX[key]?.name || (isR
   if (/press|push|liegest|dip|bench|drück|landmine/.test(s)) return "press";
   if (/rdl|hinge|deadlift|kreuz|hip|bridge|glute|thrust|backext|rückenstreck|pullthrough|nordic/.test(s)) return "hinge";
   return "_"; }
-let hurtOpen = null, hurtWhere = null;
+let hurtOpen = null, hurtWhere = null, hurtSide = null, hurtLvl = null, hurtNote = "", hurtMsg = "";
+// v267: Schmerz während der Übung melden – Stelle, Seite, Stärke, Notiz; per Antippen oder gesprochen
+const HURT_SIDED = new Set(["knie", "sc", "schulter", "ellbogen", "hand", "huefte", "oschenkel"]);
+const HURT_SIDE = {l: "links", r: "rechts", b: "beidseitig"};
+const hurtReset = () => { hurtWhere = null; hurtSide = null; hurtLvl = null; hurtNote = ""; hurtMsg = ""; };
+const hurtId = x => x.id || [x.ex, x.where, x.t].join("|");
+const hurtOf = key => (cur?.hurt || []).filter(x => x.ex === key);
+const hurtLabel = x => `${HURT[x.where]?.label || x.where}${x.side ? " " + HURT_SIDE[x.side] : ""}${x.v != null ? ` · ${x.v}/10` : ""}`;
+const hurtLine = key => { const a = hurtOf(key); return a.length ? `<button type="button" class="hurtnote small" data-hurt="${esc(key)}">😣 ${a.map(x => esc(hurtLabel(x))).join(" · ")}</button>` : ""; };
+const HURT_WORDS = [["sc", /schlüsselbein|brustbein|sternum|\bsc\b|s-c-gelenk/], ["nacken", /nacken|genick|\bhals/], ["ruecken", /rücken|lende|\bkreuz/], ["ellbogen", /ell(en)?bogen/], ["hand", /handgelenk|\bhand|finger|daumen/], ["huefte", /hüfte|hüft|leiste/], ["oschenkel", /oberschenkel|quadrizeps/], ["knie", /knie/], ["schulter", /schulter/]];
+const HURT_NUM = {null: 0, eins: 1, zwei: 2, drei: 3, vier: 4, "fünf": 5, sechs: 6, sieben: 7, acht: 8, neun: 9, zehn: 10};
+function hurtParse(t){ const s = " " + t.toLowerCase() + " ", r = {};
+  for (const [k, re] of HURT_WORDS) if (re.test(s)) { r.where = k; break; }
+  if (/\bbeide|beidseit/.test(s)) r.side = "b"; else if (/\blinks?\b|\blinke[nmrs]?\b/.test(s)) r.side = "l"; else if (/\brechts?\b|\brechte[nmrs]?\b/.test(s)) r.side = "r";
+  const m = s.match(/(?:^|\D)(10|[0-9])(?:\D|$)/) || s.match(/\s(null|eins|zwei|drei|vier|fünf|sechs|sieben|acht|neun|zehn)[\s,.]/); if (m) r.v = /\d/.test(m[1]) ? +m[1] : HURT_NUM[m[1]];
+  return r; }
+function hurtMic(){
+  if (micRec) { micRec.stop(); return; }
+  let txt = "", err = ""; const rec = new SpeechRec(); micRec = rec; rec.lang = "de-DE"; rec.interimResults = false; rec.continuous = false;
+  rec.onresult = e => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) txt += " " + e.results[i][0].transcript; };
+  rec.onerror = e => { err = e.error === "not-allowed" || e.error === "service-not-allowed" ? "Mikrofon nicht erlaubt – in Chrome bei der Seite freigeben." : e.error === "no-speech" ? "Nichts gehört – nochmal tippen und sprechen." : "Spracherkennung gerade nicht verfügbar (" + e.error + ")."; };
+  rec.onend = () => { if (micRec === rec) micRec = null; txt = txt.trim();
+    if (txt) { const p = hurtParse(txt); hurtWhere = p.where || hurtWhere || "sonst"; if (p.side) hurtSide = p.side; if (p.v != null) hurtLvl = p.v; hurtNote = txt; hurtMsg = `Verstanden: „${txt}“ – kurz prüfen, dann Notieren.`; }
+    else hurtMsg = err || "Nichts verstanden – nochmal tippen und sprechen.";
+    if (sheet.open) renderSheet(); };
+  try { rec.start(); } catch { micRec = null; return; }
+  hurtMsg = "Ich höre zu … z. B. „Knie links, vier, stechend“"; renderSheet(); }
+function hurtGo(key){ ensureCur(); hurtReset(); if (gc && ["count", "switch", "work", "myorest"].includes(gc.stage) && !gc.paused) gcCmd("pause");
+  if (sheet.open) { hurtOpen = key; renderSheet(); } else openSheet("hurt", key); }
 const exName = key => EX[key]?.name || (isRtKey(key) ? mobShort(rtItem(key)?.[1] || MOB_VAR_BY[rtId(key)]?.txt || key) : key);
 // ---------- Körperkarte 3D (Wunsch 2026-11-25): antippen = auswählen, nochmal antippen = Schmerz eintragen; Mehrfachauswahl; Zusammengehöriges ----------
 // Modell: Z-Anatomy (CC BY-SA 4.0, Basis BodyParts3D © DBCLS), body/body.glb + parts.json; Anzeige body/body3d.mjs (three.js, MIT). Einträge: day.bodyPain
@@ -1638,17 +1666,24 @@ async function b3Mount(){ const el = document.getElementById("b3"); if (!el || B
   finally { b3Busy = false; if (!B3 && !b3Err && sheet.open && sheetKind === "body" && document.getElementById("b3") && !document.querySelector("#b3 canvas")) setTimeout(b3Mount, 0); b3Err = false; } }
 function b3Close(){ if (B3) { try { B3.dispose(); } catch {} B3 = null; } b3Sel = []; b3Form = null; b3Joint = null; b3Pt = null; }
 function hurtHtml(key){
-  const e = EX[key], mb = isRtKey(key) ? rtItem(key) : null, pat = hurtPattern(key);
-  let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>
-    <div class="lab">Wo?</div><div class="chips">${Object.entries(HURT).map(([k, r]) => `<button type="button" data-hwhere="${k}" aria-pressed="${hurtWhere === k}">${esc(r.label)}</button>`).join("")}</div>`;
+  const e = EX[key], mb = isRtKey(key) ? rtItem(key) : null, pat = hurtPattern(key), today = hurtOf(key);
+  let h = `<div class="zh"><div><div class="lab">Tut weh bei</div><div class="zt">${esc(exName(key))}</div></div><button type="button" class="btn ghost small" data-hclose aria-label="Schließen">✕</button></div>`;
+  if (today.length) h += `<div class="small">${today.map(x => `<div class="hurtrow"><span>😣 ${esc(hurtLabel(x))}${x.note ? ` <span class="muted">– ${esc(x.note)}</span>` : ""} <span class="muted">(${esc(x.t)})</span></span><button type="button" class="btn ghost small" data-hdel="${esc(hurtId(x))}" aria-label="Meldung löschen">✕</button></div>`).join("")}</div>`;
+  if (SpeechRec) h += `<div class="hmic"><button type="button" class="btn micbtn${micRec ? " on" : ""}" data-hmic="1">${micRec ? "⏹ Fertig" : "🎤 Sagen, was weh tut"}</button><span class="small muted">${esc(hurtMsg || "z. B. „Knie links, vier, stechend“ – oder unten antippen")}</span></div>`;
+  h += `<div class="lab">Wo?</div><div class="chips">${Object.entries(HURT).map(([k, r]) => `<button type="button" data-hwhere="${k}" aria-pressed="${hurtWhere === k}">${esc(r.label)}</button>`).join("")}</div>`;
   if (!hurtWhere) return h + `<div class="small muted">Stelle antippen – dann siehst du, was oft dahintersteckt und worauf du achten solltest.</div><button class="btn ghost small" type="button" data-sheet="body">📍 Genauer auf der Körperkarte zeigen</button>`;
+  if (HURT_SIDED.has(hurtWhere)) h += `<div class="lab">Seite</div><div class="chips">${Object.entries(HURT_SIDE).map(([k, l]) => `<button type="button" data-hside="${k}" aria-pressed="${hurtSide === k}">${l}</button>`).join("")}</div>`;
+  h += `<div class="lab">Wie stark? 0–10</div><div class="scale" role="group" aria-label="Stärke">${[...Array(11).keys()].map(i => `<button type="button" class="${painClass(hurtWhere === "sc" ? "sc" : "knee", i)}" data-hlvl="${i}" aria-pressed="${hurtLvl === i}">${i}</button>`).join("")}</div>
+    <input type="text" id="hurtNote" value="${esc(hurtNote)}" placeholder="Notiz (optional): stechend, beim Ablassen …" aria-label="Notiz">`;
   const r = HURT[hurtWhere], tips = [...(r.tips[pat] || []), ...r.tips._], cues = e?.cue || TECH[key]?.c || [], d = DOSE[key];
+  const red = hurtLvl != null && (hurtWhere === "sc" ? hurtLvl >= 3 : hurtLvl > 5);
+  if (red) h += `<div class="warnb bad"><b>${hurtLvl}/10:</b> ${hurtWhere === "sc" ? "Übung jetzt beenden und die Alternative nehmen (Plan: ab 3/10 am SC)." : "Satz beenden. Weiter nur mit Alternative oder kleinerem Bewegungsumfang."}</div>`;
   h += `<div class="warnb"><b>Zuerst:</b> ${esc(r.stop)}</div><div class="lab">Woran es oft liegt · worauf achten</div><ul class="hurtl">${tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul>`;
   if (cues.length || d?.breath || d?.tempo) h += `<div class="lab">Technik-Checkliste für diese Übung</div><ul class="hurtl">${cues.map(c => `<li>${esc(c)}</li>`).join("")}${d?.tempo ? `<li>Tempo: ${esc(d.tempo)}</li>` : ""}${d?.breath ? `<li>Atmung: ${esc(d.breath)}</li>` : ""}</ul>`;
-  const logged = (cur.hurt || []).some(x => x.ex === key && x.where === hurtWhere);
+  const had = today.some(x => x.where === hurtWhere && (x.side || null) === (hurtSide || null));
   h += `${mb && (rtOf(key) === "reha" ? rehaAlt : mobAlt)(rtId(key)) ? `<div class="small muted">Alternative laut Plan: ${esc((rtOf(key) === "reha" ? rehaAlt : mobAlt)(rtId(key)))}</div>` : ""}
-    <div class="actions">${e && altOptions(key).length ? `<button type="button" class="btn" data-sheet="alt" data-v="${esc(key)}">⇄ Alternative wählen</button>` : ""}<button type="button" class="btn ${logged ? "" : "primary"}" data-hlog="${esc(key)}" ${logged ? "disabled" : ""}>${logged ? "✓ Notiert" : "📝 Für den Abendcheck notieren"}</button></div>
-    <div class="small muted">Notiert werden Übung und Stelle für heute. Abends im Abendcheck dazu die Skala ausfüllen.</div>`;
+    <div class="actions">${e && altOptions(key).length ? `<button type="button" class="btn" data-sheet="alt" data-v="${esc(key)}">⇄ Alternative wählen</button>` : ""}<button type="button" class="btn primary" data-hlog="${esc(key)}">${had ? "📝 Meldung ändern" : "📝 Notieren"}</button></div>
+    <div class="small muted">Kommt mit Uhrzeit in den Abendcheck von heute.</div>`;
   return h; }
 // Ende-Bildschirm: übersprungene Übungen mit Grund; fehlte nur das Band → direkt weitermachen
 function rtSkippedHtml(){ const sk = RL().filter(([k]) => rtSkip(k, selDate)); if (!sk.length) return "";
@@ -1957,6 +1992,7 @@ function mergeDay(srv, loc){
   out.antag = Object.assign({}, srv.antag || {}, loc.antag || {});
   out.mobility = Object.assign({}, srv.mobility || {}, loc.mobility || {});
   if (srv.reha || loc.reha) out.reha = Object.assign({}, srv.reha || {}, loc.reha || {});
+  if (srv.hurt || loc.hurt || srv.hurtDel || loc.hurtDel) { const del = new Set([...(srv.hurtDel || []), ...(loc.hurtDel || [])]), m = new Map(); for (const x of [...(srv.hurt || []), ...(loc.hurt || [])]) m.set(hurtId(x), x); out.hurt = [...m.values()].filter(x => !del.has(hurtId(x))); if (del.size) out.hurtDel = [...del]; }
   if (srv.bodyPain || loc.bodyPain) out.bodyPain = Object.assign({}, srv.bodyPain || {}, loc.bodyPain || {});
   out.meals = Object.assign({}, srv.meals || {}, loc.meals || {});
   out.ate = Object.assign({}, srv.ate || {}, loc.ate || {});
@@ -3829,8 +3865,8 @@ function exBody(base, n, w){
   const oth = {}; for (const [x] of donePairs(base)) if (x !== id) oth[x] = (oth[x] || 0) + 1;
   let h = `<div class="exbody">${cur.where === "mix" && !fin ? `<div class="seg mixseg"><button type="button" data-mixhome="${base}" data-v="gym" aria-pressed="${!atHome()}">🏋 Gym</button><button type="button" data-mixhome="${base}" data-v="home" aria-pressed="${atHome()}">🏠 Zuhause</button></div>` : ""}${gsw.length ? `<div class="small muted">⇄ Ersetzt, weil heute fehlt: ${gsw.map(k => GEAR[k]).join(", ")}</div>` : ""}
     <div class="exsum2"><button type="button" class="exthumb" data-sheet="tech" data-v="${id}" aria-label="Technik zu ${esc(e.name)}">${th ? `<img src="${th}" alt="" loading="lazy" decoding="async">` : ""}<span>Technik ›</span></button>${doseHtml(id, "mini", n, rir)}</div>
-    <div class="exacts">${dn < n && !fin ? `<button type="button" class="btn primary gcgo" data-gc="open" data-v="${base}">▶ Coach · Satz ${dn + 1}/${n}</button>` : ""}${nAlt > 0 ? `<button class="btn" type="button" data-sheet="alt" data-v="${base}" aria-label="Alternativen (${nAlt})">⇄ ${nAlt}</button>` : ""}${DOSE[id]?.hold ? `<button type="button" class="btn" data-tmrin="${id}" aria-label="Halte-Timer">⏱</button>` : ""}</div>
-    ${DOSE[id]?.hold ? `<div class="tmrslot"></div>` : ""}${atHome() ? gearHtml(id, true) : ""}`;
+    <div class="exacts">${dn < n && !fin ? `<button type="button" class="btn primary gcgo" data-gc="open" data-v="${base}">▶ Coach · Satz ${dn + 1}/${n}</button>` : ""}${nAlt > 0 ? `<button class="btn" type="button" data-sheet="alt" data-v="${base}" aria-label="Alternativen (${nAlt})">⇄ ${nAlt}</button>` : ""}${DOSE[id]?.hold ? `<button type="button" class="btn" data-tmrin="${id}" aria-label="Halte-Timer">⏱</button>` : ""}${fin ? "" : `<button type="button" class="btn" data-hurt="${id}" aria-label="Tut was weh?" title="Tut was weh?">😣</button>`}</div>
+    ${hurtLine(id)}${DOSE[id]?.hold ? `<div class="tmrslot"></div>` : ""}${atHome() ? gearHtml(id, true) : ""}`;
   const tgt = `${e.type !== "k" ? `<button type="button" class="sug ${sg.up ? "" : "hold"}" data-sheet="why" data-v="${id}">${esc(sg.short)} <span class="muted">· warum?</span></button>` : ""}${e.gate && !cleared ? `<span class="tag gate">SC-Ampel${e.alt ? ` · Ersatz: ${esc(e.alt)}` : ""}</span>` : ""}`;
   if (tgt) h += `<div class="target">${tgt}</div>`;
   if (other) h += `<div class="small muted">Schon erledigt: ${Object.entries(oth).map(([x, c]) => `${c} × ${esc(EX[x]?.name || x)}`).join(", ")}</div>`;
@@ -4195,7 +4231,7 @@ function gcPreview(nx){ if (!gc || !nx) return; const real = gc.pl; gc.pl = gcPl
 function gcPaint(){
   const el = document.getElementById("gc"); if (!el || !gc) return; const pl = gc.pl, st = gc.stage;
   const setTxt = `Satz ${Math.min(gc.i + 1, pl.n)} von ${pl.n}${pl.side ? " · " + SIDE_LBL[gcSideK()].toLowerCase() : ""}`;
-  const head = `<div class="gch"><div><div class="lab">${esc(setTxt)}</div><b>${esc(pl.name)}</b></div><span class="actions">${st !== "log" && gcNextEx(pl.base) ? `<button type="button" class="btn ghost gcskip" data-gc="skipex" aria-label="Weiter zur nächsten Übung">Nächste ›</button>` : ""}<button type="button" class="btn ghost" data-gc="voice" aria-label="Stimme ${gcVoice ? "aus" : "an"}">${gcVoice ? "🔊" : "🔇"}</button><button type="button" class="btn ghost" data-gc="close" aria-label="Coach schließen">✕</button></span></div>`;
+  const head = `<div class="gch"><div><div class="lab">${esc(setTxt)}</div><b>${esc(pl.name)}</b></div><span class="actions">${st !== "log" && gcNextEx(pl.base) ? `<button type="button" class="btn ghost gcskip" data-gc="skipex" aria-label="Weiter zur nächsten Übung">Nächste ›</button>` : ""}<button type="button" class="btn ghost" data-hurt="${esc(pl.id)}" aria-label="Tut was weh?">😣</button><button type="button" class="btn ghost" data-gc="voice" aria-label="Stimme ${gcVoice ? "aus" : "an"}">${gcVoice ? "🔊" : "🔇"}</button><button type="button" class="btn ghost" data-gc="close" aria-label="Coach schließen">✕</button></span></div>`;
   const what = pl.mode === "hold" ? `${pl.target} s halten${pl.side ? " je Seite" : ""}` : `${pl.target} Wdh.${pl.side ? " je Seite" : ""}`;
   const tempoTxt = pl.mode === "tempo" ? pl.ph.map(([l, x]) => `${x} s ${l}`).join(" · ") : "";
   const kgTxt = pl.load && pl.sg.kg != null ? ` · ${dec(pl.sg.kg)} kg` : "";
@@ -4265,7 +4301,7 @@ function gcCmd(c, v){
   if (c === "skipex") { const nx = gcNextEx(pl.base); clearInterval(gcInt); gcInt = null; clearTimeout(gcVtm); sayStop(); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcSay(`Weiter mit ${EX[eff(nx)].name}`); return gcOpen(nx); }
   if (c === "nextex") { const nx = gc.next; clearInterval(gcInt); if (!nx) return gcClose(); openEx = nx; if (tab === "training") renderTraining(); gcOpen(nx); }
 }
-addEventListener("click", e => { const b = e.target.closest("[data-gc]"); if (!b) return; if (b.dataset.gc === "open") { gcOpen(b.dataset.v); return; } if (b.closest("#gc")) gcCmd(b.dataset.gc, b.dataset.v); });
+addEventListener("click", e => { const hb = e.target.closest("#gc [data-hurt]"); if (hb) { hurtGo(hb.dataset.hurt); return; } const b = e.target.closest("[data-gc]"); if (!b) return; if (b.dataset.gc === "open") { gcOpen(b.dataset.v); return; } if (b.closest("#gc")) gcCmd(b.dataset.gc, b.dataset.v); });
 
 // Pausen-Timer & Stoppuhr
 let restNote = null;
@@ -4389,7 +4425,7 @@ function renderSheet(){ if (sheetKind === "body" && B3) { if (document.querySele
       <div class="lab">Knie <span class="small muted">(optional)</span></div>${scaleHtml("knee","knee",cur.pain.knee)}
       ${climbed(selDate) || climbed(addDays(selDate, -1)) || cur.pain.finger != null ? `<div class="lab">Finger / Ellbogen <span class="small muted">(nach dem Bouldern)</span></div>${scaleHtml("knee","finger",cur.pain.finger)}` : ""}
       ${info(`Erledigt, sobald SC eingetragen ist. SC: 0–2 grün · ${S().mode === "pause" ? "3 gelb · über 3 rot – der Verlauf zeigt, ob die Pause wirkt" : "3 Übung tauschen · über 3 rot"}. Knie/Rest: 0–2 grün · 3–5 ok, wenn morgen wieder Ausgangsniveau · über 5 rot.`)}
-      ${(cur.hurt || []).length ? `<div class="lab">Heute gemeldet</div><ul class="hurtl small">${cur.hurt.map(x => `<li>${esc(exName(x.ex))}: ${esc(HURT[x.where]?.label || x.where)} <span class="muted">(${esc(x.t)})</span></li>`).join("")}</ul>` : ""}
+      ${(cur.hurt || []).length ? `<div class="lab">Heute gemeldet</div><ul class="hurtl small">${cur.hurt.map(x => `<li>${esc(exName(x.ex))}: ${esc(hurtLabel(x))}${x.note ? ` – ${esc(x.note)}` : ""} <span class="muted">(${esc(x.t)})</span></li>`).join("")}</ul>` : ""}
       <details><summary class="small">Notiz hinzufügen</summary><textarea id="noteIn" placeholder="Schlaf, Stress, Technik …">${esc(cur.note)}</textarea></details>`;
   } else if (sheetKind === "session") {
     h += `<div class="sh"><h2>Einheit wählen</h2>${close}</div>${S().mode === "pause" ? `<div class="warnb small">Modus Pause aktiv: Eine Einheit hier ist eine Ausnahme, der Planer plant weiter keine.</div>` : ""}<div class="chips">${SESS_CHOICES.map(k => `<button type="button" data-act="setSession" data-v="${k}" aria-pressed="${cur.session === k}">${esc(SESS[k].title)}</button>`).join("")}</div>
@@ -7183,9 +7219,15 @@ async function onClick(e){
   const gd = t.closest("[data-goday]"); if (gd) { if (sheet.open) { sheetKind = null; sheet.close(); } if (dirty) saveCur(); selDate = gd.dataset.goday; cur = null; go("heute"); return; }
   const stg = t.closest("[data-stage]"); if (stg) { const cid = phaseIdOf(weekNo(todayIso())); openStage = (openStage || cid) === stg.dataset.stage ? "none" : stg.dataset.stage; renderJourney(); return; }
   const dd = t.closest("[data-day]"); if (dd) { if (dirty) saveCur(); const v = Number(dd.dataset.day); selDate = v === 0 ? todayIso() : addDays(selDate, v); history.replaceState(null, "", `#d=${selDate}`); loadCur(); renderToday(); return; }
-  const hb = t.closest("[data-hurt]"); if (hb) { ensureCur(); hurtWhere = null; if (sheet.open) { hurtOpen = hb.dataset.hurt; renderSheet(); } else openSheet("hurt", hb.dataset.hurt); return; }
-  const hw = t.closest("[data-hwhere]"); if (hw) { hurtWhere = hw.dataset.hwhere; renderSheet(); return; }
-  const hl = t.closest("[data-hlog]"); if (hl) { cur.hurt = [...(cur.hurt || []), {ex: hl.dataset.hlog, where: hurtWhere, t: new Date().toTimeString().slice(0, 5)}]; touch(); toast("Notiert – abends im Abendcheck die Skala ausfüllen"); renderSheet(); return; }
+  const hb = t.closest("[data-hurt]"); if (hb) { hurtGo(hb.dataset.hurt); return; }
+  const hw = t.closest("[data-hwhere]"); if (hw) { if (hurtWhere !== hw.dataset.hwhere && !HURT_SIDED.has(hw.dataset.hwhere)) hurtSide = null; hurtWhere = hw.dataset.hwhere; renderSheet(); return; }
+  const hsd = t.closest("[data-hside]"); if (hsd) { hurtSide = hurtSide === hsd.dataset.hside ? null : hsd.dataset.hside; renderSheet(); return; }
+  const hlv = t.closest("[data-hlvl]"); if (hlv) { const v = +hlv.dataset.hlvl; hurtLvl = hurtLvl === v ? null : v; renderSheet(); return; }
+  if (t.closest("[data-hmic]")) { hurtMic(); return; }
+  const hdl = t.closest("[data-hdel]"); if (hdl) { const id = hdl.dataset.hdel; cur.hurt = (cur.hurt || []).filter(x => hurtId(x) !== id); cur.hurtDel = [...new Set([...(cur.hurtDel || []), id])]; touch(); renderSheet(); if (tab === "training") renderTraining(); return; }
+  const hl = t.closest("[data-hlog]"); if (hl) { const key = hl.dataset.hlog, a = (cur.hurt || []).slice(), i = a.findIndex(x => x.ex === key && x.where === hurtWhere && (x.side || null) === (hurtSide || null));
+    const ent = {id: i >= 0 ? hurtId(a[i]) : Date.now().toString(36), ex: key, where: hurtWhere, t: new Date().toTimeString().slice(0, 5)}; if (hurtSide) ent.side = hurtSide; if (hurtLvl != null) ent.v = hurtLvl; if (hurtNote.trim()) ent.note = hurtNote.trim();
+    if (i >= 0) a[i] = ent; else a.push(ent); cur.hurt = a; touch(); hurtReset(); if (sheetKind === "hurt") closeSheet(); else { hurtOpen = null; renderSheet(); } return; }
   if (t.closest("[data-hclose]") && (t.hasAttribute("data-hclose") || !t.closest(".hurtcard"))) { if (sheetKind === "hurt") closeSheet(); else { hurtOpen = null; renderSheet(); } return; }
   const sh = t.closest("[data-sheet]"); if (sh) { ensureCur(); hurtOpen = null; altAsk = null; openSheet(sh.dataset.sheet, sh.dataset.v); return; }
   const adx = t.closest("[data-addex]"); if (adx) { const id = adx.dataset.addex, sk = woSession || cur.session, anchor = sheetArg, L = exList(sk);
@@ -7318,6 +7360,7 @@ async function onClick(e){
 }
 function onInput(e){
   const t = e.target;
+  if (t.id === "hurtNote") { hurtNote = t.value; return; }
   if (t.id === "ownName") { const show = () => { ownSugList = ownSuggest(t.value); const box = sheet.querySelector("#ownSug"); if (box) box.innerHTML = ownSugHtml(ownSugList); }; show(); if (!NW) ensureNW().then(show).catch(() => {}); return; }
   if (t.id === "ownText" && sheetKind === "resteeat" && rsEat) { rsEat.extra = t.value; clearTimeout(rsEat._t); rsEat._t = setTimeout(resteEatCalc, 400); }
   if (t.id === "ownText") { const one = !sheet.querySelector("#ownName"); // Nachtragen: Vorschläge auch aus Rezepten und früheren Einträgen, Erkennung live
