@@ -3832,7 +3832,7 @@ function checkSet(id, base, i){
     const nxt = rot.sort((x, y) => doneCount(x, w, sk) - doneCount(y, w, sk))[0]; if (nxt) openEx = nxt; }
   const others = exList(sk).some(x => x !== base && eff(x) && doneCount(x, w, sk) < nSets(x, w, sk));
   if (doneCount(base, w, sk) < nSets(base, w, sk) || setsObj()[id].some(x => x.base === base && x.added && !doneSet(x)) || others) startRest(restFor(id));
-  if (EX[id].type === "k" && doneCount(base, w, sk) >= nSets(base, w, sk)) { const ids = exList(sk), nx = ids.find(x => x !== base && eff(x) && doneCount(x, w, sk) < nSets(x, w, sk)); if (nx) openEx = nx; }
+  // Kein Auto-Sprung nach dem letzten geplanten Satz: vielleicht kommt noch ein Satz – „Weiter“ steht unter den Sätzen
   renderTraining();
 }
 // Supersatz-Hinweis im Training: Partnerübung(en) und Ablauf
